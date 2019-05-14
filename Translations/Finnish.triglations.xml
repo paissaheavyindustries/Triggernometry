@@ -435,7 +435,7 @@
 	<TranslationEntry Key="internal/Action/descdisablefolder" Translation="ota kansio ({0}) pois käytöstä" />
 	<TranslationEntry Key="internal/Action/descdiscordmsg" Translation="lähetä viesti ({0}) Discordin webhook-laajennukseen ({1})" />
 	<TranslationEntry Key="internal/Action/descdiscordttsmsg" Translation="lähetä teksti puheeksi-viesti ({0}) Discordin webhook-laajennukseen ({1})" />
-	<TranslationEntry Key="internal/Action/descenablefolder" Translation="ota kansio ({1}) käyttöön" />
+	<TranslationEntry Key="internal/Action/descenablefolder" Translation="ota kansio ({0}) käyttöön" />
 	<TranslationEntry Key="internal/Action/descendencounter" Translation="lopeta nahistelu" />
 	<TranslationEntry Key="internal/Action/descexecscript" Translation="aja ({0})-skripti" />
 	<TranslationEntry Key="internal/Action/descimgauraact" Translation="näytä peittokuva ({0}) kuvatiedostolla ({1})" />
@@ -692,6 +692,7 @@
     <TranslationEntry Key="internal/Plugin/langloadfail" Translation="Kielen lataaminen epäonnistui, varmista että ajat uusin versiota" />
     <TranslationEntry Key="internal/Plugin/loglevel" Translation="Info" />
     <TranslationEntry Key="internal/Plugin/logline" Translation="Lokiviesti: ({0})" />
+    <TranslationEntry Key="internal/Plugin/notadministrator" Translation="ACT:tä ei ole käynnistetty järjestelmänvalvojana - jotkin herättimet eivät välttämättä toimi." />
     <TranslationEntry Key="internal/Plugin/procex" Translation="Poikkeus ({0}) käsitellessä lokiriviä ({1}) alueelta ({2})" />
     <TranslationEntry Key="internal/Plugin/queuedactscancelled" Translation="Peruutettu {0} jonotettua toimintoa herättimeltä '{1}'" />
     <TranslationEntry Key="internal/Plugin/splitlogline" Translation="Jaettu lokiviesti: ({0})" />
@@ -763,6 +764,9 @@
     <TranslationEntry Key="LogForm/ctxEverythingToClipboard" Translation="Kaikki" />
     <TranslationEntry Key="LogForm/ctxRefresh" Translation="Päivitä" />
     <TranslationEntry Key="LogForm/ctxSelectionToClipboard" Translation="Vain valittu" />
+    <TranslationEntry Key="Plugin/Toast/no" Translation="Ei" />
+    <TranslationEntry Key="Plugin/Toast/ok" Translation="OK" />
+    <TranslationEntry Key="Plugin/Toast/yes" Translation="Kyllä" />
 	<TranslationEntry Key="Plugin/UserInterface/btnAbout" Translation="Tietoja ohjelmasta" />
     <TranslationEntry Key="Plugin/UserInterface/btnActionQueueDisabled" Translation="Ei käytössä" />
     <TranslationEntry Key="Plugin/UserInterface/btnActionQueueEnabled" Translation="Käytössä" />
