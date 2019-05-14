@@ -435,7 +435,7 @@
     <TranslationEntry Key="internal/Action/descdisablefolder" Translation="disable folder ({0})" />
     <TranslationEntry Key="internal/Action/descdiscordmsg" Translation="send message ({0}) to Discord webhook ({1})" />
     <TranslationEntry Key="internal/Action/descdiscordttsmsg" Translation="send TTS message ({0}) to Discord webhook ({1})" />
-    <TranslationEntry Key="internal/Action/descenablefolder" Translation="enable folder ({1})" />
+    <TranslationEntry Key="internal/Action/descenablefolder" Translation="enable folder ({0})" />
     <TranslationEntry Key="internal/Action/descendencounter" Translation="end encounter" />
     <TranslationEntry Key="internal/Action/descexecscript" Translation="execute ({0}) script" />
     <TranslationEntry Key="internal/Action/descimgauraact" Translation="activate image aura ({0}) with image ({1})" />
@@ -692,6 +692,7 @@
     <TranslationEntry Key="internal/Plugin/langloadfail" Translation="Loading language file failed, make sure you are running the latest version" />
     <TranslationEntry Key="internal/Plugin/loglevel" Translation="Info" />
     <TranslationEntry Key="internal/Plugin/logline" Translation="Log line: ({0})" />
+    <TranslationEntry Key="internal/Plugin/notadministrator" Translation="You are not running ACT as an administrator - this might prevent some triggers from working." />
     <TranslationEntry Key="internal/Plugin/procex" Translation="Exception ({0}) when processing log line ({1}) in zone ({2})" />
     <TranslationEntry Key="internal/Plugin/queuedactscancelled" Translation="{0} queued action(s) from trigger '{1}' cancelled" />
     <TranslationEntry Key="internal/Plugin/splitlogline" Translation="Split log line: ({0})" />
@@ -763,6 +764,9 @@
     <TranslationEntry Key="LogForm/ctxEverythingToClipboard" Translation="Everything to clipboard" />
     <TranslationEntry Key="LogForm/ctxRefresh" Translation="Refresh" />
     <TranslationEntry Key="LogForm/ctxSelectionToClipboard" Translation="Selection to clipboard" />
+    <TranslationEntry Key="Plugin/Toast/no" Translation="No" />
+    <TranslationEntry Key="Plugin/Toast/ok" Translation="OK" />
+    <TranslationEntry Key="Plugin/Toast/yes" Translation="Yes" />
     <TranslationEntry Key="Plugin/UserInterface/btnAbout" Translation="About" />
     <TranslationEntry Key="Plugin/UserInterface/btnActionQueueDisabled" Translation="Disabled" />
     <TranslationEntry Key="Plugin/UserInterface/btnActionQueueEnabled" Translation="Enabled" />
