@@ -935,5 +935,5 @@
     <TranslationEntry Key="internal/Plugin/loglevelWarning" Translation="Warning" />
     <TranslationEntry Key="internal/Plugin/loglevelInfo" Translation="Info" />
     <TranslationEntry Key="internal/Plugin/loglevelVerbose" Translation="Verbose" />    
-  </Translations>
+  </Translations> 
 </Language>
