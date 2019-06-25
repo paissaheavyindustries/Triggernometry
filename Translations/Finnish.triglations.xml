@@ -925,5 +925,15 @@
     <TranslationEntry Key="VariableForm/refreshToolStripMenuItem" Translation="Päivitä" />
     <TranslationEntry Key="VariableForm/tabList" Translation="Listamuuttujat" />
     <TranslationEntry Key="VariableForm/tabScalar" Translation="Skalaarimuuttujat" />
+    <TranslationEntry Key="internal/ffxiv/missingactplugin" Translation="FFXIV:n ACT-liitännäinen ei löytynyt tiedostonimellä ({0}) tai tyypillä ({1}), jotkin toiminnot eivät ehkä toimi odotetulla tavalla" />
+    <TranslationEntry Key="internal/ffxiv/oldactplugin" Translation="FFXIV:n ACT-liitännäinen on vanhempi ({0}) kuin odotettu ({1}), jotkin toiminnot eivät ehkä toimi odotetulla tavalla" />
+    <TranslationEntry Key="internal/ffxiv/updateexception" Translation="Poikkeus FFXIV-tilapäivityksessä: {0}" />
+    <TranslationEntry Key="internal/ffxiv/namedexception" Translation="Poikkeus FFXIV-olioiden nimihaussa: {0}" />
+    <TranslationEntry Key="internal/ffxiv/idexception" Translation="Poikkeus FFXIV-olioiden ID-haussa: {0}" />
+    <TranslationEntry Key="internal/ffxiv/partytoobig" Translation="Ryhmässä on enemmän kuin {0} pelaajaa" />
+    <TranslationEntry Key="internal/Plugin/loglevelError" Translation="Virhe" />
+    <TranslationEntry Key="internal/Plugin/loglevelWarning" Translation="Varoitus" />
+    <TranslationEntry Key="internal/Plugin/loglevelInfo" Translation="Info" />
+    <TranslationEntry Key="internal/Plugin/loglevelVerbose" Translation="Debug-tieto" />	  
   </Translations>
 </Language>
