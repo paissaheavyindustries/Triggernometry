@@ -925,5 +925,15 @@
     <TranslationEntry Key="VariableForm/refreshToolStripMenuItem" Translation="Refresh" />
     <TranslationEntry Key="VariableForm/tabList" Translation="List variables" />
     <TranslationEntry Key="VariableForm/tabScalar" Translation="Scalar variables" />
+    <TranslationEntry Key="internal/ffxiv/missingactplugin" Translation="FFXIV ACT plugin with filename ({0}) or type ({1}) could not be located, some functions may not work as expected" />
+    <TranslationEntry Key="internal/ffxiv/oldactplugin" Translation="FFXIV ACT plugin version is lower ({0}) than expected ({1}), some functions may not work as expected" />
+    <TranslationEntry Key="internal/ffxiv/updateexception" Translation="Exception in FFXIV state update: {0}" />
+    <TranslationEntry Key="internal/ffxiv/namedexception" Translation="Exception in FFXIV named entity retrieve: {0}" />
+    <TranslationEntry Key="internal/ffxiv/idexception" Translation="Exception in FFXIV ID entity retrieve: {0}" />
+    <TranslationEntry Key="internal/ffxiv/partytoobig" Translation="Party structure has more than {0} members" />
+    <TranslationEntry Key="internal/Plugin/loglevelError" Translation="Error" />
+    <TranslationEntry Key="internal/Plugin/loglevelWarning" Translation="Warning" />
+    <TranslationEntry Key="internal/Plugin/loglevelInfo" Translation="Info" />
+    <TranslationEntry Key="internal/Plugin/loglevelVerbose" Translation="Verbose" />    
   </Translations>
 </Language>
