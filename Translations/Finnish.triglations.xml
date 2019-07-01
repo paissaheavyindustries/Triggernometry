@@ -323,9 +323,11 @@
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Black Mage]" Translation="Black Mage" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Blue Mage]" Translation="Blue Mage" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Conjurer]" Translation="Conjurer" />
+	<TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Dancer]" Translation="Dancer" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Dark Knight]" Translation="Dark Knight" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Dragoon]" Translation="Dragoon" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Gladiator]" Translation="Gladiator" />
+	<TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Gunbreaker]" Translation="Gunbreaker" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Lancer]" Translation="Lancer" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Machinist]" Translation="Machinist" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Marauder]" Translation="Marauder" />
@@ -385,8 +387,10 @@
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Bard]" Translation="Ammatti: Bard" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Black Mage]" Translation="Ammatti: Black Mage" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Blue Mage]" Translation="Ammatti: Blue Mage" />
+	<TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Dancer]" Translation="Ammatti: Dancer" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Dark Knight]" Translation="Ammatti: Dark Knight" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Dragoon]" Translation="Ammatti: Dragoon" />
+	<TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Gunbreaker]" Translation="Ammatti: Gunbreaker" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Machinist]" Translation="Ammatti: Machinist" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Monk]" Translation="Ammatti: Monk" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Ninja]" Translation="Ammatti: Ninja" />
