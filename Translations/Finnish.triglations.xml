@@ -939,5 +939,16 @@
     <TranslationEntry Key="internal/Plugin/loglevelWarning" Translation="Varoitus" />
     <TranslationEntry Key="internal/Plugin/loglevelInfo" Translation="Info" />
     <TranslationEntry Key="internal/Plugin/loglevelVerbose" Translation="Debug-tieto" />	  
+    <TranslationEntry Key="internal/ffxiv/networksubexception" Translation="FFXIV-verkkoliikenteen seuranta ei onnistunut poikkeuksen takia: {0}" />
+    <TranslationEntry Key="internal/Plugin/ffxivnetworklogline" Translation="FFXIV-verkkoliikennetapahtuma: ({0})" />
+    <TranslationEntry Key="internal/Plugin/ffxivnetworksplitlogline" Translation="Jaettu FFXIV-verkkoliikennetapahtuma: ({0})" />
+    <TranslationEntry Key="internal/Plugin/ffxivnetworkprocex" Translation="Poikkeus ({0}) käsitellessä FFXIV-verkkoliikennetapahtumaa ({1})" />
+    <TranslationEntry Key="internal/ffxiv/networksubok" Translation="FFXIV-verkkoliikenteen seuranta onnistui" />
+    <TranslationEntry Key="ConfigurationForm/grpFfxivEventLogging" Translation="Tapahtumien kirjaaminen" />
+    <TranslationEntry Key="ConfigurationForm/chkLogNormalEvents" Translation="Kirjaa normaalit logirivit" />
+    <TranslationEntry Key="ConfigurationForm/chkFfxivLogNetwork" Translation="Kirjaa FFXIV-verkkoliikenne" />
+    <TranslationEntry Key="TriggerForm/lblTriggerSource" Translation="Herättimen tietolähde" />
+    <TranslationEntry Key="ActionForm/cbxTriggerSource[Normal log lines]" Translation="Normaalit logirivit" />
+    <TranslationEntry Key="ActionForm/cbxTriggerSource[FFXIV network events]" Translation="FFXIV-verkkoliikenne" />	  
   </Translations>
 </Language>
