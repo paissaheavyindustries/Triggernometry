@@ -938,6 +938,17 @@
     <TranslationEntry Key="internal/Plugin/loglevelError" Translation="Error" />
     <TranslationEntry Key="internal/Plugin/loglevelWarning" Translation="Warning" />
     <TranslationEntry Key="internal/Plugin/loglevelInfo" Translation="Info" />
-    <TranslationEntry Key="internal/Plugin/loglevelVerbose" Translation="Verbose" />    
+    <TranslationEntry Key="internal/Plugin/loglevelVerbose" Translation="Verbose" />
+    <TranslationEntry Key="internal/ffxiv/networksubexception" Translation="Could not subscribe to FFXIV network events due to an exception: {0}" />
+    <TranslationEntry Key="internal/Plugin/ffxivnetworklogline" Translation="Network log line: ({0})" />
+    <TranslationEntry Key="internal/Plugin/ffxivnetworksplitlogline" Translation="Split network log line: ({0})" />
+    <TranslationEntry Key="internal/Plugin/ffxivnetworkprocex" Translation="Exception ({0}) when processing network log line ({1})" />
+    <TranslationEntry Key="internal/ffxiv/networksubok" Translation="Subscribed to FFXIV network events" />
+    <TranslationEntry Key="ConfigurationForm/grpFfxivEventLogging" Translation="Event logging" />
+    <TranslationEntry Key="ConfigurationForm/chkLogNormalEvents" Translation="Log normal log lines" />
+    <TranslationEntry Key="ConfigurationForm/chkFfxivLogNetwork" Translation="Log network events" />
+    <TranslationEntry Key="TriggerForm/lblTriggerSource" Translation="Trigger event source" />
+    <TranslationEntry Key="ActionForm/cbxTriggerSource[Normal log lines]" Translation="Normal log lines" />
+    <TranslationEntry Key="ActionForm/cbxTriggerSource[FFXIV network events]" Translation="FFXIV network events" />	  
   </Translations> 
 </Language>
