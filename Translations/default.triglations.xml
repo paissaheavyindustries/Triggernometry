@@ -197,7 +197,7 @@
     <TranslationEntry Key="ActionForm/lblJsonInstructions" Translation="If the response firing expression has been defined, an log line will be generated from the result of the evaluted string expression. The log line will be processed like any other, as if it came from ACT itself.&#xD;&#xA;&#xD;&#xA;To add the response from the endpoint to this expression, special variable &quot;_response&quot; is available. The special variable will only be valid in the context of this action's execution.&#xD;&#xA;" />
     <TranslationEntry Key="ActionForm/lblJsonPayload" Translation="Payload to send" />
     <TranslationEntry Key="ActionForm/lblKeypresses" Translation="Keypresses to send" />
-    <TranslationEntry Key="ActionForm/lblKeypressesInfo" Translation="The keypress format, including how to represent modifier keys such as Shift, is described on this webpage:" />
+    <TranslationEntry Key="ActionForm/lblKeypressesInfo" Translation="The SendKeys keypress format, including how to represent modifier keys such as Shift, is described on this webpage:" />
     <TranslationEntry Key="ActionForm/lblLoggingLevel" Translation="Logging filtering level" />
     <TranslationEntry Key="ActionForm/lblLogMessageText" Translation="Message to log" />
     <TranslationEntry Key="ActionForm/lblLvarExpType" Translation="Expression type" />
@@ -949,6 +949,20 @@
     <TranslationEntry Key="ConfigurationForm/chkFfxivLogNetwork" Translation="Log network events" />
     <TranslationEntry Key="TriggerForm/lblTriggerSource" Translation="Trigger event source" />
     <TranslationEntry Key="ActionForm/cbxTriggerSource[Normal log lines]" Translation="Normal log lines" />
-    <TranslationEntry Key="ActionForm/cbxTriggerSource[FFXIV network events]" Translation="FFXIV network events" />	  
+    <TranslationEntry Key="ActionForm/cbxTriggerSource[FFXIV network events]" Translation="FFXIV network events" />
+	<TranslationEntry Key="internal/AuraContainer/updateerror" Translation="Deactivating aura due to update exception: {0}" />
+	<TranslationEntry Key="internal/Context/padleftargerror" Translation="Padleft function requires two arguments, {0} were given" />
+	<TranslationEntry Key="internal/Context/padrightargerror" Translation="Padright function requires two arguments, {0} were given" />
+	<TranslationEntry Key="internal/Context/substringargerror" Translation="Substring function requires one or two arguments, {0} were given" />
+	<TranslationEntry Key="internal/Context/indexofargerror" Translation="Indexof function requires one argument, {0} were given" />
+	<TranslationEntry Key="internal/Action/desckeypress" Translation="send keycode ({0}) to window ({1})" />
+	<TranslationEntry Key="internal/ffxiv/networkunsubok" Translation="Unsubscribed from FFXIV network events" />
+	<TranslationEntry Key="internal/ffxiv/networkunsubexception" Translation="Could not unsubscribe from FFXIV network events due to an exception: {0}" />
+	<TranslationEntry Key="ActionForm/lblKeypress" Translation="Keycode to send" />
+	<TranslationEntry Key="ActionForm/lblKeypressMethod" Translation="Keypress send method" />
+	<TranslationEntry Key="ActionForm/lblKeypressWindow" Translation="Window title" />
+	<TranslationEntry Key="ActionForm/cbxKeypressMethod[SendKeys]" Translation="SendKeys" />
+	<TranslationEntry Key="ActionForm/cbxKeypressMethod[Window message]" Translation="Window message" />
+	<TranslationEntry Key="ActionForm/lblKeypressInfo" Translation="The window message format can send one key at a time, and modifier keys such as Shift are represented as additions to the original keycode. Keycode constants are described on this webpage:" />
   </Translations> 
 </Language>
