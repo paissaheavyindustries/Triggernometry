@@ -197,7 +197,7 @@
     <TranslationEntry Key="ActionForm/lblJsonInstructions" Translation="Jos laukaisulauseke on määritelty, sen evaluointituloksesta tehdään lokirivi. Lokirivi käsitellään kuin kaikki muutkin, kuin se olisi tullut ACT:ltä itseltään.&#xD;&#xA;&#xD;&#xA;Erikoismuuttujaa &quot;_response&quot; voidaan käyttää lausekkeessa viitteenä vastaukseen. Erikoismuuttujalla on arvo vain tämän toiminnon suorituksen yhteydessä.&#xD;&#xA;" />
     <TranslationEntry Key="ActionForm/lblJsonPayload" Translation="Lähetettävä sisältö" />
     <TranslationEntry Key="ActionForm/lblKeypresses" Translation="Lähetettävät näppäinpainallukset" />
-    <TranslationEntry Key="ActionForm/lblKeypressesInfo" Translation="Näppäinpainallusten esitystapa, mm. kuinka erikoisnäppäimiä kuten Shift voidaan painaa, on kuvattu tällä sivustolla:" />
+    <TranslationEntry Key="ActionForm/lblKeypressesInfo" Translation="SendKeys-näppäinpainallusten esitystapa, mm. kuinka erikoisnäppäimiä kuten Shift voidaan painaa, on kuvattu tällä sivustolla:" />
     <TranslationEntry Key="ActionForm/lblLoggingLevel" Translation="Lokiviestien suodatustaso" />
     <TranslationEntry Key="ActionForm/lblLogMessageText" Translation="Kirjattava viesti" />
     <TranslationEntry Key="ActionForm/lblLvarExpType" Translation="Lausekkeen tyyppi" />
@@ -949,6 +949,19 @@
     <TranslationEntry Key="ConfigurationForm/chkFfxivLogNetwork" Translation="Kirjaa FFXIV-verkkoliikenne" />
     <TranslationEntry Key="TriggerForm/lblTriggerSource" Translation="Herättimen tietolähde" />
     <TranslationEntry Key="ActionForm/cbxTriggerSource[Normal log lines]" Translation="Normaalit logirivit" />
-    <TranslationEntry Key="ActionForm/cbxTriggerSource[FFXIV network events]" Translation="FFXIV-verkkoliikenne" />	  
+    <TranslationEntry Key="ActionForm/cbxTriggerSource[FFXIV network events]" Translation="FFXIV-verkkoliikenne" />
+	<TranslationEntry Key="internal/Context/padleftargerror" Translation="Padleft-funktio tarvitsee kaksi argumenttia, {0} on annettu" />
+	<TranslationEntry Key="internal/Context/padrightargerror" Translation="Padright-funktio tarvitsee kaksi argumenttia, {0} on annettu" />
+	<TranslationEntry Key="internal/Context/substringargerror" Translation="Substring-funktio tarvitsee yhden tai kaksi argumenttia, {0} on annettu" />
+	<TranslationEntry Key="internal/Context/indexofargerror" Translation="Indexof-funktio tarvitsee yhden argumentin, {0} on annettu" />
+	<TranslationEntry Key="internal/Action/desckeypress" Translation="lähetä näppäinkoodi ({0}) ikkunalle ({1})" />
+	<TranslationEntry Key="internal/ffxiv/networkunsubok" Translation="FFXIV-verkkoliikenteen seurannan peruutus onnistui" />
+	<TranslationEntry Key="internal/ffxiv/networkunsubexception" Translation="FFXIV-verkkoliikenteen seurannan peruutus ei onnistunut poikkeuksen takia: {0}" />
+	<TranslationEntry Key="ActionForm/lblKeypress" Translation="Lähetettävä näppäinkoodi" />
+	<TranslationEntry Key="ActionForm/lblKeypressMethod" Translation="Näppäinpainallusten lähetystapa" />
+	<TranslationEntry Key="ActionForm/lblKeypressWindow" Translation="Ikkunan nimi" />
+	<TranslationEntry Key="ActionForm/cbxKeypressMethod[SendKeys]" Translation="SendKeys" />
+	<TranslationEntry Key="ActionForm/cbxKeypressMethod[Window message]" Translation="Ikkunaviesti" />
+	<TranslationEntry Key="ActionForm/lblKeypressInfo" Translation="Ikkunaviestillä voi lähettää yhden painalluksen kerrallaan, and erikoisnäppäimet kuten Shift kuvataan yhteenlaskuna alkuperäisen näppäinkoodin kanssa. Näppäinkoodit on kuvattu tällä sivustolla:" />	  
   </Translations>
 </Language>
