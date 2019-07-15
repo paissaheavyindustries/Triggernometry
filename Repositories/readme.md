@@ -13,4 +13,4 @@ It's as easy as taking an export in Triggernometry and making that available on 
 ## Known repositories
 
 Triggernometry's own default repository is right here on Github:
-https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml
+* https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml
