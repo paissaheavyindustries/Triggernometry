@@ -14,3 +14,7 @@ It's as easy as taking an export in Triggernometry and making that available on 
 
 Triggernometry's own default repository is right here on Github:
 * https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml
+
+## Other tech stuff
+
+Triggernometry detects changed repositories by doing a HTTP HEAD request. If the last modified date is set and it has changed, or content length has been set and it has changed, Triggernometry will redownload the source file. If neither of those have changed, then Triggernometry will use local cache instead.
