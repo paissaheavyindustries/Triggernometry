@@ -4,17 +4,17 @@
     <Category Name="Final Fantasy XIV" Description="Triggers for Final Fantasy XIV">
       <Categories />
       <Repositories>
-        <Repository Name="Test repository 1" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world!" />
-        <Repository Name="Test repository 2" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world!" />
-        <Repository Name="Test repository 3" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world!" />
+        <Repository Name="Test repository 1" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 1!" />
+        <Repository Name="Test repository 2" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 2!" />
+        <Repository Name="Test repository 3" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 3!" />
       </Repositories>
     </Category>
     <Category Name="Final Fantasy XV" Description="Triggers for Final Fantasy XV">
       <Categories />
       <Repositories>
-        <Repository Name="Test repository 11" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world!" />
-        <Repository Name="Test repository 22" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default2.xml" Description="Hello world!" />
-        <Repository Name="Test repository 33" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default3.xml" Description="Hello world!" />
+        <Repository Name="Test repository 11" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 11!" />
+        <Repository Name="Test repository 22" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 22!" />
+        <Repository Name="Test repository 33" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 33!" />
       </Repositories>
     </Category>
   </Categories>
