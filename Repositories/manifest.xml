@@ -4,7 +4,17 @@
     <Category Name="Final Fantasy XIV" Description="Triggers for Final Fantasy XIV">
       <Categories />
       <Repositories>
-        <Repository Name="Test repository" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world!" />
+        <Repository Name="Test repository 1" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world!" />
+        <Repository Name="Test repository 2" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world!" />
+        <Repository Name="Test repository 3" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world!" />
+      </Repositories>
+    </Category>
+    <Category Name="Final Fantasy XV" Description="Triggers for Final Fantasy XV">
+      <Categories />
+      <Repositories>
+        <Repository Name="Test repository 1" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world!" />
+        <Repository Name="Test repository 2" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world!" />
+        <Repository Name="Test repository 3" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world!" />
       </Repositories>
     </Category>
   </Categories>
