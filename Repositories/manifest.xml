@@ -1,3 +1,5 @@
-<repositories>
-<repository name='Test repository' address='https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml'>
-</repositories>
+<RepositoryList>
+<Category Name='Final Fantasy XIV' Description='Triggers for Final Fantasy XIV'>
+<Repository Name='Test repository' Address='https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml' Description='Hello world!'>
+</Category>
+</RepositoryList>
