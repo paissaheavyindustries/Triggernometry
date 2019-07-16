@@ -2,7 +2,17 @@
 <RepositoryList>
   <Categories>
     <Category Name="Final Fantasy XIV" Description="Triggers for Final Fantasy XIV">
-      <Categories />
+      <Categories>
+		<Category Name="Final Fantasy XIV" Description="This is a subcategory">
+		  <Categories>
+		  </Categories>
+		  <Repositories>
+			<Repository Name="Test repository 31" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 31!" />
+			<Repository Name="Test repository 32" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 32!" />
+			<Repository Name="Test repository 33" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 33!" />
+		  </Repositories>
+		</Category>
+      </Categories>
       <Repositories>
         <Repository Name="Test repository 1" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 1!" />
         <Repository Name="Test repository 2" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 2!" />
