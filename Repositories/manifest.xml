@@ -17,6 +17,13 @@
 						<Repository Name="Final Fantasy XIV debugging triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_debugging.xml" Description="Includes some simple triggers related to debugging and outputting information related to Final Fantasy XIV functions." />
 					</Repositories>
 				</Category>
+				<Category Name="Gathering" Description="Triggers related to gathering in Final Fantasy XIV.">
+					<Categories>
+					</Categories>
+					<Repositories>
+						<Repository Name="Final Fantasy XIV gathering triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_gathering.xml" Description="Includes some simple triggers related to gathering." />
+					</Repositories>
+				</Category>
 			</Categories>
 		</Category>
 		<Category Name="Triggernometry examples" Description="Example triggers demonstrating Triggernometry usage, including some more advanced usage.">
