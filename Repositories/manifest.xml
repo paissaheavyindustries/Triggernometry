@@ -23,7 +23,7 @@
 			<Categories>
 			</Categories>
 			<Repositories>
-				<Repository Name="Final Fantasy XIV debugging triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/examples.xml" Description="Triggers that demonstrate Triggernometry functionality." />
+				<Repository Name="Triggernometry example triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/examples.xml" Description="Triggers that demonstrate Triggernometry functionality." />
 			</Repositories>
 		</Category>		
 	</Categories>
