@@ -7,14 +7,14 @@
 			<Categories>
 			</Categories>
 			<Repositories>
-				<Repository Name="Default crafting triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_crafting.xml" Description="Includes some simple triggers related to crafting. Note that some triggers may require you to do edits to suit your environment." />
+				<Repository Name="Final Fantasy XIV crafting triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_crafting.xml" Description="Includes some simple triggers related to crafting. Note that some triggers may require you to do edits to suit your environment." />
 			</Repositories>
 			</Category>
 			<Category Name="Debugging" Description="Triggers related to debugging Final Fantasy XIV related features in Triggernometry.">
 			<Categories>
 			</Categories>
 			<Repositories>
-				<Repository Name="Default debugging triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_debugging.xml" Description="Includes some simple triggers related to debugging and outputting information related to Final Fantasy XIV functions." />
+				<Repository Name="Final Fantasy XIV debugging triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_debugging.xml" Description="Includes some simple triggers related to debugging and outputting information related to Final Fantasy XIV functions." />
 			</Repositories>
 			</Category>
 			<Category Name="Final Fantasy XIV" Description="This is a subcategory">
