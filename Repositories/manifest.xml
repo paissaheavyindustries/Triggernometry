@@ -2,44 +2,29 @@
 <RepositoryList>
 	<Categories>
 		<Category Name="Final Fantasy XIV" Description="Triggers for Final Fantasy XIV">
-		<Categories>
-			<Category Name="Crafting" Description="Triggers related to crafting in Final Fantasy XIV.">
 			<Categories>
-			</Categories>
-			<Repositories>
-				<Repository Name="Final Fantasy XIV crafting triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_crafting.xml" Description="Includes some simple triggers related to crafting. Note that some triggers may require you to do edits to suit your environment." />
-			</Repositories>
-			</Category>
-			<Category Name="Debugging" Description="Triggers related to debugging Final Fantasy XIV related features in Triggernometry.">
-			<Categories>
-			</Categories>
-			<Repositories>
-				<Repository Name="Final Fantasy XIV debugging triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_debugging.xml" Description="Includes some simple triggers related to debugging and outputting information related to Final Fantasy XIV functions." />
-			</Repositories>
-			</Category>
-			<Category Name="Final Fantasy XIV" Description="This is a subcategory">
-			<Categories>
-			</Categories>
-			<Repositories>
-				<Repository Name="Test repository 31" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 31!" />
-				<Repository Name="Test repository 32" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 32!" />
-				<Repository Name="Test repository 33" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 33!" />
-			</Repositories>
+				<Category Name="Crafting" Description="Triggers related to crafting in Final Fantasy XIV.">
+					<Categories>
+					</Categories>
+					<Repositories>
+						<Repository Name="Final Fantasy XIV crafting triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_crafting.xml" Description="Includes some simple triggers related to crafting. Note that some triggers may require you to do edits to suit your environment." />
+					</Repositories>
+				</Category>
+				<Category Name="Debugging" Description="Triggers related to debugging Final Fantasy XIV related features in Triggernometry.">
+					<Categories>
+					</Categories>
+					<Repositories>
+						<Repository Name="Final Fantasy XIV debugging triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_debugging.xml" Description="Includes some simple triggers related to debugging and outputting information related to Final Fantasy XIV functions." />
+					</Repositories>
+				</Category>
 			</Category>
 		</Categories>
-		<Repositories>
-			<Repository Name="Test repository 1" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 1!" />
-			<Repository Name="Test repository 2" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 2!" />
-			<Repository Name="Test repository 3" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 3!" />
-		</Repositories>
-		</Category>
-		<Category Name="Final Fantasy XV" Description="Triggers for Final Fantasy XV">
-			<Categories />
+		<Category Name="Triggernometry examples" Description="Example triggers demonstrating Triggernometry usage, including some more advanced usage.">
+			<Categories>
+			</Categories>
 			<Repositories>
-				<Repository Name="Test repository 11" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 11!" />
-				<Repository Name="Test repository 22" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 22!" />
-				<Repository Name="Test repository 33" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/default.xml" Description="Hello world 33!" />
+				<Repository Name="Final Fantasy XIV debugging triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/examples.xml" Description="Triggers that demonstrate Triggernometry functionality." />
 			</Repositories>
-		</Category>
+		</Category>		
 	</Categories>
 </RepositoryList>
