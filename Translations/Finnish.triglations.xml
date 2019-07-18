@@ -970,6 +970,7 @@
 	<TranslationEntry Key="internal/Action/descwmsg" Translation="Lähetä ikkunaviesti ({0}) wparam ({1}) lparam ({2}) ikkunalle ({3})" />	
 	<TranslationEntry Key="ActionForm/lblWmsgWarning" Translation="Tämänkaltaiset toiminnot voivat olla vaarallisia ja aiheuttaa vahinkoa jos herätin laukeaa esimerkiksi vääränlaisilla tai odottamattomilla arvoilla. Olethan varovainen!" />
 	<TranslationEntry Key="TriggerForm/lblReadOnly" Translation="Olet vain luku-tilassa, sillä säilössä olevia herättimiä ei voi muuttaa. Jos haluat muuttaa herätintä, sinun on otettava siitä paikallinen kopio." />
+	<TranslationEntry Key="FolderForm/lblReadOnly" Translation="Olet vain luku-tilassa, sillä säilössä olevia kansioita ei voi muuttaa. Jos haluat muuttaa kansiota, sinun on otettava siitä paikallinen kopio." />
 	<TranslationEntry Key="ActionForm/cbxActionType[Send window message]" Translation="Lähetä ikkunaviesti" />
 	<TranslationEntry Key="ActionForm/lblWmsgTitle" Translation="Ikkunan nimi" />
 	<TranslationEntry Key="ActionForm/lblWmsgCode" Translation="Viestikoodi" />
