@@ -1053,5 +1053,6 @@
 	<TranslationEntry Key="RepositoryListForm/exception" Translation="Lataus epäonnistui poikkeuksen takia: {0}" />
 	<TranslationEntry Key="RepositoryListForm/downloadcomplete" Translation="Lataus valmis" />
 	<TranslationEntry Key="RepositoryListForm/masterlistproblem" Translation="Säilölistaa ei voitu avata" />	  
+	<TranslationEntry Key="ConfigurationForm/chkWarnAdmin" Translation="Varoita jos ei olla Järjestelmänvalvojana" />
   </Translations>
 </Language>
