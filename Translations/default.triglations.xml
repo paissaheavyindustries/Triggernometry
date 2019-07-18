@@ -971,6 +971,7 @@
 	<TranslationEntry Key="internal/Action/descwmsg" Translation="Send message ({0}) wparam ({1}) lparam ({2}) to window ({3})" />
 	<TranslationEntry Key="ActionForm/lblWmsgWarning" Translation="Actions of this type may be potentially dangerous and cause damage if, for example, the trigger is fired with parameters that fall outside of the expected values. Please be aware of the risk." />
 	<TranslationEntry Key="TriggerForm/lblReadOnly" Translation="You are in read-only mode, as the configuration of remote triggers can't be edited locally. If you wish to edit the trigger, you will need to make a local copy of it." />
+	<TranslationEntry Key="FolderForm/lblReadOnly" Translation="You are in read-only mode, as the configuration of remote folders can't be edited locally. If you wish to edit the folder, you will need to make a local copy of it." />
 	<TranslationEntry Key="ActionForm/cbxActionType[Send window message]" Translation="Send window message" />
 	<TranslationEntry Key="ActionForm/lblWmsgTitle" Translation="Window title" />
 	<TranslationEntry Key="ActionForm/lblWmsgCode" Translation="Message code" />
