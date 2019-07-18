@@ -305,7 +305,7 @@
     <TranslationEntry Key="ConfigurationForm/grpActHooks" Translation=" ACT-koukut " />
     <TranslationEntry Key="ConfigurationForm/grpClipboard" Translation=" Leikepöytä " />
     <TranslationEntry Key="ConfigurationForm/grpFutureProofing" Translation=" Tulevaisuuden varalta " />
-    <TranslationEntry Key="ConfigurationForm/grpGeneral" Translation=" Yleinen " />
+    <TranslationEntry Key="ConfigurationForm/grpGeneral" Translation=" Tapahtumien kirjaaminen " />
     <TranslationEntry Key="ConfigurationForm/grpPartyListOrder" Translation=" Ryhmän järjestelytapa " />
     <TranslationEntry Key="ConfigurationForm/grpStartup" Translation=" Käynnistys" />
     <TranslationEntry Key="ConfigurationForm/grpVolAdjustment" Translation=" Global volume adjustment " />
@@ -314,7 +314,6 @@
     <TranslationEntry Key="ConfigurationForm/lblLoggingLevel" Translation="Lokiviestien suodatustaso" />
     <TranslationEntry Key="ConfigurationForm/lblSeparator" Translation="Tapahtumatekstin erotin" />
     <TranslationEntry Key="ConfigurationForm/lblSoundVolume" Translation="Äänentoisto" />
-    <TranslationEntry Key="ConfigurationForm/lblTrigger" Translation="Käynnistyksessä laukaistava herätin" />
     <TranslationEntry Key="ConfigurationForm/lblTtsVolume" Translation="Teksti puheeksi" />	
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Arcanist]" Translation="Arcanist" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Archer]" Translation="Archer" />
@@ -758,7 +757,7 @@
     <TranslationEntry Key="internal/UserInterface/warnbeforemanualsave" Translation="Asetuksen lataamisessa tapahtui virheitä Triggernometryn käynnistyksessä. Asetusten tallentaminen tässä tilassa voi johtaa asetustietojen menetykseen. Haluatko silti yrittää tallentaa asetukset?" />
     <TranslationEntry Key="internal/VariableForm/variableeditortag" Translation="Muuttujien muokkaus" />
 	<TranslationEntry Key="LogForm" Translation="Triggernometryn loki" />
-    <TranslationEntry Key="LogForm/btnClear" Translation="Tyhjennä" />
+    <TranslationEntry Key="LogForm/btnClear" Translation="Tyhjennä loki" />
     <TranslationEntry Key="LogForm/btnClose" Translation="Sulje" />
     <TranslationEntry Key="LogForm/btnCopy" Translation="Kopioi" />
     <TranslationEntry Key="LogForm/btnEverythingToClipboard" Translation="Kaikki" />
@@ -963,5 +962,96 @@
 	<TranslationEntry Key="ActionForm/cbxKeypressMethod[SendKeys]" Translation="SendKeys" />
 	<TranslationEntry Key="ActionForm/cbxKeypressMethod[Window message]" Translation="Ikkunaviesti" />
 	<TranslationEntry Key="ActionForm/lblKeypressInfo" Translation="Ikkunaviestillä voi lähettää yhden painalluksen kerrallaan, and erikoisnäppäimet kuten Shift kuvataan yhteenlaskuna alkuperäisen näppäinkoodin kanssa. Näppäinkoodit on kuvattu tällä sivustolla:" />	  
+	<TranslationEntry Key="internal/RepositoryForm/allowwmsgwarn" Translation="Ikkunaviestien lähetyksen salliminen säilössä oleville herättimille voi olla erittäin riskialtista, sillä säilössä voi olla (tai sinne voi myöhemmin tulla) herättimiä jotka osoittautuvat vahingollisiksi. Oletko täysin varma että haluat sallia tämän?" />
+	<TranslationEntry Key="internal/ImportForm/dangerprocscriptwmsg" Translation="Jotkin tuoduista herättämistä sisältävät ohjelmia käynnistäviä, skriptikoodia ajavia, ja ikkunaviestejä lähettäviä toimintoja. Nämä herättimet voivat olla vaarallisia ja vahingollisia. Herättimet joihin tämä vaikuttaa, on korostettu alla." />
+	<TranslationEntry Key="internal/ImportForm/dangerprocwmsg" Translation="Jotkin tuoduista herättämistä sisältävät ohjelmia käynnistäviä ja ikkunaviestejä lähettäviä toimintoja. Nämä herättimet voivat olla vaarallisia ja vahingollisia. Herättimet joihin tämä vaikuttaa, on korostettu alla." />
+	<TranslationEntry Key="internal/ImportForm/dangerscriptwmsg" Translation="Jotkin tuoduista herättämistä sisältävät skriptikoodia ajavia ja ikkunaviestejä lähettäviä toimintoja. Nämä herättimet voivat olla vaarallisia ja vahingollisia. Herättimet joihin tämä vaikuttaa, on korostettu alla." />
+	<TranslationEntry Key="internal/ImportForm/dangerwmsg" Translation="Jotkin tuoduista herättämistä sisältävät ikkunaviestejä lähettäviä toimintoja. Nämä herättimet voivat olla vaarallisia ja vahingollisia. Herättimet joihin tämä vaikuttaa, on korostettu alla." />	
+	<TranslationEntry Key="internal/Action/descwmsg" Translation="Lähetä ikkunaviesti ({0}) wparam ({1}) lparam ({2}) ikkunalle ({3})" />	
+	<TranslationEntry Key="ActionForm/lblWmsgWarning" Translation="Tämänkaltaiset toiminnot voivat olla vaarallisia ja aiheuttaa vahinkoa jos herätin laukeaa esimerkiksi vääränlaisilla tai odottamattomilla arvoilla. Olethan varovainen!" />
+	<TranslationEntry Key="TriggerForm/lblReadOnly" Translation="Olet vain luku-tilassa, sillä säilössä olevia herättimiä ei voi muuttaa. Jos haluat muuttaa herätintä, sinun on otettava siitä paikallinen kopio." />
+	<TranslationEntry Key="ActionForm/cbxActionType[Send window message]" Translation="Lähetä ikkunaviesti" />
+	<TranslationEntry Key="ActionForm/lblWmsgTitle" Translation="Ikkunan nimi" />
+	<TranslationEntry Key="ActionForm/lblWmsgCode" Translation="Viestikoodi" />
+	<TranslationEntry Key="ActionForm/lblWmsgWparam" Translation="WParam" />
+	<TranslationEntry Key="ActionForm/lblWmsgLparam" Translation="LParam" />	
+	<TranslationEntry Key="internal/Plugin/repoupdates" Translation="Päivitetään {0} säilöä" />	
+	<TranslationEntry Key="internal/Plugin/repoupdate" Translation="Päivitetään säilöä {0} osoitteessa {1}" />
+	<TranslationEntry Key="internal/Plugin/repoupdateexception" Translation="Säilön {0} päivitys epäonnistui poikkeuksen takia: {1}" />	
+	<TranslationEntry Key="internal/Plugin/repousinglocal" Translation="Ladataan säilön {0} paikallinen kopio" />
+	<TranslationEntry Key="internal/Plugin/repoloadlocalexception" Translation="Säilön {0} paikallista kopioita ei voitu ladata poikkeuksen takia: {1}" />
+	<TranslationEntry Key="internal/Plugin/reposavelocalexception" Translation="Säilön {0} paikallista kopioita ei voitu tallentaa poikkeuksen takia: {1}" />	
+	<TranslationEntry Key="internal/Plugin/repoloadinglocal" Translation="Ladataan säilön {0} paikallinen kopio paikassa {1}" />
+	<TranslationEntry Key="internal/Plugin/repoloadedlocal" Translation="Ladattu säilön {0} paikallinen kopio paikasta {1}" />
+	<TranslationEntry Key="internal/Plugin/reposavinglocal" Translation="Tallennetaan säilön {0} paikallinen kopio paikkaan {1}" />
+	<TranslationEntry Key="internal/Plugin/reposavedlocal" Translation="Tallennettu säilön {0} paikallinen kopio paikkaan {1}" />	
+	<TranslationEntry Key="internal/Context/formatargerror" Translation="Format-funktio tarvitsee kaksi argumenttia, {0} on annettu" />	
+	<TranslationEntry Key="internal/UserInterface/editrepository" Translation="Muokkaa säilöä '{0}'" />
+	<TranslationEntry Key="internal/Plugin/repoupdatecomplete" Translation="Säilöjen päivitys valmis" />	
+	<TranslationEntry Key="Plugin/UserInterface/ctxUpdate" Translation="Päivitä" />
+	<TranslationEntry Key="Plugin/UserInterface/btnUpdate" Translation="Päivitä" />
+	<TranslationEntry Key="ActionForm/lblObsSceneName" Translation="Lähteen nimi" />	
+	<TranslationEntry Key="internal/Action/descobsshowsource" Translation="näytä lähde ({0}) OBS-kohtauksessa ({1})" />
+	<TranslationEntry Key="internal/Action/descobsshowsourcecurrent" Translation="näytä lähde ({0}) tämänhetkisessä OBS-kohtauksessa" />
+	<TranslationEntry Key="internal/Action/descobshidesource" Translation="piilota lähde ({0}) OBS-kohtauksesta ({1})" />
+	<TranslationEntry Key="internal/Action/descobshidesourcecurrent" Translation="piilota lähde ({0}) tämänhetkisestä OBS-kohtauksesta" />	
+	<TranslationEntry Key="ActionForm/cbxObsOpType[Show source]" Translation="Näytä lähde" />
+	<TranslationEntry Key="ActionForm/cbxObsOpType[Hide source]" Translation="Piilota lähde" />	
+	<TranslationEntry Key="LogForm/lblStatus" Translation="Näytetään {0}/{1} tapahtumaa" />	
+	<TranslationEntry Key="LogForm/capSearch/lblContent" Translation="Hakuasetukset" />
+	<TranslationEntry Key="LogForm/btnSearchOptions" Translation="Hakuasetukset" />
+	<TranslationEntry Key="LogForm/lblEventLevel" Translation="Tapahtuman taso" />
+	<TranslationEntry Key="LogForm/lblRegularExpression" Translation="Säännöllinen lauseke" />
+	<TranslationEntry Key="LogForm/btnSearch" Translation="Hae" />	
+	<TranslationEntry Key="LogForm/cbxLevelMethod[Level must be lower than (&amp;lt;)]" Translation="Taso on oltava alempi kuin (&amp;lt;)" />
+	<TranslationEntry Key="LogForm/cbxLevelMethod[Level must be lower or equal to (≤)]" Translation="Taso on oltava alempi tai sama kuin (≤)" />
+	<TranslationEntry Key="LogForm/cbxLevelMethod[Level must be equal to (=)]" Translation="Taso on oltava sama kuin (=)" />
+	<TranslationEntry Key="LogForm/cbxLevelMethod[Level must be higher or equal to (≥)]" Translation="Taso on oltava korkeampi tai sama kuin (≥)" />
+	<TranslationEntry Key="LogForm/cbxLevelMethod[Level must be higher than (&amp;gt;)]" Translation="Taso on oltava korkeampi kuin (&amp;gt;)" />
+	<TranslationEntry Key="LogForm/cbxLevelMethod[Level must not be equal to (≠)]" Translation="Taso ei saa olla sama kuin (≠)" />
+	<TranslationEntry Key="internal/UserInterface/adddefaultrepo" Translation="Haluaisitko lisätä joitain säilöjä päästäksesi alkuun?" />
+	<TranslationEntry Key="internal/Plugin/repoexportnull" Translation="Tietoja säilölle {0} ei voitu avata" />
+	<TranslationEntry Key="internal/RepositoryForm/exception" Translation="Poikkeus" />
+	<TranslationEntry Key="internal/RepositoryForm/warning" Translation="Varoitus" />	
+	<TranslationEntry Key="internal/RepositoryForm/allowprocesswarn" Translation="Ohjelmien käynnistyksen salliminen säilössä oleville herättimille voi olla erittäin riskialtista, sillä säilössä voi olla (tai sinne voi myöhemmin tulla) herättimiä jotka osoittautuvat vahingollisiksi. Oletko täysin varma että haluat sallia tämän?" />
+	<TranslationEntry Key="internal/RepositoryForm/allowscriptwarn" Translation="Skriptien ajon salliminen säilössä oleville herättimille voi olla erittäin riskialtista, sillä säilössä voi olla (tai sinne voi myöhemmin tulla) herättimiä jotka osoittautuvat vahingollisiksi. Oletko täysin varma että haluat sallia tämän?" />
+	<TranslationEntry Key="internal/RepositoryForm/allowobswarn" Translation="OBS:n toiminnan ohjauksen salliminen säilössä oleville herättimille voi olla erittäin riskialtista, sillä säilössä voi olla (tai sinne voi myöhemmin tulla) herättimiä jotka osoittautuvat vahingollisiksi. Oletko täysin varma että haluat sallia tämän?" />
+	<TranslationEntry Key="RepositoryForm/lblDefaultBehavior" Translation="Oletuskäyttötapa lisätyille herättimille" />
+	<TranslationEntry Key="RepositoryForm/lblUpdatePolicy" Translation="Päivitystapa" />
+	<TranslationEntry Key="RepositoryForm/chkAllowProcess" Translation="Anna herättimien käynnistää ohjelmia" />
+	<TranslationEntry Key="RepositoryForm/chkAllowScript" Translation="Anna herättimien ajaa skriptejä" />
+	<TranslationEntry Key="RepositoryForm/chkAllowWmsg" Translation="Anna herättimien lähettää ikkunaviestejä" />
+	<TranslationEntry Key="RepositoryForm/chkAllowObs" Translation="Anna herättimien ohjata OBS:n toimintaa" />
+	<TranslationEntry Key="RepositoryForm/chkKeepLocal" Translation="Maintain a local backup for outages" />
+	<TranslationEntry Key="RepositoryForm/lblName" Translation="Säilön nimi" />
+	<TranslationEntry Key="RepositoryForm/lblAddress" Translation="Osoite" />
+	<TranslationEntry Key="RepositoryForm/grpUpdateSettings" Translation=" Päivitys- ja oikeusasetukset " />
+	<TranslationEntry Key="RepositoryForm/grpGeneral" Translation=" Yleiset asetukset " />
+	<TranslationEntry Key="RepositoryForm/grpStartupTrigger" Translation=" Käynnistyksessä ajettava herätin/kansio " />
+	<TranslationEntry Key="ConfigurationForm/btnClearSelection" Translation="Poista valinta" />
+	<TranslationEntry Key="ConfigurationForm/lblFolderReminder" Translation="Valitun kansion kaikki herättimet suoritetaan" />
+	<TranslationEntry Key="RepositoryListForm/btnOk" Translation="Lisää valitut" />
+	<TranslationEntry Key="RepositoryListForm/btnCancel" Translation="Peruuta" />
+	<TranslationEntry Key="RepositoryForm/tabGeneral" Translation="Yleiset asetukset" />
+	<TranslationEntry Key="RepositoryForm/tabUpdateLog" Translation="Päivitysloki" />
+	<TranslationEntry Key="RepositoryForm/capDetails" Translation="Tiedot" />
+	<TranslationEntry Key="RepositoryForm/btnCopy" Translation="Kopioi" />
+	<TranslationEntry Key="RepositoryForm/btnSelectionToClipboard" Translation="Valittu" />
+	<TranslationEntry Key="RepositoryForm/btnEverythingToClipboard" Translation="Kaikki" />
+	<TranslationEntry Key="RepositoryForm/ctxSelectionToClipboard" Translation="Valittu" />
+	<TranslationEntry Key="RepositoryForm/ctxEverythingToClipboard" Translation="Kaikki" />
+	<TranslationEntry Key="RepositoryForm/cbxNewBehavior[Enabled or disabled as specified in repository]" Translation="Käyttöön säilön määritysten mukaisesti" />
+	<TranslationEntry Key="RepositoryForm/cbxNewBehavior[Enable everything new by default]" Translation="Kaikki oletuksena käyttöön" />
+	<TranslationEntry Key="RepositoryForm/cbxNewBehavior[Disable everything new by default]" Translation="Kaikki oletuksena pois käytöstä" />
+	<TranslationEntry Key="RepositoryForm/cbxUpdatePolicy[Update automatically on startup]" Translation="Päivitä automaattisesti käynnistyksessä" />
+	<TranslationEntry Key="RepositoryForm/cbxUpdatePolicy[Update only manually]" Translation="Päivitykset vain käsin" />
+	<TranslationEntry Key="RepositoryListForm/grpAvailRepos" Translation=" Saatavilla olevat säilöt " />
+	<TranslationEntry Key="RepositoryListForm/grpRepoDetails" Translation=" Säilön tiedot " />
+	<TranslationEntry Key="Plugin/UserInterface/btnAddRepoList" Translation="Säilö listalta" />
+	<TranslationEntry Key="Plugin/UserInterface/ctxAddRepoList" Translation="Säilö listalta" />
+	<TranslationEntry Key="internal/UserInterface/addrepolist" Translation="Lisää säilö listalta" />
+	<TranslationEntry Key="RepositoryListForm/exception" Translation="Lataus epäonnistui poikkeuksen takia: {0}" />
+	<TranslationEntry Key="RepositoryListForm/downloadcomplete" Translation="Lataus valmis" />
+	<TranslationEntry Key="RepositoryListForm/masterlistproblem" Translation="Säilölistaa ei voitu avata" />	  
   </Translations>
 </Language>
