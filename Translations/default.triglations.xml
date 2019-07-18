@@ -1054,5 +1054,6 @@
 	<TranslationEntry Key="RepositoryListForm/exception" Translation="Download failed due to exception: {0}" />
 	<TranslationEntry Key="RepositoryListForm/downloadcomplete" Translation="Download complete" />
 	<TranslationEntry Key="RepositoryListForm/masterlistproblem" Translation="Data from master repository list could not be unserialized" />
+	<TranslationEntry Key="ConfigurationForm/chkWarnAdmin" Translation="Warn if not running as Administrator" />
   </Translations> 
 </Language>
