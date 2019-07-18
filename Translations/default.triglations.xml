@@ -305,7 +305,7 @@
     <TranslationEntry Key="ConfigurationForm/grpActHooks" Translation=" ACT hooks " />
     <TranslationEntry Key="ConfigurationForm/grpClipboard" Translation=" Clipboard " />
     <TranslationEntry Key="ConfigurationForm/grpFutureProofing" Translation=" Future proofing " />
-    <TranslationEntry Key="ConfigurationForm/grpGeneral" Translation=" General " />
+    <TranslationEntry Key="ConfigurationForm/grpGeneral" Translation=" Logging " />
     <TranslationEntry Key="ConfigurationForm/grpPartyListOrder" Translation=" Party list ordering " />
     <TranslationEntry Key="ConfigurationForm/grpStartup" Translation=" Startup" />
     <TranslationEntry Key="ConfigurationForm/grpVolAdjustment" Translation=" Global volume adjustment " />
@@ -314,7 +314,6 @@
     <TranslationEntry Key="ConfigurationForm/lblLoggingLevel" Translation="Logging filtering level" />
     <TranslationEntry Key="ConfigurationForm/lblSeparator" Translation="Event text separator" />
     <TranslationEntry Key="ConfigurationForm/lblSoundVolume" Translation="Sound file playback" />
-    <TranslationEntry Key="ConfigurationForm/lblTrigger" Translation="Trigger to fire on startup" />
     <TranslationEntry Key="ConfigurationForm/lblTtsVolume" Translation="Text-to-speech" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Arcanist]" Translation="Arcanist" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Archer]" Translation="Archer" />
@@ -758,7 +757,7 @@
     <TranslationEntry Key="internal/UserInterface/warnbeforemanualsave" Translation="Errors were encountered when loading configuration on startup. Saving configuration in this state may lead to it being corrupted beyond repair. Are you sure you want to save configuration anyway?" />
     <TranslationEntry Key="internal/VariableForm/variableeditortag" Translation="Variable editor" />
     <TranslationEntry Key="LogForm" Translation="Triggernometry log" />
-    <TranslationEntry Key="LogForm/btnClear" Translation="Clear" />
+    <TranslationEntry Key="LogForm/btnClear" Translation="Clear log" />
     <TranslationEntry Key="LogForm/btnClose" Translation="Close" />
     <TranslationEntry Key="LogForm/btnCopy" Translation="Copy" />
     <TranslationEntry Key="LogForm/btnEverythingToClipboard" Translation="Everything to clipboard" />
@@ -964,5 +963,96 @@
 	<TranslationEntry Key="ActionForm/cbxKeypressMethod[SendKeys]" Translation="SendKeys" />
 	<TranslationEntry Key="ActionForm/cbxKeypressMethod[Window message]" Translation="Window message" />
 	<TranslationEntry Key="ActionForm/lblKeypressInfo" Translation="The window message format can send one key at a time, and modifier keys such as Shift are represented as additions to the original keycode. Keycode constants are described on this webpage:" />
+	<TranslationEntry Key="internal/RepositoryForm/allowwmsgwarn" Translation="Allowing triggers from a repository to send window messages can be extremely risky, as the repository may have triggers (or may add some later) that prove to be dangerous and/or malicious. Are you sure you want to allow this?" />
+	<TranslationEntry Key="internal/ImportForm/dangerprocscriptwmsg" Translation="Some of the imported triggers include triggers which launch arbitrary processes, execute arbitrary scripts, and send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
+	<TranslationEntry Key="internal/ImportForm/dangerprocwmsg" Translation="Some of the imported triggers include triggers which launch arbitrary processes and send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
+	<TranslationEntry Key="internal/ImportForm/dangerscriptwmsg" Translation="Some of the imported triggers include triggers which execute arbitrary scripts and send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
+	<TranslationEntry Key="internal/ImportForm/dangerwmsg" Translation="Some of the imported triggers include triggers which send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
+	<TranslationEntry Key="internal/Action/descwmsg" Translation="Send message ({0}) wparam ({1}) lparam ({2}) to window ({3})" />
+	<TranslationEntry Key="ActionForm/lblWmsgWarning" Translation="Actions of this type may be potentially dangerous and cause damage if, for example, the trigger is fired with parameters that fall outside of the expected values. Please be aware of the risk." />
+	<TranslationEntry Key="TriggerForm/lblReadOnly" Translation="You are in read-only mode, as the configuration of remote triggers can't be edited locally. If you wish to edit the trigger, you will need to make a local copy of it." />
+	<TranslationEntry Key="ActionForm/cbxActionType[Send window message]" Translation="Send window message" />
+	<TranslationEntry Key="ActionForm/lblWmsgTitle" Translation="Window title" />
+	<TranslationEntry Key="ActionForm/lblWmsgCode" Translation="Message code" />
+	<TranslationEntry Key="ActionForm/lblWmsgWparam" Translation="WParam" />
+	<TranslationEntry Key="ActionForm/lblWmsgLparam" Translation="LParam" />
+	<TranslationEntry Key="internal/Plugin/repoupdates" Translation="Going to update {0} repositories" />
+	<TranslationEntry Key="internal/Plugin/repoupdate" Translation="&quot;Updating repository {0} at {1}" />
+	<TranslationEntry Key="internal/Plugin/repoupdateexception" Translation="Couldn't update repository {0} due to exception: {1}" />
+	<TranslationEntry Key="internal/Plugin/repousinglocal" Translation="Loading local backup of repository {0}" />
+	<TranslationEntry Key="internal/Plugin/repoloadlocalexception" Translation="Couldn't load local backup of repository {0} due to exception: {1}" />
+	<TranslationEntry Key="internal/Plugin/reposavelocalexception" Translation="Couldn't save local backup of repository {0} due to exception: {1}" />
+	<TranslationEntry Key="internal/Plugin/repoloadinglocal" Translation="Loading local backup of repository {0} in {1}" />
+	<TranslationEntry Key="internal/Plugin/repoloadedlocal" Translation="Loaded local backup of repository {0} from {1}" />
+	<TranslationEntry Key="internal/Plugin/reposavinglocal" Translation="Saving local backup of repository {0} in {1}" />
+	<TranslationEntry Key="internal/Plugin/reposavedlocal" Translation="Saved local backup of repository {0} in {1}" />
+	<TranslationEntry Key="internal/Context/formatargerror" Translation="Format function requires two arguments, {0} were given" />
+	<TranslationEntry Key="internal/UserInterface/editrepository" Translation="Edit repository '{0}'" />
+	<TranslationEntry Key="internal/Plugin/repoupdatecomplete" Translation="Repository update complete" />
+	<TranslationEntry Key="Plugin/UserInterface/ctxUpdate" Translation="Update" />
+	<TranslationEntry Key="Plugin/UserInterface/btnUpdate" Translation="Update" />
+	<TranslationEntry Key="ActionForm/lblObsSceneName" Translation="Scene name" />
+	<TranslationEntry Key="internal/Action/descobsshowsource" Translation="show source ({0}) on OBS scene ({1})" />
+	<TranslationEntry Key="internal/Action/descobsshowsourcecurrent" Translation="show source ({0}) on current OBS scene" />
+	<TranslationEntry Key="internal/Action/descobshidesource" Translation="hide source ({0}) on OBS scene ({1})" />
+	<TranslationEntry Key="internal/Action/descobshidesourcecurrent" Translation="hide source ({0}) on current OBS scene" />
+	<TranslationEntry Key="ActionForm/cbxObsOpType[Show source]" Translation="Show source" />
+	<TranslationEntry Key="ActionForm/cbxObsOpType[Hide source]" Translation="Hide source" />
+	<TranslationEntry Key="LogForm/lblStatus" Translation="Displaying {0} out of {1}" />
+	<TranslationEntry Key="LogForm/capSearch/lblContent" Translation="Search options" />
+	<TranslationEntry Key="LogForm/btnSearchOptions" Translation="Search options" />
+	<TranslationEntry Key="LogForm/lblEventLevel" Translation="Event level" />
+	<TranslationEntry Key="LogForm/lblRegularExpression" Translation="Regular expression" />
+	<TranslationEntry Key="LogForm/btnSearch" Translation="Search" />
+	<TranslationEntry Key="LogForm/cbxLevelMethod[Level must be lower than (&amp;lt;)]" Translation="Level must be lower than (&amp;lt;)" />
+	<TranslationEntry Key="LogForm/cbxLevelMethod[Level must be lower or equal to (≤)]" Translation="Level must be lower or equal to (≤)" />
+	<TranslationEntry Key="LogForm/cbxLevelMethod[Level must be equal to (=)]" Translation="Level must be equal to (=)" />
+	<TranslationEntry Key="LogForm/cbxLevelMethod[Level must be higher or equal to (≥)]" Translation="Level must be higher or equal to (≥)" />
+	<TranslationEntry Key="LogForm/cbxLevelMethod[Level must be higher than (&amp;gt;)]" Translation="Level must be higher than (&amp;gt;)" />
+	<TranslationEntry Key="LogForm/cbxLevelMethod[Level must not be equal to (≠)]" Translation="Level must not be equal to (≠)" />
+	<TranslationEntry Key="internal/UserInterface/adddefaultrepo" Translation="Would you like to add some trigger repositories to get started?" />
+	<TranslationEntry Key="internal/Plugin/repoexportnull" Translation="Data for repository {0} could not be unserialized" />
+	<TranslationEntry Key="internal/RepositoryForm/exception" Translation="Exception" />
+	<TranslationEntry Key="internal/RepositoryForm/warning" Translation="Warning" />
+	<TranslationEntry Key="internal/RepositoryForm/allowprocesswarn" Translation="Allowing triggers from a repository to launch processes can be extremely risky, as the repository may have triggers (or may add some later) that prove to be dangerous and/or malicious. Are you sure you want to allow this?" />
+	<TranslationEntry Key="internal/RepositoryForm/allowscriptwarn" Translation="Allowing triggers from a repository to execute scripts can be extremely risky, as the repository may have triggers (or may add some later) that prove to be dangerous and/or malicious. Are you sure you want to allow this?" />
+	<TranslationEntry Key="internal/RepositoryForm/allowobswarn" Translation="Allowing triggers from a repository to control OBS can be extremely risky, as the repository may have triggers (or may add some later) that prove to be dangerous and/or malicious. Are you sure you want to allow this?" />
+	<TranslationEntry Key="RepositoryForm/lblDefaultBehavior" Translation="Default behaviour for newly added triggers" />
+	<TranslationEntry Key="RepositoryForm/lblUpdatePolicy" Translation="Update policy" />
+	<TranslationEntry Key="RepositoryForm/chkAllowProcess" Translation="Allow triggers to launch processes" />
+	<TranslationEntry Key="RepositoryForm/chkAllowScript" Translation="Allow triggers to execute scripts" />
+	<TranslationEntry Key="RepositoryForm/chkAllowWmsg" Translation="Allow triggers to send window messages" />
+	<TranslationEntry Key="RepositoryForm/chkAllowObs" Translation="Allow triggers to control OBS" />
+	<TranslationEntry Key="RepositoryForm/chkKeepLocal" Translation="Maintain a local backup for outages" />
+	<TranslationEntry Key="RepositoryForm/lblName" Translation="Repository name" />
+	<TranslationEntry Key="RepositoryForm/lblAddress" Translation="Address" />
+	<TranslationEntry Key="RepositoryForm/grpUpdateSettings" Translation=" Updates and permissions " />
+	<TranslationEntry Key="RepositoryForm/grpGeneral" Translation=" General settings " />
+	<TranslationEntry Key="RepositoryForm/grpStartupTrigger" Translation=" Startup trigger/folder " />
+	<TranslationEntry Key="ConfigurationForm/btnClearSelection" Translation="Clear selection" />
+	<TranslationEntry Key="ConfigurationForm/lblFolderReminder" Translation="Selecting a folder will fire all triggers inside the folder" />
+	<TranslationEntry Key="RepositoryListForm/btnOk" Translation="Add selected" />
+	<TranslationEntry Key="RepositoryListForm/btnCancel" Translation="Cancel" />
+	<TranslationEntry Key="RepositoryForm/tabGeneral" Translation="Settings" />
+	<TranslationEntry Key="RepositoryForm/tabUpdateLog" Translation="Update log" />
+	<TranslationEntry Key="RepositoryForm/capDetails" Translation="Details" />
+	<TranslationEntry Key="RepositoryForm/btnCopy" Translation="Copy" />
+	<TranslationEntry Key="RepositoryForm/btnSelectionToClipboard" Translation="Selection to clipboard" />
+	<TranslationEntry Key="RepositoryForm/btnEverythingToClipboard" Translation="Everything to clipboard" />
+	<TranslationEntry Key="RepositoryForm/ctxSelectionToClipboard" Translation="Selection to clipboard" />
+	<TranslationEntry Key="RepositoryForm/ctxEverythingToClipboard" Translation="Everything to clipboard" />
+	<TranslationEntry Key="RepositoryForm/cbxNewBehavior[Enabled or disabled as specified in repository]" Translation="Enabled or disabled as specified in repository" />
+	<TranslationEntry Key="RepositoryForm/cbxNewBehavior[Enable everything new by default]" Translation="Enable everything new by default" />
+	<TranslationEntry Key="RepositoryForm/cbxNewBehavior[Disable everything new by default]" Translation="Disable everything new by default" />
+	<TranslationEntry Key="RepositoryForm/cbxUpdatePolicy[Update automatically on startup]" Translation="Update automatically on startup" />
+	<TranslationEntry Key="RepositoryForm/cbxUpdatePolicy[Update only manually]" Translation="Update only manually" />
+	<TranslationEntry Key="RepositoryListForm/grpAvailRepos" Translation=" Available repositories " />
+	<TranslationEntry Key="RepositoryListForm/grpRepoDetails" Translation=" Repository details " />
+	<TranslationEntry Key="Plugin/UserInterface/btnAddRepoList" Translation="Repository from list" />
+	<TranslationEntry Key="Plugin/UserInterface/ctxAddRepoList" Translation="Repository from list" />
+	<TranslationEntry Key="internal/UserInterface/addrepolist" Translation="Add new repository from list" />
+	<TranslationEntry Key="RepositoryListForm/exception" Translation="Download failed due to exception: {0}" />
+	<TranslationEntry Key="RepositoryListForm/downloadcomplete" Translation="Download complete" />
+	<TranslationEntry Key="RepositoryListForm/masterlistproblem" Translation="Data from master repository list could not be unserialized" /></bla>	  
   </Translations> 
 </Language>
