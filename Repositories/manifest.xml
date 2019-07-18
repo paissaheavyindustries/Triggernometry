@@ -3,6 +3,18 @@
 	<Categories>
 		<Category Name="Final Fantasy XIV" Description="Triggers for Final Fantasy XIV">
 			<Categories>
+				<Category Name="Combat & Duties by Aho Senpai" Description="Triggers for all sorts of Final Fantasy XIV content, from dungeons to raids. Trigger collection created by Aho Senpai (Discord: Aho Senpai#0818).">
+					<Categories>
+					</Categories>
+					<Repositories>
+						<Repository Name="Aho's Dungeons" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_ahos_dungeons.xml" Description="Triggers for dungeon mechanics." />
+						<Repository Name="Aho's Jobs" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_ahos_jobs.xml" Description="Triggers for jobs, for example ability cooldowns and gauge notifications." />
+						<Repository Name="Aho's Raid Buffs" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_ahos_raidbuffs.xml" Description="Triggers for raid buff notifications." />
+						<Repository Name="Aho's Raids" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_ahos_raids.xml" Description="Triggers for raids and their mechanics." />
+						<Repository Name="Aho's Trials" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_ahos_raids.xml" Description="Triggers for trials (primals) and their mechanics." />
+						<Repository Name="Miscellaneous" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_ahos_misc.xml" Description="Features miscellaneous general purpose triggers." />
+					</Repositories>
+				</Category>
 				<Category Name="Crafting" Description="Triggers related to crafting in Final Fantasy XIV.">
 					<Categories>
 					</Categories>
