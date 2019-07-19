@@ -1055,5 +1055,7 @@
 	<TranslationEntry Key="RepositoryListForm/downloadcomplete" Translation="Lataus valmis" />
 	<TranslationEntry Key="RepositoryListForm/masterlistproblem" Translation="Säilölistaa ei voitu avata" />	  
 	<TranslationEntry Key="ConfigurationForm/chkWarnAdmin" Translation="Varoita jos ei olla Järjestelmänvalvojana" />
+	<TranslationEntry Key="internal/UserInterface/folderidreassign" Translation="Kansiolle ({1}) annettu uusi uniikki tunniste ({0}) sillä tunniste ({2}) on jo käytössä kansiolla ({3})" />
+	<TranslationEntry Key="internal/UserInterface/idreassigncount" Translation="Korjattu uniikki tunniste {0} herättimelle ja {1} kansiolle" />
   </Translations>
 </Language>
