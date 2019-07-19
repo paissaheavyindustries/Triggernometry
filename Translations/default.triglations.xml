@@ -1056,5 +1056,7 @@
 	<TranslationEntry Key="RepositoryListForm/downloadcomplete" Translation="Download complete" />
 	<TranslationEntry Key="RepositoryListForm/masterlistproblem" Translation="Data from master repository list could not be unserialized" />
 	<TranslationEntry Key="ConfigurationForm/chkWarnAdmin" Translation="Warn if not running as Administrator" />
+	<TranslationEntry Key="internal/UserInterface/folderidreassign" Translation="Reassigning new id ({0}) for folder ({1}) due to already assigned id ({2}) on folder ({3})" />
+	<TranslationEntry Key="internal/UserInterface/idreassigncount" Translation="Adjusted {0} trigger and {1} folder references on actions due to collisions" />
   </Translations> 
 </Language>
