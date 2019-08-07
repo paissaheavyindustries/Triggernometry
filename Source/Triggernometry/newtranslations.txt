@@ -1,0 +1,20 @@
+﻿RepositoryForm/lblAudioOverride
+Audio output setting override
+
+RepositoryForm/cbxAudioOverride[As defined in repository]
+As defined in repository
+
+RepositoryForm/cbxAudioOverride[Audio override setting always on]
+Audio override setting always on
+
+RepositoryForm/cbxAudioOverride[Audio override setting always off]
+Audio override setting always off
+
+ConfigurationForm/cbxTestLive
+Set testing with live values as the default action test method
+
+ConfigurationForm/cbxTestLive
+Enable aura hardware acceleration
+
+ConfigurationForm/grpUserInterface
+ User interface 

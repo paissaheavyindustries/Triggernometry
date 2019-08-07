@@ -1,0 +1,513 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CA86FD05-FB30-4923-BB27-638CA9CBAFCD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Triggernometry</RootNamespace>
+    <AssemblyName>Triggernometry</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Program Files (x86)\Advanced Combat Tracker\Advanced Combat Tracker.exe</StartProgram>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Program Files (x86)\Advanced Combat Tracker\Advanced Combat Tracker.exe</StartProgram>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Advanced Combat Tracker">
+      <HintPath>C:\Program Files (x86)\Advanced Combat Tracker\Advanced Combat Tracker.exe</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="SharpDX.Direct2D1, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Direct2D1.4.2.0\lib\net45\SharpDX.Direct2D1.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D11, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Direct3D11.4.2.0\lib\net45\SharpDX.Direct3D11.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpDX.DXGI, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.DXGI.4.2.0\lib\net45\SharpDX.DXGI.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Speech" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CustomControls\ConditionViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\ConditionViewer.Designer.cs">
+      <DependentUpon>ConditionViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\PrettyCaption.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\PrettyCaption.Designer.cs">
+      <DependentUpon>PrettyCaption.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\Toast.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\Toast.Designer.cs">
+      <DependentUpon>Toast.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Action.cs" />
+    <Compile Include="Forms\ActionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ActionForm.Designer.cs">
+      <DependentUpon>ActionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AuraContainerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AuraContainerForm.Designer.cs">
+      <DependentUpon>AuraContainerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AuraDesignForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AuraDesignForm.Designer.cs">
+      <DependentUpon>AuraDesignForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\BenchmarkForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BenchmarkForm.Designer.cs">
+      <DependentUpon>BenchmarkForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\BenchmarkProgressForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BenchmarkProgressForm.Designer.cs">
+      <DependentUpon>BenchmarkProgressForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\ClickthroughPictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomControls\ClickthroughPictureBox.Designer.cs">
+      <DependentUpon>ClickthroughPictureBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\ColorSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\ColorSelector.Designer.cs">
+      <DependentUpon>ColorSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Condition.cs" />
+    <Compile Include="ConditionComponent.cs" />
+    <Compile Include="ConditionGroup.cs" />
+    <Compile Include="ConditionSingle.cs" />
+    <Compile Include="Configuration.cs" />
+    <Compile Include="Forms\ConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ConfigurationForm.Designer.cs">
+      <DependentUpon>ConfigurationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Context.cs" />
+    <Compile Include="CustomControls\DataGridViewEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomControls\DataGridViewEx.Designer.cs">
+      <DependentUpon>DataGridViewEx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ExportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ExportForm.Designer.cs">
+      <DependentUpon>ExportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\ExpressionTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\ExpressionTextBox.Designer.cs">
+      <DependentUpon>ExpressionTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Folder.cs" />
+    <Compile Include="Forms\FolderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FolderForm.Designer.cs">
+      <DependentUpon>FolderForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ImportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ImportForm.Designer.cs">
+      <DependentUpon>ImportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LogForm.Designer.cs">
+      <DependentUpon>LogForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\RepositoryListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RepositoryListForm.Designer.cs">
+      <DependentUpon>RepositoryListForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="I18n.cs" />
+    <Compile Include="InternalLog.cs" />
+    <Compile Include="Language.cs" />
+    <Compile Include="LogLine.cs" />
+    <Compile Include="MathParser.cs" />
+    <Compile Include="Forms\MemoryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ObsController.cs" />
+    <Compile Include="OverrideHelper.cs" />
+    <Compile Include="PluginBridges\BridgeFFXIV.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Plugin.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CustomControls\RegexTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\RegexTextBox.Designer.cs">
+      <DependentUpon>RegexTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Repository.cs" />
+    <Compile Include="Forms\RepositoryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RepositoryForm.Designer.cs">
+      <DependentUpon>RepositoryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\SplitButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\TestInputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TestInputForm.Designer.cs">
+      <DependentUpon>TestInputForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\TreeViewEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomControls\TreeViewEx.Designer.cs">
+      <DependentUpon>TreeViewEx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RepositoryFolder.cs" />
+    <Compile Include="RepositoryList.cs" />
+    <Compile Include="Scarborough\Color.cs" />
+    <Compile Include="Scarborough\CrosshairStyle.cs" />
+    <Compile Include="Scarborough\DwmApi.cs" />
+    <Compile Include="Scarborough\DwmApi.Types.cs" />
+    <Compile Include="Scarborough\DynamicImport.cs" />
+    <Compile Include="Scarborough\Font.cs" />
+    <Compile Include="Scarborough\Geometry.cs" />
+    <Compile Include="Scarborough\Graphics.cs" />
+    <Compile Include="Scarborough\Graphics.Primitives.cs" />
+    <Compile Include="Scarborough\GraphicsWindow.cs" />
+    <Compile Include="Scarborough\GraphicsWindow.EventArgs.cs" />
+    <Compile Include="Scarborough\IBrush.cs" />
+    <Compile Include="Scarborough\Image.cs" />
+    <Compile Include="Scarborough\ImagePixelFormats.cs" />
+    <Compile Include="Scarborough\LinearGradientBrush.cs" />
+    <Compile Include="Scarborough\OverlayWindow.cs" />
+    <Compile Include="Scarborough\OverlayWindow.EventArgs.cs" />
+    <Compile Include="Scarborough\Scarborough.cs" />
+    <Compile Include="Scarborough\ScarboroughImage.cs" />
+    <Compile Include="Scarborough\ScarboroughItem.cs" />
+    <Compile Include="Scarborough\ScarboroughText.cs" />
+    <Compile Include="Scarborough\Scene.cs" />
+    <Compile Include="Scarborough\SolidBrush.cs" />
+    <Compile Include="Scarborough\StickyWindow.cs" />
+    <Compile Include="Scarborough\User32.cs" />
+    <Compile Include="Scarborough\User32.Types.cs" />
+    <Compile Include="Scarborough\WindowBounds.cs" />
+    <Compile Include="Scarborough\WindowHelper.cs" />
+    <Compile Include="ThrowHelper.cs" />
+    <Compile Include="Trigger.cs" />
+    <Compile Include="Forms\TriggerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TriggerForm.Designer.cs">
+      <DependentUpon>TriggerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TriggernometryExport.cs" />
+    <Compile Include="CustomControls\UserInterface.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\UserInterface.Designer.cs">
+      <DependentUpon>UserInterface.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Variable.cs" />
+    <Compile Include="VariableClump.cs" />
+    <Compile Include="Forms\VariableForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\VariableForm.Designer.cs">
+      <DependentUpon>VariableForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VariableList.cs" />
+    <Compile Include="WebsocketSharp\ByteOrder.cs" />
+    <Compile Include="WebsocketSharp\CloseEventArgs.cs" />
+    <Compile Include="WebsocketSharp\CloseStatusCode.cs" />
+    <Compile Include="WebsocketSharp\CompressionMethod.cs" />
+    <Compile Include="WebsocketSharp\ErrorEventArgs.cs" />
+    <Compile Include="WebsocketSharp\Ext.cs" />
+    <Compile Include="WebsocketSharp\Fin.cs" />
+    <Compile Include="WebsocketSharp\HttpBase.cs" />
+    <Compile Include="WebsocketSharp\HttpRequest.cs" />
+    <Compile Include="WebsocketSharp\HttpResponse.cs" />
+    <Compile Include="WebsocketSharp\LogData.cs" />
+    <Compile Include="WebsocketSharp\Logger.cs" />
+    <Compile Include="WebsocketSharp\LogLevel.cs" />
+    <Compile Include="WebsocketSharp\Mask.cs" />
+    <Compile Include="WebsocketSharp\MessageEventArgs.cs" />
+    <Compile Include="WebsocketSharp\Net\AuthenticationBase.cs" />
+    <Compile Include="WebsocketSharp\Net\AuthenticationChallenge.cs" />
+    <Compile Include="WebsocketSharp\Net\AuthenticationResponse.cs" />
+    <Compile Include="WebsocketSharp\Net\AuthenticationSchemes.cs" />
+    <Compile Include="WebsocketSharp\Net\Chunk.cs" />
+    <Compile Include="WebsocketSharp\Net\ChunkedRequestStream.cs" />
+    <Compile Include="WebsocketSharp\Net\ChunkStream.cs" />
+    <Compile Include="WebsocketSharp\Net\ClientSslConfiguration.cs" />
+    <Compile Include="WebsocketSharp\Net\Cookie.cs" />
+    <Compile Include="WebsocketSharp\Net\CookieCollection.cs" />
+    <Compile Include="WebsocketSharp\Net\CookieException.cs" />
+    <Compile Include="WebsocketSharp\Net\EndPointListener.cs" />
+    <Compile Include="WebsocketSharp\Net\EndPointManager.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpBasicIdentity.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpConnection.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpDigestIdentity.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpHeaderInfo.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpHeaderType.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpListener.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpListenerAsyncResult.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpListenerContext.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpListenerException.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpListenerPrefix.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpListenerPrefixCollection.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpListenerRequest.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpListenerResponse.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpRequestHeader.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpResponseHeader.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpStatusCode.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpStreamAsyncResult.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpUtility.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpVersion.cs" />
+    <Compile Include="WebsocketSharp\Net\InputChunkState.cs" />
+    <Compile Include="WebsocketSharp\Net\InputState.cs" />
+    <Compile Include="WebsocketSharp\Net\LineState.cs" />
+    <Compile Include="WebsocketSharp\Net\NetworkCredential.cs" />
+    <Compile Include="WebsocketSharp\Net\QueryStringCollection.cs" />
+    <Compile Include="WebsocketSharp\Net\ReadBufferState.cs" />
+    <Compile Include="WebsocketSharp\Net\RequestStream.cs" />
+    <Compile Include="WebsocketSharp\Net\ResponseStream.cs" />
+    <Compile Include="WebsocketSharp\Net\ServerSslConfiguration.cs" />
+    <Compile Include="WebsocketSharp\Net\WebHeaderCollection.cs" />
+    <Compile Include="WebsocketSharp\Net\Websockets\HttpListenerWebSocketContext.cs" />
+    <Compile Include="WebsocketSharp\Net\Websockets\TcpListenerWebSocketContext.cs" />
+    <Compile Include="WebsocketSharp\Net\Websockets\WebSocketContext.cs" />
+    <Compile Include="WebsocketSharp\Opcode.cs" />
+    <Compile Include="WebsocketSharp\PayloadData.cs" />
+    <Compile Include="WebsocketSharp\Rsv.cs" />
+    <Compile Include="WebsocketSharp\Server\HttpRequestEventArgs.cs" />
+    <Compile Include="WebsocketSharp\Server\HttpServer.cs" />
+    <Compile Include="WebsocketSharp\Server\IWebSocketSession.cs" />
+    <Compile Include="WebsocketSharp\Server\ServerState.cs" />
+    <Compile Include="WebsocketSharp\Server\WebSocketBehavior.cs" />
+    <Compile Include="WebsocketSharp\Server\WebSocketServer.cs" />
+    <Compile Include="WebsocketSharp\Server\WebSocketServiceHost.cs" />
+    <Compile Include="WebsocketSharp\Server\WebSocketServiceHost`1.cs" />
+    <Compile Include="WebsocketSharp\Server\WebSocketServiceManager.cs" />
+    <Compile Include="WebsocketSharp\Server\WebSocketSessionManager.cs" />
+    <Compile Include="WebsocketSharp\WebSocket.cs" />
+    <Compile Include="WebsocketSharp\WebSocketException.cs" />
+    <Compile Include="WebsocketSharp\WebSocketFrame.cs" />
+    <Compile Include="WebsocketSharp\WebSocketState.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CustomControls\ConditionViewer.resx">
+      <DependentUpon>ConditionViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomControls\PrettyCaption.resx">
+      <DependentUpon>PrettyCaption.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomControls\Toast.resx">
+      <DependentUpon>Toast.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ActionForm.resx">
+      <DependentUpon>ActionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AuraContainerForm.resx">
+      <DependentUpon>AuraContainerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AuraDesignForm.resx">
+      <DependentUpon>AuraDesignForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\BenchmarkForm.resx">
+      <DependentUpon>BenchmarkForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\BenchmarkProgressForm.resx">
+      <DependentUpon>BenchmarkProgressForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomControls\ColorSelector.resx">
+      <DependentUpon>ColorSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ConfigurationForm.resx">
+      <DependentUpon>ConfigurationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ExportForm.resx">
+      <DependentUpon>ExportForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomControls\ExpressionTextBox.resx">
+      <DependentUpon>ExpressionTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FolderForm.resx">
+      <DependentUpon>FolderForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ImportForm.resx">
+      <DependentUpon>ImportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LogForm.resx">
+      <DependentUpon>LogForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RepositoryListForm.resx">
+      <DependentUpon>RepositoryListForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomControls\RegexTextBox.resx">
+      <DependentUpon>RegexTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RepositoryForm.resx">
+      <DependentUpon>RepositoryForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TestInputForm.resx">
+      <DependentUpon>TestInputForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TriggerForm.resx">
+      <DependentUpon>TriggerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomControls\UserInterface.resx">
+      <DependentUpon>UserInterface.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\VariableForm.resx">
+      <DependentUpon>VariableForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="WMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="newtranslations.txt" />
+    <Content Include="Repositories\examples.xml" />
+    <Content Include="Repositories\ffxiv_ahos_dungeons.xml" />
+    <Content Include="Repositories\ffxiv_ahos_jobs.xml" />
+    <Content Include="Repositories\ffxiv_ahos_misc.xml" />
+    <Content Include="Repositories\ffxiv_ahos_raidbuffs.xml" />
+    <Content Include="Repositories\ffxiv_ahos_raids.xml" />
+    <Content Include="Repositories\ffxiv_ahos_trials.xml" />
+    <Content Include="Repositories\ffxiv_crafting.xml" />
+    <Content Include="Repositories\ffxiv_debugging.xml" />
+    <Content Include="Repositories\ffxiv_gathering.xml" />
+    <Content Include="Repositories\manifest.xml" />
+    <Content Include="Repositories\Resources\animationtest.gif" />
+    <Content Include="Repositories\Resources\ComboGIF.gif" />
+    <Content Include="Translations\default.triglations.xml" />
+    <Content Include="Translations\Finnish.triglations.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="readme.md" />
+    <None Include="Repositories\readme.md" />
+    <None Include="Repositories\Resources\readme.md" />
+    <None Include="Translations\readme.md" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,1712 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Diagnostics;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Speech.Synthesis;
+using System.Threading;
+using System.IO;
+using System.Reflection;
+
+namespace Triggernometry.CustomControls
+{
+
+    public partial class UserInterface : UserControl
+    {
+
+        internal WMPLib.WindowsMediaPlayer wmp;
+        internal SpeechSynthesizer tts;
+        internal Plugin plug;
+        internal Configuration cfg;
+        internal int numLoadedTriggers;
+        internal int numLoadedFolders;
+        internal Random r = new Random();
+        internal string Clipboard = "";
+
+        internal Queue<Toast> Toasts = new Queue<Toast>();
+
+        internal object formmgmt = new object();
+        internal Forms.LogForm formlog { get; set; } = null;
+
+        private Color disabledNodeColor;
+
+        public delegate string TempDelegate(object sender);
+        private delegate void ProgressDelegate(int progress, string state);
+        internal delegate void VoidDelegate(object sender, EventArgs e);
+        internal delegate bool BoolDelegate(object sender, EventArgs e);
+
+        // Create a node sorter that implements the IComparer interface.
+        public class NodeSorter : IComparer
+        {
+            // Compare the length of the strings, or the strings
+            // themselves, if they are the same length.
+            public int Compare(object x, object y)
+            {
+                TreeNode tx = x as TreeNode;
+                TreeNode ty = y as TreeNode;
+                if (tx.Tag is Folder && ty.Tag is Trigger)
+                {
+                    return -1;
+                }
+                if (ty.Tag is Folder && tx.Tag is Trigger)
+                {
+                    return 1;
+                }                // If they are the same length, call Compare.
+                return string.Compare(tx.Text, ty.Text);
+            }
+        }
+    
+        public UserInterface()
+        {
+            InitializeComponent();
+            linkLabel1.Tag = I18n.DoNotTranslate;
+            numLoadedTriggers = 0;
+            numLoadedFolders = 0;
+            disabledNodeColor = Color.Red;
+            treeView1.TreeViewNodeSorter = new NodeSorter();
+            DoubleBuffered = true;
+            treeView1.ItemDrag += TreeView1_ItemDrag;
+            treeView1.DragDrop += TreeView1_DragDrop;
+            treeView1.DragEnter += TreeView1_DragEnter;
+            treeView1.DragOver += TreeView1_DragOver;
+        }
+
+        private bool ContainsNode(TreeNode node1, TreeNode node2)
+        {
+            if (node2.Parent == null) return false;
+            if (node2.Parent.Equals(node1)) return true;
+            return ContainsNode(node1, node2.Parent);
+        }
+        
+        private bool IsPartOfRemote(TreeNode tn)
+        {
+            if (tn.Tag == cfg.RepositoryRoot)
+            {
+                return true;
+            }
+            return tn.Parent != null ? IsPartOfRemote(tn.Parent) : false;
+        }
+
+        internal void TreeView1_DragOver(object sender, DragEventArgs e)
+        {
+            Point targetPoint = treeView1.PointToClient(new Point(e.X, e.Y));
+            treeView1.SelectedNode = treeView1.GetNodeAt(targetPoint);
+            if (treeView1.SelectedNode == null || treeView1.SelectedNode.Tag is Trigger || IsPartOfRemote(treeView1.SelectedNode))
+            {
+                e.Effect = DragDropEffects.None;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.Move;
+            }
+        }
+
+        internal void TreeView1_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = e.AllowedEffect; 
+        }
+
+        private Toast PopToast()
+        {
+            Toast t = null;
+            lock (Toasts)
+            {
+                if (Toasts.Count > 0)
+                {
+                    t = Toasts.Dequeue();
+                }
+            }
+            if (t != null)
+            {
+                pnlToastSpace.Controls.Add(t);
+                t.Dock = DockStyle.Fill;
+                t.OnYes += HideToast;
+                t.OnNo += HideToast;
+                pnlToastSpace.Visible = true;
+            }
+            return t;
+        }
+
+        private void HideToast(Toast t, bool result)
+        {
+            pnlToastSpace.Controls.Remove(t);
+            Toast x = PopToast();
+            if (x == null)
+            {
+                pnlToastSpace.Visible = false;
+            }
+            t.Dispose();
+        }
+
+        internal void QueueToast(Toast t)
+        {
+            lock (Toasts)
+            {
+                Toasts.Enqueue(t);
+            }
+            if (pnlToastSpace.Controls.Count == 0)
+            {
+                PopToast();
+            }
+        }
+
+        internal void TreeView1_DragDrop(object sender, DragEventArgs e)
+        {
+            Point targetPoint = treeView1.PointToClient(new Point(e.X, e.Y));
+            TreeNode targetNode = treeView1.GetNodeAt(targetPoint);
+            TreeNode draggedNode = (TreeNode)e.Data.GetData(typeof(TreeNode));
+            if (!draggedNode.Equals(targetNode) && !ContainsNode(draggedNode, targetNode) && !(targetNode.Tag is Trigger))
+            {
+                if (e.Effect == DragDropEffects.Move)
+                {
+                    Folder tf = (Folder)targetNode.Tag;
+                    if (draggedNode.Tag is Trigger)
+                    {
+                        Trigger t = (Trigger)draggedNode.Tag;
+                        t.Parent.Triggers.Remove(t);
+                        t.Parent = tf;
+                        tf.Triggers.Add(t);                        
+                    }
+                    else
+                    {
+                        Folder f = (Folder)draggedNode.Tag;
+                        f.Parent.Folders.Remove(f);
+                        f.Parent = tf;
+                        tf.Folders.Add(f);
+                    }
+                    draggedNode.Remove();
+                    targetNode.Nodes.Add(draggedNode);
+                    RecolorStartingFromNode(targetNode, targetNode.Checked, true);
+                }
+                targetNode.Expand();
+            }
+        }
+
+        internal void TreeView1_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {                
+                if (treeView1.Nodes.Contains((TreeNode)e.Item) == false && IsPartOfRemote((TreeNode)e.Item) == false)
+                { 
+                    DoDragDrop(e.Item, DragDropEffects.Move);
+                }
+            }
+        }
+
+        private void SetupAutoUpdates(Toast t, bool result)
+        {
+            if (result == true)
+            {
+                cfg.UpdateNotifications = Configuration.UpdateNotificationsEnum.Yes;
+                plug.CheckForUpdates();
+            }
+            else
+            {
+                cfg.UpdateNotifications = Configuration.UpdateNotificationsEnum.No;
+            }
+        }
+
+        private void AddDefaultRepository()
+        {
+            btnAddRepoList_Click(null, null);
+        }
+
+        private void SetupDefaultRepository(Toast t, bool result)
+        {
+            if (result == true)
+            {
+                cfg.DefaultRepository = Configuration.UpdateNotificationsEnum.Yes;
+                AddDefaultRepository();
+            }
+            else
+            {
+                cfg.DefaultRepository = Configuration.UpdateNotificationsEnum.No;
+            }
+        }
+
+        internal void SetupToasts()
+        {
+            if (cfg.UpdateNotifications == Configuration.UpdateNotificationsEnum.Undefined)
+            {
+                Toast tx = new Toast() { ToastText = I18n.Translate("internal/UserInterface/updatenotifs", "Would you like to receive notifications when Triggernometry updates?") };
+                tx.OnNo += SetupAutoUpdates;
+                tx.OnYes += SetupAutoUpdates;
+                tx.ToastType = Toast.ToastTypeEnum.YesNo;
+                QueueToast(tx);
+            }
+            if (cfg.DefaultRepository == Configuration.UpdateNotificationsEnum.Undefined)
+            {
+                Toast tx = new Toast() { ToastText = I18n.Translate("internal/UserInterface/adddefaultrepo", "Would you like to add some trigger repositories to get started?") };
+                tx.OnNo += SetupDefaultRepository;
+                tx.OnYes += SetupDefaultRepository;
+                tx.ToastType = Toast.ToastTypeEnum.YesNo;
+                QueueToast(tx);
+            }
+        }
+
+        internal void BuildFullTreeFromConfiguration()
+        {
+            BuildTreeFromConfiguration(null, null, false);
+            plug.FilteredAddToLog(Plugin.DebugLevelEnum.Info, I18n.Translate("internal/UserInterface/loadedfromconfig", "{0} folder(s) and {1} trigger(s) loaded from configuration", numLoadedFolders, numLoadedTriggers));
+            treeView1.Sort();
+            foreach (TreeNode tn in treeView1.Nodes)
+            {
+                tn.Expand();
+            }
+            lock (plug.Triggers)
+            {
+                foreach (Trigger t in plug.Triggers)
+                {
+                    foreach (Action a in t.Actions)
+                    {
+                        if (a.Conditions != null)
+                        {
+                            a.Conditions = null;
+                        }
+                    }
+                    if (t.Conditions != null)
+                    {
+                        t.Conditions = null;
+                    }
+                }
+            }
+        }
+
+        private void RetranslateTreeRoots()
+        {
+            foreach (TreeNode tn in treeView1.Nodes)
+            {
+                if (tn.Tag == cfg.Root)
+                {
+                    tn.Text = I18n.Translate("internal/UserInterface/local", "Local triggers");
+                }
+                else if (tn.Tag == cfg.RepositoryRoot)
+                {
+                    tn.Text = I18n.Translate("internal/UserInterface/remote", "Remote triggers");
+                }
+            }
+        }
+
+        internal void BuildTreeFromConfiguration(TreeNode parentnode, Folder parentfolder, bool parentdis)
+        {
+            if (parentnode == null && parentfolder == null)
+            {
+                TreeNode tn = new TreeNode();
+                tn.Text = I18n.Translate("internal/UserInterface/local", "Local triggers");
+                tn.Tag = cfg.Root;
+                tn.Checked = cfg.Root.Enabled;
+                tn.ForeColor = (tn.Checked == true) ? treeView1.ForeColor : disabledNodeColor;
+                parentdis = (tn.Checked == false);
+                tn.ImageIndex = 0;
+                treeView1.Nodes.Add(tn);
+                parentfolder = cfg.Root;
+                parentnode = tn;
+                tn = new TreeNode();
+                tn.Text = I18n.Translate("internal/UserInterface/remote", "Remote triggers");
+                tn.Tag = cfg.RepositoryRoot;
+                tn.Checked = cfg.RepositoryRoot.Enabled;
+                tn.ForeColor = (tn.Checked == true) ? treeView1.ForeColor : disabledNodeColor;
+                tn.ImageIndex = 0;
+                treeView1.Nodes.Add(tn);
+                foreach (Repository r in cfg.RepositoryRoot.Repositories)
+                {
+                    TreeNode rtn = new TreeNode();
+                    rtn.Text = r.Name;
+                    rtn.Tag = r;
+                    r.Parent = cfg.RepositoryRoot;
+                    rtn.Checked = r.Enabled;
+                    rtn.ForeColor = (rtn.Checked == true && cfg.RepositoryRoot.Enabled == true) ? treeView1.ForeColor : disabledNodeColor;
+                    rtn.ImageIndex = 4;
+                    rtn.SelectedImageIndex = 4;
+                    tn.Nodes.Add(rtn);
+                    //BuildTreeFromConfiguration(tn, fx, parentdis == true || tn.Checked == false);
+                }
+            }
+            var ix1 = from pxx in parentfolder.Folders
+                      orderby pxx.Name ascending
+                      select pxx;
+            foreach (Folder fx in ix1)
+            {
+                numLoadedFolders++;
+                TreeNode tn = new TreeNode();
+                tn.Text = fx.Name;
+                tn.Tag = fx;
+                tn.Checked = fx.Enabled;
+                tn.ForeColor = (tn.Checked == true && parentdis == false) ? treeView1.ForeColor : disabledNodeColor;
+                tn.ImageIndex = 0;
+                tn.SelectedImageIndex = 0;
+                parentnode.Nodes.Add(tn);
+                fx.Parent = parentfolder;
+                BuildTreeFromConfiguration(tn, fx, parentdis == true || tn.Checked == false);                
+            }
+            var ix2 = from pxx in parentfolder.Triggers
+                      orderby pxx.Name ascending
+                      select pxx;     
+            foreach (Trigger tx in ix2)
+            {
+                numLoadedTriggers++;
+                TreeNode tn = new TreeNode();
+                tn.Text = tx.Name;
+                tn.Tag = tx;
+                tn.Checked = tx.Enabled;
+                tn.ForeColor = (tn.Checked == true && parentdis == false) ? treeView1.ForeColor : disabledNodeColor;
+                tn.ImageIndex = 2;
+                tn.SelectedImageIndex = 2;
+                tx.Parent = parentfolder;
+                parentnode.Nodes.Add(tn);
+                plug.AddTrigger(tx);
+                if (tx.Condition != null)
+                {
+                    ConditionGroup.RebuildParentage(tx.Condition);
+                }
+                foreach (Action a in tx.Actions)
+                {
+                    if (a.Condition != null)
+                    {
+                        ConditionGroup.RebuildParentage(a.Condition);
+                    }
+                }
+            }
+        }
+
+        internal void btnAddTriggerFolder_Click(object sender, EventArgs e)
+        {
+            using (Forms.FolderForm ff = new Forms.FolderForm())
+            {
+                ff.SettingsFromFolder(null);
+                ff.Text = I18n.Translate("internal/UserInterface/addfolder", "Add new folder");
+                ff.btnOk.Text = I18n.Translate("internal/UserInterface/add", "Add");
+                if (ff.ShowDialog() == DialogResult.OK)
+                {
+                    Folder f = new Folder();
+                    ff.SettingsToFolder(f);
+                    TreeNode tn = new TreeNode();
+                    tn.Text = f.Name;
+                    tn.Tag = f;
+                    tn.Checked = f.Enabled;
+                    tn.ImageIndex = 0;
+                    tn.SelectedImageIndex = 0;
+                    treeView1.SelectedNode.Nodes.Add(tn);
+                    treeView1.SelectedNode.Expand();
+                    f.Parent = (Folder)treeView1.SelectedNode.Tag;
+                    f.Parent.Folders.Add(f);
+                    treeView1.Sort();
+                    treeView1.SelectedNode = tn;
+                }
+            }
+        }
+
+        internal void btnAddTrigger_Click(object sender, EventArgs e)
+        {
+            using (Forms.TriggerForm tf = new Forms.TriggerForm())
+            {
+                tf.SettingsFromTrigger(null);
+                tf.plug = plug;
+                tf.fakectx.plug = plug;
+                tf.Text = I18n.Translate("internal/UserInterface/addtrigger", "Add new trigger");
+                tf.btnOk.Text = I18n.Translate("internal/UserInterface/add", "Add");
+                tf.imgs = imageList1;
+                tf.trv = treeView1;
+                tf.wmp = wmp;
+                tf.tts = tts;
+                if (tf.ShowDialog() == DialogResult.OK)
+                {
+                    Trigger t = new Trigger();
+                    t.Enabled = true;
+                    tf.SettingsToTrigger(t);
+                    TreeNode tn = new TreeNode();
+                    tn.Text = t.Name;
+                    tn.Tag = t;
+                    tn.Checked = t.Enabled;
+                    tn.ImageIndex = 2;
+                    tn.SelectedImageIndex = 2;
+                    treeView1.SelectedNode.Nodes.Add(tn);
+                    treeView1.SelectedNode.Expand();
+                    t.Parent = (Folder)treeView1.SelectedNode.Tag;
+                    t.Parent.Triggers.Add(t);
+                    treeView1.Sort();
+                    treeView1.SelectedNode = tn;
+                    plug.AddTrigger(t);
+                }
+            }
+        }
+
+        internal void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if (treeView1.SelectedNode == null)
+            {
+                btnAdd.Enabled = false;
+                btnUpdate.Enabled = false;
+                btnRemoveTrigger.Enabled = false;
+                btnEdit.Enabled = false;
+                btnImportTrigger.Enabled = false;
+                btnExportTrigger.Enabled = false;
+            }
+            else
+            {
+                object o = treeView1.SelectedNode.Tag;
+                if (o == plug.cfg.RepositoryRoot)
+                {
+                    btnAdd.Enabled = true;
+                    btnUpdate.Enabled = true;
+                    btnAddTrigger.Visible = false;
+                    btnAddTriggerFolder.Visible = false;
+                    btnAddRepo.Visible = true;
+                    btnAddRepoList.Visible = true;
+                    btnAddTrigger.Enabled = false;
+                    btnAddTriggerFolder.Enabled = false;
+                    btnAddRepo.Enabled = true;
+                    btnAddRepoList.Enabled = true;
+                    btnRemoveTrigger.Enabled = false;
+                    btnEdit.Enabled = false;
+                    btnImportTrigger.Enabled = false;
+                    btnExportTrigger.Enabled = true;
+                }
+                else
+                {
+                    if (treeView1.SelectedNode.ImageIndex == 3 || treeView1.SelectedNode.ImageIndex == 4)
+                    {
+                        btnAdd.Enabled = false;
+                        btnUpdate.Enabled = true;
+                        btnRemoveTrigger.Enabled = true;
+                        btnEdit.Enabled = true;
+                        btnImportTrigger.Enabled = false;
+                        btnExportTrigger.Enabled = true;
+                    }
+                    else if (treeView1.SelectedNode.ImageIndex == 2)
+                    {
+                        btnAdd.Enabled = false;
+                        btnUpdate.Enabled = false;
+                        btnRemoveTrigger.Enabled = (IsPartOfRemote(treeView1.SelectedNode) == false);
+                        btnEdit.Enabled = true;
+                        btnImportTrigger.Enabled = false;
+                        btnExportTrigger.Enabled = true;
+                    }
+                    else if (treeView1.SelectedNode.ImageIndex == 0 || treeView1.SelectedNode.ImageIndex == 1)
+                    {
+                        btnAdd.Enabled = (IsPartOfRemote(treeView1.SelectedNode) == false);
+                        btnUpdate.Enabled = false;
+                        btnAddTrigger.Visible = true;
+                        btnAddTriggerFolder.Visible = true;
+                        btnAddRepo.Visible = false;
+                        btnAddRepoList.Visible = false;
+                        btnAddTrigger.Enabled = true;
+                        btnAddTriggerFolder.Enabled = true;
+                        btnAddRepo.Enabled = false;
+                        btnAddRepoList.Enabled = false;
+                        btnRemoveTrigger.Enabled = (treeView1.SelectedNode.Parent != null && IsPartOfRemote(treeView1.SelectedNode) == false);
+                        btnEdit.Enabled = true;
+                        btnImportTrigger.Enabled = (IsPartOfRemote(treeView1.SelectedNode) == false);
+                        btnExportTrigger.Enabled = true;
+                    }
+                }
+            }
+        }
+
+        internal void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (treeView1.SelectedNode.ImageIndex == 2)
+            {
+                using (Forms.TriggerForm tf = new Forms.TriggerForm())
+                {
+                    Trigger t = (Trigger)treeView1.SelectedNode.Tag;
+                    Trigger.TriggerSourceEnum oldSource = t.Source;
+                    tf.plug = plug;
+                    tf.fakectx.trig = t;
+                    tf.fakectx.plug = plug;
+                    tf.SettingsFromTrigger(t);
+                    if (IsPartOfRemote(treeView1.SelectedNode) == true)
+                    {
+                        tf.SetReadOnly();
+                    }
+                    tf.imgs = imageList1;
+                    tf.trv = treeView1;
+                    tf.Text = I18n.Translate("internal/UserInterface/edittrigger", "Edit trigger '{0}'", t.Name);
+                    tf.btnOk.Text = I18n.Translate("internal/UserInterface/savechanges", "Save changes");
+                    tf.wmp = wmp;
+                    tf.tts = tts;
+                    if (tf.ShowDialog() == DialogResult.OK)
+                    {
+                        lock (t) // verified
+                        {
+                            tf.SettingsToTrigger(t);
+                            if (oldSource != t.Source)
+                            {
+                                plug.SourceChange(t, oldSource, t.Source);
+                            }
+                        }
+                        TreeNode tn = treeView1.SelectedNode;
+                        tn.Text = t.Name;
+                        treeView1.Sort();
+                        treeView1.SelectedNode = tn;
+                    }
+                }
+            }
+            else if (treeView1.SelectedNode.ImageIndex == 3 || treeView1.SelectedNode.ImageIndex == 4)
+            {
+                using (Forms.RepositoryForm rf = new Forms.RepositoryForm())
+                {
+                    rf.plug = plug;
+                    Repository r = (Repository)treeView1.SelectedNode.Tag;                    
+                    rf.SettingsFromRepository(r);
+                    rf.Text = I18n.Translate("internal/UserInterface/editrepository", "Edit repository '{0}'", r.Name);
+                    rf.btnOk.Text = I18n.Translate("internal/UserInterface/savechanges", "Save changes");
+                    if (rf.ShowDialog() == DialogResult.OK)
+                    {
+                        rf.SettingsToRepository(r);
+                        TreeNode tn = treeView1.SelectedNode;
+                        tn.Text = r.Name;
+                        treeView1.Sort();
+                        treeView1.SelectedNode = tn;
+                    }
+                }
+            }
+            else if ((treeView1.SelectedNode.ImageIndex == 0 || treeView1.SelectedNode.ImageIndex == 1) && (treeView1.SelectedNode.Parent != null))
+            {
+                using (Forms.FolderForm ff = new Forms.FolderForm())
+                {
+                    Folder f = (Folder)treeView1.SelectedNode.Tag;
+                    ff.SettingsFromFolder(f);
+                    if (IsPartOfRemote(treeView1.SelectedNode) == true)
+                    {
+                        ff.SetReadOnly();
+                    }
+                    ff.Text = I18n.Translate("internal/UserInterface/editfolder", "Edit folder '{0}'", f.Name);
+                    ff.btnOk.Text = I18n.Translate("internal/UserInterface/savechanges", "Save changes");
+                    if (ff.ShowDialog() == DialogResult.OK)
+                    {                        
+                        ff.SettingsToFolder(f);
+                        TreeNode tn = treeView1.SelectedNode;
+                        tn.Text = f.Name;
+                        treeView1.Sort();
+                        treeView1.SelectedNode = tn;
+                    }
+                }
+            }
+        }
+
+        internal void folderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            btnAddTriggerFolder_Click(sender, e);
+        }
+
+        internal void triggerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            btnAddTrigger_Click(sender, e);
+        }
+
+        internal void removeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            btnRemoveTrigger_Click(sender, e);
+        }
+
+        internal void editToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            btnEdit_Click(sender, e);
+        }
+
+        internal void importToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            btnImportTrigger_Click(sender, e);
+        }
+
+        internal void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            btnExportTrigger_Click(sender, e);
+        }
+
+        internal void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {            
+            ctxAdd.Enabled = btnAdd.Enabled;
+            ctxEdit.Enabled = btnEdit.Enabled;
+            ctxUpdate.Enabled = btnUpdate.Enabled;
+            ctxAddTrigger.Visible = btnAddTrigger.Enabled;
+            ctxAddTrigger.Enabled = btnAdd.Enabled && btnAddTrigger.Enabled;
+            ctxAddFolder.Enabled = btnAddTriggerFolder.Enabled;
+            ctxAddFolder.Visible = btnAdd.Enabled && btnAddTriggerFolder.Enabled;
+            ctxAddRepo.Enabled = btnAddRepo.Enabled;
+            ctxAddRepo.Visible = btnAdd.Enabled && btnAddRepo.Enabled;
+            ctxAddRepoList.Enabled = btnAddRepo.Enabled;
+            ctxAddRepoList.Visible = btnAdd.Enabled && btnAddRepo.Enabled;
+            ctxDelete.Enabled = btnRemoveTrigger.Enabled;
+            ctxImport.Enabled = btnImportTrigger.Enabled;
+            ctxExport.Enabled = btnExportTrigger.Enabled;
+            ctxCopy.Enabled = (treeView1.SelectedNode != null);
+            ctxPaste.Enabled = ctxAddTrigger.Enabled == true && (
+                (cfg.UseOsClipboard == false && (Clipboard != null && Clipboard.Length > 0))
+                ||
+                (cfg.UseOsClipboard == true && System.Windows.Forms.Clipboard.ContainsText() == true)
+            );
+        }
+
+        internal void CountItems(Folder f, ref int numfolders, ref int numtriggers)
+        {
+            numfolders++;
+            numtriggers += f.Triggers.Count;
+            foreach (Folder fx in f.Folders)
+            { 
+                CountItems(fx, ref numfolders, ref numtriggers);
+            }
+        }
+
+        internal void RemoveAllTriggers(Folder f)
+        {
+            foreach (Trigger t in f.Triggers)
+            {
+                plug.RemoveTrigger(t);
+            }
+            foreach (Folder fx in f.Folders)
+            {
+                RemoveAllTriggers(fx);
+            }
+        }
+
+        private delegate void RepoTreeDelegate(Repository r);
+
+        internal void ClearRepositoryInTree(Repository r)
+        {
+            if (treeView1.InvokeRequired == true)
+            {
+                treeView1.Invoke(new RepoTreeDelegate(ClearRepositoryInTree), r);
+                return;
+            }
+            foreach (TreeNode tn in treeView1.Nodes[1].Nodes)
+            {
+                if (tn.Tag == r)
+                {
+                    tn.Nodes.Clear();
+                }
+            }
+        }
+
+        internal void ClearRepository(Repository r)
+        {
+            RemoveAllTriggers(r.Root);
+            r.Root.Triggers.Clear();
+            r.Root.Folders.Clear();
+            ClearRepositoryInTree(r);
+        }
+
+        internal void CopySelected()
+        {
+            try
+            {
+                string data = ExportSelection().Serialize();
+                if (cfg.UseOsClipboard == true)
+                {
+                    System.Windows.Forms.Clipboard.SetText(data);
+                }
+                else
+                {
+                    Clipboard = data;
+                }
+            }
+            catch (Exception ex)
+            {
+                plug.FilteredAddToLog(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/UserInterface/copyfail", "Tree copy failed due to exception: {0}", ex.Message));
+            }
+        }
+
+        internal void btnRemoveTrigger_Click(object sender, EventArgs e)
+        {
+            if (treeView1.SelectedNode.ImageIndex == 2)
+            {
+                Trigger t = (Trigger)treeView1.SelectedNode.Tag;
+                switch (MessageBox.Show(this, I18n.Translate("internal/UserInterface/areyousuretrigger", "Are you sure you want to remove trigger '{0}'?", t.Name), I18n.Translate("internal/UserInterface/confirm", "Confirm removal"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                {
+                    case DialogResult.Yes:
+                        TreeNode tn = treeView1.SelectedNode;
+                        tn.Parent.Nodes.Remove(tn);
+                        t.Parent.Triggers.Remove(t);
+                        plug.RemoveTrigger(t);
+                        return;
+                    case DialogResult.No:
+                        return;
+                }
+            }
+            else if (treeView1.SelectedNode.ImageIndex == 3 || treeView1.SelectedNode.ImageIndex == 4)
+            {
+                Repository r = (Repository)treeView1.SelectedNode.Tag;
+                switch (MessageBox.Show(this, I18n.Translate("internal/UserInterface/areyousurerepo", "Are you sure you want to remove repository '{0}'?", r.Name), I18n.Translate("internal/UserInterface/confirm", "Confirm removal"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                {
+                    case DialogResult.Yes:
+                        TreeNode tn = treeView1.SelectedNode;
+                        tn.Parent.Nodes.Remove(tn);
+                        r.Parent.Repositories.Remove(r);
+                        RemoveAllTriggers(r.Root);
+                        return;
+                    case DialogResult.No:
+                        return;
+                }
+            }
+            else if (treeView1.SelectedNode.ImageIndex == 0 || treeView1.SelectedNode.ImageIndex == 1)
+            {
+                int numfolders = 0;
+                int numtriggers = 0;
+                Folder f = (Folder)treeView1.SelectedNode.Tag;
+                CountItems(f, ref numfolders, ref numtriggers);
+                string temp = I18n.Translate("internal/UserInterface/areyousurefolder", "Are you sure you want to remove folder '{0}'?", f.Name);
+                if (numfolders > 1 || numtriggers > 0)
+                {
+                    temp += Environment.NewLine + Environment.NewLine + I18n.Translate("internal/UserInterface/operationwillremove", "This operation will remove:") + Environment.NewLine;
+                    if (numfolders > 1)
+                    {
+                        temp += Environment.NewLine + "∙ " + I18n.Translate("internal/UserInterface/folderplural", "{0} folders", numfolders);
+                    }
+                    else if (numfolders > 0)
+                    {
+                        temp += Environment.NewLine + "∙ " + I18n.Translate("internal/UserInterface/foldersingular", "{0} folder", numfolders);
+                    }
+                    if (numtriggers > 1)
+                    {
+                        temp += Environment.NewLine + "∙ " + I18n.Translate("internal/UserInterface/triggerplural", "{0} triggers", numtriggers);
+                    }
+                    else if (numtriggers > 0)
+                    {
+                        temp += Environment.NewLine + "∙ " + I18n.Translate("internal/UserInterface/triggersingular", "{0} trigger", numtriggers);
+                    }
+                }
+                switch (MessageBox.Show(this, temp, I18n.Translate("internal/UserInterface/confirm", "Confirm removal"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                {
+                    case DialogResult.Yes:
+                        TreeNode tn = treeView1.SelectedNode;
+                        tn.Parent.Nodes.Remove(tn);
+                        f.Parent.Folders.Remove(f);
+                        RemoveAllTriggers(f);
+                        return;
+                    case DialogResult.No:
+                        return;
+                }
+            }
+        }
+
+        internal void ImportResultsFromForm(Forms.ImportForm imf)
+        {
+            TreeNode tn = treeView1.SelectedNode;
+            Folder df;
+            if (tn.Tag is Folder)
+            {
+                df = (Folder)tn.Tag;
+            }
+            else
+            {
+                df = ((Trigger)tn.Tag).Parent;
+                treeView1.SelectedNode = treeView1.SelectedNode.Parent;
+            }            
+            Folder f = null;
+            Trigger t = null;
+            Dictionary<Guid, Guid> renamedFolders = new Dictionary<Guid, Guid>();
+            if (imf.treeView1.Nodes[0].Tag is Folder)
+            {
+                f = (Folder)imf.treeView1.Nodes[0].Tag;
+                List<Folder> newFolders = ConstructFolderList(null, f);
+                List<Folder> exFolders = ConstructFolderList(null, cfg.Root);
+                foreach (Folder fr in newFolders)
+                {
+                    Folder trx = (from tx in exFolders where tx.Id == fr.Id select tx).FirstOrDefault();
+                    if (trx != null)
+                    {
+                        fr.Id = Guid.NewGuid();
+                        renamedFolders[trx.Id] = fr.Id;
+                        plug.FilteredAddToLog(Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/UserInterface/folderidreassign", "Reassigning new id ({0}) for folder ({1}) due to already assigned id ({2}) on folder ({3})", fr.Id, fr.Name, trx.Id, trx.Name));
+                    }
+
+                }
+                df.Folders.Add(f);
+                f.Parent = df;
+            }
+            if (imf.treeView1.Nodes[0].Tag is Trigger)
+            {
+                t = (Trigger)imf.treeView1.Nodes[0].Tag;
+                df.Triggers.Add(t);
+                t.Parent = df;
+            }
+            TreeNode tnx = (TreeNode)imf.treeView1.Nodes[0].Clone();
+            ResetBackgrounds(tnx);
+            TreeNode tmp = treeView1.SelectedNode;
+            treeView1.SelectedNode.Nodes.Add(tnx);
+            treeView1.Sort();
+            RecolorStartingFromNode(tmp, tmp.Checked, false);
+            treeView1.SelectedNode = tnx;
+            tnx.ExpandAll();
+            List<Trigger> newTrigs = new List<Trigger>();
+            Dictionary<Guid, Guid> renamedTriggers = new Dictionary<Guid, Guid>();
+            if (f != null)
+            {
+                AddAllTriggersFromFolder(f, ref newTrigs);
+            }
+            else
+            {
+                newTrigs.Add(t);
+            }
+            lock (plug.Triggers)
+            {
+                foreach (Trigger nt in newTrigs)
+                {
+                    Trigger trx = (from tx in plug.Triggers where tx.Id == nt.Id && tx.Repo == null select tx).FirstOrDefault();
+                    if (trx != null)
+                    {
+                        nt.Id = Guid.NewGuid();
+                        renamedTriggers[trx.Id] = nt.Id;
+                        plug.FilteredAddToLog(Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/UserInterface/idreassign", "Reassigning new id ({0}) for trigger ({1}) due to already assigned id ({2}) on trigger ({3})", nt.Id, nt.Name, trx.Id, trx.Name));
+                    }
+                }
+            }
+            int fdjs = 0, tdjs = 0;
+            foreach (Trigger nt in newTrigs)
+            {
+                foreach (Action a in nt.Actions)
+                {
+                    if (renamedTriggers.ContainsKey(a.TriggerId) == true)
+                    {
+                        a.TriggerId = renamedTriggers[a.TriggerId];
+                        tdjs++;
+                    }
+                    if (renamedFolders.ContainsKey(a.FolderId) == true)
+                    {
+                        a.FolderId = renamedFolders[a.FolderId];
+                        fdjs++;
+                    }
+                }
+                plug.AddTrigger(nt);
+            }
+            if (fdjs > 0 || tdjs > 0)
+            {
+                plug.FilteredAddToLog(Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/UserInterface/idreassigncount", "Adjusted {0} trigger and {1} folder references on actions due to collisions", tdjs, fdjs));
+            }
+        }
+
+        internal List<Folder> ConstructFolderList(List<Folder> cur, Folder f)
+        {
+            bool reting = false;
+            if (cur == null)
+            {
+                cur = new List<Folder>();
+                reting = true;
+            }
+            cur.Add(f);
+            foreach (Folder sf in f.Folders)
+            {
+                ConstructFolderList(cur, sf);
+            }
+            return (reting == true) ? cur : null;
+        }
+
+        internal void btnImportTrigger_Click(object sender, EventArgs e)
+        {
+            using (Forms.ImportForm imf = new Forms.ImportForm())
+            {
+                imf.plug = plug;
+                imf.imgs = imageList1;
+                imf.trv = treeView1;
+                imf.Text = I18n.Translate("internal/UserInterface/importunder", "Import under '{0}'", treeView1.SelectedNode.Text);
+                imf.wmp = wmp;
+                imf.tts = tts;
+                imf.ui = this;
+                if (imf.ShowDialog() == DialogResult.OK)
+                {
+                    ImportResultsFromForm(imf);
+                }
+            }
+        }
+
+        internal void ResetBackgrounds(TreeNode tn)
+        {
+            tn.BackColor = Color.Empty;
+            foreach (TreeNode tnc in tn.Nodes)
+            {
+                ResetBackgrounds(tnc);
+            }
+        }
+
+        internal void AddAllTriggersFromFolder(Folder f, ref List<Trigger> trigs)
+        {
+            foreach (Folder sf in f.Folders)
+            {
+                AddAllTriggersFromFolder(sf, ref trigs);
+            }
+            foreach (Trigger t in f.Triggers)
+            {                
+                trigs.Add(t);
+            }
+        }
+
+        internal TriggernometryExport ExportSelection()
+        {
+            TriggernometryExport exp = new TriggernometryExport();
+            if (treeView1.SelectedNode.ImageIndex == 2)
+            {
+                Trigger t = (Trigger)treeView1.SelectedNode.Tag;
+                exp.ExportedTrigger = t;
+            }
+            else if (treeView1.SelectedNode.ImageIndex == 0 || treeView1.SelectedNode.ImageIndex == 1)
+            {
+                if (treeView1.SelectedNode.Tag is RepositoryFolder)
+                {
+                    RepositoryFolder f = (RepositoryFolder)treeView1.SelectedNode.Tag;
+                    exp.ExportedFolder = f.ConvertToFolder();
+                }
+                else
+                {
+                    Folder f = (Folder)treeView1.SelectedNode.Tag;
+                    exp.ExportedFolder = f;
+                }
+            }
+            else if (treeView1.SelectedNode.ImageIndex == 3 || treeView1.SelectedNode.ImageIndex == 4)
+            {
+                Repository f = (Repository)treeView1.SelectedNode.Tag;
+                exp.ExportedFolder = f.Root;
+            }
+            return exp;
+        }
+
+        internal void btnExportTrigger_Click(object sender, EventArgs e)
+        {
+            string exps = ExportSelection().Serialize();
+            using (Forms.ExportForm ef = new Forms.ExportForm())
+            {
+                ef.ShownText = exps;                
+                ef.ShowDialog();
+            }
+        }
+
+        internal void clearActionQueueToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            plug.ClearActionQueue();
+        }
+
+        internal void enabledToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            lock (plug.QueueProcessingLock) // verified
+            {
+                btnActionQueueEnabled.Checked = true;
+                btnActionQueueDisabled.Checked = false;
+                plug.QueueProcessing = true;
+                plug.ActionUpdateEvent.Set();
+            }
+        }
+
+        internal void disabledToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            lock (plug.QueueProcessingLock) // verified
+            {
+                btnActionQueueEnabled.Checked = false;
+                btnActionQueueDisabled.Checked = true;
+                plug.QueueProcessing = false;
+                plug.ActionUpdateEvent.Set();
+            }
+        }
+
+        private void CloseTree(TreeNode tn)
+        {
+            if (tn.Tag is Folder)
+            {
+                tn.ImageIndex = 0;
+                tn.SelectedImageIndex = 0;
+            }
+            foreach (TreeNode tc in tn.Nodes)
+            {
+                CloseTree(tc);
+            }
+        }
+
+        internal void configurationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (Forms.ConfigurationForm cf = new Forms.ConfigurationForm())
+            {
+                cf.plug = plug;
+                cf.trvTrigger.ImageList = imageList1;
+                cf.trvTrigger.Nodes.Add((TreeNode)treeView1.Nodes[0].Clone());
+                CloseTree(cf.trvTrigger.Nodes[0]);
+                cf.SettingsFromConfiguration(plug.cfg);
+                if (cf.ShowDialog() == DialogResult.OK)
+                {
+                    lock (plug.cfg) // verified
+                    {
+                        cf.SettingsToConfiguration(plug.cfg);
+                    }
+                }
+            }
+        }
+
+        internal void treeView1_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
+        {
+            if (e.Node.ImageIndex == 0 || e.Node.ImageIndex == 1)
+            {
+                e.Node.ImageIndex = 0;
+                e.Node.SelectedImageIndex = 0;
+            }
+        }
+
+        internal void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+        {
+            if (e.Node.ImageIndex == 0 || e.Node.ImageIndex == 1)
+            {
+                e.Node.ImageIndex = 1;
+                e.Node.SelectedImageIndex = 1;
+            }
+        }
+
+        internal void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {            
+            if (e.Button == MouseButtons.Right)
+            {
+                treeView1.SelectedNode = e.Node;
+            }
+        }
+
+        internal void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (Forms.AboutForm af = new Forms.AboutForm())
+            {
+                af.ShowDialog();
+            }
+        }
+
+        internal void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (e.Node == treeView1.SelectedNode && (treeView1.SelectedNode != null) && btnEdit.Enabled == true && (treeView1.SelectedNode.ImageIndex == 2))
+            {
+                btnEdit_Click(sender, null);
+            }
+        }
+
+        internal void OpenLogForm(bool errorSearch)
+        {
+            lock (formmgmt)
+            {
+                if (formlog == null)
+                {
+                    formlog = new Forms.LogForm();
+                    formlog.plug = plug;
+                    formlog.startWithErrorSearch = errorSearch;
+                    formlog.FormClosed += Formlog_FormClosed;
+                    formlog.Show(plug.mainform);
+                }
+                else
+                {
+                    formlog.BringToFront();
+                    formlog.Focus();
+                }
+            }
+        }
+
+        internal void viewLogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenLogForm(false);
+        }
+
+        private void Formlog_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            lock (formlog)
+            {
+                formlog.Dispose();
+                formlog = null;
+            }
+        }
+
+        private void killExecutingActionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            plug.RefreshCancellationToken();
+            plug.FilteredAddToLog(Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/UserInterface/triedfullinterrupt", "Tried to interrupt executing actions"));
+        }
+
+        private void viewVariablesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (Forms.VariableForm vf = new Forms.VariableForm())
+            {
+                vf.plug = plug;
+                vf.ShowDialog();
+            }
+        }
+
+        private void RecolorStartingFromNode(TreeNode tn, bool pstate, bool refreshActives)
+        {
+            object o = tn.Tag;
+            TreeNode tnx = tn.Parent;            
+            while (tnx != null && pstate == true)
+            {
+                pstate = tnx.Checked;
+                tnx = tnx.Parent;
+            }
+            tn.ForeColor = (tn.Checked == true && pstate == true) ? treeView1.ForeColor : disabledNodeColor;
+            if (o is Trigger)
+            {
+                Trigger t = (Trigger)o;
+                bool reallyEnabled = (tn.Checked == true && pstate == true);
+                t.Enabled = tn.Checked;
+                if (refreshActives == true)
+                {
+                    if (reallyEnabled == true)
+                    {
+                        plug.TriggerEnabled(t);
+                    }
+                    else
+                    {
+                        plug.TriggerDisabled(t);
+                    }                        
+                }
+            }
+            else
+            {
+                if (o is Repository)
+                {
+                    Repository r = (Repository)o;
+                    r.Enabled = tn.Checked;
+                    foreach (TreeNode tnn in tn.Nodes)
+                    {
+                        RecolorStartingFromNode(tnn, (tn.Checked == true && pstate == true), refreshActives);
+                    }
+                }
+                else
+                {
+                    if (o is RepositoryFolder)
+                    {
+                        RepositoryFolder r = (RepositoryFolder)o;
+                        r.Enabled = tn.Checked;
+                        foreach (TreeNode tnn in tn.Nodes)
+                        {
+                            RecolorStartingFromNode(tnn, (tn.Checked == true && pstate == true), refreshActives);
+                        }
+                    }
+                    else
+                    {
+                        Folder f = (Folder)o;
+                        f.Enabled = tn.Checked;
+                        foreach (TreeNode tnn in tn.Nodes)
+                        {
+                            RecolorStartingFromNode(tnn, (tn.Checked == true && pstate == true), refreshActives);
+                        }
+                    }
+                }
+            }
+        }
+
+        private Folder GetTopLevelFolder(Trigger t)
+        {
+            return GetTopLevelFolder(t.Parent);
+        }
+
+        private Folder GetTopLevelFolder(Folder f)
+        {
+            return (f.Parent != null) ? GetTopLevelFolder(f.Parent) : f;
+        }
+
+        private void treeView1_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            TreeNode tn = e.Node, ptn;
+            if (IsPartOfRemote(tn) == true)
+            {
+                Folder rf;
+                object x = null;
+                if (tn.Tag is Folder)
+                {
+                    x = (Folder)tn.Tag;
+                    rf = GetTopLevelFolder((Folder)x);
+                }
+                else if (tn.Tag is Trigger)
+                {
+                    x = (Trigger)tn.Tag;
+                    rf = GetTopLevelFolder((Trigger)x);
+                }
+                else
+                {
+                    RecolorStartingFromNode(e.Node, e.Node.Checked, true);
+                    return;
+                }
+                ptn = tn;
+                while ((ptn.Tag is Repository) == false)
+                {
+                    ptn = ptn.Parent;
+                }
+                Repository r = (Repository)ptn.Tag;
+                if (x is Folder)
+                {
+                    var temp = (from ix in r.FolderStates where ix.Id == ((Folder)x).Id select ix).ToList();
+                    foreach (Repository.RepositoryItem ri in temp)
+                    {
+                        ri.Enabled = tn.Checked;
+                    }
+                }
+                if (x is Trigger)
+                {
+                    var temp = (from ix in r.TriggerStates where ix.Id == ((Trigger)x).Id select ix).ToList();
+                    foreach (Repository.RepositoryItem ri in temp)
+                    {
+                        ri.Enabled = tn.Checked;
+                    }
+                }
+            }
+            RecolorStartingFromNode(e.Node, e.Node.Checked, true);
+        }
+
+        private void deactivateAllAurasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Context fakectx = new Context();
+            fakectx.plug = plug;
+            Action a = new Action();
+            a.AuraOp = Action.AuraOpEnum.DeactivateAllAura;
+            a.TextAuraOp = Action.AuraOpEnum.DeactivateAllAura;
+            plug.ImageAuraManagement(fakectx, a);
+            plug.TextAuraManagement(fakectx, a);
+        }
+
+        private void testInputToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (Forms.TestInputForm ti = new Forms.TestInputForm())
+            {
+                switch (ti.ShowDialog())
+                {
+                    case DialogResult.OK:
+                        string[] lines = ti.txtEvent.Lines;
+                        plug.FilteredAddToLog(Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeue", "Queueing {0} user log lines", lines.Count()));
+                        plug.LogLineQueuerMass(lines, ti.txtZoneName.Text);
+                        plug.FilteredAddToLog(Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeuedone", "Done"));
+                        /*
+                        foreach (string line in lines)
+                        {
+                            plug.FilteredAddToLog(Plugin.DebugLevelEnum.Verbose, "User log line: (" + line + ")");
+                            plug.LogLineQueuer(line, ti.txtZone.Text);
+                        }*/
+                        break;
+                }
+            }
+        }
+
+        internal void CloseForms()
+        {
+            lock (formmgmt)
+            {
+                if (formlog != null)
+                {
+                    formlog.Close();
+                }
+            }
+        }
+
+        private void runBenchmarkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (Forms.BenchmarkForm bf = new Forms.BenchmarkForm())
+            {
+                bf.plug = plug;
+                bf.ShowDialog();
+            }
+        }
+
+        internal void ShowErrorThing(object sender, EventArgs e)
+        {
+            if (this.InvokeRequired == true)
+            {
+                this.Invoke(new VoidDelegate(ShowErrorThing), sender, e);
+                return;
+            }
+            errThing2.Visible = true;
+            errThing1.Visible = true;
+        }
+
+        internal void HideErrorThing(object sender, EventArgs e)
+        {
+            if (this.InvokeRequired == true)
+            {
+                this.Invoke(new VoidDelegate(HideErrorThing), sender, e);
+                return;
+            }
+            errThing1.Visible = false;
+            errThing2.Visible = false;
+        }
+
+        internal void PasteSelected()
+        {
+            string data = null;
+            try
+            {
+                
+                if (cfg.UseOsClipboard == true)
+                {
+                    data = System.Windows.Forms.Clipboard.GetText(TextDataFormat.Text);
+                }
+                else
+                {
+                    data = Clipboard;
+                }
+                if (data != null && data.Length > 0)
+                {
+                    TriggernometryExport exp = TriggernometryExport.Unserialize(data);
+                    using (Forms.ImportForm ifo = new Forms.ImportForm())
+                    {
+                        ifo.BuildTreeFromExport(exp, null, null, false);
+                        ImportResultsFromForm(ifo);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                plug.FilteredAddToLog(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/UserInterface/pastefail", "Tree paste failed due to exception: {0}", ex.Message));
+            }
+        }
+
+        private void treeView1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.C && e.Modifiers == Keys.Control)
+            {
+                CopySelected();
+            }
+            else if (e.KeyCode == Keys.V && e.Modifiers == Keys.Control)
+            {
+                if (btnAddTrigger.Enabled == true)
+                {
+                    PasteSelected();
+                }
+            }
+            else if (e.KeyCode == Keys.Delete)
+            {
+                if (btnRemoveTrigger.Enabled == true)
+                {
+                    btnRemoveTrigger_Click(this, null);
+                }
+            }
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CopySelected();
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (btnAddTrigger.Enabled == true)
+            {
+                PasteSelected();
+            }
+        }
+
+        internal void ClearAllVariables()
+        {
+            lock (plug.simplevariables)
+            {
+                plug.simplevariables.Clear();
+            }
+            lock (plug.listvariables)
+            {
+                plug.listvariables.Clear();
+            }
+        }
+
+        private void clearAllVariablesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ClearAllVariables();
+        }
+
+        private void saveConfigurationManuallyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (plug.configBroken == false)
+            {
+                plug.SaveCurrentConfig();
+            }
+            else
+            {
+                string exx = I18n.Translate("internal/UserInterface/warnbeforemanualsave", "Errors were encountered when loading configuration on startup. Saving configuration in this state may lead to it being corrupted beyond repair. Are you sure you want to save configuration anyway?");
+                if (MessageBox.Show(this, exx, I18n.Translate("internal/UserInterface/saveconfigmanually", "Save configuration manually"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    plug.SaveCurrentConfig();
+                    plug.configBroken = false;
+                }
+            }
+        }
+
+        private void btnCloseWelcome_Click(object sender, EventArgs e)
+        {
+            cfg.ShowWelcome = chkWelcome.Checked;
+            btnOptions.Enabled = true;
+            pnlUi.Visible = true;
+            pnlWelcome.Visible = false;
+            toolStrip1.SendToBack();
+            treeView1.SelectedNode = treeView1.Nodes[0];
+            treeView1.Focus();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(linkLabel1.Text);
+        }
+
+        private void goToConfigurationFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string pth = plug.path;
+            Process.Start(pth);
+        }
+
+        private void remoteTriggerRepositoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (Forms.RepositoryForm rf = new Forms.RepositoryForm())
+            {
+                rf.plug = plug;
+                rf.SettingsFromRepository(null);
+                rf.Text = I18n.Translate("internal/UserInterface/addrepo", "Add new repository");
+                rf.btnOk.Text = I18n.Translate("internal/UserInterface/add", "Add");
+                if (rf.ShowDialog() == DialogResult.OK)
+                {
+                    Repository r = new Repository();
+                    r.Enabled = true;
+                    rf.SettingsToRepository(r);
+                    TreeNode tn = new TreeNode();
+                    tn.Text = r.Name;
+                    tn.Tag = r;
+                    tn.Checked = r.Enabled;
+                    tn.ImageIndex = 4;
+                    tn.SelectedImageIndex = 4;
+                    RepositoryFolder rfo = (RepositoryFolder)treeView1.SelectedNode.Tag;
+                    rfo.Repositories.Add(r);
+                    r.Parent = rfo;
+                    treeView1.SelectedNode.Nodes.Add(tn);
+                    treeView1.SelectedNode.Expand();
+                    treeView1.Sort();
+                    treeView1.SelectedNode = tn;
+                    btnUpdate_Click(sender, e);
+                }
+            }
+        }
+
+        private void repositoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            remoteTriggerRepositoryToolStripMenuItem_Click(sender, e);
+        }
+
+        internal void SetupLanguageMenu()
+        {
+            if (I18n.RegisteredLanguages.Count > 0)
+            {
+                foreach (KeyValuePair<string, Language> kp in I18n.RegisteredLanguages)
+                {
+                    if (kp.Value.IsDefault == true)
+                    {
+                        continue;
+                    }
+                    if (toolStripSeparator10.Visible == false)
+                    {
+                        toolStripSeparator10.Visible = true;
+                    }
+                    ToolStripMenuItem tsi = new ToolStripMenuItem();
+                    tsi.Text = kp.Value.LanguageName;
+                    if (I18n.CurrentLanguage != null)
+                    {
+                        if (I18n.CurrentLanguage.LanguageName == tsi.Text)
+                        {
+                            if (btnDefaultLanguage.Checked == true)
+                            {
+                                btnDefaultLanguage.Checked = false;
+                                btnDefaultLanguage.Enabled = true;
+                            }
+                            tsi.Checked = true;
+                            tsi.Enabled = false;
+                        }
+                    }
+                    tsi.CheckOnClick = true;
+                    tsi.CheckedChanged += Tsi_CheckedChanged;
+                    btnLanguages.DropDownItems.Add(tsi);
+                }
+            }
+            btnDefaultLanguage.CheckedChanged += Tsi_CheckedChanged;
+            foreach (ToolStripItem tsi in btnLanguages.DropDownItems)
+            {
+                tsi.Tag = I18n.DoNotTranslate;
+            }
+        }
+
+        private void Tsi_CheckedChanged(object sender, EventArgs e)
+        {
+            ToolStripMenuItem tsi = (ToolStripMenuItem)sender;
+            if (tsi.Checked == true)
+            {
+                tsi.Enabled = false;
+                foreach (ToolStripItem tsim in btnLanguages.DropDownItems)
+                {
+                    if (tsim == tsi)
+                    {
+                        continue;
+                    }
+                    if (tsim is ToolStripMenuItem)
+                    {
+                        ToolStripMenuItem tsimm = (ToolStripMenuItem)tsim;
+                        tsimm.Checked = false;
+                    }
+                }
+                if (tsi == btnDefaultLanguage)
+                {
+                    plug.ChangeLanguage(null);
+                    RetranslateTreeRoots();
+                    I18n.TranslateControl("Plugin", this);
+                }
+                else
+                {
+                    plug.ChangeLanguage(sender.ToString());
+                    RetranslateTreeRoots();
+                    I18n.TranslateControl("Plugin", this);
+                }
+            }
+            else
+            {
+                tsi.Enabled = true;
+            }
+        }
+
+        internal void ShowProgress(int progress, string state)
+        {
+            if (statusStrip1.InvokeRequired == true)
+            {
+                statusStrip1.Invoke(new ProgressDelegate(ShowProgress), progress, state);
+                return;
+            }
+            if (progress == 0 && state == "" && statusStrip1.Visible == true)
+            {
+                statusStrip1.Visible = false;
+                return;
+            }
+            if (progress == -1)
+            {
+                prgStatus.Style = ProgressBarStyle.Marquee;
+            }
+            else
+            {
+                prgStatus.Style = ProgressBarStyle.Continuous;
+                if (progress < prgStatus.Minimum)
+                {
+                    progress = prgStatus.Minimum;
+                }
+                if (progress > prgStatus.Maximum)
+                {
+                    progress = prgStatus.Maximum;
+                }
+                prgStatus.Value = progress;
+            }
+            tlsStatus.Text = state;
+            if (progress != 0 && statusStrip1.Visible == false)
+            {
+                statusStrip1.Visible = true;
+            }
+        }
+
+        private delegate void RepoTreeBuilderDelegate(TriggernometryExport exp, Repository r);
+
+        internal void BuildTreeForRepository(TriggernometryExport exp, Repository r)
+        {
+            if (treeView1.InvokeRequired == true)
+            {
+                treeView1.Invoke(new RepoTreeBuilderDelegate(BuildTreeForRepository), exp, r);
+                return;
+            }
+            using (Forms.ImportForm ifo = new Forms.ImportForm())
+            {
+                foreach (TreeNode tn in treeView1.Nodes[1].Nodes)
+                {
+                    if (tn.Tag == r)
+                    {
+                        ifo.BuildTreeFromExport(exp, tn, r.Root, true);
+                        tn.ImageIndex = 3;
+                        tn.SelectedImageIndex = 3;
+                        RecolorStartingFromNode(tn, r.Enabled, false);
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void UpdateRepository(TreeNode tnupdate)
+        {
+            if (tnupdate.Tag is RepositoryFolder)
+            {
+                RepositoryFolder rfo = (RepositoryFolder)tnupdate.Tag;
+                foreach (TreeNode tn in tnupdate.Nodes)
+                {
+                    tn.ImageIndex = 4;
+                    tn.SelectedImageIndex = 4;
+                }
+                Task tx = new Task(() =>
+                {
+                    plug.RepositoryUpdates();
+                });
+                tx.Start();
+            }
+            if (tnupdate.Tag is Repository)
+            {
+                Repository rfo = (Repository)tnupdate.Tag;
+                tnupdate.ImageIndex = 4;
+                tnupdate.SelectedImageIndex = 4;
+                Task tx = new Task(() =>
+                {
+                    plug.RepositoryUpdate(rfo, true);
+                });
+                tx.Start();
+            }
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            UpdateRepository(treeView1.SelectedNode);
+        }
+
+        private void ctxUpdate_Click(object sender, EventArgs e)
+        {
+            btnUpdate_Click(sender, e);
+        }
+
+        private void btnAddRepoList_Click(object sender, EventArgs e)
+        {
+            using (Forms.RepositoryListForm rlf = new Forms.RepositoryListForm())
+            {
+                rlf.plug = plug;
+                rlf.Text = I18n.Translate("internal/UserInterface/addrepolist", "Add new repository from list");
+                if (rlf.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (RepositoryList.Repository rta in rlf.ReposToAdd)
+                    {
+                        Repository r = new Repository();
+                        r.Enabled = true;
+                        r.Address = rta.Address;
+                        r.AllowProcessLaunch = false;
+                        r.AllowWindowMessages = false;
+                        r.AllowScriptExecution = false;
+                        r.AllowObsControl = false;
+                        r.KeepLocalBackup = true;
+                        r.Name = rta.Name;
+                        r.NewBehavior = Repository.NewBehaviorEnum.AsDefined;
+                        r.UpdatePolicy = Repository.UpdatePolicyEnum.Startup;
+                        r.AudioOutput = Repository.AudioOutputEnum.NeverOverride;
+                        TreeNode tn = new TreeNode();
+                        tn.Text = r.Name;
+                        tn.Tag = r;
+                        tn.Checked = r.Enabled;
+                        tn.ImageIndex = 4;
+                        tn.SelectedImageIndex = 4;
+                        RepositoryFolder rfo = (RepositoryFolder)treeView1.Nodes[1].Tag;
+                        rfo.Repositories.Add(r);
+                        r.Parent = rfo;
+                        treeView1.Nodes[1].Nodes.Add(tn);
+                        treeView1.Nodes[1].Expand();
+                        treeView1.Sort();
+                        UpdateRepository(tn);
+                    }
+                }
+            }
+        }
+
+        private void ctxAddRepoList_Click(object sender, EventArgs e)
+        {
+            btnAddRepoList_Click(sender, e);
+        }
+
+        private void errThing1_Click(object sender, EventArgs e)
+        {
+            OpenLogForm(true);
+        }
+
+    }
+
+}
