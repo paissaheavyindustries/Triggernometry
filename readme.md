@@ -2,11 +2,11 @@
 
 Triggernometry has a Wiki, containing useful information and documentation:
 
-http://wiki.ensemblefc.com/index.php?title=Triggernometry
+https://github.com/paissaheavyindustries/Triggernometry/wiki
 
 To get answers to some commonly asked questions, and to get more information on how to use Triggernometry, you can find more information in the Triggernometry FAQ and examples section:
 
-http://wiki.ensemblefc.com/index.php?title=Triggernometry_FAQ_and_examples
+https://github.com/paissaheavyindustries/Triggernometry/wiki/Triggernometry-FAQ-and-examples
 
 ## Discord
 
