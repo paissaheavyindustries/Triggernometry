@@ -1445,26 +1445,26 @@ namespace Triggernometry
                 foreach (Screen s in Screen.AllScreens)
                 {
                     FilteredAddToLog(DebugLevelEnum.Info, String.Format("{0}{1}: {2},{3} - {4},{5}", s.DeviceName, s.Primary == true ? " (*)" : "", s.Bounds.Left, s.Bounds.Top, s.Bounds.Left + s.Bounds.Width, s.Bounds.Top + s.Bounds.Height));
-                    if (s.Bounds.Left < MinX)
+                    if (s.WorkingArea.Left < MinX)
                     {
-                        MinX = s.Bounds.Left;
+                        MinX = s.WorkingArea.Left;
                     }
-                    if (s.Bounds.Top < MinY)
+                    if (s.WorkingArea.Top < MinY)
                     {
-                        MinY = s.Bounds.Top;
+                        MinY = s.WorkingArea.Top;
                     }
-                    if (s.Bounds.Left + s.Bounds.Width > MaxX)
+                    if (s.WorkingArea.Left + s.WorkingArea.Width > MaxX)
                     {
-                        MaxX = s.Bounds.Left + s.Bounds.Width;
+                        MaxX = s.WorkingArea.Left + s.WorkingArea.Width;
                     }
-                    if (s.Bounds.Top + s.Bounds.Height > MaxY)
+                    if (s.WorkingArea.Top + s.WorkingArea.Height > MaxY)
                     {
-                        MaxY = s.Bounds.Top + s.Bounds.Height;
+                        MaxY = s.WorkingArea.Top + s.WorkingArea.Height;
                     }
                     if (s.Primary == true)
                     {
-                        PrimaryX = s.Bounds.Left;
-                        PrimaryY = s.Bounds.Top;
+                        PrimaryX = s.WorkingArea.Left;
+                        PrimaryY = s.WorkingArea.Top;
                     }
                 }
                 FilteredAddToLog(DebugLevelEnum.Info, String.Format("*: {0},{1} - {2},{3}", MinX, MinY, MaxX, MaxY));
