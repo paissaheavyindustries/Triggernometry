@@ -324,12 +324,33 @@ namespace Scarborough
                     }
                     else
                     {
-                        g.DrawImageEx(
-                            OriginalImage,
-                            new Rectangle(0, 0, Width, Height),
-                            new Rectangle(FinalOffsetX + Left, FinalOffsetY + Top, FinalOffsetX + Left + Width, FinalOffsetY + Top + Height),
-                            Opacity / 100.0f
-                        );
+                        if (OriginalImage.Width <= Width)
+                        {
+                            g.DrawImageEx(
+                                OriginalImage,
+                                new Rectangle(0, 0, OriginalImage.Width, Height),
+                                new Rectangle(FinalOffsetX + Left, FinalOffsetY + Top, FinalOffsetX + Left + OriginalImage.Width, FinalOffsetY + Top + Height),
+                                Opacity / 100.0f
+                            );
+                        }
+                        else if (OriginalImage.Height <= Height)
+                        {
+                            g.DrawImageEx(
+                                OriginalImage,
+                                new Rectangle(0, 0, Width, OriginalImage.Height),
+                                new Rectangle(FinalOffsetX + Left, FinalOffsetY + Top, FinalOffsetX + Left + Width, FinalOffsetY + Top + OriginalImage.Height),
+                                Opacity / 100.0f
+                            );
+                        }
+                        else
+                        {
+                            g.DrawImageEx(
+                                OriginalImage,
+                                new Rectangle(0, 0, Width, Height),
+                                new Rectangle(FinalOffsetX + Left, FinalOffsetY + Top, FinalOffsetX + Left + Width, FinalOffsetY + Top + Height),
+                                Opacity / 100.0f
+                            );
+                        }
                     }
                     break;
                 case PictureBoxSizeMode.CenterImage:
