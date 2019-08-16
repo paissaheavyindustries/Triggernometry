@@ -38,6 +38,7 @@ namespace Scarborough
 
         private OverlayWindow _window = null;
         private Graphics _graphics = null;
+        private Int64 CurOrdinal = 1;
         private Color _bgColor = new Color();
         private ManualResetEvent exitEvent = null;
         private Thread drawThread = null;
@@ -249,11 +250,17 @@ namespace Scarborough
             }
         }
 
+        private Int64 GetNextOrdinal()
+        {
+            return Interlocked.Increment(ref CurOrdinal);
+        }
+
         private void ActivateImage(string id, ScarboroughImage si)
         {
             ScarboroughImage existing = GetImage(id);
             if (existing != null)
             {
+                existing.Ordinal = GetNextOrdinal();
                 existing.Left = si.EvaluateNumericExpression(si.ctx, si.InitXExpression);
                 existing.Top = si.EvaluateNumericExpression(si.ctx, si.InitYExpression);
                 existing.Width = si.EvaluateNumericExpression(si.ctx, si.InitWExpression);
@@ -276,6 +283,7 @@ namespace Scarborough
             }
             else
             {
+                si.Ordinal = GetNextOrdinal();
                 si.NeedImage = true;
                 si.plug = plug;
                 si.ImageFilename = si.EvaluateStringExpression(si.ctx, si.ImageExpression);
@@ -294,6 +302,7 @@ namespace Scarborough
             ScarboroughText existing = GetText(id);
             if (existing != null)
             {
+                existing.Ordinal = GetNextOrdinal();
                 existing.Left = si.EvaluateNumericExpression(si.ctx, si.InitXExpression);
                 existing.Top = si.EvaluateNumericExpression(si.ctx, si.InitYExpression);
                 existing.Width = si.EvaluateNumericExpression(si.ctx, si.InitWExpression);
@@ -320,6 +329,7 @@ namespace Scarborough
             }
             else
             {
+                si.Ordinal = GetNextOrdinal();
                 si.plug = plug;
                 si.Left = si.EvaluateNumericExpression(si.ctx, si.InitXExpression);
                 si.Top = si.EvaluateNumericExpression(si.ctx, si.InitYExpression);
@@ -561,6 +571,7 @@ namespace Scarborough
             List<ScarboroughItem> toRem = new List<ScarboroughItem>();
             List<DeferredMessage> messages = new List<DeferredMessage>();
             toRem.Clear();
+            rc.items.Sort((a, b) => a.Ordinal.CompareTo(b.Ordinal));
             foreach (ScarboroughItem si in rc.items)
             {
                 try

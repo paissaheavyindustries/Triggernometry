@@ -14,6 +14,8 @@ namespace Scarborough
     abstract class ScarboroughItem : IDisposable
     {
 
+        internal Int64 Ordinal { get; set; }
+
         internal string InitXExpression { get; set; }
         internal string InitYExpression { get; set; }
         internal string InitWExpression { get; set; }

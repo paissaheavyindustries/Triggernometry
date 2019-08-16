@@ -288,7 +288,18 @@ namespace Triggernometry
                                             }
                                         }
                                         break;
-                                }                                
+                                    case "lastindexof":
+                                        {
+                                            string garg = mx.Groups["arg"].Value;
+                                            lock (plug.listvariables)
+                                            {
+                                                VariableList vl = GetListVariable(plug, gname, false);
+                                                val = vl.LastIndexOf(garg).ToString();
+                                                found = true;
+                                            }
+                                        }
+                                        break;
+                                }
                             }
                             else
                             {
@@ -404,6 +415,16 @@ namespace Triggernometry
                                             else
                                             {
                                                 val = "" + funcval.IndexOf(args[0]);
+                                            }
+                                            break;
+                                        case "lastindexof": // lastindexof(stringtosearch)
+                                            if (argc != 1)
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/lastindexofargerror", "Lastindexof function requires one argument, {0} were given", argc));
+                                            }
+                                            else
+                                            {
+                                                val = "" + funcval.LastIndexOf(args[0]);
                                             }
                                             break;
                                         case "trim": // trim() or trim(charcode,charcode,charcode,...)

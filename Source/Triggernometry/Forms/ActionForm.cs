@@ -17,6 +17,8 @@ namespace Triggernometry.Forms
     public partial class ActionForm : MemoryForm<ActionForm>
     {
 
+        private bool IsReadonly { get; set; } = false;
+
         internal WMPLib.WindowsMediaPlayer wmp;
         internal SpeechSynthesizer tts;
         private Plugin _plug;
@@ -99,6 +101,25 @@ namespace Triggernometry.Forms
             {
                 expSoundFile.Expression = openFileDialog1.FileName;
             }
+        }
+
+        internal void SetReadOnly()
+        {
+            IsReadonly = true;
+            btnTest.Visible = false;
+            btnOk.Enabled = false;
+            btnOk.Visible = false;
+            btnCancel.Dock = DockStyle.Fill;
+            cbxActionType.Enabled = false;
+            foreach (TabPage tp in tbcAction.TabPages)
+            {
+                foreach (Control c in tp.Controls)
+                {
+                    c.Enabled = false;
+                }
+            }
+            panel6.Visible = false;
+            panel8.Visible = true;
         }
 
         private void UpdateFontDescription()

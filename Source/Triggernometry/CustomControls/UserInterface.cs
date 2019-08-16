@@ -1707,6 +1707,11 @@ namespace Triggernometry.CustomControls
             OpenLogForm(true);
         }
 
+        private void ctxCollapse_Click(object sender, EventArgs e)
+        {
+            treeView1.CollapseAll();
+        }
+
     }
 
 }

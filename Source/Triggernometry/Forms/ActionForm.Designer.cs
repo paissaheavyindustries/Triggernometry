@@ -259,6 +259,8 @@
             this.expWmsgTitle = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblWmsgCode = new System.Windows.Forms.Label();
             this.lblWmsgTitle = new System.Windows.Forms.Label();
+            this.panel7 = new System.Windows.Forms.Panel();
+            this.lblWmsgWarning = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
@@ -288,8 +290,8 @@
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
             this.expressionTextBox1 = new Triggernometry.CustomControls.ExpressionTextBox();
             this.expressionTextBox2 = new Triggernometry.CustomControls.ExpressionTextBox();
-            this.panel7 = new System.Windows.Forms.Panel();
-            this.lblWmsgWarning = new System.Windows.Forms.Label();
+            this.panel8 = new System.Windows.Forms.Panel();
+            this.lblReadOnly = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.grpGeneralSettings.SuspendLayout();
             this.tbcActionSettings.SuspendLayout();
@@ -332,6 +334,7 @@
             this.jsonTableLayout.SuspendLayout();
             this.tabWindowMessage.SuspendLayout();
             this.tableLayoutPanel19.SuspendLayout();
+            this.panel7.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel6.SuspendLayout();
             this.tbcAction.SuspendLayout();
@@ -341,7 +344,7 @@
             this.tableLayoutPanel15.SuspendLayout();
             this.tabDebugging.SuspendLayout();
             this.tableLayoutPanel16.SuspendLayout();
-            this.panel7.SuspendLayout();
+            this.panel8.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -456,7 +459,7 @@
             this.tbcActionSettings.Margin = new System.Windows.Forms.Padding(0);
             this.tbcActionSettings.Name = "tbcActionSettings";
             this.tbcActionSettings.SelectedIndex = 0;
-            this.tbcActionSettings.Size = new System.Drawing.Size(550, 344);
+            this.tbcActionSettings.Size = new System.Drawing.Size(550, 293);
             this.tbcActionSettings.TabIndex = 0;
             // 
             // tabSystemBeep
@@ -466,7 +469,7 @@
             this.tabSystemBeep.Location = new System.Drawing.Point(4, 25);
             this.tabSystemBeep.Margin = new System.Windows.Forms.Padding(0);
             this.tabSystemBeep.Name = "tabSystemBeep";
-            this.tabSystemBeep.Size = new System.Drawing.Size(542, 315);
+            this.tabSystemBeep.Size = new System.Drawing.Size(542, 264);
             this.tabSystemBeep.TabIndex = 0;
             this.tabSystemBeep.Text = "System beep";
             this.tabSystemBeep.UseVisualStyleBackColor = true;
@@ -3461,6 +3464,32 @@
             this.lblWmsgTitle.Text = "Window title";
             this.lblWmsgTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // panel7
+            // 
+            this.panel7.BackColor = System.Drawing.SystemColors.Control;
+            this.panel7.Controls.Add(this.lblWmsgWarning);
+            this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel7.Location = new System.Drawing.Point(3, 3);
+            this.panel7.Name = "panel7";
+            this.panel7.Padding = new System.Windows.Forms.Padding(0, 0, 0, 10);
+            this.panel7.Size = new System.Drawing.Size(536, 51);
+            this.panel7.TabIndex = 5;
+            // 
+            // lblWmsgWarning
+            // 
+            this.lblWmsgWarning.AutoEllipsis = true;
+            this.lblWmsgWarning.BackColor = System.Drawing.SystemColors.Info;
+            this.lblWmsgWarning.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblWmsgWarning.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblWmsgWarning.Location = new System.Drawing.Point(0, 0);
+            this.lblWmsgWarning.Name = "lblWmsgWarning";
+            this.lblWmsgWarning.Size = new System.Drawing.Size(536, 41);
+            this.lblWmsgWarning.TabIndex = 0;
+            this.lblWmsgWarning.Text = "Actions of this type may be potentially dangerous and cause damage if, for exampl" +
+    "e, the trigger is fired with parameters that fall outside of the expected values" +
+    ". Please be aware of the risk.";
+            this.lblWmsgWarning.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // panel2
             // 
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -3556,10 +3585,10 @@
             this.tbcAction.Controls.Add(this.tabScheduling);
             this.tbcAction.Controls.Add(this.tabDebugging);
             this.tbcAction.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbcAction.Location = new System.Drawing.Point(10, 80);
+            this.tbcAction.Location = new System.Drawing.Point(10, 131);
             this.tbcAction.Name = "tbcAction";
             this.tbcAction.SelectedIndex = 0;
-            this.tbcAction.Size = new System.Drawing.Size(564, 376);
+            this.tbcAction.Size = new System.Drawing.Size(564, 325);
             this.tbcAction.TabIndex = 7;
             // 
             // tabActionSettings
@@ -3568,7 +3597,7 @@
             this.tabActionSettings.Location = new System.Drawing.Point(4, 22);
             this.tabActionSettings.Name = "tabActionSettings";
             this.tabActionSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabActionSettings.Size = new System.Drawing.Size(556, 350);
+            this.tabActionSettings.Size = new System.Drawing.Size(556, 299);
             this.tabActionSettings.TabIndex = 0;
             this.tabActionSettings.Text = "Action-specific settings";
             this.tabActionSettings.UseVisualStyleBackColor = true;
@@ -3785,31 +3814,32 @@
             this.expressionTextBox2.Size = new System.Drawing.Size(474, 20);
             this.expressionTextBox2.TabIndex = 14;
             // 
-            // panel7
+            // panel8
             // 
-            this.panel7.BackColor = System.Drawing.SystemColors.Control;
-            this.panel7.Controls.Add(this.lblWmsgWarning);
-            this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel7.Location = new System.Drawing.Point(3, 3);
-            this.panel7.Name = "panel7";
-            this.panel7.Padding = new System.Windows.Forms.Padding(0, 0, 0, 10);
-            this.panel7.Size = new System.Drawing.Size(536, 51);
-            this.panel7.TabIndex = 5;
+            this.panel8.BackColor = System.Drawing.SystemColors.Control;
+            this.panel8.Controls.Add(this.lblReadOnly);
+            this.panel8.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel8.Location = new System.Drawing.Point(10, 80);
+            this.panel8.Name = "panel8";
+            this.panel8.Padding = new System.Windows.Forms.Padding(0, 0, 0, 10);
+            this.panel8.Size = new System.Drawing.Size(564, 51);
+            this.panel8.TabIndex = 15;
+            this.panel8.Visible = false;
             // 
-            // lblWmsgWarning
+            // lblReadOnly
             // 
-            this.lblWmsgWarning.AutoEllipsis = true;
-            this.lblWmsgWarning.BackColor = System.Drawing.SystemColors.Info;
-            this.lblWmsgWarning.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblWmsgWarning.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblWmsgWarning.Location = new System.Drawing.Point(0, 0);
-            this.lblWmsgWarning.Name = "lblWmsgWarning";
-            this.lblWmsgWarning.Size = new System.Drawing.Size(536, 41);
-            this.lblWmsgWarning.TabIndex = 0;
-            this.lblWmsgWarning.Text = "Actions of this type may be potentially dangerous and cause damage if, for exampl" +
-    "e, the trigger is fired with parameters that fall outside of the expected values" +
-    ". Please be aware of the risk.";
-            this.lblWmsgWarning.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblReadOnly.AutoEllipsis = true;
+            this.lblReadOnly.BackColor = System.Drawing.SystemColors.Info;
+            this.lblReadOnly.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblReadOnly.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblReadOnly.Location = new System.Drawing.Point(0, 0);
+            this.lblReadOnly.Name = "lblReadOnly";
+            this.lblReadOnly.Size = new System.Drawing.Size(564, 41);
+            this.lblReadOnly.TabIndex = 0;
+            this.lblReadOnly.Text = "You are in read-only mode, as the configuration of remote triggers can\'t be edite" +
+    "d locally. If you wish to edit the action, you will need to make a local copy of" +
+    " the trigger.";
+            this.lblReadOnly.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ActionForm
             // 
@@ -3819,10 +3849,11 @@
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(584, 511);
             this.Controls.Add(this.tbcAction);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.grpGeneralSettings);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel3);
+            this.Controls.Add(this.panel8);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.grpGeneralSettings);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.MinimumSize = new System.Drawing.Size(600, 550);
             this.Name = "ActionForm";
@@ -3909,6 +3940,7 @@
             this.tabWindowMessage.PerformLayout();
             this.tableLayoutPanel19.ResumeLayout(false);
             this.tableLayoutPanel19.PerformLayout();
+            this.panel7.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
@@ -3923,7 +3955,7 @@
             this.tabDebugging.PerformLayout();
             this.tableLayoutPanel16.ResumeLayout(false);
             this.tableLayoutPanel16.PerformLayout();
-            this.panel7.ResumeLayout(false);
+            this.panel8.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -4191,5 +4223,7 @@
         private System.Windows.Forms.Label lblWmsgWparam;
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Label lblWmsgWarning;
+        private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.Label lblReadOnly;
     }
 }

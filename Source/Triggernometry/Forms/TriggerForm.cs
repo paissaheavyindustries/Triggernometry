@@ -18,6 +18,8 @@ namespace Triggernometry.Forms
     public partial class TriggerForm : MemoryForm<TriggerForm>
     {
 
+        private bool IsReadonly { get; set; } = false;
+
         internal WMPLib.WindowsMediaPlayer wmp;
         internal SpeechSynthesizer tts;
         internal List<Action> Actions;
@@ -65,7 +67,7 @@ namespace Triggernometry.Forms
         {
             using (ActionForm af = new ActionForm())
             {
-                af.plug = plug;                
+                af.plug = plug;
                 af.wmp = wmp;
                 af.tts = tts;
                 af.trvTrigger.ImageList = imgs;
@@ -76,6 +78,10 @@ namespace Triggernometry.Forms
                 RemoveTriggerNodesFromTree(af.trvFolder.Nodes[0]);
                 CloseTree(af.trvFolder.Nodes[0]);
                 af.SettingsFromAction(null);
+                if (panel5.Visible == true)
+                {
+                    af.SetReadOnly();
+                }
                 af.Text = I18n.Translate("internal/TriggerForm/addnewaction", "Add new action");
                 af.btnOk.Text = I18n.Translate("internal/TriggerForm/add", "Add");
                 if (af.ShowDialog() == DialogResult.OK)
@@ -94,6 +100,7 @@ namespace Triggernometry.Forms
 
         internal void SetReadOnly()
         {
+            IsReadonly = true;
             txtName.Enabled = false;
             txtRegexp.Enabled = false;
             btnOk.Enabled = false;
@@ -108,8 +115,10 @@ namespace Triggernometry.Forms
             cbxRefireWithinPeriod.Enabled = false;
             expRefirePeriod.Enabled = false;
             cndCondition.Enabled = false;
-            toolStrip2.Enabled = false;
-            dgvActions.Enabled = false;
+            btnAddAction.Enabled = false;
+            btnActionUp.Enabled = false;
+            btnActionDown.Enabled = false;
+            btnRemoveAction.Enabled = false;
             panel5.Visible = true;
         }
 
@@ -314,9 +323,9 @@ namespace Triggernometry.Forms
         private void dgvActions_SelectionChanged(object sender, EventArgs e)
         {
             btnEditAction.Enabled = (dgvActions.SelectedRows.Count == 1);
-            btnRemoveAction.Enabled = (dgvActions.SelectedRows.Count > 0);
-            btnActionUp.Enabled = (dgvActions.SelectedRows.Count == 1 && dgvActions.SelectedRows[0].Index > 0);
-            btnActionDown.Enabled = (dgvActions.SelectedRows.Count == 1 && dgvActions.SelectedRows[0].Index < (Actions.Count - 1));
+            btnRemoveAction.Enabled = IsReadonly == false && (dgvActions.SelectedRows.Count > 0);
+            btnActionUp.Enabled = IsReadonly == false && (dgvActions.SelectedRows.Count == 1 && dgvActions.SelectedRows[0].Index > 0);
+            btnActionDown.Enabled = IsReadonly == false && (dgvActions.SelectedRows.Count == 1 && dgvActions.SelectedRows[0].Index < (Actions.Count - 1));
         }
 
         private void btnEditAction_Click(object sender, EventArgs e)
@@ -337,6 +346,10 @@ namespace Triggernometry.Forms
                 RemoveTriggerNodesFromTree(af.trvFolder.Nodes[0]);
                 CloseTree(af.trvFolder.Nodes[0]);
                 af.SettingsFromAction(a);
+                if (panel5.Visible == true)
+                {
+                    af.SetReadOnly();
+                }
                 af.tts = tts;
                 af.Text = I18n.Translate("internal/TriggerForm/editaction", "Edit action '{0}'", a.GetDescription(ctx));
                 af.btnOk.Text = I18n.Translate("internal/TriggerForm/savechanges", "Save changes");
@@ -512,7 +525,7 @@ namespace Triggernometry.Forms
             {
                 data = ClipboardAction;
             }
-            return (data != null && data.Length > 0);
+            return IsReadonly == false && (data != null && data.Length > 0);
         }
 
         private string ExportActionSelection()

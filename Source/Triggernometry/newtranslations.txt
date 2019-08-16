@@ -18,3 +18,12 @@ Enable aura hardware acceleration
 
 ConfigurationForm/grpUserInterface
  User interface 
+
+ActionForm/lblReadOnly
+You are in read-only mode, as the configuration of remote triggers can't be edited locally. If you wish to edit the action, you will need to make a local copy of the trigger.
+
+internal/Context/lastindexofargerror
+Lastindexof function requires one argument, {0} were given
+
+Plugin/UserInterface/ctxCollapseAll
+Collapse all

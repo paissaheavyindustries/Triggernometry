@@ -68,13 +68,30 @@ namespace Scarborough
                         ii += 3;
                     }
                 }
-                // should have application block here now
-                if (data[ii] == 0x21 && data[ii + 1] == 0xff)
+                while (ii < data.Length)
                 {
-                    ii += 19;
-                    if (data[ii] == 0x21 && data[ii + 1] == 0xf9)
+                    if (data[ii] == 0x21)
                     {
-                        g.TransparencyIndex = data[ii + 6];
+                        if (data[ii + 1] == 0xf9)
+                        {
+                            g.TransparencyIndex = data[ii + 6];
+                            break;
+                        }
+                        else
+                        {
+                            int bsize = data[ii + 2];
+                            ii += bsize + 3;
+                            while (data[ii] != 0)
+                            {
+                                ii += data[ii] + 1;
+                            }
+                            ii++;
+                        }
+                    }
+                    else
+                    {
+                        // out of blocks
+                        break;
                     }
                 }
                 return g;

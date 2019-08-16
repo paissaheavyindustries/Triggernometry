@@ -127,14 +127,24 @@ namespace Triggernometry
 
         public int IndexOf(string value)
         {
-            int i = 1;
-            foreach (string x in Values)
+            for (int i = 0; i < Values.Count; i++)
             {
-                if (x == value)
+                if (Values[i] == value)
                 {
-                    return i;
+                    return i + 1;
                 }
-                i++;
+            }
+            return 0;
+        }
+
+        public int LastIndexOf(string value)
+        {
+            for (int i = Values.Count - 1; i >= 0; i--)
+            {
+                if (Values[i] == value)
+                {
+                    return i + 1;
+                }
             }
             return 0;
         }

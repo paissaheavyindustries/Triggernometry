@@ -112,6 +112,8 @@
             this.prgStatus = new System.Windows.Forms.ToolStripProgressBar();
             this.tlsStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.treeView1 = new Triggernometry.CustomControls.TreeViewEx();
+            this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
+            this.ctxCollapse = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.pnlUi.SuspendLayout();
@@ -147,9 +149,11 @@
             this.ctxImport,
             this.ctxExport,
             this.toolStripSeparator2,
-            this.ctxDelete});
+            this.ctxDelete,
+            this.toolStripSeparator11,
+            this.ctxCollapse});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(145, 198);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 248);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // ctxAdd
@@ -161,7 +165,7 @@
             this.ctxAddRepoList});
             this.ctxAdd.Image = ((System.Drawing.Image)(resources.GetObject("ctxAdd.Image")));
             this.ctxAdd.Name = "ctxAdd";
-            this.ctxAdd.Size = new System.Drawing.Size(144, 22);
+            this.ctxAdd.Size = new System.Drawing.Size(180, 22);
             this.ctxAdd.Text = "Add";
             // 
             // ctxAddFolder
@@ -200,7 +204,7 @@
             // 
             this.ctxUpdate.Image = ((System.Drawing.Image)(resources.GetObject("ctxUpdate.Image")));
             this.ctxUpdate.Name = "ctxUpdate";
-            this.ctxUpdate.Size = new System.Drawing.Size(144, 22);
+            this.ctxUpdate.Size = new System.Drawing.Size(180, 22);
             this.ctxUpdate.Text = "Update";
             this.ctxUpdate.Click += new System.EventHandler(this.ctxUpdate_Click);
             // 
@@ -208,21 +212,21 @@
             // 
             this.ctxEdit.Image = ((System.Drawing.Image)(resources.GetObject("ctxEdit.Image")));
             this.ctxEdit.Name = "ctxEdit";
-            this.ctxEdit.Size = new System.Drawing.Size(144, 22);
+            this.ctxEdit.Size = new System.Drawing.Size(180, 22);
             this.ctxEdit.Text = "Edit";
             this.ctxEdit.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(141, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(177, 6);
             // 
             // ctxCopy
             // 
             this.ctxCopy.Image = ((System.Drawing.Image)(resources.GetObject("ctxCopy.Image")));
             this.ctxCopy.Name = "ctxCopy";
             this.ctxCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.ctxCopy.Size = new System.Drawing.Size(144, 22);
+            this.ctxCopy.Size = new System.Drawing.Size(180, 22);
             this.ctxCopy.Text = "Copy";
             this.ctxCopy.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
@@ -231,20 +235,20 @@
             this.ctxPaste.Image = ((System.Drawing.Image)(resources.GetObject("ctxPaste.Image")));
             this.ctxPaste.Name = "ctxPaste";
             this.ctxPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.ctxPaste.Size = new System.Drawing.Size(144, 22);
+            this.ctxPaste.Size = new System.Drawing.Size(180, 22);
             this.ctxPaste.Text = "Paste";
             this.ctxPaste.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(141, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
             // 
             // ctxImport
             // 
             this.ctxImport.Image = ((System.Drawing.Image)(resources.GetObject("ctxImport.Image")));
             this.ctxImport.Name = "ctxImport";
-            this.ctxImport.Size = new System.Drawing.Size(144, 22);
+            this.ctxImport.Size = new System.Drawing.Size(180, 22);
             this.ctxImport.Text = "Import";
             this.ctxImport.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
             // 
@@ -252,20 +256,20 @@
             // 
             this.ctxExport.Image = ((System.Drawing.Image)(resources.GetObject("ctxExport.Image")));
             this.ctxExport.Name = "ctxExport";
-            this.ctxExport.Size = new System.Drawing.Size(144, 22);
+            this.ctxExport.Size = new System.Drawing.Size(180, 22);
             this.ctxExport.Text = "Export";
             this.ctxExport.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(141, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // ctxDelete
             // 
             this.ctxDelete.Image = ((System.Drawing.Image)(resources.GetObject("ctxDelete.Image")));
             this.ctxDelete.Name = "ctxDelete";
-            this.ctxDelete.Size = new System.Drawing.Size(144, 22);
+            this.ctxDelete.Size = new System.Drawing.Size(180, 22);
             this.ctxDelete.Text = "Remove";
             this.ctxDelete.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
@@ -952,6 +956,19 @@
             this.treeView1.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseDoubleClick);
             this.treeView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.treeView1_KeyDown);
             // 
+            // toolStripSeparator11
+            // 
+            this.toolStripSeparator11.Name = "toolStripSeparator11";
+            this.toolStripSeparator11.Size = new System.Drawing.Size(177, 6);
+            // 
+            // ctxCollapse
+            // 
+            this.ctxCollapse.Image = ((System.Drawing.Image)(resources.GetObject("ctxCollapse.Image")));
+            this.ctxCollapse.Name = "ctxCollapse";
+            this.ctxCollapse.Size = new System.Drawing.Size(180, 22);
+            this.ctxCollapse.Text = "Collapse all";
+            this.ctxCollapse.Click += new System.EventHandler(this.ctxCollapse_Click);
+            // 
             // UserInterface
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1066,5 +1083,7 @@
         private System.Windows.Forms.ToolStripButton btnUpdate;
         private System.Windows.Forms.ToolStripMenuItem btnAddRepoList;
         private System.Windows.Forms.ToolStripMenuItem ctxAddRepoList;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
+        private System.Windows.Forms.ToolStripMenuItem ctxCollapse;
     }
 }
