@@ -48,6 +48,7 @@ namespace Triggernometry.Forms
                 chkLogNormalEvents.Checked = true;
                 chkFfxivLogNetwork.Checked = false;
                 cbxEnableHwAccel.Checked = false;
+                txtMonitorWindow.Text = "";
             }
             else
             {
@@ -66,6 +67,7 @@ namespace Triggernometry.Forms
                 chkLogNormalEvents.Checked = a.LogNormalEvents;
                 chkFfxivLogNetwork.Checked = a.FfxivLogNetwork;
                 cbxEnableHwAccel.Checked = a.UseScarborough;
+                txtMonitorWindow.Text = a.WindowToMonitor;
                 SetupJobOrder(a);
             }
             if (a.StartupTriggerType == Configuration.StartupTriggerTypeEnum.Trigger)
@@ -105,6 +107,7 @@ namespace Triggernometry.Forms
             a.LogNormalEvents = chkLogNormalEvents.Checked;
             a.FfxivLogNetwork = chkFfxivLogNetwork.Checked;
             a.UseScarborough = cbxEnableHwAccel.Checked;
+            a.WindowToMonitor = txtMonitorWindow.Text;
             a.FfxivPartyOrdering = (Configuration.FfxivPartyOrderingEnum)cbxFfxivJobMethod.SelectedIndex;
             if (chkUpdates.Checked == true)
             {

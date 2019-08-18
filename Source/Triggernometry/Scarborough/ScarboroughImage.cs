@@ -25,9 +25,24 @@ namespace Scarborough
         internal string ImageFilename { get; set; }
         internal string ImageExpression { get; set; }
 
-        internal PictureBoxSizeMode Display { get; set; }
+        private PictureBoxSizeMode _Display;
+        internal PictureBoxSizeMode Display
+        {
+            get
+            {
+                return _Display;
+            }
+            set
+            {
+                if (value != _Display)
+                {
+                    Changed = true;
+                    _Display = value;
+                }
+            }
+        }
 
-        internal Image OriginalImage { get; set; } = null;
+        private Image OriginalImage { get; set; } = null;
 
         private byte[] ImageToByte(System.Drawing.Image img)
         {
@@ -227,8 +242,9 @@ namespace Scarborough
         private double TimeAccumulator = 0.0;
         private DateTime LastAdvance = DateTime.MinValue;
 
-        public void AdvanceFrame()
+        public bool AdvanceFrame()
         {
+            int prev = CurrentFrame;
             if (CurrentFrame == -1)
             {
                 LastAdvance = DateTime.Now;
@@ -257,12 +273,13 @@ namespace Scarborough
                 }
                 OriginalImage = Frames[CurrentFrame];
             }
+            return (prev != CurrentFrame);
         }
 
-        public void LoadImageOnDemand(Graphics g)
+        public void LoadImageOnDemand()
         {
             Free();
-            LoadImageData(plug, g, ImageFilename);
+            LoadImageData(plug, _graphics, ImageFilename);
         }
 
         public override void Free()
@@ -286,17 +303,36 @@ namespace Scarborough
             }
         }
 
-        public override void Render(Graphics g)
+        public override void Render()
         {
             if (NeedImage == true)
             {
-                LoadImageOnDemand(g);
+                if (_window == null)
+                {
+                    AdjustSurface();
+                }
+                LoadImageOnDemand();
                 NeedImage = false;
+                NeedRender = true;
             }
             if (IsAnimated == true)
             {
-                AdvanceFrame();
+                bool af = AdvanceFrame();
+                NeedRender = NeedRender || af;
             }
+            if (NeedRender == false)
+            {
+                return;
+            }
+            AdjustSurface();
+            if (plug.HideAllAuras == true)
+            {
+                _window.Hide();
+                return;
+            }
+            NeedRender = false;
+            _graphics.BeginScene();
+            _graphics.ClearScene(_bgColor);
             switch (Display)
             {
                 case PictureBoxSizeMode.Zoom:
@@ -318,24 +354,24 @@ namespace Scarborough
                         aW = Width;
                         aH = Height;
                     }
-                    g.DrawImage(
+                    _graphics.DrawImage(
                         OriginalImage,
-                        FinalOffsetX + Left + ((Width - aW) / 2),
-                        FinalOffsetY + Top + ((Height - aH) / 2),
-                        FinalOffsetX + Left + ((Width - aW) / 2) + aW,
-                        FinalOffsetY + Top + ((Height - aH) / 2) + aH,
+                        ((Width - aW) / 2),
+                        ((Height - aH) / 2),
+                        ((Width - aW) / 2) + aW,
+                        ((Height - aH) / 2) + aH,
                         Opacity / 100.0f
                     );
                     break;
                 case PictureBoxSizeMode.Normal:
                     if (OriginalImage.Width <= Width && OriginalImage.Height <= Height)
                     {
-                        g.DrawImage(
+                        _graphics.DrawImage(
                             OriginalImage,
-                            FinalOffsetX + Left,
-                            FinalOffsetY + Top,
-                            FinalOffsetX + Left + OriginalImage.Width,
-                            FinalOffsetY + Top + OriginalImage.Height,
+                            0,
+                            0,
+                            OriginalImage.Width,
+                            OriginalImage.Height,
                             Opacity / 100.0f
                         );
                     }
@@ -343,28 +379,28 @@ namespace Scarborough
                     {
                         if (OriginalImage.Width <= Width)
                         {
-                            g.DrawImageEx(
+                            _graphics.DrawImageEx(
                                 OriginalImage,
                                 new Rectangle(0, 0, OriginalImage.Width, Height),
-                                new Rectangle(FinalOffsetX + Left, FinalOffsetY + Top, FinalOffsetX + Left + OriginalImage.Width, FinalOffsetY + Top + Height),
+                                new Rectangle(0, 0, OriginalImage.Width, Height),
                                 Opacity / 100.0f
                             );
                         }
                         else if (OriginalImage.Height <= Height)
                         {
-                            g.DrawImageEx(
+                            _graphics.DrawImageEx(
                                 OriginalImage,
                                 new Rectangle(0, 0, Width, OriginalImage.Height),
-                                new Rectangle(FinalOffsetX + Left, FinalOffsetY + Top, FinalOffsetX + Left + Width, FinalOffsetY + Top + OriginalImage.Height),
+                                new Rectangle(0, 0, Width, OriginalImage.Height),
                                 Opacity / 100.0f
                             );
                         }
                         else
                         {
-                            g.DrawImageEx(
+                            _graphics.DrawImageEx(
                                 OriginalImage,
                                 new Rectangle(0, 0, Width, Height),
-                                new Rectangle(FinalOffsetX + Left, FinalOffsetY + Top, FinalOffsetX + Left + Width, FinalOffsetY + Top + Height),
+                                new Rectangle(0, 0, Width, Height),
                                 Opacity / 100.0f
                             );
                         }
@@ -373,18 +409,18 @@ namespace Scarborough
                 case PictureBoxSizeMode.CenterImage:
                     if (OriginalImage.Width <= Width && OriginalImage.Height <= Height)
                     {
-                        g.DrawImage(
+                        _graphics.DrawImage(
                             OriginalImage,
-                            FinalOffsetX + Left + ((Width - OriginalImage.Width) / 2),
-                            FinalOffsetY + Top + ((Height - OriginalImage.Height) / 2),
-                            FinalOffsetX + Left + ((Width - OriginalImage.Width) / 2) + OriginalImage.Width,
-                            FinalOffsetY + Top + ((Height - OriginalImage.Height) / 2) + OriginalImage.Height,
+                            ((Width - OriginalImage.Width) / 2),
+                            ((Height - OriginalImage.Height) / 2),
+                            ((Width - OriginalImage.Width) / 2) + OriginalImage.Width,
+                            ((Height - OriginalImage.Height) / 2) + OriginalImage.Height,
                             Opacity / 100.0f
                         );
                     }
                     else
                     {
-                        g.DrawImageEx(
+                        _graphics.DrawImageEx(
                             OriginalImage,
                             new Rectangle(
                                 (OriginalImage.Width / 2) - (Width / 2),
@@ -393,26 +429,27 @@ namespace Scarborough
                                 (OriginalImage.Height / 2) + (Height / 2)
                             ),
                             new Rectangle(
-                                FinalOffsetX + Left,
-                                FinalOffsetY + Top,
-                                FinalOffsetX + Left + Width,
-                                FinalOffsetY + Top + Height
+                                0,
+                                0,
+                                Width,
+                                Height
                             ),
                             Opacity / 100.0f
                         );
                     }
                     break;
                 case PictureBoxSizeMode.StretchImage:
-                    g.DrawImage(
+                    _graphics.DrawImage(
                         OriginalImage,
-                        FinalOffsetX + Left,
-                        FinalOffsetY + Top,
-                        FinalOffsetX + Left + Width,
-                        FinalOffsetY + Top + Height,
+                        0,
+                        0,
+                        Width,
+                        Height,
                         Opacity / 100.0f
                     );
                     break;
             }
+            _graphics.EndScene();
         }
 
         public override bool InternalLogic(int numTicks)

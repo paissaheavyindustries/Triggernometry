@@ -36,59 +36,17 @@ namespace Scarborough
 
         }
 
-        private OverlayWindow _window = null;
-        private Graphics _graphics = null;
         private Int64 CurOrdinal = 1;
-        private Color _bgColor = new Color();
         private ManualResetEvent exitEvent = null;
         private Thread drawThread = null;
         internal Triggernometry.Plugin plug { get; set; }
         private Queue<ItemAction> ItemActions { get; set; } = new Queue<ItemAction>();
 
-        internal int _offsetX, _offsetY;
-
-        internal int _minX, _minY, _maxX, _maxY, _primaryX, _primaryY;
-
         public Dictionary<string, ScarboroughImage> imageitems = new Dictionary<string, ScarboroughImage>();
         public Dictionary<string, ScarboroughText> textitems = new Dictionary<string, ScarboroughText>();
 
-        public int FPS
+        public Scarborough()
         {
-            get
-            {
-                return _graphics.FPS;
-            }
-        }
-
-        public Scarborough(int x1, int y1, int x2, int y2, int x3, int y3)
-        {
-            _offsetX = x3 - x1;
-            _offsetY = y3 - y1;
-            _minX = x1;
-            _minY = y1;
-            _maxX = x2;
-            _maxY = y2;
-            _primaryX = x3;
-            _primaryY = y3;
-            _window = new OverlayWindow(x1, y1, x2 - x1, y2 - y1)
-            {
-                IsTopmost = true,
-                IsVisible = true
-            };
-            _graphics = new Graphics
-            {
-                MeasureFPS = true,
-                Height = _window.Height,
-                PerPrimitiveAntiAliasing = true,
-                TextAntiAliasing = true,
-                UseMultiThreadedFactories = false,
-                VSync = true,
-                Width = _window.Width,
-                WindowHandle = IntPtr.Zero
-            };
-            _window.CreateWindow();
-            _graphics.WindowHandle = _window.Handle;
-            _graphics.Setup();
             exitEvent = new ManualResetEvent(false);
             drawThread = new Thread(Render);
             drawThread.Start();
@@ -96,16 +54,6 @@ namespace Scarborough
 
         public void Dispose()
         {
-            if (_graphics != null)
-            {
-                _graphics.Dispose();
-                _graphics = null;
-            }
-            if (_window != null)
-            {
-                _window.Dispose();
-                _window = null;
-            }
             if (exitEvent != null)
             {
                 exitEvent.Dispose();
@@ -292,7 +240,6 @@ namespace Scarborough
                 si.Width = si.EvaluateNumericExpression(si.ctx, si.InitWExpression);
                 si.Height = si.EvaluateNumericExpression(si.ctx, si.InitHExpression);
                 si.Opacity = si.EvaluateNumericExpression(si.ctx, si.InitOExpression);
-                si.Owner = this;
                 imageitems[id] = si;
             }
         }
@@ -337,7 +284,6 @@ namespace Scarborough
                 si.Height = si.EvaluateNumericExpression(si.ctx, si.InitHExpression);
                 si.Opacity = si.EvaluateNumericExpression(si.ctx, si.InitOExpression);
                 si.Text = si.EvaluateStringExpression(si.ctx, si.TextExpression);
-                si.Owner = this;
                 si.NeedFont = true;
                 textitems[id] = si;
             }
@@ -417,10 +363,12 @@ namespace Scarborough
                     }
                     else
                     {
-                        if (si.Value.Opacity > 0)
+                        if (si.Value.Changed == true)
                         {
-                            rc.Add(si.Value);
+                            si.Value.NeedRender = true;
+                            si.Value.Changed = false;
                         }
+                        rc.Add(si.Value);
                     }
                 }
                 catch (Exception ex)
@@ -499,10 +447,12 @@ namespace Scarborough
                     }
                     else
                     {
-                        if (si.Value.Opacity > 0)
+                        if (si.Value.Changed == true)
                         {
-                            rc.Add(si.Value);
+                            si.Value.NeedRender = true;
+                            si.Value.Changed = false;
                         }
+                        rc.Add(si.Value);
                     }
                 }
                 catch (Exception ex)
@@ -566,17 +516,52 @@ namespace Scarborough
             ProcessMessages(messages);
         }
 
+        internal void HideAllItems()
+        {
+            lock (textitems)
+            {
+                foreach (KeyValuePair<string, ScarboroughText> kp in textitems)
+                {
+                    kp.Value.Hide();
+                }
+            }
+            lock (imageitems)
+            {
+                foreach (KeyValuePair<string, ScarboroughImage> kp in imageitems)
+                {
+                    kp.Value.Hide();
+                }
+            }
+        }
+
+        internal void ShowAllItems()
+        {
+            lock (textitems)
+            {
+                foreach (KeyValuePair<string, ScarboroughText> kp in textitems)
+                {
+                    kp.Value.Show();
+                }
+            }
+            lock (imageitems)
+            {
+                foreach (KeyValuePair<string, ScarboroughImage> kp in imageitems)
+                {
+                    kp.Value.Show();
+                }
+            }
+        }
+
         private void Render(RenderCollection rc)
         {
             List<ScarboroughItem> toRem = new List<ScarboroughItem>();
-            List<DeferredMessage> messages = new List<DeferredMessage>();
-            toRem.Clear();
+            List<DeferredMessage> messages = new List<DeferredMessage>();            
             rc.items.Sort((a, b) => a.Ordinal.CompareTo(b.Ordinal));
             foreach (ScarboroughItem si in rc.items)
             {
                 try
                 {
-                    si.Render(_graphics);
+                    si.Render();
                 }
                 catch (Exception ex)
                 {
@@ -651,8 +636,6 @@ namespace Scarborough
         {
 
             public List<ScarboroughItem> items = new List<ScarboroughItem>();
-            public int x1, y1, x2, y2;
-            public bool needsclear = false;
 
             public RenderCollection()
             {
@@ -662,32 +645,11 @@ namespace Scarborough
             public void Clear()
             {
                 items.Clear();
-                x1 = int.MaxValue;
-                y1 = int.MaxValue;
-                x2 = int.MinValue;
-                y2 = int.MinValue;                
             }
 
             public void Add(ScarboroughItem si)
             {
                 items.Add(si);
-                if (si.Left < x1)
-                {
-                    x1 = si.Left;
-                }
-                if (si.Top < y1)
-                {
-                    y1 = si.Top;
-                }
-                if (si.Left + si.Width > x2)
-                {
-                    x2 = si.Left + si.Width;
-                }
-                if (si.Top + si.Height > y2)
-                {
-                    y2 = si.Top + si.Height;
-                }
-                needsclear = true;
             }
 
         }
@@ -702,7 +664,7 @@ namespace Scarborough
             {
                 try
                 {
-                    if (exitEvent.WaitOne(1) == true)
+                    if (exitEvent.WaitOne(5) == true)
                     {
                         return;
                     }
@@ -720,17 +682,7 @@ namespace Scarborough
                     }
                     if (rc.items.Count > 0)
                     {
-                        _graphics.BeginScene();
-                        _graphics.ClearScene(_bgColor);
                         Render(rc);
-                        _graphics.EndScene();
-                    }
-                    else if (rc.needsclear == true)
-                    {
-                        _graphics.BeginScene();
-                        _graphics.ClearScene(_bgColor);
-                        _graphics.EndScene();
-                        rc.needsclear = false;
                     }
                 }
                 catch (Exception)

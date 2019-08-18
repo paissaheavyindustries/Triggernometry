@@ -1,4 +1,5 @@
 ﻿using Scarborough.Drawing;
+using Scarborough.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +14,12 @@ namespace Scarborough
 
     abstract class ScarboroughItem : IDisposable
     {
+
+        protected OverlayWindow _window = null;
+        protected Graphics _graphics = null;
+        protected Color _bgColor = new Color();
+
+        internal bool NeedRender { get; set; } = true;
 
         internal Int64 Ordinal { get; set; }
 
@@ -30,37 +37,110 @@ namespace Scarborough
         internal Triggernometry.Context ctx { get; set; }
         internal Triggernometry.Plugin plug { get; set; }
 
-        internal int Left { get; set; }
-        internal int Top { get; set; }
-        internal int Width { get; set; }
-        internal int Height { get; set; }
-        internal int Opacity { get; set; }
+        internal bool Changed { get; set; }
 
-        internal int FinalOffsetX
+        private int _Left;
+        internal int Left
         {
             get
             {
-                return Owner._offsetX;
+                return _Left;
+            }
+            set
+            {
+                if (value != _Left)
+                {
+                    Changed = true;
+                    _Left = value;
+                }
             }
         }
 
-        internal int FinalOffsetY
+        private int _Top;
+        internal int Top
         {
             get
             {
-                return Owner._offsetY;
+                return _Top;
+            }
+            set
+            {
+                if (value != _Top)
+                {
+                    Changed = true;
+                    _Top = value;
+                }
             }
         }
 
-        internal Scarborough Owner { get; set; }
+        private int _Width;
+        internal int Width
+        {
+            get
+            {
+                return _Width;
+            }
+            set
+            {
+                if (value != _Width)
+                {
+                    Changed = true;
+                    _Width = value;
+                }
+            }
+        }
+
+        private int _Height;
+        internal int Height
+        {
+            get
+            {
+                return _Height;
+            }
+            set
+            {
+                if (value != _Height)
+                {
+                    Changed = true;
+                    _Height = value;
+                }
+            }
+        }
+
+        private int _Opacity;
+        internal int Opacity
+        {
+            get
+            {
+                return _Opacity;
+            }
+            set
+            {
+                if (value != _Opacity)
+                {
+                    Changed = true;
+                    _Opacity = value;
+                }
+            }
+        }
 
         public abstract void Free();
-        public abstract void Render(Graphics g);
+        public abstract void Render();
         public abstract bool InternalLogic(int numTicks);
 
         public void Dispose()
         {
             Free();
+            if (_graphics != null)
+            {
+                _graphics.Dispose();
+                _graphics = null;
+            }
+            if (_window != null)
+            {                
+                _window.Dispose();
+                _window = null;
+            }
         }
 
         private string PreprocessExpression(string exp)
@@ -95,31 +175,34 @@ namespace Scarborough
             }
             if (UpdateWExpression != null && UpdateWExpression.Length > 0)
             {
-                Width = EvaluateNumericExpression(ctx, UpdateWExpression);
-                if (Width < 0)
+                int newval = EvaluateNumericExpression(ctx, UpdateWExpression);
+                if (newval < 0)
                 {
-                    Width = 0;
+                    newval = 0;
                 }
+                Width = newval;
             }
             if (UpdateHExpression != null && UpdateHExpression.Length > 0)
             {
-                Height = EvaluateNumericExpression(ctx, UpdateHExpression);
-                if (Height < 0)
+                int newval = EvaluateNumericExpression(ctx, UpdateHExpression);
+                if (newval < 0)
                 {
-                    Height = 0;
+                    newval = 0;
                 }
+                Height = newval;
             }
             if (UpdateOExpression != null && UpdateOExpression.Length > 0)
             {
-                Opacity = EvaluateNumericExpression(ctx, UpdateOExpression);
-                if (Opacity < 0)
+                int newval = EvaluateNumericExpression(ctx, UpdateOExpression);
+                if (newval < 0)
                 {
-                    Opacity = 0;
+                    newval = 0;
                 }
-                if (Opacity > 100)
+                if (newval > 100)
                 {
-                    Opacity = 100;
+                    newval = 100;
                 }
+                Opacity = newval;
             }
             if (TTLExpression != null && TTLExpression.Length > 0)
             {
@@ -156,6 +239,60 @@ namespace Scarborough
                     plug.FilteredAddToLog(Triggernometry.Plugin.DebugLevelEnum.Error, Triggernometry.I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message)));
                 }
                 return false;
+            }
+        }
+
+        protected void AdjustSurface()
+        {            
+            if (_window == null)
+            {
+                _window = new OverlayWindow(Left, Top, Width, Height)
+                {
+                    IsTopmost = true,
+                    IsVisible = true
+                };
+                _graphics = new Graphics
+                {
+                    MeasureFPS = false,
+                    Width = _window.Width,
+                    Height = _window.Height,
+                    PerPrimitiveAntiAliasing = true,
+                    TextAntiAliasing = true,
+                    UseMultiThreadedFactories = false,
+                    VSync = false,
+                    WindowHandle = IntPtr.Zero
+                };
+                _window.CreateWindow();
+                _graphics.WindowHandle = _window.Handle;
+                _graphics.Setup();
+            }
+            else
+            {
+                if (Left != _window.X || Top != _window.Y)
+                {
+                    _window.Move(Left, Top);
+                }
+                if (Width != _window.Width || Height != _window.Height)
+                {
+                    _window.Resize(Width, Height);
+                    _graphics.Resize(Width, Height);
+                }
+            }
+        }
+
+        internal void Show()
+        {
+            if (_window != null)
+            {
+                _window.Show();
+            }
+        }
+
+        internal void Hide()
+        {
+            if (_window != null)
+            {
+                _window.Hide();
             }
         }
 

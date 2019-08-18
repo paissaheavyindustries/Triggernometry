@@ -632,31 +632,65 @@ namespace Triggernometry
                                 string gindex = mx.Groups["index"].Value;
                                 string gprop = mx.Groups["prop"].Value.ToLower();
                                 val = "";
-                                lock (plug.textauras)
+                                if (plug.sc != null)
                                 {
-                                    if (plug.textauras.ContainsKey(gindex) == true)
+                                    lock (plug.sc.textitems)
                                     {
-                                        Forms.AuraContainerForm acf = plug.textauras[gindex];
-                                        switch (gprop)
+                                        Scarborough.ScarboroughText item = plug.sc.GetText(gindex);
+                                        if (item != null)
                                         {
-                                            case "x":
-                                                val = acf.Left.ToString(CultureInfo.InvariantCulture);
-                                                break;
-                                            case "y":
-                                                val = acf.Top.ToString(CultureInfo.InvariantCulture);
-                                                break;
-                                            case "w":
-                                                val = acf.Width.ToString(CultureInfo.InvariantCulture);
-                                                break;
-                                            case "h":
-                                                val = acf.Height.ToString(CultureInfo.InvariantCulture);
-                                                break;
-                                            case "opacity":
-                                                val = acf.PresentableOpacity.ToString(CultureInfo.InvariantCulture);
-                                                break;
-                                            case "text":
-                                                val = acf.CurrentText;
-                                                break;
+                                            switch (gprop)
+                                            {
+                                                case "x":
+                                                    val = item.Left.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "y":
+                                                    val = item.Top.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "w":
+                                                    val = item.Width.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "h":
+                                                    val = item.Height.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "opacity":
+                                                    val = item.Opacity.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "text":
+                                                    val = item.Text;
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    lock (plug.textauras)
+                                    {
+                                        if (plug.textauras.ContainsKey(gindex) == true)
+                                        {
+                                            Forms.AuraContainerForm acf = plug.textauras[gindex];
+                                            switch (gprop)
+                                            {
+                                                case "x":
+                                                    val = acf.Left.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "y":
+                                                    val = acf.Top.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "w":
+                                                    val = acf.Width.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "h":
+                                                    val = acf.Height.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "opacity":
+                                                    val = acf.PresentableOpacity.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "text":
+                                                    val = acf.CurrentText;
+                                                    break;
+                                            }
                                         }
                                     }
                                 }
@@ -671,28 +705,59 @@ namespace Triggernometry
                                 string gindex = mx.Groups["index"].Value;
                                 string gprop = mx.Groups["prop"].Value.ToLower();
                                 val = "";
-                                lock (plug.imageauras)
+                                if (plug.sc != null)
                                 {
-                                    if (plug.imageauras.ContainsKey(gindex) == true)
+                                    lock (plug.sc.imageitems)
                                     {
-                                        Forms.AuraContainerForm acf = plug.imageauras[gindex];
-                                        switch (gprop)
+                                        Scarborough.ScarboroughImage item = plug.sc.GetImage(gindex);
+                                        if (item != null)
                                         {
-                                            case "x":
-                                                val = acf.Left.ToString(CultureInfo.InvariantCulture);
-                                                break;
-                                            case "y":
-                                                val = acf.Top.ToString(CultureInfo.InvariantCulture);
-                                                break;
-                                            case "w":
-                                                val = acf.Width.ToString(CultureInfo.InvariantCulture);
-                                                break;
-                                            case "h":
-                                                val = acf.Height.ToString(CultureInfo.InvariantCulture);
-                                                break;
-                                            case "opacity":
-                                                val = acf.PresentableOpacity.ToString(CultureInfo.InvariantCulture);
-                                                break;
+                                            switch (gprop)
+                                            {
+                                                case "x":
+                                                    val = item.Left.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "y":
+                                                    val = item.Top.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "w":
+                                                    val = item.Width.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "h":
+                                                    val = item.Height.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "opacity":
+                                                    val = item.Opacity.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    lock (plug.imageauras)
+                                    {
+                                        if (plug.imageauras.ContainsKey(gindex) == true)
+                                        {
+                                            Forms.AuraContainerForm acf = plug.imageauras[gindex];
+                                            switch (gprop)
+                                            {
+                                                case "x":
+                                                    val = acf.Left.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "y":
+                                                    val = acf.Top.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "w":
+                                                    val = acf.Width.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "h":
+                                                    val = acf.Height.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                                case "opacity":
+                                                    val = acf.PresentableOpacity.ToString(CultureInfo.InvariantCulture);
+                                                    break;
+                                            }
                                         }
                                     }
                                 }
@@ -729,18 +794,6 @@ namespace Triggernometry
                         else if (x == "_screenmaxy")
                         {
                             val = plug.MaxY.ToString(CultureInfo.InvariantCulture);
-                            found = true;
-                        }
-                        else if (x == "_fps")
-                        {
-                            if (plug.sc != null)
-                            {
-                                val = plug.sc.FPS.ToString(CultureInfo.InvariantCulture);
-                            }
-                            else
-                            {
-                                val = "0";
-                            }
                             found = true;
                         }
                     }

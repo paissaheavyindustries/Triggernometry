@@ -181,6 +181,9 @@ namespace Triggernometry
         [XmlAttribute]
         public bool TestLiveByDefault { get; set; }
 
+        [XmlAttribute]
+        public string WindowToMonitor { get; set; }
+
         internal bool isnew;
         internal DateTime lastWrite;
 
@@ -198,7 +201,7 @@ namespace Triggernometry
             DebugLevel = Plugin.DebugLevelEnum.Info;
             UseACTForTTS = false;
             UseACTForSound = false;
-            UseOsClipboard = false;
+            UseOsClipboard = true;
             LogNormalEvents = true;
             FfxivLogNetwork = false;
             TestLiveByDefault = false;
@@ -212,6 +215,7 @@ namespace Triggernometry
             FfxivPartyOrdering = FfxivPartyOrderingEnum.Legacy;
             FfxivCustomPartyOrder = "19, 1, 21, 3, 32, 37, 24, 6, 28, 33, 20, 2, 22, 4, 30, 29, 34, 23, 5, 31, 38, 25, 7, 27, 26, 35, 36";
             ShowWelcome = true;
+            WindowToMonitor = "FINAL FANTASY XIV";
         }
         /*
         Paladin		19

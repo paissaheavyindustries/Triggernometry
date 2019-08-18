@@ -48,18 +48,45 @@ namespace Triggernometry
             Inherit
         }
 
-        internal class WindowMessageSender
+        internal class WindowsUtils
         {
 
             const uint WM_KEYUP = 0x101;
             const uint WM_KEYDOWN = 0x100;
 
+            public struct WINDOWPLACEMENT
+            {
+                public int length;
+                public int flags;
+                public int showCmd;
+                public System.Drawing.Point ptMinPosition;
+                public System.Drawing.Point ptMaxPosition;
+                public System.Drawing.Rectangle rcNormalPosition;
+            }
+
+            const int SW_UNKNOWN = -1;
+            const UInt32 SW_HIDE = 0;
+            const UInt32 SW_SHOWNORMAL = 1;
+            const UInt32 SW_NORMAL = 1;
+            const UInt32 SW_SHOWMINIMIZED = 2;
+            const UInt32 SW_SHOWMAXIMIZED = 3;
+            const UInt32 SW_MAXIMIZE = 3;
+            const UInt32 SW_SHOWNOACTIVATE = 4;
+            const UInt32 SW_SHOW = 5;
+            const UInt32 SW_MINIMIZE = 6;
+            const UInt32 SW_SHOWMINNOACTIVE = 7;
+            const UInt32 SW_SHOWNA = 8;
+            const UInt32 SW_RESTORE = 9;
+
             [DllImport("user32.dll")]
-            public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+            private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
             [DllImport("user32.dll")]
-            public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+            private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
             [DllImport("user32.dll")]
-            public static extern IntPtr PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+            private static extern IntPtr PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+            [DllImport("user32.dll", SetLastError = true)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            private static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
 
             public static void SendKeycode(string windowtitle, int keycode)
             {
@@ -74,6 +101,22 @@ namespace Triggernometry
                 {
                     IntPtr res = SendMessage(hwnd, code, (IntPtr)wparam, (IntPtr)lparam);
                 }
+            }
+
+            public static WINDOWPLACEMENT GetWindowPlacement(string windowtitle)
+            {
+                IntPtr hwnd = FindWindow(null, windowtitle);
+                WINDOWPLACEMENT wp = new WINDOWPLACEMENT();
+                wp.showCmd = SW_UNKNOWN;
+                if (hwnd != IntPtr.Zero)
+                {                    
+                    wp.length = Marshal.SizeOf(typeof(WINDOWPLACEMENT));
+                    if (GetWindowPlacement(hwnd, ref wp) == true)
+                    {
+                        return wp;
+                    }
+                }
+                return wp;
             }
 
         }
@@ -118,6 +161,30 @@ namespace Triggernometry
         internal CancellationTokenSource cts = null;
         internal object ctslock = new object();
         internal int MinX = int.MaxValue, MinY = int.MaxValue, MaxX = int.MinValue, MaxY = int.MinValue;
+
+        private bool _HideAllAuras = false;
+        internal bool HideAllAuras
+        {
+            get
+            {
+                return _HideAllAuras;
+            }
+            set
+            {
+                if (value != _HideAllAuras)
+                {
+                    _HideAllAuras = value;
+                    if (_HideAllAuras == true)
+                    {
+                        ProcessAuraControl(true);
+                    }
+                    else
+                    {
+                        ProcessAuraControl(false);
+                    }
+                }
+            }
+        }
 
         internal delegate void ActionExecutionHook(Context ctx, Action a);
 
@@ -1090,7 +1157,6 @@ namespace Triggernometry
             }
         }
 
-
         public void GenericExceptionHandler(string msg, Exception ex)
         {
             MessageBox.Show(ui, msg + ": " + Environment.NewLine + Environment.NewLine + ex.Message + " " + ex.StackTrace, I18n.Translate("internal/Plugin/exception", "Exception"), MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1470,7 +1536,7 @@ namespace Triggernometry
                 FilteredAddToLog(DebugLevelEnum.Info, String.Format("*: {0},{1} - {2},{3}", MinX, MinY, MaxX, MaxY));
                 if (cfg.UseScarborough == true)
                 {
-                    sc = new Scarborough.Scarborough(MinX, MinY, MaxX, MaxY, PrimaryX, PrimaryY);
+                    sc = new Scarborough.Scarborough();
                     sc.plug = this;
                     _usingScarborough = true;
                 }
@@ -2289,11 +2355,64 @@ namespace Triggernometry
             }
         }
 
+        private void VerifyProcessWindow()
+        {
+            if (cfg.WindowToMonitor != "")
+            {
+                WindowsUtils.WINDOWPLACEMENT wp = WindowsUtils.GetWindowPlacement(cfg.WindowToMonitor);
+                HideAllAuras = (wp.showCmd == 2);
+            }
+            else
+            {
+                HideAllAuras = false;
+            }
+        }
+
+        private void ProcessAuraControl(bool hideAuras)
+        {
+            if (hideAuras == true)
+            {
+                if (sc != null)
+                {
+                    sc.HideAllItems();
+                }
+                else
+                {
+                    foreach (KeyValuePair<string, Forms.AuraContainerForm> kp in textauras)
+                    {
+                        kp.Value.Hide();
+                    }
+                    foreach (KeyValuePair<string, Forms.AuraContainerForm> kp in imageauras)
+                    {
+                        kp.Value.Hide();
+                    }
+                }
+            }
+            else
+            {
+                if (sc != null)
+                {
+                    sc.ShowAllItems();
+                }
+                else
+                {
+                    foreach (KeyValuePair<string, Forms.AuraContainerForm> kp in textauras)
+                    {
+                        kp.Value.Show();
+                    }
+                    foreach (KeyValuePair<string, Forms.AuraContainerForm> kp in imageauras)
+                    {
+                        kp.Value.Show();
+                    }
+                }
+            }
+        }
+
         private void AuraUpdateThreadProc()
         {
             WaitHandle[] wh = new WaitHandle[1];
             wh[0] = ExitEvent;
-            int numTicks = 0;
+            int numTicks = 0, procticks = 0;
             DateTime prevTick, tickTime;
             if (mainform.IsHandleCreated == false)
             {
@@ -2310,6 +2429,11 @@ namespace Triggernometry
                 {
                     return;
                 }
+                if (procticks >= 10)
+                {
+                    VerifyProcessWindow();
+                    procticks = 0;
+                }
                 tickTime = DateTime.Now;
                 msSince = (tickTime - prevTick).TotalMilliseconds + lag;
                 numTicks = (int)Math.Floor(msSince / 20.0);
@@ -2317,6 +2441,7 @@ namespace Triggernometry
                 lag = msSince - (numTicks * 20);
                 prevTick = tickTime;
                 UpdateAuras(numTicks);
+                procticks++;
             }
         }
 

@@ -118,6 +118,8 @@
             this.grpClipboard = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.chkClipboard = new System.Windows.Forms.CheckBox();
+            this.lblMonitorWindow = new System.Windows.Forms.Label();
+            this.txtMonitorWindow = new System.Windows.Forms.TextBox();
             this.panel4.SuspendLayout();
             this.grpVolAdjustment.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -1128,7 +1130,7 @@
             this.groupBox1.Location = new System.Drawing.Point(7, 208);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
-            this.groupBox1.Size = new System.Drawing.Size(542, 56);
+            this.groupBox1.Size = new System.Drawing.Size(542, 82);
             this.groupBox1.TabIndex = 27;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = " Beta ";
@@ -1136,24 +1138,28 @@
             // tableLayoutPanel11
             // 
             this.tableLayoutPanel11.AutoSize = true;
-            this.tableLayoutPanel11.ColumnCount = 1;
+            this.tableLayoutPanel11.ColumnCount = 2;
+            this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel11.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel11.Controls.Add(this.cbxEnableHwAccel, 0, 0);
+            this.tableLayoutPanel11.Controls.Add(this.txtMonitorWindow, 1, 0);
+            this.tableLayoutPanel11.Controls.Add(this.lblMonitorWindow, 0, 0);
+            this.tableLayoutPanel11.Controls.Add(this.cbxEnableHwAccel, 0, 1);
             this.tableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel11.Location = new System.Drawing.Point(10, 23);
             this.tableLayoutPanel11.Name = "tableLayoutPanel11";
-            this.tableLayoutPanel11.RowCount = 1;
+            this.tableLayoutPanel11.RowCount = 2;
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-            this.tableLayoutPanel11.Size = new System.Drawing.Size(522, 23);
+            this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel11.Size = new System.Drawing.Size(522, 49);
             this.tableLayoutPanel11.TabIndex = 2;
             // 
             // cbxEnableHwAccel
             // 
             this.cbxEnableHwAccel.AutoSize = true;
             this.cbxEnableHwAccel.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel11.SetColumnSpan(this.cbxEnableHwAccel, 2);
             this.cbxEnableHwAccel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxEnableHwAccel.Location = new System.Drawing.Point(3, 3);
+            this.cbxEnableHwAccel.Location = new System.Drawing.Point(3, 29);
             this.cbxEnableHwAccel.Name = "cbxEnableHwAccel";
             this.cbxEnableHwAccel.Size = new System.Drawing.Size(516, 17);
             this.cbxEnableHwAccel.TabIndex = 6;
@@ -1263,6 +1269,26 @@
             this.chkClipboard.TabIndex = 6;
             this.chkClipboard.Text = "Use operating system clipboard";
             this.chkClipboard.UseVisualStyleBackColor = true;
+            // 
+            // lblMonitorWindow
+            // 
+            this.lblMonitorWindow.AutoEllipsis = true;
+            this.lblMonitorWindow.AutoSize = true;
+            this.lblMonitorWindow.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblMonitorWindow.Location = new System.Drawing.Point(3, 0);
+            this.lblMonitorWindow.Name = "lblMonitorWindow";
+            this.lblMonitorWindow.Size = new System.Drawing.Size(195, 26);
+            this.lblMonitorWindow.TabIndex = 7;
+            this.lblMonitorWindow.Text = "Monitor window for showing/hiding aura";
+            this.lblMonitorWindow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // txtMonitorWindow
+            // 
+            this.txtMonitorWindow.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtMonitorWindow.Location = new System.Drawing.Point(204, 3);
+            this.txtMonitorWindow.Name = "txtMonitorWindow";
+            this.txtMonitorWindow.Size = new System.Drawing.Size(315, 20);
+            this.txtMonitorWindow.TabIndex = 8;
             // 
             // ConfigurationForm
             // 
@@ -1446,5 +1472,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
         private System.Windows.Forms.CheckBox cbxEnableHwAccel;
         private System.Windows.Forms.Panel panel12;
+        private System.Windows.Forms.TextBox txtMonitorWindow;
+        private System.Windows.Forms.Label lblMonitorWindow;
     }
 }

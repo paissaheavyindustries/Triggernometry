@@ -326,6 +326,10 @@ namespace Triggernometry.Forms
             //Plugin.DebugLevelEnum levelFilter = Plugin.DebugLevelEnum.None;
             try
             {
+                if (plug.HideAllAuras == true)
+                {
+                    Hide();
+                }
                 while (numTicks > 0)
                 {
                     int i;

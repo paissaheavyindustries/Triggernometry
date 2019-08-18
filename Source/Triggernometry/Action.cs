@@ -2583,7 +2583,7 @@ namespace Triggernometry
                             {
                                 string window = ctx.EvaluateStringExpression(ActionContextLogger, ctx, KeyPressWindow);
                                 int keycode = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, KeyPressCode);
-                                Plugin.WindowMessageSender.SendKeycode(window, (ushort)keycode);
+                                Plugin.WindowsUtils.SendKeycode(window, (ushort)keycode);
                             }
                         }
 						break;
@@ -3206,7 +3206,7 @@ namespace Triggernometry
                             int code = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, WmsgCode);
                             int wparam = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, WmsgWparam);
                             int lparam = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, WmsgLparam);
-                            Plugin.WindowMessageSender.SendMessageToWindow(window, (ushort)code, wparam, lparam);
+                            Plugin.WindowsUtils.SendMessageToWindow(window, (ushort)code, wparam, lparam);
                         }
                         break;
                 }

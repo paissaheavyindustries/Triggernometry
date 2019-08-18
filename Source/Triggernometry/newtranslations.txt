@@ -16,6 +16,9 @@ Set testing with live values as the default action test method
 ConfigurationForm/cbxTestLive
 Enable aura hardware acceleration
 
+ConfigurationForm/lblMonitorWindow
+Monitor window for showing/hiding aura
+
 ConfigurationForm/grpUserInterface
  User interface 
 
