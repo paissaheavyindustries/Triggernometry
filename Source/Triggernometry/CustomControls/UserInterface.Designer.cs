@@ -47,6 +47,8 @@
             this.ctxExport = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.ctxDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
+            this.ctxCollapse = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnAdd = new System.Windows.Forms.ToolStripDropDownButton();
             this.btnAddTriggerFolder = new System.Windows.Forms.ToolStripMenuItem();
@@ -111,9 +113,8 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.prgStatus = new System.Windows.Forms.ToolStripProgressBar();
             this.tlsStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.ctxExpand = new System.Windows.Forms.ToolStripMenuItem();
             this.treeView1 = new Triggernometry.CustomControls.TreeViewEx();
-            this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
-            this.ctxCollapse = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.pnlUi.SuspendLayout();
@@ -151,9 +152,10 @@
             this.toolStripSeparator2,
             this.ctxDelete,
             this.toolStripSeparator11,
+            this.ctxExpand,
             this.ctxCollapse});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 248);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 270);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // ctxAdd
@@ -273,6 +275,19 @@
             this.ctxDelete.Text = "Remove";
             this.ctxDelete.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
+            // toolStripSeparator11
+            // 
+            this.toolStripSeparator11.Name = "toolStripSeparator11";
+            this.toolStripSeparator11.Size = new System.Drawing.Size(177, 6);
+            // 
+            // ctxCollapse
+            // 
+            this.ctxCollapse.Image = ((System.Drawing.Image)(resources.GetObject("ctxCollapse.Image")));
+            this.ctxCollapse.Name = "ctxCollapse";
+            this.ctxCollapse.Size = new System.Drawing.Size(180, 22);
+            this.ctxCollapse.Text = "Collapse all";
+            this.ctxCollapse.Click += new System.EventHandler(this.ctxCollapse_Click);
+            // 
             // toolStrip1
             // 
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -382,7 +397,7 @@
             this.btnExportTrigger.Image = ((System.Drawing.Image)(resources.GetObject("btnExportTrigger.Image")));
             this.btnExportTrigger.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnExportTrigger.Name = "btnExportTrigger";
-            this.btnExportTrigger.Size = new System.Drawing.Size(60, 22);
+            this.btnExportTrigger.Size = new System.Drawing.Size(61, 22);
             this.btnExportTrigger.Text = "Export";
             this.btnExportTrigger.Click += new System.EventHandler(this.btnExportTrigger_Click);
             // 
@@ -934,6 +949,14 @@
             this.tlsStatus.Size = new System.Drawing.Size(39, 17);
             this.tlsStatus.Text = "Ready";
             // 
+            // ctxExpand
+            // 
+            this.ctxExpand.Image = ((System.Drawing.Image)(resources.GetObject("ctxExpand.Image")));
+            this.ctxExpand.Name = "ctxExpand";
+            this.ctxExpand.Size = new System.Drawing.Size(180, 22);
+            this.ctxExpand.Text = "Expand all";
+            this.ctxExpand.Click += new System.EventHandler(this.ctxExpand_Click);
+            // 
             // treeView1
             // 
             this.treeView1.AllowDrop = true;
@@ -955,19 +978,6 @@
             this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
             this.treeView1.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseDoubleClick);
             this.treeView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.treeView1_KeyDown);
-            // 
-            // toolStripSeparator11
-            // 
-            this.toolStripSeparator11.Name = "toolStripSeparator11";
-            this.toolStripSeparator11.Size = new System.Drawing.Size(177, 6);
-            // 
-            // ctxCollapse
-            // 
-            this.ctxCollapse.Image = ((System.Drawing.Image)(resources.GetObject("ctxCollapse.Image")));
-            this.ctxCollapse.Name = "ctxCollapse";
-            this.ctxCollapse.Size = new System.Drawing.Size(180, 22);
-            this.ctxCollapse.Text = "Collapse all";
-            this.ctxCollapse.Click += new System.EventHandler(this.ctxCollapse_Click);
             // 
             // UserInterface
             // 
@@ -1085,5 +1095,6 @@
         private System.Windows.Forms.ToolStripMenuItem ctxAddRepoList;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
         private System.Windows.Forms.ToolStripMenuItem ctxCollapse;
+        private System.Windows.Forms.ToolStripMenuItem ctxExpand;
     }
 }

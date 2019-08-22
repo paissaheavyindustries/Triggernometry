@@ -20,6 +20,18 @@ namespace Triggernometry.CustomControls
             Numeric
         }
 
+        public bool ReadOnly
+        {
+            get
+            {
+                return textBox1.ReadOnly;
+            }
+            set
+            {
+                textBox1.ReadOnly = value;
+            }
+        }
+
         public string Expression
         {
             get

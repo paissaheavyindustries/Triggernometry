@@ -244,7 +244,32 @@ To add the response from the endpoint to this expression, special variable "_res
   <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>437, 17</value>
   </metadata>
+  <metadata name="stsMouseHelp.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>900, 17</value>
+  </metadata>
+  <data name="tlsMouseLocation.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
+        EwAACxMBAJqcGAAAAAd0SU1FB9UECA0YBDO9ZgAAAAA1dEVYdENvbW1lbnQAKGMpIDIwMDQgSmFrdWIg
+        U3RlaW5lcgoKQ3JlYXRlZCB3aXRoIFRoZSBHSU1QkNmLbwAAAedJREFUOE+NkUtrE1EcxbMTNy7diBS/
+        jgjid/A7uKyTyYuAj4JulJKUmU4gxKaKXRgINUgyY+bRTpJFm5AXZBIXCQbdhdDj/3+dhylUcuAH9557
+        z7mXe2PXVSqV7hOvVFWdKYrym/hVPj7K+suhjj+WH2na4Sd/GonCDxVVmdOGGs8p/CSXy3Wo8Id6qE5o
+        /ph9Wm8TEo83JMvym72910tJkjziwLeFqHynUNBaWkEzjsof8sJMyM93U8k4UhkZmWwSFEK1WoWiHiAu
+        x4WXTEmQ47s/kwlJFaF/lUknsFgsrpbLJVarFegGqFQqKBaLYszefD5H9/Liivf6sUhsTmcztNrtsCCf
+        z4MeLyzgNd6zVQGTTqcFwXzrAs/zwlAAe1sXBAxHI6zX6w3vvwXdyy6m3jRkPB5vzBnec/MN6JruuQvX
+        ddFyWzQ+h+M4sGwLzeZ36IaO4XB4Y4E1mUzgnDk4YyjoODYsi8NNGIaBRqMeFFh+LBKZCl+ZTzdNC5Zp
+        wqTg35M53CDPCgre+7FIZD6tVL6g3++j0+nAtm1xqq7rqNfrorjX6+Hk5DMXPPNjkci88/JF9lut9lU8
+        3oh+gH+BT2QGgwFOT6vY33/HBXf9WCQybxMPiLeETojHusaIuEfc8mO+YrE/4K8uh7duPCMAAAAASUVO
+        RK5CYII=
+</value>
+  </data>
   <metadata name="fontDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>784, 17</value>
+  </metadata>
+  <metadata name="timer2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1029, 17</value>
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>79</value>
   </metadata>
 </root>

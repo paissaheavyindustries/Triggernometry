@@ -182,6 +182,14 @@ namespace Triggernometry
         [XmlAttribute]
         public string Name { get; set; }
 
+        internal string LogName
+        {
+            get
+            {
+                return Name + " (" + (Repo != null ? "@" : "") + Id + ")";
+            }
+        }
+
         [XmlAttribute]
         public Guid Id { get; set; }
 
@@ -406,7 +414,7 @@ namespace Triggernometry
                 {
                     if (Condition.CheckCondition(ctx, TriggerContextLogger, ctx.plug) == false)
                     {
-                        AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/trignotfired", "Trigger '{0}' not fired, condition not met", Name));
+                        AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/trignotfired", "Trigger '{0}' not fired, condition not met", LogName));
                         return;
                     }
                 }
@@ -416,7 +424,7 @@ namespace Triggernometry
             if (PeriodRefire == RefireEnum.Deny)
             {
                 RefireDelayedUntil = LastFired.AddMilliseconds(ctx.EvaluateNumericExpression(TriggerContextLogger, p, RefirePeriodExpression));
-                AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/delayingrefire", "Delaying trigger '{0}' refire to {1}", Name, RefireDelayedUntil));
+                AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/delayingrefire", "Delaying trigger '{0}' refire to {1}", LogName, RefireDelayedUntil));
             }
             else
             {
@@ -435,7 +443,7 @@ namespace Triggernometry
                     if (ixy.Count() > 0)
                     {
                         curtime = ixy.ElementAt(0).when;
-                        AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/lastactionfound", "Last action for trigger '{0}' found at {1}", Name, curtime));
+                        AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/lastactionfound", "Last action for trigger '{0}' found at {1}", LogName, curtime));
                     }
                 }
             }
@@ -445,7 +453,7 @@ namespace Triggernometry
                 if (curtime < LastFired)
                 {
                     curtime = LastFired;
-                    AddToLog(p, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Trigger/beforelastfired", "Current time is before last fired for trigger '{0}'", Name));
+                    AddToLog(p, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Trigger/beforelastfired", "Current time is before last fired for trigger '{0}'", LogName));
                 }
             }
             if (PrevActions == PrevActionsEnum.Interrupt)
@@ -471,12 +479,12 @@ namespace Triggernometry
                 {
                     if (PrevActionsRefire == RefireEnum.Deny)
                     {
-                        AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/removefromqueuenorefire", "Removed {0} instance(s) of trigger '{1}' actions from queue, refire denied", exx, Name));
+                        AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/removefromqueuenorefire", "Removed {0} instance(s) of trigger '{1}' actions from queue, refire denied", exx, LogName));
                         return;
                     }
                     else
                     {
-                        AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/removefromqueue", "Removed {0} instance(s) of trigger '{1}' actions from queue", exx, Name));
+                        AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/removefromqueue", "Removed {0} instance(s) of trigger '{1}' actions from queue", exx, LogName));
                     }                    
                 }
             }
@@ -492,7 +500,7 @@ namespace Triggernometry
                 }
                 if (exx > 0)
                 {
-                    AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/refiredenied", "{0} instance(s) of trigger '{1}' actions in queue, refire denied", exx, Name));
+                    AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/refiredenied", "{0} instance(s) of trigger '{1}' actions in queue, refire denied", exx, LogName));
                     return;
                 }
             }

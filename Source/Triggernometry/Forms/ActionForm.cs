@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Speech.Synthesis;
 using System.Xml.Serialization;
 using System.IO;
+using System.Globalization;
 
 namespace Triggernometry.Forms
 {
@@ -80,11 +81,6 @@ namespace Triggernometry.Forms
             TestActionPrepare(false);
         }
 
-        private void Tsi_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         private void TextBox1_TextChanged(object sender, EventArgs e)
         {
             btnAuraGuide.Enabled = (expAuraImage.textBox1.Text.Length > 0);
@@ -92,7 +88,18 @@ namespace Triggernometry.Forms
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            int oldsel = tbcActionSettings.SelectedIndex;
             tbcActionSettings.SelectedIndex = cbxActionType.SelectedIndex;
+            if (cbxActionType.SelectedIndex == 9 || cbxActionType.SelectedIndex == 13)
+            {
+                timer2.Enabled = true;
+                stsMouseHelp.Visible = true;
+            }
+            else if (oldsel == 9 || oldsel == 13)
+            {
+                stsMouseHelp.Visible = false;
+                timer2.Enabled = false;
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -100,6 +107,42 @@ namespace Triggernometry.Forms
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 expSoundFile.Expression = openFileDialog1.FileName;
+            }
+        }
+
+        internal void SetReadOnlyRecursive(Control c)
+        {
+            if (c is CustomControls.RegexTextBox)
+            {
+                ((CustomControls.RegexTextBox)c).ReadOnly = true;
+                return;
+            }
+            if (c is CustomControls.ExpressionTextBox)
+            {
+                ((CustomControls.ExpressionTextBox)c).ReadOnly = true;
+                return;
+            }
+            if (c is TextBox)
+            {
+                ((TextBox)c).ReadOnly = true;
+                return;
+            }
+            foreach (Control cc in c.Controls)
+            {
+                SetReadOnlyRecursive(cc);
+            }
+            if (c is Panel || c is TabPage)
+            {
+                return;
+            }
+            c.Enabled = false;
+        }
+
+        internal void SetReadOnly(TabPage tp)
+        {
+            foreach (Control c in tp.Controls)
+            {
+                SetReadOnlyRecursive(c);
             }
         }
 
@@ -111,13 +154,13 @@ namespace Triggernometry.Forms
             btnOk.Visible = false;
             btnCancel.Dock = DockStyle.Fill;
             cbxActionType.Enabled = false;
-            foreach (TabPage tp in tbcAction.TabPages)
+            foreach (TabPage tp in tbcActionSettings.TabPages)
             {
-                foreach (Control c in tp.Controls)
-                {
-                    c.Enabled = false;
-                }
+                SetReadOnly(tp);
             }
+            SetReadOnly(tabActionCondition);
+            SetReadOnly(tabScheduling);
+            SetReadOnly(tabDebugging);
             panel6.Visible = false;
             panel8.Visible = true;
         }
@@ -1522,6 +1565,14 @@ namespace Triggernometry.Forms
         private void btnKeycodesLink_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start(txtKeyCodesLink.Text.ToString());
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            tlsMouseLocation.Text = String.Format("X: {0}, Y: {1}",
+                Cursor.Position.X.ToString(CultureInfo.InvariantCulture),
+                Cursor.Position.Y.ToString(CultureInfo.InvariantCulture)
+            );
         }
 
     }

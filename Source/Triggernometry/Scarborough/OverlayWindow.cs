@@ -17,18 +17,19 @@ namespace Scarborough.Windows
 
         private Thread _windowThread;
 
-        private WindowProc _windowProc;
-        private IntPtr _windowProcAddress;
+        //private WindowProc _windowProc;
+        //private IntPtr _windowProcAddress;
 
         private volatile bool _isInitialized;
 
         private volatile IntPtr _handle;
 
         private volatile string _title;
-        private volatile string _className;
+        //private volatile string _className;
 
         private volatile bool _isVisible;
         private volatile bool _isTopmost;
+        private volatile bool _running;
 
         private volatile int _x;
         private volatile int _y;
@@ -65,11 +66,12 @@ namespace Scarborough.Windows
         /// <summary>
         /// Gets the windows menu name.
         /// </summary>
-        public string MenuName { get; private set; }
+        //public string MenuName { get; private set; }
 
         /// <summary>
         /// Gets or sets the windows class name.
         /// </summary>
+        /*
         public string ClassName
         {
             get
@@ -82,7 +84,7 @@ namespace Scarborough.Windows
 
                 _className = value;
             }
-        }
+        }*/
 
         /// <summary>
         /// Gets or sets a Boolean indicating whether this window is visible.
@@ -253,7 +255,7 @@ namespace Scarborough.Windows
             _lock = new object();
 
             Title = string.Empty;
-            ClassName = string.Empty;
+            //ClassName = string.Empty;
 
             Width = 800;
             Height = 600;
@@ -523,36 +525,37 @@ namespace Scarborough.Windows
             SetupWindow();
 
             _isInitialized = true;
+            _running = true;
 
-            while (true)
+            try
             {
-                User32.WaitMessage();
-
-                var message = default(Message);
-
-                if (User32.PeekMessage(ref message, _handle, 0, 0, 1))
+                while (_running)
                 {
-                    switch (message.Msg)
-                    {
-                        //case WindowMessage.Quit:
-                        //    continue; // TODO: test
-                        case CustomDestroyWindowMessage:
-                            User32.DestroyWindow(Handle);
-                            break;
-                        default: break;
-                    }
+                    User32.WaitMessage();
 
-                    User32.TranslateMessage(ref message);
-                    User32.DispatchMessage(ref message);
+                    var message = default(Message);
 
-                    if (message.Msg == WindowMessage.Destroy || message.Msg == WindowMessage.Ncdestroy)
+                    if (User32.PeekMessage(ref message, _handle, 0, 0, 1))
                     {
-                        break;
+                        switch (message.Msg)
+                        {
+                            //case WindowMessage.Quit:
+                            //    continue; // TODO: test
+                            case CustomDestroyWindowMessage:
+                                User32.DestroyWindow(_handle);
+                                _running = false;
+                                break;
+                            default:
+                                User32.TranslateMessage(ref message);
+                                User32.DispatchMessage(ref message);
+                                break;
+                        }
                     }
                 }
             }
-
-            User32.UnregisterClass(_className, IntPtr.Zero);
+            catch (Exception)
+            {
+            }
 
             _isInitialized = false;
 
@@ -566,16 +569,16 @@ namespace Scarborough.Windows
         {
             // generate a random title if it's null (invalid)
             if (_title == null) _title = WindowHelper.GenerateRandomTitle();
-            if (string.IsNullOrEmpty(MenuName)) MenuName = WindowHelper.GenerateRandomTitle();
+            //if (string.IsNullOrEmpty(MenuName)) MenuName = WindowHelper.GenerateRandomTitle();
             // if no class name is given then generate a "unique" one
-            if (string.IsNullOrEmpty(_className)) _className = WindowHelper.GenerateRandomClass();
+            //if (string.IsNullOrEmpty(_className)) _className = WindowHelper.GenerateRandomClass();
 
             // prepare window procedure
-            _windowProc = WindowProcedure;
-            _windowProcAddress = Marshal.GetFunctionPointerForDelegate(_windowProc);
+            //_windowProc = WindowProcedure;
+            //_windowProcAddress = Marshal.GetFunctionPointerForDelegate(_windowProc);
 
             // try to register our class
-            while (true)
+            /*while (true)
             {
                 var wndClassEx = new WindowClassEx
                 {
@@ -602,7 +605,7 @@ namespace Scarborough.Windows
                     // already taken name?
                     _className = WindowHelper.GenerateRandomClass();
                 }
-            }
+            }*/
 
             var extendedWindowStyle = ExtendedWindowStyle.Transparent | ExtendedWindowStyle.Layered | ExtendedWindowStyle.NoActivate;
             if (_isTopmost) extendedWindowStyle |= ExtendedWindowStyle.Topmost;
@@ -612,7 +615,7 @@ namespace Scarborough.Windows
 
             _handle = User32.CreateWindowEx(
                 extendedWindowStyle,
-                _className,
+                User32._className,
                 _title,
                 windowStyle,
                 _x, _y,
@@ -639,7 +642,7 @@ namespace Scarborough.Windows
             }
         }
 
-        private IntPtr WindowProcedure(IntPtr hwnd, WindowMessage msg, IntPtr wParam, IntPtr lParam)
+        internal static IntPtr WindowProcedure(IntPtr hwnd, WindowMessage msg, IntPtr wParam, IntPtr lParam)
         {
             switch (msg)
             {
@@ -751,10 +754,10 @@ namespace Scarborough.Windows
                 VisibilityChanged = null;
 
                 _windowThread = null;
-                _windowProc = null;
+                //_windowProc = null;
 
                 _title = null;
-                _className = null;
+                //_className = null;
 
                 disposedValue = true;
             }

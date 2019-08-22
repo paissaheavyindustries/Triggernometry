@@ -30,3 +30,6 @@ Lastindexof function requires one argument, {0} were given
 
 Plugin/UserInterface/ctxCollapseAll
 Collapse all
+
+Plugin/UserInterface/ctxExpand
+Expand all

@@ -27,6 +27,18 @@ namespace Triggernometry.CustomControls
             }
         }
 
+        public bool ReadOnly
+        {
+            get
+            {
+                return textBox1.ReadOnly;
+            }
+            set
+            {
+                textBox1.ReadOnly = value;
+            }
+        }
+
         public RegexTextBox()
         {
             InitializeComponent();

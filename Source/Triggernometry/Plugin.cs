@@ -87,6 +87,8 @@ namespace Triggernometry
             [DllImport("user32.dll", SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
             private static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
+            [DllImport("user32.dll")]
+            private static extern IntPtr GetForegroundWindow();
 
             public static void SendKeycode(string windowtitle, int keycode)
             {
@@ -103,20 +105,25 @@ namespace Triggernometry
                 }
             }
 
-            public static WINDOWPLACEMENT GetWindowPlacement(string windowtitle)
+            public static bool IsInFocus(string windowtitle)
             {
                 IntPtr hwnd = FindWindow(null, windowtitle);
                 WINDOWPLACEMENT wp = new WINDOWPLACEMENT();
                 wp.showCmd = SW_UNKNOWN;
                 if (hwnd != IntPtr.Zero)
-                {                    
+                {
                     wp.length = Marshal.SizeOf(typeof(WINDOWPLACEMENT));
                     if (GetWindowPlacement(hwnd, ref wp) == true)
                     {
-                        return wp;
+                        if (wp.showCmd == SW_SHOWMINIMIZED)
+                        {
+                            return false;
+                        }
+                        IntPtr hwnd2 = GetForegroundWindow();
+                        return (hwnd == hwnd2);
                     }
                 }
-                return wp;
+                return true;
             }
 
         }
@@ -863,7 +870,7 @@ namespace Triggernometry
                     {
                         if (ActiveTextTriggers.Contains(t) == false)
                         {
-                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigaddbook", "Trigger '{0}' added to bookkeeping", t.Name));
+                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigaddbook", "Trigger '{0}' added to bookkeeping", t.LogName));
                             ActiveTextTriggers.Add(t);
                             return;
                         }
@@ -874,7 +881,7 @@ namespace Triggernometry
                     {
                         if (ActiveFFXIVNetworkTriggers.Contains(t) == false)
                         {
-                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigaddbook", "Trigger '{0}' added to bookkeeping", t.Name));
+                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigaddbook", "Trigger '{0}' added to bookkeeping", t.LogName));
                             ActiveFFXIVNetworkTriggers.Add(t);
                             return;
                         }
@@ -892,7 +899,7 @@ namespace Triggernometry
                     {
                         if (ActiveTextTriggers.Contains(t) == true)
                         {
-                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigrembook", "Trigger '{0}' removed from bookkeeping", t.Name));
+                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigrembook", "Trigger '{0}' removed from bookkeeping", t.LogName));
                             ActiveTextTriggers.Remove(t);
                             return;
                         }
@@ -903,7 +910,7 @@ namespace Triggernometry
                     {
                         if (ActiveFFXIVNetworkTriggers.Contains(t) == true)
                         {
-                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigrembook", "Trigger '{0}' removed from bookkeeping", t.Name));
+                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigrembook", "Trigger '{0}' removed from bookkeeping", t.LogName));
                             ActiveFFXIVNetworkTriggers.Remove(t);
                             return;
                         }
@@ -1035,7 +1042,7 @@ namespace Triggernometry
                     ActionUpdateEvent.Set();
                 }
             }
-            t.AddToLog(this, DebugLevelEnum.Info, I18n.Translate("internal/Plugin/queuedactscancelled", "{0} queued action(s) from trigger '{1}' cancelled", remd, t.Name));
+            t.AddToLog(this, DebugLevelEnum.Info, I18n.Translate("internal/Plugin/queuedactscancelled", "{0} queued action(s) from trigger '{1}' cancelled", remd, t.LogName));
         }
 
         internal void TtsPlaybackAct(Context ctx, Action a)
@@ -1989,7 +1996,7 @@ namespace Triggernometry
                 string json = "";
                 using (WebClient wc = new WebClient())
                 {
-                    wc.Headers["User-Agent"] = "Triggernometry Auto-update";
+                    wc.Headers["User-Agent"] = "Triggernometry Auto-update";                    
                     byte[] rawdata = wc.DownloadData(@"https://api.github.com/repos/paissaheavyindustries/Triggernometry/releases");
                     json = Encoding.UTF8.GetString(rawdata);
                 }
@@ -2122,17 +2129,26 @@ namespace Triggernometry
             }
             if (ActionQueueThread != null)
             {
-                ActionQueueThread.Join();
+                if (ActionQueueThread.Join(5000) == false)
+                {
+                    ActionQueueThread.Abort();
+                }
                 ActionQueueThread = null;
             }
             if (EventQueueThread != null)
             {
-                EventQueueThread.Join();
+                if (EventQueueThread.Join(5000) == false)
+                {
+                    EventQueueThread.Abort();
+                }
                 EventQueueThread = null;
             }
             if (AuraUpdateThread != null)
             {
-                AuraUpdateThread.Join();
+                if (AuraUpdateThread.Join(5000) == false)
+                {
+                    AuraUpdateThread.Abort();
+                }
                 AuraUpdateThread = null;
             }
             if (sc != null)
@@ -2217,14 +2233,14 @@ namespace Triggernometry
                     }
                     else
                     {
-                        t.AddToLog(this, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigmatches", "Trigger '{0}' matches log line '{1}'", t.Name, le.Text));
+                        t.AddToLog(this, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigmatches", "Trigger '{0}' matches log line '{1}'", t.LogName, le.Text));
                     }
                 }
                 if ((force & Action.TriggerForceTypeEnum.SkipActive) == 0)
                 {
                     if (t.Enabled == false)
                     {
-                        t.AddToLog(this, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trignotactive", "Trigger '{0}' is not active for firing", t.Name));
+                        t.AddToLog(this, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trignotactive", "Trigger '{0}' is not active for firing", t.LogName));
                         return;
                     }
                 }
@@ -2235,7 +2251,7 @@ namespace Triggernometry
                     {
                         if (reason != Folder.FilterFailReason.NotEnabled)
                         {
-                            t.AddToLog(this, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigparentfail", "Trigger '{0}' doesn't pass parent folder '{1}' filter(s): {2}", t.Name, t.Parent.Name, reason.ToString()));
+                            t.AddToLog(this, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigparentfail", "Trigger '{0}' doesn't pass parent folder '{1}' filter(s): {2}", t.LogName, t.Parent.Name, reason.ToString()));
                         }
                         return;
                     }
@@ -2244,11 +2260,11 @@ namespace Triggernometry
                 {
                     if (t.PeriodRefire == Trigger.RefireEnum.Deny && DateTime.Now < t.RefireDelayedUntil)
                     {
-                        t.AddToLog(this, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigrefirefail", "Trigger '{0}' refire delayed until {1}", t.Name, FormatDateTime(t.RefireDelayedUntil)));
+                        t.AddToLog(this, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigrefirefail", "Trigger '{0}' refire delayed until {1}", t.LogName, FormatDateTime(t.RefireDelayedUntil)));
                         return;
                     }
                 }
-                t.AddToLog(this, DebugLevelEnum.Info, I18n.Translate("internal/Plugin/trigfiring", "Firing trigger '{0}'", t.Name));
+                t.AddToLog(this, DebugLevelEnum.Info, I18n.Translate("internal/Plugin/trigfiring", "Firing trigger '{0}'", t.LogName));
                 Context ctx = new Context();
                 ctx.plug = this;
                 ctx.trig = t;
@@ -2259,12 +2275,12 @@ namespace Triggernometry
                     foreach (int idx in t.rex.GetGroupNumbers())
                     {
                         ctx.numgroups.Add(m.Groups[idx].Value);
-                        t.AddToLog(this, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/debugnumgroup", "Trigger '{0}' numbered group {1}: {2}", t.Name, idx, m.Groups[idx].Value));
+                        t.AddToLog(this, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/debugnumgroup", "Trigger '{0}' numbered group {1}: {2}", t.LogName, idx, m.Groups[idx].Value));
                     }
                     foreach (string sdx in t.rex.GetGroupNames())
                     {
                         ctx.namedgroups[sdx] = m.Groups[sdx].Value;
-                        t.AddToLog(this, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/debugnamedgroup", "Trigger '{0}' named group '{1}': {2}", t.Name, sdx, m.Groups[sdx].Value));
+                        t.AddToLog(this, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/debugnamedgroup", "Trigger '{0}' named group '{1}': {2}", t.LogName, sdx, m.Groups[sdx].Value));
                     }
                 }
                 ctx.namedgroups["_zone"] = le.Zone;
@@ -2359,8 +2375,7 @@ namespace Triggernometry
         {
             if (cfg.WindowToMonitor != "")
             {
-                WindowsUtils.WINDOWPLACEMENT wp = WindowsUtils.GetWindowPlacement(cfg.WindowToMonitor);
-                HideAllAuras = (wp.showCmd == 2);
+                HideAllAuras = (WindowsUtils.IsInFocus(cfg.WindowToMonitor) == false);
             }
             else
             {
@@ -2742,12 +2757,12 @@ namespace Triggernometry
                             }
                             if (exx > 0)
                             {
-                                a.AddToLog(ctx, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/actionqueuerem", "Removed {0} instance(s) of trigger '{1}' action '{2}' from queue", exx, t.Name, a.GetDescription(ctx)));
+                                a.AddToLog(ctx, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/actionqueuerem", "Removed {0} instance(s) of trigger '{1}' action '{2}' from queue", exx, t.LogName, a.GetDescription(ctx)));
                             }
                         }
                         if (a._RefireRequeue == false)
                         {
-                            a.AddToLog(ctx, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/actionqueuefail", "Trigger '{0}' action '{1}' not queued, refire requeue disabled", t.Name, a.GetDescription(ctx)));
+                            a.AddToLog(ctx, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/actionqueuefail", "Trigger '{0}' action '{1}' not queued, refire requeue disabled", t.LogName, a.GetDescription(ctx)));
                             return;
                         }
                     }
@@ -2758,7 +2773,7 @@ namespace Triggernometry
                     newOrdinal = curOrdinal;
                     curOrdinal++;
                 }
-                a.AddToLog(ctx, DebugLevelEnum.Info, I18n.Translate("internal/Plugin/actionqueued", "Queuing trigger '{0}' action '{1}' to {2} slot {3}", t.Name, a.GetDescription(ctx), FormatDateTime(when), newOrdinal));
+                a.AddToLog(ctx, DebugLevelEnum.Info, I18n.Translate("internal/Plugin/actionqueued", "Queuing trigger '{0}' action '{1}' to {2} slot {3}", t.LogName, a.GetDescription(ctx), FormatDateTime(when), newOrdinal));
                 ActionQueue.Add(new QueuedAction(when, newOrdinal, a, ctx));
                 ActionQueue.Sort();
                 ActionUpdateEvent.Set();

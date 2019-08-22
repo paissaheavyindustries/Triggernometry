@@ -50,10 +50,10 @@ namespace Triggernometry
                     WSConnection.OnMessage += WSConnection_OnMessage;
                     WSConnection.Connect();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Disconnect();
-                    throw ex;
+                    throw;
                 }
             }
         }
@@ -74,10 +74,10 @@ namespace Triggernometry
                     str = str.Replace("scene_name", "scene-name");
                     WSConnection.Send(str);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Disconnect();
-                    throw ex;
+                    throw;
                 }
             }
         }

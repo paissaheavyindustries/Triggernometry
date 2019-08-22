@@ -76,6 +76,15 @@ namespace Triggernometry.CustomControls
             treeView1.DragDrop += TreeView1_DragDrop;
             treeView1.DragEnter += TreeView1_DragEnter;
             treeView1.DragOver += TreeView1_DragOver;
+            statusStrip1.VisibleChanged += StatusStrip1_VisibleChanged;
+        }
+
+        private void StatusStrip1_VisibleChanged(object sender, EventArgs e)
+        {
+            if (prgStatus.Value == 0 && tlsStatus.Text == "" && statusStrip1.Visible == true)
+            {
+                statusStrip1.Visible = false;
+            }            
         }
 
         private bool ContainsNode(TreeNode node1, TreeNode node2)
@@ -644,6 +653,16 @@ namespace Triggernometry.CustomControls
                 ||
                 (cfg.UseOsClipboard == true && System.Windows.Forms.Clipboard.ContainsText() == true)
             );
+            if (treeView1.SelectedNode != null)
+            {
+                ctxCollapse.Enabled = (treeView1.SelectedNode.Nodes.Count > 0);
+                ctxExpand.Enabled = ctxCollapse.Enabled;
+            }
+            else
+            {
+                ctxCollapse.Enabled = true;
+                ctxExpand.Enabled = true;
+            }
         }
 
         internal void CountItems(Folder f, ref int numfolders, ref int numtriggers)
@@ -1709,7 +1728,26 @@ namespace Triggernometry.CustomControls
 
         private void ctxCollapse_Click(object sender, EventArgs e)
         {
-            treeView1.CollapseAll();
+            if (treeView1.SelectedNode != null)
+            {
+                treeView1.SelectedNode.Collapse(false);
+            }
+            else
+            {
+                treeView1.CollapseAll();
+            }
+        }
+
+        private void ctxExpand_Click(object sender, EventArgs e)
+        {
+            if (treeView1.SelectedNode != null)
+            {
+                treeView1.SelectedNode.ExpandAll();
+            }
+            else
+            {
+                treeView1.ExpandAll();
+            }
         }
 
     }

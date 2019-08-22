@@ -91,14 +91,14 @@ namespace Triggernometry.Forms
             btnOk.Visible = false;
             btnCancel.Dock = DockStyle.Fill;
             panel5.Visible = true;
-            txtFolderName.Enabled = false;
+            txtFolderName.ReadOnly = true;
             chkZoneFilter.Enabled = false;
-            txtZoneFilterRegex.Enabled = false;
             btnGetCurZone.Enabled = false;
             chkEventFilter.Enabled = false;
-            txtEventFilterRegex.Enabled = false;
             chkFfxivClassFilter.Enabled = false;
             chkFfxivClassFilterEnabled.Enabled = false;
+            txtZoneFilterRegex.ReadOnly = true;
+            txtEventFilterRegex.ReadOnly = true;
         }
 
         internal void JobFilterFromInt(Int64 val)

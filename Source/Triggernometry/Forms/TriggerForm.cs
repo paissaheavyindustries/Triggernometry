@@ -101,8 +101,8 @@ namespace Triggernometry.Forms
         internal void SetReadOnly()
         {
             IsReadonly = true;
-            txtName.Enabled = false;
-            txtRegexp.Enabled = false;
+            txtName.ReadOnly = true;
+            txtRegexp.ReadOnly = true;
             btnOk.Enabled = false;
             btnOk.Visible = false;
             btnCancel.Dock = DockStyle.Fill;

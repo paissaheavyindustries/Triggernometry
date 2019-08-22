@@ -221,9 +221,13 @@ namespace Scarborough.Drawing
             try
             {
                 _strokeStyle.Dispose();
+                _strokeStyle = null;
                 _fontFactory.Dispose();
+                _fontFactory = null;
                 _factory.Dispose();
+                _factory = null;
                 _device.Dispose();
+                _device = null;
             }
             catch { }
 

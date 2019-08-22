@@ -1,4 +1,5 @@
 ﻿using Scarborough.Drawing;
+using Scarborough.PInvoke;
 using Scarborough.Windows;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,7 @@ namespace Scarborough
 
         public Scarborough()
         {
+            User32.InitializeWindowClass();
             exitEvent = new ManualResetEvent(false);
             drawThread = new Thread(Render);
             drawThread.Start();

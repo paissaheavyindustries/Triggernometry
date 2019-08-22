@@ -2428,7 +2428,7 @@ namespace Triggernometry
                     {
                         if (Condition.CheckCondition(ctx, ActionContextLogger, ctx) == false)
                         {
-                            AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/actionnotfired", "Action #{0} on trigger '{1}' not fired, condition not met", OrderNumber, (ctx.trig != null ? ctx.trig.Name : "(null)")));
+                            AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/actionnotfired", "Action #{0} on trigger '{1}' not fired, condition not met", OrderNumber, (ctx.trig != null ? ctx.trig.LogName : "(null)")));
                             return;
                         }
                     }
@@ -2521,12 +2521,12 @@ namespace Triggernometry
                                             }
                                             if (tn != null)
                                             {
-                                                AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/trigenable", "Trigger '{0}' enabled", t.Name));
+                                                AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/trigenable", "Trigger '{0}' enabled", t.LogName));
                                                 tn.Checked = true;
                                             }
                                             else
                                             {
-                                                AddToLog(ctx, Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodetrigenable", "Could not find tree node to modify for enabling trigger {0}", t.Name));
+                                                AddToLog(ctx, Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodetrigenable", "Could not find tree node to modify for enabling trigger {0}", t.LogName));
                                             }
                                         }
                                         break;
@@ -2544,12 +2544,12 @@ namespace Triggernometry
                                             }
                                             if (tn != null)
                                             {
-                                                AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/trigdisable", "Trigger '{0}' disabled", t.Name));
+                                                AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/trigdisable", "Trigger '{0}' disabled", t.LogName));
                                                 tn.Checked = false;
                                             }
                                             else
                                             {
-                                                AddToLog(ctx, Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodetrigdisable", "Could not find tree node to modify for disabling trigger {0}", t.Name));
+                                                AddToLog(ctx, Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodetrigdisable", "Could not find tree node to modify for disabling trigger {0}", t.LogName));
                                             }
                                         }
                                         break;
@@ -2687,7 +2687,7 @@ namespace Triggernometry
                             string changer;
                             if (ctx.trig != null)
                             {
-                                changer = I18n.Translate("internal/Action/changetagtrigaction", "Trigger '{0}' action '{1}'", ctx.trig.Name, GetDescription(ctx));
+                                changer = I18n.Translate("internal/Action/changetagtrigaction", "Trigger '{0}' action '{1}'", ctx.trig.LogName, GetDescription(ctx));
                             }
                             else
                             {
@@ -3052,7 +3052,7 @@ namespace Triggernometry
                                             x.Value = newval;
                                             if (ctx.trig != null)
                                             {
-                                                x.LastChanger = I18n.Translate("internal/Action/changetagtrigaction", "Trigger '{0}' action '{1}'", ctx.trig.Name, GetDescription(ctx));
+                                                x.LastChanger = I18n.Translate("internal/Action/changetagtrigaction", "Trigger '{0}' action '{1}'", ctx.trig.LogName, GetDescription(ctx));
                                             }
                                             else
                                             {

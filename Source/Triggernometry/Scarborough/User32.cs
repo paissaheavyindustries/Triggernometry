@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Scarborough.Windows;
+using System;
 using System.Runtime.InteropServices;
 
 namespace Scarborough.PInvoke
@@ -135,6 +136,59 @@ namespace Scarborough.PInvoke
         public delegate bool PostMessageWDelegate(IntPtr hwnd, WindowMessage message, IntPtr wparam, IntPtr lparam);
 
         public static readonly PostMessageWDelegate PostMessage;
+
+        internal static string _className;
+        private static WindowProc _windowProc;
+        private static IntPtr _windowProcAddress;
+
+        internal static void InitializeWindowClass()
+        {
+            string MenuName;
+            if (string.IsNullOrEmpty(_className))
+            {
+                _className = WindowHelper.GenerateRandomClass();
+                MenuName = WindowHelper.GenerateRandomTitle();
+                _windowProc = OverlayWindow.WindowProcedure;
+                _windowProcAddress = Marshal.GetFunctionPointerForDelegate(_windowProc);
+            }
+            else
+            {
+                return;
+            }
+            while (true)
+            {
+                var wndClassEx = new WindowClassEx
+                {
+                    Size = WindowClassEx.NativeSize(),
+                    Style = 0,
+                    WindowProc = _windowProcAddress,
+                    ClsExtra = 0,
+                    WindowExtra = 0,
+                    Instance = IntPtr.Zero,
+                    Icon = IntPtr.Zero,
+                    Curser = IntPtr.Zero,
+                    Background = IntPtr.Zero,
+                    MenuName = MenuName,
+                    ClassName = _className,
+                    IconSm = IntPtr.Zero
+                };
+
+                if (User32.RegisterClassEx(ref wndClassEx) != 0)
+                {
+                    break;
+                }
+                else
+                {
+                    // already taken name?
+                    _className = WindowHelper.GenerateRandomClass();
+                }
+            }
+        }
+
+        static void UninitializeWindowClass()
+        {
+            User32.UnregisterClass(_className, IntPtr.Zero);
+        }
 
         static User32()
         {
