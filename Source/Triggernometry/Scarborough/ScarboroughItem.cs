@@ -15,11 +15,14 @@ namespace Scarborough
     abstract class ScarboroughItem : IDisposable
     {
 
+        protected Scarborough Owner { get; set; } = null;
+
         protected OverlayWindow _window = null;
         protected Graphics _graphics = null;
         protected Color _bgColor = new Color();
 
         internal bool NeedRender { get; set; } = true;
+        internal bool WasHidden { get; set; } = false;
 
         internal Int64 Ordinal { get; set; }
 
@@ -127,6 +130,11 @@ namespace Scarborough
         public abstract void Free();
         public abstract void Render();
         public abstract bool InternalLogic(int numTicks);
+
+        public ScarboroughItem(Scarborough own)
+        {
+            Owner = own;
+        }
 
         public void Dispose()
         {

@@ -106,7 +106,7 @@ namespace Triggernometry.Forms
             {
                 return;
             }
-            string newval = e.Value.ToString();
+            string newval = e.Value != null ? e.Value.ToString() : "";
             lock (plug.simplevariables)
             {
                 string exname = dgvScalarVariables.Rows[e.RowIndex].Cells[0].Value.ToString();
@@ -119,11 +119,6 @@ namespace Triggernometry.Forms
                 }
             }
             RefreshSimpleVariables();
-        }
-
-        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
-        {
-
         }
 
         private void dgvListVariables_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)

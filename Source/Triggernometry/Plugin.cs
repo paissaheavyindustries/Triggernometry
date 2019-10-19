@@ -263,7 +263,7 @@ namespace Triggernometry
                         FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/actimageaura", "Activating image aura '{0}'", ax));
                         try
                         { 
-                            Scarborough.ScarboroughImage si = new Scarborough.ScarboroughImage();
+                            Scarborough.ScarboroughImage si = new Scarborough.ScarboroughImage(sc);
                             si.ImageExpression = a.AuraImage;
                             si.InitXExpression = a.AuraXIniExpression;
                             si.InitYExpression = a.AuraYIniExpression;
@@ -450,7 +450,7 @@ namespace Triggernometry
                         FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/acttextaura", "Activating text aura '{0}'", ax));
                         try
                         {
-                            Scarborough.ScarboroughText si = new Scarborough.ScarboroughText();
+                            Scarborough.ScarboroughText si = new Scarborough.ScarboroughText(sc);
                             si.InitXExpression = a.TextAuraXIniExpression;
                             si.InitYExpression = a.TextAuraYIniExpression;
                             si.InitWExpression = a.TextAuraWIniExpression;

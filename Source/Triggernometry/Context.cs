@@ -191,6 +191,16 @@ namespace Triggernometry
                             val = contextResponse;
                             found = true;
                         }
+                        else if (x == "_triggername")
+                        {
+                            val = trig != null ? trig.Name : "(null)";
+                            found = true;
+                        }
+                        else if (x == "_triggerid")
+                        {
+                            val = trig != null ? trig.Id.ToString() : "(null)";
+                            found = true;
+                        }
                         else if (x.IndexOf("_jsonresponse") == 0)
                         {
                             mx = rexlidx.Match(x);

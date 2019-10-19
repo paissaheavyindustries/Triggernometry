@@ -167,6 +167,10 @@ namespace Scarborough
         private Font TextFont { get; set; } = null;
         private SolidBrush TextBrush { get; set; } = null;
 
+        public ScarboroughText(Scarborough own) : base(own)
+        {
+        }
+
         public override void Free()
         {
             if (TextFont != null)
@@ -205,18 +209,36 @@ namespace Scarborough
                 NeedFont = false;
                 NeedRender = true;
             }
+            if (Owner.RenderingActive == false)
+            {
+                if (WasHidden == false)
+                {
+                    NeedRender = true;
+                    WasHidden = true;
+                }
+            }
+            else
+            {
+                if (WasHidden == true)
+                {
+                    NeedRender = true;
+                    WasHidden = false;
+                }
+            }
             if (NeedRender == false)
             {
                 return;
             }
             AdjustSurface();
-            if (plug.HideAllAuras == true)
-            {
-                _window.Hide();
-                return;
-            }
             NeedRender = false;
             _graphics.BeginScene();
+            if (Owner.RenderingActive == false)
+            {
+                Color tempBgColor = new Color();
+                _graphics.ClearScene(tempBgColor);
+                _graphics.EndScene();
+                return;
+            }
             if (BackgroundColor != System.Drawing.Color.Transparent)
             {
                 _bgColor.A = Opacity / 100.0f;

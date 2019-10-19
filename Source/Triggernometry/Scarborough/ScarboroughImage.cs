@@ -241,6 +241,10 @@ namespace Scarborough
 
         private double TimeAccumulator = 0.0;
         private DateTime LastAdvance = DateTime.MinValue;
+        
+        public ScarboroughImage(Scarborough own) : base(own)
+        {
+        }
 
         public bool AdvanceFrame()
         {
@@ -320,19 +324,35 @@ namespace Scarborough
                 bool af = AdvanceFrame();
                 NeedRender = NeedRender || af;
             }
+            if (Owner.RenderingActive == false)
+            {
+                if (WasHidden == false)
+                {
+                    NeedRender = true;
+                    WasHidden = true;
+                }
+            }
+            else
+            {
+                if (WasHidden == true)
+                {
+                    NeedRender = true;
+                    WasHidden = false;
+                }
+            }
             if (NeedRender == false)
             {
                 return;
             }
             AdjustSurface();
-            if (plug.HideAllAuras == true)
-            {
-                _window.Hide();
-                return;
-            }
-            NeedRender = false;
+            NeedRender = false;            
             _graphics.BeginScene();
             _graphics.ClearScene(_bgColor);
+            if (Owner.RenderingActive == false)
+            {
+                _graphics.EndScene();
+                return;
+            }
             switch (Display)
             {
                 case PictureBoxSizeMode.Zoom:

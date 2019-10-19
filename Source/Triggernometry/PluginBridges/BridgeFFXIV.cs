@@ -16,6 +16,8 @@ namespace Triggernometry.PluginBridges
         private static string ActPluginType = "FFXIV_ACT_Plugin";
         private static ActPluginData ActPluginPrevious = null;
 
+        private static VariableClump NullCombatant = new VariableClump();
+
         internal delegate void LoggingDelegate(Plugin.DebugLevelEnum level, string text);
         internal static event LoggingDelegate OnLogEvent;
 
@@ -41,6 +43,36 @@ namespace Triggernometry.PluginBridges
         }
 
         private delegate void NetworkReceiveDelegate(string connection, long epoch, byte[] message);
+
+        public static void SetupNullCombatant()
+        {
+            NullCombatant.SetValue("name", "");
+            NullCombatant.SetValue("currenthp", 0);
+            NullCombatant.SetValue("currentmp", 0);
+            NullCombatant.SetValue("currentgp", 0);
+            NullCombatant.SetValue("currentcp", 0);
+            NullCombatant.SetValue("maxhp", 0);
+            NullCombatant.SetValue("maxmp", 0);
+            NullCombatant.SetValue("maxgp", 0);
+            NullCombatant.SetValue("maxcp", 0);
+            NullCombatant.SetValue("level", 0);
+            NullCombatant.SetValue("jobid", 0);
+            NullCombatant.SetValue("job", "");
+            NullCombatant.SetValue("role", "");
+            NullCombatant.SetValue("x", 0);
+            NullCombatant.SetValue("y", 0);
+            NullCombatant.SetValue("z", 0);
+            NullCombatant.SetValue("id", "");
+            NullCombatant.SetValue("inparty", 0);
+            NullCombatant.SetValue("order", 0);
+            NullCombatant.SetValue("casttargetid", 0);
+            NullCombatant.SetValue("targetid", 0);
+            NullCombatant.SetValue("heading", 0);
+            NullCombatant.SetValue("distance", 0);
+            NullCombatant.SetValue("worldid", 0);
+            NullCombatant.SetValue("worldname", "");
+            NullCombatant.SetValue("currentworldid", 0);
+        }
 
         public static void SubscribeToNetworkEvents(Plugin p)
         {
@@ -511,19 +543,19 @@ namespace Triggernometry.PluginBridges
                 return 1;
             }
             //System.Diagnostics.Debug.WriteLine(a.GetValue("name") + " (" + av + ") -(" + a.GetValue("name").CompareTo(b.GetValue("name")) + ")- " + b.GetValue("name") + " (" + bv + ")");
-            return a.GetValue("name").CompareTo(b.GetValue("name"));
+            // https://github.com/paissaheavyindustries/Triggernometry/issues/9
+            return b.GetValue("id").CompareTo(a.GetValue("id"));
         }
 
         public static VariableClump GetNamedEntity(string name)
-        {
-            VariableClump vc = new VariableClump();
+        {            
             try
             {
                 object plug = null;
                 plug = GetInstance();
                 if (plug == null)
                 {
-                    return vc;
+                    return NullCombatant;
                 }
                 PropertyInfo pi = GetDataRepository(plug);
                 CombatantData cd = GetCombatants(plug, pi);
@@ -549,8 +581,9 @@ namespace Triggernometry.PluginBridges
                             {
                                 inParty = 0;
                             }
+                            VariableClump vc = new VariableClump();
                             PopulateClumpFromCombatant(vc, cmx, inParty, 0);
-                            break;
+                            return vc;
                         }
                     }
                 }
@@ -559,12 +592,12 @@ namespace Triggernometry.PluginBridges
             {
                 LogMessage(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/namedexception", "Exception in FFXIV named entity retrieve: {0}", ex.Message));
             }
-            return vc;
+            return NullCombatant;
         }
 
         public static VariableClump GetIdEntity(string id, out bool found)
         {
-            VariableClump vc = new VariableClump();
+            
             found = false;
             try
             {
@@ -572,7 +605,7 @@ namespace Triggernometry.PluginBridges
                 plug = GetInstance();
                 if (plug == null)
                 {
-                    return vc;
+                    return NullCombatant;
                 }
                 PropertyInfo pi = GetDataRepository(plug);
                 CombatantData cd = GetCombatants(plug, pi);
@@ -598,9 +631,10 @@ namespace Triggernometry.PluginBridges
                             {
                                 inParty = 0;
                             }
+                            VariableClump vc = new VariableClump();
                             PopulateClumpFromCombatant(vc, cmx, inParty, 0);
                             found = true;
-                            break;
+                            return vc;
                         }
                     }
                 }
@@ -609,7 +643,7 @@ namespace Triggernometry.PluginBridges
             {
                 LogMessage(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/idexception", "Exception in FFXIV ID entity retrieve: {0}", ex.Message));
             }
-            return vc;
+            return NullCombatant;
         }
 
         public static VariableClump GetPartyMember(int index)
@@ -617,7 +651,7 @@ namespace Triggernometry.PluginBridges
             UpdateState();
             if (index < 1 || index > NumPartyMembers)
             {
-                return new VariableClump();
+                return NullCombatant;
             }
             return PartyMembers[index - 1];
         }
@@ -638,7 +672,7 @@ namespace Triggernometry.PluginBridges
                     return vc;
                 }
             }
-            return new VariableClump();
+            return NullCombatant;
         }
 
         public static VariableClump GetIdPartyMember(string id, out bool found)
@@ -653,7 +687,7 @@ namespace Triggernometry.PluginBridges
                     return vc;
                 }
             }
-            return new VariableClump();
+            return NullCombatant;
         }
 
     }

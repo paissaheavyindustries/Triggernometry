@@ -40,34 +40,34 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.tbcMain = new System.Windows.Forms.TabControl();
-            this.tabScalar = new System.Windows.Forms.TabPage();
-            this.tabList = new System.Windows.Forms.TabPage();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.tlsList = new System.Windows.Forms.ToolStrip();
-            this.btnRefreshList = new System.Windows.Forms.ToolStripButton();
-            this.btnRemoveAllList = new System.Windows.Forms.ToolStripButton();
             this.dgvScalarVariables = new Triggernometry.CustomControls.DataGridViewEx();
             this.colScalarName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colScalarValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colScalarLastChanged = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colScalarChangedBy = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tbcMain = new System.Windows.Forms.TabControl();
+            this.tabScalar = new System.Windows.Forms.TabPage();
+            this.tabList = new System.Windows.Forms.TabPage();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.dgvListVariables = new Triggernometry.CustomControls.DataGridViewEx();
             this.colListName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colListSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colListValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colListLastChanged = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colListChangedBy = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tlsList = new System.Windows.Forms.ToolStrip();
+            this.btnRefreshList = new System.Windows.Forms.ToolStripButton();
+            this.btnRemoveAllList = new System.Windows.Forms.ToolStripButton();
             this.tlsScalar.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvScalarVariables)).BeginInit();
             this.tbcMain.SuspendLayout();
             this.tabScalar.SuspendLayout();
             this.tabList.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.tlsList.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvScalarVariables)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvListVariables)).BeginInit();
+            this.tlsList.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel3
@@ -125,7 +125,6 @@
             this.refreshToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(114, 26);
-            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // refreshToolStripMenuItem
             // 
@@ -144,79 +143,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(550, 364);
             this.panel1.TabIndex = 22;
-            // 
-            // tbcMain
-            // 
-            this.tbcMain.Controls.Add(this.tabScalar);
-            this.tbcMain.Controls.Add(this.tabList);
-            this.tbcMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbcMain.Location = new System.Drawing.Point(10, 10);
-            this.tbcMain.Name = "tbcMain";
-            this.tbcMain.SelectedIndex = 0;
-            this.tbcMain.Size = new System.Drawing.Size(564, 396);
-            this.tbcMain.TabIndex = 23;
-            // 
-            // tabScalar
-            // 
-            this.tabScalar.Controls.Add(this.panel1);
-            this.tabScalar.Location = new System.Drawing.Point(4, 22);
-            this.tabScalar.Name = "tabScalar";
-            this.tabScalar.Padding = new System.Windows.Forms.Padding(3);
-            this.tabScalar.Size = new System.Drawing.Size(556, 370);
-            this.tabScalar.TabIndex = 0;
-            this.tabScalar.Text = "Scalar variables";
-            this.tabScalar.UseVisualStyleBackColor = true;
-            // 
-            // tabList
-            // 
-            this.tabList.Controls.Add(this.panel2);
-            this.tabList.Location = new System.Drawing.Point(4, 22);
-            this.tabList.Name = "tabList";
-            this.tabList.Padding = new System.Windows.Forms.Padding(3);
-            this.tabList.Size = new System.Drawing.Size(456, 170);
-            this.tabList.TabIndex = 1;
-            this.tabList.Text = "List variables";
-            this.tabList.UseVisualStyleBackColor = true;
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.dgvListVariables);
-            this.panel2.Controls.Add(this.tlsList);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(3, 3);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(450, 164);
-            this.panel2.TabIndex = 23;
-            // 
-            // tlsList
-            // 
-            this.tlsList.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.tlsList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnRefreshList,
-            this.btnRemoveAllList});
-            this.tlsList.Location = new System.Drawing.Point(0, 0);
-            this.tlsList.Name = "tlsList";
-            this.tlsList.Size = new System.Drawing.Size(450, 25);
-            this.tlsList.TabIndex = 20;
-            // 
-            // btnRefreshList
-            // 
-            this.btnRefreshList.Image = ((System.Drawing.Image)(resources.GetObject("btnRefreshList.Image")));
-            this.btnRefreshList.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnRefreshList.Name = "btnRefreshList";
-            this.btnRefreshList.Size = new System.Drawing.Size(66, 22);
-            this.btnRefreshList.Text = "Refresh";
-            this.btnRefreshList.Click += new System.EventHandler(this.toolStripButton2_Click);
-            // 
-            // btnRemoveAllList
-            // 
-            this.btnRemoveAllList.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.btnRemoveAllList.Image = ((System.Drawing.Image)(resources.GetObject("btnRemoveAllList.Image")));
-            this.btnRemoveAllList.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnRemoveAllList.Name = "btnRemoveAllList";
-            this.btnRemoveAllList.Size = new System.Drawing.Size(85, 22);
-            this.btnRemoveAllList.Text = "Remove all";
-            this.btnRemoveAllList.Click += new System.EventHandler(this.btnRemoveAllList_Click);
             // 
             // dgvScalarVariables
             // 
@@ -279,6 +205,49 @@
             this.colScalarChangedBy.ReadOnly = true;
             this.colScalarChangedBy.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // tbcMain
+            // 
+            this.tbcMain.Controls.Add(this.tabScalar);
+            this.tbcMain.Controls.Add(this.tabList);
+            this.tbcMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbcMain.Location = new System.Drawing.Point(10, 10);
+            this.tbcMain.Name = "tbcMain";
+            this.tbcMain.SelectedIndex = 0;
+            this.tbcMain.Size = new System.Drawing.Size(564, 396);
+            this.tbcMain.TabIndex = 23;
+            // 
+            // tabScalar
+            // 
+            this.tabScalar.Controls.Add(this.panel1);
+            this.tabScalar.Location = new System.Drawing.Point(4, 22);
+            this.tabScalar.Name = "tabScalar";
+            this.tabScalar.Padding = new System.Windows.Forms.Padding(3);
+            this.tabScalar.Size = new System.Drawing.Size(556, 370);
+            this.tabScalar.TabIndex = 0;
+            this.tabScalar.Text = "Scalar variables";
+            this.tabScalar.UseVisualStyleBackColor = true;
+            // 
+            // tabList
+            // 
+            this.tabList.Controls.Add(this.panel2);
+            this.tabList.Location = new System.Drawing.Point(4, 22);
+            this.tabList.Name = "tabList";
+            this.tabList.Padding = new System.Windows.Forms.Padding(3);
+            this.tabList.Size = new System.Drawing.Size(556, 370);
+            this.tabList.TabIndex = 1;
+            this.tabList.Text = "List variables";
+            this.tabList.UseVisualStyleBackColor = true;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.dgvListVariables);
+            this.panel2.Controls.Add(this.tlsList);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(3, 3);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(550, 364);
+            this.panel2.TabIndex = 23;
+            // 
             // dgvListVariables
             // 
             this.dgvListVariables.AllowUserToAddRows = false;
@@ -304,7 +273,7 @@
             this.dgvListVariables.ShowCellErrors = false;
             this.dgvListVariables.ShowEditingIcon = false;
             this.dgvListVariables.ShowRowErrors = false;
-            this.dgvListVariables.Size = new System.Drawing.Size(450, 139);
+            this.dgvListVariables.Size = new System.Drawing.Size(550, 339);
             this.dgvListVariables.TabIndex = 21;
             this.dgvListVariables.VirtualMode = true;
             this.dgvListVariables.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvListVariables_CellValueNeeded);
@@ -347,6 +316,36 @@
             this.colListChangedBy.ReadOnly = true;
             this.colListChangedBy.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // tlsList
+            // 
+            this.tlsList.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.tlsList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnRefreshList,
+            this.btnRemoveAllList});
+            this.tlsList.Location = new System.Drawing.Point(0, 0);
+            this.tlsList.Name = "tlsList";
+            this.tlsList.Size = new System.Drawing.Size(550, 25);
+            this.tlsList.TabIndex = 20;
+            // 
+            // btnRefreshList
+            // 
+            this.btnRefreshList.Image = ((System.Drawing.Image)(resources.GetObject("btnRefreshList.Image")));
+            this.btnRefreshList.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRefreshList.Name = "btnRefreshList";
+            this.btnRefreshList.Size = new System.Drawing.Size(66, 22);
+            this.btnRefreshList.Text = "Refresh";
+            this.btnRefreshList.Click += new System.EventHandler(this.toolStripButton2_Click);
+            // 
+            // btnRemoveAllList
+            // 
+            this.btnRemoveAllList.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.btnRemoveAllList.Image = ((System.Drawing.Image)(resources.GetObject("btnRemoveAllList.Image")));
+            this.btnRemoveAllList.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRemoveAllList.Name = "btnRemoveAllList";
+            this.btnRemoveAllList.Size = new System.Drawing.Size(85, 22);
+            this.btnRemoveAllList.Text = "Remove all";
+            this.btnRemoveAllList.Click += new System.EventHandler(this.btnRemoveAllList_Click);
+            // 
             // VariableForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -368,15 +367,15 @@
             this.contextMenuStrip1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvScalarVariables)).EndInit();
             this.tbcMain.ResumeLayout(false);
             this.tabScalar.ResumeLayout(false);
             this.tabList.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvListVariables)).EndInit();
             this.tlsList.ResumeLayout(false);
             this.tlsList.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvScalarVariables)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvListVariables)).EndInit();
             this.ResumeLayout(false);
 
         }

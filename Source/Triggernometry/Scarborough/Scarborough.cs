@@ -21,7 +21,9 @@ namespace Scarborough
             {
                 Activate,
                 Deactivate,
-                DeactivateAll
+                DeactivateAll,
+                RenderingOn,
+                RenderingOff
             }
 
             public enum ItemTypeEnum
@@ -40,6 +42,7 @@ namespace Scarborough
         private Int64 CurOrdinal = 1;
         private ManualResetEvent exitEvent = null;
         private Thread drawThread = null;
+        internal bool RenderingActive { get; set; }
         internal Triggernometry.Plugin plug { get; set; }
         private Queue<ItemAction> ItemActions { get; set; } = new Queue<ItemAction>();
 
@@ -49,6 +52,7 @@ namespace Scarborough
         public Scarborough()
         {
             User32.InitializeWindowClass();
+            RenderingActive = true;
             exitEvent = new ManualResetEvent(false);
             drawThread = new Thread(Render);
             drawThread.Start();
@@ -97,6 +101,12 @@ namespace Scarborough
         {
             switch (ia.Action)
             {
+                case ItemAction.ActionTypeEnum.RenderingOn:
+                    RenderingActive = true;
+                    break;
+                case ItemAction.ActionTypeEnum.RenderingOff:
+                    RenderingActive = false;
+                    break;
                 case ItemAction.ActionTypeEnum.Activate:
                     {
                         if (ia.Item is ScarboroughImage)
@@ -520,37 +530,17 @@ namespace Scarborough
 
         internal void HideAllItems()
         {
-            lock (textitems)
+            lock (ItemActions)
             {
-                foreach (KeyValuePair<string, ScarboroughText> kp in textitems)
-                {
-                    kp.Value.Hide();
-                }
-            }
-            lock (imageitems)
-            {
-                foreach (KeyValuePair<string, ScarboroughImage> kp in imageitems)
-                {
-                    kp.Value.Hide();
-                }
+                ItemActions.Enqueue(new ItemAction() { Action = ItemAction.ActionTypeEnum.RenderingOff });
             }
         }
 
         internal void ShowAllItems()
         {
-            lock (textitems)
+            lock (ItemActions)
             {
-                foreach (KeyValuePair<string, ScarboroughText> kp in textitems)
-                {
-                    kp.Value.Show();
-                }
-            }
-            lock (imageitems)
-            {
-                foreach (KeyValuePair<string, ScarboroughImage> kp in imageitems)
-                {
-                    kp.Value.Show();
-                }
+                ItemActions.Enqueue(new ItemAction() { Action = ItemAction.ActionTypeEnum.RenderingOn });
             }
         }
 
