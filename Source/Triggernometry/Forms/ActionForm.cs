@@ -22,8 +22,8 @@ namespace Triggernometry.Forms
 
         internal WMPLib.WindowsMediaPlayer wmp;
         internal SpeechSynthesizer tts;
-        private Plugin _plug;
-        internal Plugin plug
+        private RealPlugin _plug;
+        internal RealPlugin plug
         {
             get
             {
@@ -112,11 +112,6 @@ namespace Triggernometry.Forms
 
         internal void SetReadOnlyRecursive(Control c)
         {
-            if (c is CustomControls.RegexTextBox)
-            {
-                ((CustomControls.RegexTextBox)c).ReadOnly = true;
-                return;
-            }
             if (c is CustomControls.ExpressionTextBox)
             {
                 ((CustomControls.ExpressionTextBox)c).ReadOnly = true;
@@ -535,7 +530,7 @@ namespace Triggernometry.Forms
             a.LaunchProcessPathExpression = expProcessName.Expression;
             a.LaunchProcessCmdlineExpression = expProcessParameters.Expression;
 			a.LaunchProcessWorkingDirExpression = expProcessWorkingDir.Expression;
-            a.DebugLevel = (Plugin.DebugLevelEnum)cbxLoggingLevel.SelectedIndex;
+            a.DebugLevel = (RealPlugin.DebugLevelEnum)cbxLoggingLevel.SelectedIndex;
 			a.LaunchProcessWindowStyle = (System.Diagnostics.ProcessWindowStyle)cbxProcessWindowStyle.SelectedIndex;
             a.KeyPressExpression = expKeypresses.Expression;
             a.ExecScriptType = (Action.ScriptTypeEnum)cbxExecScriptLang.SelectedIndex;
@@ -803,6 +798,17 @@ namespace Triggernometry.Forms
 
         private void cbxAuraOp_SelectedIndexChanged(object sender, EventArgs e)
         {
+            switch (cbxAuraOp.SelectedIndex)
+            {
+                case 0:
+                case 1:
+                case 2:
+                    expAuraName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    break;
+                case 3:
+                    expAuraName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
+                    break;
+            }
             btnBrowseAura.Enabled = (cbxAuraOp.SelectedIndex == 0);
             cbxAuraDisplay.Enabled = (cbxAuraOp.SelectedIndex == 0);
             expAuraImage.Enabled = (cbxAuraOp.SelectedIndex == 0);
@@ -1163,6 +1169,17 @@ namespace Triggernometry.Forms
 
         private void cbxTextAuraOp_SelectedIndexChanged(object sender, EventArgs e)
         {
+            switch (cbxTextAuraOp.SelectedIndex)
+            {
+                case 0:
+                case 1:
+                case 2:
+                    expTextAuraName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    break;
+                case 3:
+                    expTextAuraName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
+                    break;
+            }
             cbxTextAuraAlignment.Enabled = (cbxTextAuraOp.SelectedIndex == 0);
             expTextAuraText.Enabled = (cbxTextAuraOp.SelectedIndex == 0);
             expTextAuraXIni.Enabled = (cbxTextAuraOp.SelectedIndex == 0);

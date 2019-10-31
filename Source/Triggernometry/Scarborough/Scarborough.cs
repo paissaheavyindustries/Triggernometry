@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,7 +24,8 @@ namespace Scarborough
                 Deactivate,
                 DeactivateAll,
                 RenderingOn,
-                RenderingOff
+                RenderingOff,
+                DeactivateRegex
             }
 
             public enum ItemTypeEnum
@@ -43,7 +45,7 @@ namespace Scarborough
         private ManualResetEvent exitEvent = null;
         private Thread drawThread = null;
         internal bool RenderingActive { get; set; }
-        internal Triggernometry.Plugin plug { get; set; }
+        internal Triggernometry.RealPlugin plug { get; set; }
         private Queue<ItemAction> ItemActions { get; set; } = new Queue<ItemAction>();
 
         public Dictionary<string, ScarboroughImage> imageitems = new Dictionary<string, ScarboroughImage>();
@@ -119,6 +121,45 @@ namespace Scarborough
                         }
                     }
                     break;
+                case ItemAction.ActionTypeEnum.DeactivateRegex:
+                    {
+                        Regex rex = new Regex(ia.Id);
+                        List<string> toRem = new List<string>();
+                        switch (ia.ItemType)
+                        {
+                            case ItemAction.ItemTypeEnum.Image:
+                                {
+                                    toRem.AddRange(from sx in imageitems where rex.IsMatch(sx.Key) select sx.Key);
+                                    foreach (string rem in toRem)
+                                    {
+                                        ScarboroughImage si = null;
+                                        si = imageitems[rem];
+                                        imageitems.Remove(rem);
+                                        if (si != null)
+                                        {
+                                            si.Dispose();
+                                        }
+                                    }
+                                }
+                                break;
+                            case ItemAction.ItemTypeEnum.Text:
+                                {
+                                    toRem.AddRange(from sx in textitems where rex.IsMatch(sx.Key) select sx.Key);
+                                    foreach (string rem in toRem)
+                                    {
+                                        ScarboroughText si = null;
+                                        si = textitems[rem];
+                                        textitems.Remove(rem);
+                                        if (si != null)
+                                        {
+                                            si.Dispose();
+                                        }
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                    break;
                 case ItemAction.ActionTypeEnum.Deactivate:
                     {
                         switch (ia.ItemType)
@@ -151,7 +192,6 @@ namespace Scarborough
                                     }
                                 }
                                 break;
-
                         }
                     }
                     break;
@@ -207,6 +247,14 @@ namespace Scarborough
             lock (ItemActions)
             {
                 ItemActions.Enqueue(new ItemAction() { Action = ItemAction.ActionTypeEnum.Deactivate, Id = id, ItemType = it });
+            }
+        }
+
+        public void DeactivateRegex(string rex, ItemAction.ItemTypeEnum it)
+        {
+            lock (ItemActions)
+            {
+                ItemActions.Enqueue(new ItemAction() { Action = ItemAction.ActionTypeEnum.DeactivateRegex, Id = rex, ItemType = it });
             }
         }
 
@@ -339,8 +387,8 @@ namespace Scarborough
         {
 
             public Triggernometry.Context ctx { get; set; } = null;
-            public Triggernometry.Plugin plug { get; set; } = null;
-            public Triggernometry.Plugin.DebugLevelEnum level { get; set; } = Triggernometry.Plugin.DebugLevelEnum.None;
+            public Triggernometry.RealPlugin plug { get; set; } = null;
+            public Triggernometry.RealPlugin.DebugLevelEnum level { get; set; } = Triggernometry.RealPlugin.DebugLevelEnum.None;
             public string Message { get; set; } = "";
 
         }
@@ -391,7 +439,7 @@ namespace Scarborough
                         {
                             ctx = si.Value.ctx,
                             plug = plug,
-                            level = Triggernometry.Plugin.DebugLevelEnum.Error,
+                            level = Triggernometry.RealPlugin.DebugLevelEnum.Error,
                             Message = Triggernometry.I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message))
                         }
                         );
@@ -402,7 +450,7 @@ namespace Scarborough
                         {
                             ctx = null,
                             plug = plug,
-                            level = Triggernometry.Plugin.DebugLevelEnum.Error,
+                            level = Triggernometry.RealPlugin.DebugLevelEnum.Error,
                             Message = Triggernometry.I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message))
                         }
                         );
@@ -421,7 +469,7 @@ namespace Scarborough
                         {
                             ctx = sit.ctx,
                             plug = plug,
-                            level = Triggernometry.Plugin.DebugLevelEnum.Verbose,
+                            level = Triggernometry.RealPlugin.DebugLevelEnum.Verbose,
                             Message = Triggernometry.I18n.Translate("internal/AuraContainer/closingaura", "Closing aura window")
                         }
                         );
@@ -432,7 +480,7 @@ namespace Scarborough
                         {
                             ctx = null,
                             plug = plug,
-                            level = Triggernometry.Plugin.DebugLevelEnum.Verbose,
+                            level = Triggernometry.RealPlugin.DebugLevelEnum.Verbose,
                             Message = Triggernometry.I18n.Translate("internal/AuraContainer/closingaura", "Closing aura window")
                         }
                         );
@@ -475,7 +523,7 @@ namespace Scarborough
                         {
                             ctx = si.Value.ctx,
                             plug = plug,
-                            level = Triggernometry.Plugin.DebugLevelEnum.Error,
+                            level = Triggernometry.RealPlugin.DebugLevelEnum.Error,
                             Message = Triggernometry.I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message))
                         }
                         );
@@ -486,7 +534,7 @@ namespace Scarborough
                         {
                             ctx = null,
                             plug = plug,
-                            level = Triggernometry.Plugin.DebugLevelEnum.Error,
+                            level = Triggernometry.RealPlugin.DebugLevelEnum.Error,
                             Message = Triggernometry.I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message))
                         }
                         );
@@ -505,7 +553,7 @@ namespace Scarborough
                         {
                             ctx = sit.ctx,
                             plug = plug,
-                            level = Triggernometry.Plugin.DebugLevelEnum.Verbose,
+                            level = Triggernometry.RealPlugin.DebugLevelEnum.Verbose,
                             Message = Triggernometry.I18n.Translate("internal/AuraContainer/closingaura", "Closing aura window")
                         }
                         );
@@ -516,7 +564,7 @@ namespace Scarborough
                         {
                             ctx = null,
                             plug = plug,
-                            level = Triggernometry.Plugin.DebugLevelEnum.Verbose,
+                            level = Triggernometry.RealPlugin.DebugLevelEnum.Verbose,
                             Message = Triggernometry.I18n.Translate("internal/AuraContainer/closingaura", "Closing aura window")
                         }
                         );
@@ -563,7 +611,7 @@ namespace Scarborough
                         {
                             ctx = si.ctx,
                             plug = plug,
-                            level = Triggernometry.Plugin.DebugLevelEnum.Error,
+                            level = Triggernometry.RealPlugin.DebugLevelEnum.Error,
                             Message = Triggernometry.I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message))
                         }
                         );
@@ -574,7 +622,7 @@ namespace Scarborough
                         {
                             ctx = null,
                             plug = plug,
-                            level = Triggernometry.Plugin.DebugLevelEnum.Error,
+                            level = Triggernometry.RealPlugin.DebugLevelEnum.Error,
                             Message = Triggernometry.I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message))
                         }
                         );
@@ -592,7 +640,7 @@ namespace Scarborough
                         {
                             ctx = si.ctx,
                             plug = plug,
-                            level = Triggernometry.Plugin.DebugLevelEnum.Verbose,
+                            level = Triggernometry.RealPlugin.DebugLevelEnum.Verbose,
                             Message = Triggernometry.I18n.Translate("internal/AuraContainer/closingaura", "Closing aura window")
                         }
                         );
@@ -603,7 +651,7 @@ namespace Scarborough
                         {
                             ctx = null,
                             plug = plug,
-                            level = Triggernometry.Plugin.DebugLevelEnum.Verbose,
+                            level = Triggernometry.RealPlugin.DebugLevelEnum.Verbose,
                             Message = Triggernometry.I18n.Translate("internal/AuraContainer/closingaura", "Closing aura window")
                         }
                         );

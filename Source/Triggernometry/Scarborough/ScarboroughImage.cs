@@ -138,7 +138,7 @@ namespace Scarborough
             }
         }
 
-        internal void LoadImageDataFromFile(Triggernometry.Plugin plug, Graphics g, string fn)
+        internal void LoadImageDataFromFile(Triggernometry.RealPlugin plug, Graphics g, string fn)
         {
             byte[] data = File.ReadAllBytes(fn);
             GifData gif = GetGifData(data);
@@ -207,7 +207,7 @@ namespace Scarborough
             }
         }
 
-        internal void LoadImageData(Triggernometry.Plugin plug, Graphics g, string ifn)
+        internal void LoadImageData(Triggernometry.RealPlugin plug, Graphics g, string ifn)
         {
             Uri u = new Uri(ifn);
             if (u.IsFile == true)

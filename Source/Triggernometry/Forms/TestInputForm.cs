@@ -7,13 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Advanced_Combat_Tracker;
 
 namespace Triggernometry.Forms
 {
 
     public partial class TestInputForm : MemoryForm<TestInputForm>
     {
+
+        public RealPlugin plug;
 
         public TestInputForm()
         {
@@ -29,7 +30,7 @@ namespace Triggernometry.Forms
 
         private void btnGetCurZone_Click(object sender, EventArgs e)
         {
-            txtZoneName.Text = ActGlobals.oFormActMain.CurrentZone;
+            txtZoneName.Text = plug.CurrentZoneHook();
         }
 
         private void txtEvent_KeyDown(object sender, KeyEventArgs e)

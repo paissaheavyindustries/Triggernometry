@@ -90,7 +90,8 @@ namespace Triggernometry
         {
             ActivateAura,
             DeactivateAura,
-            DeactivateAllAura
+            DeactivateAllAura,
+            DeactivateAuraRegex
         }
 
         public enum MessageBoxIconTypeEnum
@@ -209,7 +210,7 @@ namespace Triggernometry
 
 
         [XmlAttribute]
-        public Plugin.DebugLevelEnum DebugLevel { get; set; } = Plugin.DebugLevelEnum.Inherit;
+        public RealPlugin.DebugLevelEnum DebugLevel { get; set; } = RealPlugin.DebugLevelEnum.Inherit;
 
         internal bool _RefireInterrupt { get; set; }
         [XmlAttribute]
@@ -1764,7 +1765,7 @@ namespace Triggernometry
 
         public void ActionContextLogger(object o, string msg)
         {
-            AddToLog((Context)o, Plugin.DebugLevelEnum.Verbose, msg);
+            AddToLog((Context)o, RealPlugin.DebugLevelEnum.Verbose, msg);
         }
 
         private string Capitalize(string str)
@@ -1782,7 +1783,7 @@ namespace Triggernometry
 
         internal bool ObsConnector(Context ctx)
         {
-            Plugin p = ctx.plug;
+            RealPlugin p = ctx.plug;
             lock (p._obs)
             {
                 if (p._obs.IsConnected == true)
@@ -1792,12 +1793,12 @@ namespace Triggernometry
                 try
                 {
                     p._obs.Connect();
-                    AddToLog(ctx, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Action/obsconnectok", "OBS WebSocket connected successfully"));
+                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Action/obsconnectok", "OBS WebSocket connected successfully"));
                     return true;
                 }
                 catch (Exception ex)
                 {
-                    AddToLog(ctx, Plugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/obsconnecterror", "Error connecting to OBS WebSocket: {0}", ex.Message));
+                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/obsconnecterror", "Error connecting to OBS WebSocket: {0}", ex.Message));
                 }
             }
             return false;
@@ -2144,6 +2145,9 @@ namespace Triggernometry
                         case AuraOpEnum.DeactivateAllAura:
                             temp += I18n.Translate("internal/Action/descimgauradeactall", "deactivate all image auras");
                             break;
+                        case AuraOpEnum.DeactivateAuraRegex:
+                            temp += I18n.Translate("internal/Action/descimgauradeactrex", "deactivate image auras matching regular expression ({0})", AuraName);
+                            break;
                     }
                     break;
                 case ActionTypeEnum.TextAura:
@@ -2157,6 +2161,9 @@ namespace Triggernometry
                             break;
                         case AuraOpEnum.DeactivateAllAura:
                             temp += I18n.Translate("internal/Action/desctextauradeactall", "deactivate all text auras");
+                            break;
+                        case AuraOpEnum.DeactivateAuraRegex:
+                            temp += I18n.Translate("internal/Action/descimgauradeactrex", "deactivate text auras matching regular expression ({0})", AuraName);
                             break;
                     }
                     break;
@@ -2269,7 +2276,7 @@ namespace Triggernometry
             ActionType = ActionTypeEnum.SystemBeep;
             _Asynchronous = true;
             _RefireInterrupt = false;
-            DebugLevel = Plugin.DebugLevelEnum.Inherit;
+            DebugLevel = RealPlugin.DebugLevelEnum.Inherit;
             _RefireRequeue = true;
             ExecutionDelayExpression = "0";
             SystemBeepFreqExpression = "1000";
@@ -2363,9 +2370,9 @@ namespace Triggernometry
             WmsgLparam = "";
         }
 
-        private Plugin.DebugLevelEnum GetDebugLevel(Context ctx)
+        private RealPlugin.DebugLevelEnum GetDebugLevel(Context ctx)
         {
-            if (DebugLevel == Plugin.DebugLevelEnum.Inherit)
+            if (DebugLevel == RealPlugin.DebugLevelEnum.Inherit)
             {
                 if (ctx.trig != null)
                 {
@@ -2373,7 +2380,7 @@ namespace Triggernometry
                 }
                 else
                 {
-                    return Plugin.DebugLevelEnum.Verbose;
+                    return RealPlugin.DebugLevelEnum.Verbose;
                 }
             }
             else
@@ -2382,9 +2389,9 @@ namespace Triggernometry
             }
         }
 
-        internal void AddToLog(Context ctx, Plugin.DebugLevelEnum level, string message)
+        internal void AddToLog(Context ctx, RealPlugin.DebugLevelEnum level, string message)
         {
-            Plugin.DebugLevelEnum dx = GetDebugLevel(ctx);
+            RealPlugin.DebugLevelEnum dx = GetDebugLevel(ctx);
             if (level > dx)
             {
                 return;
@@ -2392,7 +2399,7 @@ namespace Triggernometry
             ctx.plug.UnfilteredAddToLog(level, message);
         }
 
-        private VariableList GetListVariable(Plugin p, string varname, bool createNew)
+        private VariableList GetListVariable(RealPlugin p, string varname, bool createNew)
         {
             if (p.listvariables.ContainsKey(varname) == true)
             {
@@ -2428,12 +2435,12 @@ namespace Triggernometry
                     {
                         if (Condition.CheckCondition(ctx, ActionContextLogger, ctx) == false)
                         {
-                            AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/actionnotfired", "Action #{0} on trigger '{1}' not fired, condition not met", OrderNumber, (ctx.trig != null ? ctx.trig.LogName : "(null)")));
+                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/actionnotfired", "Action #{0} on trigger '{1}' not fired, condition not met", OrderNumber, (ctx.trig != null ? ctx.trig.LogName : "(null)")));
                             return;
                         }
                     }
                 }
-                AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/executingaction", "Executing action '{0}' in thread {1}", GetDescription(ctx), System.Threading.Thread.CurrentThread.ManagedThreadId));
+                AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/executingaction", "Executing action '{0}' in thread {1}", GetDescription(ctx), System.Threading.Thread.CurrentThread.ManagedThreadId));
 				switch (ActionType)
 				{
 					case ActionTypeEnum.SystemBeep:
@@ -2442,18 +2449,18 @@ namespace Triggernometry
                             if (freq < 37.0)
                             {                                
                                 freq = 37.0;
-                                AddToLog(ctx, Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/beepfreqlo", "Beep frequency below limit, capping to {0}", freq));
+                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/beepfreqlo", "Beep frequency below limit, capping to {0}", freq));
                             }
                             if (freq > 32767.0)
                             {
                                 freq = 32767.0;
-                                AddToLog(ctx, Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/beepfreqhi", "Beep frequency above limit, capping to {0} ", freq));
+                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/beepfreqhi", "Beep frequency above limit, capping to {0} ", freq));
                             }
                             double len = ctx.EvaluateNumericExpression(ActionContextLogger, ctx, SystemBeepLengthExpression);
                             if (len < 0.0)
                             {
                                 len = 0.0;
-                                AddToLog(ctx, Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/beeplengthlo", "Beep length below limit, capping to {0}", len));
+                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/beeplengthlo", "Beep length below limit, capping to {0}", len));
                             }
                             Console.Beep((int)Math.Ceiling(freq), (int)Math.Ceiling(len));
 						}
@@ -2480,7 +2487,7 @@ namespace Triggernometry
 							p.Start();
 							if (_Asynchronous == false)
 							{
-                                AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/waitingprocexit", "Waiting for process to exit"));
+                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/waitingprocexit", "Waiting for process to exit"));
                                 p.WaitForExit();                                
 							}
 						}
@@ -2521,12 +2528,12 @@ namespace Triggernometry
                                             }
                                             if (tn != null)
                                             {
-                                                AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/trigenable", "Trigger '{0}' enabled", t.LogName));
+                                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/trigenable", "Trigger '{0}' enabled", t.LogName));
                                                 tn.Checked = true;
                                             }
                                             else
                                             {
-                                                AddToLog(ctx, Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodetrigenable", "Could not find tree node to modify for enabling trigger {0}", t.LogName));
+                                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodetrigenable", "Could not find tree node to modify for enabling trigger {0}", t.LogName));
                                             }
                                         }
                                         break;
@@ -2544,12 +2551,12 @@ namespace Triggernometry
                                             }
                                             if (tn != null)
                                             {
-                                                AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/trigdisable", "Trigger '{0}' disabled", t.LogName));
+                                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/trigdisable", "Trigger '{0}' disabled", t.LogName));
                                                 tn.Checked = false;
                                             }
                                             else
                                             {
-                                                AddToLog(ctx, Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodetrigdisable", "Could not find tree node to modify for disabling trigger {0}", t.LogName));
+                                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodetrigdisable", "Could not find tree node to modify for disabling trigger {0}", t.LogName));
                                             }
                                         }
                                         break;
@@ -2563,7 +2570,7 @@ namespace Triggernometry
                                 }
                                 else
                                 {
-                                    AddToLog(ctx, Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notrigiderror", "No trigger id, and op is not cancel all actions, unexpected"));
+                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notrigiderror", "No trigger id, and op is not cancel all actions, unexpected"));
                                 }
                             }
 						}
@@ -2583,7 +2590,7 @@ namespace Triggernometry
                             {
                                 string window = ctx.EvaluateStringExpression(ActionContextLogger, ctx, KeyPressWindow);
                                 int keycode = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, KeyPressCode);
-                                Plugin.WindowsUtils.SendKeycode(window, (ushort)keycode);
+                                RealPlugin.WindowsUtils.SendKeycode(window, (ushort)keycode);
                             }
                         }
 						break;
@@ -2609,7 +2616,7 @@ namespace Triggernometry
                                 foreach (string sass in assy.Split(",".ToArray()))
                                 {
                                     string saf = sass.Trim();
-                                    AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/addingassembly", "Adding assembly {0}", saf));
+                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/addingassembly", "Adding assembly {0}", saf));
                                     cp.ReferencedAssemblies.Add(saf);
                                 }
                                 List<string> temp = new List<string>();
@@ -2647,7 +2654,7 @@ namespace Triggernometry
                                         int num = 0;                                        
                                         foreach (CompilerError ce in cr.Errors)
                                         {
-                                            AddToLog(ctx, Plugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/scripterror", "Script error: {0} @ line {1}", ce.ErrorText, ce.Line));
+                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/scripterror", "Script error: {0} @ line {1}", ce.ErrorText, ce.Line));
                                             erm += Environment.NewLine + Environment.NewLine + I18n.Translate("internal/Action/shortscripterror", "{0} @ line {1}", ce.ErrorText, ce.Line);
                                             num++;
                                             if (num >= 5)
@@ -2662,7 +2669,7 @@ namespace Triggernometry
                                         int num = 0;
                                         foreach (CompilerError ce in cr.Errors)
                                         {
-                                            AddToLog(ctx, Plugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/scripterror", "Script error: {0} @ line {1}", ce.ErrorText, ce.Line));
+                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/scripterror", "Script error: {0} @ line {1}", ce.ErrorText, ce.Line));
                                             num++;
                                             if (num >= 5)
                                             {
@@ -2703,7 +2710,7 @@ namespace Triggernometry
                                             ctx.plug.listvariables.Remove(varname);
                                         }
                                     }
-                                    AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listunset", "List variable ({0}) unset", varname));
+                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listunset", "List variable ({0}) unset", varname));
                                     break;
                                 case ListVariableOpEnum.Push:
                                     {
@@ -2713,7 +2720,7 @@ namespace Triggernometry
                                             VariableList vl = GetListVariable(ctx.plug, varname, true);
                                             vl.Push(value, changer);
                                         }
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listpush", "Value ({0}) pushed to the end of list variable ({1})", value, varname));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listpush", "Value ({0}) pushed to the end of list variable ({1})", value, varname));
                                     }
                                     break;
                                 case ListVariableOpEnum.Insert:
@@ -2725,7 +2732,7 @@ namespace Triggernometry
                                             VariableList vl = GetListVariable(ctx.plug, varname, true);
                                             vl.Insert(index, value, changer);
                                         }
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listindexinsert", "Value ({0}) inserted to index ({1}) of list variable ({2})", value, index, varname));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listindexinsert", "Value ({0}) inserted to index ({1}) of list variable ({2})", value, index, varname));
                                     }
                                     break;
                                 case ListVariableOpEnum.Set:
@@ -2737,7 +2744,7 @@ namespace Triggernometry
                                             VariableList vl = GetListVariable(ctx.plug, varname, true);
                                             vl.Set(index, value, changer);
                                         }
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listindexset", "Value ({0}) set to index ({1}) of list variable ({2})", value, index, varname));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listindexset", "Value ({0}) set to index ({1}) of list variable ({2})", value, index, varname));
                                     }
                                     break;
                                 case ListVariableOpEnum.Remove:
@@ -2748,7 +2755,7 @@ namespace Triggernometry
                                             VariableList vl = GetListVariable(ctx.plug, varname, false);
                                             vl.Remove(index, changer);
                                         }
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listindexunset", "Value removed from index ({0}) of list variable ({1})", index, varname));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listindexunset", "Value removed from index ({0}) of list variable ({1})", index, varname));
                                     }
                                     break;
                                 case ListVariableOpEnum.PopLast:
@@ -2771,7 +2778,7 @@ namespace Triggernometry
                                             x.LastChanger = changer;
                                             x.LastChanged = DateTime.Now;
                                         }
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listpopend", "Value ({0}) popped from the end of list variable ({1}) into scalar variable ({2})", newval, varname, newname));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listpopend", "Value ({0}) popped from the end of list variable ({1}) into scalar variable ({2})", newval, varname, newname));
                                     }
                                     break;
                                 case ListVariableOpEnum.PopFirst:
@@ -2794,7 +2801,7 @@ namespace Triggernometry
                                             x.LastChanger = changer;
                                             x.LastChanged = DateTime.Now;
                                         }
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listpopbegin", "Value ({0}) popped from the beginning of list variable ({1}) into scalar variable ({2})", newval, varname, newname));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listpopbegin", "Value ({0}) popped from the beginning of list variable ({1}) into scalar variable ({2})", newval, varname, newname));
                                     }
                                     break;
                                 case ListVariableOpEnum.SortAlphaAsc:
@@ -2804,7 +2811,7 @@ namespace Triggernometry
                                             VariableList vl = GetListVariable(ctx.plug, varname, false);
                                             vl.SortAlphaAsc(changer);
                                         }
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortasc", "List variable ({0}) sorted in ascending order", varname));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortasc", "List variable ({0}) sorted in ascending order", varname));
                                     }
                                     break;
                                 case ListVariableOpEnum.SortAlphaDesc:
@@ -2814,7 +2821,7 @@ namespace Triggernometry
                                             VariableList vl = GetListVariable(ctx.plug, varname, false);
                                             vl.SortAlphaDesc(changer);
                                         }
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortdesc", "List variable ({0}) sorted in descending order", varname));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortdesc", "List variable ({0}) sorted in descending order", varname));
                                     }
                                     break;
                                 case ListVariableOpEnum.SortFfxivPartyAsc:
@@ -2824,7 +2831,7 @@ namespace Triggernometry
                                             VariableList vl = GetListVariable(ctx.plug, varname, false);
                                             vl.SortFfxivPartyAsc(ctx.plug.cfg, changer);
                                         }
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortffxivasc", "List variable ({0}) sorted in FFXIV party ascending order", varname));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortffxivasc", "List variable ({0}) sorted in FFXIV party ascending order", varname));
                                     }
                                     break;
                                 case ListVariableOpEnum.SortFfxivPartyDesc:
@@ -2834,7 +2841,7 @@ namespace Triggernometry
                                             VariableList vl = GetListVariable(ctx.plug, varname, false);
                                             vl.SortFfxivPartyDesc(ctx.plug.cfg, changer);
                                         }
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortffxivdesc", "List variable ({0}) sorted in FFXIV party descending order", varname));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortffxivdesc", "List variable ({0}) sorted in FFXIV party descending order", varname));
                                     }
                                     break;
                                 case ListVariableOpEnum.Copy:
@@ -2850,7 +2857,7 @@ namespace Triggernometry
                                             }
                                             ctx.plug.listvariables[newname] = newvl;
                                         }
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listcopy", "List variable ({0}) copied to list variable ({1})", varname, newname));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listcopy", "List variable ({0}) copied to list variable ({1})", varname, newname));
                                     }
                                     break;
                                 case ListVariableOpEnum.InsertList:
@@ -2868,7 +2875,7 @@ namespace Triggernometry
                                                 rindex++;
                                             }                                            
                                         }
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listinsertlist", "List variable ({0}) inserted to list variable ({1}) at index ({2})", varname, newname, index));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listinsertlist", "List variable ({0}) inserted to list variable ({1}) at index ({2})", varname, newname, index));
                                     }
                                     break;
                                 case ListVariableOpEnum.Join:
@@ -2892,7 +2899,7 @@ namespace Triggernometry
                                             x.LastChanger = changer;
                                             x.LastChanged = DateTime.Now;
                                         }
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listscalarjoin", "List variable ({0}) joined to scalar variable ({1}) with separator ({2})", varname, newname, separator));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listscalarjoin", "List variable ({0}) joined to scalar variable ({1}) with separator ({2})", varname, newname, separator));
                                     }
                                     break;
                                 case ListVariableOpEnum.Split:
@@ -2917,7 +2924,7 @@ namespace Triggernometry
                                             }
                                             ctx.plug.listvariables[newname] = newvl;
                                         }
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarlistsplit", "Scalar variable ({0}) split into list variable ({1}) with separator ({2})", varname, newname, separator));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarlistsplit", "Scalar variable ({0}) split into list variable ({1}) with separator ({2})", varname, newname, separator));
                                     }
                                     break;
                                 case ListVariableOpEnum.UnsetAll:
@@ -2925,7 +2932,7 @@ namespace Triggernometry
                                     {
                                         ctx.plug.listvariables.Clear();
                                     }
-                                    AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/alllistunset", "All list variables unset"));
+                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/alllistunset", "All list variables unset"));
                                     break;
                             }
                         }
@@ -2994,12 +3001,12 @@ namespace Triggernometry
                                     }
                                     catch (Exception ex)
                                     {
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/obscontrolexception", "Can't execute OBS control action due to exception: " + ex.Message));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/obscontrolexception", "Can't execute OBS control action due to exception: " + ex.Message));
                                     }
                                 }
                                 else
                                 {
-                                    AddToLog(ctx, Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/obscontrolerror", "Can't execute OBS control action due to error"));
+                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/obscontrolerror", "Can't execute OBS control action due to error"));
                                 }
                             }
                         }
@@ -3016,7 +3023,7 @@ namespace Triggernometry
                                         {
                                             ctx.plug.simplevariables.Clear();
                                         }
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/allscalarunset", "All scalar variables unset"));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/allscalarunset", "All scalar variables unset"));
                                         break;
                                     }
                                 case VariableOpEnum.Unset:
@@ -3028,7 +3035,7 @@ namespace Triggernometry
                                                 ctx.plug.simplevariables.Remove(varname);
                                             }
                                         }
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarunset", "Scalar variable ({0}) unset", varname));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarunset", "Scalar variable ({0}) unset", varname));
                                         break;
                                     }
                                 case VariableOpEnum.SetString:
@@ -3060,7 +3067,7 @@ namespace Triggernometry
                                             }                                            
                                             x.LastChanged = DateTime.Now;
                                         }
-                                        AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarset", "Scalar variable ({0}) value set to ({1})", varname, newval));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarset", "Scalar variable ({0}) value set to ({1})", varname, newval));
                                         break;
                                     }
                             }
@@ -3101,9 +3108,9 @@ namespace Triggernometry
                                             }
                                             else
                                             {
-                                                AddToLog(ctx, Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodefolderwithid", "Didn't find a tree node for folder ({0}) with id ({1})", f.Name, f.Id));
+                                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodefolderwithid", "Didn't find a tree node for folder ({0}) with id ({1})", f.Name, f.Id));
                                             }
-                                            AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/disabledfolderwithid", "Disabled folder ({0}) with id ({1})", f.Name, f.Id));
+                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/disabledfolderwithid", "Disabled folder ({0}) with id ({1})", f.Name, f.Id));
                                         }
                                         break;
                                     case FolderOpEnum.EnableFolder:
@@ -3124,16 +3131,16 @@ namespace Triggernometry
                                             }
                                             else
                                             {
-                                                AddToLog(ctx, Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodefolderwithid", "Didn't find a tree node for folder ({0}) with id ({1})", f.Name, f.Id));
+                                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodefolderwithid", "Didn't find a tree node for folder ({0}) with id ({1})", f.Name, f.Id));
                                             }
-                                            AddToLog(ctx, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/enabledfolderwithid", "Enabled folder ({0}) with id ({1})", f.Name, f.Id));
+                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/enabledfolderwithid", "Enabled folder ({0}) with id ({1})", f.Name, f.Id));
                                         }
                                         break;
                                 }
                             }
                             else
                             {
-                                AddToLog(ctx, Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/nofolderwithid", "Didn't find a folder with id ({0})", FolderId));
+                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/nofolderwithid", "Didn't find a folder with id ({0})", FolderId));
                             }
                         }
                         break;
@@ -3166,7 +3173,7 @@ namespace Triggernometry
                                 if (msg.Length > 1970)
                                 {
                                     msg = msg.Substring(0, 1970);
-                                    AddToLog(ctx, Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/warndiscordtrunc", "Discord message too long, capping to {0}", msg.Length));
+                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/warndiscordtrunc", "Discord message too long, capping to {0}", msg.Length));
                                 }
                                 var wh = new JavaScriptSerializer().Serialize(new { content = msg, tts = true });
                                 PostJson(ctx, url, wh, true);
@@ -3176,7 +3183,7 @@ namespace Triggernometry
                                 if (msg.Length > 1980)
                                 {
                                     msg = msg.Substring(0, 1980);
-                                    AddToLog(ctx, Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/warndiscordtrunc", "Discord message too long, capping to {0}", msg.Length));
+                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/warndiscordtrunc", "Discord message too long, capping to {0}", msg.Length));
                                 }
                                 var wh = new JavaScriptSerializer().Serialize(new { content = msg });
                                 PostJson(ctx, url, wh, true);
@@ -3185,7 +3192,7 @@ namespace Triggernometry
                         break;
                     case ActionTypeEnum.EndEncounter:
                         {
-                            ctx.plug.EndEncounter();
+                            ctx.plug.EndCombatHook();
                         }
                         break;
                     case ActionTypeEnum.LogMessage:
@@ -3196,7 +3203,7 @@ namespace Triggernometry
                             }
                             else
                             {
-                                AddToLog(ctx, Plugin.DebugLevelEnum.Error, ctx.EvaluateStringExpression(ActionContextLogger, ctx, LogMessageText));
+                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, ctx.EvaluateStringExpression(ActionContextLogger, ctx, LogMessageText));
                             }
                         }
                         break;
@@ -3206,14 +3213,14 @@ namespace Triggernometry
                             int code = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, WmsgCode);
                             int wparam = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, WmsgWparam);
                             int lparam = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, WmsgLparam);
-                            Plugin.WindowsUtils.SendMessageToWindow(window, (ushort)code, wparam, lparam);
+                            RealPlugin.WindowsUtils.SendMessageToWindow(window, (ushort)code, wparam, lparam);
                         }
                         break;
                 }
             }
 			catch (Exception ex)
 			{
-                AddToLog(ctx, Plugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/exception", "Exception: {0}", ex.Message));
+                AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/exception", "Exception: {0}", ex.Message));
             }
 		}
 
@@ -3405,7 +3412,7 @@ namespace Triggernometry
                 var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
                 if (httpResponse.StatusCode != HttpStatusCode.NoContent && expectNoContent == true)
                 {
-                    AddToLog(ctx, Plugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/jsonpostunexpectedresponse", "Unexpected response code: {0}", httpResponse.StatusCode));
+                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/jsonpostunexpectedresponse", "Unexpected response code: {0}", httpResponse.StatusCode));
                 }
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
@@ -3414,7 +3421,7 @@ namespace Triggernometry
             }
             catch (Exception ex)
             {
-                AddToLog(ctx, Plugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/jsonpostexception", "Couldn't send message due to exception: {0}", ex.Message));
+                AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/jsonpostexception", "Couldn't send message due to exception: {0}", ex.Message));
                 return "";
             }
         }

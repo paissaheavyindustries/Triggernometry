@@ -11,12 +11,12 @@ namespace Triggernometry
     {
 
         public DateTime Timestamp { get; set; }
-        public Plugin.DebugLevelEnum Level { get; set; }
+        public RealPlugin.DebugLevelEnum Level { get; set; }
         public string Message { get; set; }
 
         public override string ToString()
         {
-            return Plugin.FormatDateTime(Timestamp) + " - " + I18n.Translate("internal/Plugin/loglevel" + Level.ToString(), "{0}", Level.ToString()) + " - " + Message;
+            return RealPlugin.FormatDateTime(Timestamp) + " - " + I18n.Translate("internal/Plugin/loglevel" + Level.ToString(), "{0}", Level.ToString()) + " - " + Message;
         }
 
     }

@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Threading;
 using System.Linq;
 using System.Globalization;
-using Advanced_Combat_Tracker;
 
 namespace Triggernometry.PluginBridges
 {
@@ -14,11 +13,10 @@ namespace Triggernometry.PluginBridges
 
         private static string ActPluginName = "FFXIV_ACT_Plugin.dll";
         private static string ActPluginType = "FFXIV_ACT_Plugin";
-        private static ActPluginData ActPluginPrevious = null;
 
         private static VariableClump NullCombatant = new VariableClump();
 
-        internal delegate void LoggingDelegate(Plugin.DebugLevelEnum level, string text);
+        internal delegate void LoggingDelegate(RealPlugin.DebugLevelEnum level, string text);
         internal static event LoggingDelegate OnLogEvent;
 
         public static Int64 LastCheck = 0;
@@ -64,6 +62,7 @@ namespace Triggernometry.PluginBridges
             NullCombatant.SetValue("z", 0);
             NullCombatant.SetValue("id", "");
             NullCombatant.SetValue("inparty", 0);
+            NullCombatant.SetValue("inalliance", 0);
             NullCombatant.SetValue("order", 0);
             NullCombatant.SetValue("casttargetid", 0);
             NullCombatant.SetValue("targetid", 0);
@@ -74,7 +73,7 @@ namespace Triggernometry.PluginBridges
             NullCombatant.SetValue("currentworldid", 0);
         }
 
-        public static void SubscribeToNetworkEvents(Plugin p)
+        public static void SubscribeToNetworkEvents(RealPlugin p)
         {
             try
             {
@@ -102,15 +101,15 @@ namespace Triggernometry.PluginBridges
                 Type deltype = ei.EventHandlerType;
                 Delegate handler = Delegate.CreateDelegate(deltype, p, mix);
                 ei.AddEventHandler(subs, handler);
-                LogMessage(Plugin.DebugLevelEnum.Info, I18n.Translate("internal/ffxiv/networksubok", "Subscribed to FFXIV network events"));
+                LogMessage(RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/ffxiv/networksubok", "Subscribed to FFXIV network events"));
             }
             catch (Exception ex)
             {
-                LogMessage(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/networksubexception", "Could not subscribe to FFXIV network events due to an exception: {0}", ex.Message));
+                LogMessage(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/networksubexception", "Could not subscribe to FFXIV network events due to an exception: {0}", ex.Message));
             }
         }
 
-        public static void UnsubscribeFromNetworkEvents(Plugin p)
+        public static void UnsubscribeFromNetworkEvents(RealPlugin p)
         {
             try
             {
@@ -138,15 +137,15 @@ namespace Triggernometry.PluginBridges
                 Type deltype = ei.EventHandlerType;
                 Delegate handler = Delegate.CreateDelegate(deltype, p, mix);
                 ei.RemoveEventHandler(subs, handler);
-                LogMessage(Plugin.DebugLevelEnum.Info, I18n.Translate("internal/ffxiv/networkunsubok", "Unsubscribed from FFXIV network events"));
+                LogMessage(RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/ffxiv/networkunsubok", "Unsubscribed from FFXIV network events"));
             }
             catch (Exception ex)
             {
-                LogMessage(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/networkunsubexception", "Could not unsubscribe from FFXIV network events due to an exception: {0}", ex.Message));
+                LogMessage(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/networkunsubexception", "Could not unsubscribe from FFXIV network events due to an exception: {0}", ex.Message));
             }
         }
 
-        private static void LogMessage(Plugin.DebugLevelEnum level, string message)
+        private static void LogMessage(RealPlugin.DebugLevelEnum level, string message)
         {
             if (OnLogEvent != null)
             {
@@ -254,7 +253,7 @@ namespace Triggernometry.PluginBridges
             return "";
         }
 
-        public static void PopulateClumpFromCombatant(VariableClump vc, dynamic cmx, int inParty, int orderNum)
+        public static void PopulateClumpFromCombatant(VariableClump vc, dynamic cmx, int inParty, int inAlliance, int orderNum)
         {
             vc.SetValue("name", cmx.Name);
             vc.SetValue("currenthp", cmx.CurrentHP);
@@ -274,6 +273,7 @@ namespace Triggernometry.PluginBridges
             vc.SetValue("z", cmx.PosZ);
             vc.SetValue("id", ConvertToHex(cmx.ID));
             vc.SetValue("inparty", inParty);
+            vc.SetValue("inalliance", inAlliance);
             vc.SetValue("order", orderNum);
             if (cmx.IsCasting == true)
             {
@@ -299,51 +299,28 @@ namespace Triggernometry.PluginBridges
         }
 
         private static object GetInstance()
-        {
-            foreach (ActPluginData p in ActGlobals.oFormActMain.ActPlugins)
+        {            
+            RealPlugin.PluginWrapper wrap = RealPlugin.InstanceHook(ActPluginName, ActPluginType);
+            switch (wrap.state)
             {
-                string tn = p.pluginObj != null ? p.pluginObj.GetType().Name : "(null)";
-                if (
-                    (
-                        (String.Compare(p.pluginFile.Name, ActPluginName, true) == 0)
-                        ||
-                        (String.Compare(tn, ActPluginType, true) == 0)
-                    )
-                    &&
-                    (String.Compare(p.lblPluginStatus.Text, "FFXIV Plugin Started.", true) == 0)
-                )
-                {
-                    if (ActPluginPrevious == p)
+                case 0:
                     {
-                        return p.pluginObj;
-                    }
-                    else
-                    {
-                        ActPluginPrevious = p;
-                        System.Diagnostics.FileVersionInfo vi = System.Diagnostics.FileVersionInfo.GetVersionInfo(p.pluginFile.FullName);
-                        int[] expectedActVer = new int[4] { 2, 0, 1, 5 };
-                        string expectedActVers = "2.0.1.5";
-                        int[] currentActVer = new int[4] { vi.FileMajorPart, vi.FileMinorPart, vi.FileBuildPart, vi.FilePrivatePart };
-                        for (int i = 0; i < 4; i++)
+                        if (ckw == false)
                         {
-                            if (currentActVer[i] > expectedActVer[i])
-                            {
-                                break;
-                            }
-                            if (currentActVer[i] < expectedActVer[i])
-                            {
-                                LogMessage(Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/ffxiv/oldactplugin", "FFXIV ACT plugin version is lower ({0}) than expected ({1}), some functions may not work as expected", vi.FileVersion, expectedActVers));
-                                break;
-                            }
+                            LogMessage(RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/ffxiv/missingactplugin", "FFXIV ACT plugin with filename ({0}) or type ({1}) could not be located, some functions may not work as expected", ActPluginName, ActPluginType));
+                            ckw = true;
                         }
-                        return p.pluginObj;
+                        return null;
                     }
-                }
-            }
-            if (ckw == false)
-            {
-                LogMessage(Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/ffxiv/missingactplugin", "FFXIV ACT plugin with filename ({0}) or type ({1}) could not be located, some functions may not work as expected", ActPluginName, ActPluginType));
-                ckw = true;
+                case 1:
+                    {
+                        return wrap.pluginObj;
+                    }
+                case 2:
+                    {
+                        LogMessage(RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/ffxiv/oldactplugin", "FFXIV ACT plugin version is lower ({0}) than expected ({1}), some functions may not work as expected", wrap.fileversion, wrap.expectedversion));
+                        return wrap.pluginObj;
+                    }
             }
             return null;
         }
@@ -458,7 +435,7 @@ namespace Triggernometry.PluginBridges
                                 Myself = PartyMembers[ex];
                             }
                             phase = 5;
-                            PopulateClumpFromCombatant(PartyMembers[ex], cmx, 1, ex + 1);
+                            PopulateClumpFromCombatant(PartyMembers[ex], cmx, 1, nump == 2 ? 1 : 0, ex + 1);
                             phase = 6;
                             ex++;
                             if (ex >= PartyMembers.Count)
@@ -499,7 +476,7 @@ namespace Triggernometry.PluginBridges
             }
             catch (Exception ex)
             {
-                LogMessage(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/updateexception", "Exception in FFXIV state update: {0} at stage {1}", ex.Message, phase));
+                LogMessage(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/updateexception", "Exception in FFXIV state update: {0} at stage {1}", ex.Message, phase));
             }
         }
 
@@ -565,24 +542,16 @@ namespace Triggernometry.PluginBridges
                     {                        
                         if (cmx.Name == name)
                         {
-                            int inParty = 0;
+                            int nump = 0;
                             try
                             {
-                                if ((int)cmx.PartyType == 1)
-                                {
-                                    inParty = 1;
-                                }
-                                else
-                                {
-                                    inParty = 0;
-                                }
+                                nump = (int)cmx.PartyType;
                             }
                             catch (Exception)
                             {
-                                inParty = 0;
                             }
                             VariableClump vc = new VariableClump();
-                            PopulateClumpFromCombatant(vc, cmx, inParty, 0);
+                            PopulateClumpFromCombatant(vc, cmx, nump == 1 ? 1 : 0, nump == 2 ? 1 : 0, 0);
                             return vc;
                         }
                     }
@@ -590,7 +559,7 @@ namespace Triggernometry.PluginBridges
             }
             catch (Exception ex)
             {
-                LogMessage(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/namedexception", "Exception in FFXIV named entity retrieve: {0}", ex.Message));
+                LogMessage(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/namedexception", "Exception in FFXIV named entity retrieve: {0}", ex.Message));
             }
             return NullCombatant;
         }
@@ -615,24 +584,16 @@ namespace Triggernometry.PluginBridges
                     {
                         if (String.Compare(ConvertToHex(cmx.ID), id, true) == 0)
                         {
-                            int inParty = 0;
+                            int nump = 0;
                             try
                             {
-                                if ((int)cmx.PartyType == 1)
-                                {
-                                    inParty = 1;
-                                }
-                                else
-                                {
-                                    inParty = 0;
-                                }
+                                nump = (int)cmx.PartyType;
                             }
                             catch (Exception)
                             {
-                                inParty = 0;
                             }
                             VariableClump vc = new VariableClump();
-                            PopulateClumpFromCombatant(vc, cmx, inParty, 0);
+                            PopulateClumpFromCombatant(vc, cmx, nump == 1 ? 1 : 0, nump == 2 ? 1 : 0, 0);
                             found = true;
                             return vc;
                         }
@@ -641,7 +602,7 @@ namespace Triggernometry.PluginBridges
             }
             catch (Exception ex)
             {
-                LogMessage(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/idexception", "Exception in FFXIV ID entity retrieve: {0}", ex.Message));
+                LogMessage(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/idexception", "Exception in FFXIV ID entity retrieve: {0}", ex.Message));
             }
             return NullCombatant;
         }

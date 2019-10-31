@@ -41,12 +41,12 @@
             this.tbcMain = new System.Windows.Forms.TabControl();
             this.tabGeneral = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.txtEventFilterRegex = new Triggernometry.CustomControls.RegexTextBox();
+            this.txtEventFilterRegex = new CustomControls.ExpressionTextBox();
             this.lblEventFilterRegex = new System.Windows.Forms.Label();
             this.chkEventFilter = new System.Windows.Forms.CheckBox();
             this.lblZoneFilterRegex = new System.Windows.Forms.Label();
             this.chkZoneFilter = new System.Windows.Forms.CheckBox();
-            this.txtZoneFilterRegex = new Triggernometry.CustomControls.RegexTextBox();
+            this.txtZoneFilterRegex = new CustomControls.ExpressionTextBox();
             this.btnGetCurZone = new System.Windows.Forms.Button();
             this.tabFFXIV = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -241,6 +241,7 @@
             this.txtEventFilterRegex.Name = "txtEventFilterRegex";
             this.txtEventFilterRegex.Size = new System.Drawing.Size(352, 20);
             this.txtEventFilterRegex.TabIndex = 14;
+            this.txtEventFilterRegex.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
             // 
             // lblEventFilterRegex
             // 
@@ -305,6 +306,7 @@
             this.txtZoneFilterRegex.Name = "txtZoneFilterRegex";
             this.txtZoneFilterRegex.Size = new System.Drawing.Size(352, 20);
             this.txtZoneFilterRegex.TabIndex = 13;
+            this.txtZoneFilterRegex.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
             // 
             // btnGetCurZone
             // 
@@ -473,12 +475,12 @@
         private System.Windows.Forms.TabControl tbcMain;
         private System.Windows.Forms.TabPage tabGeneral;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private CustomControls.RegexTextBox txtEventFilterRegex;
+        private CustomControls.ExpressionTextBox txtEventFilterRegex;
         private System.Windows.Forms.Label lblEventFilterRegex;
         private System.Windows.Forms.CheckBox chkEventFilter;
         private System.Windows.Forms.Label lblZoneFilterRegex;
         private System.Windows.Forms.CheckBox chkZoneFilter;
-        private CustomControls.RegexTextBox txtZoneFilterRegex;
+        private CustomControls.ExpressionTextBox txtZoneFilterRegex;
         private System.Windows.Forms.TabPage tabFFXIV;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.CheckBox chkFfxivClassFilterEnabled;

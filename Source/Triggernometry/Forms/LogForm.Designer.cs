@@ -43,7 +43,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnSearch = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.rexSearch = new Triggernometry.CustomControls.RegexTextBox();
+            this.rexSearch = new CustomControls.ExpressionTextBox();
             this.lblRegularExpression = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.cbxLevelMethod = new System.Windows.Forms.ComboBox();
@@ -241,6 +241,7 @@
             this.rexSearch.Name = "rexSearch";
             this.rexSearch.Size = new System.Drawing.Size(194, 20);
             this.rexSearch.TabIndex = 8;
+            this.rexSearch.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
             // 
             // lblRegularExpression
             // 
@@ -475,7 +476,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private CustomControls.RegexTextBox rexSearch;
+        private CustomControls.ExpressionTextBox rexSearch;
         private System.Windows.Forms.Label lblRegularExpression;
         private System.Windows.Forms.ComboBox cbxLevelMethod;
         private System.Windows.Forms.ToolStripLabel lblStatus;

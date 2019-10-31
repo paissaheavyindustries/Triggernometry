@@ -15,7 +15,7 @@ namespace Triggernometry.Forms
     {
 
         bool cancomplain;
-        internal Plugin plug;
+        internal RealPlugin plug;
         private bool firstchange = true;
 
         public ConfigurationForm()
@@ -96,7 +96,7 @@ namespace Triggernometry.Forms
         {
             a.SfxVolumeAdjustment = trbSoundVolume.Value;
             a.TtsVolumeAdjustment = trbTtsVolume.Value;
-            a.DebugLevel = (Plugin.DebugLevelEnum)cbxLoggingLevel.SelectedIndex;
+            a.DebugLevel = (RealPlugin.DebugLevelEnum)cbxLoggingLevel.SelectedIndex;
             a.UseACTForTTS = chkActTts.Checked;
             a.UseACTForSound = chkActSoundFiles.Checked;
             a.EventSeparator = txtSeparator.Text;

@@ -292,7 +292,7 @@ namespace Scarborough
             _graphics.EndScene();
         }
 
-        internal void LoadFontData(Triggernometry.Plugin plug)
+        internal void LoadFontData(Triggernometry.RealPlugin plug)
         {
             TextFont = _graphics.CreateFont(
                 FontName,

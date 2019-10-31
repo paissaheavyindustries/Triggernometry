@@ -8,13 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using Advanced_Combat_Tracker;
 
 namespace Triggernometry.Forms
 {
 
     public partial class FolderForm : MemoryForm<FolderForm>
     {
+
+        public RealPlugin plug;
 
         public class ClassLink
         {
@@ -197,7 +198,7 @@ namespace Triggernometry.Forms
 
         private void btnGetCurZone_Click(object sender, EventArgs e)
         {
-            txtZoneFilterRegex.Text = Regex.Escape(ActGlobals.oFormActMain.CurrentZone);
+            txtZoneFilterRegex.Text = Regex.Escape(plug.CurrentZoneHook());
         }
 
     }

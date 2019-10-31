@@ -63,7 +63,7 @@ namespace Triggernometry
         public int TtsVolumeAdjustment { get; set; }
 
         [XmlAttribute]
-        public Plugin.DebugLevelEnum DebugLevel { get; set; }
+        public RealPlugin.DebugLevelEnum DebugLevel { get; set; }
 
         public enum FfxivPartyOrderingEnum
         {
@@ -136,11 +136,11 @@ namespace Triggernometry
             {
                 if (value == "true")
                 {
-                    DebugLevel = Plugin.DebugLevelEnum.Verbose;
+                    DebugLevel = RealPlugin.DebugLevelEnum.Verbose;
                 }
                 else
                 {
-                    DebugLevel = Plugin.DebugLevelEnum.Info;
+                    DebugLevel = RealPlugin.DebugLevelEnum.Info;
                 }
             }
         }
@@ -198,7 +198,7 @@ namespace Triggernometry
             RepositoryRoot.Name = I18n.Translate("internal/Configuration/remote", "Remote triggers");
             SfxVolumeAdjustment = 100;
             TtsVolumeAdjustment = 100;
-            DebugLevel = Plugin.DebugLevelEnum.Info;
+            DebugLevel = RealPlugin.DebugLevelEnum.Info;
             UseACTForTTS = false;
             UseACTForSound = false;
             UseOsClipboard = true;

@@ -119,7 +119,7 @@ namespace Triggernometry
         {
             lock (UpdateLog)
             {
-                UpdateLog.Add(Plugin.FormatDateTime(DateTime.Now) + " - " + s);
+                UpdateLog.Add(RealPlugin.FormatDateTime(DateTime.Now) + " - " + s);
             }
         }
 

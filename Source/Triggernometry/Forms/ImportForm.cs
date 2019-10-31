@@ -13,7 +13,6 @@ using System.Windows.Forms;
 using System.IO;
 using System.Speech.Synthesis;
 using System.Net;
-using Advanced_Combat_Tracker;
 
 namespace Triggernometry.Forms
 {
@@ -44,7 +43,7 @@ namespace Triggernometry.Forms
 
         internal WMPLib.WindowsMediaPlayer wmp;
         internal SpeechSynthesizer tts;
-        internal Plugin plug;
+        internal RealPlugin plug;
         private int importMethod;
         private string importData;
         internal ImageList imgs;
@@ -63,16 +62,17 @@ namespace Triggernometry.Forms
             }
         }
 
-        public ImportForm()
+        public ImportForm(RealPlugin p)
         {
             InitializeComponent();
+            plug = p;
             if (DesignMode == false)
             {
                 tabControl1.ItemSize = new Size(0, 1);
                 tabControl1.SizeMode = TabSizeMode.Fixed;
             }
             radImportFromText.Select();
-            radExistingActTriggers.Enabled = (ActGlobals.oFormActMain.CustomTriggers.Count > 0);
+            radExistingActTriggers.Enabled = plug.CustomTriggerCheckHook();
             treeView1.TreeViewNodeSorter = new NodeSorter();
             treeView1.ItemDrag += TreeView1_ItemDrag;
             treeView1.DragDrop += TreeView1_DragDrop;
@@ -535,19 +535,17 @@ namespace Triggernometry.Forms
             root.ImageIndex = 0;
             root.SelectedImageIndex = 0;
             treeView1.Nodes.Add(root);
-            var trigs = from ix in ActGlobals.oFormActMain.CustomTriggers
-                        group ix by new { ix.Value.Category, ix.Value.RestrictToCategoryZone } into ixs
-                        select new { Key = ixs.Key, Items = ixs.ToList() };
+            var trigs = plug.CustomTriggerHook();
             foreach (var trig in trigs)
             {
                 Folder f = new Folder();
-                f.Name = trig.Key.Category;
-                if (trig.Key.RestrictToCategoryZone == true)
+                f.Name = trig.Category;
+                if (trig.RestrictToCategoryZone == true)
                 {
                     f.ZoneFilterEnabled = true;
                     f.ZoneFilterRegularExpression = f.Name;
                 }
-                f.Name += (trig.Key.RestrictToCategoryZone == true ? " (" + I18n.Translate("internal/ImportForm/restrictedtozone", "restricted to zone") +")" : "");
+                f.Name += (trig.RestrictToCategoryZone == true ? " (" + I18n.Translate("internal/ImportForm/restrictedtozone", "restricted to zone") +")" : "");
                 TreeNode fn = new TreeNode();
                 fn.Text = f.Name;
                 f.Enabled = true;
@@ -558,11 +556,10 @@ namespace Triggernometry.Forms
                 root.Nodes.Add(fn);
                 rootf.Folders.Add(f);
                 f.Parent = rootf;                
-                foreach (KeyValuePair<string, CustomTrigger> kp in trig.Items)
+                foreach (RealPlugin.CustomTriggerProxy ct in trig.Items)
                 {
                     TreeNode tn = new TreeNode();
-                    Trigger t = new Trigger();
-                    CustomTrigger ct = kp.Value;                    
+                    Trigger t = new Trigger();                    
                     t = ImportActTrigger(ct.Active, ct.ShortRegexString, ct.SoundData, ct.SoundType, ct.TimerName, ct.Tabbed, ct.Timer);
                     includesTabs = (includesTabs == true || ct.Tabbed == true);
                     includesTimers = (includesTimers == true || ct.Timer == true);
@@ -777,6 +774,7 @@ namespace Triggernometry.Forms
             {
                 using (Forms.FolderForm ff = new Forms.FolderForm())
                 {
+                    ff.plug = plug;
                     Folder f = (Folder)treeView1.SelectedNode.Tag;
                     ff.SettingsFromFolder(f);
                     ff.Text = I18n.Translate("internal/ImportForm/editimportedfolder", "Edit imported folder '{0}'", f.Name);

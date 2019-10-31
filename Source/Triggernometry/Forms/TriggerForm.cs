@@ -23,8 +23,8 @@ namespace Triggernometry.Forms
         internal WMPLib.WindowsMediaPlayer wmp;
         internal SpeechSynthesizer tts;
         internal List<Action> Actions;
-        private Plugin _plug;
-        internal Plugin plug
+        private RealPlugin _plug;
+        internal RealPlugin plug
         {
             get
             {
@@ -284,7 +284,7 @@ namespace Triggernometry.Forms
                     break;
             }
             t.RefirePeriodExpression = expRefirePeriod.Expression;
-            t.DebugLevel = (Plugin.DebugLevelEnum)cbxLoggingLevel.SelectedIndex;
+            t.DebugLevel = (RealPlugin.DebugLevelEnum)cbxLoggingLevel.SelectedIndex;
             t.Actions.Clear();
             var ix = from tx in Actions
                      orderby tx.OrderNumber ascending
@@ -566,7 +566,7 @@ namespace Triggernometry.Forms
             }
             catch (Exception ex)
             {
-                plug.FilteredAddToLog(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/TriggerForm/actioncopyfail", "Action copy failed due to exception: {0}", ex.Message));
+                plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/TriggerForm/actioncopyfail", "Action copy failed due to exception: {0}", ex.Message));
             }
         }
 
@@ -616,7 +616,7 @@ namespace Triggernometry.Forms
             }
             catch (Exception ex)
             {
-                plug.FilteredAddToLog(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/TriggerForm/actionpastefail", "Action paste failed due to exception: {0}", ex.Message));
+                plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/TriggerForm/actionpastefail", "Action paste failed due to exception: {0}", ex.Message));
             }
         }
 

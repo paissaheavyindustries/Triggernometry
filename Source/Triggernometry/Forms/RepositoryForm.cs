@@ -17,7 +17,7 @@ namespace Triggernometry.Forms
     {
 
         private bool cancomplain = false;
-        internal Plugin plug { get; set; }
+        internal RealPlugin plug { get; set; }
 
         public RepositoryForm()
         {

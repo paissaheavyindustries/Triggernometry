@@ -38,7 +38,7 @@ namespace Scarborough
         internal string UpdateOExpression { get; set; }
         internal string TTLExpression { get; set; }
         internal Triggernometry.Context ctx { get; set; }
-        internal Triggernometry.Plugin plug { get; set; }
+        internal Triggernometry.RealPlugin plug { get; set; }
 
         internal bool Changed { get; set; }
 
@@ -218,11 +218,11 @@ namespace Scarborough
                 {
                     if (ctx.trig != null)
                     {
-                        ctx.trig.AddToLog(plug, Triggernometry.Plugin.DebugLevelEnum.Verbose, Triggernometry.I18n.Translate("internal/AuraContainer/deactaurattl", "Deactivating aura due to TTL expression"));
+                        ctx.trig.AddToLog(plug, Triggernometry.RealPlugin.DebugLevelEnum.Verbose, Triggernometry.I18n.Translate("internal/AuraContainer/deactaurattl", "Deactivating aura due to TTL expression"));
                     }
                     else
                     {
-                        plug.FilteredAddToLog(Triggernometry.Plugin.DebugLevelEnum.Verbose, Triggernometry.I18n.Translate("internal/AuraContainer/deactaurattl", "Deactivating aura due to TTL expression"));
+                        plug.FilteredAddToLog(Triggernometry.RealPlugin.DebugLevelEnum.Verbose, Triggernometry.I18n.Translate("internal/AuraContainer/deactaurattl", "Deactivating aura due to TTL expression"));
                     }
                     return false;
                 }
@@ -240,11 +240,11 @@ namespace Scarborough
             {
                 if (ctx.trig != null)
                 {
-                    ctx.trig.AddToLog(plug, Triggernometry.Plugin.DebugLevelEnum.Error, Triggernometry.I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message)));
+                    ctx.trig.AddToLog(plug, Triggernometry.RealPlugin.DebugLevelEnum.Error, Triggernometry.I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message)));
                 }
                 else
                 {
-                    plug.FilteredAddToLog(Triggernometry.Plugin.DebugLevelEnum.Error, Triggernometry.I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message)));
+                    plug.FilteredAddToLog(Triggernometry.RealPlugin.DebugLevelEnum.Error, Triggernometry.I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message)));
                 }
                 return false;
             }

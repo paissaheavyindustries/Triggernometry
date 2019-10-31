@@ -15,7 +15,7 @@ namespace Triggernometry.Forms
     public partial class BenchmarkForm : MemoryForm<BenchmarkForm>
     {
 
-        public Plugin plug { get; set; }
+        public RealPlugin plug { get; set; }
         public List<BenchmarkItem> temp;
         public BenchmarkProgressForm bpf;
 
@@ -136,7 +136,7 @@ namespace Triggernometry.Forms
             }
             catch (Exception)
             {
-                plug.FilteredAddToLog(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/BenchmarkForm/resultexception", "An exception occurred during compiling benchmark results"));
+                plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/BenchmarkForm/resultexception", "An exception occurred during compiling benchmark results"));
             }
         }
 
@@ -241,7 +241,7 @@ namespace Triggernometry.Forms
             catch (Exception)
             {
                 plug.DisableLogging = false;
-                plug.FilteredAddToLog(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/BenchmarkForm/exception", "An exception occurred during benchmark"));
+                plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/BenchmarkForm/exception", "An exception occurred during benchmark"));
             }
             plug.DisableLogging = false;
         }

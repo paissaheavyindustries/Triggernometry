@@ -1,9 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 14 for Windows Desktop
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Triggernometry", "Triggernometry\Triggernometry.csproj", "{CA86FD05-FB30-4923-BB27-638CA9CBAFCD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriggernometryPlugin", "Triggernometry\TriggernometryPlugin.csproj", "{CA86FD05-FB30-4923-BB27-638CA9CBAFCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriggernometryProxy", "TriggernometryProxy\TriggernometryProxy.csproj", "{AA747357-8F4A-4633-A631-B421CA05BC26}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CA86FD05-FB30-4923-BB27-638CA9CBAFCD} = {CA86FD05-FB30-4923-BB27-638CA9CBAFCD}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +20,15 @@ Global
 		{CA86FD05-FB30-4923-BB27-638CA9CBAFCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA86FD05-FB30-4923-BB27-638CA9CBAFCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA86FD05-FB30-4923-BB27-638CA9CBAFCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA747357-8F4A-4633-A631-B421CA05BC26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA747357-8F4A-4633-A631-B421CA05BC26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA747357-8F4A-4633-A631-B421CA05BC26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA747357-8F4A-4633-A631-B421CA05BC26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B02B9E57-88C6-457B-89DD-3A4A6219AE5E}
 	EndGlobalSection
 EndGlobal

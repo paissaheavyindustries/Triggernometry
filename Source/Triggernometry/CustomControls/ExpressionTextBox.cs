@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace Triggernometry.CustomControls
 {
@@ -17,7 +18,8 @@ namespace Triggernometry.CustomControls
         public enum SupportedExpressionTypeEnum
         {
             String,
-            Numeric
+            Numeric,
+            Regex
         }
 
         public bool ReadOnly
@@ -42,6 +44,18 @@ namespace Triggernometry.CustomControls
             set
             {
                 textBox1.Text = value;
+            }
+        }
+
+        public override string Text
+        {
+            get
+            {
+                return Expression;
+            }
+            set
+            {
+                Expression = value;
             }
         }
 
@@ -74,6 +88,9 @@ namespace Triggernometry.CustomControls
                     break;
                 case SupportedExpressionTypeEnum.String:
                     toolTip1.SetToolTip(panel1, I18n.Translate("internal/ExpressionTextBox/string", "This field supports string expressions; references to named regular expression groups will be expanded."));
+                    break;
+                case SupportedExpressionTypeEnum.Regex:
+                    toolTip1.SetToolTip(panel1, I18n.Translate("internal/RegexTextBox", "This field supports regular expressions; the color of the field will change depending on whether the regular expression is valid (green) or not (red)."));
                     break;
             }
             UpdateBackground();
@@ -114,6 +131,23 @@ namespace Triggernometry.CustomControls
                 if (textBox1.BackColor != SystemColors.Window)
                 {
                     textBox1.BackColor = SystemColors.Window;
+                }
+            }
+            else if (ExpressionType == SupportedExpressionTypeEnum.Regex)
+            {
+                if (textBox1.Text.Length == 0)
+                {
+                    textBox1.BackColor = SystemColors.Window;
+                    return;
+                }
+                try
+                {
+                    Regex rex = new Regex(textBox1.Text);
+                    textBox1.BackColor = Color.FromArgb(200, 255, 200);
+                }
+                catch (Exception)
+                {
+                    textBox1.BackColor = Color.FromArgb(255, 200, 200);
                 }
             }
         }

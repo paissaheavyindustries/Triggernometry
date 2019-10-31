@@ -23,7 +23,7 @@ namespace Triggernometry.CustomControls
 
         internal WMPLib.WindowsMediaPlayer wmp;
         internal SpeechSynthesizer tts;
-        internal Plugin plug;
+        internal RealPlugin plug;
         internal Configuration cfg;
         internal int numLoadedTriggers;
         internal int numLoadedFolders;
@@ -263,7 +263,7 @@ namespace Triggernometry.CustomControls
         internal void BuildFullTreeFromConfiguration()
         {
             BuildTreeFromConfiguration(null, null, false);
-            plug.FilteredAddToLog(Plugin.DebugLevelEnum.Info, I18n.Translate("internal/UserInterface/loadedfromconfig", "{0} folder(s) and {1} trigger(s) loaded from configuration", numLoadedFolders, numLoadedTriggers));
+            plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/UserInterface/loadedfromconfig", "{0} folder(s) and {1} trigger(s) loaded from configuration", numLoadedFolders, numLoadedTriggers));
             treeView1.Sort();
             foreach (TreeNode tn in treeView1.Nodes)
             {
@@ -389,6 +389,7 @@ namespace Triggernometry.CustomControls
         {
             using (Forms.FolderForm ff = new Forms.FolderForm())
             {
+                ff.plug = plug;
                 ff.SettingsFromFolder(null);
                 ff.Text = I18n.Translate("internal/UserInterface/addfolder", "Add new folder");
                 ff.btnOk.Text = I18n.Translate("internal/UserInterface/add", "Add");
@@ -581,6 +582,7 @@ namespace Triggernometry.CustomControls
             {
                 using (Forms.FolderForm ff = new Forms.FolderForm())
                 {
+                    ff.plug = plug;
                     Folder f = (Folder)treeView1.SelectedNode.Tag;
                     ff.SettingsFromFolder(f);
                     if (IsPartOfRemote(treeView1.SelectedNode) == true)
@@ -729,7 +731,7 @@ namespace Triggernometry.CustomControls
             }
             catch (Exception ex)
             {
-                plug.FilteredAddToLog(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/UserInterface/copyfail", "Tree copy failed due to exception: {0}", ex.Message));
+                plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/UserInterface/copyfail", "Tree copy failed due to exception: {0}", ex.Message));
             }
         }
 
@@ -834,7 +836,7 @@ namespace Triggernometry.CustomControls
                     {
                         fr.Id = Guid.NewGuid();
                         renamedFolders[trx.Id] = fr.Id;
-                        plug.FilteredAddToLog(Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/UserInterface/folderidreassign", "Reassigning new id ({0}) for folder ({1}) due to already assigned id ({2}) on folder ({3})", fr.Id, fr.Name, trx.Id, trx.Name));
+                        plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/UserInterface/folderidreassign", "Reassigning new id ({0}) for folder ({1}) due to already assigned id ({2}) on folder ({3})", fr.Id, fr.Name, trx.Id, trx.Name));
                     }
 
                 }
@@ -874,7 +876,7 @@ namespace Triggernometry.CustomControls
                     {
                         nt.Id = Guid.NewGuid();
                         renamedTriggers[trx.Id] = nt.Id;
-                        plug.FilteredAddToLog(Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/UserInterface/idreassign", "Reassigning new id ({0}) for trigger ({1}) due to already assigned id ({2}) on trigger ({3})", nt.Id, nt.Name, trx.Id, trx.Name));
+                        plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/UserInterface/idreassign", "Reassigning new id ({0}) for trigger ({1}) due to already assigned id ({2}) on trigger ({3})", nt.Id, nt.Name, trx.Id, trx.Name));
                     }
                 }
             }
@@ -898,7 +900,7 @@ namespace Triggernometry.CustomControls
             }
             if (fdjs > 0 || tdjs > 0)
             {
-                plug.FilteredAddToLog(Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/UserInterface/idreassigncount", "Adjusted {0} trigger and {1} folder references on actions due to collisions", tdjs, fdjs));
+                plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/UserInterface/idreassigncount", "Adjusted {0} trigger and {1} folder references on actions due to collisions", tdjs, fdjs));
             }
         }
 
@@ -920,9 +922,8 @@ namespace Triggernometry.CustomControls
 
         internal void btnImportTrigger_Click(object sender, EventArgs e)
         {
-            using (Forms.ImportForm imf = new Forms.ImportForm())
+            using (Forms.ImportForm imf = new Forms.ImportForm(plug))
             {
-                imf.plug = plug;
                 imf.imgs = imageList1;
                 imf.trv = treeView1;
                 imf.Text = I18n.Translate("internal/UserInterface/importunder", "Import under '{0}'", treeView1.SelectedNode.Text);
@@ -1134,7 +1135,7 @@ namespace Triggernometry.CustomControls
         private void killExecutingActionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             plug.RefreshCancellationToken();
-            plug.FilteredAddToLog(Plugin.DebugLevelEnum.Warning, I18n.Translate("internal/UserInterface/triedfullinterrupt", "Tried to interrupt executing actions"));
+            plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/UserInterface/triedfullinterrupt", "Tried to interrupt executing actions"));
         }
 
         private void viewVariablesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1281,13 +1282,14 @@ namespace Triggernometry.CustomControls
         {
             using (Forms.TestInputForm ti = new Forms.TestInputForm())
             {
+                ti.plug = plug;
                 switch (ti.ShowDialog())
                 {
                     case DialogResult.OK:
                         string[] lines = ti.txtEvent.Lines;
-                        plug.FilteredAddToLog(Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeue", "Queueing {0} user log lines", lines.Count()));
+                        plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeue", "Queueing {0} user log lines", lines.Count()));
                         plug.LogLineQueuerMass(lines, ti.txtZoneName.Text);
-                        plug.FilteredAddToLog(Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeuedone", "Done"));
+                        plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeuedone", "Done"));
                         /*
                         foreach (string line in lines)
                         {
@@ -1358,7 +1360,7 @@ namespace Triggernometry.CustomControls
                 if (data != null && data.Length > 0)
                 {
                     TriggernometryExport exp = TriggernometryExport.Unserialize(data);
-                    using (Forms.ImportForm ifo = new Forms.ImportForm())
+                    using (Forms.ImportForm ifo = new Forms.ImportForm(plug))
                     {
                         ifo.BuildTreeFromExport(exp, null, null, false);
                         ImportResultsFromForm(ifo);
@@ -1367,7 +1369,7 @@ namespace Triggernometry.CustomControls
             }
             catch (Exception ex)
             {
-                plug.FilteredAddToLog(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/UserInterface/pastefail", "Tree paste failed due to exception: {0}", ex.Message));
+                plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/UserInterface/pastefail", "Tree paste failed due to exception: {0}", ex.Message));
             }
         }
 
@@ -1621,7 +1623,7 @@ namespace Triggernometry.CustomControls
                 treeView1.Invoke(new RepoTreeBuilderDelegate(BuildTreeForRepository), exp, r);
                 return;
             }
-            using (Forms.ImportForm ifo = new Forms.ImportForm())
+            using (Forms.ImportForm ifo = new Forms.ImportForm(plug))
             {
                 foreach (TreeNode tn in treeView1.Nodes[1].Nodes)
                 {

@@ -58,7 +58,7 @@
             this.lblRegexp = new System.Windows.Forms.Label();
             this.lblName = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
-            this.txtRegexp = new Triggernometry.CustomControls.RegexTextBox();
+            this.txtRegexp = new CustomControls.ExpressionTextBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -400,6 +400,7 @@
             this.txtRegexp.Name = "txtRegexp";
             this.txtRegexp.Size = new System.Drawing.Size(435, 20);
             this.txtRegexp.TabIndex = 3;
+            this.txtRegexp.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
             // 
             // panel3
             // 
@@ -854,7 +855,7 @@
         private System.Windows.Forms.ToolStripMenuItem ctxMoveDown;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem ctxRemoveAction;
-        private CustomControls.RegexTextBox txtRegexp;
+        private CustomControls.ExpressionTextBox txtRegexp;
         private System.Windows.Forms.TabControl tbcMain;
         private System.Windows.Forms.TabPage tabTriggerActions;
         private System.Windows.Forms.ToolStripMenuItem ctxCopyAction;

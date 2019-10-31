@@ -15,7 +15,7 @@ namespace Triggernometry.Forms
     public partial class LogForm : MemoryForm<LogForm>
     {
 
-        internal Plugin plug;
+        internal RealPlugin plug;
 
         internal List<InternalLog> logData;
         internal List<InternalLog> virtualData;
@@ -26,10 +26,10 @@ namespace Triggernometry.Forms
             InitializeComponent();
             logData = new List<InternalLog>();
             Shown += LogForm_Shown;
-            cbxLevel.Items.Add(I18n.Translate("internal/Plugin/loglevel" + Plugin.DebugLevelEnum.Error.ToString(), "{0}", Plugin.DebugLevelEnum.Error.ToString()));
-            cbxLevel.Items.Add(I18n.Translate("internal/Plugin/loglevel" + Plugin.DebugLevelEnum.Warning.ToString(), "{0}", Plugin.DebugLevelEnum.Warning.ToString()));
-            cbxLevel.Items.Add(I18n.Translate("internal/Plugin/loglevel" + Plugin.DebugLevelEnum.Info.ToString(), "{0}", Plugin.DebugLevelEnum.Info.ToString()));
-            cbxLevel.Items.Add(I18n.Translate("internal/Plugin/loglevel" + Plugin.DebugLevelEnum.Verbose.ToString(), "{0}", Plugin.DebugLevelEnum.Verbose.ToString()));
+            cbxLevel.Items.Add(I18n.Translate("internal/Plugin/loglevel" + RealPlugin.DebugLevelEnum.Error.ToString(), "{0}", RealPlugin.DebugLevelEnum.Error.ToString()));
+            cbxLevel.Items.Add(I18n.Translate("internal/Plugin/loglevel" + RealPlugin.DebugLevelEnum.Warning.ToString(), "{0}", RealPlugin.DebugLevelEnum.Warning.ToString()));
+            cbxLevel.Items.Add(I18n.Translate("internal/Plugin/loglevel" + RealPlugin.DebugLevelEnum.Info.ToString(), "{0}", RealPlugin.DebugLevelEnum.Info.ToString()));
+            cbxLevel.Items.Add(I18n.Translate("internal/Plugin/loglevel" + RealPlugin.DebugLevelEnum.Verbose.ToString(), "{0}", RealPlugin.DebugLevelEnum.Verbose.ToString()));
             RestoredSavedDimensions();
             if (dgvLog.VirtualMode == true)
             {
@@ -43,19 +43,19 @@ namespace Triggernometry.Forms
             InternalLog il = virtualData[e.RowIndex];
             switch (il.Level)
             {
-                case Plugin.DebugLevelEnum.Verbose:
+                case RealPlugin.DebugLevelEnum.Verbose:
                     e.CellStyle.BackColor = Color.LightGray;
                     e.CellStyle.ForeColor = Color.Black;
                     break;
-                case Plugin.DebugLevelEnum.Info:
+                case RealPlugin.DebugLevelEnum.Info:
                     e.CellStyle.BackColor = Color.White;
                     e.CellStyle.ForeColor = Color.Black;
                     break;
-                case Plugin.DebugLevelEnum.Warning:
+                case RealPlugin.DebugLevelEnum.Warning:
                     e.CellStyle.BackColor = Color.Yellow;
                     e.CellStyle.ForeColor = Color.Black;
                     break;
-                case Plugin.DebugLevelEnum.Error:
+                case RealPlugin.DebugLevelEnum.Error:
                     e.CellStyle.BackColor = Color.Red;
                     e.CellStyle.ForeColor = Color.Yellow;
                     break;
@@ -69,7 +69,7 @@ namespace Triggernometry.Forms
             switch (e.ColumnIndex)
             {
                 case 0:
-                    e.Value = Plugin.FormatDateTime(il.Timestamp);
+                    e.Value = RealPlugin.FormatDateTime(il.Timestamp);
                     break;
                 case 1:
                     e.Value = I18n.Translate("internal/Plugin/loglevel" + il.Level.ToString(), "{0}", il.Level.ToString());
@@ -116,7 +116,7 @@ namespace Triggernometry.Forms
         private List<InternalLog> BuildDataset()
         {
             List<InternalLog> p1 = new List<InternalLog>();
-            Plugin.DebugLevelEnum level = (Plugin.DebugLevelEnum)(cbxLevel.SelectedIndex + 1);
+            RealPlugin.DebugLevelEnum level = (RealPlugin.DebugLevelEnum)(cbxLevel.SelectedIndex + 1);
             Regex rex = null;
             if (rexSearch.Text != null && rexSearch.Text.Trim().Length > 0)
             {
@@ -167,22 +167,22 @@ namespace Triggernometry.Forms
             foreach (InternalLog il in p1)
             {
                 DataGridViewRow row = (DataGridViewRow)dgvLog.RowTemplate.Clone();
-                row.CreateCells(dgvLog, Plugin.FormatDateTime(il.Timestamp), I18n.Translate("internal/Plugin/loglevel" + il.Level.ToString(), "{0}", il.Level.ToString()), il.Message);
+                row.CreateCells(dgvLog, RealPlugin.FormatDateTime(il.Timestamp), I18n.Translate("internal/Plugin/loglevel" + il.Level.ToString(), "{0}", il.Level.ToString()), il.Message);
                 switch (il.Level)
                 {
-                    case Plugin.DebugLevelEnum.Verbose:
+                    case RealPlugin.DebugLevelEnum.Verbose:
                         row.DefaultCellStyle.BackColor = Color.LightGray;
                         row.DefaultCellStyle.ForeColor = Color.Black;
                         break;
-                    case Plugin.DebugLevelEnum.Info:
+                    case RealPlugin.DebugLevelEnum.Info:
                         row.DefaultCellStyle.BackColor = Color.White;
                         row.DefaultCellStyle.ForeColor = Color.Black;
                         break;
-                    case Plugin.DebugLevelEnum.Warning:
+                    case RealPlugin.DebugLevelEnum.Warning:
                         row.DefaultCellStyle.BackColor = Color.Yellow;
                         row.DefaultCellStyle.ForeColor = Color.Black;
                         break;
-                    case Plugin.DebugLevelEnum.Error:
+                    case RealPlugin.DebugLevelEnum.Error:
                         row.DefaultCellStyle.BackColor = Color.Red;
                         row.DefaultCellStyle.ForeColor = Color.Yellow;
                         break;

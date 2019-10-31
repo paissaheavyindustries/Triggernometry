@@ -17,12 +17,12 @@ namespace Triggernometry
     {
 
 		internal bool testmode;
-        internal Plugin plug;
+        internal RealPlugin plug;
         internal Trigger trig;
         internal Action.TriggerForceTypeEnum force;
 
-        internal Plugin.ActionExecutionHook soundhook;
-        internal Plugin.ActionExecutionHook ttshook;
+        internal RealPlugin.ActionExecutionHook soundhook;
+        internal RealPlugin.ActionExecutionHook ttshook;
 
         internal static Regex rex = new Regex(@"\$\{(?<id>[^\}\{\$]*)\}");
         internal static Regex rexnum = new Regex(@"\$(?<id>[0-9]+)");
@@ -73,7 +73,7 @@ namespace Triggernometry
             return new DateTime(eorzeaTicks).TimeOfDay;
         }
 
-        private VariableList GetListVariable(Plugin p, string varname, bool createNew)
+        private VariableList GetListVariable(RealPlugin p, string varname, bool createNew)
         {
             if (p.listvariables.ContainsKey(varname) == true)
             {
@@ -514,16 +514,16 @@ namespace Triggernometry
                         }
                         else if (x == "_incombat")
                         {
-                            val = (plug.mainform.InCombat == true) ? "1" : "0";
+                            val = plug != null && plug.InCombatHook() ? "1" : "0";
                             found = true;
                         }
                         else if (x == "_duration")
                         {
                             try
                             {
-                                if (plug.mainform.InCombat == true)
+                                if (plug != null && plug.InCombatHook() == true)
                                 {
-                                    val = ((int)Math.Floor(plug.mainform.ActiveZone.ActiveEncounter.Duration.TotalSeconds)).ToString();
+                                    val = ((int)Math.Floor(plug.EncounterDurationHook())).ToString();
                                 }
                                 else
                                 {
@@ -603,35 +603,12 @@ namespace Triggernometry
                         }
                         else if (x == "_lastencounter")
                         {
-                            Advanced_Combat_Tracker.FormActMain act = Advanced_Combat_Tracker.ActGlobals.oFormActMain;
-                            FieldInfo fi = act.GetType().GetField("defaultTextFormat", BindingFlags.GetField | BindingFlags.NonPublic | BindingFlags.Instance);
-                            dynamic texf = fi.GetValue(act);
-                            val = "";
-                            if (texf != null)
-                            {
-                                int zones = act.ZoneList.Count;
-                                for (int ii = zones - 1; ii >= 0; ii--)
-                                {
-                                    int encs = act.ZoneList[ii].Items.Count;
-                                    for (int jj = encs - 1; jj >= 1; jj--)
-                                    {
-                                        if (act.ZoneList[ii].Items[jj] != act.ActiveZone.ActiveEncounter)
-                                        {
-                                            val = act.GetTextExport(act.ZoneList[ii].Items[jj], texf);
-                                            ii = 0;
-                                            jj = 0;
-                                        }
-                                    }
-                                }
-                            }
+                            val = plug != null ? plug.LastEncounterHook() : "";
                             found = true;
                         }
                         else if (x == "_activeencounter")
                         {
-                            Advanced_Combat_Tracker.FormActMain act = Advanced_Combat_Tracker.ActGlobals.oFormActMain;
-                            FieldInfo fi = act.GetType().GetField("defaultTextFormat", BindingFlags.GetField | BindingFlags.NonPublic | BindingFlags.Instance);
-                            dynamic texf = fi.GetValue(act);
-                            val = act.GetTextExport(act.ActiveZone.ActiveEncounter, texf);
+                            val = plug != null ? plug.ActiveEncounterHook() : "";
                             found = true;
                         }
                         else if (x.IndexOf("_textaura") == 0)
@@ -822,11 +799,11 @@ namespace Triggernometry
             };
             if (trig != null)
             {
-                if (trig.DebugLevel == Plugin.DebugLevelEnum.Inherit)
+                if (trig.DebugLevel == RealPlugin.DebugLevelEnum.Inherit)
                 {
                     if (plug != null)
                     {
-                        if (plug.cfg.DebugLevel < Plugin.DebugLevelEnum.Verbose)
+                        if (plug.cfg.DebugLevel < RealPlugin.DebugLevelEnum.Verbose)
                         {
                             return newexpr;
                         }
@@ -834,7 +811,7 @@ namespace Triggernometry
                 }
                 else
                 {
-                    if (trig.DebugLevel < Plugin.DebugLevelEnum.Verbose)
+                    if (trig.DebugLevel < RealPlugin.DebugLevelEnum.Verbose)
                     {
                         return newexpr;
                     }
@@ -848,7 +825,7 @@ namespace Triggernometry
                 }
                 else if (plug != null)
                 {
-                    plug.FilteredAddToLog(Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Context/expansion", "Variable expansion from '{0}' to '{1}'", expr, newexpr));
+                    plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Context/expansion", "Variable expansion from '{0}' to '{1}'", expr, newexpr));
                 }
             }
             return newexpr;

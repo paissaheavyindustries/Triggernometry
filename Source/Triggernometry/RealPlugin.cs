@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Management;
 using System.Windows.Forms;
-using Advanced_Combat_Tracker;
 using System.Diagnostics;
 using System.IO;
 using System.Xml;
@@ -35,7 +34,7 @@ using System.Runtime.InteropServices;
 namespace Triggernometry
 {
 
-    public class Plugin : IActPluginV1
+    public class RealPlugin
     {
 
         public enum DebugLevelEnum
@@ -46,6 +45,38 @@ namespace Triggernometry
             Info,
             Verbose,
             Inherit
+        }
+
+        public class CustomTriggerProxy
+        {
+
+            public bool Active { get; set; }
+            public string ShortRegexString { get; set; }
+            public string SoundData { get; set; }
+            public int SoundType { get; set; }
+            public string TimerName { get; set; }
+            public bool Tabbed { get; set; }
+            public bool Timer { get; set; }
+
+        }
+
+        public class CustomTriggerCategoryProxy
+        {
+
+            public string Category { get; set; }
+            public bool RestrictToCategoryZone { get; set; }
+            public List<CustomTriggerProxy> Items = new List<CustomTriggerProxy>();
+
+        }
+
+        public class PluginWrapper
+        {
+
+            public object pluginObj { get; set; }
+            public int state { get; set; }
+            public string fileversion { get; set; }
+            public string expectedversion { get; set; }
+
         }
 
         internal class WindowsUtils
@@ -129,13 +160,21 @@ namespace Triggernometry
         }
 
         private delegate void LogLineProcDelegate(LogEvent le);
-        
+        public delegate bool SimpleBoolDelegate();
+        public delegate void SimpleVoidDelegate();
+        public delegate double SimpleDoubleDelegate();
+        public delegate string SimpleStringDelegate();
+        public delegate void TtsDelegate(string text);
+        public delegate void SoundDelegate(string filename, int volume);
+        public delegate List<CustomTriggerCategoryProxy> CustomTriggerDelegate();
+        public delegate PluginWrapper InstanceDelegate(string ActPluginName, string ActPluginType);
+
         internal Scarborough.Scarborough sc;
         private Queue<LogEvent> EventQueue;
         private ManualResetEvent QueueWakeupEvent;
         internal CustomControls.UserInterface ui;
         internal Configuration cfg;
-        internal string path;
+        public string path { get; set; }
         internal WMPLib.WindowsMediaPlayer wmp;
         internal SpeechSynthesizer tts;
         internal Thread ActionQueueThread;
@@ -147,9 +186,9 @@ namespace Triggernometry
         private TabPage mytp;
         private Int64 curOrdinal;
         private string updateDownloadUrl;
-        private string pluginName, pluginPath;
+        public string pluginName { get; set; }
+        public string pluginPath { get; set; }
         private bool firstevent = true;
-        internal FormActMain mainform;
         internal bool WMPUnavailable;
         internal Queue<InternalLog> log;
         internal DateTime LastDelayWarning;
@@ -167,7 +206,20 @@ namespace Triggernometry
         internal ObsController _obs = null;
         internal CancellationTokenSource cts = null;
         internal object ctslock = new object();
+        public Form mainform { get; set; }
         internal int MinX = int.MaxValue, MinY = int.MaxValue, MaxX = int.MinValue, MaxY = int.MinValue;
+
+        public SimpleBoolDelegate InCombatHook { get; set; }
+        public SimpleBoolDelegate CustomTriggerCheckHook { get; set; }
+        public SimpleVoidDelegate EndCombatHook { get; set; }
+        public SimpleStringDelegate CurrentZoneHook { get; set; }
+        public SimpleStringDelegate ActiveEncounterHook { get; set; }
+        public SimpleStringDelegate LastEncounterHook { get; set; }
+        public SimpleDoubleDelegate EncounterDurationHook { get; set; }
+        public TtsDelegate TtsPlaybackHook { get; set; }
+        public SoundDelegate SoundPlaybackHook { get; set; }
+        public CustomTriggerDelegate CustomTriggerHook { get; set; }
+        public static InstanceDelegate InstanceHook { get; set; }
 
         private bool _HideAllAuras = false;
         internal bool HideAllAuras
@@ -297,6 +349,13 @@ namespace Triggernometry
                     {
                         FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/deactallimageaura", "Deactivating all image auras"));
                         sc.DeactivateAllImages();
+                    }
+                    break;
+                case Action.AuraOpEnum.DeactivateAuraRegex:
+                    {
+                        string ax = a.AuraName;
+                        FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/deactimageaurarex", "Deactivating image auras matching '{0}'", ax));
+                        sc.DeactivateRegex(ax, Scarborough.Scarborough.ItemAction.ItemTypeEnum.Image);
                     }
                     break;
             }
@@ -430,6 +489,22 @@ namespace Triggernometry
                         }
                     }
                     break;
+                case Action.AuraOpEnum.DeactivateAuraRegex:
+                    {
+                        Regex rex = new Regex(a.AuraName);
+                        FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/deactimageaurarex", "Deactivating image auras matching '{0}'", a.AuraName));
+                        List<string> toRem = new List<string>();
+                        lock (ctx.plug.imageauras)
+                        {
+                            toRem.AddRange(from sx in ctx.plug.imageauras where rex.IsMatch(sx.Key) select sx.Key);
+                            foreach (string rem in toRem)
+                            {
+                                Forms.AuraContainerForm acf = ctx.plug.imageauras[rem];
+                                acf.AuraDeactivate();
+                            }
+                        }
+                    }
+                    break;
             }
         }
 
@@ -508,6 +583,13 @@ namespace Triggernometry
                     {
                         FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/deactalltextaura", "Deactivating all text auras"));
                         sc.DeactivateAllText();
+                    }
+                    break;
+                case Action.AuraOpEnum.DeactivateAuraRegex:
+                    {
+                        string ax = a.AuraName;
+                        FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/deacttextaurarex", "Deactivating text auras matching '{0}'", ax));
+                        sc.DeactivateRegex(ax, Scarborough.Scarborough.ItemAction.ItemTypeEnum.Text);
                     }
                     break;
             }
@@ -701,6 +783,22 @@ namespace Triggernometry
                         }
                     }
                     break;
+                case Action.AuraOpEnum.DeactivateAuraRegex:
+                    {
+                        Regex rex = new Regex(a.AuraName);
+                        FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/deacttextaurarex", "Deactivating text auras matching '{0}'", a.AuraName));
+                        List<string> toRem = new List<string>();
+                        lock (ctx.plug.textauras)
+                        {
+                            toRem.AddRange(from sx in ctx.plug.textauras where rex.IsMatch(sx.Key) select sx.Key);
+                            foreach (string rem in toRem)
+                            {
+                                Forms.AuraContainerForm acf = ctx.plug.textauras[rem];
+                                acf.AuraDeactivate();
+                            }
+                        }
+                    }
+                    break;
             }
         }
 
@@ -733,12 +831,12 @@ namespace Triggernometry
 
         }
 
-        public Plugin()
+        public RealPlugin()
         {
             ui = null;
             sc = null;
             DisableLogging = false;
-            path = Path.Combine(ActGlobals.oFormActMain.AppDataFolder.FullName, "Config");
+            path = null;
             ActionQueue = new List<QueuedAction>();
             log = new Queue<InternalLog>();
             EventQueue = new Queue<LogEvent>();
@@ -1048,10 +1146,7 @@ namespace Triggernometry
         internal void TtsPlaybackAct(Context ctx, Action a)
         {
             string text = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a.UseTTSTextExpression);
-            if (ActGlobals.oFormActMain.PlayTtsMethod != null)
-            { 
-                ActGlobals.oFormActMain.PlayTtsMethod(text);
-            }
+            TtsPlaybackHook(text);
         }
 
         internal void SoundPlaybackAct(Context ctx, Action a)
@@ -1067,10 +1162,7 @@ namespace Triggernometry
                 vol = 100.0;
             }
             string filename = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a.PlaySoundFileExpression);
-            if (ActGlobals.oFormActMain.PlaySoundMethod != null)
-            {
-                ActGlobals.oFormActMain.PlaySoundMethod(filename, (int)Math.Floor(vol));
-            }
+            SoundPlaybackHook(filename, (int)Math.Floor(vol));
         }
 
         internal void TtsPlaybackSelf(Context ctx, Action a)
@@ -1412,6 +1504,7 @@ namespace Triggernometry
 
         public void InitPlugin(TabPage pluginScreenSpace, Label pluginStatusText)
         {
+
             Language ld = new Language();
             ld.LanguageName = "English (default)";
             ld.MissingKeyHandling = Language.MissingHandlingEnum.OutputKey;
@@ -1423,20 +1516,6 @@ namespace Triggernometry
             {
                 FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/initing", "Initializing"));
                 //CombobulateTranslations();
-                foreach (ActPluginData p in ActGlobals.oFormActMain.ActPlugins)
-                {
-                    if (p.pluginObj == this)
-                    {
-                        pluginName = p.pluginFile.Name;
-                        pluginPath = p.pluginFile.Directory.FullName;
-                        break;
-                    }
-                }
-                if (pluginName == null || pluginName.Trim().Length == 0)
-                {
-                    pluginName = "Triggernometry";
-                    pluginPath = path;
-                }
                 exwhere = I18n.Translate("internal/Plugin/inifilename", "determining filename");
                 pluginName = Path.GetFileNameWithoutExtension(pluginName);
                 FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/filenameis", "Plugin filename is '{0}' at '{1}'", pluginName, pluginPath));
@@ -1457,7 +1536,6 @@ namespace Triggernometry
                 }
                 exwhere = I18n.Translate("internal/Plugin/iniactui", "setting up ACT ui");
                 mytp = pluginScreenSpace;
-                mainform = ActGlobals.oFormActMain;
                 pluginScreenSpace.Text = "Triggernometry";
                 exwhere = I18n.Translate("internal/Plugin/inievents", "creating events");
                 ExitEvent = new ManualResetEvent(false);
@@ -1556,8 +1634,7 @@ namespace Triggernometry
                 AuraUpdateThread = new Thread(new ThreadStart(AuraUpdateThreadProc));
                 AuraUpdateThread.Name = "AuraUpdateThread";
                 AuraUpdateThread.Start();
-                _obs = new ObsController();
-                ActGlobals.oFormActMain.OnLogLineRead += oFormActMain_OnLogLineRead;
+                _obs = new ObsController();                
                 pluginStatusText.Text = I18n.Translate("internal/Plugin/iniready", "Ready");
                 FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/inited", "Initialized"));
                 Task tx = new Task(() =>
@@ -2087,11 +2164,6 @@ namespace Triggernometry
             }
         }
 
-        public void EndEncounter()
-        {
-            ActGlobals.oFormActMain.EndCombat(false);
-        }
-
         public void SaveCurrentConfig()
         {
             SaveConfigToFile(cfg, Path.Combine(path, pluginName + ".config.xml"));
@@ -2117,7 +2189,6 @@ namespace Triggernometry
         {
             ui.CloseForms();
             PluginBridges.BridgeFFXIV.UnsubscribeFromNetworkEvents(this);
-            ActGlobals.oFormActMain.OnLogLineRead -= oFormActMain_OnLogLineRead;
             if (_obs != null)
             {
                 _obs.Dispose();
@@ -2499,7 +2570,7 @@ namespace Triggernometry
             }
         }
 
-        private void oFormActMain_OnLogLineRead(bool isImport, LogLineEventArgs logInfo)
+        public void OnLogLineRead(bool isImport, string logLine, string detectedZone)
         {
             if (isImport == true)
             {
@@ -2509,34 +2580,34 @@ namespace Triggernometry
             {
                 if (cfg.EventSeparator.Length > 0)
                 {
-                    string[] lines = logInfo.logLine.Split(new string[] { cfg.EventSeparator }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] lines = logLine.Split(new string[] { cfg.EventSeparator }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (string line in lines)
                     {
-                        if (logInfo.logLine.Substring(logInfo.logLine.Length - 5) != "] FB:")
+                        if (logLine.Substring(logLine.Length - 5) != "] FB:")
                         {
                             if (cfg.LogNormalEvents == true)
                             {
                                 FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/splitlogline", "Split log line: ({0})", line));
                             }
-                            LogLineQueuer(line, logInfo.detectedZone, LogEvent.SourceEnum.Log);
+                            LogLineQueuer(line, detectedZone, LogEvent.SourceEnum.Log);
                         }
                     }
                 }
                 else
                 {
-                    if (logInfo.logLine.Substring(logInfo.logLine.Length - 5) != "] FB:")
+                    if (logLine.Substring(logLine.Length - 5) != "] FB:")
                     {
                         if (cfg.LogNormalEvents == true)
                         {
-                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/logline", "Log line: ({0})", logInfo.logLine));
+                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/logline", "Log line: ({0})", logLine));
                         }
-                        LogLineQueuer(logInfo.logLine, logInfo.detectedZone, LogEvent.SourceEnum.Log);
+                        LogLineQueuer(logLine, detectedZone, LogEvent.SourceEnum.Log);
                     }
                 }
             }
             catch (Exception ex)
             {
-                FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/Plugin/procex", "Exception ({0}) when processing log line ({1}) in zone ({2})", ex.Message, logInfo.logLine, logInfo.detectedZone));
+                FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/Plugin/procex", "Exception ({0}) when processing log line ({1}) in zone ({2})", ex.Message, logLine, detectedZone));
             }
         }
 
@@ -2778,11 +2849,6 @@ namespace Triggernometry
                 ActionQueue.Sort();
                 ActionUpdateEvent.Set();
             }
-        }
-
-        private void Mainform_BeforeCombatAction(bool isImport, CombatActionEventArgs actionInfo)
-        {
-            //System.Diagnostics.Debug.WriteLine("BLARG " + actionInfo.time);
         }
 
         internal void ActionThreadProc()

@@ -18,7 +18,7 @@ namespace Triggernometry.Forms
     {
 
         private delegate void ProgressDelegate(int progress, string state);
-        internal Plugin plug { get; set; }
+        internal RealPlugin plug { get; set; }
 
         internal List<RepositoryList.Repository> ReposToAdd { get; set; } = new List<RepositoryList.Repository>();
 
@@ -69,7 +69,7 @@ namespace Triggernometry.Forms
         {
             string trans = I18n.Translate("RepositoryListForm/statusdownloading", "Downloading master repository list...");
             ShowProgress(-1, trans);
-            plug.FilteredAddToLog(Plugin.DebugLevelEnum.Info, trans);
+            plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Info, trans);
             Task tx = new Task(() =>
             {
                 RepositoryListDownload();
@@ -97,7 +97,7 @@ namespace Triggernometry.Forms
                 }
                 ParseRepositoryList(rl);
                 trans = I18n.Translate("RepositoryListForm/downloadcomplete", "Download complete");
-                plug.FilteredAddToLog(Plugin.DebugLevelEnum.Info, trans);
+                plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Info, trans);
                 ShowProgress(100, trans);
                 System.Threading.Thread.Sleep(2000);
                 ShowProgress(0, "");
@@ -105,7 +105,7 @@ namespace Triggernometry.Forms
             catch (Exception ex)
             {
                 trans = I18n.Translate("RepositoryListForm/exception", "Download failed due to exception: {0}", ex.Message);
-                plug.FilteredAddToLog(Plugin.DebugLevelEnum.Error, trans);
+                plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, trans);
                 ShowProgress(100, trans);
             }
         }

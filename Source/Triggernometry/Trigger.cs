@@ -206,7 +206,7 @@ namespace Triggernometry
 			}
 			set
 			{
-                string temp = Plugin.UnserializeInvalidXmlCharacters(value);
+                string temp = RealPlugin.UnserializeInvalidXmlCharacters(value);
                 if (_RegularExpression != temp)
 				{
 					_RegularExpression = temp;
@@ -247,7 +247,7 @@ namespace Triggernometry
         }
 
         [XmlAttribute]
-        public Plugin.DebugLevelEnum DebugLevel { get; set; } = Plugin.DebugLevelEnum.Inherit;
+        public RealPlugin.DebugLevelEnum DebugLevel { get; set; } = RealPlugin.DebugLevelEnum.Inherit;
 
         [XmlAttribute]
         public PrevActionsEnum PrevActions { get; set; } // option1a
@@ -380,9 +380,9 @@ namespace Triggernometry
             return null;
         }
 
-        internal Plugin.DebugLevelEnum GetDebugLevel(Plugin p)
+        internal RealPlugin.DebugLevelEnum GetDebugLevel(RealPlugin p)
         {
-            if (DebugLevel == Plugin.DebugLevelEnum.Inherit)
+            if (DebugLevel == RealPlugin.DebugLevelEnum.Inherit)
             {
                 if (p.cfg != null)
                 {
@@ -390,15 +390,15 @@ namespace Triggernometry
                 }
                 else
                 {
-                    return Plugin.DebugLevelEnum.Verbose;
+                    return RealPlugin.DebugLevelEnum.Verbose;
                 }
             }
             return DebugLevel;
         }
 
-        internal void AddToLog(Plugin p, Plugin.DebugLevelEnum level, string message)
+        internal void AddToLog(RealPlugin p, RealPlugin.DebugLevelEnum level, string message)
         {
-            Plugin.DebugLevelEnum dx = GetDebugLevel(p);
+            RealPlugin.DebugLevelEnum dx = GetDebugLevel(p);
             if (level > dx)
             {
                 return;
@@ -406,7 +406,7 @@ namespace Triggernometry
             p.UnfilteredAddToLog(level, message);
         }
 
-        internal void Fire(Plugin p, Context ctx)
+        internal void Fire(RealPlugin p, Context ctx)
 		{
             if ((ctx.force & Action.TriggerForceTypeEnum.SkipConditions) == 0)
             {
@@ -414,7 +414,7 @@ namespace Triggernometry
                 {
                     if (Condition.CheckCondition(ctx, TriggerContextLogger, ctx.plug) == false)
                     {
-                        AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/trignotfired", "Trigger '{0}' not fired, condition not met", LogName));
+                        AddToLog(p, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/trignotfired", "Trigger '{0}' not fired, condition not met", LogName));
                         return;
                     }
                 }
@@ -424,7 +424,7 @@ namespace Triggernometry
             if (PeriodRefire == RefireEnum.Deny)
             {
                 RefireDelayedUntil = LastFired.AddMilliseconds(ctx.EvaluateNumericExpression(TriggerContextLogger, p, RefirePeriodExpression));
-                AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/delayingrefire", "Delaying trigger '{0}' refire to {1}", LogName, RefireDelayedUntil));
+                AddToLog(p, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/delayingrefire", "Delaying trigger '{0}' refire to {1}", LogName, RefireDelayedUntil));
             }
             else
             {
@@ -443,7 +443,7 @@ namespace Triggernometry
                     if (ixy.Count() > 0)
                     {
                         curtime = ixy.ElementAt(0).when;
-                        AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/lastactionfound", "Last action for trigger '{0}' found at {1}", LogName, curtime));
+                        AddToLog(p, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/lastactionfound", "Last action for trigger '{0}' found at {1}", LogName, curtime));
                     }
                 }
             }
@@ -453,7 +453,7 @@ namespace Triggernometry
                 if (curtime < LastFired)
                 {
                     curtime = LastFired;
-                    AddToLog(p, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Trigger/beforelastfired", "Current time is before last fired for trigger '{0}'", LogName));
+                    AddToLog(p, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Trigger/beforelastfired", "Current time is before last fired for trigger '{0}'", LogName));
                 }
             }
             if (PrevActions == PrevActionsEnum.Interrupt)
@@ -466,9 +466,9 @@ namespace Triggernometry
                                 select ax;
                     if (ixy.Count() > 0)
                     {
-                        List<Plugin.QueuedAction> rems = new List<Plugin.QueuedAction>();
+                        List<RealPlugin.QueuedAction> rems = new List<RealPlugin.QueuedAction>();
                         rems.AddRange(ixy);
-                        foreach (Plugin.QueuedAction qa in rems)
+                        foreach (RealPlugin.QueuedAction qa in rems)
                         {
                             ctx.plug.ActionQueue.Remove(qa);
                             exx++;
@@ -479,12 +479,12 @@ namespace Triggernometry
                 {
                     if (PrevActionsRefire == RefireEnum.Deny)
                     {
-                        AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/removefromqueuenorefire", "Removed {0} instance(s) of trigger '{1}' actions from queue, refire denied", exx, LogName));
+                        AddToLog(p, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/removefromqueuenorefire", "Removed {0} instance(s) of trigger '{1}' actions from queue, refire denied", exx, LogName));
                         return;
                     }
                     else
                     {
-                        AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/removefromqueue", "Removed {0} instance(s) of trigger '{1}' actions from queue", exx, LogName));
+                        AddToLog(p, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/removefromqueue", "Removed {0} instance(s) of trigger '{1}' actions from queue", exx, LogName));
                     }                    
                 }
             }
@@ -500,7 +500,7 @@ namespace Triggernometry
                 }
                 if (exx > 0)
                 {
-                    AddToLog(p, Plugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/refiredenied", "{0} instance(s) of trigger '{1}' actions in queue, refire denied", exx, LogName));
+                    AddToLog(p, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/refiredenied", "{0} instance(s) of trigger '{1}' actions in queue, refire denied", exx, LogName));
                     return;
                 }
             }
@@ -519,7 +519,7 @@ namespace Triggernometry
 
         public void TriggerContextLogger(object o, string msg)
         {
-            AddToLog((Plugin)o, Plugin.DebugLevelEnum.Verbose, msg);
+            AddToLog((RealPlugin)o, RealPlugin.DebugLevelEnum.Verbose, msg);
         }
 
     }

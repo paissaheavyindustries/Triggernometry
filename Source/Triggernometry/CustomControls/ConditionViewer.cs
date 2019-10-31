@@ -21,7 +21,7 @@ namespace Triggernometry.CustomControls
         private Dictionary<ConditionComponent, TreeNode> ReverseNodeLookup = new Dictionary<ConditionComponent, TreeNode>();
         private bool Changing { get; set; } = false;
         private Color disabledNodeColor;
-        internal Plugin plug;
+        internal RealPlugin plug;
 
         private bool _PanelStateFromOption;
         private bool PanelStateFromOption
@@ -746,7 +746,7 @@ namespace Triggernometry.CustomControls
             }
             catch (Exception ex)
             {
-                plug.FilteredAddToLog(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/ConditionViewer/copyfail", "Tree copy failed due to exception: {0}", ex.Message));
+                plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ConditionViewer/copyfail", "Tree copy failed due to exception: {0}", ex.Message));
             }
         }
 
@@ -852,7 +852,7 @@ namespace Triggernometry.CustomControls
             }
             catch (Exception ex)
             {
-                plug.FilteredAddToLog(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/ConditionViewer/pastefail", "Tree paste failed due to exception: {0}", ex.Message));
+                plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ConditionViewer/pastefail", "Tree paste failed due to exception: {0}", ex.Message));
             }
         }
 

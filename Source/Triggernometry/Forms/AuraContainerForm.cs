@@ -59,7 +59,7 @@ namespace Triggernometry.Forms
             }
         }
 
-        internal Plugin plug;
+        internal RealPlugin plug;
         
         protected override bool ShowWithoutActivation
         {
@@ -175,7 +175,7 @@ namespace Triggernometry.Forms
             return bm;
         }
 
-        internal static Image LoadImageData(Plugin plug, string ifn)
+        internal static Image LoadImageData(RealPlugin plug, string ifn)
         {
             Uri u = new Uri(ifn);
             if (u.IsFile == true)
@@ -231,11 +231,11 @@ namespace Triggernometry.Forms
             }
             if (ctx.trig != null)
             {
-                ctx.trig.AddToLog(plug, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/AuraContainer/displayingaura", "Displaying aura window"));
+                ctx.trig.AddToLog(plug, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/AuraContainer/displayingaura", "Displaying aura window"));
             }
             else
             {
-                plug.FilteredAddToLog(Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/AuraContainer/displayingaura", "Displaying aura window"));
+                plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/AuraContainer/displayingaura", "Displaying aura window"));
             }            
             //Show();
             ShowMe();
@@ -249,11 +249,11 @@ namespace Triggernometry.Forms
         {
             if (ctx.trig != null)
             {
-                ctx.trig.AddToLog(plug, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/AuraContainer/closingaura", "Closing aura window"));
+                ctx.trig.AddToLog(plug, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/AuraContainer/closingaura", "Closing aura window"));
             }
             else
             {
-                plug.FilteredAddToLog(Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/AuraContainer/closingaura", "Closing aura window"));
+                plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/AuraContainer/closingaura", "Closing aura window"));
             }
             Close();
         }
@@ -395,11 +395,11 @@ namespace Triggernometry.Forms
                         {
                             if (ctx.trig != null)
                             {
-                                ctx.trig.AddToLog(plug, Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/AuraContainer/deactaurattl", "Deactivating aura due to TTL expression"));
+                                ctx.trig.AddToLog(plug, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/AuraContainer/deactaurattl", "Deactivating aura due to TTL expression"));
                             }
                             else
                             {
-                                plug.FilteredAddToLog(Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/AuraContainer/deactaurattl", "Deactivating aura due to TTL expression"));
+                                plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/AuraContainer/deactaurattl", "Deactivating aura due to TTL expression"));
                             }
                             AuraDeactivateForm();
                             return false;
@@ -413,11 +413,11 @@ namespace Triggernometry.Forms
             {
                 if (ctx.trig != null)
                 {
-                    ctx.trig.AddToLog(plug, Plugin.DebugLevelEnum.Error, I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message)));
+                    ctx.trig.AddToLog(plug, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message)));
                 }
                 else
                 {
-                    plug.FilteredAddToLog(Plugin.DebugLevelEnum.Error, I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message)));
+                    plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message)));
                 }
                 AuraDeactivateForm();
                 return false;

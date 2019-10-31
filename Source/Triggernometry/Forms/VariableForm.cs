@@ -14,7 +14,7 @@ namespace Triggernometry.Forms
     public partial class VariableForm : MemoryForm<VariableForm>
     {
 
-        internal Plugin plug;
+        internal RealPlugin plug;
 
         public VariableForm()
         {
