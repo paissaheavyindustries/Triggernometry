@@ -114,6 +114,7 @@ namespace Triggernometry.Forms
             cbxScheduleFrom.Enabled = false;
             cbxRefireWithinPeriod.Enabled = false;
             expRefirePeriod.Enabled = false;
+            cbxEditAutofire.Enabled = false;
             cndCondition.Enabled = false;
             btnAddAction.Enabled = false;
             btnActionUp.Enabled = false;
@@ -147,6 +148,7 @@ namespace Triggernometry.Forms
                 cbxTriggerSource.SelectedIndex = 0;
                 cbxRefireWithinPeriod.SelectedIndex = 0;
                 expRefirePeriod.Expression = "0";
+                cbxEditAutofire.Checked = false;
                 cbxLoggingLevel.SelectedIndex = 5;
                 txtDescription.Text = "";
                 cndCondition.ConditionToEdit = new ConditionGroup() { Enabled = false };
@@ -205,6 +207,7 @@ namespace Triggernometry.Forms
                         break;
                 }
                 expRefirePeriod.Expression = t.RefirePeriodExpression;
+                cbxEditAutofire.Checked = t.EditAutofire;
                 cbxLoggingLevel.SelectedIndex = (int)t.DebugLevel;
                 var ix = from tx in t.Actions
                          orderby tx.OrderNumber ascending
@@ -234,7 +237,8 @@ namespace Triggernometry.Forms
         {
             t.Name = txtName.Text;
             t.RegularExpression = txtRegexp.Text;
-            t.Description = txtDescription.Text;  
+            t.Description = txtDescription.Text;
+            t.EditAutofire = cbxEditAutofire.Checked;
             switch (cbxRefireOption1.SelectedIndex)
             {
                 case 0:

@@ -259,6 +259,8 @@ namespace Triggernometry
         public RefireEnum PeriodRefire { get; set; } // option3
         [XmlAttribute]
         public string RefirePeriodExpression { get; set; }
+        [XmlAttribute]
+        public bool EditAutofire { get; set; }
 
         private string _Description;
         [XmlAttribute]
@@ -358,6 +360,7 @@ namespace Triggernometry
             Conditions = new EventList<Triggernometry.Condition>();
             Id = Guid.NewGuid();
             Source = TriggerSourceEnum.Log;
+            EditAutofire = false;
         }
 
         internal Match CheckMatch(string input)

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Costura;
+using System.Drawing;
 
 namespace TriggernometryProxy
 {
@@ -16,6 +17,10 @@ namespace TriggernometryProxy
         private Triggernometry.RealPlugin Instance;
 
         private ActPluginData ActPluginPrevious = null;
+
+        private object CornerLock = new object();
+        private bool CornerPopupVisible = false;
+        private Control CornerPopup = null;
 
         public ProxyPlugin()
         {
@@ -36,16 +41,104 @@ namespace TriggernometryProxy
             Instance.SoundPlaybackHook = InvokeSoundMethod;
             Instance.CustomTriggerCheckHook = HasCustomTriggers;
             Instance.CustomTriggerHook = GetCustomTriggers;
+            Instance.CornerShowHook = ShowCornerNotification;
+            Instance.CornerHideHook = HideCornerNotification;
+            Instance.TabLocateHook = LocateTab;
             Triggernometry.RealPlugin.InstanceHook = GetInstance;
             GetPluginNameAndPath();
             ActGlobals.oFormActMain.OnLogLineRead += OFormActMain_OnLogLineRead;
-            Instance.InitPlugin(pluginScreenSpace, pluginStatusText);
+            Instance.InitPlugin(pluginScreenSpace, pluginStatusText);      
+        }
+
+        public void LocateTab(TabPage tp)
+        {
+            try
+            {
+                FieldInfo fi = ActGlobals.oFormActMain.GetType().GetField("tc1", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (fi == null)
+                {
+                    return;
+                }
+                TabControl tc1 = (TabControl)fi.GetValue(ActGlobals.oFormActMain);
+                foreach (TabPage tp1 in tc1.TabPages)
+                {
+                    if (tp1.Text == "Plugins")
+                    {
+                        foreach (Control c in tp1.Controls)
+                        {
+                            if (c.Name == "tcPlugins")
+                            {
+                                TabControl tc2 = (TabControl)c;
+                                foreach (TabPage tp2 in tc2.TabPages)
+                                {
+                                    if (tp2 == tp)
+                                    {
+                                        tc2.SelectedTab = tp;
+                                    }
+                                }
+                            }
+                        }
+                        tc1.SelectedTab = tp1;
+                        return;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public void ShowCornerNotification()
+        {
+            if (ActGlobals.oFormActMain.InvokeRequired == true)
+            {
+                ActGlobals.oFormActMain.Invoke((MethodInvoker)delegate { ShowCornerNotification(); });
+                return;
+            }
+            lock (CornerLock)
+            {
+                if (CornerPopupVisible == true)
+                {
+                    return;
+                }         
+                MethodInfo mi = ActGlobals.oFormActMain.GetType().GetMethod("CornerControlAdd");
+                if (mi != null)
+                {
+                    CornerPopup = Instance.GetCornerControl();
+                    mi.Invoke(ActGlobals.oFormActMain, new object[] { CornerPopup });
+                    CornerPopupVisible = true;
+                }
+            }
+        }
+
+        public void HideCornerNotification()
+        {
+            if (ActGlobals.oFormActMain.InvokeRequired == true)
+            {
+                ActGlobals.oFormActMain.Invoke((MethodInvoker)delegate { HideCornerNotification(); });
+                return;
+            }
+            lock (CornerLock)
+            {
+                if (CornerPopupVisible == false)
+                {
+                    return;
+                }
+                MethodInfo mi = ActGlobals.oFormActMain.GetType().GetMethod("CornerControlRemove");
+                if (mi != null)
+                {
+                    mi.Invoke(ActGlobals.oFormActMain, new object[] { CornerPopup });
+                    CornerPopup = null;
+                    CornerPopupVisible = false;
+                }
+            }
         }
 
         public void DeInitPlugin()
-        {
+        {            
             ActGlobals.oFormActMain.OnLogLineRead -= OFormActMain_OnLogLineRead;
             Instance.DeInitPlugin();
+            HideCornerNotification();
         }
 
         private void OFormActMain_OnLogLineRead(bool isImport, LogLineEventArgs logInfo)

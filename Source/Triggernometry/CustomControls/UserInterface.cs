@@ -122,8 +122,14 @@ namespace Triggernometry.CustomControls
             e.Effect = e.AllowedEffect; 
         }
 
+        private delegate Toast ToastDelegate();
+
         private Toast PopToast()
         {
+            if (pnlToastSpace.InvokeRequired == true)
+            {
+                return (Toast)pnlToastSpace.Invoke(new ToastDelegate(PopToast));
+            }
             Toast t = null;
             lock (Toasts)
             {
@@ -152,6 +158,7 @@ namespace Triggernometry.CustomControls
                 pnlToastSpace.Visible = false;
             }
             t.Dispose();
+            plug.CornerHideHook();
         }
 
         internal void QueueToast(Toast t)
@@ -162,7 +169,10 @@ namespace Triggernometry.CustomControls
             }
             if (pnlToastSpace.Controls.Count == 0)
             {
-                PopToast();
+                if (PopToast() != null)
+                {
+                    plug.CornerShowHook();
+                }
             }
         }
 
@@ -444,6 +454,10 @@ namespace Triggernometry.CustomControls
                     treeView1.Sort();
                     treeView1.SelectedNode = tn;
                     plug.AddTrigger(t);
+                    if (t.EditAutofire == true)
+                    {
+                        ForceFireTrigger(t);
+                    }
                 }
             }
         }
@@ -552,6 +566,10 @@ namespace Triggernometry.CustomControls
                                 plug.SourceChange(t, oldSource, t.Source);
                             }
                         }
+                        if (t.EditAutofire == true)
+                        {
+                            ForceFireTrigger(t);
+                        }
                         TreeNode tn = treeView1.SelectedNode;
                         tn.Text = t.Name;
                         treeView1.Sort();
@@ -634,7 +652,7 @@ namespace Triggernometry.CustomControls
         }
 
         internal void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
-        {            
+        {
             ctxAdd.Enabled = btnAdd.Enabled;
             ctxEdit.Enabled = btnEdit.Enabled;
             ctxUpdate.Enabled = btnUpdate.Enabled;
@@ -649,6 +667,8 @@ namespace Triggernometry.CustomControls
             ctxDelete.Enabled = btnRemoveTrigger.Enabled;
             ctxImport.Enabled = btnImportTrigger.Enabled;
             ctxExport.Enabled = btnExportTrigger.Enabled;
+            ctxFire.Visible = cfg.DeveloperMode;
+            toolStripSeparator12.Visible = cfg.DeveloperMode;
             ctxCopy.Enabled = (treeView1.SelectedNode != null);
             ctxPaste.Enabled = ctxAddTrigger.Enabled == true && (
                 (cfg.UseOsClipboard == false && (Clipboard != null && Clipboard.Length > 0))
@@ -658,12 +678,14 @@ namespace Triggernometry.CustomControls
             if (treeView1.SelectedNode != null)
             {
                 ctxCollapse.Enabled = (treeView1.SelectedNode.Nodes.Count > 0);
-                ctxExpand.Enabled = ctxCollapse.Enabled;
+                ctxExpand.Enabled = ctxCollapse.Enabled;                
+                ctxFire.Enabled = (treeView1.SelectedNode.ImageIndex == 2);
             }
             else
             {
                 ctxCollapse.Enabled = true;
                 ctxExpand.Enabled = true;
+                ctxFire.Enabled = false;
             }
         }
 
@@ -1750,6 +1772,51 @@ namespace Triggernometry.CustomControls
             {
                 treeView1.ExpandAll();
             }
+        }
+
+        private void btnOptions_DropDownOpening(object sender, EventArgs e)
+        {
+            btnActionQueueProcessing.Visible = cfg.DeveloperMode;
+            btnTryInterrupt.Visible = cfg.DeveloperMode;
+            btnClearActionQueue.Visible = cfg.DeveloperMode;
+            btnClearVars.Visible = cfg.DeveloperMode;
+            btnTestInput.Visible = cfg.DeveloperMode;
+            btnDeactivateAllAuras.Visible = cfg.DeveloperMode;
+            toolStripSeparator5.Visible = cfg.DeveloperMode;
+            btnBenchmark.Visible = cfg.DeveloperMode;
+            btnViewVariables.Visible = cfg.DeveloperMode;
+        }
+
+        private void ctxFire_Click(object sender, EventArgs e)
+        {
+            if (treeView1.SelectedNode != null)
+            {
+                TreeNode tn = treeView1.SelectedNode;
+                if (tn.ImageIndex == 2)
+                {
+                    Trigger t = (Trigger)tn.Tag;
+                    ForceFireTrigger(t);
+                }
+            }
+        }
+
+        private void ForceFireTrigger(Trigger t)
+        {            
+            Context ctx = new Context();
+            ctx.plug = plug;
+            ctx.testmode = true;
+            ctx.trig = t;
+            ctx.soundhook = plug.SoundPlaybackSmart;
+            ctx.ttshook = plug.TtsPlaybackSmart;
+            ctx.triggered = DateTime.UtcNow;
+            ctx.force = Action.TriggerForceTypeEnum.SkipAll;
+            t.Fire(plug, ctx);
+        }
+
+        private void btnCornerPopup_Click(object sender, EventArgs e)
+        {
+            TabPage tp = (TabPage)btnCornerPopup.Tag;
+            plug.TabLocateHook(tp);
         }
 
     }

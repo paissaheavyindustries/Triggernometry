@@ -39,6 +39,7 @@ namespace Triggernometry.Forms
                 chkActTts.Checked = false;
                 chkActSoundFiles.Checked = false;
                 chkClipboard.Checked = false;
+                cbxDevMode.Checked = false;
                 txtSeparator.Text = "";
                 cbxFfxivJobMethod.SelectedIndex = 0;                
                 chkWelcome.Checked = true;
@@ -59,6 +60,7 @@ namespace Triggernometry.Forms
                 chkActSoundFiles.Checked = a.UseACTForSound;
                 chkClipboard.Checked = a.UseOsClipboard;
                 txtSeparator.Text = a.EventSeparator;
+                cbxDevMode.Checked = a.DeveloperMode;
                 cbxFfxivJobMethod.SelectedIndex = (int)a.FfxivPartyOrdering;
                 chkWelcome.Checked = a.ShowWelcome;
                 chkWarnAdmin.Checked = a.WarnAdmin;
@@ -106,6 +108,7 @@ namespace Triggernometry.Forms
             a.TestLiveByDefault = cbxTestLive.Checked;
             a.LogNormalEvents = chkLogNormalEvents.Checked;
             a.FfxivLogNetwork = chkFfxivLogNetwork.Checked;
+            a.DeveloperMode = cbxDevMode.Checked;
             a.UseScarborough = cbxEnableHwAccel.Checked;
             a.WindowToMonitor = txtMonitorWindow.Text;
             a.FfxivPartyOrdering = (Configuration.FfxivPartyOrderingEnum)cbxFfxivJobMethod.SelectedIndex;

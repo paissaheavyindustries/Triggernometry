@@ -184,6 +184,9 @@ namespace Triggernometry
         [XmlAttribute]
         public string WindowToMonitor { get; set; }
 
+        [XmlAttribute]
+        public bool DeveloperMode { get; set; }
+
         internal bool isnew;
         internal DateTime lastWrite;
 
@@ -207,6 +210,7 @@ namespace Triggernometry
             TestLiveByDefault = false;
             UseScarborough = true;
             WarnAdmin = true;
+            DeveloperMode = false;
             StartupTriggerType = StartupTriggerTypeEnum.Trigger;
             EventSeparator = "";
             StartupTriggerId = Guid.Empty;

@@ -58,7 +58,7 @@
             this.lblRegexp = new System.Windows.Forms.Label();
             this.lblName = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
-            this.txtRegexp = new CustomControls.ExpressionTextBox();
+            this.txtRegexp = new Triggernometry.CustomControls.ExpressionTextBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -88,6 +88,7 @@
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.panel5 = new System.Windows.Forms.Panel();
             this.lblReadOnly = new System.Windows.Forms.Label();
+            this.cbxEditAutofire = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActions)).BeginInit();
             this.ctxAction.SuspendLayout();
             this.toolStrip2.SuspendLayout();
@@ -396,11 +397,13 @@
             // 
             this.txtRegexp.AutoSize = true;
             this.txtRegexp.Dock = System.Windows.Forms.DockStyle.Top;
+            this.txtRegexp.Expression = "";
+            this.txtRegexp.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
             this.txtRegexp.Location = new System.Drawing.Point(106, 29);
             this.txtRegexp.Name = "txtRegexp";
+            this.txtRegexp.ReadOnly = false;
             this.txtRegexp.Size = new System.Drawing.Size(435, 20);
             this.txtRegexp.TabIndex = 3;
-            this.txtRegexp.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
             // 
             // panel3
             // 
@@ -475,7 +478,7 @@
             this.tabTriggerCondition.Location = new System.Drawing.Point(4, 22);
             this.tabTriggerCondition.Name = "tabTriggerCondition";
             this.tabTriggerCondition.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTriggerCondition.Size = new System.Drawing.Size(556, 275);
+            this.tabTriggerCondition.Size = new System.Drawing.Size(556, 224);
             this.tabTriggerCondition.TabIndex = 5;
             this.tabTriggerCondition.Text = "Trigger condition";
             this.tabTriggerCondition.UseVisualStyleBackColor = true;
@@ -486,7 +489,7 @@
             this.cndCondition.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cndCondition.Location = new System.Drawing.Point(3, 3);
             this.cndCondition.Name = "cndCondition";
-            this.cndCondition.Size = new System.Drawing.Size(550, 269);
+            this.cndCondition.Size = new System.Drawing.Size(550, 218);
             this.cndCondition.TabIndex = 4;
             // 
             // tabScheduling
@@ -495,7 +498,7 @@
             this.tabScheduling.Location = new System.Drawing.Point(4, 22);
             this.tabScheduling.Name = "tabScheduling";
             this.tabScheduling.Padding = new System.Windows.Forms.Padding(7);
-            this.tabScheduling.Size = new System.Drawing.Size(556, 275);
+            this.tabScheduling.Size = new System.Drawing.Size(556, 224);
             this.tabScheduling.TabIndex = 2;
             this.tabScheduling.Text = "Scheduling";
             this.tabScheduling.UseVisualStyleBackColor = true;
@@ -507,6 +510,7 @@
             this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tableLayoutPanel15.Controls.Add(this.cbxEditAutofire, 0, 6);
             this.tableLayoutPanel15.Controls.Add(this.cbxTriggerSource, 1, 0);
             this.tableLayoutPanel15.Controls.Add(this.lblTriggerSource, 0, 0);
             this.tableLayoutPanel15.Controls.Add(this.cbxRefireWithinPeriod, 1, 4);
@@ -521,14 +525,15 @@
             this.tableLayoutPanel15.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel15.Location = new System.Drawing.Point(7, 7);
             this.tableLayoutPanel15.Name = "tableLayoutPanel15";
-            this.tableLayoutPanel15.RowCount = 6;
+            this.tableLayoutPanel15.RowCount = 7;
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel15.Size = new System.Drawing.Size(542, 161);
+            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel15.Size = new System.Drawing.Size(542, 184);
             this.tableLayoutPanel15.TabIndex = 6;
             // 
             // cbxTriggerSource
@@ -666,6 +671,7 @@
             this.expRefirePeriod.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
             this.expRefirePeriod.Location = new System.Drawing.Point(282, 138);
             this.expRefirePeriod.Name = "expRefirePeriod";
+            this.expRefirePeriod.ReadOnly = false;
             this.expRefirePeriod.Size = new System.Drawing.Size(257, 20);
             this.expRefirePeriod.TabIndex = 7;
             // 
@@ -675,7 +681,7 @@
             this.tabDebugging.Location = new System.Drawing.Point(4, 22);
             this.tabDebugging.Name = "tabDebugging";
             this.tabDebugging.Padding = new System.Windows.Forms.Padding(7);
-            this.tabDebugging.Size = new System.Drawing.Size(556, 275);
+            this.tabDebugging.Size = new System.Drawing.Size(556, 224);
             this.tabDebugging.TabIndex = 3;
             this.tabDebugging.Text = "Debugging";
             this.tabDebugging.UseVisualStyleBackColor = true;
@@ -733,7 +739,7 @@
             this.tabDescription.Location = new System.Drawing.Point(4, 22);
             this.tabDescription.Name = "tabDescription";
             this.tabDescription.Padding = new System.Windows.Forms.Padding(7);
-            this.tabDescription.Size = new System.Drawing.Size(556, 275);
+            this.tabDescription.Size = new System.Drawing.Size(556, 224);
             this.tabDescription.TabIndex = 4;
             this.tabDescription.Text = "Description";
             this.tabDescription.UseVisualStyleBackColor = true;
@@ -747,7 +753,7 @@
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtDescription.Size = new System.Drawing.Size(542, 261);
+            this.txtDescription.Size = new System.Drawing.Size(542, 210);
             this.txtDescription.TabIndex = 0;
             this.txtDescription.WordWrap = false;
             // 
@@ -777,6 +783,19 @@
     "d locally. If you wish to edit the trigger, you will need to make a local copy o" +
     "f it.";
             this.lblReadOnly.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // cbxEditAutofire
+            // 
+            this.cbxEditAutofire.AutoSize = true;
+            this.cbxEditAutofire.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel15.SetColumnSpan(this.cbxEditAutofire, 3);
+            this.cbxEditAutofire.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbxEditAutofire.Location = new System.Drawing.Point(3, 164);
+            this.cbxEditAutofire.Name = "cbxEditAutofire";
+            this.cbxEditAutofire.Size = new System.Drawing.Size(536, 17);
+            this.cbxEditAutofire.TabIndex = 15;
+            this.cbxEditAutofire.Text = "Autofire trigger after it has been edited";
+            this.cbxEditAutofire.UseVisualStyleBackColor = true;
             // 
             // TriggerForm
             // 
@@ -886,5 +905,6 @@
         private System.Windows.Forms.Label lblTriggerSource;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Label lblReadOnly;
+        private System.Windows.Forms.CheckBox cbxEditAutofire;
     }
 }

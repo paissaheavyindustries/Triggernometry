@@ -2163,7 +2163,7 @@ namespace Triggernometry
                             temp += I18n.Translate("internal/Action/desctextauradeactall", "deactivate all text auras");
                             break;
                         case AuraOpEnum.DeactivateAuraRegex:
-                            temp += I18n.Translate("internal/Action/descimgauradeactrex", "deactivate text auras matching regular expression ({0})", AuraName);
+                            temp += I18n.Translate("internal/Action/desctextauradeactrex", "deactivate text auras matching regular expression ({0})", AuraName);
                             break;
                     }
                     break;

@@ -164,6 +164,7 @@ namespace Triggernometry
         public delegate void SimpleVoidDelegate();
         public delegate double SimpleDoubleDelegate();
         public delegate string SimpleStringDelegate();
+        public delegate void TabPageDelegate(TabPage tp);
         public delegate void TtsDelegate(string text);
         public delegate void SoundDelegate(string filename, int volume);
         public delegate List<CustomTriggerCategoryProxy> CustomTriggerDelegate();
@@ -220,6 +221,9 @@ namespace Triggernometry
         public SoundDelegate SoundPlaybackHook { get; set; }
         public CustomTriggerDelegate CustomTriggerHook { get; set; }
         public static InstanceDelegate InstanceHook { get; set; }
+        public SimpleVoidDelegate CornerShowHook { get; set; }
+        public SimpleVoidDelegate CornerHideHook { get; set; }
+        public TabPageDelegate TabLocateHook { get; set; }
 
         private bool _HideAllAuras = false;
         internal bool HideAllAuras
@@ -1543,6 +1547,7 @@ namespace Triggernometry
                 ActionUpdateEvent = new AutoResetEvent(false);
                 exwhere = I18n.Translate("internal/Plugin/iniui", "creating user interface");
                 ui = new CustomControls.UserInterface();
+                ui.btnCornerPopup.Tag = pluginScreenSpace;
                 ui.cfg = cfg;
                 I18n.TranslateControl("Plugin", ui);
                 ui.Dock = DockStyle.Fill;
@@ -2063,69 +2068,73 @@ namespace Triggernometry
 
         internal void CheckForUpdates()
         {
-            string curver = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            string[] curvers = curver.Split(".".ToArray());
-            string newest = curver;
-            string[] newests = curvers;
-            string newestasset = "";
-            try
+            Task tx = new Task(() =>
             {
-                string json = "";
-                using (WebClient wc = new WebClient())
+                string curver = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                string[] curvers = curver.Split(".".ToArray());
+                string newest = curver;
+                string[] newests = curvers;
+                string newestasset = "";
+                try
                 {
-                    wc.Headers["User-Agent"] = "Triggernometry Auto-update";                    
-                    byte[] rawdata = wc.DownloadData(@"https://api.github.com/repos/paissaheavyindustries/Triggernometry/releases");
-                    json = Encoding.UTF8.GetString(rawdata);
+                    string json = "";
+                    using (WebClient wc = new WebClient())
+                    {
+                        wc.Headers["User-Agent"] = "Triggernometry Auto-update";
+                        byte[] rawdata = wc.DownloadData(@"https://api.github.com/repos/paissaheavyindustries/Triggernometry/releases");
+                        json = Encoding.UTF8.GetString(rawdata);
+                    }
+                    dynamic releases = new JavaScriptSerializer().DeserializeObject(json);
+                    foreach (dynamic release in releases)
+                    {
+                        string fullrver = (string)release["tag_name"];
+                        string[] rvers = fullrver.Split(".".ToArray());
+                        if (rvers[0][0] == 'v')
+                        {
+                            rvers[0] = rvers[0].Substring(1);
+                        }
+                        fullrver = String.Join(".", rvers);
+                        for (int i = 0; i < 4; i++)
+                        {
+                            int a = Int32.Parse(newests[i]);
+                            int b = Int32.Parse(rvers[i]);
+                            if (a > b)
+                            {
+                                //FilteredAddToLog(DebugLevelEnum.Info, "Newest version " + newest + " > release version " + fullrver);
+                                break;
+                            }
+                            if (a < b)
+                            {
+                                //FilteredAddToLog(DebugLevelEnum.Info, "Newest version " + newest + " < release version " + fullrver);
+                                newest = fullrver;
+                                newests = rvers;
+                                newestasset = release["assets"][0]["browser_download_url"];
+                                break;
+                            }
+                        }
+                    }
                 }
-                dynamic releases = new JavaScriptSerializer().DeserializeObject(json);
-                foreach (dynamic release in releases)
+                catch (Exception ex)
                 {
-                    string fullrver = (string)release["tag_name"];
-                    string[] rvers = fullrver.Split(".".ToArray());
-                    if (rvers[0][0] == 'v')
-                    {
-                        rvers[0] = rvers[0].Substring(1);
-                    }
-                    fullrver = String.Join(".", rvers);
-                    for (int i = 0; i < 4; i++)
-                    {
-                        int a = Int32.Parse(newests[i]);
-                        int b = Int32.Parse(rvers[i]);
-                        if (a > b)
-                        {
-                            //FilteredAddToLog(DebugLevelEnum.Info, "Newest version " + newest + " > release version " + fullrver);
-                            break;
-                        }
-                        if (a < b)
-                        {
-                            //FilteredAddToLog(DebugLevelEnum.Info, "Newest version " + newest + " < release version " + fullrver);
-                            newest = fullrver;
-                            newests = rvers;
-                            newestasset = release["assets"][0]["browser_download_url"];
-                            break;
-                        }
-                    }
+                    FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/Plugin/vercheckfail", "Version update check failed: {0}", ex.Message));
                 }
-            }
-            catch (Exception ex)
-            {
-                FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/Plugin/vercheckfail", "Version update check failed: {0}", ex.Message));
-            }
-            if (newest != curver)
-            {
-                FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/verchecknew", "Version check: A new version {0} is available for download to replace current version {1}", newest, curver));
-                updateDownloadUrl = newestasset;
-                CustomControls.Toast t = new CustomControls.Toast();
-                t.ToastText = I18n.Translate("internal/Plugin/downloadnewver", "A new version ({0}) is available for download. Would you like to open the download page?", newest);
-                t.OnYes += AutoUpdatePromptResult;
-                t.OnNo += AutoUpdatePromptResult;
-                t.ToastType = CustomControls.Toast.ToastTypeEnum.YesNo;
-                ui.QueueToast(t);
-            }
-            else
-            {
-                FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/verchecksame", "Version check: Newest version {0} is the same or older than current version {1}", newest, curver));
-            }
+                if (newest != curver)
+                {
+                    FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/verchecknew", "Version check: A new version {0} is available for download to replace current version {1}", newest, curver));
+                    updateDownloadUrl = newestasset;
+                    CustomControls.Toast t = new CustomControls.Toast();
+                    t.ToastText = I18n.Translate("internal/Plugin/downloadnewver", "A new version ({0}) is available for download. Would you like to open the download page?", newest);
+                    t.OnYes += AutoUpdatePromptResult;
+                    t.OnNo += AutoUpdatePromptResult;
+                    t.ToastType = CustomControls.Toast.ToastTypeEnum.YesNo;
+                    ui.QueueToast(t);
+                }
+                else
+                {
+                    FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/verchecksame", "Version check: Newest version {0} is the same or older than current version {1}", newest, curver));
+                }
+            });
+            tx.Start();
         }
 
         private void AutoUpdatePromptResult(CustomControls.Toast t, bool result)
@@ -2954,6 +2963,11 @@ namespace Triggernometry
                         break;
                 }
             }
+        }
+
+        public Control GetCornerControl()
+        {
+            return ui.btnCornerPopup;
         }
 
     }
