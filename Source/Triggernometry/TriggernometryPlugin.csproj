@@ -44,6 +44,9 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.12.2.1\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
@@ -71,6 +74,9 @@
     <Reference Include="System.Management" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Speech" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -80,6 +86,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionProps.cs" />
     <Compile Include="CustomControls\ConditionViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -202,6 +209,12 @@
     <Compile Include="Forms\RepositoryListForm.Designer.cs">
       <DependentUpon>RepositoryListForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SearchForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SearchForm.Designer.cs">
+      <DependentUpon>SearchForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="I18n.cs" />
     <Compile Include="InternalLog.cs" />
     <Compile Include="Language.cs" />
@@ -211,7 +224,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ObsController.cs" />
-    <Compile Include="OverrideHelper.cs" />
+    <Compile Include="Scarborough\OverrideHelper.cs" />
     <Compile Include="PluginBridges\BridgeFFXIV.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -272,7 +285,7 @@
     <Compile Include="Scarborough\User32.Types.cs" />
     <Compile Include="Scarborough\WindowBounds.cs" />
     <Compile Include="Scarborough\WindowHelper.cs" />
-    <Compile Include="ThrowHelper.cs" />
+    <Compile Include="Scarborough\ThrowHelper.cs" />
     <Compile Include="Trigger.cs" />
     <Compile Include="Forms\TriggerForm.cs">
       <SubType>Form</SubType>
@@ -287,15 +300,17 @@
     <Compile Include="CustomControls\UserInterface.Designer.cs">
       <DependentUpon>UserInterface.cs</DependentUpon>
     </Compile>
-    <Compile Include="Variable.cs" />
-    <Compile Include="VariableClump.cs" />
+    <Compile Include="Variables\Variable.cs" />
+    <Compile Include="Variables\VariableScalar.cs" />
+    <Compile Include="Variables\VariableDictionary.cs" />
     <Compile Include="Forms\VariableForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\VariableForm.Designer.cs">
       <DependentUpon>VariableForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="VariableList.cs" />
+    <Compile Include="Variables\VariableList.cs" />
+    <Compile Include="Variables\VariableTable.cs" />
     <Compile Include="WebsocketSharp\ByteOrder.cs" />
     <Compile Include="WebsocketSharp\CloseEventArgs.cs" />
     <Compile Include="WebsocketSharp\CloseStatusCode.cs" />
@@ -427,6 +442,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RepositoryListForm.resx">
       <DependentUpon>RepositoryListForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SearchForm.resx">
+      <DependentUpon>SearchForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

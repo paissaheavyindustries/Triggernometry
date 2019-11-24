@@ -32,6 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserInterface));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ctxFire = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.ctxAdd = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxAddFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxAddTrigger = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,6 +82,7 @@
             this.btnBenchmark = new System.Windows.Forms.ToolStripMenuItem();
             this.btnViewVariables = new System.Windows.Forms.ToolStripMenuItem();
             this.btnViewLog = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnSearch = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.btnAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
@@ -89,6 +92,7 @@
             this.errThing2 = new System.Windows.Forms.ToolStripSeparator();
             this.errThing1 = new System.Windows.Forms.ToolStripLabel();
             this.pnlUi = new System.Windows.Forms.Panel();
+            this.btnCornerPopup = new System.Windows.Forms.Button();
             this.pnlToastSpace = new System.Windows.Forms.Panel();
             this.pnlWelcome = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -114,9 +118,6 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.prgStatus = new System.Windows.Forms.ToolStripProgressBar();
             this.tlsStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
-            this.ctxFire = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnCornerPopup = new System.Windows.Forms.Button();
             this.treeView1 = new Triggernometry.CustomControls.TreeViewEx();
             this.contextMenuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -139,6 +140,8 @@
             this.imageList1.Images.SetKeyName(2, "bolt.png");
             this.imageList1.Images.SetKeyName(3, "network-transmit-receive.png");
             this.imageList1.Images.SetKeyName(4, "network-error.png");
+            this.imageList1.Images.SetKeyName(5, "folder-closed-limited.png");
+            this.imageList1.Images.SetKeyName(6, "folder-open-limited.png");
             // 
             // contextMenuStrip1
             // 
@@ -162,6 +165,19 @@
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(145, 276);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            // 
+            // ctxFire
+            // 
+            this.ctxFire.Image = ((System.Drawing.Image)(resources.GetObject("ctxFire.Image")));
+            this.ctxFire.Name = "ctxFire";
+            this.ctxFire.Size = new System.Drawing.Size(144, 22);
+            this.ctxFire.Text = "Fire";
+            this.ctxFire.Click += new System.EventHandler(this.ctxFire_Click);
+            // 
+            // toolStripSeparator12
+            // 
+            this.toolStripSeparator12.Name = "toolStripSeparator12";
+            this.toolStripSeparator12.Size = new System.Drawing.Size(141, 6);
             // 
             // ctxAdd
             // 
@@ -447,6 +463,7 @@
             this.btnBenchmark,
             this.btnViewVariables,
             this.btnViewLog,
+            this.btnSearch,
             this.toolStripSeparator6,
             this.btnAbout});
             this.btnOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnOptions.Image")));
@@ -580,6 +597,14 @@
             this.btnViewLog.Text = "View log";
             this.btnViewLog.Click += new System.EventHandler(this.viewLogToolStripMenuItem_Click);
             // 
+            // btnSearch
+            // 
+            this.btnSearch.Image = ((System.Drawing.Image)(resources.GetObject("btnSearch.Image")));
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(248, 22);
+            this.btnSearch.Text = "Search";
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
@@ -653,6 +678,19 @@
             this.pnlUi.Name = "pnlUi";
             this.pnlUi.Size = new System.Drawing.Size(800, 372);
             this.pnlUi.TabIndex = 4;
+            // 
+            // btnCornerPopup
+            // 
+            this.btnCornerPopup.BackColor = System.Drawing.SystemColors.Info;
+            this.btnCornerPopup.ForeColor = System.Drawing.SystemColors.InfoText;
+            this.btnCornerPopup.Image = ((System.Drawing.Image)(resources.GetObject("btnCornerPopup.Image")));
+            this.btnCornerPopup.Location = new System.Drawing.Point(56, 222);
+            this.btnCornerPopup.Name = "btnCornerPopup";
+            this.btnCornerPopup.Size = new System.Drawing.Size(28, 24);
+            this.btnCornerPopup.TabIndex = 7;
+            this.btnCornerPopup.Text = " ";
+            this.btnCornerPopup.UseVisualStyleBackColor = false;
+            this.btnCornerPopup.Click += new System.EventHandler(this.btnCornerPopup_Click);
             // 
             // pnlToastSpace
             // 
@@ -964,32 +1002,6 @@
             this.tlsStatus.Size = new System.Drawing.Size(39, 17);
             this.tlsStatus.Text = "Ready";
             // 
-            // toolStripSeparator12
-            // 
-            this.toolStripSeparator12.Name = "toolStripSeparator12";
-            this.toolStripSeparator12.Size = new System.Drawing.Size(141, 6);
-            // 
-            // ctxFire
-            // 
-            this.ctxFire.Image = ((System.Drawing.Image)(resources.GetObject("ctxFire.Image")));
-            this.ctxFire.Name = "ctxFire";
-            this.ctxFire.Size = new System.Drawing.Size(144, 22);
-            this.ctxFire.Text = "Fire";
-            this.ctxFire.Click += new System.EventHandler(this.ctxFire_Click);
-            // 
-            // btnCornerPopup
-            // 
-            this.btnCornerPopup.BackColor = System.Drawing.SystemColors.Info;
-            this.btnCornerPopup.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.btnCornerPopup.Image = ((System.Drawing.Image)(resources.GetObject("btnCornerPopup.Image")));
-            this.btnCornerPopup.Location = new System.Drawing.Point(56, 222);
-            this.btnCornerPopup.Name = "btnCornerPopup";
-            this.btnCornerPopup.Size = new System.Drawing.Size(28, 24);
-            this.btnCornerPopup.TabIndex = 7;
-            this.btnCornerPopup.Text = " ";
-            this.btnCornerPopup.UseVisualStyleBackColor = false;
-            this.btnCornerPopup.Click += new System.EventHandler(this.btnCornerPopup_Click);
-            // 
             // treeView1
             // 
             this.treeView1.AllowDrop = true;
@@ -1132,5 +1144,6 @@
         private System.Windows.Forms.ToolStripMenuItem ctxFire;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
         public System.Windows.Forms.Button btnCornerPopup;
+        private System.Windows.Forms.ToolStripMenuItem btnSearch;
     }
 }

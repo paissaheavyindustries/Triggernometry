@@ -86,6 +86,8 @@ namespace Triggernometry
         public bool AllowWindowMessages { get; set; }
         [XmlAttribute]
         public bool AllowObsControl { get; set; }
+        [XmlAttribute]
+        public bool AllowDiskOperations { get; set; }
 
         [XmlAttribute]
         public NewBehaviorEnum NewBehavior { get; set; }
@@ -110,6 +112,7 @@ namespace Triggernometry
             AllowProcessLaunch = false;
             AllowScriptExecution = false;
             AllowWindowMessages = false;
+            AllowDiskOperations = false;
             KeepLocalBackup = true;
             TriggerStates = new List<RepositoryItem>();
             FolderStates = new List<RepositoryItem>();

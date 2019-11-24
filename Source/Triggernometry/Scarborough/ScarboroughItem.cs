@@ -26,6 +26,7 @@ namespace Scarborough
 
         internal Int64 Ordinal { get; set; }
 
+        internal string Name { get; set; }
         internal string InitXExpression { get; set; }
         internal string InitYExpression { get; set; }
         internal string InitWExpression { get; set; }
@@ -240,11 +241,11 @@ namespace Scarborough
             {
                 if (ctx.trig != null)
                 {
-                    ctx.trig.AddToLog(plug, Triggernometry.RealPlugin.DebugLevelEnum.Error, Triggernometry.I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message)));
+                    ctx.trig.AddToLog(plug, Triggernometry.RealPlugin.DebugLevelEnum.Error, Triggernometry.I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura '{0}' from trigger '{1}' due to update exception: {2}", Name, ctx.trig.LogName, ex.Message)));
                 }
                 else
                 {
-                    plug.FilteredAddToLog(Triggernometry.RealPlugin.DebugLevelEnum.Error, Triggernometry.I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message)));
+                    plug.FilteredAddToLog(Triggernometry.RealPlugin.DebugLevelEnum.Error, Triggernometry.I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura '{0}' due to update exception: {1}", Name, ex.Message)));
                 }
                 return false;
             }

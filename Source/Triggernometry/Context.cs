@@ -9,6 +9,7 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.Web.Script.Serialization;
+using Triggernometry.Variables;
 
 namespace Triggernometry
 {
@@ -28,6 +29,7 @@ namespace Triggernometry
         internal static Regex rexnum = new Regex(@"\$(?<id>[0-9]+)");
         internal static Regex rexnump = new Regex(@"\[(?<index>.+?)\]\.(?<prop>[a-zA-Z]+)");
         internal static Regex rexlidx = new Regex(@"(?<name>[^\[]+)\[(?<index>.+?)\]");
+        internal static Regex rextidx = new Regex(@"(?<name>[^\[]+)\[(?<column>.+?)\]\[(?<row>.+?)\]");
         internal static Regex rexlprp = new Regex(@"(?<name>[^\.]+)\.(?<prop>[a-zA-Z]+)(\((?<arg>[^\)]+)\)){0,1}");
         internal static Regex rexfunc = new Regex(@"(?<name>[^\(]{1,})(\((?<arg>[^\)]+)\)){0,1}");
         internal Dictionary<string, string> namedgroups;
@@ -37,6 +39,8 @@ namespace Triggernometry
         internal dynamic contextJsonResponse;
         internal bool contextJsonParsed = false;
 
+        internal List<int> ActionResults = new List<int>();
+
         internal const double EORZEA_MULTIPLIER = 3600D / 175D;
 
         private static MathParser mp = new MathParser();
@@ -45,6 +49,37 @@ namespace Triggernometry
 		{
 			namedgroups = new Dictionary<string, string>();
 			numgroups = new List<string>();
+        }
+
+        internal void PushActionResult(int i)
+        {
+            lock (ActionResults)
+            {
+                ActionResults.Add(i);
+            }
+        }
+
+        internal int PeekActionResult(bool previous, int i)
+        {
+            lock (ActionResults)
+            {
+                if (previous == true)
+                {
+                    if (ActionResults.Count > 0)
+                    {
+                        return ActionResults[ActionResults.Count - 1];
+                    }
+                    return 0;
+                }
+                else
+                {
+                    if (i < 1 || i > ActionResults.Count)
+                    {
+                        return 0;
+                    }
+                    return ActionResults[i - 1];
+                }
+            }
         }
 
         public delegate void LoggerCallback(object o, string message);
@@ -83,6 +118,20 @@ namespace Triggernometry
             if (createNew == true)
             {
                 p.listvariables[varname] = vl;
+            }
+            return vl;
+        }
+
+        private VariableTable GetTableVariable(RealPlugin p, string varname, bool createNew)
+        {
+            if (p.tablevariables.ContainsKey(varname) == true)
+            {
+                return p.tablevariables[varname];
+            }
+            VariableTable vl = new VariableTable();
+            if (createNew == true)
+            {
+                p.tablevariables[varname] = vl;
             }
             return vl;
         }
@@ -186,6 +235,44 @@ namespace Triggernometry
                             val = ((long)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds).ToString();
                             found = true;
                         }
+                        else if (x == "_ffxivplayer")
+                        {
+                            VariableDictionary vc = PluginBridges.BridgeFFXIV.GetMyself();
+                            if (vc != null)
+                            {
+                                val = vc.GetValue("name").ToString();
+                            }
+                            found = true;
+                        }
+                        else if (x == "_ffxivpartyorder")
+                        {
+                            val = plug.cfg.FfxivPartyOrdering + " " + plug.cfg.FfxivCustomPartyOrder;
+                            found = true;
+                        }
+                        else if (x == "_incombat")
+                        {
+                            val = plug != null && plug.InCombatHook() ? "1" : "0";
+                            found = true;
+                        }
+                        else if (x == "_duration")
+                        {
+                            try
+                            {
+                                if (plug != null && plug.InCombatHook() == true)
+                                {
+                                    val = ((int)Math.Floor(plug.EncounterDurationHook())).ToString();
+                                }
+                                else
+                                {
+                                    val = "0";
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                val = "0";
+                            }
+                            found = true;
+                        }
                         else if (x == "_response")
                         {
                             val = contextResponse;
@@ -200,6 +287,33 @@ namespace Triggernometry
                         {
                             val = trig != null ? trig.Id.ToString() : "(null)";
                             found = true;
+                        }
+                        else if (x.IndexOf("_actionhistory") == 0)
+                        {
+                            mx = rexlidx.Match(x);
+                            if (mx.Success == true)
+                            {
+                                string idx = mx.Groups["index"].Value;
+                                if (idx == "previous")
+                                {
+                                    val = PeekActionResult(true, 0).ToString();
+                                }
+                                else
+                                {
+                                    val = PeekActionResult(false, Int32.Parse(idx)).ToString();
+                                }
+                                found = true;
+                            }
+                        }
+                        else if (x.IndexOf("_env") == 0)
+                        {
+                            mx = rexlidx.Match(x);
+                            if (mx.Success == true)
+                            {
+                                string idx = mx.Groups["index"].Value;
+                                val = System.Environment.GetEnvironmentVariable(idx);
+                                found = true;
+                            }
                         }
                         else if (x.IndexOf("_jsonresponse") == 0)
                         {
@@ -245,6 +359,22 @@ namespace Triggernometry
                             lock (plug.listvariables) // verified
                             {
                                 if (plug.listvariables.ContainsKey(varname) == true)
+                                {
+                                    val = "1";
+                                }
+                                else
+                                {
+                                    val = "0";
+                                }
+                                found = true;
+                            }
+                        }
+                        else if (x.IndexOf("etvar:") == 0)
+                        {
+                            string varname = x.Substring(6);
+                            lock (plug.tablevariables) // verified
+                            {
+                                if (plug.tablevariables.ContainsKey(varname) == true)
                                 {
                                     val = "1";
                                 }
@@ -328,13 +458,202 @@ namespace Triggernometry
                                         int iindex;
                                         if (Int32.TryParse(gindex, out iindex) == true)
                                         {
-                                            val = vl.Peek(iindex);
+                                            val = vl.Peek(iindex).ToString();
                                         }
                                         found = true;
                                     }
                                     found = true;
                                 }
-                            }                                                            
+                            }
+                        }
+                        else if (x.IndexOf("tvar:") == 0)
+                        {
+                            string varname = x.Substring(5);
+                            mx = rexlprp.Match(varname);
+                            if (mx.Success == true)
+                            {
+                                string gname = mx.Groups["name"].Value;
+                                string gprop = mx.Groups["prop"].Value;
+                                switch (gprop)
+                                {
+                                    case "width":
+                                        {
+                                            lock (plug.tablevariables)
+                                            {
+                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                val = vt.Width.ToString();
+                                                found = true;
+                                            }
+                                        }
+                                        break;
+                                    case "height":
+                                        {
+                                            lock (plug.tablevariables)
+                                            {
+                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                val = vt.Height.ToString();
+                                                found = true;
+                                            }
+                                        }
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                mx = rextidx.Match(varname);
+                                if (mx.Success == true)
+                                {
+                                    string gname = mx.Groups["name"].Value;
+                                    string gcol = mx.Groups["column"].Value;
+                                    string grow = mx.Groups["row"].Value;
+                                    lock (plug.tablevariables)
+                                    {
+                                        VariableTable vt = GetTableVariable(plug, gname, false);
+                                        if (gcol == "last")
+                                        {
+                                            gcol = vt.Width.ToString();
+                                        }
+                                        if (grow == "last")
+                                        {
+                                            grow = vt.Height.ToString();
+                                        }
+                                        int xindex, yindex;
+                                        if (Int32.TryParse(gcol, out xindex) == true)
+                                        {
+                                            if (Int32.TryParse(grow, out yindex) == true)
+                                            {
+                                                val = vt.Peek(xindex, yindex).ToString();
+                                            }
+                                        }
+                                        found = true;
+                                    }
+                                    found = true;
+                                }
+                            }
+                        }
+                        else if (x.IndexOf("tvarrl:") == 0)
+                        {
+                            string varname = x.Substring(7);
+                            mx = rexlprp.Match(varname);
+                            if (mx.Success == true)
+                            {
+                                string gname = mx.Groups["name"].Value;
+                                string gprop = mx.Groups["prop"].Value;
+                                switch (gprop)
+                                {
+                                    case "width":
+                                        {
+                                            lock (plug.tablevariables)
+                                            {
+                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                val = (vt.Width > 0 ? vt.Width - 1 :0).ToString();
+                                                found = true;
+                                            }
+                                        }
+                                        break;
+                                    case "height":
+                                        {
+                                            lock (plug.tablevariables)
+                                            {
+                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                val = vt.Height.ToString();
+                                                found = true;
+                                            }
+                                        }
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                mx = rextidx.Match(varname);
+                                if (mx.Success == true)
+                                {
+                                    string gname = mx.Groups["name"].Value;
+                                    string gheader = mx.Groups["column"].Value;
+                                    string gindex = mx.Groups["row"].Value;
+                                    lock (plug.tablevariables)
+                                    {
+                                        VariableTable vt = GetTableVariable(plug, gname, false);
+                                        if (gindex == "last")
+                                        {
+                                            gindex = (vt.Width > 0 ? vt.Width - 1 : 0).ToString();
+                                        }
+                                        int xindex;
+                                        if (Int32.TryParse(gindex, out xindex) == true)
+                                        {
+                                            int yindex = vt.SeekRow(gheader);
+                                            if (yindex > 0)
+                                            {
+                                                val = vt.Peek(xindex + 1, yindex).ToString();
+                                            }
+                                        }
+                                        found = true;
+                                    }
+                                    found = true;
+                                }
+                            }
+                        }
+                        else if (x.IndexOf("tvarcl:") == 0)
+                        {
+                            string varname = x.Substring(7);
+                            mx = rexlprp.Match(varname);
+                            if (mx.Success == true)
+                            {
+                                string gname = mx.Groups["name"].Value;
+                                string gprop = mx.Groups["prop"].Value;
+                                switch (gprop)
+                                {
+                                    case "width":
+                                        {
+                                            lock (plug.tablevariables)
+                                            {
+                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                val = vt.Width.ToString();
+                                                found = true;
+                                            }
+                                        }
+                                        break;
+                                    case "height":
+                                        {
+                                            lock (plug.tablevariables)
+                                            {
+                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                val = (vt.Height > 0 ? vt.Height - 1 : 0).ToString();
+                                                found = true;
+                                            }
+                                        }
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                mx = rextidx.Match(varname);
+                                if (mx.Success == true)
+                                {
+                                    string gname = mx.Groups["name"].Value;
+                                    string gheader = mx.Groups["column"].Value;
+                                    string gindex = mx.Groups["row"].Value;
+                                    lock (plug.tablevariables)
+                                    {
+                                        VariableTable vt = GetTableVariable(plug, gname, false);
+                                        if (gindex == "last")
+                                        {
+                                            gindex = (vt.Height > 0 ? vt.Height - 1 : 0).ToString();
+                                        }
+                                        int yindex;
+                                        if (Int32.TryParse(gindex, out yindex) == true)
+                                        {
+                                            int xindex = vt.SeekColumn(gheader);
+                                            if (xindex > 0)
+                                            {
+                                                val = vt.Peek(xindex, yindex + 1).ToString();
+                                            }
+                                        }
+                                        found = true;
+                                    }
+                                    found = true;
+                                }
+                            }
                         }
                         else if (x.IndexOf("numeric:") == 0)
                         {
@@ -498,44 +817,6 @@ namespace Triggernometry
                                 }
                             }
                         }
-                        else if (x == "_ffxivplayer")
-                        {
-                            VariableClump vc = PluginBridges.BridgeFFXIV.GetMyself();
-                            if (vc != null)
-                            {
-                                val = vc.GetValue("name");
-                            }
-                            found = true;
-                        }
-                        else if (x == "_ffxivpartyorder")
-                        {
-                            val = plug.cfg.FfxivPartyOrdering + " " + plug.cfg.FfxivCustomPartyOrder;
-                            found = true;
-                        }
-                        else if (x == "_incombat")
-                        {
-                            val = plug != null && plug.InCombatHook() ? "1" : "0";
-                            found = true;
-                        }
-                        else if (x == "_duration")
-                        {
-                            try
-                            {
-                                if (plug != null && plug.InCombatHook() == true)
-                                {
-                                    val = ((int)Math.Floor(plug.EncounterDurationHook())).ToString();
-                                }
-                                else
-                                {
-                                    val = "0";
-                                }
-                            }
-                            catch (Exception)
-                            {
-                                val = "0";
-                            }
-                            found = true;
-                        }
                         else if (x.IndexOf("_ffxivparty") == 0)
                         {
                             mx = rexnump.Match(x);
@@ -545,7 +826,7 @@ namespace Triggernometry
                                 string gprop = mx.Groups["prop"].Value;
                                 int iindex = 0;
                                 Int64 honk;
-                                VariableClump vc = null;
+                                VariableDictionary vc = null;
                                 bool foundid = false;
                                 if (Int64.TryParse(gindex, System.Globalization.NumberStyles.HexNumber, CultureInfo.InvariantCulture, out honk) == true)
                                 {
@@ -564,7 +845,7 @@ namespace Triggernometry
                                 }
                                 if (vc != null)
                                 {
-                                    val = vc.GetValue(gprop);
+                                    val = vc.GetValue(gprop).ToString();
                                 }
                             }
                             found = true;
@@ -577,7 +858,7 @@ namespace Triggernometry
                                 string gindex = mx.Groups["index"].Value;
                                 string gprop = mx.Groups["prop"].Value;
                                 Int64 honk;
-                                VariableClump vc = null;
+                                VariableDictionary vc = null;
                                 bool foundid = false;
                                 if (Int64.TryParse(gindex, System.Globalization.NumberStyles.HexNumber, CultureInfo.InvariantCulture, out honk) == true)
                                 {
@@ -589,7 +870,7 @@ namespace Triggernometry
                                 }
                                 if (vc != null)
                                 {
-                                    val = vc.GetValue(gprop);
+                                    val = vc.GetValue(gprop).ToString();
                                 }
                             }
                             found = true;
@@ -799,7 +1080,7 @@ namespace Triggernometry
             };
             if (trig != null)
             {
-                if (trig.DebugLevel == RealPlugin.DebugLevelEnum.Inherit)
+                if (trig._DebugLevel == RealPlugin.DebugLevelEnum.Inherit)
                 {
                     if (plug != null)
                     {
@@ -811,7 +1092,7 @@ namespace Triggernometry
                 }
                 else
                 {
-                    if (trig.DebugLevel < RealPlugin.DebugLevelEnum.Verbose)
+                    if (trig._DebugLevel < RealPlugin.DebugLevelEnum.Verbose)
                     {
                         return newexpr;
                     }

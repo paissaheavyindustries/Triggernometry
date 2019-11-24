@@ -44,6 +44,9 @@
             this.tbcGeneral = new System.Windows.Forms.TabControl();
             this.tabGeneral = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.chkAllowDisk = new System.Windows.Forms.CheckBox();
+            this.cbxAudioOverride = new System.Windows.Forms.ComboBox();
+            this.lblAudioOverride = new System.Windows.Forms.Label();
             this.chkAllowObs = new System.Windows.Forms.CheckBox();
             this.chkAllowWmsg = new System.Windows.Forms.CheckBox();
             this.cbxUpdatePolicy = new System.Windows.Forms.ComboBox();
@@ -76,8 +79,6 @@
             this.txtLastUpdated = new System.Windows.Forms.TextBox();
             this.capDetails = new Triggernometry.CustomControls.PrettyCaption();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.lblAudioOverride = new System.Windows.Forms.Label();
-            this.cbxAudioOverride = new System.Windows.Forms.ComboBox();
             this.panel4.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -101,7 +102,7 @@
             // panel3
             // 
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(10, 406);
+            this.panel3.Location = new System.Drawing.Point(10, 456);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(564, 10);
             this.panel3.TabIndex = 16;
@@ -111,7 +112,7 @@
             this.panel4.Controls.Add(this.btnCancel);
             this.panel4.Controls.Add(this.btnOk);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel4.Location = new System.Drawing.Point(10, 416);
+            this.panel4.Location = new System.Drawing.Point(10, 466);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(564, 35);
             this.panel4.TabIndex = 17;
@@ -222,7 +223,7 @@
             this.grpUpdateSettings.Location = new System.Drawing.Point(10, 105);
             this.grpUpdateSettings.Name = "grpUpdateSettings";
             this.grpUpdateSettings.Padding = new System.Windows.Forms.Padding(10);
-            this.grpUpdateSettings.Size = new System.Drawing.Size(564, 301);
+            this.grpUpdateSettings.Size = new System.Drawing.Size(564, 351);
             this.grpUpdateSettings.TabIndex = 19;
             this.grpUpdateSettings.TabStop = false;
             this.grpUpdateSettings.Text = " Updates and permissions ";
@@ -235,7 +236,7 @@
             this.tbcGeneral.Location = new System.Drawing.Point(10, 23);
             this.tbcGeneral.Name = "tbcGeneral";
             this.tbcGeneral.SelectedIndex = 0;
-            this.tbcGeneral.Size = new System.Drawing.Size(544, 268);
+            this.tbcGeneral.Size = new System.Drawing.Size(544, 318);
             this.tbcGeneral.TabIndex = 1;
             // 
             // tabGeneral
@@ -244,7 +245,7 @@
             this.tabGeneral.Location = new System.Drawing.Point(4, 22);
             this.tabGeneral.Name = "tabGeneral";
             this.tabGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.tabGeneral.Size = new System.Drawing.Size(536, 242);
+            this.tabGeneral.Size = new System.Drawing.Size(536, 292);
             this.tabGeneral.TabIndex = 0;
             this.tabGeneral.Text = "Settings";
             this.tabGeneral.UseVisualStyleBackColor = true;
@@ -255,13 +256,14 @@
             this.tableLayoutPanel2.ColumnCount = 2;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Controls.Add(this.chkAllowDisk, 0, 7);
             this.tableLayoutPanel2.Controls.Add(this.cbxAudioOverride, 1, 2);
             this.tableLayoutPanel2.Controls.Add(this.lblAudioOverride, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.chkAllowObs, 0, 6);
             this.tableLayoutPanel2.Controls.Add(this.chkAllowWmsg, 0, 5);
             this.tableLayoutPanel2.Controls.Add(this.cbxUpdatePolicy, 2, 1);
             this.tableLayoutPanel2.Controls.Add(this.lblUpdatePolicy, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.chkKeepLocal, 0, 7);
+            this.tableLayoutPanel2.Controls.Add(this.chkKeepLocal, 0, 8);
             this.tableLayoutPanel2.Controls.Add(this.chkAllowScript, 0, 4);
             this.tableLayoutPanel2.Controls.Add(this.chkAllowProcess, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.cbxNewBehavior, 1, 0);
@@ -269,7 +271,7 @@
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 8;
+            this.tableLayoutPanel2.RowCount = 9;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -278,8 +280,50 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(530, 236);
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(530, 286);
             this.tableLayoutPanel2.TabIndex = 0;
+            // 
+            // chkAllowDisk
+            // 
+            this.chkAllowDisk.AutoSize = true;
+            this.chkAllowDisk.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel2.SetColumnSpan(this.chkAllowDisk, 2);
+            this.chkAllowDisk.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkAllowDisk.Location = new System.Drawing.Point(3, 194);
+            this.chkAllowDisk.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
+            this.chkAllowDisk.Name = "chkAllowDisk";
+            this.chkAllowDisk.Size = new System.Drawing.Size(525, 17);
+            this.chkAllowDisk.TabIndex = 36;
+            this.chkAllowDisk.Text = "Allow triggers to perform file operations";
+            this.chkAllowDisk.UseVisualStyleBackColor = true;
+            this.chkAllowDisk.CheckedChanged += new System.EventHandler(this.chkAllowDisk_CheckedChanged);
+            // 
+            // cbxAudioOverride
+            // 
+            this.cbxAudioOverride.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxAudioOverride.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxAudioOverride.FormattingEnabled = true;
+            this.cbxAudioOverride.Items.AddRange(new object[] {
+            "As defined in repository",
+            "Audio override setting always on",
+            "Audio override setting always off"});
+            this.cbxAudioOverride.Location = new System.Drawing.Point(215, 57);
+            this.cbxAudioOverride.Name = "cbxAudioOverride";
+            this.cbxAudioOverride.Size = new System.Drawing.Size(312, 21);
+            this.cbxAudioOverride.TabIndex = 35;
+            // 
+            // lblAudioOverride
+            // 
+            this.lblAudioOverride.AutoEllipsis = true;
+            this.lblAudioOverride.AutoSize = true;
+            this.lblAudioOverride.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblAudioOverride.Location = new System.Drawing.Point(3, 54);
+            this.lblAudioOverride.Name = "lblAudioOverride";
+            this.lblAudioOverride.Size = new System.Drawing.Size(206, 27);
+            this.lblAudioOverride.TabIndex = 34;
+            this.lblAudioOverride.Text = "Audio output setting override";
+            this.lblAudioOverride.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // chkAllowObs
             // 
@@ -342,7 +386,7 @@
             this.chkKeepLocal.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tableLayoutPanel2.SetColumnSpan(this.chkKeepLocal, 2);
             this.chkKeepLocal.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkKeepLocal.Location = new System.Drawing.Point(3, 194);
+            this.chkKeepLocal.Location = new System.Drawing.Point(3, 221);
             this.chkKeepLocal.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.chkKeepLocal.Name = "chkKeepLocal";
             this.chkKeepLocal.Size = new System.Drawing.Size(525, 17);
@@ -412,7 +456,7 @@
             this.tabUpdateLog.Location = new System.Drawing.Point(4, 22);
             this.tabUpdateLog.Name = "tabUpdateLog";
             this.tabUpdateLog.Padding = new System.Windows.Forms.Padding(6);
-            this.tabUpdateLog.Size = new System.Drawing.Size(536, 242);
+            this.tabUpdateLog.Size = new System.Drawing.Size(536, 292);
             this.tabUpdateLog.TabIndex = 1;
             this.tabUpdateLog.Text = "Update log";
             this.tabUpdateLog.UseVisualStyleBackColor = true;
@@ -434,7 +478,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel4);
             this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel3);
             this.splitContainer1.Panel2.Controls.Add(this.capDetails);
-            this.splitContainer1.Size = new System.Drawing.Size(524, 230);
+            this.splitContainer1.Size = new System.Drawing.Size(524, 280);
             this.splitContainer1.SplitterDistance = 327;
             this.splitContainer1.TabIndex = 7;
             // 
@@ -445,7 +489,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(327, 230);
+            this.panel2.Size = new System.Drawing.Size(327, 280);
             this.panel2.TabIndex = 6;
             // 
             // txtLog
@@ -461,7 +505,7 @@
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtLog.Size = new System.Drawing.Size(327, 205);
+            this.txtLog.Size = new System.Drawing.Size(327, 255);
             this.txtLog.TabIndex = 4;
             this.txtLog.WordWrap = false;
             // 
@@ -671,46 +715,20 @@
             this.panel1.Size = new System.Drawing.Size(564, 10);
             this.panel1.TabIndex = 20;
             // 
-            // lblAudioOverride
-            // 
-            this.lblAudioOverride.AutoEllipsis = true;
-            this.lblAudioOverride.AutoSize = true;
-            this.lblAudioOverride.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAudioOverride.Location = new System.Drawing.Point(3, 54);
-            this.lblAudioOverride.Name = "lblAudioOverride";
-            this.lblAudioOverride.Size = new System.Drawing.Size(206, 27);
-            this.lblAudioOverride.TabIndex = 34;
-            this.lblAudioOverride.Text = "Audio output setting override";
-            this.lblAudioOverride.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // cbxAudioOverride
-            // 
-            this.cbxAudioOverride.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cbxAudioOverride.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxAudioOverride.FormattingEnabled = true;
-            this.cbxAudioOverride.Items.AddRange(new object[] {
-            "As defined in repository",
-            "Audio override setting always on",
-            "Audio override setting always off"});
-            this.cbxAudioOverride.Location = new System.Drawing.Point(215, 57);
-            this.cbxAudioOverride.Name = "cbxAudioOverride";
-            this.cbxAudioOverride.Size = new System.Drawing.Size(312, 21);
-            this.cbxAudioOverride.TabIndex = 35;
-            // 
             // RepositoryForm
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(584, 461);
+            this.ClientSize = new System.Drawing.Size(584, 511);
             this.Controls.Add(this.grpUpdateSettings);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.grpGeneral);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel4);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.MinimumSize = new System.Drawing.Size(600, 500);
+            this.MinimumSize = new System.Drawing.Size(600, 550);
             this.Name = "RepositoryForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.ShowInTaskbar = false;
@@ -799,5 +817,6 @@
         private System.Windows.Forms.CheckBox chkAllowObs;
         private System.Windows.Forms.Label lblAudioOverride;
         private System.Windows.Forms.ComboBox cbxAudioOverride;
+        private System.Windows.Forms.CheckBox chkAllowDisk;
     }
 }

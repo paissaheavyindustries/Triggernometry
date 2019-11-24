@@ -43,7 +43,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnSearch = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.rexSearch = new CustomControls.ExpressionTextBox();
+            this.rexSearch = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblRegularExpression = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.cbxLevelMethod = new System.Windows.Forms.ComboBox();
@@ -83,7 +83,7 @@
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
             this.panel2.Padding = new System.Windows.Forms.Padding(10);
-            this.panel2.Size = new System.Drawing.Size(741, 461);
+            this.panel2.Size = new System.Drawing.Size(734, 461);
             this.panel2.TabIndex = 2;
             // 
             // splitContainer1
@@ -103,8 +103,8 @@
             this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel1);
             this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel2);
             this.splitContainer1.Panel2.Controls.Add(this.capSearch);
-            this.splitContainer1.Size = new System.Drawing.Size(721, 371);
-            this.splitContainer1.SplitterDistance = 517;
+            this.splitContainer1.Size = new System.Drawing.Size(714, 371);
+            this.splitContainer1.SplitterDistance = 510;
             this.splitContainer1.TabIndex = 18;
             // 
             // dgvLog
@@ -129,7 +129,7 @@
             this.dgvLog.ShowCellErrors = false;
             this.dgvLog.ShowEditingIcon = false;
             this.dgvLog.ShowRowErrors = false;
-            this.dgvLog.Size = new System.Drawing.Size(517, 371);
+            this.dgvLog.Size = new System.Drawing.Size(510, 371);
             this.dgvLog.TabIndex = 0;
             this.dgvLog.VirtualMode = true;
             // 
@@ -237,11 +237,13 @@
             // 
             this.rexSearch.AutoSize = true;
             this.rexSearch.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rexSearch.Expression = "";
+            this.rexSearch.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
             this.rexSearch.Location = new System.Drawing.Point(3, 32);
             this.rexSearch.Name = "rexSearch";
+            this.rexSearch.ReadOnly = false;
             this.rexSearch.Size = new System.Drawing.Size(194, 20);
             this.rexSearch.TabIndex = 8;
-            this.rexSearch.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
             // 
             // lblRegularExpression
             // 
@@ -332,7 +334,7 @@
             this.lblStatus});
             this.tlsMain.Location = new System.Drawing.Point(10, 10);
             this.tlsMain.Name = "tlsMain";
-            this.tlsMain.Size = new System.Drawing.Size(721, 25);
+            this.tlsMain.Size = new System.Drawing.Size(714, 25);
             this.tlsMain.TabIndex = 3;
             // 
             // btnCopy
@@ -403,7 +405,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel3.Location = new System.Drawing.Point(10, 406);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(721, 10);
+            this.panel3.Size = new System.Drawing.Size(714, 10);
             this.panel3.TabIndex = 17;
             // 
             // btnClose
@@ -412,7 +414,7 @@
             this.btnClose.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.btnClose.Location = new System.Drawing.Point(10, 416);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(721, 35);
+            this.btnClose.Size = new System.Drawing.Size(714, 35);
             this.btnClose.TabIndex = 16;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = true;
@@ -423,7 +425,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(741, 461);
+            this.ClientSize = new System.Drawing.Size(734, 461);
             this.Controls.Add(this.panel2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.MinimumSize = new System.Drawing.Size(700, 500);

@@ -104,6 +104,7 @@ namespace Triggernometry.Forms
 
         internal void JobFilterFromInt(Int64 val)
         {
+            //System.Diagnostics.Debug.WriteLine("opening filter = " + val);
             List<int> indices = new List<int>();
             for (int id = 1; id < 60; id++)
             {
@@ -116,6 +117,7 @@ namespace Triggernometry.Forms
                         ClassLink cl = (ClassLink)ob;
                         if (cl.id == id)
                         {
+                            //System.Diagnostics.Debug.WriteLine(shifted + " --> " + cl.id + " = " + cl.name);
                             indices.Add(listidx);
                         }
                         listidx++;
@@ -135,8 +137,11 @@ namespace Triggernometry.Forms
             {
                 object ob = chkFfxivClassFilter.Items[ci];
                 ClassLink cl = (ClassLink)ob;
-                fifi |= ((Int64)1) << (int)(cl.id - 1);
+                Int64 num = ((Int64)1) << (int)(cl.id - 1);
+                //System.Diagnostics.Debug.WriteLine(cl.name + " = " + cl.id + " --> " + num);
+                fifi |= num;
             }
+            //System.Diagnostics.Debug.WriteLine("final filter = " + fifi);
             return fifi;
         }        
 
@@ -155,24 +160,24 @@ namespace Triggernometry.Forms
             else
             { 
                 txtFolderName.Text = f.Name;
-				chkZoneFilter.Checked = f.ZoneFilterEnabled;
-				chkEventFilter.Checked = f.EventFilterEnabled;
+				chkZoneFilter.Checked = f._ZoneFilterEnabled;
+				chkEventFilter.Checked = f._EventFilterEnabled;
 				txtZoneFilterRegex.Text = f.ZoneFilterRegularExpression;
 				txtEventFilterRegex.Text = f.EventFilterRegularExpression;
-                chkFfxivClassFilterEnabled.Checked = f.FFXIVJobFilterEnabled;
-                JobFilterFromInt(f.FFXIVJobFilter);
+                chkFfxivClassFilterEnabled.Checked = f._FFXIVJobFilterEnabled;
+                JobFilterFromInt(f._FFXIVJobFilter);
             }
         }
 
         internal void SettingsToFolder(Folder f)
         {
             f.Name = txtFolderName.Text;
-			f.ZoneFilterEnabled = chkZoneFilter.Checked;
-			f.EventFilterEnabled = chkEventFilter.Checked;
+			f._ZoneFilterEnabled = chkZoneFilter.Checked;
+			f._EventFilterEnabled = chkEventFilter.Checked;
 			f.ZoneFilterRegularExpression = txtZoneFilterRegex.Text;
 			f.EventFilterRegularExpression = txtEventFilterRegex.Text;
-            f.FFXIVJobFilterEnabled = chkFfxivClassFilterEnabled.Checked;
-            f.FFXIVJobFilter = JobfilterToInt();
+            f._FFXIVJobFilterEnabled = chkFfxivClassFilterEnabled.Checked;
+            f._FFXIVJobFilter = JobfilterToInt();
         }
 
         private void txtName_TextChanged(object sender, EventArgs e)
@@ -199,6 +204,11 @@ namespace Triggernometry.Forms
         private void btnGetCurZone_Click(object sender, EventArgs e)
         {
             txtZoneFilterRegex.Text = Regex.Escape(plug.CurrentZoneHook());
+        }
+
+        private void chkFfxivClassFilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            chkFfxivClassFilter.ClearSelected();
         }
 
     }

@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VariableForm));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel3 = new System.Windows.Forms.Panel();
             this.btnClose = new System.Windows.Forms.Button();
             this.tlsScalar = new System.Windows.Forms.ToolStrip();
@@ -40,34 +41,47 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.dgvScalarVariables = new Triggernometry.CustomControls.DataGridViewEx();
+            this.colScalarName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colScalarValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colScalarLastChanged = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colScalarChangedBy = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbcMain = new System.Windows.Forms.TabControl();
             this.tabScalar = new System.Windows.Forms.TabPage();
             this.tabList = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.tlsList = new System.Windows.Forms.ToolStrip();
-            this.btnRefreshList = new System.Windows.Forms.ToolStripButton();
-            this.btnRemoveAllList = new System.Windows.Forms.ToolStripButton();
-            this.dgvScalarVariables = new Triggernometry.CustomControls.DataGridViewEx();
             this.dgvListVariables = new Triggernometry.CustomControls.DataGridViewEx();
             this.colListName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colListSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colListValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colListLastChanged = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colListChangedBy = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colScalarName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colScalarValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colScalarLastChanged = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colScalarChangedBy = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tlsList = new System.Windows.Forms.ToolStrip();
+            this.btnRefreshList = new System.Windows.Forms.ToolStripButton();
+            this.btnRemoveAllList = new System.Windows.Forms.ToolStripButton();
+            this.tabTable = new System.Windows.Forms.TabPage();
+            this.dgvTableVariables = new Triggernometry.CustomControls.DataGridViewEx();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.btnRefreshTable = new System.Windows.Forms.ToolStripButton();
+            this.btnRemoveAllTable = new System.Windows.Forms.ToolStripButton();
             this.tlsScalar.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvScalarVariables)).BeginInit();
             this.tbcMain.SuspendLayout();
             this.tabScalar.SuspendLayout();
             this.tabList.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.tlsList.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvScalarVariables)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvListVariables)).BeginInit();
+            this.tlsList.SuspendLayout();
+            this.tabTable.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTableVariables)).BeginInit();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel3
@@ -144,10 +158,71 @@
             this.panel1.Size = new System.Drawing.Size(550, 364);
             this.panel1.TabIndex = 22;
             // 
+            // dgvScalarVariables
+            // 
+            this.dgvScalarVariables.AllowUserToAddRows = false;
+            this.dgvScalarVariables.AllowUserToDeleteRows = false;
+            this.dgvScalarVariables.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.dgvScalarVariables.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvScalarVariables.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvScalarVariables.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colScalarName,
+            this.colScalarValue,
+            this.colScalarLastChanged,
+            this.colScalarChangedBy});
+            this.dgvScalarVariables.ContextMenuStrip = this.contextMenuStrip1;
+            this.dgvScalarVariables.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvScalarVariables.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.dgvScalarVariables.Location = new System.Drawing.Point(0, 25);
+            this.dgvScalarVariables.Name = "dgvScalarVariables";
+            this.dgvScalarVariables.RowHeadersVisible = false;
+            this.dgvScalarVariables.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.dgvScalarVariables.ShowCellErrors = false;
+            this.dgvScalarVariables.ShowEditingIcon = false;
+            this.dgvScalarVariables.ShowRowErrors = false;
+            this.dgvScalarVariables.Size = new System.Drawing.Size(550, 339);
+            this.dgvScalarVariables.TabIndex = 21;
+            this.dgvScalarVariables.VirtualMode = true;
+            this.dgvScalarVariables.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dataGridView1_CellValueNeeded);
+            this.dgvScalarVariables.CellValuePushed += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dataGridView1_CellValuePushed);
+            this.dgvScalarVariables.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
+            // 
+            // colScalarName
+            // 
+            this.colScalarName.Frozen = true;
+            this.colScalarName.HeaderText = "Name";
+            this.colScalarName.Name = "colScalarName";
+            this.colScalarName.ReadOnly = true;
+            this.colScalarName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // colScalarValue
+            // 
+            this.colScalarValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colScalarValue.HeaderText = "Value";
+            this.colScalarValue.Name = "colScalarValue";
+            this.colScalarValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // colScalarLastChanged
+            // 
+            this.colScalarLastChanged.HeaderText = "Last changed";
+            this.colScalarLastChanged.Name = "colScalarLastChanged";
+            this.colScalarLastChanged.ReadOnly = true;
+            this.colScalarLastChanged.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colScalarLastChanged.Width = 120;
+            // 
+            // colScalarChangedBy
+            // 
+            this.colScalarChangedBy.HeaderText = "Changed by";
+            this.colScalarChangedBy.Name = "colScalarChangedBy";
+            this.colScalarChangedBy.ReadOnly = true;
+            this.colScalarChangedBy.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // tbcMain
             // 
             this.tbcMain.Controls.Add(this.tabScalar);
             this.tbcMain.Controls.Add(this.tabList);
+            this.tbcMain.Controls.Add(this.tabTable);
             this.tbcMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbcMain.Location = new System.Drawing.Point(10, 10);
             this.tbcMain.Name = "tbcMain";
@@ -186,66 +261,6 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(550, 364);
             this.panel2.TabIndex = 23;
-            // 
-            // tlsList
-            // 
-            this.tlsList.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.tlsList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnRefreshList,
-            this.btnRemoveAllList});
-            this.tlsList.Location = new System.Drawing.Point(0, 0);
-            this.tlsList.Name = "tlsList";
-            this.tlsList.Size = new System.Drawing.Size(550, 25);
-            this.tlsList.TabIndex = 20;
-            // 
-            // btnRefreshList
-            // 
-            this.btnRefreshList.Image = ((System.Drawing.Image)(resources.GetObject("btnRefreshList.Image")));
-            this.btnRefreshList.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnRefreshList.Name = "btnRefreshList";
-            this.btnRefreshList.Size = new System.Drawing.Size(66, 22);
-            this.btnRefreshList.Text = "Refresh";
-            this.btnRefreshList.Click += new System.EventHandler(this.toolStripButton2_Click);
-            // 
-            // btnRemoveAllList
-            // 
-            this.btnRemoveAllList.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.btnRemoveAllList.Image = ((System.Drawing.Image)(resources.GetObject("btnRemoveAllList.Image")));
-            this.btnRemoveAllList.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnRemoveAllList.Name = "btnRemoveAllList";
-            this.btnRemoveAllList.Size = new System.Drawing.Size(85, 22);
-            this.btnRemoveAllList.Text = "Remove all";
-            this.btnRemoveAllList.Click += new System.EventHandler(this.btnRemoveAllList_Click);
-            // 
-            // dgvScalarVariables
-            // 
-            this.dgvScalarVariables.AllowUserToAddRows = false;
-            this.dgvScalarVariables.AllowUserToDeleteRows = false;
-            this.dgvScalarVariables.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.dgvScalarVariables.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.dgvScalarVariables.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvScalarVariables.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colScalarName,
-            this.colScalarValue,
-            this.colScalarLastChanged,
-            this.colScalarChangedBy});
-            this.dgvScalarVariables.ContextMenuStrip = this.contextMenuStrip1;
-            this.dgvScalarVariables.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvScalarVariables.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dgvScalarVariables.Location = new System.Drawing.Point(0, 25);
-            this.dgvScalarVariables.Name = "dgvScalarVariables";
-            this.dgvScalarVariables.RowHeadersVisible = false;
-            this.dgvScalarVariables.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgvScalarVariables.ShowCellErrors = false;
-            this.dgvScalarVariables.ShowEditingIcon = false;
-            this.dgvScalarVariables.ShowRowErrors = false;
-            this.dgvScalarVariables.Size = new System.Drawing.Size(550, 339);
-            this.dgvScalarVariables.TabIndex = 21;
-            this.dgvScalarVariables.VirtualMode = true;
-            this.dgvScalarVariables.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dataGridView1_CellValueNeeded);
-            this.dgvScalarVariables.CellValuePushed += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dataGridView1_CellValuePushed);
-            this.dgvScalarVariables.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
             // 
             // dgvListVariables
             // 
@@ -315,35 +330,146 @@
             this.colListChangedBy.ReadOnly = true;
             this.colListChangedBy.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // colScalarName
+            // tlsList
             // 
-            this.colScalarName.Frozen = true;
-            this.colScalarName.HeaderText = "Name";
-            this.colScalarName.Name = "colScalarName";
-            this.colScalarName.ReadOnly = true;
-            this.colScalarName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.tlsList.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.tlsList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnRefreshList,
+            this.btnRemoveAllList});
+            this.tlsList.Location = new System.Drawing.Point(0, 0);
+            this.tlsList.Name = "tlsList";
+            this.tlsList.Size = new System.Drawing.Size(550, 25);
+            this.tlsList.TabIndex = 20;
             // 
-            // colScalarValue
+            // btnRefreshList
             // 
-            this.colScalarValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colScalarValue.HeaderText = "Value";
-            this.colScalarValue.Name = "colScalarValue";
-            this.colScalarValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.btnRefreshList.Image = ((System.Drawing.Image)(resources.GetObject("btnRefreshList.Image")));
+            this.btnRefreshList.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRefreshList.Name = "btnRefreshList";
+            this.btnRefreshList.Size = new System.Drawing.Size(66, 22);
+            this.btnRefreshList.Text = "Refresh";
+            this.btnRefreshList.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
-            // colScalarLastChanged
+            // btnRemoveAllList
             // 
-            this.colScalarLastChanged.HeaderText = "Last changed";
-            this.colScalarLastChanged.Name = "colScalarLastChanged";
-            this.colScalarLastChanged.ReadOnly = true;
-            this.colScalarLastChanged.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colScalarLastChanged.Width = 120;
+            this.btnRemoveAllList.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.btnRemoveAllList.Image = ((System.Drawing.Image)(resources.GetObject("btnRemoveAllList.Image")));
+            this.btnRemoveAllList.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRemoveAllList.Name = "btnRemoveAllList";
+            this.btnRemoveAllList.Size = new System.Drawing.Size(85, 22);
+            this.btnRemoveAllList.Text = "Remove all";
+            this.btnRemoveAllList.Click += new System.EventHandler(this.btnRemoveAllList_Click);
             // 
-            // colScalarChangedBy
+            // tabTable
             // 
-            this.colScalarChangedBy.HeaderText = "Changed by";
-            this.colScalarChangedBy.Name = "colScalarChangedBy";
-            this.colScalarChangedBy.ReadOnly = true;
-            this.colScalarChangedBy.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.tabTable.Controls.Add(this.dgvTableVariables);
+            this.tabTable.Controls.Add(this.toolStrip1);
+            this.tabTable.Location = new System.Drawing.Point(4, 22);
+            this.tabTable.Name = "tabTable";
+            this.tabTable.Padding = new System.Windows.Forms.Padding(3);
+            this.tabTable.Size = new System.Drawing.Size(556, 370);
+            this.tabTable.TabIndex = 2;
+            this.tabTable.Text = "Table variables";
+            this.tabTable.UseVisualStyleBackColor = true;
+            // 
+            // dgvTableVariables
+            // 
+            this.dgvTableVariables.AllowUserToAddRows = false;
+            this.dgvTableVariables.AllowUserToDeleteRows = false;
+            this.dgvTableVariables.AllowUserToResizeRows = false;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.dgvTableVariables.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            this.dgvTableVariables.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTableVariables.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2,
+            this.Column1,
+            this.dataGridViewTextBoxColumn4,
+            this.dataGridViewTextBoxColumn5});
+            this.dgvTableVariables.ContextMenuStrip = this.contextMenuStrip1;
+            this.dgvTableVariables.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvTableVariables.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dgvTableVariables.Location = new System.Drawing.Point(3, 28);
+            this.dgvTableVariables.Name = "dgvTableVariables";
+            this.dgvTableVariables.RowHeadersVisible = false;
+            this.dgvTableVariables.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.dgvTableVariables.ShowCellErrors = false;
+            this.dgvTableVariables.ShowEditingIcon = false;
+            this.dgvTableVariables.ShowRowErrors = false;
+            this.dgvTableVariables.Size = new System.Drawing.Size(550, 339);
+            this.dgvTableVariables.TabIndex = 22;
+            this.dgvTableVariables.VirtualMode = true;
+            this.dgvTableVariables.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvTableVariables_CellValueNeeded);
+            this.dgvTableVariables.SelectionChanged += new System.EventHandler(this.dgvTableVariables_SelectionChanged);
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn1.HeaderText = "Name";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.HeaderText = "Width";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn2.Width = 60;
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Height";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column1.Width = 60;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.HeaderText = "Last changed";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.ReadOnly = true;
+            this.dataGridViewTextBoxColumn4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn4.Width = 120;
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            this.dataGridViewTextBoxColumn5.HeaderText = "Changed by";
+            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            this.dataGridViewTextBoxColumn5.ReadOnly = true;
+            this.dataGridViewTextBoxColumn5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnRefreshTable,
+            this.btnRemoveAllTable});
+            this.toolStrip1.Location = new System.Drawing.Point(3, 3);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(550, 25);
+            this.toolStrip1.TabIndex = 21;
+            // 
+            // btnRefreshTable
+            // 
+            this.btnRefreshTable.Image = ((System.Drawing.Image)(resources.GetObject("btnRefreshTable.Image")));
+            this.btnRefreshTable.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRefreshTable.Name = "btnRefreshTable";
+            this.btnRefreshTable.Size = new System.Drawing.Size(66, 22);
+            this.btnRefreshTable.Text = "Refresh";
+            this.btnRefreshTable.Click += new System.EventHandler(this.btnRefreshTable_Click);
+            // 
+            // btnRemoveAllTable
+            // 
+            this.btnRemoveAllTable.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.btnRemoveAllTable.Image = ((System.Drawing.Image)(resources.GetObject("btnRemoveAllTable.Image")));
+            this.btnRemoveAllTable.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRemoveAllTable.Name = "btnRemoveAllTable";
+            this.btnRemoveAllTable.Size = new System.Drawing.Size(85, 22);
+            this.btnRemoveAllTable.Text = "Remove all";
+            this.btnRemoveAllTable.Click += new System.EventHandler(this.btnRemoveAllTable_Click);
             // 
             // VariableForm
             // 
@@ -366,15 +492,20 @@
             this.contextMenuStrip1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvScalarVariables)).EndInit();
             this.tbcMain.ResumeLayout(false);
             this.tabScalar.ResumeLayout(false);
             this.tabList.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvListVariables)).EndInit();
             this.tlsList.ResumeLayout(false);
             this.tlsList.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvScalarVariables)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvListVariables)).EndInit();
+            this.tabTable.ResumeLayout(false);
+            this.tabTable.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTableVariables)).EndInit();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -407,5 +538,15 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colScalarValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn colScalarLastChanged;
         private System.Windows.Forms.DataGridViewTextBoxColumn colScalarChangedBy;
+        private System.Windows.Forms.TabPage tabTable;
+        private CustomControls.DataGridViewEx dgvTableVariables;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton btnRefreshTable;
+        private System.Windows.Forms.ToolStripButton btnRemoveAllTable;
     }
 }

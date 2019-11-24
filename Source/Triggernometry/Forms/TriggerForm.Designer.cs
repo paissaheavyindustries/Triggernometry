@@ -69,6 +69,7 @@
             this.cndCondition = new Triggernometry.CustomControls.ConditionViewer();
             this.tabScheduling = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
+            this.cbxEditAutofire = new System.Windows.Forms.CheckBox();
             this.cbxTriggerSource = new System.Windows.Forms.ComboBox();
             this.lblTriggerSource = new System.Windows.Forms.Label();
             this.cbxRefireWithinPeriod = new System.Windows.Forms.ComboBox();
@@ -88,7 +89,7 @@
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.panel5 = new System.Windows.Forms.Panel();
             this.lblReadOnly = new System.Windows.Forms.Label();
-            this.cbxEditAutofire = new System.Windows.Forms.CheckBox();
+            this.cbxSequential = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActions)).BeginInit();
             this.ctxAction.SuspendLayout();
             this.toolStrip2.SuspendLayout();
@@ -510,6 +511,7 @@
             this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tableLayoutPanel15.Controls.Add(this.cbxSequential, 0, 7);
             this.tableLayoutPanel15.Controls.Add(this.cbxEditAutofire, 0, 6);
             this.tableLayoutPanel15.Controls.Add(this.cbxTriggerSource, 1, 0);
             this.tableLayoutPanel15.Controls.Add(this.lblTriggerSource, 0, 0);
@@ -525,7 +527,7 @@
             this.tableLayoutPanel15.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel15.Location = new System.Drawing.Point(7, 7);
             this.tableLayoutPanel15.Name = "tableLayoutPanel15";
-            this.tableLayoutPanel15.RowCount = 7;
+            this.tableLayoutPanel15.RowCount = 8;
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -533,8 +535,22 @@
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel15.Size = new System.Drawing.Size(542, 184);
+            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel15.Size = new System.Drawing.Size(542, 207);
             this.tableLayoutPanel15.TabIndex = 6;
+            // 
+            // cbxEditAutofire
+            // 
+            this.cbxEditAutofire.AutoSize = true;
+            this.cbxEditAutofire.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel15.SetColumnSpan(this.cbxEditAutofire, 3);
+            this.cbxEditAutofire.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbxEditAutofire.Location = new System.Drawing.Point(3, 164);
+            this.cbxEditAutofire.Name = "cbxEditAutofire";
+            this.cbxEditAutofire.Size = new System.Drawing.Size(536, 17);
+            this.cbxEditAutofire.TabIndex = 15;
+            this.cbxEditAutofire.Text = "Autofire trigger after it has been edited";
+            this.cbxEditAutofire.UseVisualStyleBackColor = true;
             // 
             // cbxTriggerSource
             // 
@@ -784,18 +800,18 @@
     "f it.";
             this.lblReadOnly.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // cbxEditAutofire
+            // cbxSequential
             // 
-            this.cbxEditAutofire.AutoSize = true;
-            this.cbxEditAutofire.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.tableLayoutPanel15.SetColumnSpan(this.cbxEditAutofire, 3);
-            this.cbxEditAutofire.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxEditAutofire.Location = new System.Drawing.Point(3, 164);
-            this.cbxEditAutofire.Name = "cbxEditAutofire";
-            this.cbxEditAutofire.Size = new System.Drawing.Size(536, 17);
-            this.cbxEditAutofire.TabIndex = 15;
-            this.cbxEditAutofire.Text = "Autofire trigger after it has been edited";
-            this.cbxEditAutofire.UseVisualStyleBackColor = true;
+            this.cbxSequential.AutoSize = true;
+            this.cbxSequential.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel15.SetColumnSpan(this.cbxSequential, 3);
+            this.cbxSequential.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbxSequential.Location = new System.Drawing.Point(3, 187);
+            this.cbxSequential.Name = "cbxSequential";
+            this.cbxSequential.Size = new System.Drawing.Size(536, 17);
+            this.cbxSequential.TabIndex = 16;
+            this.cbxSequential.Text = "Sequential execution";
+            this.cbxSequential.UseVisualStyleBackColor = true;
             // 
             // TriggerForm
             // 
@@ -906,5 +922,6 @@
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Label lblReadOnly;
         private System.Windows.Forms.CheckBox cbxEditAutofire;
+        private System.Windows.Forms.CheckBox cbxSequential;
     }
 }

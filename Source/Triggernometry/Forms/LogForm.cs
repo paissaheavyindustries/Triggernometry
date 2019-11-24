@@ -36,6 +36,12 @@ namespace Triggernometry.Forms
                 dgvLog.CellValueNeeded += DgvLog_CellValueNeeded;
                 dgvLog.CellFormatting += DgvLog_CellFormatting;
             }
+            rexSearch.OnEnterKeyHit += RexSearch_OnEnter;
+        }
+
+        private void RexSearch_OnEnter()
+        {
+            btnSearch_Click(null, null);
         }
 
         private void DgvLog_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -93,6 +99,7 @@ namespace Triggernometry.Forms
                 cbxLevel.SelectedIndex = 3;
             }
             RefreshLog();
+            rexSearch.Focus();
         }
 
         private void RefreshLog()
@@ -158,6 +165,7 @@ namespace Triggernometry.Forms
             virtualData = p1;
             dgvLog.RowCount = p1.Count;
             dgvLog.Refresh();
+            lblStatus.Text = I18n.Translate("internal/LogForm/displaying", "Displaying {0} out of {1}", p1.Count, logData.Count);
         }
 
         private void RefreshViewStatic()

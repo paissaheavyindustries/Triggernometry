@@ -342,6 +342,31 @@ namespace Triggernometry.Forms
             return (ix.Count() > 0);
         }
 
+        private bool HasDiskTriggers(Folder f)
+        {
+            foreach (Folder sf in f.Folders)
+            {
+                if (HasDiskTriggers(sf) == true)
+                {
+                    return true;
+                }
+            }
+            foreach (Trigger t in f.Triggers)
+            {
+                if (IsDiskTrigger(t) == true)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool IsDiskTrigger(Trigger t)
+        {
+            var ix = from ax in t.Actions where ax.ActionType == Action.ActionTypeEnum.DiskFile select ax;
+            return (ix.Count() > 0);
+        }
+
         private bool HasLaunchTriggers(Folder f)
         {            
             foreach (Folder sf in f.Folders)
@@ -407,55 +432,111 @@ namespace Triggernometry.Forms
             return (tex.ExportedFolder != null ? HasLaunchTriggers(tex.ExportedFolder) : IsLaunchTrigger(tex.ExportedTrigger));
         }
 
+        private bool HasDiskTriggers(TriggernometryExport tex)
+        {
+            return (tex.ExportedFolder != null ? HasDiskTriggers(tex.ExportedFolder) : IsDiskTrigger(tex.ExportedTrigger));
+        }
+
         private void TryImportExport(TriggernometryExport tex)
         {
             string warning = "";
             bool includesLaunch = HasLaunchTriggers(tex);
             bool includesScript = HasScriptTriggers(tex);
             bool includesWmsg = HasWmsgTriggers(tex);
+            bool includesDisk = HasDiskTriggers(tex);
             BuildTreeFromExport(tex, null, null, false);
             treeView1.ExpandAll();
-            if (includesLaunch == true || includesScript == true || includesWmsg == true)
-            {                
-                if (includesLaunch == true)
+            if (includesLaunch == true || includesScript == true || includesWmsg == true || includesDisk == true)
+            {
+                if (includesDisk == true)
                 {
-                    if (includesScript == true)
+                    if (includesLaunch == true)
                     {
-                        if (includesWmsg == true)
+                        if (includesScript == true)
                         {
-                            warning = I18n.Translate("internal/ImportForm/dangerprocscriptwmsg", "Some of the imported triggers include triggers which launch arbitrary processes, execute arbitrary scripts, and send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                            if (includesWmsg == true)
+                            {
+                                warning = I18n.Translate("internal/ImportForm/dangerprocscriptwmsgdisk", "Some of the imported triggers include triggers which launch arbitrary processes, execute arbitrary scripts, send arbitrary window messages, and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                            }
+                            else
+                            {
+                                warning = I18n.Translate("internal/ImportForm/dangerprocscriptdisk", "Some of the imported triggers include triggers which launch arbitrary processes, execute arbitrary scripts, and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                            }
                         }
                         else
                         {
-                            warning = I18n.Translate("internal/ImportForm/dangerprocscript", "Some of the imported triggers include triggers which launch arbitrary processes and execute arbitrary scripts. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                            if (includesWmsg == true)
+                            {
+                                warning = I18n.Translate("internal/ImportForm/dangerprocwmsgdisk", "Some of the imported triggers include triggers which launch arbitrary processes, send arbitrary window messages, and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                            }
+                            else
+                            {
+                                warning = I18n.Translate("internal/ImportForm/dangerprocdisk", "Some of the imported triggers include triggers which launch arbitrary processes and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                            }
                         }
                     }
-                    else
+                    else if (includesScript == true)
                     {
                         if (includesWmsg == true)
                         {
-                            warning = I18n.Translate("internal/ImportForm/dangerprocwmsg", "Some of the imported triggers include triggers which launch arbitrary processes and send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                            warning = I18n.Translate("internal/ImportForm/dangerscriptwmsgdisk", "Some of the imported triggers include triggers which execute arbitrary scripts, send arbitrary window messages, and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
                         }
                         else
                         {
-                            warning = I18n.Translate("internal/ImportForm/dangerproc", "Some of the imported triggers include triggers which launch arbitrary processes. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                            warning = I18n.Translate("internal/ImportForm/dangerscriptdisk", "Some of the imported triggers include triggers which execute arbitrary scripts and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
                         }
                     }
-                }
-                else if (includesScript == true)
-                {
-                    if (includesWmsg == true)
+                    else if (includesWmsg == true)
                     {
-                        warning = I18n.Translate("internal/ImportForm/dangerscriptwmsg", "Some of the imported triggers include triggers which execute arbitrary scripts and send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                        warning = I18n.Translate("internal/ImportForm/dangerwmsgdisk", "Some of the imported triggers include triggers which send arbitrary window messages and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
                     }
                     else
                     {
-                        warning = I18n.Translate("internal/ImportForm/dangerscript", "Some of the imported triggers include triggers which execute arbitrary scripts. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                        warning = I18n.Translate("internal/ImportForm/dangerdisk", "Some of the imported triggers include triggers which perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
                     }
                 }
-                else if (includesWmsg == true)
+                else
                 {
-                    warning = I18n.Translate("internal/ImportForm/dangerwmsg", "Some of the imported triggers include triggers which send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                    if (includesLaunch == true)
+                    {
+                        if (includesScript == true)
+                        {
+                            if (includesWmsg == true)
+                            {
+                                warning = I18n.Translate("internal/ImportForm/dangerprocscriptwmsg", "Some of the imported triggers include triggers which launch arbitrary processes, execute arbitrary scripts, and send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                            }
+                            else
+                            {
+                                warning = I18n.Translate("internal/ImportForm/dangerprocscript", "Some of the imported triggers include triggers which launch arbitrary processes and execute arbitrary scripts. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                            }
+                        }
+                        else
+                        {
+                            if (includesWmsg == true)
+                            {
+                                warning = I18n.Translate("internal/ImportForm/dangerprocwmsg", "Some of the imported triggers include triggers which launch arbitrary processes and send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                            }
+                            else
+                            {
+                                warning = I18n.Translate("internal/ImportForm/dangerproc", "Some of the imported triggers include triggers which launch arbitrary processes. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                            }
+                        }
+                    }
+                    else if (includesScript == true)
+                    {
+                        if (includesWmsg == true)
+                        {
+                            warning = I18n.Translate("internal/ImportForm/dangerscriptwmsg", "Some of the imported triggers include triggers which execute arbitrary scripts and send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                        }
+                        else
+                        {
+                            warning = I18n.Translate("internal/ImportForm/dangerscript", "Some of the imported triggers include triggers which execute arbitrary scripts. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                        }
+                    }
+                    else if (includesWmsg == true)
+                    {
+                        warning = I18n.Translate("internal/ImportForm/dangerwmsg", "Some of the imported triggers include triggers which send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
+                    }
                 }
             }
             if (warning.Length > 0)
@@ -473,8 +554,8 @@ namespace Triggernometry.Forms
                 treeView1.Nodes.Add(tn);
                 if (tex.ExportedFolder != null)
                 {
-                    tn.ImageIndex = 0;
-                    tn.SelectedImageIndex = 0;
+                    tn.ImageIndex = (int)CustomControls.UserInterface.GetImageIndexForClosedFolder(tex.ExportedFolder);
+                    tn.SelectedImageIndex = tn.ImageIndex;
                     tn.Text = tex.ExportedFolder.Name;
                     tn.Checked = tex.ExportedFolder.Enabled;
                     tn.Tag = tex.ExportedFolder;
@@ -483,8 +564,8 @@ namespace Triggernometry.Forms
                 }
                 else
                 {
-                    tn.ImageIndex = 2;
-                    tn.SelectedImageIndex = 2;
+                    tn.ImageIndex = (int)CustomControls.UserInterface.ImageIndices.Bolt;
+                    tn.SelectedImageIndex = tn.ImageIndex;
                     tn.Text = tex.ExportedTrigger.Name;
                     tn.Checked = tex.ExportedTrigger.Enabled;
                     tn.Tag = tex.ExportedTrigger;
@@ -497,8 +578,8 @@ namespace Triggernometry.Forms
                 tn.Text = f.Name;
                 tn.Checked = f.Enabled;
                 tn.Tag = f;
-                tn.ImageIndex = 0;
-                tn.SelectedImageIndex = 0;
+                tn.ImageIndex = (int)CustomControls.UserInterface.GetImageIndexForClosedFolder(f);
+                tn.SelectedImageIndex = tn.ImageIndex;
                 parentnode.Nodes.Add(tn);
                 f.Parent = parentfolder;
                 BuildTreeFromExport(tex, tn, f, isRemote);
@@ -509,9 +590,9 @@ namespace Triggernometry.Forms
                 tn.Text = t.Name;
                 tn.Checked = t.Enabled;
                 tn.Tag = t;
-                tn.ImageIndex = 2;
-                tn.SelectedImageIndex = 2;
-                if ((IsLaunchTrigger(t) == true || IsScriptTrigger(t) == true || IsWmsgTrigger(t) == true) && isRemote == false)
+                tn.ImageIndex = (int)CustomControls.UserInterface.ImageIndices.Bolt;
+                tn.SelectedImageIndex = tn.ImageIndex;
+                if ((IsLaunchTrigger(t) == true || IsScriptTrigger(t) == true || IsWmsgTrigger(t) == true || IsDiskTrigger(t) == true) && isRemote == false)
                 {
                     tn.BackColor = Color.Yellow;
                 }
@@ -532,8 +613,8 @@ namespace Triggernometry.Forms
             root.Tag = rootf;
             rootf.Enabled = true;
             root.Checked = true;
-            root.ImageIndex = 0;
-            root.SelectedImageIndex = 0;
+            root.ImageIndex = (int)CustomControls.UserInterface.GetImageIndexForClosedFolder(rootf);
+            root.SelectedImageIndex = root.ImageIndex;
             treeView1.Nodes.Add(root);
             var trigs = plug.CustomTriggerHook();
             foreach (var trig in trigs)
@@ -542,7 +623,7 @@ namespace Triggernometry.Forms
                 f.Name = trig.Category;
                 if (trig.RestrictToCategoryZone == true)
                 {
-                    f.ZoneFilterEnabled = true;
+                    f._ZoneFilterEnabled = true;
                     f.ZoneFilterRegularExpression = f.Name;
                 }
                 f.Name += (trig.RestrictToCategoryZone == true ? " (" + I18n.Translate("internal/ImportForm/restrictedtozone", "restricted to zone") +")" : "");
@@ -551,8 +632,8 @@ namespace Triggernometry.Forms
                 f.Enabled = true;
                 fn.Checked = true;
                 fn.Tag = f;
-                fn.ImageIndex = 0;
-                fn.SelectedImageIndex = 0;
+                fn.ImageIndex = (int)CustomControls.UserInterface.GetImageIndexForClosedFolder(f);
+                fn.SelectedImageIndex = fn.ImageIndex;
                 root.Nodes.Add(fn);
                 rootf.Folders.Add(f);
                 f.Parent = rootf;                
@@ -570,8 +651,8 @@ namespace Triggernometry.Forms
                     tn.Text = t.Name;
                     tn.Tag = t;
                     tn.Checked = t.Enabled;
-                    tn.ImageIndex = 2;
-                    tn.SelectedImageIndex = 2;
+                    tn.ImageIndex = (int)CustomControls.UserInterface.ImageIndices.Bolt;
+                    tn.SelectedImageIndex = tn.ImageIndex;
                     fn.Nodes.Add(tn);
                     f.Triggers.Add(t);
                     t.Parent = f;
@@ -609,11 +690,11 @@ namespace Triggernometry.Forms
             t.RegularExpression = regex;
             t.Name = t.RegularExpression;
             t.Enabled = active;
-            t.PrevActions = Trigger.PrevActionsEnum.Keep;
-            t.PrevActionsRefire = Trigger.RefireEnum.Allow;
-            t.Scheduling = Trigger.SchedulingEnum.FromFire;
-            t.PeriodRefire = Trigger.RefireEnum.Allow;
-            t.RefirePeriodExpression = "";
+            t._PrevActions = Trigger.PrevActionsEnum.Keep;
+            t._PrevActionsRefire = Trigger.RefireEnum.Allow;
+            t._Scheduling = Trigger.SchedulingEnum.FromFire;
+            t._PeriodRefire = Trigger.RefireEnum.Allow;
+            t._RefirePeriodExpression = "";
             string tag = "";
             if (tabbed == true)
             {
@@ -639,8 +720,8 @@ namespace Triggernometry.Forms
                     {
                         Action a = new Action();
                         a.ActionType = Action.ActionTypeEnum.SystemBeep;
-                        a.SystemBeepFreqExpression = "1000";
-                        a.SystemBeepLengthExpression = "100";
+                        a._SystemBeepFreqExpression = "1000";
+                        a._SystemBeepLengthExpression = "100";
                         a.OrderNumber = 1;
                         t.Actions.Add(a);
                     }
@@ -650,8 +731,8 @@ namespace Triggernometry.Forms
                         Action a = new Action();
                         a.ActionType = Action.ActionTypeEnum.PlaySound;
                         a._PlaySoundExclusive = true;
-                        a.PlaySoundFileExpression = soundData;
-                        a.PlaySoundVolumeExpression = "100";
+                        a._PlaySoundFileExpression = soundData;
+                        a._PlaySoundVolumeExpression = "100";
                         a.OrderNumber = 1;
                         t.Actions.Add(a);
                     }
@@ -661,9 +742,9 @@ namespace Triggernometry.Forms
                         Action a = new Action();
                         a.ActionType = Action.ActionTypeEnum.UseTTS;
                         a._UseTTSExclusive = true;
-                        a.UseTTSTextExpression = soundData;
-                        a.UseTTSVolumeExpression = "100";
-                        a.UseTTSRateExpression = "0";
+                        a._UseTTSTextExpression = soundData;
+                        a._UseTTSVolumeExpression = "100";
+                        a._UseTTSRateExpression = "0";
                         a.OrderNumber = 1;
                         t.Actions.Add(a);
                     }
@@ -679,31 +760,27 @@ namespace Triggernometry.Forms
                 btnEdit.Enabled = false;
                 btnRemove.Enabled = false;
             }
-            else
+            else if (
+                (treeView1.SelectedNode.Tag is Trigger)
+                ||
+                (treeView1.SelectedNode.Tag is Folder)
+            )
             {
-                if (treeView1.SelectedNode.ImageIndex == 2)
-                {
-                    btnEdit.Enabled = true;
-                    btnRemove.Enabled = (treeView1.SelectedNode.Parent != null);
-                }
-                else if (treeView1.SelectedNode.ImageIndex == 0 || treeView1.SelectedNode.ImageIndex == 1)
-                {
-                    btnEdit.Enabled = true;
-                    btnRemove.Enabled = (treeView1.SelectedNode.Parent != null);
-                }
+                btnEdit.Enabled = true;
+                btnRemove.Enabled = (treeView1.SelectedNode.Parent != null);
             }
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
-            if (treeView1.SelectedNode.ImageIndex == 2)
+            if (treeView1.SelectedNode.Tag is Trigger)
             {
                 Trigger t = (Trigger)treeView1.SelectedNode.Tag;
                 TreeNode tn = treeView1.SelectedNode;
                 tn.Parent.Nodes.Remove(tn);
                 t.Parent.Triggers.Remove(t);
             }
-            else if (treeView1.SelectedNode.ImageIndex == 0 || treeView1.SelectedNode.ImageIndex == 1)
+            else if (treeView1.SelectedNode.Tag is Folder)
             {
                 Folder f = (Folder)treeView1.SelectedNode.Tag;
                 TreeNode tn = treeView1.SelectedNode;
@@ -715,14 +792,20 @@ namespace Triggernometry.Forms
 
         private void treeView1_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
         {
-            e.Node.ImageIndex = 0;
-            e.Node.SelectedImageIndex = 0;
+            if (e.Node.Tag is Folder)
+            {
+                e.Node.ImageIndex = (int)CustomControls.UserInterface.GetImageIndexForClosedFolder((Folder)e.Node.Tag);
+                e.Node.SelectedImageIndex = e.Node.ImageIndex;
+            }
         }
 
         private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            e.Node.ImageIndex = 1;
-            e.Node.SelectedImageIndex = 1;
+            if (e.Node.Tag is Folder)
+            {
+                e.Node.ImageIndex = (int)CustomControls.UserInterface.GetImageIndexForOpenFolder((Folder)e.Node.Tag);
+                e.Node.SelectedImageIndex = e.Node.ImageIndex;
+            }
         }
 
         private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -735,7 +818,7 @@ namespace Triggernometry.Forms
 
         private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            if (e.Node == treeView1.SelectedNode && (treeView1.SelectedNode != null) && btnEdit.Enabled == true && (treeView1.SelectedNode.ImageIndex == 2))
+            if (e.Node == treeView1.SelectedNode && (treeView1.SelectedNode != null) && btnEdit.Enabled == true && (treeView1.SelectedNode.Tag is Trigger))
             {
                 btnEdit_Click(sender, null);
             }
@@ -743,7 +826,7 @@ namespace Triggernometry.Forms
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            if (treeView1.SelectedNode.ImageIndex == 2)
+            if (treeView1.SelectedNode.Tag is Trigger)
             {
                 using (Forms.TriggerForm tf = new Forms.TriggerForm())
                 {
@@ -770,7 +853,7 @@ namespace Triggernometry.Forms
                     }
                 }
             }
-            else if (treeView1.SelectedNode.ImageIndex == 0 || treeView1.SelectedNode.ImageIndex == 1)
+            else if (treeView1.SelectedNode.Tag is Folder)
             {
                 using (Forms.FolderForm ff = new Forms.FolderForm())
                 {
@@ -852,9 +935,9 @@ namespace Triggernometry.Forms
             TreeNode root = new TreeNode();
             root.Text = rootf.Name;
             root.Tag = rootf;
-            root.ImageIndex = 0;
+            root.ImageIndex = (int)CustomControls.UserInterface.GetImageIndexForClosedFolder(rootf);
+            root.SelectedImageIndex = root.ImageIndex;
             root.Checked = true;
-            root.SelectedImageIndex = 0;
             treeView1.Nodes.Add(root);
             foreach (KeyValuePair<string, List<Tuple<bool, bool, string, Trigger>>> kp in trx)
             {
@@ -863,16 +946,16 @@ namespace Triggernometry.Forms
                 f.Name = kp.Value[0].Item3;
                 if (kp.Value[0].Item1 == true)
                 {
-                    f.ZoneFilterEnabled = true;
+                    f._ZoneFilterEnabled = true;
                     f.ZoneFilterRegularExpression = kp.Value[0].Item3;
                 }
                 f.Name += (kp.Value[0].Item1 == true ? " (" + I18n.Translate("internal/ImportForm/restrictedtozone", "restricted to zone") + ")" : "");
                 TreeNode fn = new TreeNode();
                 fn.Text = f.Name;
                 fn.Tag = f;
-                fn.ImageIndex = 0;
+                fn.ImageIndex = (int)CustomControls.UserInterface.GetImageIndexForClosedFolder(f);
+                fn.SelectedImageIndex = fn.ImageIndex;
                 fn.Checked = f.Enabled;
-                fn.SelectedImageIndex = 0;
                 root.Nodes.Add(fn);
                 rootf.Folders.Add(f);
                 f.Parent = rootf;
@@ -886,9 +969,9 @@ namespace Triggernometry.Forms
                     }
                     tn.Text = t.Name;
                     tn.Tag = t;
-                    tn.ImageIndex = 2;
+                    tn.ImageIndex = (int)CustomControls.UserInterface.ImageIndices.Bolt;
+                    tn.SelectedImageIndex = tn.ImageIndex;
                     tn.Checked = t.Enabled;
-                    tn.SelectedImageIndex = 2;
                     fn.Nodes.Add(tn);
                     f.Triggers.Add(t);
                     t.Parent = f;

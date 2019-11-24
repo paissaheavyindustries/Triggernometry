@@ -1,61 +1,100 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Triggernometry
+namespace Triggernometry.Variables
 {
 
-    public class VariableList
+    public class VariableList : Variable
     {
 
-        public List<string> Values { get; set; }
-        public string LastChanger { get; set; }
-        public DateTime LastChanged { get; set; }
+        public List<Variable> Values { get; set; } = new List<Variable>();
 
-        public VariableList()
+        public override string ToString()
         {
-            Values = new List<string>();
-            LastChanged = DateTime.Now;
-            LastChanger = "N/A";
+            return String.Join(",", Values);
         }
 
-        public void Push(string value, string changer)
+        public override int CompareTo(object o)
+        {
+            if ((o is Variable) == false)
+            {
+                throw new InvalidOperationException();
+            }
+            if (o is VariableScalar)
+            {
+                return 1;
+            }
+            if (o is VariableList)
+            {
+                VariableList v = (VariableList)o;
+                if (v.Values.Count > Values.Count)
+                {
+                    return -1;
+                }
+                if (v.Values.Count < Values.Count)
+                {
+                    return 1;
+                }
+                for (int i = 0; i < Values.Count; i++)
+                {
+                    int res = Values[i].CompareTo(v.Values[i]);
+                    if (res != 0)
+                    {
+                        return res;
+                    }
+                }
+                return 0;
+            }
+            return -1;
+        }
+
+        public override Variable Duplicate()
+        {
+            VariableList v = new VariableList();
+            foreach (Variable vx in Values)
+            {
+                v.Push(vx.Duplicate(), "");
+            }
+            v.LastChanger = LastChanger;
+            v.LastChanged = LastChanged;
+            return v;
+        }
+
+        public void Push(Variable value, string changer)
         {
             Values.Add(value);
             LastChanged = DateTime.Now;
             LastChanger = changer;
         }
 
-        public string QueuePop(string changer)
+        public Variable QueuePop(string changer)
         {
             if (Values.Count > 0)
             {
-                string x = Values[0];
+                Variable x = Values[0];
                 Values.RemoveAt(0);
                 LastChanged = DateTime.Now;
                 LastChanger = changer;
                 return x;
             }
-            return "";
+            return null;
         }
 
-        public string StackPop(string changer)
+        public Variable StackPop(string changer)
         {
             if (Values.Count > 0)
             {
                 int idx = Values.Count - 1;
-                string x = Values[idx];
+                Variable x = Values[idx];
                 Values.RemoveAt(idx);
                 LastChanged = DateTime.Now;
                 LastChanger = changer;
                 return x;
             }
-            return "";
+            return null;
         }
 
-        public void Insert(int index, string value, string changer)
+        public void Insert(int index, Variable value, string changer)
         {
             int idx = index - 1;
             if (idx < 0)
@@ -67,7 +106,7 @@ namespace Triggernometry
                 int needcre = idx - Values.Count;
                 while (needcre > 0)
                 {
-                    Push("", changer);
+                    Push(null, changer);
                     needcre--;
                 }                
             }
@@ -76,7 +115,12 @@ namespace Triggernometry
             LastChanger = changer;
         }
 
-        public void Set(int index, string value, string changer)
+        public void Insert(int index, string value, string changer)
+        {
+            Insert(index, new VariableScalar() { Value = value }, changer);
+        }
+
+        public void Set(int index, Variable value, string changer)
         {
             int idx = index - 1;
             if (idx < 0)
@@ -88,13 +132,18 @@ namespace Triggernometry
                 int needcre = idx - Values.Count;
                 while (needcre > 0)
                 {
-                    Push("", changer);
+                    Push(new VariableScalar() { Value = "" }, changer);
                     needcre--;
                 }
             }
             Values[idx] = value;
             LastChanged = DateTime.Now;
             LastChanger = changer;
+        }
+
+        public void Set(int index, string value, string changer)
+        {
+            Set(index, new VariableScalar() { Value = value }, changer);
         }
 
         public void Remove(int index, string changer)
@@ -108,14 +157,14 @@ namespace Triggernometry
             }
         }
 
-        public string Peek(int index)
+        public Variable Peek(int index)
         {
             int idx = index - 1;
             if (idx >= 0 && idx < Values.Count)
             {
                 return Values[index - 1];
             }
-            return "";
+            return new VariableScalar();
         }
 
         public void RemoveAll(string changer)
@@ -125,11 +174,28 @@ namespace Triggernometry
             LastChanger = changer;
         }
 
-        public int IndexOf(string value)
+        public int IndexOf(Variable value)
         {
             for (int i = 0; i < Values.Count; i++)
             {
-                if (Values[i] == value)
+                if (Values[i].CompareTo(value) == 0)
+                {
+                    return i + 1;
+                }
+            }
+            return 0;
+        }
+
+        public int IndexOf(string value)
+        {
+            return IndexOf(new VariableScalar() { Value = value });
+        }
+
+        public int LastIndexOf(Variable value)
+        {
+            for (int i = Values.Count - 1; i >= 0; i--)
+            {
+                if (Values[i].CompareTo(value) == 0)
                 {
                     return i + 1;
                 }
@@ -139,14 +205,7 @@ namespace Triggernometry
 
         public int LastIndexOf(string value)
         {
-            for (int i = Values.Count - 1; i >= 0; i--)
-            {
-                if (Values[i] == value)
-                {
-                    return i + 1;
-                }
-            }
-            return 0;
+            return LastIndexOf(new VariableScalar() { Value = value });
         }
 
         public int Size()
@@ -177,11 +236,11 @@ namespace Triggernometry
         {
             Values.Sort((a, b) =>
             {
-                VariableClump pa = PluginBridges.BridgeFFXIV.GetNamedPartyMember(a);
-                VariableClump pb = PluginBridges.BridgeFFXIV.GetNamedPartyMember(b);
+                VariableDictionary pa = PluginBridges.BridgeFFXIV.GetNamedPartyMember(a.ToString());
+                VariableDictionary pb = PluginBridges.BridgeFFXIV.GetNamedPartyMember(b.ToString());
                 if (cfg.FfxivPartyOrdering == Configuration.FfxivPartyOrderingEnum.CustomSelfFirst)
                 {
-                    VariableClump se = PluginBridges.BridgeFFXIV.GetMyself();
+                    VariableDictionary se = PluginBridges.BridgeFFXIV.GetMyself();
                     if (se == pa)
                     {
                         return -1;
@@ -191,8 +250,8 @@ namespace Triggernometry
                         return 1;
                     }
                 }
-                int vla = cfg.GetPartyOrderValue(pa.GetValue("jobid"));
-                int vlb = cfg.GetPartyOrderValue(pb.GetValue("jobid"));
+                int vla = cfg.GetPartyOrderValue(pa.GetValue("jobid").ToString());
+                int vlb = cfg.GetPartyOrderValue(pb.GetValue("jobid").ToString());
                 if (vla < vlb)
                 {
                     return -1;
@@ -209,11 +268,11 @@ namespace Triggernometry
         {
             Values.Sort((a, b) =>
             {
-                VariableClump pa = PluginBridges.BridgeFFXIV.GetNamedPartyMember(a);
-                VariableClump pb = PluginBridges.BridgeFFXIV.GetNamedPartyMember(b);
+                VariableDictionary pa = PluginBridges.BridgeFFXIV.GetNamedPartyMember(a.ToString());
+                VariableDictionary pb = PluginBridges.BridgeFFXIV.GetNamedPartyMember(b.ToString());
                 if (cfg.FfxivPartyOrdering == Configuration.FfxivPartyOrderingEnum.CustomSelfFirst)
                 {
-                    VariableClump se = PluginBridges.BridgeFFXIV.GetMyself();
+                    VariableDictionary se = PluginBridges.BridgeFFXIV.GetMyself();
                     if (se == pa)
                     {
                         return 1;
@@ -223,8 +282,8 @@ namespace Triggernometry
                         return -1;
                     }
                 }
-                int vla = cfg.GetPartyOrderValue(pa.GetValue("jobid"));
-                int vlb = cfg.GetPartyOrderValue(pb.GetValue("jobid"));
+                int vla = cfg.GetPartyOrderValue(pa.GetValue("jobid").ToString());
+                int vlb = cfg.GetPartyOrderValue(pb.GetValue("jobid").ToString());
                 if (vla < vlb)
                 {
                     return 1;

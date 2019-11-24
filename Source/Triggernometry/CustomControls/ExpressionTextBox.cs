@@ -98,6 +98,9 @@ namespace Triggernometry.CustomControls
 
         private Context ctx;
 
+        public delegate void EnterDelegate();
+        public event EnterDelegate OnEnterKeyHit;
+
         public ExpressionTextBox()
         {            
             InitializeComponent();
@@ -105,6 +108,18 @@ namespace Triggernometry.CustomControls
             ctx.testmode = true;
             ResetTooltip();
             textBox1.TextChanged += TextBox1_TextChanged;
+            textBox1.KeyDown += TextBox1_KeyDown;
+        }
+
+        private void TextBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (OnEnterKeyHit != null)
+                {
+                    OnEnterKeyHit();
+                }
+            }
         }
 
         private void UpdateBackground()

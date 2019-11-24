@@ -4,11 +4,8 @@ using System.Linq;
 using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
-using System.Management;
 using System.Windows.Forms;
-using System.Diagnostics;
 using System.IO;
-using System.Xml;
 using System.Xml.Serialization;
 using System.Speech.Synthesis;
 using System.Threading;
@@ -19,16 +16,30 @@ using WMPLib;
 using System.Security.Principal;
 using System.Web.Script.Serialization;
 using System.Runtime.InteropServices;
+using Triggernometry.Variables;
 
 /*
- * Triggernometry II: The Triggering
-- trigger copy/paste now available
-- aura windows no longer appear when alt-tabbing
-- aura opacity set to 100 instead of blank (0) when using the guide for placement
-- "disable all auras" action
-- "unset all variables" action
-- special variable ${_ffxivplayer} for retrieving current character name in FFXIV
-- removed unnecessary logging regarding triggers with disabled parent folders
+- added table variables with column and row based lookups
+- added an action type for file operations (read only, will be expanded in the future)
+- added special variable _actionhistory to check if another action in the context of the same trigger was executed or not
+- added a search function to help locate triggers, actions, or actions properties
+- added option to unset scalar and list variables via regular expressions
+- added option to cache JSON request responses to disk
+- added a sequential execution mode guaranteering action execution order and enabling proper dynamic delays between actions
+- added special variable _env to access environment variables
+- added caching for remote sound files
+- added syntax tvar for accessing table variables (tvar:variablename[column number][row number])
+- added syntax tvarcl for accessing values of a single column by seeking columns by content (tvar:variablename[My Column Header Text][row number])
+- added syntax tvarrl for accessing values of a single row by seeking rows by content (tvar:variablename[My Row Header Text][column number])
+- added syntax etvar for checking the existing of a table variable
+- all clipboard operations are now in Unicode
+- reduced config/export size to about one third of previous size
+- configuration now has options for item-specific cache expiry (by default cache expiry for non-JSON is 360 days, JSON is 7 days)
+- folders with active restrictions applied will now appear purple instead of blue
+- changed trigger autofire and context menu fire to work on live values, instead of test values
+- prevent error messages when plugin is updated without restarting ACT in between
+- fixed a crash that occurred when the action delay resolved into an invalid value
+- fixed an issue that prevented text auras to be disabled via regular expressions
 */
 
 namespace Triggernometry
@@ -186,6 +197,7 @@ namespace Triggernometry
         private ManualResetEvent ExitEvent;
         private TabPage mytp;
         private Int64 curOrdinal;
+        private bool complainAboutReload = false;
         private string updateDownloadUrl;
         public string pluginName { get; set; }
         public string pluginPath { get; set; }
@@ -199,8 +211,9 @@ namespace Triggernometry
         internal List<Trigger> Triggers;
         internal List<Trigger> ActiveTextTriggers;
         internal List<Trigger> ActiveFFXIVNetworkTriggers;
-        internal Dictionary<string, Variable> simplevariables;
+        internal Dictionary<string, VariableScalar> simplevariables;
         internal Dictionary<string, VariableList> listvariables;
+        internal Dictionary<string, VariableTable> tablevariables;
         internal Dictionary<string, Forms.AuraContainerForm> imageauras;
         internal Dictionary<string, Forms.AuraContainerForm> textauras;
         internal bool DisableLogging;
@@ -311,28 +324,28 @@ namespace Triggernometry
 
         internal void SbImageAuraManagement(Context ctx, Action a)
         {
-            switch (a.AuraOp)
+            switch (a._AuraOp)
             {
                 case Action.AuraOpEnum.ActivateAura:
                     {
-                        string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a.AuraName);
+                        string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._AuraName);
                         FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/actimageaura", "Activating image aura '{0}'", ax));
                         try
                         { 
                             Scarborough.ScarboroughImage si = new Scarborough.ScarboroughImage(sc);
-                            si.ImageExpression = a.AuraImage;
-                            si.InitXExpression = a.AuraXIniExpression;
-                            si.InitYExpression = a.AuraYIniExpression;
-                            si.InitWExpression = a.AuraWIniExpression;
-                            si.InitHExpression = a.AuraHIniExpression;
-                            si.InitOExpression = a.AuraOIniExpression;
-                            si.UpdateXExpression = a.AuraXTickExpression;
-                            si.UpdateYExpression = a.AuraYTickExpression;
-                            si.UpdateWExpression = a.AuraWTickExpression;
-                            si.UpdateHExpression = a.AuraHTickExpression;
-                            si.UpdateOExpression = a.AuraOTickExpression;
-                            si.TTLExpression = a.AuraTTLTickExpression;
-                            si.Display = a.AuraImageMode;
+                            si.ImageExpression = a._AuraImage;
+                            si.InitXExpression = a._AuraXIniExpression;
+                            si.InitYExpression = a._AuraYIniExpression;
+                            si.InitWExpression = a._AuraWIniExpression;
+                            si.InitHExpression = a._AuraHIniExpression;
+                            si.InitOExpression = a._AuraOIniExpression;
+                            si.UpdateXExpression = a._AuraXTickExpression;
+                            si.UpdateYExpression = a._AuraYTickExpression;
+                            si.UpdateWExpression = a._AuraWTickExpression;
+                            si.UpdateHExpression = a._AuraHTickExpression;
+                            si.UpdateOExpression = a._AuraOTickExpression;
+                            si.TTLExpression = a._AuraTTLTickExpression;
+                            si.Display = a._AuraImageMode;
                             si.ctx = ctx;
                             sc.Activate(ax, si);
                         }
@@ -344,7 +357,7 @@ namespace Triggernometry
                     break;
                 case Action.AuraOpEnum.DeactivateAura:
                     {
-                        string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a.AuraName);
+                        string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._AuraName);
                         FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/deactimageaura", "Deactivating image aura '{0}'", ax));
                         sc.Deactivate(ax, Scarborough.Scarborough.ItemAction.ItemTypeEnum.Image);
                     }
@@ -357,7 +370,7 @@ namespace Triggernometry
                     break;
                 case Action.AuraOpEnum.DeactivateAuraRegex:
                     {
-                        string ax = a.AuraName;
+                        string ax = a._AuraName;
                         FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/deactimageaurarex", "Deactivating image auras matching '{0}'", ax));
                         sc.DeactivateRegex(ax, Scarborough.Scarborough.ItemAction.ItemTypeEnum.Image);
                     }
@@ -369,16 +382,16 @@ namespace Triggernometry
         {
             if (mainform.InvokeRequired == true)
             {
-                string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a.AuraName);
+                string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._AuraName);
                 FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/invokeimageaura", "Invoke required for image aura '{0}'", ax));
                 mainform.Invoke(new ActionExecutionHook(ImageAuraManagement), ctx, a);
                 return;
             }
-            switch (a.AuraOp)
+            switch (a._AuraOp)
             {
                 case Action.AuraOpEnum.ActivateAura:
                     {
-                        string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a.AuraName);
+                        string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._AuraName);
                         FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/actimageaura", "Activating image aura '{0}'", ax));
                         Forms.AuraContainerForm acf = null;
                         bool newAura = false;
@@ -399,11 +412,11 @@ namespace Triggernometry
                                 }
                                 acf.AuraPrepare();
                                 acf.ctx = ctx;
-                                acf.ImageExpression = a.AuraImage;
-                                acf.Display = a.AuraImageMode;
-                                acf.Left = acf.EvaluateNumericExpression(ctx, a.AuraXIniExpression);
-                                acf.Top = acf.EvaluateNumericExpression(ctx, a.AuraYIniExpression);
-                                int i = acf.EvaluateNumericExpression(ctx, a.AuraWIniExpression);
+                                acf.ImageExpression = a._AuraImage;
+                                acf.Display = a._AuraImageMode;
+                                acf.Left = acf.EvaluateNumericExpression(ctx, a._AuraXIniExpression);
+                                acf.Top = acf.EvaluateNumericExpression(ctx, a._AuraYIniExpression);
+                                int i = acf.EvaluateNumericExpression(ctx, a._AuraWIniExpression);
                                 if (i < 0)
                                 {
                                     i = 0;
@@ -413,13 +426,13 @@ namespace Triggernometry
                                 {
                                     i = 0;
                                 }
-                                i = acf.EvaluateNumericExpression(ctx, a.AuraHIniExpression);
+                                i = acf.EvaluateNumericExpression(ctx, a._AuraHIniExpression);
                                 if (i < 0)
                                 {
                                     i = 0;
                                 }
                                 acf.Height = i;
-                                i = acf.EvaluateNumericExpression(ctx, a.AuraOIniExpression);
+                                i = acf.EvaluateNumericExpression(ctx, a._AuraOIniExpression);
                                 if (i < 0)
                                 {
                                     i = 0;
@@ -429,12 +442,12 @@ namespace Triggernometry
                                     i = 100;
                                 }                                
                                 acf.PresentableOpacity = i;
-                                acf.XExpression = a.AuraXTickExpression;
-                                acf.YExpression = a.AuraYTickExpression;
-                                acf.WExpression = a.AuraWTickExpression;
-                                acf.HExpression = a.AuraHTickExpression;
-                                acf.OExpression = a.AuraOTickExpression;
-                                acf.TTLExpression = a.AuraTTLTickExpression;
+                                acf.XExpression = a._AuraXTickExpression;
+                                acf.YExpression = a._AuraYTickExpression;
+                                acf.WExpression = a._AuraWTickExpression;
+                                acf.HExpression = a._AuraHTickExpression;
+                                acf.OExpression = a._AuraOTickExpression;
+                                acf.TTLExpression = a._AuraTTLTickExpression;
                                 acf.AuraActivate();
                                 if (newAura == true)
                                 {
@@ -461,7 +474,7 @@ namespace Triggernometry
                     break;
                 case Action.AuraOpEnum.DeactivateAura:
                     {
-                        string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a.AuraName);
+                        string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._AuraName);
                         FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/deactimageaura", "Deactivating image aura '{0}'", ax));
                         lock (ctx.plug.imageauras)
                         {
@@ -495,8 +508,8 @@ namespace Triggernometry
                     break;
                 case Action.AuraOpEnum.DeactivateAuraRegex:
                     {
-                        Regex rex = new Regex(a.AuraName);
-                        FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/deactimageaurarex", "Deactivating image auras matching '{0}'", a.AuraName));
+                        Regex rex = new Regex(a._AuraName);
+                        FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/deactimageaurarex", "Deactivating image auras matching '{0}'", a._AuraName));
                         List<string> toRem = new List<string>();
                         lock (ctx.plug.imageauras)
                         {
@@ -516,58 +529,58 @@ namespace Triggernometry
         {
             if (mainform.InvokeRequired == true)
             {
-                string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a.TextAuraName);
+                string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._TextAuraName);
                 FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/invoketextaura", "Invoke required for text aura '{0}'", ax));
                 mainform.Invoke(new ActionExecutionHook(TextAuraManagement), ctx, a);
                 return;
             }
-            switch (a.TextAuraOp)
+            switch (a._TextAuraOp)
             {
                 case Action.AuraOpEnum.ActivateAura:
                     {
-                        string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a.TextAuraName);
+                        string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._TextAuraName);
                         FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/acttextaura", "Activating text aura '{0}'", ax));
                         try
                         {
                             Scarborough.ScarboroughText si = new Scarborough.ScarboroughText(sc);
-                            si.InitXExpression = a.TextAuraXIniExpression;
-                            si.InitYExpression = a.TextAuraYIniExpression;
-                            si.InitWExpression = a.TextAuraWIniExpression;
-                            si.InitHExpression = a.TextAuraHIniExpression;
-                            si.InitOExpression = a.TextAuraOIniExpression;
-                            si.UpdateXExpression = a.TextAuraXTickExpression;
-                            si.UpdateYExpression = a.TextAuraYTickExpression;
-                            si.UpdateWExpression = a.TextAuraWTickExpression;
-                            si.UpdateHExpression = a.TextAuraHTickExpression;
-                            si.UpdateOExpression = a.TextAuraOTickExpression;
-                            si.TTLExpression = a.TextAuraTTLTickExpression;
+                            si.InitXExpression = a._TextAuraXIniExpression;
+                            si.InitYExpression = a._TextAuraYIniExpression;
+                            si.InitWExpression = a._TextAuraWIniExpression;
+                            si.InitHExpression = a._TextAuraHIniExpression;
+                            si.InitOExpression = a._TextAuraOIniExpression;
+                            si.UpdateXExpression = a._TextAuraXTickExpression;
+                            si.UpdateYExpression = a._TextAuraYTickExpression;
+                            si.UpdateWExpression = a._TextAuraWTickExpression;
+                            si.UpdateHExpression = a._TextAuraHTickExpression;
+                            si.UpdateOExpression = a._TextAuraOTickExpression;
+                            si.TTLExpression = a._TextAuraTTLTickExpression;
                             FontStyle fs = FontStyle.Regular;
-                            if ((a.TextAuraEffect & Action.TextAuraEffectEnum.Bold) != 0)
+                            if ((a._TextAuraEffect & Action.TextAuraEffectEnum.Bold) != 0)
                             {
                                 fs |= FontStyle.Bold;
                             }
-                            if ((a.TextAuraEffect & Action.TextAuraEffectEnum.Italic) != 0)
+                            if ((a._TextAuraEffect & Action.TextAuraEffectEnum.Italic) != 0)
                             {
                                 fs |= FontStyle.Italic;
                             }
-                            if ((a.TextAuraEffect & Action.TextAuraEffectEnum.Underline) != 0)
+                            if ((a._TextAuraEffect & Action.TextAuraEffectEnum.Underline) != 0)
                             {
                                 fs |= FontStyle.Underline;
                             }
-                            if ((a.TextAuraEffect & Action.TextAuraEffectEnum.Strikeout) != 0)
+                            if ((a._TextAuraEffect & Action.TextAuraEffectEnum.Strikeout) != 0)
                             {
                                 fs |= FontStyle.Strikeout;
                             }
-                            si.TextExpression = a.TextAuraExpression;
-                            si.TextAlignment = a.TextAuraAlignment;
-                            si.TextColor = a.TextAuraForegroundClInt;
-                            si.OutlineColor = a.TextAuraOutlineClInt;
+                            si.TextExpression = a._TextAuraExpression;
+                            si.TextAlignment = a._TextAuraAlignment;
+                            si.TextColor = a._TextAuraForegroundClInt;
+                            si.OutlineColor = a._TextAuraOutlineClInt;
                             si.UseOutline = a._TextAuraUseOutline;
-                            si.FontName = a.TextAuraFontName;
-                            si.FontSize = a.TextAuraFontSize;
+                            si.FontName = a._TextAuraFontName;
+                            si.FontSize = a._TextAuraFontSize;
                             si.FontStyle = fs;
                             si.ctx = ctx;
-                            si.BackgroundColor = a.TextAuraBackgroundClInt;
+                            si.BackgroundColor = a._TextAuraBackgroundClInt;
                             sc.Activate(ax, si);
                         }
                         catch (Exception ex)
@@ -578,7 +591,7 @@ namespace Triggernometry
                     break;
                 case Action.AuraOpEnum.DeactivateAura:
                     {
-                        string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a.TextAuraName);
+                        string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._TextAuraName);
                         FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/deacttextaura", "Deactivating text aura '{0}'", ax));
                         sc.Deactivate(ax, Scarborough.Scarborough.ItemAction.ItemTypeEnum.Text);
                     }
@@ -591,7 +604,7 @@ namespace Triggernometry
                     break;
                 case Action.AuraOpEnum.DeactivateAuraRegex:
                     {
-                        string ax = a.AuraName;
+                        string ax = a._TextAuraName;
                         FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/deacttextaurarex", "Deactivating text auras matching '{0}'", ax));
                         sc.DeactivateRegex(ax, Scarborough.Scarborough.ItemAction.ItemTypeEnum.Text);
                     }
@@ -603,16 +616,16 @@ namespace Triggernometry
         {
             if (mainform.InvokeRequired == true)
             {
-                string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a.TextAuraName);
+                string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._TextAuraName);
                 FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/invoketextaura", "Invoke required for text aura '{0}'", ax));
                 mainform.Invoke(new ActionExecutionHook(TextAuraManagement), ctx, a);
                 return;
             }
-            switch (a.TextAuraOp)
+            switch (a._TextAuraOp)
             {
                 case Action.AuraOpEnum.ActivateAura:
                     {
-                        string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a.TextAuraName);
+                        string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._TextAuraName);
                         FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/acttextaura", "Activating text aura '{0}'", ax));
                         Forms.AuraContainerForm acf = null;
                         bool newAura = false;
@@ -633,32 +646,32 @@ namespace Triggernometry
                                 }
                                 acf.AuraPrepare();
                                 acf.ctx = ctx;
-                                acf.TextExpression = a.TextAuraExpression;
-                                acf.TextAlignment = a.TextAuraAlignment;
-                                acf.TextColor = a.TextAuraForegroundClInt;
-                                acf.OutlineColor = a.TextAuraOutlineClInt;
+                                acf.TextExpression = a._TextAuraExpression;
+                                acf.TextAlignment = a._TextAuraAlignment;
+                                acf.TextColor = a._TextAuraForegroundClInt;
+                                acf.OutlineColor = a._TextAuraOutlineClInt;
                                 acf.UseOutline = a._TextAuraUseOutline;
                                 if (acf.AuraFont != null)
                                 {
                                     FontStyle fs = FontStyle.Regular;
-                                    if ((a.TextAuraEffect & Action.TextAuraEffectEnum.Bold) != 0)
+                                    if ((a._TextAuraEffect & Action.TextAuraEffectEnum.Bold) != 0)
                                     {
                                         fs |= FontStyle.Bold;
                                     }
-                                    if ((a.TextAuraEffect & Action.TextAuraEffectEnum.Italic) != 0)
+                                    if ((a._TextAuraEffect & Action.TextAuraEffectEnum.Italic) != 0)
                                     {
                                         fs |= FontStyle.Italic;
                                     }
-                                    if ((a.TextAuraEffect & Action.TextAuraEffectEnum.Underline) != 0)
+                                    if ((a._TextAuraEffect & Action.TextAuraEffectEnum.Underline) != 0)
                                     {
                                         fs |= FontStyle.Underline;
                                     }
-                                    if ((a.TextAuraEffect & Action.TextAuraEffectEnum.Strikeout) != 0)
+                                    if ((a._TextAuraEffect & Action.TextAuraEffectEnum.Strikeout) != 0)
                                     {
                                         fs |= FontStyle.Strikeout;
                                     }
                                     Font x = acf.AuraFont;
-                                    if (x.Style != fs || x.Size != a.TextAuraFontSize || x.Name != a.TextAuraFontName)
+                                    if (x.Style != fs || x.Size != a._TextAuraFontSize || x.Name != a._TextAuraFontName)
                                     {
                                         x.Dispose();
                                         acf.AuraFont = null;
@@ -667,37 +680,37 @@ namespace Triggernometry
                                 if (acf.AuraFont == null)
                                 {                                    
                                     FontStyle fs = FontStyle.Regular;
-                                    if ((a.TextAuraEffect & Action.TextAuraEffectEnum.Bold) != 0)
+                                    if ((a._TextAuraEffect & Action.TextAuraEffectEnum.Bold) != 0)
                                     {
                                         fs |= FontStyle.Bold;
                                     }
-                                    if ((a.TextAuraEffect & Action.TextAuraEffectEnum.Italic) != 0)
+                                    if ((a._TextAuraEffect & Action.TextAuraEffectEnum.Italic) != 0)
                                     {
                                         fs |= FontStyle.Italic;
                                     }
-                                    if ((a.TextAuraEffect & Action.TextAuraEffectEnum.Underline) != 0)
+                                    if ((a._TextAuraEffect & Action.TextAuraEffectEnum.Underline) != 0)
                                     {
                                         fs |= FontStyle.Underline;
                                     }
-                                    if ((a.TextAuraEffect & Action.TextAuraEffectEnum.Strikeout) != 0)
+                                    if ((a._TextAuraEffect & Action.TextAuraEffectEnum.Strikeout) != 0)
                                     {
                                         fs |= FontStyle.Strikeout;
                                     }
-                                    float ex = a.TextAuraFontSize;
+                                    float ex = a._TextAuraFontSize;
                                     if (ex < 1)
                                     {
                                         ex = 1;
                                     }                                    
-                                    acf.AuraFont = new Font(a.TextAuraFontName, ex, fs, GraphicsUnit.Point);
+                                    acf.AuraFont = new Font(a._TextAuraFontName, ex, fs, GraphicsUnit.Point);
                                 }
-                                acf.BackgroundColor = a.TextAuraBackgroundClInt;
+                                acf.BackgroundColor = a._TextAuraBackgroundClInt;
                                 if (acf.BackgroundColor == Color.Transparent)
                                 {
                                     acf.BackColor = acf.TransparencyKey;
                                 }
-                                acf.Left = acf.EvaluateNumericExpression(ctx, a.TextAuraXIniExpression);
-                                acf.Top = acf.EvaluateNumericExpression(ctx, a.TextAuraYIniExpression);
-                                int i = acf.EvaluateNumericExpression(ctx, a.TextAuraWIniExpression);
+                                acf.Left = acf.EvaluateNumericExpression(ctx, a._TextAuraXIniExpression);
+                                acf.Top = acf.EvaluateNumericExpression(ctx, a._TextAuraYIniExpression);
+                                int i = acf.EvaluateNumericExpression(ctx, a._TextAuraWIniExpression);
                                 if (i < 0)
                                 {
                                     i = 0;
@@ -707,13 +720,13 @@ namespace Triggernometry
                                 {
                                     i = 0;
                                 }
-                                i = acf.EvaluateNumericExpression(ctx, a.TextAuraHIniExpression);
+                                i = acf.EvaluateNumericExpression(ctx, a._TextAuraHIniExpression);
                                 if (i < 0)
                                 {
                                     i = 0;
                                 }
                                 acf.Height = i;
-                                i = acf.EvaluateNumericExpression(ctx, a.TextAuraOIniExpression);
+                                i = acf.EvaluateNumericExpression(ctx, a._TextAuraOIniExpression);
                                 if (i < 0)
                                 {
                                     i = 0;
@@ -723,12 +736,12 @@ namespace Triggernometry
                                     i = 100;
                                 }
                                 acf.PresentableOpacity = i;
-                                acf.XExpression = a.TextAuraXTickExpression;
-                                acf.YExpression = a.TextAuraYTickExpression;
-                                acf.WExpression = a.TextAuraWTickExpression;
-                                acf.HExpression = a.TextAuraHTickExpression;
-                                acf.OExpression = a.TextAuraOTickExpression;
-                                acf.TTLExpression = a.TextAuraTTLTickExpression;
+                                acf.XExpression = a._TextAuraXTickExpression;
+                                acf.YExpression = a._TextAuraYTickExpression;
+                                acf.WExpression = a._TextAuraWTickExpression;
+                                acf.HExpression = a._TextAuraHTickExpression;
+                                acf.OExpression = a._TextAuraOTickExpression;
+                                acf.TTLExpression = a._TextAuraTTLTickExpression;
                                 acf.AuraActivate();
                                 if (newAura == true)
                                 {
@@ -755,7 +768,7 @@ namespace Triggernometry
                     break;
                 case Action.AuraOpEnum.DeactivateAura:
                     {
-                        string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a.TextAuraName);
+                        string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._TextAuraName);
                         FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/deacttextaura", "Deactivating text aura '{0}'", ax));
                         lock (ctx.plug.textauras)
                         {
@@ -789,8 +802,8 @@ namespace Triggernometry
                     break;
                 case Action.AuraOpEnum.DeactivateAuraRegex:
                     {
-                        Regex rex = new Regex(a.AuraName);
-                        FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/deacttextaurarex", "Deactivating text auras matching '{0}'", a.AuraName));
+                        Regex rex = new Regex(a._TextAuraName);
+                        FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/deacttextaurarex", "Deactivating text auras matching '{0}'", a._TextAuraName));
                         List<string> toRem = new List<string>();
                         lock (ctx.plug.textauras)
                         {
@@ -858,8 +871,9 @@ namespace Triggernometry
             Triggers = new List<Trigger>();
             ActiveTextTriggers = new List<Trigger>();
             ActiveFFXIVNetworkTriggers = new List<Trigger>();
-            simplevariables = new Dictionary<string, Variable>();
+            simplevariables = new Dictionary<string, VariableScalar>();
             listvariables = new Dictionary<string, VariableList>();
+            tablevariables = new Dictionary<string, VariableTable>();
             imageauras = new Dictionary<string, Forms.AuraContainerForm>();
             textauras = new Dictionary<string, Forms.AuraContainerForm>();
             ThreadPool.SetMinThreads(10, 10);
@@ -878,7 +892,7 @@ namespace Triggernometry
                 Triggers.Add(t);
                 if (t.Enabled == true && t.Parent.ParentsEnabled() == true)
                 {
-                    switch (t.Source)
+                    switch (t._Source)
                     {
                         case Trigger.TriggerSourceEnum.Log:
                             lock (ActiveTextTriggers)
@@ -938,7 +952,7 @@ namespace Triggernometry
         {
             lock (Triggers)
             {
-                switch (t.Source)
+                switch (t._Source)
                 {
                     case Trigger.TriggerSourceEnum.Log:
                         lock (ActiveTextTriggers)
@@ -965,7 +979,7 @@ namespace Triggernometry
 
         internal void TriggerEnabled(Trigger t)
         {
-            switch (t.Source)
+            switch (t._Source)
             {
                 case Trigger.TriggerSourceEnum.Log:
                     lock (ActiveTextTriggers)
@@ -994,7 +1008,7 @@ namespace Triggernometry
 
         internal void TriggerDisabled(Trigger t)
         {
-            switch (t.Source)
+            switch (t._Source)
             {
                 case Trigger.TriggerSourceEnum.Log:
                     lock (ActiveTextTriggers)
@@ -1149,13 +1163,13 @@ namespace Triggernometry
 
         internal void TtsPlaybackAct(Context ctx, Action a)
         {
-            string text = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a.UseTTSTextExpression);
+            string text = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._UseTTSTextExpression);
             TtsPlaybackHook(text);
         }
 
-        internal void SoundPlaybackAct(Context ctx, Action a)
+        internal void SoundPlaybackAct(Context ctx, Action a, string filename)
         {
-            double vol = ctx.EvaluateNumericExpression(a.ActionContextLogger, ctx, a.PlaySoundVolumeExpression);
+            double vol = ctx.EvaluateNumericExpression(a.ActionContextLogger, ctx, a._PlaySoundVolumeExpression);
             vol *= (ctx.plug.cfg.SfxVolumeAdjustment / 100.0);
             if (vol < 0.0)
             {
@@ -1165,7 +1179,6 @@ namespace Triggernometry
             {
                 vol = 100.0;
             }
-            string filename = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a.PlaySoundFileExpression);
             SoundPlaybackHook(filename, (int)Math.Floor(vol));
         }
 
@@ -1180,7 +1193,7 @@ namespace Triggernometry
             {
                 mytts = tts;
             }
-            double vol = ctx.EvaluateNumericExpression(a.ActionContextLogger, ctx, a.UseTTSVolumeExpression);
+            double vol = ctx.EvaluateNumericExpression(a.ActionContextLogger, ctx, a._UseTTSVolumeExpression);
             vol *= (ctx.plug.cfg.TtsVolumeAdjustment / 100.0);
             if (vol < 0.0)
             {
@@ -1190,7 +1203,7 @@ namespace Triggernometry
             {
                 vol = 100.0;
             }
-            double rate = ctx.EvaluateNumericExpression(a.ActionContextLogger, ctx, a.UseTTSRateExpression);
+            double rate = ctx.EvaluateNumericExpression(a.ActionContextLogger, ctx, a._UseTTSRateExpression);
             if (rate < -10.0)
             {
                 rate = -10.0;
@@ -1201,10 +1214,10 @@ namespace Triggernometry
             }
             mytts.Volume = (int)Math.Ceiling(vol);
             mytts.Rate = (int)Math.Ceiling(rate);
-            mytts.Speak(ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a.UseTTSTextExpression));
+            mytts.Speak(ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._UseTTSTextExpression));
         }
 
-        internal void SoundPlaybackSelf(Context ctx, Action a)
+        internal void SoundPlaybackSelf(Context ctx, Action a, string filename)
         {
             WindowsMediaPlayer mywmp;
             if (a._PlaySoundExclusive == true)
@@ -1221,7 +1234,7 @@ namespace Triggernometry
             {
                 mywmp = wmp;
             }
-            double vol = ctx.EvaluateNumericExpression(a.ActionContextLogger, ctx, a.PlaySoundVolumeExpression);
+            double vol = ctx.EvaluateNumericExpression(a.ActionContextLogger, ctx, a._PlaySoundVolumeExpression);
             vol *= (ctx.plug.cfg.SfxVolumeAdjustment / 100.0);
             if (vol < 0.0)
             {
@@ -1233,7 +1246,7 @@ namespace Triggernometry
             }
             mywmp.URL = "";
             mywmp.settings.volume = (int)Math.Ceiling(vol);
-            mywmp.URL = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a.PlaySoundFileExpression);
+            mywmp.URL = filename;
         }
 
         internal void TtsPlaybackSmart(Context ctx, Action a)
@@ -1250,13 +1263,46 @@ namespace Triggernometry
 
         internal void SoundPlaybackSmart(Context ctx, Action a)
         {
+            string filename = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._PlaySoundFileExpression);
+            Uri u = new Uri(filename);
+            if (u.IsFile == false)
+            {
+                string fn = Path.Combine(path, "TriggernometryRemoteSounds");
+                if (Directory.Exists(fn) == false)
+                {
+                    Directory.CreateDirectory(fn);
+                }
+                string ext = Path.GetExtension(u.LocalPath);
+                fn = Path.Combine(fn, GenerateHash(u.AbsoluteUri) + Path.GetExtension(u.LocalPath));
+                bool fromcache = false;
+                if (File.Exists(fn) == true)
+                {
+                    FileInfo fi = new FileInfo(fn);
+                    DateTime dt = DateTime.Now.AddMinutes(0 - cfg.CacheSoundExpiry);
+                    if (fi.LastWriteTime > dt)
+                    {
+                        filename = fn;
+                        fromcache = true;
+                    }
+                }
+                if (fromcache == false)
+                {
+                    using (WebClient wc = new WebClient())
+                    {
+                        wc.Headers["User-Agent"] = "Triggernometry Sound Retriever";
+                        byte[] data = wc.DownloadData(u.AbsoluteUri);
+                        File.WriteAllBytes(fn, data);
+                        filename = fn;
+                    }
+                }
+            }
             if (WMPUnavailable == true || (cfg.UseACTForSound == true && a._PlaySoundMyself == false))
             {
-                SoundPlaybackAct(ctx, a);
+                SoundPlaybackAct(ctx, a, filename);
             }
             else
             {
-                SoundPlaybackSelf(ctx, a);
+                SoundPlaybackSelf(ctx, a, filename);
             }
         }
 
@@ -1506,9 +1552,13 @@ namespace Triggernometry
             }
         }
 
+        public void IfYouSeeThisErrorYouNeedToRestartACT()
+        {
+            complainAboutReload = true;            
+        }
+
         public void InitPlugin(TabPage pluginScreenSpace, Label pluginStatusText)
         {
-
             Language ld = new Language();
             ld.LanguageName = "English (default)";
             ld.MissingKeyHandling = Language.MissingHandlingEnum.OutputKey;
@@ -1554,6 +1604,8 @@ namespace Triggernometry
                 ui.plug = this;
                 pluginScreenSpace.Controls.Add(ui);
                 WMPUnavailable = false;
+                exwhere = I18n.Translate("internal/Plugin/inicache", "performing cache cleanup");
+                ClearCache();
                 exwhere = I18n.Translate("internal/Plugin/iniwmp", "trying to initialize Windows Media Player");
                 try
                 {
@@ -1589,6 +1641,10 @@ namespace Triggernometry
                     CheckForUpdates();
                 }
                 exwhere = I18n.Translate("internal/Plugin/initoasts", "setting up toasts");
+                if (complainAboutReload == true)
+                {
+                    ui.ComplainAboutReload();
+                }
                 ui.SetupToasts();
                 ui.SetupLanguageMenu();
                 if (cfg.WarnAdmin == true)
@@ -1715,6 +1771,8 @@ namespace Triggernometry
                             remsize = 0;
                         }
                     }
+                    DateTime cacheExpiry = DateTime.Now.AddMinutes(0 - cfg.CacheRepoExpiry);
+                    bool cacheExpired = false;
                     if (r.KeepLocalBackup == true)
                     {
                         string repofn = GetRepositoryBackupFilename(r);
@@ -1722,9 +1780,10 @@ namespace Triggernometry
                         {
                             FileInfo fi = new FileInfo(repofn);
                             localsize = fi.Length;
+                            cacheExpired = (fi.LastWriteTime < cacheExpiry);
                         }
                     }
-                    if (remdate == r.LastUpdated && remsize == localsize && localsize > 0 && r.KeepLocalBackup == true)
+                    if (remdate == r.LastUpdated && remsize == localsize && localsize > 0 && r.KeepLocalBackup == true && cacheExpired == false)
                     {
                         trans = I18n.Translate("internal/Plugin/repousingbackup", "Repository {0} hasn't changed since {1}, and size {2} hasn't changed from {3}, using local backup", r.Name, remdate, remsize, localsize);
                         FilteredAddToLog(DebugLevelEnum.Info, trans);
@@ -1882,7 +1941,11 @@ namespace Triggernometry
                 {
                     return false;
                 }
-                if (a.ActionType == Action.ActionTypeEnum.WindowMessage&& r.AllowWindowMessages == false)
+                if (a.ActionType == Action.ActionTypeEnum.WindowMessage && r.AllowWindowMessages == false)
+                {
+                    return false;
+                }
+                if (a.ActionType == Action.ActionTypeEnum.DiskFile && r.AllowDiskOperations == false)
                 {
                     return false;
                 }
@@ -1982,7 +2045,7 @@ namespace Triggernometry
             ui.BuildTreeForRepository(exp, r);
         }
 
-        internal string HashRepositoryAddress(string addy)
+        internal string GenerateHash(string addy)
         {
             using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
             {
@@ -2000,7 +2063,7 @@ namespace Triggernometry
         internal string GetRepositoryBackupFilename(Repository r)
         {
             string fn = Path.Combine(path, "TriggernometryRepoBackups");
-            return Path.Combine(fn, HashRepositoryAddress(r.Address) + ".xml");
+            return Path.Combine(fn, GenerateHash(r.Address) + ".xml");
         }
 
         private bool LoadLocalBackupForRepository(Repository r)
@@ -2016,6 +2079,7 @@ namespace Triggernometry
                 TriggernometryExport exp = TriggernometryExport.Unserialize(data);
                 if (exp != null)
                 {
+                    r.LastUpdated = File.GetLastWriteTime(fn);
                     r.ContentSize = data.Length;
                     AddContentToRepository(exp, r);
                     trans = I18n.Translate("internal/Plugin/repoloadedlocal", "Loaded local backup of repository {0} from {1}", r.Name, fn);
@@ -2045,7 +2109,7 @@ namespace Triggernometry
             try
             {
                 string fn = Path.Combine(path, "TriggernometryRepoBackups");
-                string fn2 = Path.Combine(fn, HashRepositoryAddress(r.Address) + ".xml");
+                string fn2 = Path.Combine(fn, GenerateHash(r.Address) + ".xml");
                 trans = I18n.Translate("internal/Plugin/reposavinglocal", "Saving local backup of repository {0} in {1}", r.Name, fn2);
                 FilteredAddToLog(DebugLevelEnum.Verbose, trans);
                 r.AddToLog(trans);
@@ -2196,7 +2260,10 @@ namespace Triggernometry
 
         public void DeInitPlugin()
         {
-            ui.CloseForms();
+            if (ui != null)
+            {
+                ui.CloseForms();
+            }
             PluginBridges.BridgeFFXIV.UnsubscribeFromNetworkEvents(this);
             if (_obs != null)
             {
@@ -2338,7 +2405,7 @@ namespace Triggernometry
                 }
                 if ((force & Action.TriggerForceTypeEnum.SkipRefire) == 0)
                 {
-                    if (t.PeriodRefire == Trigger.RefireEnum.Deny && DateTime.Now < t.RefireDelayedUntil)
+                    if (t._PeriodRefire == Trigger.RefireEnum.Deny && DateTime.Now < t.RefireDelayedUntil)
                     {
                         t.AddToLog(this, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigrefirefail", "Trigger '{0}' refire delayed until {1}", t.LogName, FormatDateTime(t.RefireDelayedUntil)));
                         return;
@@ -2968,6 +3035,61 @@ namespace Triggernometry
         public Control GetCornerControl()
         {
             return ui.btnCornerPopup;
+        }
+
+        private void ClearCache()
+        {
+            int cleared = 0, clearedt = 0;
+            cleared = ClearCache("TriggernometryRemoteImages", cfg.CacheImageExpiry);
+            if (cleared > 0)
+            {
+                FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/cachecleanimage", "{0} item(s) cleared from image cache with expiry {1}", cleared, cfg.CacheImageExpiry));
+                clearedt += cleared;
+            }
+            cleared = ClearCache("TriggernometryRemoteSounds", cfg.CacheSoundExpiry);
+            if (cleared > 0)
+            {
+                FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/cachecleansound", "{0} item(s) cleared from sound cache with expiry {1}", cleared, cfg.CacheSoundExpiry));
+                clearedt += cleared;
+            }
+            cleared = ClearCache("TriggernometryJsonCache", cfg.CacheJsonExpiry);
+            if (cleared > 0)
+            {
+                FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/cachecleanjson", "{0} item(s) cleared from JSON cache with expiry {1}", cleared, cfg.CacheJsonExpiry));
+                clearedt += cleared;
+            }
+            cleared = ClearCache("TriggernometryRepoBackups", cfg.CacheRepoExpiry);
+            if (cleared > 0)
+            {
+                FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/cachecleanrepo", "{0} item(s) cleared from repository cache with expiry {1}", cleared, cfg.CacheRepoExpiry));
+                clearedt += cleared;
+            }
+            if (clearedt > 0)
+            {
+                FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/cacheclean", "Total of {0} cached item(s) cleared", clearedt));
+            }
+        }
+
+        internal int ClearCache(string cachedir, int expiry)
+        {
+            string cachepath = Path.Combine(path, cachedir);
+            DateTime dt = DateTime.Now.AddMinutes(0 - expiry);
+            DirectoryInfo di = new DirectoryInfo(cachepath);
+            if (di.Exists == true)
+            {
+                int i = 0;
+                FileInfo[] fis = di.GetFiles();
+                foreach (FileInfo fi in fis)
+                {
+                    if (fi.LastWriteTime < dt)
+                    {
+                        fi.Delete();
+                        i++;
+                    }
+                }
+                return i;
+            }
+            return 0;
         }
 
     }

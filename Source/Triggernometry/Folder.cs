@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.Text.RegularExpressions;
+using System.Globalization;
+using Triggernometry.Variables;
 
 namespace Triggernometry
 {
@@ -14,12 +16,78 @@ namespace Triggernometry
 
 		private Regex rexz;
 		private string _ZoneFilterRegularExpression;
+
+        internal bool _FFXIVJobFilterEnabled { get; set; } = false;
         [XmlAttribute]
-        public bool FFXIVJobFilterEnabled;
+        public string FFXIVJobFilterEnabled
+        {
+            get
+            {
+                if (_FFXIVJobFilterEnabled == false)
+                {
+                    return null;
+                }
+                return _FFXIVJobFilterEnabled.ToString();
+            }
+            set
+            {
+                _FFXIVJobFilterEnabled = Boolean.Parse(value);
+            }
+        }
+
+        internal Int64 _FFXIVJobFilter { get; set; } = 0;
         [XmlAttribute]
-        public Int64 FFXIVJobFilter;
+        public string FFXIVJobFilter
+        {
+            get
+            {
+                if (_FFXIVJobFilter == 0)
+                {
+                    return null;
+                }
+                return _FFXIVJobFilter.ToString(CultureInfo.InvariantCulture);
+            }
+            set
+            {
+                _FFXIVJobFilter = Int64.Parse(value, CultureInfo.InvariantCulture);
+            }
+        }
+
+        internal bool _EventFilterEnabled { get; set; } = false;
         [XmlAttribute]
-		public bool ZoneFilterEnabled;
+        public string EventFilterEnabled
+        {
+            get
+            {
+                if (_EventFilterEnabled == false)
+                {
+                    return null;
+                }
+                return _EventFilterEnabled.ToString();
+            }
+            set
+            {
+                _EventFilterEnabled = Boolean.Parse(value);
+            }
+        }
+
+        internal bool _ZoneFilterEnabled { get; set; } = false;
+        [XmlAttribute]
+        public string ZoneFilterEnabled
+        {
+            get
+            {
+                if (_ZoneFilterEnabled == false)
+                {
+                    return null;
+                }
+                return _ZoneFilterEnabled.ToString();
+            }
+            set
+            {
+                _ZoneFilterEnabled = Boolean.Parse(value);
+            }
+        }
 
         [XmlAttribute]
         public Guid Id { get; set; }
@@ -51,11 +119,28 @@ namespace Triggernometry
 				}
 			}
 		}
-		
-		private Regex rexe;
+
+        internal string FullPath
+        {
+            get
+            {
+                string name = Name;
+                Folder f = Parent;
+                while (f != null)
+                {
+                    if (f.Parent != null)
+                    {
+                        name = f.Name + @"\" + name;
+                    }
+                    f = f.Parent;
+                }
+                return name;
+            }
+        }
+
+        private Regex rexe;
 		private string _EventFilterRegularExpression;
-        [XmlAttribute]
-		public bool EventFilterEnabled;
+
 		[XmlAttribute]
         public string EventFilterRegularExpression
 		{
@@ -123,6 +208,17 @@ namespace Triggernometry
             }
             return true;
         }
+
+        public bool IsLimited()
+        {
+            return (
+                (_ZoneFilterEnabled == true)
+                ||
+                (_EventFilterEnabled == true)
+                ||
+                (_FFXIVJobFilterEnabled == true)
+            );
+        }
 		
 		public FilterFailReason PassesFilter(string zone, string evtext)
 		{
@@ -134,23 +230,23 @@ namespace Triggernometry
                 {
                     return FilterFailReason.NotEnabled;
                 }
-                if (ret == true && f.ZoneFilterEnabled == true)
+                if (ret == true && f._ZoneFilterEnabled == true)
 				{
 					ret = f.rexz != null ? f.rexz.IsMatch(zone) : false;
 				}		
-				if (ret == true && f.EventFilterEnabled == true)
+				if (ret == true && f._EventFilterEnabled == true)
 				{
 					ret = f.rexe != null ? f.rexe.IsMatch(evtext) : false;
 				}
-                if (ret == true && f.FFXIVJobFilterEnabled == true)
+                if (ret == true && f._FFXIVJobFilterEnabled == true)
                 {
-                    VariableClump vc = PluginBridges.BridgeFFXIV.GetMyself();
+                    VariableDictionary vc = PluginBridges.BridgeFFXIV.GetMyself();
                     if (vc != null)
                     {
                         Int64 currentJob = 0;
-                        Int64.TryParse(vc.GetValue("jobid"), out currentJob);
+                        Int64.TryParse(vc.GetValue("jobid").ToString(), out currentJob);
                         Int64 shifted = ((Int64)1) << ((int)currentJob - 1);
-                        ret = ((f.FFXIVJobFilter & shifted) != 0);
+                        ret = ((f._FFXIVJobFilter & shifted) != 0);
                     }
                     else
                     {

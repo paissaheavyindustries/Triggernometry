@@ -187,6 +187,21 @@ namespace Triggernometry
         [XmlAttribute]
         public bool DeveloperMode { get; set; }
 
+        [XmlAttribute]
+        public int CacheImageExpiry { get; set; }
+
+        [XmlAttribute]
+        public int CacheSoundExpiry { get; set; }
+
+        [XmlAttribute]
+        public int CacheJsonExpiry { get; set; }
+
+        [XmlAttribute]
+        public int CacheRepoExpiry { get; set; }
+
+        [XmlAttribute]
+        public int CacheFileExpiry { get; set; }
+
         internal bool isnew;
         internal DateTime lastWrite;
 
@@ -220,6 +235,11 @@ namespace Triggernometry
             FfxivCustomPartyOrder = "19, 1, 21, 3, 32, 37, 24, 6, 28, 33, 20, 2, 22, 4, 30, 29, 34, 23, 5, 31, 38, 25, 7, 27, 26, 35, 36";
             ShowWelcome = true;
             WindowToMonitor = "FINAL FANTASY XIV";
+            CacheImageExpiry = 518400;
+            CacheSoundExpiry = 518400;
+            CacheJsonExpiry = 10080;
+            CacheRepoExpiry = 518400;
+            CacheFileExpiry = 518400;
         }
         /*
         Paladin		19

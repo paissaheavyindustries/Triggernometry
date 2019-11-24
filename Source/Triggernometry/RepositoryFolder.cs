@@ -19,6 +19,11 @@ namespace Triggernometry
         [XmlAttribute]
         public bool Enabled { get; set; }
 
+        public bool IsLimited()
+        {
+            return false;
+        }
+
         public RepositoryFolder()
         {
             Repositories = new List<Repository>();

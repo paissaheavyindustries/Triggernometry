@@ -66,6 +66,7 @@ namespace Triggernometry.Forms
                 chkAllowProcess.Checked = r.AllowProcessLaunch;
                 chkAllowScript.Checked = r.AllowScriptExecution;
                 chkAllowWmsg.Checked = r.AllowWindowMessages;
+                chkAllowDisk.Checked = r.AllowDiskOperations;
                 chkAllowObs.Checked = r.AllowObsControl;
                 cbxNewBehavior.SelectedIndex = (int)r.NewBehavior;
                 cbxUpdatePolicy.SelectedIndex = (int)r.UpdatePolicy;
@@ -87,6 +88,7 @@ namespace Triggernometry.Forms
             r.Address = txtAddress.Text;
             r.AllowProcessLaunch = chkAllowProcess.Checked;
             r.AllowScriptExecution = chkAllowScript.Checked;
+            r.AllowDiskOperations = chkAllowDisk.Checked;
             r.AllowWindowMessages = chkAllowWmsg.Checked;
             r.AllowObsControl = chkAllowObs.Checked;
             r.KeepLocalBackup = chkKeepLocal.Checked;
@@ -140,6 +142,18 @@ namespace Triggernometry.Forms
             if (MessageBox.Show(this, I18n.Translate("internal/RepositoryForm/allowobswarn", "Allowing triggers from a repository to control OBS can be extremely risky, as the repository may have triggers (or may add some later) that prove to be dangerous and/or malicious. Are you sure you want to allow this?"), I18n.Translate("internal/RepositoryForm/warning", "Warning"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
             {
                 chkAllowObs.Checked = false;
+            }
+        }
+
+        private void chkAllowDisk_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkAllowDisk.Checked == false || cancomplain == false)
+            {
+                return;
+            }
+            if (MessageBox.Show(this, I18n.Translate("internal/RepositoryForm/allowdisk", "Allowing triggers from a repository to perform disk operations can be extremely risky, as the repository may have triggers (or may add some later) that prove to be dangerous and/or malicious. Are you sure you want to allow this?"), I18n.Translate("internal/RepositoryForm/warning", "Warning"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+            {
+                chkAllowDisk.Checked = false;
             }
         }
 

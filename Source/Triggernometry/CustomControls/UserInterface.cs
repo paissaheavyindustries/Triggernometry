@@ -6,20 +6,26 @@ using System.Drawing;
 using System.Data;
 using System.Linq;
 using System.Diagnostics;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Speech.Synthesis;
-using System.Threading;
-using System.IO;
-using System.Reflection;
 
 namespace Triggernometry.CustomControls
 {
 
     public partial class UserInterface : UserControl
     {
+
+        public enum ImageIndices
+        {
+            FolderClosed = 0,
+            FolderOpen = 1,
+            Bolt = 2,
+            RemoteRepo = 3,
+            RemoteRepoUnavailable = 4,
+            LimitedFolderClosed = 5,
+            LimitedFolderOpen = 6
+        }
 
         internal WMPLib.WindowsMediaPlayer wmp;
         internal SpeechSynthesizer tts;
@@ -34,6 +40,7 @@ namespace Triggernometry.CustomControls
 
         internal object formmgmt = new object();
         internal Forms.LogForm formlog { get; set; } = null;
+        internal Forms.SearchForm formsearch { get; set; } = null;
 
         private Color disabledNodeColor;
 
@@ -41,6 +48,26 @@ namespace Triggernometry.CustomControls
         private delegate void ProgressDelegate(int progress, string state);
         internal delegate void VoidDelegate(object sender, EventArgs e);
         internal delegate bool BoolDelegate(object sender, EventArgs e);
+
+        public static ImageIndices GetImageIndexForClosedFolder(Folder f)
+        {
+            return f.IsLimited() ? ImageIndices.LimitedFolderClosed : ImageIndices.FolderClosed;
+        }
+
+        public static ImageIndices GetImageIndexForOpenFolder(Folder f)
+        {
+            return f.IsLimited() ? ImageIndices.LimitedFolderOpen : ImageIndices.FolderOpen;
+        }
+
+        public static ImageIndices GetImageIndexForClosedFolder(RepositoryFolder f)
+        {
+            return f.IsLimited() ? ImageIndices.LimitedFolderClosed : ImageIndices.FolderClosed;
+        }
+
+        public static ImageIndices GetImageIndexForOpenFolder(RepositoryFolder f)
+        {
+            return f.IsLimited() ? ImageIndices.LimitedFolderOpen : ImageIndices.FolderOpen;
+        }
 
         // Create a node sorter that implements the IComparer interface.
         public class NodeSorter : IComparer
@@ -270,6 +297,13 @@ namespace Triggernometry.CustomControls
             }
         }
 
+        internal void ComplainAboutReload()
+        {
+            Toast tx = new Toast() { ToastText = I18n.Translate("internal/UserInterface/restartafterupdate", "You have updated Triggernometry without restarting ACT - new features may not be available until you restart.") };
+            tx.ToastType = Toast.ToastTypeEnum.OK;
+            QueueToast(tx);
+        }
+
         internal void BuildFullTreeFromConfiguration()
         {
             BuildTreeFromConfiguration(null, null, false);
@@ -323,7 +357,7 @@ namespace Triggernometry.CustomControls
                 tn.Checked = cfg.Root.Enabled;
                 tn.ForeColor = (tn.Checked == true) ? treeView1.ForeColor : disabledNodeColor;
                 parentdis = (tn.Checked == false);
-                tn.ImageIndex = 0;
+                tn.ImageIndex = (int)GetImageIndexForClosedFolder(cfg.Root);
                 treeView1.Nodes.Add(tn);
                 parentfolder = cfg.Root;
                 parentnode = tn;
@@ -332,7 +366,7 @@ namespace Triggernometry.CustomControls
                 tn.Tag = cfg.RepositoryRoot;
                 tn.Checked = cfg.RepositoryRoot.Enabled;
                 tn.ForeColor = (tn.Checked == true) ? treeView1.ForeColor : disabledNodeColor;
-                tn.ImageIndex = 0;
+                tn.ImageIndex = (int)GetImageIndexForClosedFolder(cfg.RepositoryRoot);
                 treeView1.Nodes.Add(tn);
                 foreach (Repository r in cfg.RepositoryRoot.Repositories)
                 {
@@ -342,8 +376,8 @@ namespace Triggernometry.CustomControls
                     r.Parent = cfg.RepositoryRoot;
                     rtn.Checked = r.Enabled;
                     rtn.ForeColor = (rtn.Checked == true && cfg.RepositoryRoot.Enabled == true) ? treeView1.ForeColor : disabledNodeColor;
-                    rtn.ImageIndex = 4;
-                    rtn.SelectedImageIndex = 4;
+                    rtn.ImageIndex = (int)ImageIndices.RemoteRepoUnavailable;
+                    rtn.SelectedImageIndex = rtn.ImageIndex;
                     tn.Nodes.Add(rtn);
                     //BuildTreeFromConfiguration(tn, fx, parentdis == true || tn.Checked == false);
                 }
@@ -359,8 +393,8 @@ namespace Triggernometry.CustomControls
                 tn.Tag = fx;
                 tn.Checked = fx.Enabled;
                 tn.ForeColor = (tn.Checked == true && parentdis == false) ? treeView1.ForeColor : disabledNodeColor;
-                tn.ImageIndex = 0;
-                tn.SelectedImageIndex = 0;
+                tn.ImageIndex = (int)GetImageIndexForClosedFolder(fx);
+                tn.SelectedImageIndex = tn.ImageIndex;
                 parentnode.Nodes.Add(tn);
                 fx.Parent = parentfolder;
                 BuildTreeFromConfiguration(tn, fx, parentdis == true || tn.Checked == false);                
@@ -376,8 +410,8 @@ namespace Triggernometry.CustomControls
                 tn.Tag = tx;
                 tn.Checked = tx.Enabled;
                 tn.ForeColor = (tn.Checked == true && parentdis == false) ? treeView1.ForeColor : disabledNodeColor;
-                tn.ImageIndex = 2;
-                tn.SelectedImageIndex = 2;
+                tn.ImageIndex = (int)ImageIndices.Bolt;
+                tn.SelectedImageIndex = tn.ImageIndex;
                 tx.Parent = parentfolder;
                 parentnode.Nodes.Add(tn);
                 plug.AddTrigger(tx);
@@ -411,8 +445,8 @@ namespace Triggernometry.CustomControls
                     tn.Text = f.Name;
                     tn.Tag = f;
                     tn.Checked = f.Enabled;
-                    tn.ImageIndex = 0;
-                    tn.SelectedImageIndex = 0;
+                    tn.ImageIndex = (int)GetImageIndexForClosedFolder(f);
+                    tn.SelectedImageIndex = tn.ImageIndex;
                     treeView1.SelectedNode.Nodes.Add(tn);
                     treeView1.SelectedNode.Expand();
                     f.Parent = (Folder)treeView1.SelectedNode.Tag;
@@ -445,8 +479,8 @@ namespace Triggernometry.CustomControls
                     tn.Text = t.Name;
                     tn.Tag = t;
                     tn.Checked = t.Enabled;
-                    tn.ImageIndex = 2;
-                    tn.SelectedImageIndex = 2;
+                    tn.ImageIndex = (int)ImageIndices.Bolt;
+                    tn.SelectedImageIndex = tn.ImageIndex;
                     treeView1.SelectedNode.Nodes.Add(tn);
                     treeView1.SelectedNode.Expand();
                     t.Parent = (Folder)treeView1.SelectedNode.Tag;
@@ -454,7 +488,7 @@ namespace Triggernometry.CustomControls
                     treeView1.Sort();
                     treeView1.SelectedNode = tn;
                     plug.AddTrigger(t);
-                    if (t.EditAutofire == true)
+                    if (t._EditAutofire == true)
                     {
                         ForceFireTrigger(t);
                     }
@@ -494,8 +528,8 @@ namespace Triggernometry.CustomControls
                     btnExportTrigger.Enabled = true;
                 }
                 else
-                {
-                    if (treeView1.SelectedNode.ImageIndex == 3 || treeView1.SelectedNode.ImageIndex == 4)
+                {                    
+                    if (treeView1.SelectedNode.Tag is Repository)
                     {
                         btnAdd.Enabled = false;
                         btnUpdate.Enabled = true;
@@ -504,7 +538,7 @@ namespace Triggernometry.CustomControls
                         btnImportTrigger.Enabled = false;
                         btnExportTrigger.Enabled = true;
                     }
-                    else if (treeView1.SelectedNode.ImageIndex == 2)
+                    else if (treeView1.SelectedNode.Tag is Trigger)
                     {
                         btnAdd.Enabled = false;
                         btnUpdate.Enabled = false;
@@ -513,7 +547,7 @@ namespace Triggernometry.CustomControls
                         btnImportTrigger.Enabled = false;
                         btnExportTrigger.Enabled = true;
                     }
-                    else if (treeView1.SelectedNode.ImageIndex == 0 || treeView1.SelectedNode.ImageIndex == 1)
+                    else if (treeView1.SelectedNode.Tag is Folder)
                     {
                         btnAdd.Enabled = (IsPartOfRemote(treeView1.SelectedNode) == false);
                         btnUpdate.Enabled = false;
@@ -536,12 +570,12 @@ namespace Triggernometry.CustomControls
 
         internal void btnEdit_Click(object sender, EventArgs e)
         {
-            if (treeView1.SelectedNode.ImageIndex == 2)
+            if (treeView1.SelectedNode.Tag is Trigger)
             {
                 using (Forms.TriggerForm tf = new Forms.TriggerForm())
                 {
                     Trigger t = (Trigger)treeView1.SelectedNode.Tag;
-                    Trigger.TriggerSourceEnum oldSource = t.Source;
+                    Trigger.TriggerSourceEnum oldSource = t._Source;
                     tf.plug = plug;
                     tf.fakectx.trig = t;
                     tf.fakectx.plug = plug;
@@ -561,12 +595,12 @@ namespace Triggernometry.CustomControls
                         lock (t) // verified
                         {
                             tf.SettingsToTrigger(t);
-                            if (oldSource != t.Source)
+                            if (oldSource != t._Source)
                             {
-                                plug.SourceChange(t, oldSource, t.Source);
+                                plug.SourceChange(t, oldSource, t._Source);
                             }
                         }
-                        if (t.EditAutofire == true)
+                        if (t._EditAutofire == true)
                         {
                             ForceFireTrigger(t);
                         }
@@ -577,7 +611,7 @@ namespace Triggernometry.CustomControls
                     }
                 }
             }
-            else if (treeView1.SelectedNode.ImageIndex == 3 || treeView1.SelectedNode.ImageIndex == 4)
+            else if (treeView1.SelectedNode.Tag is Repository)
             {
                 using (Forms.RepositoryForm rf = new Forms.RepositoryForm())
                 {
@@ -596,7 +630,7 @@ namespace Triggernometry.CustomControls
                     }
                 }
             }
-            else if ((treeView1.SelectedNode.ImageIndex == 0 || treeView1.SelectedNode.ImageIndex == 1) && (treeView1.SelectedNode.Parent != null))
+            else if (treeView1.SelectedNode.Tag is Folder && treeView1.SelectedNode.Parent != null)
             {
                 using (Forms.FolderForm ff = new Forms.FolderForm())
                 {
@@ -614,6 +648,15 @@ namespace Triggernometry.CustomControls
                         ff.SettingsToFolder(f);
                         TreeNode tn = treeView1.SelectedNode;
                         tn.Text = f.Name;
+                        if (tn.ImageIndex == (int)ImageIndices.FolderClosed || tn.ImageIndex == (int)ImageIndices.LimitedFolderClosed)
+                        {
+                            tn.ImageIndex = (int)GetImageIndexForClosedFolder(f);                            
+                        }
+                        else if (tn.ImageIndex == (int)ImageIndices.FolderOpen || tn.ImageIndex == (int)ImageIndices.LimitedFolderOpen)
+                        {
+                            tn.ImageIndex = (int)GetImageIndexForOpenFolder(f);
+                        }
+                        tn.SelectedImageIndex = tn.ImageIndex;
                         treeView1.Sort();
                         treeView1.SelectedNode = tn;
                     }
@@ -679,7 +722,7 @@ namespace Triggernometry.CustomControls
             {
                 ctxCollapse.Enabled = (treeView1.SelectedNode.Nodes.Count > 0);
                 ctxExpand.Enabled = ctxCollapse.Enabled;                
-                ctxFire.Enabled = (treeView1.SelectedNode.ImageIndex == 2);
+                ctxFire.Enabled = (treeView1.SelectedNode.Tag is Trigger);
             }
             else
             {
@@ -759,7 +802,7 @@ namespace Triggernometry.CustomControls
 
         internal void btnRemoveTrigger_Click(object sender, EventArgs e)
         {
-            if (treeView1.SelectedNode.ImageIndex == 2)
+            if (treeView1.SelectedNode.Tag is Trigger)
             {
                 Trigger t = (Trigger)treeView1.SelectedNode.Tag;
                 switch (MessageBox.Show(this, I18n.Translate("internal/UserInterface/areyousuretrigger", "Are you sure you want to remove trigger '{0}'?", t.Name), I18n.Translate("internal/UserInterface/confirm", "Confirm removal"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
@@ -774,7 +817,7 @@ namespace Triggernometry.CustomControls
                         return;
                 }
             }
-            else if (treeView1.SelectedNode.ImageIndex == 3 || treeView1.SelectedNode.ImageIndex == 4)
+            else if (treeView1.SelectedNode.Tag is Repository)
             {
                 Repository r = (Repository)treeView1.SelectedNode.Tag;
                 switch (MessageBox.Show(this, I18n.Translate("internal/UserInterface/areyousurerepo", "Are you sure you want to remove repository '{0}'?", r.Name), I18n.Translate("internal/UserInterface/confirm", "Confirm removal"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
@@ -789,7 +832,7 @@ namespace Triggernometry.CustomControls
                         return;
                 }
             }
-            else if (treeView1.SelectedNode.ImageIndex == 0 || treeView1.SelectedNode.ImageIndex == 1)
+            else if (treeView1.SelectedNode.Tag is Folder)
             {
                 int numfolders = 0;
                 int numtriggers = 0;
@@ -907,14 +950,14 @@ namespace Triggernometry.CustomControls
             {
                 foreach (Action a in nt.Actions)
                 {
-                    if (renamedTriggers.ContainsKey(a.TriggerId) == true)
+                    if (renamedTriggers.ContainsKey(a._TriggerId) == true)
                     {
-                        a.TriggerId = renamedTriggers[a.TriggerId];
+                        a._TriggerId = renamedTriggers[a._TriggerId];
                         tdjs++;
                     }
-                    if (renamedFolders.ContainsKey(a.FolderId) == true)
+                    if (renamedFolders.ContainsKey(a._FolderId) == true)
                     {
-                        a.FolderId = renamedFolders[a.FolderId];
+                        a._FolderId = renamedFolders[a._FolderId];
                         fdjs++;
                     }
                 }
@@ -983,12 +1026,12 @@ namespace Triggernometry.CustomControls
         internal TriggernometryExport ExportSelection()
         {
             TriggernometryExport exp = new TriggernometryExport();
-            if (treeView1.SelectedNode.ImageIndex == 2)
+            if (treeView1.SelectedNode.Tag is Trigger)
             {
                 Trigger t = (Trigger)treeView1.SelectedNode.Tag;
                 exp.ExportedTrigger = t;
             }
-            else if (treeView1.SelectedNode.ImageIndex == 0 || treeView1.SelectedNode.ImageIndex == 1)
+            else if (treeView1.SelectedNode.Tag is Folder)
             {
                 if (treeView1.SelectedNode.Tag is RepositoryFolder)
                 {
@@ -1001,7 +1044,7 @@ namespace Triggernometry.CustomControls
                     exp.ExportedFolder = f;
                 }
             }
-            else if (treeView1.SelectedNode.ImageIndex == 3 || treeView1.SelectedNode.ImageIndex == 4)
+            else if (treeView1.SelectedNode.Tag is Repository)
             {
                 Repository f = (Repository)treeView1.SelectedNode.Tag;
                 exp.ExportedFolder = f.Root;
@@ -1050,8 +1093,8 @@ namespace Triggernometry.CustomControls
         {
             if (tn.Tag is Folder)
             {
-                tn.ImageIndex = 0;
-                tn.SelectedImageIndex = 0;
+                tn.ImageIndex = (int)GetImageIndexForClosedFolder((Folder)tn.Tag);
+                tn.SelectedImageIndex = tn.ImageIndex;
             }
             foreach (TreeNode tc in tn.Nodes)
             {
@@ -1080,19 +1123,19 @@ namespace Triggernometry.CustomControls
 
         internal void treeView1_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
         {
-            if (e.Node.ImageIndex == 0 || e.Node.ImageIndex == 1)
+            if (e.Node.Tag is Folder)
             {
-                e.Node.ImageIndex = 0;
-                e.Node.SelectedImageIndex = 0;
+                e.Node.ImageIndex = (int)GetImageIndexForClosedFolder((Folder)e.Node.Tag);
+                e.Node.SelectedImageIndex = e.Node.ImageIndex;
             }
         }
 
         internal void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            if (e.Node.ImageIndex == 0 || e.Node.ImageIndex == 1)
+            if (e.Node.Tag is Folder)
             {
-                e.Node.ImageIndex = 1;
-                e.Node.SelectedImageIndex = 1;
+                e.Node.ImageIndex = (int)GetImageIndexForOpenFolder((Folder)e.Node.Tag);
+                e.Node.SelectedImageIndex = e.Node.ImageIndex;
             }
         }
 
@@ -1114,7 +1157,7 @@ namespace Triggernometry.CustomControls
 
         internal void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            if (e.Node == treeView1.SelectedNode && (treeView1.SelectedNode != null) && btnEdit.Enabled == true && (treeView1.SelectedNode.ImageIndex == 2))
+            if (e.Node == treeView1.SelectedNode && (treeView1.SelectedNode != null) && btnEdit.Enabled == true && (treeView1.SelectedNode.Tag is Trigger))
             {
                 btnEdit_Click(sender, null);
             }
@@ -1140,6 +1183,25 @@ namespace Triggernometry.CustomControls
             }
         }
 
+        internal void OpenSearchForm()
+        {
+            lock (formmgmt)
+            {
+                if (formsearch == null)
+                {
+                    formsearch = new Forms.SearchForm();
+                    formsearch.plug = plug;
+                    formsearch.FormClosed += Formsearch_FormClosed;
+                    formsearch.Show(plug.mainform);
+                }
+                else
+                {
+                    formsearch.BringToFront();
+                    formsearch.Focus();
+                }
+            }
+        }
+
         internal void viewLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenLogForm(false);
@@ -1151,6 +1213,15 @@ namespace Triggernometry.CustomControls
             {
                 formlog.Dispose();
                 formlog = null;
+            }
+        }
+
+        private void Formsearch_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            lock (formsearch)
+            {
+                formsearch.Dispose();
+                formsearch = null;
             }
         }
 
@@ -1294,8 +1365,8 @@ namespace Triggernometry.CustomControls
             Context fakectx = new Context();
             fakectx.plug = plug;
             Action a = new Action();
-            a.AuraOp = Action.AuraOpEnum.DeactivateAllAura;
-            a.TextAuraOp = Action.AuraOpEnum.DeactivateAllAura;
+            a._AuraOp = Action.AuraOpEnum.DeactivateAllAura;
+            a._TextAuraOp = Action.AuraOpEnum.DeactivateAllAura;
             plug.ImageAuraManagement(fakectx, a);
             plug.TextAuraManagement(fakectx, a);
         }
@@ -1330,6 +1401,10 @@ namespace Triggernometry.CustomControls
                 if (formlog != null)
                 {
                     formlog.Close();
+                }
+                if (formsearch != null)
+                {
+                    formsearch.Close();
                 }
             }
         }
@@ -1373,7 +1448,7 @@ namespace Triggernometry.CustomControls
                 
                 if (cfg.UseOsClipboard == true)
                 {
-                    data = System.Windows.Forms.Clipboard.GetText(TextDataFormat.Text);
+                    data = System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText);
                 }
                 else
                 {
@@ -1503,8 +1578,8 @@ namespace Triggernometry.CustomControls
                     tn.Text = r.Name;
                     tn.Tag = r;
                     tn.Checked = r.Enabled;
-                    tn.ImageIndex = 4;
-                    tn.SelectedImageIndex = 4;
+                    tn.ImageIndex = (int)ImageIndices.RemoteRepoUnavailable;
+                    tn.SelectedImageIndex = tn.ImageIndex;
                     RepositoryFolder rfo = (RepositoryFolder)treeView1.SelectedNode.Tag;
                     rfo.Repositories.Add(r);
                     r.Parent = rfo;
@@ -1652,8 +1727,8 @@ namespace Triggernometry.CustomControls
                     if (tn.Tag == r)
                     {
                         ifo.BuildTreeFromExport(exp, tn, r.Root, true);
-                        tn.ImageIndex = 3;
-                        tn.SelectedImageIndex = 3;
+                        tn.ImageIndex = (int)ImageIndices.RemoteRepo;
+                        tn.SelectedImageIndex = tn.ImageIndex;
                         RecolorStartingFromNode(tn, r.Enabled, false);
                         return;
                     }
@@ -1668,8 +1743,8 @@ namespace Triggernometry.CustomControls
                 RepositoryFolder rfo = (RepositoryFolder)tnupdate.Tag;
                 foreach (TreeNode tn in tnupdate.Nodes)
                 {
-                    tn.ImageIndex = 4;
-                    tn.SelectedImageIndex = 4;
+                    tn.ImageIndex = (int)ImageIndices.RemoteRepoUnavailable;
+                    tn.SelectedImageIndex = tn.ImageIndex;
                 }
                 Task tx = new Task(() =>
                 {
@@ -1680,8 +1755,8 @@ namespace Triggernometry.CustomControls
             if (tnupdate.Tag is Repository)
             {
                 Repository rfo = (Repository)tnupdate.Tag;
-                tnupdate.ImageIndex = 4;
-                tnupdate.SelectedImageIndex = 4;
+                tnupdate.ImageIndex = (int)ImageIndices.RemoteRepoUnavailable;
+                tnupdate.SelectedImageIndex = tnupdate.ImageIndex;
                 Task tx = new Task(() =>
                 {
                     plug.RepositoryUpdate(rfo, true);
@@ -1717,6 +1792,7 @@ namespace Triggernometry.CustomControls
                         r.AllowWindowMessages = false;
                         r.AllowScriptExecution = false;
                         r.AllowObsControl = false;
+                        r.AllowDiskOperations = false;
                         r.KeepLocalBackup = true;
                         r.Name = rta.Name;
                         r.NewBehavior = Repository.NewBehaviorEnum.AsDefined;
@@ -1726,8 +1802,8 @@ namespace Triggernometry.CustomControls
                         tn.Text = r.Name;
                         tn.Tag = r;
                         tn.Checked = r.Enabled;
-                        tn.ImageIndex = 4;
-                        tn.SelectedImageIndex = 4;
+                        tn.ImageIndex = (int)ImageIndices.RemoteRepoUnavailable;
+                        tn.SelectedImageIndex = tn.ImageIndex;
                         RepositoryFolder rfo = (RepositoryFolder)treeView1.Nodes[1].Tag;
                         rfo.Repositories.Add(r);
                         r.Parent = rfo;
@@ -1785,6 +1861,7 @@ namespace Triggernometry.CustomControls
             toolStripSeparator5.Visible = cfg.DeveloperMode;
             btnBenchmark.Visible = cfg.DeveloperMode;
             btnViewVariables.Visible = cfg.DeveloperMode;
+            btnSearch.Visible = cfg.DeveloperMode;
         }
 
         private void ctxFire_Click(object sender, EventArgs e)
@@ -1792,7 +1869,7 @@ namespace Triggernometry.CustomControls
             if (treeView1.SelectedNode != null)
             {
                 TreeNode tn = treeView1.SelectedNode;
-                if (tn.ImageIndex == 2)
+                if (tn.Tag is Trigger)
                 {
                     Trigger t = (Trigger)tn.Tag;
                     ForceFireTrigger(t);
@@ -1804,7 +1881,7 @@ namespace Triggernometry.CustomControls
         {            
             Context ctx = new Context();
             ctx.plug = plug;
-            ctx.testmode = true;
+            ctx.testmode = false;
             ctx.trig = t;
             ctx.soundhook = plug.SoundPlaybackSmart;
             ctx.ttshook = plug.TtsPlaybackSmart;
@@ -1817,6 +1894,15 @@ namespace Triggernometry.CustomControls
         {
             TabPage tp = (TabPage)btnCornerPopup.Tag;
             plug.TabLocateHook(tp);
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            OpenSearchForm();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
         }
 
     }

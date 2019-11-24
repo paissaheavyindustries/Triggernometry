@@ -73,6 +73,62 @@
             this.chkWelcome = new System.Windows.Forms.CheckBox();
             this.panel10 = new System.Windows.Forms.Panel();
             this.tabAudio = new System.Windows.Forms.TabPage();
+            this.tabCaching = new System.Windows.Forms.TabPage();
+            this.panel16 = new System.Windows.Forms.Panel();
+            this.grpCacheFile = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel16 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnCacheFileBrowse = new System.Windows.Forms.Button();
+            this.btnCacheFileClear = new System.Windows.Forms.Button();
+            this.txtCacheFileSize = new System.Windows.Forms.TextBox();
+            this.lblCacheFileSize = new System.Windows.Forms.Label();
+            this.lblCacheFileCount = new System.Windows.Forms.Label();
+            this.lblCacheFileExpiry = new System.Windows.Forms.Label();
+            this.nudCacheFileExpiry = new System.Windows.Forms.NumericUpDown();
+            this.txtCacheFileCount = new System.Windows.Forms.TextBox();
+            this.panel17 = new System.Windows.Forms.Panel();
+            this.grpCacheRepo = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnCacheRepoBrowse = new System.Windows.Forms.Button();
+            this.btnCacheRepoClear = new System.Windows.Forms.Button();
+            this.txtCacheRepoSize = new System.Windows.Forms.TextBox();
+            this.lblCacheRepoSize = new System.Windows.Forms.Label();
+            this.lblCacheRepoCount = new System.Windows.Forms.Label();
+            this.lblCacheRepoExpiry = new System.Windows.Forms.Label();
+            this.nudCacheRepoExpiry = new System.Windows.Forms.NumericUpDown();
+            this.txtCacheRepoCount = new System.Windows.Forms.TextBox();
+            this.panel15 = new System.Windows.Forms.Panel();
+            this.grpCacheJSON = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel13 = new System.Windows.Forms.TableLayoutPanel();
+            this.nudCacheJsonExpiry = new System.Windows.Forms.NumericUpDown();
+            this.btnCacheJsonBrowse = new System.Windows.Forms.Button();
+            this.btnCacheJsonClear = new System.Windows.Forms.Button();
+            this.txtCacheJsonSize = new System.Windows.Forms.TextBox();
+            this.lblCacheJsonSize = new System.Windows.Forms.Label();
+            this.lblCacheJsonCount = new System.Windows.Forms.Label();
+            this.lblCacheJsonExpiry = new System.Windows.Forms.Label();
+            this.txtCacheJsonCount = new System.Windows.Forms.TextBox();
+            this.panel14 = new System.Windows.Forms.Panel();
+            this.grpCacheSound = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnCacheSoundBrowse = new System.Windows.Forms.Button();
+            this.btnCacheSoundClear = new System.Windows.Forms.Button();
+            this.txtCacheSoundSize = new System.Windows.Forms.TextBox();
+            this.lblCacheSoundSize = new System.Windows.Forms.Label();
+            this.lblCacheSoundCount = new System.Windows.Forms.Label();
+            this.lblCacheSoundExpiry = new System.Windows.Forms.Label();
+            this.nudCacheSoundExpiry = new System.Windows.Forms.NumericUpDown();
+            this.txtCacheSoundCount = new System.Windows.Forms.TextBox();
+            this.panel13 = new System.Windows.Forms.Panel();
+            this.grpCacheImage = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel12 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnCacheImageBrowse = new System.Windows.Forms.Button();
+            this.txtCacheImageSize = new System.Windows.Forms.TextBox();
+            this.lblCacheImageSize = new System.Windows.Forms.Label();
+            this.lblCacheImageCount = new System.Windows.Forms.Label();
+            this.lblCacheImageExpiry = new System.Windows.Forms.Label();
+            this.nudCacheImageExpiry = new System.Windows.Forms.NumericUpDown();
+            this.txtCacheImageCount = new System.Windows.Forms.TextBox();
+            this.btnCacheImageClear = new System.Windows.Forms.Button();
             this.tabEndpoint = new System.Windows.Forms.TabPage();
             this.grpEndpointSettings = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
@@ -114,13 +170,13 @@
             this.panel12 = new System.Windows.Forms.Panel();
             this.grpUserInterface = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+            this.cbxDevMode = new System.Windows.Forms.CheckBox();
             this.cbxTestLive = new System.Windows.Forms.CheckBox();
             this.panel6 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.grpClipboard = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.chkClipboard = new System.Windows.Forms.CheckBox();
-            this.cbxDevMode = new System.Windows.Forms.CheckBox();
             this.panel4.SuspendLayout();
             this.grpVolAdjustment.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -140,6 +196,23 @@
             this.grpStartup.SuspendLayout();
             this.tableLayoutPanel7.SuspendLayout();
             this.tabAudio.SuspendLayout();
+            this.tabCaching.SuspendLayout();
+            this.panel16.SuspendLayout();
+            this.grpCacheFile.SuspendLayout();
+            this.tableLayoutPanel16.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCacheFileExpiry)).BeginInit();
+            this.grpCacheRepo.SuspendLayout();
+            this.tableLayoutPanel15.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCacheRepoExpiry)).BeginInit();
+            this.grpCacheJSON.SuspendLayout();
+            this.tableLayoutPanel13.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCacheJsonExpiry)).BeginInit();
+            this.grpCacheSound.SuspendLayout();
+            this.tableLayoutPanel14.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCacheSoundExpiry)).BeginInit();
+            this.grpCacheImage.SuspendLayout();
+            this.tableLayoutPanel12.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCacheImageExpiry)).BeginInit();
             this.tabEndpoint.SuspendLayout();
             this.grpEndpointSettings.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
@@ -201,7 +274,6 @@
             this.btnOk.TabIndex = 0;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
-            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
             // grpVolAdjustment
             // 
@@ -537,6 +609,7 @@
             // 
             this.tbcMain.Controls.Add(this.tabGeneral);
             this.tbcMain.Controls.Add(this.tabAudio);
+            this.tbcMain.Controls.Add(this.tabCaching);
             this.tbcMain.Controls.Add(this.tabEndpoint);
             this.tbcMain.Controls.Add(this.tabFFXIV);
             this.tbcMain.Controls.Add(this.tabMisc);
@@ -702,6 +775,813 @@
             this.tabAudio.TabIndex = 1;
             this.tabAudio.Text = "Audio";
             this.tabAudio.UseVisualStyleBackColor = true;
+            // 
+            // tabCaching
+            // 
+            this.tabCaching.Controls.Add(this.panel16);
+            this.tabCaching.Location = new System.Drawing.Point(4, 22);
+            this.tabCaching.Name = "tabCaching";
+            this.tabCaching.Padding = new System.Windows.Forms.Padding(7);
+            this.tabCaching.Size = new System.Drawing.Size(556, 390);
+            this.tabCaching.TabIndex = 5;
+            this.tabCaching.Text = "Caching";
+            this.tabCaching.UseVisualStyleBackColor = true;
+            // 
+            // panel16
+            // 
+            this.panel16.AutoScroll = true;
+            this.panel16.Controls.Add(this.grpCacheFile);
+            this.panel16.Controls.Add(this.panel17);
+            this.panel16.Controls.Add(this.grpCacheRepo);
+            this.panel16.Controls.Add(this.panel15);
+            this.panel16.Controls.Add(this.grpCacheJSON);
+            this.panel16.Controls.Add(this.panel14);
+            this.panel16.Controls.Add(this.grpCacheSound);
+            this.panel16.Controls.Add(this.panel13);
+            this.panel16.Controls.Add(this.grpCacheImage);
+            this.panel16.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel16.Location = new System.Drawing.Point(7, 7);
+            this.panel16.Name = "panel16";
+            this.panel16.Size = new System.Drawing.Size(542, 376);
+            this.panel16.TabIndex = 30;
+            // 
+            // grpCacheFile
+            // 
+            this.grpCacheFile.AutoSize = true;
+            this.grpCacheFile.Controls.Add(this.tableLayoutPanel16);
+            this.grpCacheFile.Dock = System.Windows.Forms.DockStyle.Top;
+            this.grpCacheFile.Location = new System.Drawing.Point(0, 600);
+            this.grpCacheFile.Name = "grpCacheFile";
+            this.grpCacheFile.Padding = new System.Windows.Forms.Padding(10);
+            this.grpCacheFile.Size = new System.Drawing.Size(525, 140);
+            this.grpCacheFile.TabIndex = 34;
+            this.grpCacheFile.TabStop = false;
+            this.grpCacheFile.Text = " File downloads ";
+            // 
+            // tableLayoutPanel16
+            // 
+            this.tableLayoutPanel16.AutoSize = true;
+            this.tableLayoutPanel16.ColumnCount = 3;
+            this.tableLayoutPanel16.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel16.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel16.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel16.Controls.Add(this.btnCacheFileBrowse, 2, 3);
+            this.tableLayoutPanel16.Controls.Add(this.btnCacheFileClear, 1, 3);
+            this.tableLayoutPanel16.Controls.Add(this.txtCacheFileSize, 1, 2);
+            this.tableLayoutPanel16.Controls.Add(this.lblCacheFileSize, 0, 2);
+            this.tableLayoutPanel16.Controls.Add(this.lblCacheFileCount, 0, 1);
+            this.tableLayoutPanel16.Controls.Add(this.lblCacheFileExpiry, 0, 0);
+            this.tableLayoutPanel16.Controls.Add(this.nudCacheFileExpiry, 1, 0);
+            this.tableLayoutPanel16.Controls.Add(this.txtCacheFileCount, 1, 1);
+            this.tableLayoutPanel16.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel16.Location = new System.Drawing.Point(10, 23);
+            this.tableLayoutPanel16.Name = "tableLayoutPanel16";
+            this.tableLayoutPanel16.RowCount = 4;
+            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel16.Size = new System.Drawing.Size(505, 107);
+            this.tableLayoutPanel16.TabIndex = 0;
+            // 
+            // btnCacheFileBrowse
+            // 
+            this.btnCacheFileBrowse.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCacheFileBrowse.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheFileBrowse.Image")));
+            this.btnCacheFileBrowse.Location = new System.Drawing.Point(320, 81);
+            this.btnCacheFileBrowse.Name = "btnCacheFileBrowse";
+            this.btnCacheFileBrowse.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheFileBrowse.TabIndex = 18;
+            this.btnCacheFileBrowse.Text = "Browse";
+            this.btnCacheFileBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCacheFileBrowse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnCacheFileBrowse.UseMnemonic = false;
+            this.btnCacheFileBrowse.UseVisualStyleBackColor = true;
+            this.btnCacheFileBrowse.Click += new System.EventHandler(this.btnCacheFileBrowse_Click);
+            // 
+            // btnCacheFileClear
+            // 
+            this.btnCacheFileClear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCacheFileClear.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheFileClear.Image")));
+            this.btnCacheFileClear.Location = new System.Drawing.Point(132, 81);
+            this.btnCacheFileClear.Name = "btnCacheFileClear";
+            this.btnCacheFileClear.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheFileClear.TabIndex = 17;
+            this.btnCacheFileClear.Text = "Clear cache";
+            this.btnCacheFileClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCacheFileClear.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnCacheFileClear.UseMnemonic = false;
+            this.btnCacheFileClear.UseVisualStyleBackColor = true;
+            this.btnCacheFileClear.Click += new System.EventHandler(this.btnCacheFileClear_Click);
+            // 
+            // txtCacheFileSize
+            // 
+            this.tableLayoutPanel16.SetColumnSpan(this.txtCacheFileSize, 2);
+            this.txtCacheFileSize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCacheFileSize.Location = new System.Drawing.Point(132, 55);
+            this.txtCacheFileSize.Name = "txtCacheFileSize";
+            this.txtCacheFileSize.ReadOnly = true;
+            this.txtCacheFileSize.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheFileSize.TabIndex = 13;
+            this.txtCacheFileSize.Text = "0";
+            this.txtCacheFileSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // lblCacheFileSize
+            // 
+            this.lblCacheFileSize.AutoEllipsis = true;
+            this.lblCacheFileSize.AutoSize = true;
+            this.lblCacheFileSize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCacheFileSize.Location = new System.Drawing.Point(3, 52);
+            this.lblCacheFileSize.Name = "lblCacheFileSize";
+            this.lblCacheFileSize.Size = new System.Drawing.Size(123, 26);
+            this.lblCacheFileSize.TabIndex = 12;
+            this.lblCacheFileSize.Text = "Current disk size in bytes";
+            this.lblCacheFileSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblCacheFileCount
+            // 
+            this.lblCacheFileCount.AutoEllipsis = true;
+            this.lblCacheFileCount.AutoSize = true;
+            this.lblCacheFileCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCacheFileCount.Location = new System.Drawing.Point(3, 26);
+            this.lblCacheFileCount.Name = "lblCacheFileCount";
+            this.lblCacheFileCount.Size = new System.Drawing.Size(123, 26);
+            this.lblCacheFileCount.TabIndex = 10;
+            this.lblCacheFileCount.Text = "Current item count";
+            this.lblCacheFileCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblCacheFileExpiry
+            // 
+            this.lblCacheFileExpiry.AutoEllipsis = true;
+            this.lblCacheFileExpiry.AutoSize = true;
+            this.lblCacheFileExpiry.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCacheFileExpiry.Location = new System.Drawing.Point(3, 0);
+            this.lblCacheFileExpiry.Name = "lblCacheFileExpiry";
+            this.lblCacheFileExpiry.Size = new System.Drawing.Size(123, 26);
+            this.lblCacheFileExpiry.TabIndex = 8;
+            this.lblCacheFileExpiry.Text = "Expiration in minutes";
+            this.lblCacheFileExpiry.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // nudCacheFileExpiry
+            // 
+            this.tableLayoutPanel16.SetColumnSpan(this.nudCacheFileExpiry, 2);
+            this.nudCacheFileExpiry.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudCacheFileExpiry.Location = new System.Drawing.Point(132, 3);
+            this.nudCacheFileExpiry.Maximum = new decimal(new int[] {
+            1215752191,
+            23,
+            0,
+            0});
+            this.nudCacheFileExpiry.Name = "nudCacheFileExpiry";
+            this.nudCacheFileExpiry.Size = new System.Drawing.Size(370, 20);
+            this.nudCacheFileExpiry.TabIndex = 9;
+            this.nudCacheFileExpiry.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudCacheFileExpiry.Value = new decimal(new int[] {
+            518400,
+            0,
+            0,
+            0});
+            // 
+            // txtCacheFileCount
+            // 
+            this.tableLayoutPanel16.SetColumnSpan(this.txtCacheFileCount, 2);
+            this.txtCacheFileCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCacheFileCount.Location = new System.Drawing.Point(132, 29);
+            this.txtCacheFileCount.Name = "txtCacheFileCount";
+            this.txtCacheFileCount.ReadOnly = true;
+            this.txtCacheFileCount.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheFileCount.TabIndex = 11;
+            this.txtCacheFileCount.Text = "0";
+            this.txtCacheFileCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // panel17
+            // 
+            this.panel17.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel17.Location = new System.Drawing.Point(0, 590);
+            this.panel17.Name = "panel17";
+            this.panel17.Size = new System.Drawing.Size(525, 10);
+            this.panel17.TabIndex = 33;
+            // 
+            // grpCacheRepo
+            // 
+            this.grpCacheRepo.AutoSize = true;
+            this.grpCacheRepo.Controls.Add(this.tableLayoutPanel15);
+            this.grpCacheRepo.Dock = System.Windows.Forms.DockStyle.Top;
+            this.grpCacheRepo.Location = new System.Drawing.Point(0, 450);
+            this.grpCacheRepo.Name = "grpCacheRepo";
+            this.grpCacheRepo.Padding = new System.Windows.Forms.Padding(10);
+            this.grpCacheRepo.Size = new System.Drawing.Size(525, 140);
+            this.grpCacheRepo.TabIndex = 32;
+            this.grpCacheRepo.TabStop = false;
+            this.grpCacheRepo.Text = " Repository backups ";
+            // 
+            // tableLayoutPanel15
+            // 
+            this.tableLayoutPanel15.AutoSize = true;
+            this.tableLayoutPanel15.ColumnCount = 3;
+            this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel15.Controls.Add(this.btnCacheRepoBrowse, 2, 3);
+            this.tableLayoutPanel15.Controls.Add(this.btnCacheRepoClear, 1, 3);
+            this.tableLayoutPanel15.Controls.Add(this.txtCacheRepoSize, 1, 2);
+            this.tableLayoutPanel15.Controls.Add(this.lblCacheRepoSize, 0, 2);
+            this.tableLayoutPanel15.Controls.Add(this.lblCacheRepoCount, 0, 1);
+            this.tableLayoutPanel15.Controls.Add(this.lblCacheRepoExpiry, 0, 0);
+            this.tableLayoutPanel15.Controls.Add(this.nudCacheRepoExpiry, 1, 0);
+            this.tableLayoutPanel15.Controls.Add(this.txtCacheRepoCount, 1, 1);
+            this.tableLayoutPanel15.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel15.Location = new System.Drawing.Point(10, 23);
+            this.tableLayoutPanel15.Name = "tableLayoutPanel15";
+            this.tableLayoutPanel15.RowCount = 4;
+            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel15.Size = new System.Drawing.Size(505, 107);
+            this.tableLayoutPanel15.TabIndex = 0;
+            // 
+            // btnCacheRepoBrowse
+            // 
+            this.btnCacheRepoBrowse.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCacheRepoBrowse.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheRepoBrowse.Image")));
+            this.btnCacheRepoBrowse.Location = new System.Drawing.Point(320, 81);
+            this.btnCacheRepoBrowse.Name = "btnCacheRepoBrowse";
+            this.btnCacheRepoBrowse.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheRepoBrowse.TabIndex = 18;
+            this.btnCacheRepoBrowse.Text = "Browse";
+            this.btnCacheRepoBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCacheRepoBrowse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnCacheRepoBrowse.UseMnemonic = false;
+            this.btnCacheRepoBrowse.UseVisualStyleBackColor = true;
+            this.btnCacheRepoBrowse.Click += new System.EventHandler(this.btnCacheRepoBrowse_Click);
+            // 
+            // btnCacheRepoClear
+            // 
+            this.btnCacheRepoClear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCacheRepoClear.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheRepoClear.Image")));
+            this.btnCacheRepoClear.Location = new System.Drawing.Point(132, 81);
+            this.btnCacheRepoClear.Name = "btnCacheRepoClear";
+            this.btnCacheRepoClear.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheRepoClear.TabIndex = 17;
+            this.btnCacheRepoClear.Text = "Clear cache";
+            this.btnCacheRepoClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCacheRepoClear.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnCacheRepoClear.UseMnemonic = false;
+            this.btnCacheRepoClear.UseVisualStyleBackColor = true;
+            this.btnCacheRepoClear.Click += new System.EventHandler(this.btnCacheRepoClear_Click);
+            // 
+            // txtCacheRepoSize
+            // 
+            this.tableLayoutPanel15.SetColumnSpan(this.txtCacheRepoSize, 2);
+            this.txtCacheRepoSize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCacheRepoSize.Location = new System.Drawing.Point(132, 55);
+            this.txtCacheRepoSize.Name = "txtCacheRepoSize";
+            this.txtCacheRepoSize.ReadOnly = true;
+            this.txtCacheRepoSize.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheRepoSize.TabIndex = 13;
+            this.txtCacheRepoSize.Text = "0";
+            this.txtCacheRepoSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // lblCacheRepoSize
+            // 
+            this.lblCacheRepoSize.AutoEllipsis = true;
+            this.lblCacheRepoSize.AutoSize = true;
+            this.lblCacheRepoSize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCacheRepoSize.Location = new System.Drawing.Point(3, 52);
+            this.lblCacheRepoSize.Name = "lblCacheRepoSize";
+            this.lblCacheRepoSize.Size = new System.Drawing.Size(123, 26);
+            this.lblCacheRepoSize.TabIndex = 12;
+            this.lblCacheRepoSize.Text = "Current disk size in bytes";
+            this.lblCacheRepoSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblCacheRepoCount
+            // 
+            this.lblCacheRepoCount.AutoEllipsis = true;
+            this.lblCacheRepoCount.AutoSize = true;
+            this.lblCacheRepoCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCacheRepoCount.Location = new System.Drawing.Point(3, 26);
+            this.lblCacheRepoCount.Name = "lblCacheRepoCount";
+            this.lblCacheRepoCount.Size = new System.Drawing.Size(123, 26);
+            this.lblCacheRepoCount.TabIndex = 10;
+            this.lblCacheRepoCount.Text = "Current item count";
+            this.lblCacheRepoCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblCacheRepoExpiry
+            // 
+            this.lblCacheRepoExpiry.AutoEllipsis = true;
+            this.lblCacheRepoExpiry.AutoSize = true;
+            this.lblCacheRepoExpiry.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCacheRepoExpiry.Location = new System.Drawing.Point(3, 0);
+            this.lblCacheRepoExpiry.Name = "lblCacheRepoExpiry";
+            this.lblCacheRepoExpiry.Size = new System.Drawing.Size(123, 26);
+            this.lblCacheRepoExpiry.TabIndex = 8;
+            this.lblCacheRepoExpiry.Text = "Expiration in minutes";
+            this.lblCacheRepoExpiry.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // nudCacheRepoExpiry
+            // 
+            this.tableLayoutPanel15.SetColumnSpan(this.nudCacheRepoExpiry, 2);
+            this.nudCacheRepoExpiry.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudCacheRepoExpiry.Location = new System.Drawing.Point(132, 3);
+            this.nudCacheRepoExpiry.Maximum = new decimal(new int[] {
+            1215752191,
+            23,
+            0,
+            0});
+            this.nudCacheRepoExpiry.Name = "nudCacheRepoExpiry";
+            this.nudCacheRepoExpiry.Size = new System.Drawing.Size(370, 20);
+            this.nudCacheRepoExpiry.TabIndex = 9;
+            this.nudCacheRepoExpiry.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudCacheRepoExpiry.Value = new decimal(new int[] {
+            518400,
+            0,
+            0,
+            0});
+            // 
+            // txtCacheRepoCount
+            // 
+            this.tableLayoutPanel15.SetColumnSpan(this.txtCacheRepoCount, 2);
+            this.txtCacheRepoCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCacheRepoCount.Location = new System.Drawing.Point(132, 29);
+            this.txtCacheRepoCount.Name = "txtCacheRepoCount";
+            this.txtCacheRepoCount.ReadOnly = true;
+            this.txtCacheRepoCount.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheRepoCount.TabIndex = 11;
+            this.txtCacheRepoCount.Text = "0";
+            this.txtCacheRepoCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // panel15
+            // 
+            this.panel15.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel15.Location = new System.Drawing.Point(0, 440);
+            this.panel15.Name = "panel15";
+            this.panel15.Size = new System.Drawing.Size(525, 10);
+            this.panel15.TabIndex = 31;
+            // 
+            // grpCacheJSON
+            // 
+            this.grpCacheJSON.AutoSize = true;
+            this.grpCacheJSON.Controls.Add(this.tableLayoutPanel13);
+            this.grpCacheJSON.Dock = System.Windows.Forms.DockStyle.Top;
+            this.grpCacheJSON.Location = new System.Drawing.Point(0, 300);
+            this.grpCacheJSON.Name = "grpCacheJSON";
+            this.grpCacheJSON.Padding = new System.Windows.Forms.Padding(10);
+            this.grpCacheJSON.Size = new System.Drawing.Size(525, 140);
+            this.grpCacheJSON.TabIndex = 30;
+            this.grpCacheJSON.TabStop = false;
+            this.grpCacheJSON.Text = " JSON responses ";
+            // 
+            // tableLayoutPanel13
+            // 
+            this.tableLayoutPanel13.AutoSize = true;
+            this.tableLayoutPanel13.ColumnCount = 3;
+            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel13.Controls.Add(this.nudCacheJsonExpiry, 1, 0);
+            this.tableLayoutPanel13.Controls.Add(this.btnCacheJsonBrowse, 2, 3);
+            this.tableLayoutPanel13.Controls.Add(this.btnCacheJsonClear, 1, 3);
+            this.tableLayoutPanel13.Controls.Add(this.txtCacheJsonSize, 1, 2);
+            this.tableLayoutPanel13.Controls.Add(this.lblCacheJsonSize, 0, 2);
+            this.tableLayoutPanel13.Controls.Add(this.lblCacheJsonCount, 0, 1);
+            this.tableLayoutPanel13.Controls.Add(this.lblCacheJsonExpiry, 0, 0);
+            this.tableLayoutPanel13.Controls.Add(this.txtCacheJsonCount, 1, 1);
+            this.tableLayoutPanel13.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel13.Location = new System.Drawing.Point(10, 23);
+            this.tableLayoutPanel13.Name = "tableLayoutPanel13";
+            this.tableLayoutPanel13.RowCount = 4;
+            this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel13.Size = new System.Drawing.Size(505, 107);
+            this.tableLayoutPanel13.TabIndex = 0;
+            // 
+            // nudCacheJsonExpiry
+            // 
+            this.tableLayoutPanel13.SetColumnSpan(this.nudCacheJsonExpiry, 2);
+            this.nudCacheJsonExpiry.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudCacheJsonExpiry.Location = new System.Drawing.Point(132, 3);
+            this.nudCacheJsonExpiry.Maximum = new decimal(new int[] {
+            1215752191,
+            23,
+            0,
+            0});
+            this.nudCacheJsonExpiry.Name = "nudCacheJsonExpiry";
+            this.nudCacheJsonExpiry.Size = new System.Drawing.Size(370, 20);
+            this.nudCacheJsonExpiry.TabIndex = 18;
+            this.nudCacheJsonExpiry.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudCacheJsonExpiry.Value = new decimal(new int[] {
+            10800,
+            0,
+            0,
+            0});
+            // 
+            // btnCacheJsonBrowse
+            // 
+            this.btnCacheJsonBrowse.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCacheJsonBrowse.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheJsonBrowse.Image")));
+            this.btnCacheJsonBrowse.Location = new System.Drawing.Point(320, 81);
+            this.btnCacheJsonBrowse.Name = "btnCacheJsonBrowse";
+            this.btnCacheJsonBrowse.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheJsonBrowse.TabIndex = 17;
+            this.btnCacheJsonBrowse.Text = "Browse";
+            this.btnCacheJsonBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCacheJsonBrowse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnCacheJsonBrowse.UseMnemonic = false;
+            this.btnCacheJsonBrowse.UseVisualStyleBackColor = true;
+            this.btnCacheJsonBrowse.Click += new System.EventHandler(this.btnCacheJsonBrowse_Click);
+            // 
+            // btnCacheJsonClear
+            // 
+            this.btnCacheJsonClear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCacheJsonClear.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheJsonClear.Image")));
+            this.btnCacheJsonClear.Location = new System.Drawing.Point(132, 81);
+            this.btnCacheJsonClear.Name = "btnCacheJsonClear";
+            this.btnCacheJsonClear.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheJsonClear.TabIndex = 16;
+            this.btnCacheJsonClear.Text = "Clear cache";
+            this.btnCacheJsonClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCacheJsonClear.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnCacheJsonClear.UseMnemonic = false;
+            this.btnCacheJsonClear.UseVisualStyleBackColor = true;
+            this.btnCacheJsonClear.Click += new System.EventHandler(this.btnCacheJsonClear_Click);
+            // 
+            // txtCacheJsonSize
+            // 
+            this.tableLayoutPanel13.SetColumnSpan(this.txtCacheJsonSize, 2);
+            this.txtCacheJsonSize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCacheJsonSize.Location = new System.Drawing.Point(132, 55);
+            this.txtCacheJsonSize.Name = "txtCacheJsonSize";
+            this.txtCacheJsonSize.ReadOnly = true;
+            this.txtCacheJsonSize.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheJsonSize.TabIndex = 13;
+            this.txtCacheJsonSize.Text = "0";
+            this.txtCacheJsonSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // lblCacheJsonSize
+            // 
+            this.lblCacheJsonSize.AutoEllipsis = true;
+            this.lblCacheJsonSize.AutoSize = true;
+            this.lblCacheJsonSize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCacheJsonSize.Location = new System.Drawing.Point(3, 52);
+            this.lblCacheJsonSize.Name = "lblCacheJsonSize";
+            this.lblCacheJsonSize.Size = new System.Drawing.Size(123, 26);
+            this.lblCacheJsonSize.TabIndex = 12;
+            this.lblCacheJsonSize.Text = "Current disk size in bytes";
+            this.lblCacheJsonSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblCacheJsonCount
+            // 
+            this.lblCacheJsonCount.AutoEllipsis = true;
+            this.lblCacheJsonCount.AutoSize = true;
+            this.lblCacheJsonCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCacheJsonCount.Location = new System.Drawing.Point(3, 26);
+            this.lblCacheJsonCount.Name = "lblCacheJsonCount";
+            this.lblCacheJsonCount.Size = new System.Drawing.Size(123, 26);
+            this.lblCacheJsonCount.TabIndex = 10;
+            this.lblCacheJsonCount.Text = "Current item count";
+            this.lblCacheJsonCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblCacheJsonExpiry
+            // 
+            this.lblCacheJsonExpiry.AutoEllipsis = true;
+            this.lblCacheJsonExpiry.AutoSize = true;
+            this.lblCacheJsonExpiry.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCacheJsonExpiry.Location = new System.Drawing.Point(3, 0);
+            this.lblCacheJsonExpiry.Name = "lblCacheJsonExpiry";
+            this.lblCacheJsonExpiry.Size = new System.Drawing.Size(123, 26);
+            this.lblCacheJsonExpiry.TabIndex = 8;
+            this.lblCacheJsonExpiry.Text = "Expiration in minutes";
+            this.lblCacheJsonExpiry.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // txtCacheJsonCount
+            // 
+            this.tableLayoutPanel13.SetColumnSpan(this.txtCacheJsonCount, 2);
+            this.txtCacheJsonCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCacheJsonCount.Location = new System.Drawing.Point(132, 29);
+            this.txtCacheJsonCount.Name = "txtCacheJsonCount";
+            this.txtCacheJsonCount.ReadOnly = true;
+            this.txtCacheJsonCount.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheJsonCount.TabIndex = 11;
+            this.txtCacheJsonCount.Text = "0";
+            this.txtCacheJsonCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // panel14
+            // 
+            this.panel14.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel14.Location = new System.Drawing.Point(0, 290);
+            this.panel14.Name = "panel14";
+            this.panel14.Size = new System.Drawing.Size(525, 10);
+            this.panel14.TabIndex = 29;
+            // 
+            // grpCacheSound
+            // 
+            this.grpCacheSound.AutoSize = true;
+            this.grpCacheSound.Controls.Add(this.tableLayoutPanel14);
+            this.grpCacheSound.Dock = System.Windows.Forms.DockStyle.Top;
+            this.grpCacheSound.Location = new System.Drawing.Point(0, 150);
+            this.grpCacheSound.Name = "grpCacheSound";
+            this.grpCacheSound.Padding = new System.Windows.Forms.Padding(10);
+            this.grpCacheSound.Size = new System.Drawing.Size(525, 140);
+            this.grpCacheSound.TabIndex = 28;
+            this.grpCacheSound.TabStop = false;
+            this.grpCacheSound.Text = " Sound files ";
+            // 
+            // tableLayoutPanel14
+            // 
+            this.tableLayoutPanel14.AutoSize = true;
+            this.tableLayoutPanel14.ColumnCount = 3;
+            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel14.Controls.Add(this.btnCacheSoundBrowse, 2, 3);
+            this.tableLayoutPanel14.Controls.Add(this.btnCacheSoundClear, 1, 3);
+            this.tableLayoutPanel14.Controls.Add(this.txtCacheSoundSize, 1, 2);
+            this.tableLayoutPanel14.Controls.Add(this.lblCacheSoundSize, 0, 2);
+            this.tableLayoutPanel14.Controls.Add(this.lblCacheSoundCount, 0, 1);
+            this.tableLayoutPanel14.Controls.Add(this.lblCacheSoundExpiry, 0, 0);
+            this.tableLayoutPanel14.Controls.Add(this.nudCacheSoundExpiry, 1, 0);
+            this.tableLayoutPanel14.Controls.Add(this.txtCacheSoundCount, 1, 1);
+            this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel14.Location = new System.Drawing.Point(10, 23);
+            this.tableLayoutPanel14.Name = "tableLayoutPanel14";
+            this.tableLayoutPanel14.RowCount = 4;
+            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel14.Size = new System.Drawing.Size(505, 107);
+            this.tableLayoutPanel14.TabIndex = 0;
+            // 
+            // btnCacheSoundBrowse
+            // 
+            this.btnCacheSoundBrowse.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCacheSoundBrowse.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheSoundBrowse.Image")));
+            this.btnCacheSoundBrowse.Location = new System.Drawing.Point(320, 81);
+            this.btnCacheSoundBrowse.Name = "btnCacheSoundBrowse";
+            this.btnCacheSoundBrowse.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheSoundBrowse.TabIndex = 16;
+            this.btnCacheSoundBrowse.Text = "Browse";
+            this.btnCacheSoundBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCacheSoundBrowse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnCacheSoundBrowse.UseMnemonic = false;
+            this.btnCacheSoundBrowse.UseVisualStyleBackColor = true;
+            this.btnCacheSoundBrowse.Click += new System.EventHandler(this.btnCacheSoundBrowse_Click);
+            // 
+            // btnCacheSoundClear
+            // 
+            this.btnCacheSoundClear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCacheSoundClear.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheSoundClear.Image")));
+            this.btnCacheSoundClear.Location = new System.Drawing.Point(132, 81);
+            this.btnCacheSoundClear.Name = "btnCacheSoundClear";
+            this.btnCacheSoundClear.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheSoundClear.TabIndex = 15;
+            this.btnCacheSoundClear.Text = "Clear cache";
+            this.btnCacheSoundClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCacheSoundClear.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnCacheSoundClear.UseMnemonic = false;
+            this.btnCacheSoundClear.UseVisualStyleBackColor = true;
+            this.btnCacheSoundClear.Click += new System.EventHandler(this.btnCacheSoundClear_Click);
+            // 
+            // txtCacheSoundSize
+            // 
+            this.tableLayoutPanel14.SetColumnSpan(this.txtCacheSoundSize, 2);
+            this.txtCacheSoundSize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCacheSoundSize.Location = new System.Drawing.Point(132, 55);
+            this.txtCacheSoundSize.Name = "txtCacheSoundSize";
+            this.txtCacheSoundSize.ReadOnly = true;
+            this.txtCacheSoundSize.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheSoundSize.TabIndex = 13;
+            this.txtCacheSoundSize.Text = "0";
+            this.txtCacheSoundSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // lblCacheSoundSize
+            // 
+            this.lblCacheSoundSize.AutoEllipsis = true;
+            this.lblCacheSoundSize.AutoSize = true;
+            this.lblCacheSoundSize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCacheSoundSize.Location = new System.Drawing.Point(3, 52);
+            this.lblCacheSoundSize.Name = "lblCacheSoundSize";
+            this.lblCacheSoundSize.Size = new System.Drawing.Size(123, 26);
+            this.lblCacheSoundSize.TabIndex = 12;
+            this.lblCacheSoundSize.Text = "Current disk size in bytes";
+            this.lblCacheSoundSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblCacheSoundCount
+            // 
+            this.lblCacheSoundCount.AutoEllipsis = true;
+            this.lblCacheSoundCount.AutoSize = true;
+            this.lblCacheSoundCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCacheSoundCount.Location = new System.Drawing.Point(3, 26);
+            this.lblCacheSoundCount.Name = "lblCacheSoundCount";
+            this.lblCacheSoundCount.Size = new System.Drawing.Size(123, 26);
+            this.lblCacheSoundCount.TabIndex = 10;
+            this.lblCacheSoundCount.Text = "Current item count";
+            this.lblCacheSoundCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblCacheSoundExpiry
+            // 
+            this.lblCacheSoundExpiry.AutoEllipsis = true;
+            this.lblCacheSoundExpiry.AutoSize = true;
+            this.lblCacheSoundExpiry.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCacheSoundExpiry.Location = new System.Drawing.Point(3, 0);
+            this.lblCacheSoundExpiry.Name = "lblCacheSoundExpiry";
+            this.lblCacheSoundExpiry.Size = new System.Drawing.Size(123, 26);
+            this.lblCacheSoundExpiry.TabIndex = 8;
+            this.lblCacheSoundExpiry.Text = "Expiration in minutes";
+            this.lblCacheSoundExpiry.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // nudCacheSoundExpiry
+            // 
+            this.tableLayoutPanel14.SetColumnSpan(this.nudCacheSoundExpiry, 2);
+            this.nudCacheSoundExpiry.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudCacheSoundExpiry.Location = new System.Drawing.Point(132, 3);
+            this.nudCacheSoundExpiry.Maximum = new decimal(new int[] {
+            1215752191,
+            23,
+            0,
+            0});
+            this.nudCacheSoundExpiry.Name = "nudCacheSoundExpiry";
+            this.nudCacheSoundExpiry.Size = new System.Drawing.Size(370, 20);
+            this.nudCacheSoundExpiry.TabIndex = 9;
+            this.nudCacheSoundExpiry.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudCacheSoundExpiry.Value = new decimal(new int[] {
+            518400,
+            0,
+            0,
+            0});
+            // 
+            // txtCacheSoundCount
+            // 
+            this.tableLayoutPanel14.SetColumnSpan(this.txtCacheSoundCount, 2);
+            this.txtCacheSoundCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCacheSoundCount.Location = new System.Drawing.Point(132, 29);
+            this.txtCacheSoundCount.Name = "txtCacheSoundCount";
+            this.txtCacheSoundCount.ReadOnly = true;
+            this.txtCacheSoundCount.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheSoundCount.TabIndex = 11;
+            this.txtCacheSoundCount.Text = "0";
+            this.txtCacheSoundCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // panel13
+            // 
+            this.panel13.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel13.Location = new System.Drawing.Point(0, 140);
+            this.panel13.Name = "panel13";
+            this.panel13.Size = new System.Drawing.Size(525, 10);
+            this.panel13.TabIndex = 25;
+            // 
+            // grpCacheImage
+            // 
+            this.grpCacheImage.AutoSize = true;
+            this.grpCacheImage.Controls.Add(this.tableLayoutPanel12);
+            this.grpCacheImage.Dock = System.Windows.Forms.DockStyle.Top;
+            this.grpCacheImage.Location = new System.Drawing.Point(0, 0);
+            this.grpCacheImage.Name = "grpCacheImage";
+            this.grpCacheImage.Padding = new System.Windows.Forms.Padding(10);
+            this.grpCacheImage.Size = new System.Drawing.Size(525, 140);
+            this.grpCacheImage.TabIndex = 24;
+            this.grpCacheImage.TabStop = false;
+            this.grpCacheImage.Text = " Image files ";
+            // 
+            // tableLayoutPanel12
+            // 
+            this.tableLayoutPanel12.AutoSize = true;
+            this.tableLayoutPanel12.ColumnCount = 3;
+            this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel12.Controls.Add(this.btnCacheImageBrowse, 2, 3);
+            this.tableLayoutPanel12.Controls.Add(this.txtCacheImageSize, 1, 2);
+            this.tableLayoutPanel12.Controls.Add(this.lblCacheImageSize, 0, 2);
+            this.tableLayoutPanel12.Controls.Add(this.lblCacheImageCount, 0, 1);
+            this.tableLayoutPanel12.Controls.Add(this.lblCacheImageExpiry, 0, 0);
+            this.tableLayoutPanel12.Controls.Add(this.nudCacheImageExpiry, 1, 0);
+            this.tableLayoutPanel12.Controls.Add(this.txtCacheImageCount, 1, 1);
+            this.tableLayoutPanel12.Controls.Add(this.btnCacheImageClear, 1, 3);
+            this.tableLayoutPanel12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel12.Location = new System.Drawing.Point(10, 23);
+            this.tableLayoutPanel12.Name = "tableLayoutPanel12";
+            this.tableLayoutPanel12.RowCount = 4;
+            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel12.Size = new System.Drawing.Size(505, 107);
+            this.tableLayoutPanel12.TabIndex = 0;
+            // 
+            // btnCacheImageBrowse
+            // 
+            this.btnCacheImageBrowse.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCacheImageBrowse.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheImageBrowse.Image")));
+            this.btnCacheImageBrowse.Location = new System.Drawing.Point(320, 81);
+            this.btnCacheImageBrowse.Name = "btnCacheImageBrowse";
+            this.btnCacheImageBrowse.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheImageBrowse.TabIndex = 15;
+            this.btnCacheImageBrowse.Text = "Browse";
+            this.btnCacheImageBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCacheImageBrowse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnCacheImageBrowse.UseMnemonic = false;
+            this.btnCacheImageBrowse.UseVisualStyleBackColor = true;
+            this.btnCacheImageBrowse.Click += new System.EventHandler(this.btnCacheImageBrowse_Click);
+            // 
+            // txtCacheImageSize
+            // 
+            this.tableLayoutPanel12.SetColumnSpan(this.txtCacheImageSize, 2);
+            this.txtCacheImageSize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCacheImageSize.Location = new System.Drawing.Point(132, 55);
+            this.txtCacheImageSize.Name = "txtCacheImageSize";
+            this.txtCacheImageSize.ReadOnly = true;
+            this.txtCacheImageSize.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheImageSize.TabIndex = 13;
+            this.txtCacheImageSize.Text = "0";
+            this.txtCacheImageSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // lblCacheImageSize
+            // 
+            this.lblCacheImageSize.AutoEllipsis = true;
+            this.lblCacheImageSize.AutoSize = true;
+            this.lblCacheImageSize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCacheImageSize.Location = new System.Drawing.Point(3, 52);
+            this.lblCacheImageSize.Name = "lblCacheImageSize";
+            this.lblCacheImageSize.Size = new System.Drawing.Size(123, 26);
+            this.lblCacheImageSize.TabIndex = 12;
+            this.lblCacheImageSize.Text = "Current disk size in bytes";
+            this.lblCacheImageSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblCacheImageCount
+            // 
+            this.lblCacheImageCount.AutoEllipsis = true;
+            this.lblCacheImageCount.AutoSize = true;
+            this.lblCacheImageCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCacheImageCount.Location = new System.Drawing.Point(3, 26);
+            this.lblCacheImageCount.Name = "lblCacheImageCount";
+            this.lblCacheImageCount.Size = new System.Drawing.Size(123, 26);
+            this.lblCacheImageCount.TabIndex = 10;
+            this.lblCacheImageCount.Text = "Current item count";
+            this.lblCacheImageCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblCacheImageExpiry
+            // 
+            this.lblCacheImageExpiry.AutoEllipsis = true;
+            this.lblCacheImageExpiry.AutoSize = true;
+            this.lblCacheImageExpiry.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCacheImageExpiry.Location = new System.Drawing.Point(3, 0);
+            this.lblCacheImageExpiry.Name = "lblCacheImageExpiry";
+            this.lblCacheImageExpiry.Size = new System.Drawing.Size(123, 26);
+            this.lblCacheImageExpiry.TabIndex = 8;
+            this.lblCacheImageExpiry.Text = "Expiration in minutes";
+            this.lblCacheImageExpiry.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // nudCacheImageExpiry
+            // 
+            this.tableLayoutPanel12.SetColumnSpan(this.nudCacheImageExpiry, 2);
+            this.nudCacheImageExpiry.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudCacheImageExpiry.Location = new System.Drawing.Point(132, 3);
+            this.nudCacheImageExpiry.Maximum = new decimal(new int[] {
+            1215752191,
+            23,
+            0,
+            0});
+            this.nudCacheImageExpiry.Name = "nudCacheImageExpiry";
+            this.nudCacheImageExpiry.Size = new System.Drawing.Size(370, 20);
+            this.nudCacheImageExpiry.TabIndex = 9;
+            this.nudCacheImageExpiry.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudCacheImageExpiry.Value = new decimal(new int[] {
+            518400,
+            0,
+            0,
+            0});
+            // 
+            // txtCacheImageCount
+            // 
+            this.tableLayoutPanel12.SetColumnSpan(this.txtCacheImageCount, 2);
+            this.txtCacheImageCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCacheImageCount.Location = new System.Drawing.Point(132, 29);
+            this.txtCacheImageCount.Name = "txtCacheImageCount";
+            this.txtCacheImageCount.ReadOnly = true;
+            this.txtCacheImageCount.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheImageCount.TabIndex = 11;
+            this.txtCacheImageCount.Text = "0";
+            this.txtCacheImageCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // btnCacheImageClear
+            // 
+            this.btnCacheImageClear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCacheImageClear.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheImageClear.Image")));
+            this.btnCacheImageClear.Location = new System.Drawing.Point(132, 81);
+            this.btnCacheImageClear.Name = "btnCacheImageClear";
+            this.btnCacheImageClear.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheImageClear.TabIndex = 14;
+            this.btnCacheImageClear.Text = "Clear cache";
+            this.btnCacheImageClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnCacheImageClear.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnCacheImageClear.UseMnemonic = false;
+            this.btnCacheImageClear.UseVisualStyleBackColor = true;
+            this.btnCacheImageClear.Click += new System.EventHandler(this.btnCacheImageClear_Click);
             // 
             // tabEndpoint
             // 
@@ -1224,6 +2104,18 @@
             this.tableLayoutPanel10.Size = new System.Drawing.Size(522, 46);
             this.tableLayoutPanel10.TabIndex = 2;
             // 
+            // cbxDevMode
+            // 
+            this.cbxDevMode.AutoSize = true;
+            this.cbxDevMode.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cbxDevMode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbxDevMode.Location = new System.Drawing.Point(3, 26);
+            this.cbxDevMode.Name = "cbxDevMode";
+            this.cbxDevMode.Size = new System.Drawing.Size(516, 17);
+            this.cbxDevMode.TabIndex = 7;
+            this.cbxDevMode.Text = "Developer mode";
+            this.cbxDevMode.UseVisualStyleBackColor = true;
+            // 
             // cbxTestLive
             // 
             this.cbxTestLive.AutoSize = true;
@@ -1292,18 +2184,6 @@
             this.chkClipboard.Text = "Use operating system clipboard";
             this.chkClipboard.UseVisualStyleBackColor = true;
             // 
-            // cbxDevMode
-            // 
-            this.cbxDevMode.AutoSize = true;
-            this.cbxDevMode.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cbxDevMode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxDevMode.Location = new System.Drawing.Point(3, 26);
-            this.cbxDevMode.Name = "cbxDevMode";
-            this.cbxDevMode.Size = new System.Drawing.Size(516, 17);
-            this.cbxDevMode.TabIndex = 7;
-            this.cbxDevMode.Text = "Developer mode";
-            this.cbxDevMode.UseVisualStyleBackColor = true;
-            // 
             // ConfigurationForm
             // 
             this.AcceptButton = this.btnOk;
@@ -1355,6 +2235,34 @@
             this.tableLayoutPanel7.PerformLayout();
             this.tabAudio.ResumeLayout(false);
             this.tabAudio.PerformLayout();
+            this.tabCaching.ResumeLayout(false);
+            this.panel16.ResumeLayout(false);
+            this.panel16.PerformLayout();
+            this.grpCacheFile.ResumeLayout(false);
+            this.grpCacheFile.PerformLayout();
+            this.tableLayoutPanel16.ResumeLayout(false);
+            this.tableLayoutPanel16.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCacheFileExpiry)).EndInit();
+            this.grpCacheRepo.ResumeLayout(false);
+            this.grpCacheRepo.PerformLayout();
+            this.tableLayoutPanel15.ResumeLayout(false);
+            this.tableLayoutPanel15.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCacheRepoExpiry)).EndInit();
+            this.grpCacheJSON.ResumeLayout(false);
+            this.grpCacheJSON.PerformLayout();
+            this.tableLayoutPanel13.ResumeLayout(false);
+            this.tableLayoutPanel13.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCacheJsonExpiry)).EndInit();
+            this.grpCacheSound.ResumeLayout(false);
+            this.grpCacheSound.PerformLayout();
+            this.tableLayoutPanel14.ResumeLayout(false);
+            this.tableLayoutPanel14.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCacheSoundExpiry)).EndInit();
+            this.grpCacheImage.ResumeLayout(false);
+            this.grpCacheImage.PerformLayout();
+            this.tableLayoutPanel12.ResumeLayout(false);
+            this.tableLayoutPanel12.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCacheImageExpiry)).EndInit();
             this.tabEndpoint.ResumeLayout(false);
             this.tabEndpoint.PerformLayout();
             this.grpEndpointSettings.ResumeLayout(false);
@@ -1489,5 +2397,61 @@
         private System.Windows.Forms.TextBox txtMonitorWindow;
         private System.Windows.Forms.Label lblMonitorWindow;
         private System.Windows.Forms.CheckBox cbxDevMode;
+        private System.Windows.Forms.TabPage tabCaching;
+        private System.Windows.Forms.Panel panel16;
+        private System.Windows.Forms.GroupBox grpCacheRepo;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel15;
+        private System.Windows.Forms.Button btnCacheRepoClear;
+        private System.Windows.Forms.TextBox txtCacheRepoSize;
+        private System.Windows.Forms.Label lblCacheRepoSize;
+        private System.Windows.Forms.Label lblCacheRepoCount;
+        private System.Windows.Forms.Label lblCacheRepoExpiry;
+        private System.Windows.Forms.NumericUpDown nudCacheRepoExpiry;
+        private System.Windows.Forms.TextBox txtCacheRepoCount;
+        private System.Windows.Forms.Panel panel15;
+        private System.Windows.Forms.GroupBox grpCacheJSON;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel13;
+        private System.Windows.Forms.Button btnCacheJsonClear;
+        private System.Windows.Forms.TextBox txtCacheJsonSize;
+        private System.Windows.Forms.Label lblCacheJsonSize;
+        private System.Windows.Forms.Label lblCacheJsonCount;
+        private System.Windows.Forms.Label lblCacheJsonExpiry;
+        private System.Windows.Forms.TextBox txtCacheJsonCount;
+        private System.Windows.Forms.Panel panel14;
+        private System.Windows.Forms.GroupBox grpCacheSound;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel14;
+        private System.Windows.Forms.Button btnCacheSoundClear;
+        private System.Windows.Forms.TextBox txtCacheSoundSize;
+        private System.Windows.Forms.Label lblCacheSoundSize;
+        private System.Windows.Forms.Label lblCacheSoundCount;
+        private System.Windows.Forms.Label lblCacheSoundExpiry;
+        private System.Windows.Forms.NumericUpDown nudCacheSoundExpiry;
+        private System.Windows.Forms.TextBox txtCacheSoundCount;
+        private System.Windows.Forms.Panel panel13;
+        private System.Windows.Forms.GroupBox grpCacheImage;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel12;
+        private System.Windows.Forms.TextBox txtCacheImageSize;
+        private System.Windows.Forms.Label lblCacheImageSize;
+        private System.Windows.Forms.Label lblCacheImageCount;
+        private System.Windows.Forms.Label lblCacheImageExpiry;
+        private System.Windows.Forms.NumericUpDown nudCacheImageExpiry;
+        private System.Windows.Forms.TextBox txtCacheImageCount;
+        private System.Windows.Forms.Button btnCacheImageClear;
+        private System.Windows.Forms.Button btnCacheRepoBrowse;
+        private System.Windows.Forms.Button btnCacheJsonBrowse;
+        private System.Windows.Forms.Button btnCacheSoundBrowse;
+        private System.Windows.Forms.Button btnCacheImageBrowse;
+        private System.Windows.Forms.NumericUpDown nudCacheJsonExpiry;
+        private System.Windows.Forms.GroupBox grpCacheFile;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel16;
+        private System.Windows.Forms.Button btnCacheFileBrowse;
+        private System.Windows.Forms.Button btnCacheFileClear;
+        private System.Windows.Forms.TextBox txtCacheFileSize;
+        private System.Windows.Forms.Label lblCacheFileSize;
+        private System.Windows.Forms.Label lblCacheFileCount;
+        private System.Windows.Forms.Label lblCacheFileExpiry;
+        private System.Windows.Forms.NumericUpDown nudCacheFileExpiry;
+        private System.Windows.Forms.TextBox txtCacheFileCount;
+        private System.Windows.Forms.Panel panel17;
     }
 }

@@ -21,30 +21,65 @@ namespace TriggernometryProxy
         private object CornerLock = new object();
         private bool CornerPopupVisible = false;
         private Control CornerPopup = null;
+        private bool complained = false;
 
         public ProxyPlugin()
         {
             CosturaUtility.Initialize();
         }
 
+        public void FailsafeRegisterHook(string hookname, string methodname)
+        {
+            // this is to prevent errors when users don't shut down ACT in between updates, and the old realplugin is still loaded in
+            // (and might not expose the hooks that are expected by a newer version of the proxy)
+            try
+            {
+                MethodInfo mi = GetType().GetMethod(methodname);
+                PropertyInfo pi = Instance.GetType().GetProperty(hookname);
+                Delegate dob = Delegate.CreateDelegate(pi.PropertyType, this, mi);
+                pi.SetValue(Instance, dob);
+                return;
+            }
+            catch (Exception)
+            {
+            }
+            ComplainAboutReload();
+        }
+
+        private void ComplainAboutReload()
+        {
+            if (complained == true)
+            {
+                return;
+            }
+            complained = true;
+            Instance.IfYouSeeThisErrorYouNeedToRestartACT();
+        }
+
         public void InitPlugin(TabPage pluginScreenSpace, Label pluginStatusText)
         {
             Instance = new Triggernometry.RealPlugin();
             Instance.mainform = ActGlobals.oFormActMain;
-            Instance.InCombatHook = InCombat;
-            Instance.EndCombatHook = EndCombat;
-            Instance.CurrentZoneHook = GetCurrentZone;
-            Instance.ActiveEncounterHook = ExportActiveEncounter;
-            Instance.LastEncounterHook = ExportLastEncounter;
-            Instance.EncounterDurationHook = GetEncounterDuration;
-            Instance.TtsPlaybackHook = InvokeTtsMethod;
-            Instance.SoundPlaybackHook = InvokeSoundMethod;
-            Instance.CustomTriggerCheckHook = HasCustomTriggers;
-            Instance.CustomTriggerHook = GetCustomTriggers;
-            Instance.CornerShowHook = ShowCornerNotification;
-            Instance.CornerHideHook = HideCornerNotification;
-            Instance.TabLocateHook = LocateTab;
-            Triggernometry.RealPlugin.InstanceHook = GetInstance;
+            Version iv = typeof(Triggernometry.RealPlugin).Assembly.GetName().Version;
+            Version ip = typeof(ProxyPlugin).Assembly.GetName().Version;
+            if (iv.CompareTo(ip) != 0)
+            {
+                ComplainAboutReload();
+            }
+            FailsafeRegisterHook("InCombatHook", "InCombat");
+            FailsafeRegisterHook("EndCombatHook", "EndCombat");
+            FailsafeRegisterHook("CurrentZoneHook", "GetCurrentZone");
+            FailsafeRegisterHook("ActiveEncounterHook", "ExportActiveEncounter");
+            FailsafeRegisterHook("LastEncounterHook", "ExportLastEncounter");
+            FailsafeRegisterHook("EncounterDurationHook", "GetEncounterDuration");
+            FailsafeRegisterHook("TtsPlaybackHook", "InvokeTtsMethod");
+            FailsafeRegisterHook("SoundPlaybackHook", "InvokeSoundMethod");
+            FailsafeRegisterHook("CustomTriggerCheckHook", "HasCustomTriggers");
+            FailsafeRegisterHook("CustomTriggerHook", "GetCustomTriggers");
+            FailsafeRegisterHook("CornerShowHook", "ShowCornerNotification");
+            FailsafeRegisterHook("CornerHideHook", "HideCornerNotification");
+            FailsafeRegisterHook("TabLocateHook", "LocateTab");
+            FailsafeRegisterHook("InstanceHook", "GetInstance");
             GetPluginNameAndPath();
             ActGlobals.oFormActMain.OnLogLineRead += OFormActMain_OnLogLineRead;
             Instance.InitPlugin(pluginScreenSpace, pluginStatusText);      

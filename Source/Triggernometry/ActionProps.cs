@@ -1,0 +1,2277 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
+using System.Windows.Forms;
+using System.Xml.Serialization;
+
+namespace Triggernometry
+{
+
+    public partial class Action
+    {
+
+        #region Enums
+
+        public enum ActionTypeEnum
+        {
+            SystemBeep,
+            PlaySound,
+            UseTTS,
+            LaunchProcess,
+            Trigger,
+            KeyPress,
+            ExecuteScript,
+            MessageBox,
+            Variable,
+            Aura,
+            Folder,
+            EndEncounter,
+            DiscordWebhook,
+            TextAura,
+            LogMessage,
+            ListVariable,
+            ObsControl,
+            GenericJson,
+            WindowMessage,
+            DiskFile,
+            TableVariable
+        }
+
+        public enum VariableOpEnum
+        {
+            Unset,
+            SetString,
+            SetNumeric,
+            UnsetAll,
+            UnsetRegex
+        }
+
+        public enum TableVariableOpEnum
+        {
+            Unset,
+            Resize,
+            Set,
+            UnsetAll,
+            UnsetRegex,
+            Copy,
+            Append
+        }
+
+        public enum TableVariableExpTypeEnum
+        {
+            String,
+            Numeric
+        }
+
+        public enum ScriptTypeEnum
+        {
+            CSharp,
+            VBScript
+        }
+
+        public enum DiskFileOpEnum
+        {
+            ReadIntoVariable,
+            ReadIntoListVariable,
+            ReadCSVIntoTableVariable
+        }
+
+        public enum TriggerOpEnum
+        {
+            FireTrigger,
+            CancelTrigger,
+            EnableTrigger,
+            DisableTrigger,
+            CancelAllTrigger
+        }
+
+        public enum FolderOpEnum
+        {
+            EnableFolder,
+            DisableFolder
+        }
+
+        public enum AuraOpEnum
+        {
+            ActivateAura,
+            DeactivateAura,
+            DeactivateAllAura,
+            DeactivateAuraRegex
+        }
+
+        public enum MessageBoxIconTypeEnum
+        {
+            None = 0,
+            Error = 16,
+            Question = 32,
+            Warning = 48,
+            Information = 64
+        }
+
+        public enum TextAuraAlignmentEnum
+        {
+            TopLeft,
+            TopCenter,
+            TopRight,
+            MiddleLeft,
+            MiddleCenter,
+            MiddleRight,
+            BottomLeft,
+            BottomCenter,
+            BottomRight
+        }
+
+        public enum ListVariableOpEnum
+        {
+            Unset,
+            Push,
+            Insert,
+            Set,
+            Remove,
+            PopLast,
+            PopFirst,
+            SortAlphaAsc,
+            SortAlphaDesc,
+            SortFfxivPartyAsc,
+            SortFfxivPartyDesc,
+            Copy,
+            InsertList,
+            Join,
+            Split,
+            UnsetAll,
+            UnsetRegex
+        }
+
+        public enum ListVariableExpTypeEnum
+        {
+            String,
+            Numeric
+        }
+
+        public enum ObsControlTypeEnum
+        {
+            StartStreaming,
+            StopStreaming,
+            ToggleStreaming,
+            StartRecording,
+            StopRecording,
+            ToggleRecording,
+            StartReplayBuffer,
+            StopReplayBuffer,
+            ToggleReplayBuffer,
+            SaveReplayBuffer,
+            SetScene,
+            ShowSource,
+            HideSource
+        }
+
+        public enum KeypressTypeEnum
+        {
+            SendKeys,
+            WindowMessage
+        }
+
+        [Flags]
+        public enum TriggerForceTypeEnum
+        {
+            NoSkip = 0,
+            SkipRegexp = 1,
+            SkipConditions = 2,
+            SkipRefire = 4,
+            SkipParent = 8,
+            SkipActive = 16,
+            SkipAll = SkipRegexp | SkipConditions | SkipRefire | SkipParent | SkipActive
+        }
+
+        [Flags]
+        public enum TextAuraEffectEnum
+        {
+            None = 0,
+            Bold = 1,
+            Italic = 2,
+            Underline = 4,
+            Strikeout = 8,
+            Outline = 16
+        }
+
+        #endregion
+
+        #region Action specific properties - Beep
+
+        internal string _SystemBeepFreqExpression = "1000";
+        [XmlAttribute]
+        public string SystemBeepFreqExpression
+        {
+            get
+            {
+                if (_SystemBeepFreqExpression == "1000")
+                {
+                    return null;
+                }
+                return _SystemBeepFreqExpression;
+            }
+            set
+            {
+                _SystemBeepFreqExpression = value;
+            }
+        }
+
+        internal string _SystemBeepLengthExpression = "100";
+        [XmlAttribute]
+        public string SystemBeepLengthExpression
+        {
+            get
+            {
+                if (_SystemBeepLengthExpression == "100")
+                {
+                    return null;
+                }
+                return _SystemBeepLengthExpression;
+            }
+            set
+            {
+                _SystemBeepLengthExpression = value;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Discord webhook
+
+        internal string _DiscordWebhookURL = "";
+        [XmlAttribute]
+        public string DiscordWebhookURL
+        {
+            get
+            {
+                if (_DiscordWebhookURL == "")
+                {
+                    return null;
+                }
+                return _DiscordWebhookURL;
+            }
+            set
+            {
+                _DiscordWebhookURL = value;
+            }
+        }
+
+        internal string _DiscordWebhookMessage = "";
+        [XmlAttribute]
+        public string DiscordWebhookMessage
+        {
+            get
+            {
+                if (_DiscordWebhookMessage == "")
+                {
+                    return null;
+                }
+                return _DiscordWebhookMessage;
+            }
+            set
+            {
+                _DiscordWebhookMessage = value;
+            }
+        }
+
+        internal bool _DiscordTts { get; set; } = false;
+        [XmlAttribute]
+        public string DiscordTts
+        {
+            get
+            {
+                if (_DiscordTts == false)
+                {
+                    return null;
+                }
+                return _DiscordTts.ToString();
+            }
+            set
+            {
+                _DiscordTts = Boolean.Parse(value);
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Disk operation
+
+        internal DiskFileOpEnum _DiskFileOp { get; set; } = DiskFileOpEnum.ReadIntoVariable;
+        [XmlAttribute]
+        public string DiskFileOp
+        {
+            get
+            {
+                if (_DiskFileOp != DiskFileOpEnum.ReadIntoVariable)
+                {
+                    return _DiskFileOp.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _DiskFileOp = (DiskFileOpEnum)Enum.Parse(typeof(DiskFileOpEnum), value);
+            }
+        }
+
+        internal string _DiskFileOpName;
+        [XmlAttribute]
+        public string DiskFileOpName
+        {
+            get
+            {
+                if (_DiskFileOpName == "")
+                {
+                    return null;
+                }
+                return _DiskFileOpName;
+            }
+            set
+            {
+                _DiskFileOpName = value;
+            }
+        }
+        internal string _DiskFileOpVar;
+        [XmlAttribute]
+        public string DiskFileOpVar
+        {
+            get
+            {
+                if (_DiskFileOpVar == "")
+                {
+                    return null;
+                }
+                return _DiskFileOpVar;
+            }
+            set
+            {
+                _DiskFileOpVar = value;
+            }
+        }
+
+        internal bool _DiskFileCache { get; set; } = false;
+        [XmlAttribute]
+        public string DiskFileCache
+        {
+            get
+            {
+                if (_DiskFileCache == false)
+                {
+                    return null;
+                }
+                return _DiskFileCache.ToString();
+            }
+            set
+            {
+                _DiskFileCache = Boolean.Parse(value);
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Execute script
+
+        internal ScriptTypeEnum _ExecScriptType { get; set; } = ScriptTypeEnum.CSharp;
+        [XmlAttribute]
+        public string ExecScriptType
+        {
+            get
+            {
+                if (_ExecScriptType != ScriptTypeEnum.CSharp)
+                {
+                    return _ExecScriptType.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _ExecScriptType = (ScriptTypeEnum)Enum.Parse(typeof(ScriptTypeEnum), value);
+            }
+        }
+
+        internal string _ExecScriptAssembliesExpression = "";
+        [XmlAttribute]
+        public string ExecScriptAssembliesExpression
+        {
+            get
+            {
+                if (_ExecScriptAssembliesExpression == "")
+                {
+                    return null;
+                }
+                return _ExecScriptAssembliesExpression;
+            }
+            set
+            {
+                _ExecScriptAssembliesExpression = value;
+            }
+        }
+
+        internal string _ExecScriptExpression = "";
+        [XmlAttribute]
+        public string ExecScriptExpression
+        {
+            get
+            {
+                if (_ExecScriptExpression == "")
+                {
+                    return null;
+                }
+                return _ExecScriptExpression;
+            }
+            set
+            {
+                _ExecScriptExpression = value;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Folder operation
+
+        internal FolderOpEnum _FolderOp { get; set; } = FolderOpEnum.EnableFolder;
+        [XmlAttribute]
+        public string FolderOp
+        {
+            get
+            {
+                if (_FolderOp != FolderOpEnum.EnableFolder)
+                {
+                    return _FolderOp.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _FolderOp = (FolderOpEnum)Enum.Parse(typeof(FolderOpEnum), value);
+            }
+        }
+
+        internal Guid _FolderId { get; set; } = Guid.Empty;
+        [XmlAttribute]
+        public string FolderId
+        {
+            get
+            {
+                if (_FolderId != Guid.Empty)
+                {
+                    return _FolderId.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _FolderId = Guid.Parse(value);
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Image aura
+
+        internal AuraOpEnum _AuraOp { get; set; } = AuraOpEnum.ActivateAura;
+        [XmlAttribute]
+        public string AuraOp
+        {
+            get
+            {
+                if (_AuraOp != AuraOpEnum.ActivateAura)
+                {
+                    return _AuraOp.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _AuraOp = (AuraOpEnum)Enum.Parse(typeof(AuraOpEnum), value);
+            }
+        }
+
+        internal PictureBoxSizeMode _AuraImageMode { get; set; } = PictureBoxSizeMode.Normal;
+        [XmlAttribute]
+        public string AuraImageMode
+        {
+            get
+            {
+                if (_AuraImageMode != PictureBoxSizeMode.Normal)
+                {
+                    return _AuraImageMode.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _AuraImageMode = (PictureBoxSizeMode)Enum.Parse(typeof(PictureBoxSizeMode), value);
+            }
+        }
+
+        internal string _AuraName = "";
+        [XmlAttribute]
+        public string AuraName
+        {
+            get
+            {
+                if (_AuraName == "")
+                {
+                    return null;
+                }
+                return _AuraName;
+            }
+            set
+            {
+                _AuraName = value;
+            }
+        }
+
+        internal string _AuraImage = "";
+        [XmlAttribute]
+        public string AuraImage
+        {
+            get
+            {
+                if (_AuraImage == "")
+                {
+                    return null;
+                }
+                return _AuraImage;
+            }
+            set
+            {
+                _AuraImage = value;
+            }
+        }
+
+        internal string _AuraXIniExpression = "";
+        [XmlAttribute]
+        public string AuraXIniExpression
+        {
+            get
+            {
+                if (_AuraXIniExpression == "")
+                {
+                    return null;
+                }
+                return _AuraXIniExpression;
+            }
+            set
+            {
+                _AuraXIniExpression = value;
+            }
+        }
+
+        internal string _AuraYIniExpression = "";
+        [XmlAttribute]
+        public string AuraYIniExpression
+        {
+            get
+            {
+                if (_AuraYIniExpression == "")
+                {
+                    return null;
+                }
+                return _AuraYIniExpression;
+            }
+            set
+            {
+                _AuraYIniExpression = value;
+            }
+        }
+
+        internal string _AuraWIniExpression = "";
+        [XmlAttribute]
+        public string AuraWIniExpression
+        {
+            get
+            {
+                if (_AuraWIniExpression == "")
+                {
+                    return null;
+                }
+                return _AuraWIniExpression;
+            }
+            set
+            {
+                _AuraWIniExpression = value;
+            }
+        }
+
+        internal string _AuraHIniExpression = "";
+        [XmlAttribute]
+        public string AuraHIniExpression
+        {
+            get
+            {
+                if (_AuraHIniExpression == "")
+                {
+                    return null;
+                }
+                return _AuraHIniExpression;
+            }
+            set
+            {
+                _AuraHIniExpression = value;
+            }
+        }
+
+        internal string _AuraOIniExpression = "";
+        [XmlAttribute]
+        public string AuraOIniExpression
+        {
+            get
+            {
+                if (_AuraOIniExpression == "")
+                {
+                    return null;
+                }
+                return _AuraOIniExpression;
+            }
+            set
+            {
+                _AuraOIniExpression = value;
+            }
+        }
+
+        internal string _AuraXTickExpression = "";
+        [XmlAttribute]
+        public string AuraXTickExpression
+        {
+            get
+            {
+                if (_AuraXTickExpression == "")
+                {
+                    return null;
+                }
+                return _AuraXTickExpression;
+            }
+            set
+            {
+                _AuraXTickExpression = value;
+            }
+        }
+
+        internal string _AuraYTickExpression = "";
+        [XmlAttribute]
+        public string AuraYTickExpression
+        {
+            get
+            {
+                if (_AuraYTickExpression == "")
+                {
+                    return null;
+                }
+                return _AuraYTickExpression;
+            }
+            set
+            {
+                _AuraYTickExpression = value;
+            }
+        }
+
+        internal string _AuraWTickExpression = "";
+        [XmlAttribute]
+        public string AuraWTickExpression
+        {
+            get
+            {
+                if (_AuraWTickExpression == "")
+                {
+                    return null;
+                }
+                return _AuraWTickExpression;
+            }
+            set
+            {
+                _AuraWTickExpression = value;
+            }
+        }
+
+        internal string _AuraHTickExpression = "";
+        [XmlAttribute]
+        public string AuraHTickExpression
+        {
+            get
+            {
+                if (_AuraHTickExpression == "")
+                {
+                    return null;
+                }
+                return _AuraHTickExpression;
+            }
+            set
+            {
+                _AuraHTickExpression = value;
+            }
+        }
+
+        internal string _AuraOTickExpression = "";
+        [XmlAttribute]
+        public string AuraOTickExpression
+        {
+            get
+            {
+                if (_AuraOTickExpression == "")
+                {
+                    return null;
+                }
+                return _AuraOTickExpression;
+            }
+            set
+            {
+                _AuraOTickExpression = value;
+            }
+        }
+
+        internal string _AuraTTLTickExpression = "";
+        [XmlAttribute]
+        public string AuraTTLTickExpression
+        {
+            get
+            {
+                if (_AuraTTLTickExpression == "")
+                {
+                    return null;
+                }
+                return _AuraTTLTickExpression;
+            }
+            set
+            {
+                _AuraTTLTickExpression = value;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - JSON
+
+        internal bool _JsonCacheRequest { get; set; } = false;
+        [XmlAttribute]
+        public string JsonCacheRequest
+        {
+            get
+            {
+                if (_JsonCacheRequest == false)
+                {
+                    return null;
+                }
+                return _JsonCacheRequest.ToString();
+            }
+            set
+            {
+                _JsonCacheRequest = Boolean.Parse(value);
+            }
+        }
+
+        internal string _JsonEndpointExpression = "";
+        [XmlAttribute]
+        public string JsonEndpointExpression
+        {
+            get
+            {
+                if (_JsonEndpointExpression == "")
+                {
+                    return null;
+                }
+                return _JsonEndpointExpression;
+            }
+            set
+            {
+                _JsonEndpointExpression = value;
+            }
+        }
+
+        internal string _JsonPayloadExpression = "";
+        [XmlAttribute]
+        public string JsonPayloadExpression
+        {
+            get
+            {
+                if (_JsonPayloadExpression == "")
+                {
+                    return null;
+                }
+                return _JsonPayloadExpression;
+            }
+            set
+            {
+                _JsonPayloadExpression = value;
+            }
+        }
+
+        internal string _JsonFiringExpression = "";
+        [XmlAttribute]
+        public string JsonFiringExpression
+        {
+            get
+            {
+                if (_JsonFiringExpression == "")
+                {
+                    return null;
+                }
+                return _JsonFiringExpression;
+            }
+            set
+            {
+                _JsonFiringExpression = value;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Keypress
+
+        internal KeypressTypeEnum _KeypressType { get; set; } = KeypressTypeEnum.SendKeys;
+        [XmlAttribute]
+        public string KeypressType
+        {
+            get
+            {
+                if (_KeypressType != KeypressTypeEnum.SendKeys)
+                {
+                    return _KeypressType.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _KeypressType = (KeypressTypeEnum)Enum.Parse(typeof(KeypressTypeEnum), value);
+            }
+        }
+
+        internal string _KeyPressExpression = "";
+        [XmlAttribute]
+        public string KeyPressExpression
+        {
+            get
+            {
+                if (_KeyPressExpression == "")
+                {
+                    return null;
+                }
+                return _KeyPressExpression;
+            }
+            set
+            {
+                _KeyPressExpression = value;
+            }
+        }
+
+        internal string _KeyPressCode = "";
+        [XmlAttribute]
+        public string KeyPressCode
+        {
+            get
+            {
+                if (_KeyPressCode == "")
+                {
+                    return null;
+                }
+                return _KeyPressCode;
+            }
+            set
+            {
+                _KeyPressCode = value;
+            }
+        }
+
+        internal string _KeyPressWindow = "";
+        [XmlAttribute]
+        public string KeyPressWindow
+        {
+            get
+            {
+                if (_KeyPressWindow == "")
+                {
+                    return null;
+                }
+                return _KeyPressWindow;
+            }
+            set
+            {
+                _KeyPressWindow = value;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Launch process
+
+        internal System.Diagnostics.ProcessWindowStyle _LaunchProcessWindowStyle { get; set; } = System.Diagnostics.ProcessWindowStyle.Normal;
+        [XmlAttribute]
+        public string LaunchProcessWindowStyle
+        {
+            get
+            {
+                if (_LaunchProcessWindowStyle != System.Diagnostics.ProcessWindowStyle.Normal)
+                {
+                    return _LaunchProcessWindowStyle.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _LaunchProcessWindowStyle = (System.Diagnostics.ProcessWindowStyle)Enum.Parse(typeof(System.Diagnostics.ProcessWindowStyle), value);
+            }
+        }
+
+        internal string _LaunchProcessPathExpression = "";
+        [XmlAttribute]
+        public string LaunchProcessPathExpression
+        {
+            get
+            {
+                if (_LaunchProcessPathExpression == "")
+                {
+                    return null;
+                }
+                return _LaunchProcessPathExpression;
+            }
+            set
+            {
+                _LaunchProcessPathExpression = value;
+            }
+        }
+
+        internal string _LaunchProcessCmdlineExpression = "";
+        [XmlAttribute]
+        public string LaunchProcessCmdlineExpression
+        {
+            get
+            {
+                if (_LaunchProcessCmdlineExpression == "")
+                {
+                    return null;
+                }
+                return _LaunchProcessCmdlineExpression;
+            }
+            set
+            {
+                _LaunchProcessCmdlineExpression = value;
+            }
+        }
+
+        internal string _LaunchProcessWorkingDirExpression = "";
+        [XmlAttribute]
+        public string LaunchProcessWorkingDirExpression
+        {
+            get
+            {
+                if (_LaunchProcessWorkingDirExpression == "")
+                {
+                    return null;
+                }
+                return _LaunchProcessWorkingDirExpression;
+            }
+            set
+            {
+                _LaunchProcessWorkingDirExpression = value;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - List variable
+
+        internal ListVariableOpEnum _ListVariableOp { get; set; } = ListVariableOpEnum.Unset;
+        [XmlAttribute]
+        public string ListVariableOp
+        {
+            get
+            {
+                if (_ListVariableOp != ListVariableOpEnum.Unset)
+                {
+                    return _ListVariableOp.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _ListVariableOp = (ListVariableOpEnum)Enum.Parse(typeof(ListVariableOpEnum), value);
+            }
+        }
+
+        internal ListVariableExpTypeEnum _ListVariableExpressionType { get; set; } = ListVariableExpTypeEnum.String;
+        [XmlAttribute]
+        public string ListVariableExpressionType
+        {
+            get
+            {
+                if (_ListVariableExpressionType != ListVariableExpTypeEnum.String)
+                {
+                    return _ListVariableExpressionType.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _ListVariableExpressionType = (ListVariableExpTypeEnum)Enum.Parse(typeof(ListVariableExpTypeEnum), value);
+            }
+        }
+
+        internal string _ListVariableName = "";
+        [XmlAttribute]
+        public string ListVariableName
+        {
+            get
+            {
+                if (_ListVariableName == "")
+                {
+                    return null;
+                }
+                return _ListVariableName;
+            }
+            set
+            {
+                _ListVariableName = value;
+            }
+        }
+
+        internal string _ListVariableExpression = "";
+        [XmlAttribute]
+        public string ListVariableExpression
+        {
+            get
+            {
+                if (_ListVariableExpression == "")
+                {
+                    return null;
+                }
+                return _ListVariableExpression;
+            }
+            set
+            {
+                _ListVariableExpression = value;
+            }
+        }
+
+        internal string _ListVariableIndex = "";
+        [XmlAttribute]
+        public string ListVariableIndex
+        {
+            get
+            {
+                if (_ListVariableIndex == "")
+                {
+                    return null;
+                }
+                return _ListVariableIndex;
+            }
+            set
+            {
+                _ListVariableIndex = value;
+            }
+        }
+
+        internal string _ListVariableTarget = "";
+        [XmlAttribute]
+        public string ListVariableTarget
+        {
+            get
+            {
+                if (_ListVariableTarget == "")
+                {
+                    return null;
+                }
+                return _ListVariableTarget;
+            }
+            set
+            {
+                _ListVariableTarget = value;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Log message
+
+        internal string _LogMessageText = "";
+        [XmlAttribute]
+        public string LogMessageText
+        {
+            get
+            {
+                if (_LogMessageText == "")
+                {
+                    return null;
+                }
+                return _LogMessageText;
+            }
+            set
+            {
+                _LogMessageText = value;
+            }
+        }
+
+        internal bool _LogProcess { get; set; } = false;
+        [XmlAttribute]
+        public string LogProcess
+        {
+            get
+            {
+                if (_LogProcess == false)
+                {
+                    return null;
+                }
+                return _LogProcess.ToString();
+            }
+            set
+            {
+                _LogProcess = Boolean.Parse(value);
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Message box
+
+        internal MessageBoxIconTypeEnum _MessageBoxIconType { get; set; } = MessageBoxIconTypeEnum.None;
+        [XmlAttribute]
+        public string MessageBoxIconType
+        {
+            get
+            {
+                if (_MessageBoxIconType != MessageBoxIconTypeEnum.None)
+                {
+                    return _MessageBoxIconType.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _MessageBoxIconType = (MessageBoxIconTypeEnum)Enum.Parse(typeof(MessageBoxIconTypeEnum), value);
+            }
+        }
+
+        internal string _MessageBoxText = "";
+        [XmlAttribute]
+        public string MessageBoxText
+        {
+            get
+            {
+                if (_MessageBoxText == "")
+                {
+                    return null;
+                }
+                return _MessageBoxText;
+            }
+            set
+            {
+                _MessageBoxText = value;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - OBS
+
+        internal ObsControlTypeEnum _OBSControlType { get; set; } = ObsControlTypeEnum.StartStreaming;
+        [XmlAttribute]
+        public string OBSControlType
+        {
+            get
+            {
+                if (_OBSControlType != ObsControlTypeEnum.StartStreaming)
+                {
+                    return _OBSControlType.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _OBSControlType = (ObsControlTypeEnum)Enum.Parse(typeof(ObsControlTypeEnum), value);
+            }
+        }
+
+        internal string _OBSSceneName = "";
+        [XmlAttribute]
+        public string OBSSceneName
+        {
+            get
+            {
+                if (_OBSSceneName == "")
+                {
+                    return null;
+                }
+                return _OBSSceneName;
+            }
+            set
+            {
+                _OBSSceneName = value;
+            }
+        }
+
+        internal string _OBSSourceName = "";
+        [XmlAttribute]
+        public string OBSSourceName
+        {
+            get
+            {
+                if (_OBSSourceName == "")
+                {
+                    return null;
+                }
+                return _OBSSourceName;
+            }
+            set
+            {
+                _OBSSourceName = value;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Play sound
+
+        internal string _PlaySoundFileExpression = "";
+        [XmlAttribute]
+        public string PlaySoundFileExpression
+        {
+            get
+            {
+                if (_PlaySoundFileExpression == "")
+                {
+                    return null;
+                }
+                return _PlaySoundFileExpression;
+            }
+            set
+            {
+                _PlaySoundFileExpression = value;
+            }
+        }
+
+        internal string _PlaySoundVolumeExpression = "100";
+        [XmlAttribute]
+        public string PlaySoundVolumeExpression
+        {
+            get
+            {
+                if (_PlaySoundVolumeExpression == "100")
+                {
+                    return null;
+                }
+                return _PlaySoundVolumeExpression;
+            }
+            set
+            {
+                _PlaySoundVolumeExpression = value;
+            }
+        }
+
+        internal bool _PlaySoundExclusive { get; set; } = true;
+        [XmlAttribute]
+        public string PlaySoundExclusive
+        {
+            get
+            {
+                if (_PlaySoundExclusive == true)
+                {
+                    return null;
+                }
+                return _PlaySoundExclusive.ToString();
+            }
+            set
+            {
+                _PlaySoundExclusive = Boolean.Parse(value);
+            }
+        }
+
+        internal bool _PlaySoundMyself { get; set; } = false;
+        [XmlAttribute]
+        public string PlaySoundMyself
+        {
+            get
+            {
+                if (_PlaySoundMyself == false)
+                {
+                    return null;
+                }
+                return _PlaySoundMyself.ToString();
+            }
+            set
+            {
+                _PlaySoundMyself = Boolean.Parse(value);
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Play speech
+
+        internal bool _PlaySpeechMyself { get; set; } = false;
+        [XmlAttribute]
+        public string PlaySpeechMyself
+        {
+            get
+            {
+                if (_PlaySpeechMyself == false)
+                {
+                    return null;
+                }
+                return _PlaySpeechMyself.ToString();
+            }
+            set
+            {
+                _PlaySpeechMyself = Boolean.Parse(value);
+            }
+        }
+
+        internal string _UseTTSTextExpression = "";
+        [XmlAttribute]
+        public string UseTTSTextExpression
+        {
+            get
+            {
+                if (_UseTTSTextExpression == "")
+                {
+                    return null;
+                }
+                return _UseTTSTextExpression;
+            }
+            set
+            {
+                _UseTTSTextExpression = value;
+            }
+        }
+
+        internal string _UseTTSVolumeExpression = "100";
+        [XmlAttribute]
+        public string UseTTSVolumeExpression
+        {
+            get
+            {
+                if (_UseTTSVolumeExpression == "100")
+                {
+                    return null;
+                }
+                return _UseTTSVolumeExpression;
+            }
+            set
+            {
+                _UseTTSVolumeExpression = value;
+            }
+        }
+
+        internal string _UseTTSRateExpression = "0";
+        [XmlAttribute]
+        public string UseTTSRateExpression
+        {
+            get
+            {
+                if (_UseTTSRateExpression == "0")
+                {
+                    return null;
+                }
+                return _UseTTSRateExpression;
+            }
+            set
+            {
+                _UseTTSRateExpression = value;
+            }
+        }
+
+        internal bool _UseTTSExclusive { get; set; } = true;
+        [XmlAttribute]
+        public string UseTTSExclusive
+        {
+            get
+            {
+                if (_UseTTSExclusive == true)
+                {
+                    return null;
+                }
+                return _UseTTSExclusive.ToString();
+            }
+            set
+            {
+                _UseTTSExclusive = Boolean.Parse(value);
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Scalar variable
+
+        internal VariableOpEnum _VariableOp { get; set; } = VariableOpEnum.Unset;
+        [XmlAttribute]
+        public string VariableOp
+        {
+            get
+            {
+                if (_VariableOp != VariableOpEnum.Unset)
+                {
+                    return _VariableOp.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _VariableOp = (VariableOpEnum)Enum.Parse(typeof(VariableOpEnum), value);
+            }
+        }
+
+        internal string _VariableName = "";
+        [XmlAttribute]
+        public string VariableName
+        {
+            get
+            {
+                if (_VariableName == "")
+                {
+                    return null;
+                }
+                return _VariableName;
+            }
+            set
+            {
+                _VariableName = value;
+            }
+        }
+
+        internal string _VariableExpression = "";
+        [XmlAttribute]
+        public string VariableExpression
+        {
+            get
+            {
+                if (_VariableExpression == "")
+                {
+                    return null;
+                }
+                return _VariableExpression;
+            }
+            set
+            {
+                _VariableExpression = value;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Table variable
+
+        internal TableVariableOpEnum _TableVariableOp { get; set; } = TableVariableOpEnum.Unset;
+        [XmlAttribute]
+        public string TableVariableOp
+        {
+            get
+            {
+                if (_TableVariableOp != TableVariableOpEnum.Unset)
+                {
+                    return _TableVariableOp.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _TableVariableOp = (TableVariableOpEnum)Enum.Parse(typeof(TableVariableOpEnum), value);
+            }
+        }
+
+        internal TableVariableExpTypeEnum _TableVariableExpressionType { get; set; } = TableVariableExpTypeEnum.String;
+        [XmlAttribute]
+        public string TableVariableExpressionType
+        {
+            get
+            {
+                if (_TableVariableExpressionType != TableVariableExpTypeEnum.String)
+                {
+                    return _TableVariableExpressionType.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _TableVariableExpressionType = (TableVariableExpTypeEnum)Enum.Parse(typeof(TableVariableExpTypeEnum), value);
+            }
+        }
+
+        internal string _TableVariableName = "";
+        [XmlAttribute]
+        public string TableVariableName
+        {
+            get
+            {
+                if (_TableVariableName == "")
+                {
+                    return null;
+                }
+                return _TableVariableName;
+            }
+            set
+            {
+                _TableVariableName = value;
+            }
+        }
+
+        internal string _TableVariableTarget = "";
+        [XmlAttribute]
+        public string TableVariableTarget
+        {
+            get
+            {
+                if (_TableVariableTarget == "")
+                {
+                    return null;
+                }
+                return _TableVariableTarget;
+            }
+            set
+            {
+                _TableVariableTarget = value;
+            }
+        }
+
+        internal string _TableVariableExpression = "";
+        [XmlAttribute]
+        public string TableVariableExpression
+        {
+            get
+            {
+                if (_TableVariableExpression == "")
+                {
+                    return null;
+                }
+                return _TableVariableExpression;
+            }
+            set
+            {
+                _TableVariableExpression = value;
+            }
+        }
+
+        internal string _TableVariableX = "";
+        [XmlAttribute]
+        public string TableVariableX
+        {
+            get
+            {
+                if (_TableVariableX == "")
+                {
+                    return null;
+                }
+                return _TableVariableX;
+            }
+            set
+            {
+                _TableVariableX = value;
+            }
+        }
+
+        internal string _TableVariableY = "";
+        [XmlAttribute]
+        public string TableVariableY
+        {
+            get
+            {
+                if (_TableVariableY == "")
+                {
+                    return null;
+                }
+                return _TableVariableY;
+            }
+            set
+            {
+                _TableVariableY = value;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Text aura
+
+        internal AuraOpEnum _TextAuraOp { get; set; } = AuraOpEnum.ActivateAura;
+        [XmlAttribute]
+        public string TextAuraOp
+        {
+            get
+            {
+                if (_TextAuraOp != AuraOpEnum.ActivateAura)
+                {
+                    return _TextAuraOp.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _TextAuraOp = (AuraOpEnum)Enum.Parse(typeof(AuraOpEnum), value);
+            }
+        }
+
+        internal TextAuraAlignmentEnum _TextAuraAlignment { get; set; } = TextAuraAlignmentEnum.MiddleCenter;
+        [XmlAttribute]
+        public string TextAuraAlignment
+        {
+            get
+            {
+                if (_TextAuraAlignment != TextAuraAlignmentEnum.MiddleCenter)
+                {
+                    return _TextAuraAlignment.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _TextAuraAlignment = (TextAuraAlignmentEnum)Enum.Parse(typeof(TextAuraAlignmentEnum), value);
+            }
+        }
+
+        internal TextAuraEffectEnum _TextAuraEffect { get; set; } = TextAuraEffectEnum.None;
+        [XmlAttribute]
+        public string TextAuraEffect
+        {
+            get
+            {
+                if (_TextAuraEffect != TextAuraEffectEnum.None)
+                {
+                    return _TextAuraEffect.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                TextAuraEffectEnum tea = (TextAuraEffectEnum)0;
+                string[] ex = value.Split(' ');
+                foreach (string exx in ex)
+                {
+                    tea |= (TextAuraEffectEnum)Enum.Parse(typeof(TextAuraEffectEnum), exx.Replace(",", ""));
+                }
+                _TextAuraEffect = tea;
+            }
+        }
+
+        internal float _TextAuraFontSize { get; set; } = 10.0f;
+        [XmlAttribute]
+        public string TextAuraFontSize
+        {
+            get
+            {
+                if (_TextAuraFontSize != 10.0f)
+                {
+                    return I18n.ThingToString(_TextAuraFontSize);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _TextAuraFontSize = float.Parse(value, CultureInfo.InvariantCulture);
+            }
+        }
+
+        internal Color _TextAuraForegroundClInt = Color.Black;
+        [XmlAttribute]
+        public string TextAuraForeground
+        {
+            get
+            {
+                if (_TextAuraForegroundClInt != Color.Black)
+                {
+                    return System.Drawing.ColorTranslator.ToHtml(_TextAuraForegroundClInt);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _TextAuraForegroundClInt = System.Drawing.ColorTranslator.FromHtml(value);
+            }
+        }
+
+        internal Color _TextAuraBackgroundClInt = Color.Transparent;
+        [XmlAttribute]
+        public string TextAuraBackground
+        {
+            get
+            {
+                if (_TextAuraBackgroundClInt != Color.Transparent)
+                {
+                    return System.Drawing.ColorTranslator.ToHtml(_TextAuraBackgroundClInt);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _TextAuraBackgroundClInt = System.Drawing.ColorTranslator.FromHtml(value);
+            }
+        }
+
+        internal Color _TextAuraOutlineClInt = Color.White;
+        [XmlAttribute]
+        public string TextAuraOutline
+        {
+            get
+            {
+                if (_TextAuraOutlineClInt != Color.White)
+                {
+                    return System.Drawing.ColorTranslator.ToHtml(_TextAuraOutlineClInt);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _TextAuraOutlineClInt = System.Drawing.ColorTranslator.FromHtml(value);
+            }
+        }
+
+        internal string _TextAuraName = "";
+        [XmlAttribute]
+        public string TextAuraName
+        {
+            get
+            {
+                if (_TextAuraName == "")
+                {
+                    return null;
+                }
+                return _TextAuraName;
+            }
+            set
+            {
+                _TextAuraName = value;
+            }
+        }
+
+        internal string _TextAuraExpression = "";
+        [XmlAttribute]
+        public string TextAuraExpression
+        {
+            get
+            {
+                if (_TextAuraExpression == "")
+                {
+                    return null;
+                }
+                return _TextAuraExpression;
+            }
+            set
+            {
+                _TextAuraExpression = value;
+            }
+        }
+
+        internal string _TextAuraXIniExpression = "";
+        [XmlAttribute]
+        public string TextAuraXIniExpression
+        {
+            get
+            {
+                if (_TextAuraXIniExpression == "")
+                {
+                    return null;
+                }
+                return _TextAuraXIniExpression;
+            }
+            set
+            {
+                _TextAuraXIniExpression = value;
+            }
+        }
+
+        internal string _TextAuraYIniExpression = "";
+        [XmlAttribute]
+        public string TextAuraYIniExpression
+        {
+            get
+            {
+                if (_TextAuraYIniExpression == "")
+                {
+                    return null;
+                }
+                return _TextAuraYIniExpression;
+            }
+            set
+            {
+                _TextAuraYIniExpression = value;
+            }
+        }
+
+        internal string _TextAuraWIniExpression = "";
+        [XmlAttribute]
+        public string TextAuraWIniExpression
+        {
+            get
+            {
+                if (_TextAuraWIniExpression == "")
+                {
+                    return null;
+                }
+                return _TextAuraWIniExpression;
+            }
+            set
+            {
+                _TextAuraWIniExpression = value;
+            }
+        }
+
+        internal string _TextAuraHIniExpression = "";
+        [XmlAttribute]
+        public string TextAuraHIniExpression
+        {
+            get
+            {
+                if (_TextAuraHIniExpression == "")
+                {
+                    return null;
+                }
+                return _TextAuraHIniExpression;
+            }
+            set
+            {
+                _TextAuraHIniExpression = value;
+            }
+        }
+
+        internal string _TextAuraOIniExpression = "";
+        [XmlAttribute]
+        public string TextAuraOIniExpression
+        {
+            get
+            {
+                if (_TextAuraOIniExpression == "")
+                {
+                    return null;
+                }
+                return _TextAuraOIniExpression;
+            }
+            set
+            {
+                _TextAuraOIniExpression = value;
+            }
+        }
+
+        internal string _TextAuraXTickExpression = "";
+        [XmlAttribute]
+        public string TextAuraXTickExpression
+        {
+            get
+            {
+                if (_TextAuraXTickExpression == "")
+                {
+                    return null;
+                }
+                return _TextAuraXTickExpression;
+            }
+            set
+            {
+                _TextAuraXTickExpression = value;
+            }
+        }
+
+        internal string _TextAuraYTickExpression = "";
+        [XmlAttribute]
+        public string TextAuraYTickExpression
+        {
+            get
+            {
+                if (_TextAuraYTickExpression == "")
+                {
+                    return null;
+                }
+                return _TextAuraYTickExpression;
+            }
+            set
+            {
+                _TextAuraYTickExpression = value;
+            }
+        }
+
+        internal string _TextAuraWTickExpression = "";
+        [XmlAttribute]
+        public string TextAuraWTickExpression
+        {
+            get
+            {
+                if (_TextAuraWTickExpression == "")
+                {
+                    return null;
+                }
+                return _TextAuraWTickExpression;
+            }
+            set
+            {
+                _TextAuraWTickExpression = value;
+            }
+        }
+
+        internal string _TextAuraHTickExpression = "";
+        [XmlAttribute]
+        public string TextAuraHTickExpression
+        {
+            get
+            {
+                if (_TextAuraHTickExpression == "")
+                {
+                    return null;
+                }
+                return _TextAuraHTickExpression;
+            }
+            set
+            {
+                _TextAuraHTickExpression = value;
+            }
+        }
+
+        internal string _TextAuraOTickExpression = "";
+        [XmlAttribute]
+        public string TextAuraOTickExpression
+        {
+            get
+            {
+                if (_TextAuraOTickExpression == "")
+                {
+                    return null;
+                }
+                return _TextAuraOTickExpression;
+            }
+            set
+            {
+                _TextAuraOTickExpression = value;
+            }
+        }
+
+        internal string _TextAuraTTLTickExpression = "";
+        [XmlAttribute]
+        public string TextAuraTTLTickExpression
+        {
+            get
+            {
+                if (_TextAuraTTLTickExpression == "")
+                {
+                    return null;
+                }
+                return _TextAuraTTLTickExpression;
+            }
+            set
+            {
+                _TextAuraTTLTickExpression = value;
+            }
+        }
+
+        internal bool _TextAuraUseOutline { get; set; } = false;
+        [XmlAttribute]
+        public string TextAuraUseOutline
+        {
+            get
+            {
+                if (_TextAuraUseOutline == false)
+                {
+                    return null;
+                }
+                return _TextAuraUseOutline.ToString();
+            }
+            set
+            {
+                _TextAuraUseOutline = Boolean.Parse(value);
+            }
+        }
+
+        internal string _TextAuraFontName = "";
+        [XmlAttribute]
+        public string TextAuraFontName
+        {
+            get
+            {
+                if (_TextAuraFontName == "")
+                {
+                    return null;
+                }
+                return _TextAuraFontName;
+            }
+            set
+            {
+                _TextAuraFontName = value;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Trigger operation
+
+        internal TriggerOpEnum _TriggerOp { get; set; } = TriggerOpEnum.FireTrigger;
+        [XmlAttribute]
+        public string TriggerOp
+        {
+            get
+            {
+                if (_TriggerOp != TriggerOpEnum.FireTrigger)
+                {
+                    return _TriggerOp.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _TriggerOp = (TriggerOpEnum)Enum.Parse(typeof(TriggerOpEnum), value);
+            }
+        }
+
+        internal Guid _TriggerId { get; set; } = Guid.Empty;
+        [XmlAttribute]
+        public string TriggerId
+        {
+            get
+            {
+                if (_TriggerId != Guid.Empty)
+                {
+                    return _TriggerId.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _TriggerId = Guid.Parse(value);
+            }
+        }
+
+        internal string _TriggerText = "";
+        [XmlAttribute]
+        public string TriggerText
+        {
+            get
+            {
+                if (_TriggerText == "")
+                {
+                    return null;
+                }
+                return _TriggerText;
+            }
+            set
+            {
+                _TriggerText = value;
+            }
+        }
+
+        internal string _TriggerZone = "";
+        [XmlAttribute]
+        public string TriggerZone
+        {
+            get
+            {
+                if (_TriggerZone == "")
+                {
+                    return null;
+                }
+                return _TriggerZone;
+            }
+            set
+            {
+                _TriggerZone = value;
+            }
+        }
+
+        [XmlIgnore]
+        internal TriggerForceTypeEnum _TriggerForceType { get; set; } = TriggerForceTypeEnum.NoSkip;
+        [XmlAttribute]
+        public string TriggerForce
+        {
+            get
+            {
+                List<string> ex = new List<string>();
+                if (_TriggerForceType == TriggerForceTypeEnum.SkipAll)
+                {
+                    ex.Add("true");
+                }
+                else
+                {
+                    if ((_TriggerForceType & TriggerForceTypeEnum.SkipRegexp) != 0)
+                    {
+                        ex.Add("regexp");
+                    }
+                    if ((_TriggerForceType & TriggerForceTypeEnum.SkipConditions) != 0)
+                    {
+                        ex.Add("conditions");
+                    }
+                    if ((_TriggerForceType & TriggerForceTypeEnum.SkipRefire) != 0)
+                    {
+                        ex.Add("refire");
+                    }
+                    if ((_TriggerForceType & TriggerForceTypeEnum.SkipParent) != 0)
+                    {
+                        ex.Add("parent");
+                    }
+                    if ((_TriggerForceType & TriggerForceTypeEnum.SkipActive) != 0)
+                    {
+                        ex.Add("active");
+                    }
+                }
+                string temp = String.Join(",", ex.ToArray());
+                if (temp.Length > 0)
+                {
+                    return temp;
+                }
+                return null;
+            }
+            set
+            {
+                string[] exx = value != null ? value.Split(",".ToCharArray()) : new string[] { "" };
+                TriggerForceTypeEnum newval = TriggerForceTypeEnum.NoSkip;
+                foreach (string ex in exx)
+                {
+                    if (string.Compare(ex, "true", true) == 0)
+                    {
+                        newval = TriggerForceTypeEnum.SkipAll;
+                        break;
+                    }
+                    else if (string.Compare(ex, "false", true) == 0)
+                    {
+                        newval = TriggerForceTypeEnum.NoSkip;
+                        break;
+                    }
+                    if (string.Compare(ex, "regexp", true) == 0)
+                    {
+                        newval |= TriggerForceTypeEnum.SkipRegexp;
+                    }
+                    if (string.Compare(ex, "conditions", true) == 0)
+                    {
+                        newval |= TriggerForceTypeEnum.SkipConditions;
+                    }
+                    if (string.Compare(ex, "refire", true) == 0)
+                    {
+                        newval |= TriggerForceTypeEnum.SkipRefire;
+                    }
+                    if (string.Compare(ex, "parent", true) == 0)
+                    {
+                        newval |= TriggerForceTypeEnum.SkipParent;
+                    }
+                    if (string.Compare(ex, "active", true) == 0)
+                    {
+                        newval |= TriggerForceTypeEnum.SkipActive;
+                    }
+                }
+                _TriggerForceType = newval;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Window message
+
+        internal string _WmsgTitle = "";
+        [XmlAttribute]
+        public string WmsgTitle
+        {
+            get
+            {
+                if (_WmsgTitle == "")
+                {
+                    return null;
+                }
+                return _WmsgTitle;
+            }
+            set
+            {
+                _WmsgTitle = value;
+            }
+        }
+
+        internal string _WmsgCode = "";
+        [XmlAttribute]
+        public string WmsgCode
+        {
+            get
+            {
+                if (_WmsgCode == "")
+                {
+                    return null;
+                }
+                return _WmsgCode;
+            }
+            set
+            {
+                _WmsgCode = value;
+            }
+        }
+
+        internal string _WmsgWparam = "";
+        [XmlAttribute]
+        public string WmsgWparam
+        {
+            get
+            {
+                if (_WmsgWparam == "")
+                {
+                    return null;
+                }
+                return _WmsgWparam;
+            }
+            set
+            {
+                _WmsgWparam = value;
+            }
+        }
+
+        internal string _WmsgLparam = "";
+        [XmlAttribute]
+        public string WmsgLparam
+        {
+            get
+            {
+                if (_WmsgLparam == "")
+                {
+                    return null;
+                }
+                return _WmsgLparam;
+            }
+            set
+            {
+                _WmsgLparam = value;
+            }
+        }
+
+        #endregion
+
+    }
+
+}

@@ -472,6 +472,7 @@ namespace Triggernometry.CustomControls
         private void btnAddCondition_Click(object sender, EventArgs e)
         {
             ConditionSingle re = new ConditionSingle();
+            re.ConditionType = ConditionSingle.CndTypeEnum.StringEqualNocase;
             TreeNode tn = new TreeNode();
             AttachConditionComponentToNode(tn, re);
             TreeNode tx = trvNodes.SelectedNode;
@@ -757,7 +758,7 @@ namespace Triggernometry.CustomControls
             {
                 if (plug.cfg.UseOsClipboard == true)
                 {
-                    data = System.Windows.Forms.Clipboard.GetText(TextDataFormat.Text);
+                    data = System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText);
                 }
                 else
                 {

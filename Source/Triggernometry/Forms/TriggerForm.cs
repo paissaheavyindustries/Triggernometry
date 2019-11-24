@@ -42,7 +42,7 @@ namespace Triggernometry.Forms
         internal Context fakectx;
         internal string ClipboardAction = "";
 
-        public TriggerForm()
+        public TriggerForm() : base()
         {
             InitializeComponent();
             Actions = new List<Action>();
@@ -54,8 +54,8 @@ namespace Triggernometry.Forms
         {
             if (tn.Tag is Folder)
             { 
-                tn.ImageIndex = 0;
-                tn.SelectedImageIndex = 0;
+                tn.ImageIndex = (int)CustomControls.UserInterface.GetImageIndexForClosedFolder((Folder)tn.Tag);
+                tn.SelectedImageIndex = tn.ImageIndex;
             }
             foreach (TreeNode tc in tn.Nodes)
             {
@@ -115,6 +115,7 @@ namespace Triggernometry.Forms
             cbxRefireWithinPeriod.Enabled = false;
             expRefirePeriod.Enabled = false;
             cbxEditAutofire.Enabled = false;
+            cbxSequential.Enabled = false;
             cndCondition.Enabled = false;
             btnAddAction.Enabled = false;
             btnActionUp.Enabled = false;
@@ -149,6 +150,7 @@ namespace Triggernometry.Forms
                 cbxRefireWithinPeriod.SelectedIndex = 0;
                 expRefirePeriod.Expression = "0";
                 cbxEditAutofire.Checked = false;
+                cbxSequential.Checked = false;
                 cbxLoggingLevel.SelectedIndex = 5;
                 txtDescription.Text = "";
                 cndCondition.ConditionToEdit = new ConditionGroup() { Enabled = false };
@@ -157,8 +159,8 @@ namespace Triggernometry.Forms
             {
                 txtName.Text = t.Name;
                 txtRegexp.Text = t.RegularExpression;
-                txtDescription.Text = t.Description;            
-                switch (t.PrevActions)
+                txtDescription.Text = t._Description;            
+                switch (t._PrevActions)
                 {
                     case Trigger.PrevActionsEnum.Interrupt:
                         cbxRefireOption1.SelectedIndex = 0;
@@ -167,7 +169,7 @@ namespace Triggernometry.Forms
                         cbxRefireOption1.SelectedIndex = 1;
                         break;
                 }
-                switch (t.PrevActionsRefire)
+                switch (t._PrevActionsRefire)
                 {
                     case Trigger.RefireEnum.Allow:
                         cbxRefireOption2.SelectedIndex = 0;
@@ -176,7 +178,7 @@ namespace Triggernometry.Forms
                         cbxRefireOption2.SelectedIndex = 1;
                         break;
                 }
-                switch (t.Scheduling)
+                switch (t._Scheduling)
                 {
                     case Trigger.SchedulingEnum.FromFire:
                         cbxScheduleFrom.SelectedIndex = 0;
@@ -188,7 +190,7 @@ namespace Triggernometry.Forms
                         cbxScheduleFrom.SelectedIndex = 2;
                         break;
                 }
-                switch (t.PeriodRefire)
+                switch (t._PeriodRefire)
                 {
                     case Trigger.RefireEnum.Allow:
                         cbxRefireWithinPeriod.SelectedIndex = 0;
@@ -197,7 +199,7 @@ namespace Triggernometry.Forms
                         cbxRefireWithinPeriod.SelectedIndex = 1;
                         break;
                 }
-                switch (t.Source)
+                switch (t._Source)
                 {
                     case Trigger.TriggerSourceEnum.Log:
                         cbxTriggerSource.SelectedIndex = 0;
@@ -206,9 +208,10 @@ namespace Triggernometry.Forms
                         cbxTriggerSource.SelectedIndex = 1;
                         break;
                 }
-                expRefirePeriod.Expression = t.RefirePeriodExpression;
-                cbxEditAutofire.Checked = t.EditAutofire;
-                cbxLoggingLevel.SelectedIndex = (int)t.DebugLevel;
+                expRefirePeriod.Expression = t._RefirePeriodExpression;
+                cbxEditAutofire.Checked = t._EditAutofire;
+                cbxSequential.Checked = t._Sequential;
+                cbxLoggingLevel.SelectedIndex = (int)t._DebugLevel;
                 var ix = from tx in t.Actions
                          orderby tx.OrderNumber ascending
                          select tx;
@@ -237,58 +240,59 @@ namespace Triggernometry.Forms
         {
             t.Name = txtName.Text;
             t.RegularExpression = txtRegexp.Text;
-            t.Description = txtDescription.Text;
-            t.EditAutofire = cbxEditAutofire.Checked;
+            t._Description = txtDescription.Text;
+            t._EditAutofire = cbxEditAutofire.Checked;
+            t._Sequential = cbxSequential.Checked;
             switch (cbxRefireOption1.SelectedIndex)
             {
                 case 0:
-                    t.PrevActions = Trigger.PrevActionsEnum.Interrupt;
+                    t._PrevActions = Trigger.PrevActionsEnum.Interrupt;
                     break;
                 case 1:
-                    t.PrevActions = Trigger.PrevActionsEnum.Keep;
+                    t._PrevActions = Trigger.PrevActionsEnum.Keep;
                     break;
             }
             switch (cbxRefireOption2.SelectedIndex)
             {
                 case 0:
-                    t.PrevActionsRefire = Trigger.RefireEnum.Allow;
+                    t._PrevActionsRefire = Trigger.RefireEnum.Allow;
                     break;
                 case 1:
-                    t.PrevActionsRefire = Trigger.RefireEnum.Deny;
+                    t._PrevActionsRefire = Trigger.RefireEnum.Deny;
                     break;
             }
             switch (cbxScheduleFrom.SelectedIndex)
             {
                 case 0:
-                    t.Scheduling = Trigger.SchedulingEnum.FromFire;
+                    t._Scheduling = Trigger.SchedulingEnum.FromFire;
                     break;
                 case 1:
-                    t.Scheduling = Trigger.SchedulingEnum.FromLastAction;
+                    t._Scheduling = Trigger.SchedulingEnum.FromLastAction;
                     break;
                 case 2:
-                    t.Scheduling = Trigger.SchedulingEnum.FromRefirePeriod;
+                    t._Scheduling = Trigger.SchedulingEnum.FromRefirePeriod;
                     break;
             }
             switch (cbxRefireWithinPeriod.SelectedIndex)
             {
                 case 0:
-                    t.PeriodRefire = Trigger.RefireEnum.Allow;
+                    t._PeriodRefire = Trigger.RefireEnum.Allow;
                     break;
                 case 1:
-                    t.PeriodRefire = Trigger.RefireEnum.Deny;
+                    t._PeriodRefire = Trigger.RefireEnum.Deny;
                     break;
             }
             switch (cbxTriggerSource.SelectedIndex)
             {
                 case 0:
-                    t.Source = Trigger.TriggerSourceEnum.Log;
+                    t._Source = Trigger.TriggerSourceEnum.Log;
                     break;
                 case 1:
-                    t.Source = Trigger.TriggerSourceEnum.FFXIVNetwork;
+                    t._Source = Trigger.TriggerSourceEnum.FFXIVNetwork;
                     break;
             }
-            t.RefirePeriodExpression = expRefirePeriod.Expression;
-            t.DebugLevel = (RealPlugin.DebugLevelEnum)cbxLoggingLevel.SelectedIndex;
+            t._RefirePeriodExpression = expRefirePeriod.Expression;
+            t._DebugLevel = (RealPlugin.DebugLevelEnum)cbxLoggingLevel.SelectedIndex;
             t.Actions.Clear();
             var ix = from tx in Actions
                      orderby tx.OrderNumber ascending
@@ -523,7 +527,7 @@ namespace Triggernometry.Forms
             string data = null;
             if (plug.cfg.UseOsClipboard == true)
             {
-                data = System.Windows.Forms.Clipboard.GetText(TextDataFormat.Text);
+                data = System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText);
             }
             else
             {
@@ -583,7 +587,7 @@ namespace Triggernometry.Forms
             string data = null;
             if (plug.cfg.UseOsClipboard == true)
             {
-                data = System.Windows.Forms.Clipboard.GetText(TextDataFormat.Text);
+                data = System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText);
             }
             else
             {
@@ -592,7 +596,7 @@ namespace Triggernometry.Forms
             try
             {
                 XmlSerializer xs = new XmlSerializer(typeof(Action));
-                using (MemoryStream ms = new MemoryStream(ASCIIEncoding.ASCII.GetBytes(data)))
+                using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(data)))
                 {
                     Action cx = (Action)xs.Deserialize(ms);
                     int idx = 0;

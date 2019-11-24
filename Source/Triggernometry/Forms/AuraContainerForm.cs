@@ -190,7 +190,7 @@ namespace Triggernometry.Forms
                     Directory.CreateDirectory(fn);
                 }
                 string ext = Path.GetExtension(u.LocalPath);
-                fn = Path.Combine(fn, plug.HashRepositoryAddress(u.AbsoluteUri) + Path.GetExtension(u.LocalPath));
+                fn = Path.Combine(fn, plug.GenerateHash(u.AbsoluteUri) + Path.GetExtension(u.LocalPath));
                 if (File.Exists(fn) == false)
                 {
                     using (WebClient wc = new WebClient())
@@ -413,11 +413,11 @@ namespace Triggernometry.Forms
             {
                 if (ctx.trig != null)
                 {
-                    ctx.trig.AddToLog(plug, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message)));
+                    ctx.trig.AddToLog(plug, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura '{0}' from trigger '{1}' due to update exception: {2}", AuraName, ctx.trig.LogName, ex.Message)));
                 }
                 else
                 {
-                    plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura due to update exception: {0}", ex.Message)));
+                    plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/AuraContainer/updateerror", String.Format("Deactivating aura '{0}' due to update exception: {1}", AuraName, ex.Message)));
                 }
                 AuraDeactivateForm();
                 return false;

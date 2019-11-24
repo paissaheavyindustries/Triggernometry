@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
-using System.Linq;
-using System.Globalization;
+using Triggernometry.Variables;
 
 namespace Triggernometry.PluginBridges
 {
@@ -14,7 +13,7 @@ namespace Triggernometry.PluginBridges
         private static string ActPluginName = "FFXIV_ACT_Plugin.dll";
         private static string ActPluginType = "FFXIV_ACT_Plugin";
 
-        private static VariableClump NullCombatant = new VariableClump();
+        private static VariableDictionary NullCombatant = new VariableDictionary();
 
         internal delegate void LoggingDelegate(RealPlugin.DebugLevelEnum level, string text);
         internal static event LoggingDelegate OnLogEvent;
@@ -25,15 +24,14 @@ namespace Triggernometry.PluginBridges
 
         public static Configuration cfg;
 
-        public static List<VariableClump> PartyMembers = new List<VariableClump>(new VariableClump[8] {
-            new VariableClump(), new VariableClump(), new VariableClump(), new VariableClump(),
-            new VariableClump(), new VariableClump(), new VariableClump(), new VariableClump()
+        public static List<VariableDictionary> PartyMembers = new List<VariableDictionary>(new VariableDictionary[8] {
+            new VariableDictionary(), new VariableDictionary(), new VariableDictionary(), new VariableDictionary(),
+            new VariableDictionary(), new VariableDictionary(), new VariableDictionary(), new VariableDictionary()
         });
         public static int NumPartyMembers = 0;
-        public static VariableClump Myself;
+        public static VariableDictionary Myself;
 
         internal static bool ckw = false;
-        private static List<Int64> cks = new List<long>();
 
         internal static string ConvertToHex(Int64 x)
         {
@@ -253,7 +251,7 @@ namespace Triggernometry.PluginBridges
             return "";
         }
 
-        public static void PopulateClumpFromCombatant(VariableClump vc, dynamic cmx, int inParty, int inAlliance, int orderNum)
+        public static void PopulateClumpFromCombatant(VariableDictionary vc, dynamic cmx, int inParty, int inAlliance, int orderNum)
         {
             vc.SetValue("name", cmx.Name);
             vc.SetValue("currenthp", cmx.CurrentHP);
@@ -451,7 +449,7 @@ namespace Triggernometry.PluginBridges
                         //DebugPlayerSorting("a1", PartyMembers);
                         PartyMembers.Sort(SortPlayersSelf);
                         int ro = 1;
-                        foreach (VariableClump vc in PartyMembers)
+                        foreach (VariableDictionary vc in PartyMembers)
                         {
                             vc.SetValue("order", "" + ro);
                             ro++;
@@ -463,7 +461,7 @@ namespace Triggernometry.PluginBridges
                         //DebugPlayerSorting("b1", PartyMembers);
                         PartyMembers.Sort(SortPlayers);
                         int ro = 1;
-                        foreach (VariableClump vc in PartyMembers)
+                        foreach (VariableDictionary vc in PartyMembers)
                         {
                             vc.SetValue("order", "" + ro);
                             ro++;
@@ -490,7 +488,7 @@ namespace Triggernometry.PluginBridges
             }
         }*/
 
-        public static int SortPlayersSelf(VariableClump a, VariableClump b)
+        public static int SortPlayersSelf(VariableDictionary a, VariableDictionary b)
         {
             if (a == Myself && b != Myself)
             {
@@ -505,10 +503,10 @@ namespace Triggernometry.PluginBridges
             return SortPlayers(a, b);
         }
 
-        public static int SortPlayers(VariableClump a, VariableClump b)
+        public static int SortPlayers(VariableDictionary a, VariableDictionary b)
         {
-            int av = cfg.GetPartyOrderValue(a.GetValue("jobid"));
-            int bv = cfg.GetPartyOrderValue(b.GetValue("jobid"));
+            int av = cfg.GetPartyOrderValue(a.GetValue("jobid").ToString());
+            int bv = cfg.GetPartyOrderValue(b.GetValue("jobid").ToString());
             if (av < bv)
             {
                 //System.Diagnostics.Debug.WriteLine(a.GetValue("name") + " (" + av + ") < " + b.GetValue("name") + " (" + bv + ")");
@@ -524,7 +522,7 @@ namespace Triggernometry.PluginBridges
             return b.GetValue("id").CompareTo(a.GetValue("id"));
         }
 
-        public static VariableClump GetNamedEntity(string name)
+        public static VariableDictionary GetNamedEntity(string name)
         {            
             try
             {
@@ -550,7 +548,7 @@ namespace Triggernometry.PluginBridges
                             catch (Exception)
                             {
                             }
-                            VariableClump vc = new VariableClump();
+                            VariableDictionary vc = new VariableDictionary();
                             PopulateClumpFromCombatant(vc, cmx, nump == 1 ? 1 : 0, nump == 2 ? 1 : 0, 0);
                             return vc;
                         }
@@ -564,7 +562,7 @@ namespace Triggernometry.PluginBridges
             return NullCombatant;
         }
 
-        public static VariableClump GetIdEntity(string id, out bool found)
+        public static VariableDictionary GetIdEntity(string id, out bool found)
         {
             
             found = false;
@@ -592,7 +590,7 @@ namespace Triggernometry.PluginBridges
                             catch (Exception)
                             {
                             }
-                            VariableClump vc = new VariableClump();
+                            VariableDictionary vc = new VariableDictionary();
                             PopulateClumpFromCombatant(vc, cmx, nump == 1 ? 1 : 0, nump == 2 ? 1 : 0, 0);
                             found = true;
                             return vc;
@@ -607,7 +605,7 @@ namespace Triggernometry.PluginBridges
             return NullCombatant;
         }
 
-        public static VariableClump GetPartyMember(int index)
+        public static VariableDictionary GetPartyMember(int index)
         {
             UpdateState();
             if (index < 1 || index > NumPartyMembers)
@@ -617,18 +615,18 @@ namespace Triggernometry.PluginBridges
             return PartyMembers[index - 1];
         }
 
-        public static VariableClump GetMyself()
+        public static VariableDictionary GetMyself()
         {
             UpdateState();
             return Myself;
         }
 
-        public static VariableClump GetNamedPartyMember(string name)
+        public static VariableDictionary GetNamedPartyMember(string name)
         {
             UpdateState();
-            foreach (VariableClump vc in PartyMembers)
+            foreach (VariableDictionary vc in PartyMembers)
             {
-                if (vc.GetValue("name") == name)
+                if (vc.GetValue("name").ToString() == name)
                 {
                     return vc;
                 }
@@ -636,13 +634,13 @@ namespace Triggernometry.PluginBridges
             return NullCombatant;
         }
 
-        public static VariableClump GetIdPartyMember(string id, out bool found)
+        public static VariableDictionary GetIdPartyMember(string id, out bool found)
         {
             found = false;
             UpdateState();
-            foreach (VariableClump vc in PartyMembers)
+            foreach (VariableDictionary vc in PartyMembers)
             {
-                if (String.Compare(vc.GetValue("id"), id, true) == 0)
+                if (String.Compare(vc.GetValue("id").ToString(), id, true) == 0)
                 {
                     found = true;
                     return vc;

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,6 +52,11 @@ namespace Triggernometry.Forms
                 chkFfxivLogNetwork.Checked = false;
                 cbxEnableHwAccel.Checked = false;
                 txtMonitorWindow.Text = "";
+                nudCacheImageExpiry.Value = 518400;
+                nudCacheSoundExpiry.Value = 518400;
+                nudCacheJsonExpiry.Value = 10080;
+                nudCacheRepoExpiry.Value = 518400;
+                nudCacheFileExpiry.Value = 518400;
             }
             else
             {
@@ -70,6 +77,13 @@ namespace Triggernometry.Forms
                 chkFfxivLogNetwork.Checked = a.FfxivLogNetwork;
                 cbxEnableHwAccel.Checked = a.UseScarborough;
                 txtMonitorWindow.Text = a.WindowToMonitor;
+                nudCacheImageExpiry.Value = a.CacheImageExpiry;
+                nudCacheSoundExpiry.Value = a.CacheSoundExpiry;
+                int dummy = (int)nudCacheJsonExpiry.Value;                
+                nudCacheJsonExpiry.Value = a.CacheJsonExpiry;
+                dummy = (int)nudCacheJsonExpiry.Value;
+                nudCacheRepoExpiry.Value = a.CacheRepoExpiry;
+                nudCacheFileExpiry.Value = a.CacheFileExpiry;
                 SetupJobOrder(a);
             }
             if (a.StartupTriggerType == Configuration.StartupTriggerTypeEnum.Trigger)
@@ -111,6 +125,11 @@ namespace Triggernometry.Forms
             a.DeveloperMode = cbxDevMode.Checked;
             a.UseScarborough = cbxEnableHwAccel.Checked;
             a.WindowToMonitor = txtMonitorWindow.Text;
+            a.CacheImageExpiry = (int)nudCacheImageExpiry.Value;
+            a.CacheSoundExpiry = (int)nudCacheSoundExpiry.Value;            
+            a.CacheJsonExpiry = (int)nudCacheJsonExpiry.Value;            
+            a.CacheRepoExpiry = (int)nudCacheRepoExpiry.Value;
+            a.CacheFileExpiry = (int)nudCacheFileExpiry.Value;
             a.FfxivPartyOrdering = (Configuration.FfxivPartyOrderingEnum)cbxFfxivJobMethod.SelectedIndex;
             if (chkUpdates.Checked == true)
             {
@@ -184,18 +203,25 @@ namespace Triggernometry.Forms
         private void ConfigurationForm_Shown(object sender, EventArgs e)
         {
             cancomplain = true;
+            RefreshCacheStates();
         }
 
         private void trvTrigger_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
         {
-            e.Node.ImageIndex = 0;
-            e.Node.SelectedImageIndex = 0;
+            if (e.Node.Tag is Folder)
+            {
+                e.Node.ImageIndex = (int)CustomControls.UserInterface.GetImageIndexForClosedFolder((Folder)e.Node.Tag);
+                e.Node.SelectedImageIndex = e.Node.ImageIndex;
+            }
         }
 
         private void trvTrigger_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            e.Node.ImageIndex = 1;
-            e.Node.SelectedImageIndex = 1;
+            if (e.Node.Tag is Folder)
+            {
+                e.Node.ImageIndex = (int)CustomControls.UserInterface.GetImageIndexForOpenFolder((Folder)e.Node.Tag);
+                e.Node.SelectedImageIndex = e.Node.ImageIndex;
+            }
         }
 
         private void trvTrigger_BeforeSelect(object sender, TreeViewCancelEventArgs e)
@@ -216,11 +242,6 @@ namespace Triggernometry.Forms
             trvTrigger.SelectedNode = null;
             btnClearSelection.Enabled = false;
             lblFolderReminder.Visible = false;
-        }
-
-        private void btnOk_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void cbxFfxivJobMethod_SelectedIndexChanged(object sender, EventArgs e)
@@ -401,6 +422,155 @@ namespace Triggernometry.Forms
         private void btnClearSelection_Click(object sender, EventArgs e)
         {
             clearSelectionToolStripMenuItem_Click(sender, e);
+        }
+
+        private void RefreshCacheStates()
+        {
+            RefreshImageCacheState();
+            RefreshSoundCacheState();
+            RefreshJsonCacheState();
+            RefreshRepoCacheState();
+            RefreshFileCacheState();
+        }
+
+        private void RefreshImageCacheState()
+        {
+            string path = Path.Combine(plug.path, "TriggernometryRemoteImages");
+            RefreshCacheState(path, txtCacheImageCount, txtCacheImageSize, btnCacheImageClear, btnCacheImageBrowse);
+        }
+
+        private void RefreshSoundCacheState()
+        {
+            string path = Path.Combine(plug.path, "TriggernometryRemoteSounds");
+            RefreshCacheState(path, txtCacheSoundCount, txtCacheSoundSize, btnCacheSoundClear, btnCacheSoundBrowse);
+        }
+
+        private void RefreshJsonCacheState()
+        {
+            string path = Path.Combine(plug.path, "TriggernometryJsonCache");
+            RefreshCacheState(path, txtCacheJsonCount, txtCacheJsonSize, btnCacheJsonClear, btnCacheJsonBrowse);
+        }
+
+        private void RefreshRepoCacheState()
+        {
+            string path = Path.Combine(plug.path, "TriggernometryRepoBackups");
+            RefreshCacheState(path, txtCacheRepoCount, txtCacheRepoSize, btnCacheRepoClear, btnCacheRepoBrowse);
+        }
+
+        private void RefreshFileCacheState()
+        {
+            string path = Path.Combine(plug.path, "TriggernometryFileCache");
+            RefreshCacheState(path, txtCacheFileCount, txtCacheFileSize, btnCacheFileClear, btnCacheFileBrowse);
+        }
+
+        private void RefreshCacheState(string path, TextBox count, TextBox size, Button clear, Button browse)
+        {
+            DirectoryInfo di = new DirectoryInfo(path);
+            if (di.Exists == true)
+            {
+                FileInfo[] fis = di.GetFiles();
+                long totalSize = 0;
+                foreach (FileInfo fi in fis)
+                {
+                    totalSize += fi.Length;
+                }
+                count.Text = fis.Length.ToString();
+                size.Text = totalSize.ToString();
+                clear.Enabled = (fis.Length > 0);
+                browse.Enabled = true;
+            }
+            else
+            {
+                count.Text = "0";
+                size.Text = "0";
+                clear.Enabled = false;
+                browse.Enabled = false;
+            }
+        }
+
+        private void btnCacheImageClear_Click(object sender, EventArgs e)
+        {
+            if (plug.ClearCache("TriggernometryRemoteImages", 0) > 0)
+            {
+                RefreshImageCacheState();
+            }
+        }
+
+        private void btnCacheSoundClear_Click(object sender, EventArgs e)
+        {
+            if (plug.ClearCache("TriggernometryRemoteSounds", 0) > 0)
+            {
+                RefreshSoundCacheState();
+            }
+        }
+
+        private void btnCacheJsonClear_Click(object sender, EventArgs e)
+        {
+            if (plug.ClearCache("TriggernometryJsonCache", 0) > 0)
+            {
+                RefreshJsonCacheState();
+            }
+        }
+
+        private void btnCacheRepoClear_Click(object sender, EventArgs e)
+        {
+            if (plug.ClearCache("TriggernometryRepoBackups", 0) > 0)
+            {
+                RefreshRepoCacheState();
+            }
+        }
+
+        private void btnCacheFileClear_Click(object sender, EventArgs e)
+        {
+            if (plug.ClearCache("TriggernometryFileCache", 0) > 0)
+            {
+                RefreshFileCacheState();
+            }
+        }
+
+        private void btnCacheImageBrowse_Click(object sender, EventArgs e)
+        {
+            string path = Path.Combine(plug.path, "TriggernometryRemoteImages");
+            if (Directory.Exists(path) == true)
+            {
+                Process.Start("explorer.exe", path);
+            }
+        }
+
+        private void btnCacheSoundBrowse_Click(object sender, EventArgs e)
+        {
+            string path = Path.Combine(plug.path, "TriggernometryRemoteSounds");
+            if (Directory.Exists(path) == true)
+            {
+                Process.Start("explorer.exe", path);
+            }
+        }
+
+        private void btnCacheJsonBrowse_Click(object sender, EventArgs e)
+        {
+            string path = Path.Combine(plug.path, "TriggernometryJsonCache");
+            if (Directory.Exists(path) == true)
+            {
+                Process.Start("explorer.exe", path);
+            }
+        }
+
+        private void btnCacheRepoBrowse_Click(object sender, EventArgs e)
+        {
+            string path = Path.Combine(plug.path, "TriggernometryRepoBackups");
+            if (Directory.Exists(path) == true)
+            {
+                Process.Start("explorer.exe", path);
+            }
+        }
+
+        private void btnCacheFileBrowse_Click(object sender, EventArgs e)
+        {
+            string path = Path.Combine(plug.path, "TriggernometryFileCache");
+            if (Directory.Exists(path) == true)
+            {
+                Process.Start("explorer.exe", path);
+            }
         }
 
     }

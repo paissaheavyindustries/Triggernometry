@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using Triggernometry.Variables;
 
 namespace Triggernometry.Forms
 {
@@ -27,6 +23,7 @@ namespace Triggernometry.Forms
         {
             RefreshSimpleVariables();
             RefreshListVariables();
+            RefreshTableVariables();
         }
 
         private void RefreshSimpleVariables()
@@ -43,6 +40,15 @@ namespace Triggernometry.Forms
             lock (plug.listvariables)
             {
                 dgvListVariables.RowCount = plug.listvariables.Count;
+            }
+            Refresh();
+        }
+
+        private void RefreshTableVariables()
+        {
+            lock (plug.tablevariables)
+            {
+                dgvTableVariables.RowCount = plug.tablevariables.Count;
             }
             Refresh();
         }
@@ -81,7 +87,7 @@ namespace Triggernometry.Forms
                 {
                     return;
                 }
-                KeyValuePair<string, Variable> kp = plug.simplevariables.ElementAt(e.RowIndex);
+                KeyValuePair<string, VariableScalar> kp = plug.simplevariables.ElementAt(e.RowIndex);
                 switch (e.ColumnIndex)
                 {
                     case 0:
@@ -112,7 +118,7 @@ namespace Triggernometry.Forms
                 string exname = dgvScalarVariables.Rows[e.RowIndex].Cells[0].Value.ToString();
                 if (plug.simplevariables.ContainsKey(exname) == true)
                 {
-                    Variable x = plug.simplevariables[exname];
+                    VariableScalar x = plug.simplevariables[exname];
                     x.Value = newval;
                     x.LastChanged = DateTime.Now;
                     x.LastChanger = I18n.Translate("internal/VariableForm/variableeditortag", "Variable editor");
@@ -167,6 +173,55 @@ namespace Triggernometry.Forms
                 plug.listvariables.Clear();
             }
             toolStripButton2_Click(sender, e);
+        }
+
+        private void btnRefreshTable_Click(object sender, EventArgs e)
+        {
+            RefreshTableVariables();
+        }
+
+        private void btnRemoveAllTable_Click(object sender, EventArgs e)
+        {
+            lock (plug.tablevariables)
+            {
+                plug.tablevariables.Clear();
+            }
+            btnRefreshTable_Click(sender, e);
+        }
+
+        private void dgvTableVariables_SelectionChanged(object sender, EventArgs e)
+        {
+            dgvTableVariables.ClearSelection();
+        }
+
+        private void dgvTableVariables_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
+        {
+            lock (plug.tablevariables)
+            {
+                if (e.RowIndex >= plug.tablevariables.Count)
+                {
+                    return;
+                }
+                KeyValuePair<string, VariableTable> kp = plug.tablevariables.ElementAt(e.RowIndex);
+                switch (e.ColumnIndex)
+                {
+                    case 0:
+                        e.Value = kp.Key;
+                        break;
+                    case 1:
+                        e.Value = kp.Value.Width;
+                        break;
+                    case 2:
+                        e.Value = kp.Value.Height;
+                        break;
+                    case 3:
+                        e.Value = kp.Value.LastChanged.ToString();
+                        break;
+                    case 4:
+                        e.Value = kp.Value.LastChanger;
+                        break;
+                }
+            }
         }
 
     }

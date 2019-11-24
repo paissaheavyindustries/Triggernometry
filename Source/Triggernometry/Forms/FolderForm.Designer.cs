@@ -41,17 +41,18 @@
             this.tbcMain = new System.Windows.Forms.TabControl();
             this.tabGeneral = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.txtEventFilterRegex = new CustomControls.ExpressionTextBox();
+            this.txtEventFilterRegex = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblEventFilterRegex = new System.Windows.Forms.Label();
             this.chkEventFilter = new System.Windows.Forms.CheckBox();
             this.lblZoneFilterRegex = new System.Windows.Forms.Label();
             this.chkZoneFilter = new System.Windows.Forms.CheckBox();
-            this.txtZoneFilterRegex = new CustomControls.ExpressionTextBox();
+            this.txtZoneFilterRegex = new Triggernometry.CustomControls.ExpressionTextBox();
             this.btnGetCurZone = new System.Windows.Forms.Button();
             this.tabFFXIV = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.chkFfxivClassFilterEnabled = new System.Windows.Forms.CheckBox();
             this.grpFfxivClassFilter = new System.Windows.Forms.GroupBox();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.chkFfxivClassFilter = new System.Windows.Forms.CheckedListBox();
             this.panel5 = new System.Windows.Forms.Panel();
             this.lblReadOnly = new System.Windows.Forms.Label();
@@ -65,6 +66,7 @@
             this.tabFFXIV.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.grpFfxivClassFilter.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.panel5.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -125,7 +127,7 @@
             // panel3
             // 
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(10, 306);
+            this.panel3.Location = new System.Drawing.Point(10, 406);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(564, 10);
             this.panel3.TabIndex = 14;
@@ -135,7 +137,7 @@
             this.panel4.Controls.Add(this.btnCancel);
             this.panel4.Controls.Add(this.btnOk);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel4.Location = new System.Drawing.Point(10, 316);
+            this.panel4.Location = new System.Drawing.Point(10, 416);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(564, 35);
             this.panel4.TabIndex = 15;
@@ -179,7 +181,7 @@
             this.grpFiltering.Location = new System.Drawing.Point(10, 130);
             this.grpFiltering.Name = "grpFiltering";
             this.grpFiltering.Padding = new System.Windows.Forms.Padding(10);
-            this.grpFiltering.Size = new System.Drawing.Size(564, 176);
+            this.grpFiltering.Size = new System.Drawing.Size(564, 276);
             this.grpFiltering.TabIndex = 17;
             this.grpFiltering.TabStop = false;
             this.grpFiltering.Text = " Filtering settings ";
@@ -192,7 +194,7 @@
             this.tbcMain.Location = new System.Drawing.Point(10, 23);
             this.tbcMain.Name = "tbcMain";
             this.tbcMain.SelectedIndex = 0;
-            this.tbcMain.Size = new System.Drawing.Size(544, 143);
+            this.tbcMain.Size = new System.Drawing.Size(544, 243);
             this.tbcMain.TabIndex = 19;
             // 
             // tabGeneral
@@ -202,7 +204,7 @@
             this.tabGeneral.Location = new System.Drawing.Point(4, 22);
             this.tabGeneral.Name = "tabGeneral";
             this.tabGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.tabGeneral.Size = new System.Drawing.Size(536, 117);
+            this.tabGeneral.Size = new System.Drawing.Size(536, 217);
             this.tabGeneral.TabIndex = 0;
             this.tabGeneral.Text = "General";
             this.tabGeneral.UseVisualStyleBackColor = true;
@@ -229,7 +231,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(513, 135);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(530, 135);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
             // txtEventFilterRegex
@@ -237,11 +239,13 @@
             this.txtEventFilterRegex.AutoSize = true;
             this.txtEventFilterRegex.Dock = System.Windows.Forms.DockStyle.Top;
             this.txtEventFilterRegex.Enabled = false;
+            this.txtEventFilterRegex.Expression = "";
+            this.txtEventFilterRegex.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
             this.txtEventFilterRegex.Location = new System.Drawing.Point(158, 112);
             this.txtEventFilterRegex.Name = "txtEventFilterRegex";
-            this.txtEventFilterRegex.Size = new System.Drawing.Size(352, 20);
+            this.txtEventFilterRegex.ReadOnly = false;
+            this.txtEventFilterRegex.Size = new System.Drawing.Size(369, 20);
             this.txtEventFilterRegex.TabIndex = 14;
-            this.txtEventFilterRegex.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
             // 
             // lblEventFilterRegex
             // 
@@ -264,7 +268,7 @@
             this.chkEventFilter.Location = new System.Drawing.Point(3, 87);
             this.chkEventFilter.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.chkEventFilter.Name = "chkEventFilter";
-            this.chkEventFilter.Size = new System.Drawing.Size(508, 17);
+            this.chkEventFilter.Size = new System.Drawing.Size(525, 17);
             this.chkEventFilter.TabIndex = 10;
             this.chkEventFilter.Text = "Restrict event processing only to events with matching event text";
             this.chkEventFilter.UseVisualStyleBackColor = true;
@@ -291,7 +295,7 @@
             this.chkZoneFilter.Location = new System.Drawing.Point(3, 5);
             this.chkZoneFilter.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.chkZoneFilter.Name = "chkZoneFilter";
-            this.chkZoneFilter.Size = new System.Drawing.Size(508, 17);
+            this.chkZoneFilter.Size = new System.Drawing.Size(525, 17);
             this.chkZoneFilter.TabIndex = 7;
             this.chkZoneFilter.Text = "Restrict event processing only to events with matching zone name";
             this.chkZoneFilter.UseVisualStyleBackColor = true;
@@ -302,11 +306,13 @@
             this.txtZoneFilterRegex.AutoSize = true;
             this.txtZoneFilterRegex.Dock = System.Windows.Forms.DockStyle.Top;
             this.txtZoneFilterRegex.Enabled = false;
+            this.txtZoneFilterRegex.Expression = "";
+            this.txtZoneFilterRegex.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
             this.txtZoneFilterRegex.Location = new System.Drawing.Point(158, 30);
             this.txtZoneFilterRegex.Name = "txtZoneFilterRegex";
-            this.txtZoneFilterRegex.Size = new System.Drawing.Size(352, 20);
+            this.txtZoneFilterRegex.ReadOnly = false;
+            this.txtZoneFilterRegex.Size = new System.Drawing.Size(369, 20);
             this.txtZoneFilterRegex.TabIndex = 13;
-            this.txtZoneFilterRegex.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
             // 
             // btnGetCurZone
             // 
@@ -314,7 +320,7 @@
             this.btnGetCurZone.Enabled = false;
             this.btnGetCurZone.Location = new System.Drawing.Point(158, 56);
             this.btnGetCurZone.Name = "btnGetCurZone";
-            this.btnGetCurZone.Size = new System.Drawing.Size(352, 23);
+            this.btnGetCurZone.Size = new System.Drawing.Size(369, 23);
             this.btnGetCurZone.TabIndex = 15;
             this.btnGetCurZone.Text = "Retrieve current zone name";
             this.btnGetCurZone.UseVisualStyleBackColor = true;
@@ -327,7 +333,7 @@
             this.tabFFXIV.Location = new System.Drawing.Point(4, 22);
             this.tabFFXIV.Name = "tabFFXIV";
             this.tabFFXIV.Padding = new System.Windows.Forms.Padding(3);
-            this.tabFFXIV.Size = new System.Drawing.Size(536, 117);
+            this.tabFFXIV.Size = new System.Drawing.Size(536, 217);
             this.tabFFXIV.TabIndex = 1;
             this.tabFFXIV.Text = "Final Fantasy XIV";
             this.tabFFXIV.UseVisualStyleBackColor = true;
@@ -348,7 +354,7 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(530, 111);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(530, 211);
             this.tableLayoutPanel3.TabIndex = 2;
             // 
             // chkFfxivClassFilterEnabled
@@ -369,16 +375,26 @@
             // grpFfxivClassFilter
             // 
             this.tableLayoutPanel3.SetColumnSpan(this.grpFfxivClassFilter, 2);
-            this.grpFfxivClassFilter.Controls.Add(this.chkFfxivClassFilter);
+            this.grpFfxivClassFilter.Controls.Add(this.panel2);
             this.grpFfxivClassFilter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpFfxivClassFilter.Enabled = false;
             this.grpFfxivClassFilter.Location = new System.Drawing.Point(3, 30);
             this.grpFfxivClassFilter.Name = "grpFfxivClassFilter";
             this.grpFfxivClassFilter.Padding = new System.Windows.Forms.Padding(10);
-            this.grpFfxivClassFilter.Size = new System.Drawing.Size(524, 129);
+            this.grpFfxivClassFilter.Size = new System.Drawing.Size(524, 178);
             this.grpFfxivClassFilter.TabIndex = 8;
             this.grpFfxivClassFilter.TabStop = false;
             this.grpFfxivClassFilter.Text = " Classes ";
+            // 
+            // panel2
+            // 
+            this.panel2.AutoScroll = true;
+            this.panel2.Controls.Add(this.chkFfxivClassFilter);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(10, 23);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(504, 145);
+            this.panel2.TabIndex = 16;
             // 
             // chkFfxivClassFilter
             // 
@@ -386,11 +402,12 @@
             this.chkFfxivClassFilter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkFfxivClassFilter.FormattingEnabled = true;
             this.chkFfxivClassFilter.IntegralHeight = false;
-            this.chkFfxivClassFilter.Location = new System.Drawing.Point(10, 23);
+            this.chkFfxivClassFilter.Location = new System.Drawing.Point(0, 0);
             this.chkFfxivClassFilter.Name = "chkFfxivClassFilter";
             this.chkFfxivClassFilter.ScrollAlwaysVisible = true;
-            this.chkFfxivClassFilter.Size = new System.Drawing.Size(504, 96);
+            this.chkFfxivClassFilter.Size = new System.Drawing.Size(504, 145);
             this.chkFfxivClassFilter.TabIndex = 15;
+            this.chkFfxivClassFilter.SelectedIndexChanged += new System.EventHandler(this.chkFfxivClassFilter_SelectedIndexChanged);
             // 
             // panel5
             // 
@@ -425,7 +442,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(584, 361);
+            this.ClientSize = new System.Drawing.Size(584, 461);
             this.Controls.Add(this.grpFiltering);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.panel1);
@@ -433,7 +450,7 @@
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel4);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.MinimumSize = new System.Drawing.Size(500, 400);
+            this.MinimumSize = new System.Drawing.Size(600, 500);
             this.Name = "FolderForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.ShowInTaskbar = false;
@@ -454,6 +471,7 @@
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
             this.grpFfxivClassFilter.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -489,5 +507,6 @@
         private System.Windows.Forms.Button btnGetCurZone;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Label lblReadOnly;
+        private System.Windows.Forms.Panel panel2;
     }
 }

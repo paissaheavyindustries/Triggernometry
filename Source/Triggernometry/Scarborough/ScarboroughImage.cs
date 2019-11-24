@@ -141,6 +141,11 @@ namespace Scarborough
         internal void LoadImageDataFromFile(Triggernometry.RealPlugin plug, Graphics g, string fn)
         {
             byte[] data = File.ReadAllBytes(fn);
+            LoadImageDataFromByte(plug, g, data);
+        }
+
+        internal void LoadImageDataFromByte(Triggernometry.RealPlugin plug, Graphics g, byte[] data)
+        {
             GifData gif = GetGifData(data);
             using (MemoryStream ms = new MemoryStream(data))
             {
@@ -222,19 +227,27 @@ namespace Scarborough
                     Directory.CreateDirectory(fn);
                 }
                 string ext = Path.GetExtension(u.LocalPath);
-                fn = Path.Combine(fn, plug.HashRepositoryAddress(u.AbsoluteUri) + Path.GetExtension(u.LocalPath));
-                if (File.Exists(fn) == false)
+                fn = Path.Combine(fn, plug.GenerateHash(u.AbsoluteUri) + Path.GetExtension(u.LocalPath));
+                bool fromcache = false;
+                if (File.Exists(fn) == true)
+                {
+                    FileInfo fi = new FileInfo(fn);
+                    DateTime dt = DateTime.Now.AddMinutes(0 - plug.cfg.CacheImageExpiry);
+                    if (fi.LastWriteTime > dt)
+                    {
+                        LoadImageDataFromFile(plug, g, fn);
+                        fromcache = true;
+                    }
+                }
+                if (fromcache == false)
                 {
                     using (WebClient wc = new WebClient())
                     {
                         wc.Headers["User-Agent"] = "Triggernometry Image Retriever";
                         byte[] data = wc.DownloadData(u.AbsoluteUri);
                         File.WriteAllBytes(fn, data);
+                        LoadImageDataFromByte(plug, g, data);
                     }
-                }
-                if (File.Exists(fn) == true)
-                {
-                    LoadImageDataFromFile(plug, g, fn);
                 }
             }
         }
