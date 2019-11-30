@@ -215,6 +215,12 @@
     <Compile Include="Forms\SearchForm.Designer.cs">
       <DependentUpon>SearchForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\VariableEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\VariableEditorForm.Designer.cs">
+      <DependentUpon>VariableEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="I18n.cs" />
     <Compile Include="InternalLog.cs" />
     <Compile Include="Language.cs" />
@@ -445,6 +451,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SearchForm.resx">
       <DependentUpon>SearchForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\VariableEditorForm.resx">
+      <DependentUpon>VariableEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

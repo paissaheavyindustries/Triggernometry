@@ -21,73 +21,68 @@ namespace Triggernometry.Forms
 
         private void VariableForm_Shown(object sender, EventArgs e)
         {
-            RefreshSimpleVariables();
+            RefreshScalarVariables();
             RefreshListVariables();
             RefreshTableVariables();
         }
 
-        private void RefreshSimpleVariables()
+        #region Generic
+
+        private Variable OpenVariableEditor(Variable v, ref string name, bool isNew)
         {
-            lock (plug.simplevariables)
+            using (VariableEditorForm vef = new VariableEditorForm())
             {
-                dgvScalarVariables.RowCount = plug.simplevariables.Count;
+                vef.VariableName = name;
+                vef.VariableToEdit = v.Duplicate();
+                vef.IsNew = isNew;
+                if (vef.ShowDialog() == DialogResult.OK)
+                {
+                    name = vef.VariableName;
+                    vef.VariableToEdit.LastChanged = DateTime.Now;
+                    vef.VariableToEdit.LastChanger = I18n.Translate("internal/VariableForm/variableeditortag", "Variable editor");
+                    return vef.VariableToEdit;
+                }
             }
-            Refresh();
+            return null;
         }
 
-        private void RefreshListVariables()
+        #endregion
+
+        #region Scalar variables
+
+        private void dgvScalarVariables_KeyDown(object sender, KeyEventArgs e)
         {
-            lock (plug.listvariables)
+            if (e.KeyCode == Keys.Delete)
             {
-                dgvListVariables.RowCount = plug.listvariables.Count;
+                if (btnScalarRemove.Enabled == true)
+                {
+                    btnScalarRemove_Click(this, null);
+                }
             }
-            Refresh();
         }
 
-        private void RefreshTableVariables()
-        {
-            lock (plug.tablevariables)
-            {
-                dgvTableVariables.RowCount = plug.tablevariables.Count;
-            }
-            Refresh();
-        }
-
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-            RefreshSimpleVariables();
-        }
-
-        private void toolStripButton2_Click(object sender, EventArgs e)
-        {
-            RefreshListVariables();
-        }
-
-        private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            toolStripButton1_Click(sender, e);
-            toolStripButton2_Click(sender, e);
-        }
-
-        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        private void dgvScalarVariables_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             dgvScalarVariables.ClearSelection();
+            dgvScalarVariables.Rows[e.RowIndex].Selected = true;
+            btnScalarEdit_Click(sender, null);
         }
 
-        private void dgvListVariables_SelectionChanged(object sender, EventArgs e)
+        private void dgvScalarVariables_SelectionChanged(object sender, EventArgs e)
         {
-            dgvListVariables.ClearSelection();
+            btnScalarEdit.Enabled = (dgvScalarVariables.SelectedRows.Count == 1);
+            btnScalarRemove.Enabled = (dgvScalarVariables.SelectedRows.Count > 0);
         }
 
-        private void dataGridView1_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
+        private void dgvScalarVariables_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
         {
-            lock (plug.simplevariables)
+            lock (plug.scalarvariables)
             {
-                if (e.RowIndex >= plug.simplevariables.Count)
+                if (e.RowIndex >= plug.scalarvariables.Count)
                 {
                     return;
                 }
-                KeyValuePair<string, VariableScalar> kp = plug.simplevariables.ElementAt(e.RowIndex);
+                KeyValuePair<string, VariableScalar> kp = plug.scalarvariables.ElementAt(e.RowIndex);
                 switch (e.ColumnIndex)
                 {
                     case 0:
@@ -106,25 +101,138 @@ namespace Triggernometry.Forms
             }
         }
 
-        private void dataGridView1_CellValuePushed(object sender, DataGridViewCellValueEventArgs e)
+        private void RefreshScalarVariables()
         {
-            if (e.ColumnIndex != 1)
+            lock (plug.scalarvariables)
             {
-                return;
+                dgvScalarVariables.RowCount = plug.scalarvariables.Count;
             }
-            string newval = e.Value != null ? e.Value.ToString() : "";
-            lock (plug.simplevariables)
+            Refresh();
+        }
+
+        private void btnScalarAdd_Click(object sender, EventArgs e)
+        {
+            VariableScalar v = new VariableScalar();
+            string varname = "";
+            v = (VariableScalar)OpenVariableEditor(v, ref varname, true);
+            if (v != null)
             {
-                string exname = dgvScalarVariables.Rows[e.RowIndex].Cells[0].Value.ToString();
-                if (plug.simplevariables.ContainsKey(exname) == true)
+                lock (plug.scalarvariables)
                 {
-                    VariableScalar x = plug.simplevariables[exname];
-                    x.Value = newval;
-                    x.LastChanged = DateTime.Now;
-                    x.LastChanger = I18n.Translate("internal/VariableForm/variableeditortag", "Variable editor");
+                    plug.scalarvariables[varname] = v;
+                }
+                RefreshScalarVariables();
+            }
+        }
+
+        private void btnScalarEdit_Click(object sender, EventArgs e)
+        {
+            string varname = "";
+            foreach (DataGridViewRow r in dgvScalarVariables.SelectedRows)
+            {
+                varname = r.Cells[0].Value.ToString();
+            }
+            VariableScalar v = null;
+            lock (plug.scalarvariables)
+            {
+                if (plug.scalarvariables.ContainsKey(varname) == true)
+                {
+                    v = plug.scalarvariables[varname];
                 }
             }
-            RefreshSimpleVariables();
+            if (v == null)
+            {
+                v = new VariableScalar();
+            }
+            string varname2 = varname;
+            v = (VariableScalar)OpenVariableEditor(v, ref varname2, false);
+            if (v != null)
+            {
+                lock (plug.scalarvariables)
+                {
+                    if (varname != varname2)
+                    {
+                        if (plug.scalarvariables.ContainsKey(varname) == true)
+                        {
+                            plug.scalarvariables.Remove(varname);
+                        }
+                    }
+                    plug.scalarvariables[varname2] = v;
+                }
+                RefreshScalarVariables();
+            }
+        }
+
+        private void btnScalarRemove_Click(object sender, EventArgs e)
+        {
+            string temp;
+            if (dgvScalarVariables.SelectedRows.Count > 1)
+            {
+                temp = I18n.Translate("internal/VariableForm/areyousureplural", "Are you sure you want to remove the selected variables?");
+            }
+            else
+            {
+                temp = I18n.Translate("internal/VariableForm/areyousuresingular", "Are you sure you want to remove the selected variable?");
+            }
+            switch (MessageBox.Show(this, temp, I18n.Translate("internal/VariableForm/confirmremoval", "Confirm removal"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+            {
+                case DialogResult.Yes:
+                    List<string> varnames = new List<string>();
+                    foreach (DataGridViewRow r in dgvScalarVariables.SelectedRows)
+                    {
+                        varnames.Add(r.Cells[0].Value.ToString());
+                    }
+                    lock (plug.scalarvariables)
+                    {
+                        foreach (string varname in varnames)
+                        {
+                            if (plug.scalarvariables.ContainsKey(varname) == true)
+                            {
+                                plug.scalarvariables.Remove(varname);
+                            }
+                        }
+                        dgvScalarVariables.RowCount = plug.scalarvariables.Count;
+                    }
+                    dgvScalarVariables.ClearSelection();
+                    dgvScalarVariables.Refresh();
+                    break;
+            }
+        }
+
+        private void btnRefreshScalar_ButtonClick(object sender, EventArgs e)
+        {
+            RefreshScalarVariables();
+        }
+
+        private void btnRemoveAllScalar_Click(object sender, EventArgs e)
+        {
+            lock (plug.scalarvariables)
+            {
+                plug.scalarvariables.Clear();
+            }
+            RefreshScalarVariables();
+        }
+
+        #endregion
+
+        #region List variables
+
+        private void dgvListVariables_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                if (btnListRemove.Enabled == true)
+                {
+                    btnListRemove_Click(this, null);
+                }
+            }
+        }
+
+        private void dgvListVariables_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            dgvListVariables.ClearSelection();
+            dgvListVariables.Rows[e.RowIndex].Selected = true;
+            btnListEdit_Click(sender, null);
         }
 
         private void dgvListVariables_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
@@ -157,41 +265,144 @@ namespace Triggernometry.Forms
             }
         }
 
-        private void toolStripButton4_Click(object sender, EventArgs e)
+        private void dgvListVariables_SelectionChanged(object sender, EventArgs e)
         {
-            lock (plug.simplevariables)
-            {
-                plug.simplevariables.Clear();
-            }
-            toolStripButton1_Click(sender, e);
+            btnListEdit.Enabled = (dgvListVariables.SelectedRows.Count == 1);
+            btnListRemove.Enabled = (dgvListVariables.SelectedRows.Count > 0);
         }
 
-        private void btnRemoveAllList_Click(object sender, EventArgs e)
+        private void RefreshListVariables()
+        {
+            lock (plug.listvariables)
+            {
+                dgvListVariables.RowCount = plug.listvariables.Count;
+            }
+            Refresh();
+        }
+
+        private void btnListAdd_Click(object sender, EventArgs e)
+        {
+            VariableList v = new VariableList();
+            string varname = "";
+            v = (VariableList)OpenVariableEditor(v, ref varname, true);
+            if (v != null)
+            {
+                lock (plug.listvariables)
+                {
+                    plug.listvariables[varname] = v;
+                }
+                RefreshListVariables();
+            }
+        }
+
+        private void btnListEdit_Click(object sender, EventArgs e)
+        {
+            string varname = "";
+            foreach (DataGridViewRow r in dgvListVariables.SelectedRows)
+            {
+                varname = r.Cells[0].Value.ToString();
+            }
+            VariableList v = null;
+            lock (plug.listvariables)
+            {
+                if (plug.listvariables.ContainsKey(varname) == true)
+                {
+                    v = plug.listvariables[varname];
+                }
+            }
+            if (v == null)
+            {
+                v = new VariableList();
+            }
+            string varname2 = varname;
+            v = (VariableList)OpenVariableEditor(v, ref varname2, false);
+            if (v != null)
+            {
+                lock (plug.listvariables)
+                {
+                    if (varname != varname2)
+                    {
+                        if (plug.listvariables.ContainsKey(varname) == true)
+                        {
+                            plug.listvariables.Remove(varname);
+                        }
+                    }
+                    plug.listvariables[varname2] = v;
+                }
+                RefreshListVariables();
+            }
+        }
+
+        private void btnListRemove_Click(object sender, EventArgs e)
+        {
+            string temp;
+            if (dgvListVariables.SelectedRows.Count > 1)
+            {
+                temp = I18n.Translate("internal/VariableForm/areyousureplural", "Are you sure you want to remove the selected variables?");
+            }
+            else
+            {
+                temp = I18n.Translate("internal/VariableForm/areyousuresingular", "Are you sure you want to remove the selected variable?");
+            }
+            switch (MessageBox.Show(this, temp, I18n.Translate("internal/VariableForm/confirmremoval", "Confirm removal"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+            {
+                case DialogResult.Yes:
+                    List<string> varnames = new List<string>();
+                    foreach (DataGridViewRow r in dgvListVariables.SelectedRows)
+                    {
+                        varnames.Add(r.Cells[0].Value.ToString());
+                    }
+                    lock (plug.listvariables)
+                    {
+                        foreach (string varname in varnames)
+                        {
+                            if (plug.listvariables.ContainsKey(varname) == true)
+                            {
+                                plug.listvariables.Remove(varname);
+                            }
+                        }
+                        dgvListVariables.RowCount = plug.listvariables.Count;
+                    }
+                    dgvListVariables.ClearSelection();
+                    dgvListVariables.Refresh();
+                    break;
+            }
+        }
+
+        private void btnListRefresh_ButtonClick(object sender, EventArgs e)
+        {
+            RefreshListVariables();
+        }
+
+        private void btnListRemoveAll_Click(object sender, EventArgs e)
         {
             lock (plug.listvariables)
             {
                 plug.listvariables.Clear();
             }
-            toolStripButton2_Click(sender, e);
+            RefreshListVariables();
         }
 
-        private void btnRefreshTable_Click(object sender, EventArgs e)
-        {
-            RefreshTableVariables();
-        }
+        #endregion
 
-        private void btnRemoveAllTable_Click(object sender, EventArgs e)
+        #region Table variables
+
+        private void dgvTableVariables_KeyDown(object sender, KeyEventArgs e)
         {
-            lock (plug.tablevariables)
+            if (e.KeyCode == Keys.Delete)
             {
-                plug.tablevariables.Clear();
+                if (btnTableRemove.Enabled == true)
+                {
+                    btnTableRemove_Click(this, null);
+                }
             }
-            btnRefreshTable_Click(sender, e);
         }
 
-        private void dgvTableVariables_SelectionChanged(object sender, EventArgs e)
+        private void dgvTableVariables_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             dgvTableVariables.ClearSelection();
+            dgvTableVariables.Rows[e.RowIndex].Selected = true;
+            btnTableEdit_Click(sender, null);
         }
 
         private void dgvTableVariables_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
@@ -223,6 +434,126 @@ namespace Triggernometry.Forms
                 }
             }
         }
+
+        private void dgvTableVariables_SelectionChanged(object sender, EventArgs e)
+        {
+            btnTableEdit.Enabled = (dgvTableVariables.SelectedRows.Count == 1);
+            btnTableRemove.Enabled = (dgvTableVariables.SelectedRows.Count > 0);
+        }
+
+        private void RefreshTableVariables()
+        {
+            lock (plug.tablevariables)
+            {
+                dgvTableVariables.RowCount = plug.tablevariables.Count;
+            }
+            Refresh();
+        }
+
+        private void btnTableAdd_Click(object sender, EventArgs e)
+        {
+            VariableTable v = new VariableTable();
+            string varname = "";
+            v = (VariableTable)OpenVariableEditor(v, ref varname, true);
+            if (v != null)
+            {
+                lock (plug.tablevariables)
+                {
+                    plug.tablevariables[varname] = v;
+                }
+                RefreshTableVariables();
+            }
+        }
+
+        private void btnTableEdit_Click(object sender, EventArgs e)
+        {
+            string varname = "";
+            foreach (DataGridViewRow r in dgvTableVariables.SelectedRows)
+            {
+                varname = r.Cells[0].Value.ToString();
+            }
+            VariableTable v = null;
+            lock (plug.tablevariables)
+            {
+                if (plug.tablevariables.ContainsKey(varname) == true)
+                {
+                    v = plug.tablevariables[varname];
+                }
+            }
+            if (v == null)
+            {
+                v = new VariableTable();
+            }
+            string varname2 = varname;
+            v = (VariableTable)OpenVariableEditor(v, ref varname2, false);
+            if (v != null)
+            {
+                lock (plug.tablevariables)
+                {
+                    if (varname != varname2)
+                    {
+                        if (plug.tablevariables.ContainsKey(varname) == true)
+                        {
+                            plug.tablevariables.Remove(varname);
+                        }
+                    }
+                    plug.tablevariables[varname2] = v;
+                }
+                RefreshTableVariables();
+            }
+        }
+
+        private void btnTableRemove_Click(object sender, EventArgs e)
+        {
+            string temp;
+            if (dgvTableVariables.SelectedRows.Count > 1)
+            {
+                temp = I18n.Translate("internal/VariableForm/areyousureplural", "Are you sure you want to remove the selected variables?");
+            }
+            else
+            {
+                temp = I18n.Translate("internal/VariableForm/areyousuresingular", "Are you sure you want to remove the selected variable?");
+            }
+            switch (MessageBox.Show(this, temp, I18n.Translate("internal/VariableForm/confirmremoval", "Confirm removal"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+            {
+                case DialogResult.Yes:
+                    List<string> varnames = new List<string>();
+                    foreach (DataGridViewRow r in dgvTableVariables.SelectedRows)
+                    {
+                        varnames.Add(r.Cells[0].Value.ToString());
+                    }
+                    lock (plug.tablevariables)
+                    {
+                        foreach (string varname in varnames)
+                        {
+                            if (plug.tablevariables.ContainsKey(varname) == true)
+                            {
+                                plug.tablevariables.Remove(varname);
+                            }
+                        }
+                        dgvTableVariables.RowCount = plug.tablevariables.Count;
+                    }
+                    dgvTableVariables.ClearSelection();
+                    dgvTableVariables.Refresh();
+                    break;
+            }
+        }
+
+        private void btnTableRefresh_ButtonClick(object sender, EventArgs e)
+        {
+            RefreshTableVariables();
+        }
+
+        private void btnTableRemoveAll_Click(object sender, EventArgs e)
+        {
+            lock (plug.tablevariables)
+            {
+                plug.tablevariables.Clear();
+            }
+            RefreshTableVariables();
+        }
+
+        #endregion
 
     }
 

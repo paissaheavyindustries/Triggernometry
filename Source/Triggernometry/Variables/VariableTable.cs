@@ -101,9 +101,9 @@ namespace Triggernometry.Variables
         {
             VariableTable v = new VariableTable();
             v.Resize(Width, Height);
-            for (int y=0; y < Height; y++)
+            for (int y = 1; y <= Height; y++)
             {
-                for (int x = 0; x < Width; x++)
+                for (int x = 1; x <= Width; x++)
                 {
                     v.Set(x, y, Peek(x, y).Duplicate(), LastChanger);
                 }
@@ -248,6 +248,58 @@ namespace Triggernometry.Variables
                 }
             }
             return 0;
+        }
+
+        public void InsertRow(int index)
+        {
+            Resize(Width > 0 ? Width : 1, Height + 1);
+            for (int y = Height - 1; y > index; y--)
+            {
+                Values[y] = Values[y - 1];
+            }
+            if (index >= Values.Length)
+            {
+                index = Values.Length - 1;
+            }
+            Values[index] = new Variable[Width];
+        }
+
+        public void RemoveRow(int index)
+        {
+            for (int y = index; y < Height - 1; y++)
+            {
+                Values[y] = Values[y + 1];
+            }
+            Resize(Width, Height - 1);
+        }
+
+        public void InsertColumn(int index)
+        {
+            Resize(Width + 1, Height > 0 ? Height : 1);
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = Width - 1; x > index; x--)
+                {
+                    Values[y][x] = Values[y][x - 1];
+                }
+                if (index >= Width)
+                {
+                    index = Width - 1;
+                }
+                Values[y][index] = new VariableScalar();
+            }
+        }
+
+        public void RemoveColumn(int index)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = index; x < Width - 1; x++)
+                {
+                    Values[y][x] = Values[y][x + 1];
+                }
+            }
+            Resize(Width - 1, Height);
         }
 
     }

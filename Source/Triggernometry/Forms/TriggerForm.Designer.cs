@@ -69,6 +69,7 @@
             this.cndCondition = new Triggernometry.CustomControls.ConditionViewer();
             this.tabScheduling = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
+            this.cbxSequential = new System.Windows.Forms.CheckBox();
             this.cbxEditAutofire = new System.Windows.Forms.CheckBox();
             this.cbxTriggerSource = new System.Windows.Forms.ComboBox();
             this.lblTriggerSource = new System.Windows.Forms.Label();
@@ -89,7 +90,6 @@
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.panel5 = new System.Windows.Forms.Panel();
             this.lblReadOnly = new System.Windows.Forms.Label();
-            this.cbxSequential = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActions)).BeginInit();
             this.ctxAction.SuspendLayout();
             this.toolStrip2.SuspendLayout();
@@ -539,6 +539,19 @@
             this.tableLayoutPanel15.Size = new System.Drawing.Size(542, 207);
             this.tableLayoutPanel15.TabIndex = 6;
             // 
+            // cbxSequential
+            // 
+            this.cbxSequential.AutoSize = true;
+            this.cbxSequential.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel15.SetColumnSpan(this.cbxSequential, 3);
+            this.cbxSequential.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbxSequential.Location = new System.Drawing.Point(3, 187);
+            this.cbxSequential.Name = "cbxSequential";
+            this.cbxSequential.Size = new System.Drawing.Size(536, 17);
+            this.cbxSequential.TabIndex = 16;
+            this.cbxSequential.Text = "Sequential execution";
+            this.cbxSequential.UseVisualStyleBackColor = true;
+            // 
             // cbxEditAutofire
             // 
             this.cbxEditAutofire.AutoSize = true;
@@ -560,7 +573,8 @@
             this.cbxTriggerSource.FormattingEnabled = true;
             this.cbxTriggerSource.Items.AddRange(new object[] {
             "Normal log lines",
-            "FFXIV network events"});
+            "FFXIV network events",
+            "None"});
             this.cbxTriggerSource.Location = new System.Drawing.Point(282, 3);
             this.cbxTriggerSource.Name = "cbxTriggerSource";
             this.cbxTriggerSource.Size = new System.Drawing.Size(257, 21);
@@ -799,19 +813,6 @@
     "d locally. If you wish to edit the trigger, you will need to make a local copy o" +
     "f it.";
             this.lblReadOnly.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // cbxSequential
-            // 
-            this.cbxSequential.AutoSize = true;
-            this.cbxSequential.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.tableLayoutPanel15.SetColumnSpan(this.cbxSequential, 3);
-            this.cbxSequential.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxSequential.Location = new System.Drawing.Point(3, 187);
-            this.cbxSequential.Name = "cbxSequential";
-            this.cbxSequential.Size = new System.Drawing.Size(536, 17);
-            this.cbxSequential.TabIndex = 16;
-            this.cbxSequential.Text = "Sequential execution";
-            this.cbxSequential.UseVisualStyleBackColor = true;
             // 
             // TriggerForm
             // 

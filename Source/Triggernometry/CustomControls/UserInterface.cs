@@ -1507,9 +1507,9 @@ namespace Triggernometry.CustomControls
 
         internal void ClearAllVariables()
         {
-            lock (plug.simplevariables)
+            lock (plug.scalarvariables)
             {
-                plug.simplevariables.Clear();
+                plug.scalarvariables.Clear();
             }
             lock (plug.listvariables)
             {

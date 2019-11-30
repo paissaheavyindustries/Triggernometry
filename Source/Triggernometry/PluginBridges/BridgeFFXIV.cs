@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
+using System.Diagnostics;
 using Triggernometry.Variables;
 
 namespace Triggernometry.PluginBridges
@@ -647,6 +648,52 @@ namespace Triggernometry.PluginBridges
                 }
             }
             return NullCombatant;
+        }
+
+        public static Process GetProcess()
+        {
+            try
+            {
+                object plug = GetInstance();
+                if (plug == null)
+                {
+                    return null;
+                }
+                PropertyInfo pi = GetDataRepository(plug);
+                if (pi == null)
+                {
+                    return null;
+                }
+                MethodInfo mi = pi.GetGetMethod();
+                object o = mi.Invoke(plug, null);
+                mi = o.GetType().GetMethod("GetCurrentFFXIVProcess", BindingFlags.Instance | BindingFlags.Public);
+                return (Process)mi.Invoke(o, null);
+            }
+            catch (Exception ex)
+            {
+                LogMessage(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/procexception", "Exception in FFXIV process retrieve: {0}", ex.Message));
+            }
+            return null;
+        }
+
+        public static int GetProcessId()
+        {
+            Process p = GetProcess();
+            if (p == null)
+            {
+                return 0;
+            }            
+            return p.Id;
+        }
+
+        public static string GetProcessName()
+        {
+            Process p = GetProcess();
+            if (p == null)
+            {
+                return "";
+            }
+            return p.ProcessName;
         }
 
     }

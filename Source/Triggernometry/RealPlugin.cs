@@ -19,27 +19,8 @@ using System.Runtime.InteropServices;
 using Triggernometry.Variables;
 
 /*
-- added table variables with column and row based lookups
-- added an action type for file operations (read only, will be expanded in the future)
-- added special variable _actionhistory to check if another action in the context of the same trigger was executed or not
-- added a search function to help locate triggers, actions, or actions properties
-- added option to unset scalar and list variables via regular expressions
-- added option to cache JSON request responses to disk
-- added a sequential execution mode guaranteering action execution order and enabling proper dynamic delays between actions
-- added special variable _env to access environment variables
-- added caching for remote sound files
-- added syntax tvar for accessing table variables (tvar:variablename[column number][row number])
-- added syntax tvarcl for accessing values of a single column by seeking columns by content (tvar:variablename[My Column Header Text][row number])
-- added syntax tvarrl for accessing values of a single row by seeking rows by content (tvar:variablename[My Row Header Text][column number])
-- added syntax etvar for checking the existing of a table variable
-- all clipboard operations are now in Unicode
-- reduced config/export size to about one third of previous size
-- configuration now has options for item-specific cache expiry (by default cache expiry for non-JSON is 360 days, JSON is 7 days)
-- folders with active restrictions applied will now appear purple instead of blue
-- changed trigger autofire and context menu fire to work on live values, instead of test values
-- prevent error messages when plugin is updated without restarting ACT in between
-- fixed a crash that occurred when the action delay resolved into an invalid value
-- fixed an issue that prevented text auras to be disabled via regular expressions
+- implemented new variable editor
+- added special variables _ffxivprocid and _ffxivprocname to retrieve FFXIV process ID and name respectively
 */
 
 namespace Triggernometry
@@ -211,7 +192,7 @@ namespace Triggernometry
         internal List<Trigger> Triggers;
         internal List<Trigger> ActiveTextTriggers;
         internal List<Trigger> ActiveFFXIVNetworkTriggers;
-        internal Dictionary<string, VariableScalar> simplevariables;
+        internal Dictionary<string, VariableScalar> scalarvariables;
         internal Dictionary<string, VariableList> listvariables;
         internal Dictionary<string, VariableTable> tablevariables;
         internal Dictionary<string, Forms.AuraContainerForm> imageauras;
@@ -871,7 +852,7 @@ namespace Triggernometry
             Triggers = new List<Trigger>();
             ActiveTextTriggers = new List<Trigger>();
             ActiveFFXIVNetworkTriggers = new List<Trigger>();
-            simplevariables = new Dictionary<string, VariableScalar>();
+            scalarvariables = new Dictionary<string, VariableScalar>();
             listvariables = new Dictionary<string, VariableList>();
             tablevariables = new Dictionary<string, VariableTable>();
             imageauras = new Dictionary<string, Forms.AuraContainerForm>();
@@ -906,6 +887,8 @@ namespace Triggernometry
                                 ActiveFFXIVNetworkTriggers.Add(t);
                             }
                             break;
+                        case Trigger.TriggerSourceEnum.None:
+                            break;
                     }
                 }
             }
@@ -929,6 +912,8 @@ namespace Triggernometry
                             ActiveFFXIVNetworkTriggers.Remove(t);
                         }
                         break;
+                    case Trigger.TriggerSourceEnum.None:
+                        break;
                 }
                 switch (newSource)
                 {
@@ -943,6 +928,8 @@ namespace Triggernometry
                         {
                             ActiveFFXIVNetworkTriggers.Add(t);
                         }
+                        break;
+                    case Trigger.TriggerSourceEnum.None:
                         break;
                 }
             }
@@ -971,6 +958,8 @@ namespace Triggernometry
                                 ActiveFFXIVNetworkTriggers.Remove(t);
                             }
                         }
+                        break;
+                    case Trigger.TriggerSourceEnum.None:
                         break;
                 }
                 Triggers.Remove(t);
@@ -1003,7 +992,8 @@ namespace Triggernometry
                         }
                     }
                     break;
-            }
+                case Trigger.TriggerSourceEnum.None:
+                    break;            }
         }
 
         internal void TriggerDisabled(Trigger t)
@@ -1031,6 +1021,8 @@ namespace Triggernometry
                             return;
                         }
                     }
+                    break;
+                case Trigger.TriggerSourceEnum.None:
                     break;
             }
         }

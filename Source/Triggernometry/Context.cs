@@ -249,6 +249,16 @@ namespace Triggernometry
                             val = plug.cfg.FfxivPartyOrdering + " " + plug.cfg.FfxivCustomPartyOrder;
                             found = true;
                         }
+                        else if (x == "_ffxivprocid")
+                        {
+                            val = PluginBridges.BridgeFFXIV.GetProcessId().ToString();
+                            found = true;
+                        }
+                        else if (x == "_ffxivprocname")
+                        {
+                            val = PluginBridges.BridgeFFXIV.GetProcessName();
+                            found = true;
+                        }
                         else if (x == "_incombat")
                         {
                             val = plug != null && plug.InCombatHook() ? "1" : "0";
@@ -340,9 +350,9 @@ namespace Triggernometry
                         else if (x.IndexOf("evar:") == 0)
                         {
                             string varname = x.Substring(5);
-                            lock (plug.simplevariables) // verified
+                            lock (plug.scalarvariables) // verified
                             {
-                                if (plug.simplevariables.ContainsKey(varname) == true)
+                                if (plug.scalarvariables.ContainsKey(varname) == true)
                                 {
                                     val = "1";
                                 }
@@ -388,11 +398,11 @@ namespace Triggernometry
                         else if (x.IndexOf("var:") == 0)
                         {
                             string varname = x.Substring(4);
-                            lock (plug.simplevariables) // verified
+                            lock (plug.scalarvariables) // verified
                             {
-                                if (plug.simplevariables.ContainsKey(varname) == true)
+                                if (plug.scalarvariables.ContainsKey(varname) == true)
                                 {
-                                    val = plug.simplevariables[varname].Value;
+                                    val = plug.scalarvariables[varname].Value;
                                     found = true;
                                 }
                             }

@@ -19,6 +19,7 @@ namespace Triggernometry.CustomControls
         public DataGridViewEx()
         {
             InitializeComponent();
+            DoubleBuffered = true;
             CellBeginEdit += DataGridViewEx_CellBeginEdit;
             CellEndEdit += DataGridViewEx_CellEndEdit;
         }
