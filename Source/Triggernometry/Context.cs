@@ -40,6 +40,7 @@ namespace Triggernometry
         internal bool contextJsonParsed = false;
 
         internal List<int> ActionResults = new List<int>();
+        internal Dictionary<Mutex, int> heldmutices = new Dictionary<Mutex, int>();
 
         internal const double EORZEA_MULTIPLIER = 3600D / 175D;
 
@@ -49,6 +50,11 @@ namespace Triggernometry
 		{
 			namedgroups = new Dictionary<string, string>();
 			numgroups = new List<string>();
+        }
+
+        public override string ToString()
+        {
+            return (trig != null ? trig.LogName : "(no trigger)") + " at " + triggered.ToString();
         }
 
         internal void PushActionResult(int i)
@@ -87,6 +93,10 @@ namespace Triggernometry
         public double EvaluateNumericExpression(LoggerDelegate logger, object o, string expr)
         {
             string exp = ExpandVariables(logger, o, true, expr == null ? "" : expr);
+            if (plug != null)
+            {
+                exp = plug.cfg.PerformSubstitution(exp, Configuration.Substitution.SubstitutionScopeEnum.NumericExpression);
+            }
             lock (mp)
             {
                 return mp.Parse(exp);
@@ -96,6 +106,10 @@ namespace Triggernometry
         public string EvaluateStringExpression(LoggerDelegate logger, object o, string expr)
         {            
             string exp = ExpandVariables(logger, o, false, expr == null ? "" : expr);
+            if (plug != null)
+            {
+                exp = plug.cfg.PerformSubstitution(exp, Configuration.Substitution.SubstitutionScopeEnum.StringExpression);
+            }
             return exp;
         }
 
@@ -202,6 +216,10 @@ namespace Triggernometry
                         if (gn >= 0 && gn < numgroups.Count)
                         {
                             val = numgroups[gn];
+                            if (plug != null)
+                            {
+                                val = plug.cfg.PerformSubstitution(val, Configuration.Substitution.SubstitutionScopeEnum.CaptureGroup);
+                            }
                             found = true;
                         }
                     }
@@ -210,6 +228,10 @@ namespace Triggernometry
                         if (namedgroups.ContainsKey(x) == true)
                         {
                             val = namedgroups[x];
+                            if (plug != null)
+                            {
+                                val = plug.cfg.PerformSubstitution(val, Configuration.Substitution.SubstitutionScopeEnum.CaptureGroup);
+                            }
                             found = true;
                         }
                     }

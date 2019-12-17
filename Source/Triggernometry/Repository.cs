@@ -70,6 +70,8 @@ namespace Triggernometry
 
         internal RepositoryFolder Parent { get; set; }
 
+        internal List<Trigger> ReadmeTriggers = new List<Trigger>();
+
         [XmlAttribute]
         public string Address { get; set; }
         [XmlAttribute]

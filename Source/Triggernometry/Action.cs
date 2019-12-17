@@ -155,6 +155,42 @@ namespace Triggernometry
         [XmlAttribute]
         public int OrderNumber;
 
+        internal string _Description { get; set; } = "";
+        [XmlAttribute]
+        public string Description
+        {
+            get
+            {
+                if (_Description == "")
+                {
+                    return null;
+                }
+                return _Description;
+            }
+            set
+            {
+                _Description = value;
+            }
+        }
+
+        internal bool _DescriptionOverride { get; set; } = false;
+        [XmlAttribute]
+        public string DescriptionOverride
+        {
+            get
+            {
+                if (_DescriptionOverride == false)
+                {
+                    return null;
+                }
+                return _DescriptionOverride.ToString();
+            }
+            set
+            {
+                _DescriptionOverride = Boolean.Parse(value);
+            }
+        }
+
         public ConditionGroup Condition { get; set; }
 
         #endregion
@@ -354,6 +390,10 @@ namespace Triggernometry
         internal string GetDescription(Context ctx)
         {
             string temp = "";
+            if (_DescriptionOverride == true)
+            {
+                return _Description;
+            }
             if (_ExecutionDelayExpression.Length > 0 && _ExecutionDelayExpression != "0")
             {
                 temp += I18n.Translate("internal/Action/descafterdelay", "after ({0}) ms", _ExecutionDelayExpression);
@@ -517,6 +557,17 @@ namespace Triggernometry
                     break;
                 case ActionTypeEnum.MessageBox:
                     temp += I18n.Translate("internal/Action/descmsgbox", "show a message box saying ({0}) with icon ({1})", _MessageBoxText, _MessageBoxIconType.ToString());
+                    break;
+                case ActionTypeEnum.Mutex:
+                    switch (_MutexOpType)
+                    {
+                        case MutexOpEnum.Release:
+                            temp += I18n.Translate("internal/Action/mutexrelease", "release mutex ({0})", _MutexName);
+                            break;
+                        case MutexOpEnum.Acquire:
+                            temp += I18n.Translate("internal/Action/mutexacquire", "acquire mutex ({0})", _MutexName);
+                            break;
+                    }
                     break;
                 case ActionTypeEnum.ListVariable:
                     switch (_ListVariableOp)
@@ -915,7 +966,7 @@ namespace Triggernometry
             return "";
         }
 
-        private void ExecutionImplementation(Context ctx)
+        private void ExecutionImplementation(RealPlugin.QueuedAction qa, Context ctx)
 		{
 			try
 			{
@@ -1683,6 +1734,28 @@ namespace Triggernometry
                         }
                         break;
                     #endregion
+                    #region Implementation - Mutex
+                    case ActionTypeEnum.Mutex:
+                        {
+                            string mn = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _MutexName);
+                            switch (_MutexOpType)
+                            {
+                                case MutexOpEnum.Acquire:
+                                    {
+                                        RealPlugin.MutexInformation mi = ctx.plug.GetMutex(mn);
+                                        mi.Acquire(ctx);
+                                    }
+                                    break;
+                                case MutexOpEnum.Release:
+                                    {
+                                        RealPlugin.MutexInformation mi = ctx.plug.GetMutex(mn);
+                                        mi.Release(ctx);
+                                    }
+                                    break;
+                            }
+                        }
+                        break;
+                    #endregion
                     #region Implementation - OBS
                     case ActionTypeEnum.ObsControl:
                         if (ctx.plug._obs != null)
@@ -2146,7 +2219,7 @@ namespace Triggernometry
             if (NextAction != null)
             {
                 DateTime dt = DateTime.Now.AddMilliseconds(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, NextAction._ExecutionDelayExpression));
-                ctx.plug.QueueAction(ctx, ctx.trig, NextAction, dt);
+                ctx.plug.QueueAction(ctx, ctx.trig, qa != null ? qa.mutex : null, NextAction, dt);
             }
 		}
 
@@ -2187,7 +2260,7 @@ namespace Triggernometry
             }
         }
 
-        internal void Execute(Context ctx)
+        internal void Execute(RealPlugin.QueuedAction qa, Context ctx)
         {
             if (_Asynchronous == true)
             {
@@ -2198,21 +2271,33 @@ namespace Triggernometry
                     t = new Task(() =>
                     {
                         ct.ThrowIfCancellationRequested();
-                        ExecutionImplementation(ctx);
+                        ExecutionImplementation(qa, ctx);
+                        if (qa != null)
+                        {
+                            qa.ActionFinished();
+                        }
                     });
                 }
                 else
                 {
                     t = new Task(() =>
                     {
-                        ExecutionImplementation(ctx);
+                        ExecutionImplementation(qa, ctx);
+                        if (qa != null)
+                        {
+                            qa.ActionFinished();
+                        }
                     });
                 }
                 t.Start();
             }
             else
             {
-                ExecutionImplementation(ctx);
+                ExecutionImplementation(qa, ctx);
+                if (qa != null)
+                {
+                    qa.ActionFinished();
+                }
             }
         }
 
@@ -2330,6 +2415,10 @@ namespace Triggernometry
             a._TableVariableTarget = _TableVariableTarget;
             a._TableVariableX = _TableVariableX;
             a._TableVariableY = _TableVariableY;
+            a._MutexOpType = _MutexOpType;
+            a._MutexName = _MutexName;
+            a._Description = _Description;
+            a._DescriptionOverride = _DescriptionOverride;
         }
 
         private string PostJson(Context ctx, string url, string json, bool expectNoContent)

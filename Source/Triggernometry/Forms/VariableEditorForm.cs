@@ -12,7 +12,7 @@ using Triggernometry.Variables;
 namespace Triggernometry.Forms
 {
 
-    public partial class VariableEditorForm : Form
+    public partial class VariableEditorForm : MemoryForm<VariableEditorForm>
     {
 
         public string VariableName
@@ -44,6 +44,7 @@ namespace Triggernometry.Forms
             Shown += VariableEditorForm_Shown;
             dgvVariableData.RowHeadersDefaultCellStyle.Padding = new Padding(dgvVariableData.RowHeadersWidth);
             dgvVariableData.RowPostPaint += DgvVariableData_RowPostPaint;
+            RestoredSavedDimensions();
         }
 
         private void VariableEditorForm_Disposed(object sender, EventArgs e)

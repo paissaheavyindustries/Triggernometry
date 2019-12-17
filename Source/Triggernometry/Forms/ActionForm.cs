@@ -156,6 +156,7 @@ namespace Triggernometry.Forms
             SetReadOnly(tabActionCondition);
             SetReadOnly(tabScheduling);
             SetReadOnly(tabDebugging);
+            SetReadOnly(tabDescription);
             panel6.Visible = false;
             panel8.Visible = true;
         }
@@ -318,6 +319,10 @@ namespace Triggernometry.Forms
                 expTvarRow.Expression = "";
                 expTvarTarget.Expression = "";
                 expTvarValue.Expression = "";
+                cbxMutexOp.SelectedIndex = 0;
+                expMutexName.Expression = "";
+                txtDescription.Text = "";
+                chkOverrideDesc.Checked = false;
             }
             else
             {
@@ -529,6 +534,10 @@ namespace Triggernometry.Forms
                 expTvarTarget.Expression = a._TableVariableTarget;
                 expTvarValue.Expression = a._TableVariableExpression;
                 cbxFileOpCache.Checked = a._DiskFileCache;
+                cbxMutexOp.SelectedIndex = (int)a._MutexOpType;
+                expMutexName.Expression = a._MutexName;
+                txtDescription.Text = a._Description;
+                chkOverrideDesc.Checked = a._DescriptionOverride;
             }
         }
 
@@ -726,6 +735,10 @@ namespace Triggernometry.Forms
             a._TableVariableY = expTvarRow.Expression;
             a._TableVariableTarget = expTvarTarget.Expression;
             a._TableVariableExpression = expTvarValue.Expression;
+            a._MutexOpType = (Action.MutexOpEnum)cbxMutexOp.SelectedIndex;
+            a._MutexName = expMutexName.Expression;
+            a._Description = txtDescription.Text;
+            a._DescriptionOverride = chkOverrideDesc.Checked;
         }
 
         private void TestAction(bool liveValues)
@@ -739,7 +752,7 @@ namespace Triggernometry.Forms
             ctx.ttshook = plug.TtsPlaybackSmart;
             SettingsToAction(a);
             ctx.triggered = DateTime.UtcNow;
-            a.Execute(ctx);		
+            a.Execute(null, ctx);		
 		}
 
         private void button6_Click(object sender, EventArgs e)
@@ -1137,7 +1150,7 @@ namespace Triggernometry.Forms
             a.ActionType = Action.ActionTypeEnum.Aura;
             a._AuraOp = Action.AuraOpEnum.DeactivateAura;
             ctx.triggered = DateTime.UtcNow;
-            a.Execute(ctx);
+            a.Execute(null, ctx);
         }
 
         private void btnTextAuraHide_Click(object sender, EventArgs e)
@@ -1151,7 +1164,7 @@ namespace Triggernometry.Forms
             a.ActionType = Action.ActionTypeEnum.TextAura;
             a._AuraOp = Action.AuraOpEnum.DeactivateAura;
             ctx.triggered = DateTime.UtcNow;
-            a.Execute(ctx);
+            a.Execute(null, ctx);
         }
 
         private void timer1_Tick(object sender, EventArgs e)

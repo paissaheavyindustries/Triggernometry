@@ -219,6 +219,21 @@ namespace Triggernometry
                 (_FFXIVJobFilterEnabled == true)
             );
         }
+
+        public bool PassesZoneRestriction(string zone)
+        {
+            bool ret = true;
+            Folder f = this;
+            while (f != null && ret == true)
+            {
+                if (f._ZoneFilterEnabled == true)
+                {
+                    ret = f.rexz != null ? f.rexz.IsMatch(zone) : false;
+                }
+                f = f.Parent;
+            }
+            return ret;
+        }
 		
 		public FilterFailReason PassesFilter(string zone, string evtext)
 		{

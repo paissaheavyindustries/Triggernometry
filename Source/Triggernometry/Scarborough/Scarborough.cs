@@ -37,6 +37,7 @@ namespace Scarborough
             public ActionTypeEnum Action { get; set; }
             public ScarboroughItem Item { get; set; }
             public ItemTypeEnum ItemType { get; set; }
+            public ManualResetEvent Completed { get; set; } = null;
             public string Id { get; set; }
 
         }
@@ -91,6 +92,10 @@ namespace Scarborough
                     {
                         ItemAction ia = ItemActions.Dequeue();
                         ExecuteAction(ia);
+                        if (ia.Completed != null)
+                        {
+                            ia.Completed.Set();
+                        }
                     }
                     catch (Exception)
                     {
@@ -99,7 +104,7 @@ namespace Scarborough
             }
         }
 
-        private void ExecuteAction(ItemAction ia)
+        internal void ExecuteAction(ItemAction ia)
         {
             switch (ia.Action)
             {

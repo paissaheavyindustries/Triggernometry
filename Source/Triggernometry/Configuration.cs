@@ -11,6 +11,65 @@ namespace Triggernometry
     public class Configuration
     {
 
+        public class Substitution : IComparable
+        {
+
+            [Flags]
+            public enum SubstitutionScopeEnum
+            {
+                CaptureGroup =  1,
+                NumericExpression = 2,
+                StringExpression = 4,
+                TextToSpeech = 8
+            }
+
+            [XmlAttribute]
+            public string SearchFor { get; set; }
+
+            [XmlAttribute]
+            public string ReplaceWith { get; set; }
+
+            [XmlAttribute]
+            public SubstitutionScopeEnum Scope { get; set; }
+
+            public string Replace(string input)
+            {
+                return input.Replace(SearchFor, ReplaceWith);
+            }
+
+            public int CompareTo(object obj)
+            {
+                Substitution b = (Substitution)obj;
+                int x = SearchFor.CompareTo(b.SearchFor);
+                if (x != 0)
+                {
+                    return x;
+                }
+                x = ReplaceWith.CompareTo(b.ReplaceWith);
+                if (x != 0)
+                {
+                    return x;
+                }
+                return Scope.CompareTo(b.Scope);
+            }
+        }
+
+        public string PerformSubstitution(string input, Substitution.SubstitutionScopeEnum scope)
+        {
+            if (Substitutions.Count > 0)
+            {
+                var reps = from ix in Substitutions where (ix.Scope & scope) == scope select ix;
+                if (reps.Count() > 0)
+                {
+                    foreach (Configuration.Substitution rep in reps)
+                    {
+                        input = rep.Replace(input);
+                    }
+                }
+            }
+            return input;
+        }
+
         public Folder Root;
         public RepositoryFolder RepositoryRoot;
 
@@ -38,12 +97,15 @@ namespace Triggernometry
 
         internal bool _ShowWelcomeHasBeenSet = false;
 
+        public List<Substitution> Substitutions { get; set; }
+
         private bool _ShowWelcome { get; set; }
         [XmlAttribute]
         public bool ShowWelcome
         {
             get
             {
+                
                 return _ShowWelcome;
             }
             set
@@ -240,6 +302,7 @@ namespace Triggernometry
             CacheJsonExpiry = 10080;
             CacheRepoExpiry = 518400;
             CacheFileExpiry = 518400;
+            Substitutions = new List<Substitution>();
         }
         /*
         Paladin		19

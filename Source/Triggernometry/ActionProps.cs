@@ -35,7 +35,8 @@ namespace Triggernometry
             GenericJson,
             WindowMessage,
             DiskFile,
-            TableVariable
+            TableVariable,
+            Mutex
         }
 
         public enum VariableOpEnum
@@ -170,6 +171,12 @@ namespace Triggernometry
         {
             SendKeys,
             WindowMessage
+        }
+
+        public enum MutexOpEnum
+        {
+            Release,
+            Acquire
         }
 
         [Flags]
@@ -1179,6 +1186,48 @@ namespace Triggernometry
             set
             {
                 _MessageBoxText = value;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Mutex
+
+        internal MutexOpEnum _MutexOpType { get; set; } = MutexOpEnum.Release;
+        [XmlAttribute]
+        public string MutexOpType
+        {
+            get
+            {
+                if (_MutexOpType != MutexOpEnum.Release)
+                {
+                    return _MutexOpType.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _MutexOpType = (MutexOpEnum)Enum.Parse(typeof(MutexOpEnum), value);
+            }
+        }
+
+        internal string _MutexName = "";
+        [XmlAttribute]
+        public string MutexName
+        {
+            get
+            {
+                if (_MutexName == "")
+                {
+                    return null;
+                }
+                return _MutexName;
+            }
+            set
+            {
+                _MutexName = value;
             }
         }
 

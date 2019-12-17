@@ -69,6 +69,8 @@
             this.cndCondition = new Triggernometry.CustomControls.ConditionViewer();
             this.tabScheduling = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
+            this.expMutexName = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.lblMutexCapture = new System.Windows.Forms.Label();
             this.cbxSequential = new System.Windows.Forms.CheckBox();
             this.cbxEditAutofire = new System.Windows.Forms.CheckBox();
             this.cbxTriggerSource = new System.Windows.Forms.ComboBox();
@@ -87,6 +89,8 @@
             this.cbxLoggingLevel = new System.Windows.Forms.ComboBox();
             this.lblLoggingLevel = new System.Windows.Forms.Label();
             this.tabDescription = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel23 = new System.Windows.Forms.TableLayoutPanel();
+            this.chkReadmeTrigger = new System.Windows.Forms.CheckBox();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.panel5 = new System.Windows.Forms.Panel();
             this.lblReadOnly = new System.Windows.Forms.Label();
@@ -104,6 +108,7 @@
             this.tabDebugging.SuspendLayout();
             this.tableLayoutPanel16.SuspendLayout();
             this.tabDescription.SuspendLayout();
+            this.tableLayoutPanel23.SuspendLayout();
             this.panel5.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -128,7 +133,7 @@
             this.dgvActions.ShowCellErrors = false;
             this.dgvActions.ShowEditingIcon = false;
             this.dgvActions.ShowRowErrors = false;
-            this.dgvActions.Size = new System.Drawing.Size(550, 193);
+            this.dgvActions.Size = new System.Drawing.Size(650, 293);
             this.dgvActions.TabIndex = 0;
             this.dgvActions.VirtualMode = true;
             this.dgvActions.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvActions_CellClick);
@@ -258,7 +263,7 @@
             this.btnRemoveAction});
             this.toolStrip2.Location = new System.Drawing.Point(3, 3);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(550, 25);
+            this.toolStrip2.Size = new System.Drawing.Size(650, 25);
             this.toolStrip2.TabIndex = 1;
             // 
             // btnAddAction
@@ -325,7 +330,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(10, 95);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(564, 10);
+            this.panel1.Size = new System.Drawing.Size(664, 10);
             this.panel1.TabIndex = 9;
             // 
             // grpGeneral
@@ -336,7 +341,7 @@
             this.grpGeneral.Location = new System.Drawing.Point(10, 10);
             this.grpGeneral.Name = "grpGeneral";
             this.grpGeneral.Padding = new System.Windows.Forms.Padding(10);
-            this.grpGeneral.Size = new System.Drawing.Size(564, 85);
+            this.grpGeneral.Size = new System.Drawing.Size(664, 85);
             this.grpGeneral.TabIndex = 8;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = " General settings ";
@@ -358,7 +363,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(544, 52);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(644, 52);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // lblRegexp
@@ -390,7 +395,7 @@
             this.txtName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtName.Location = new System.Drawing.Point(106, 3);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(435, 20);
+            this.txtName.Size = new System.Drawing.Size(535, 20);
             this.txtName.TabIndex = 1;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
@@ -403,15 +408,15 @@
             this.txtRegexp.Location = new System.Drawing.Point(106, 29);
             this.txtRegexp.Name = "txtRegexp";
             this.txtRegexp.ReadOnly = false;
-            this.txtRegexp.Size = new System.Drawing.Size(435, 20);
+            this.txtRegexp.Size = new System.Drawing.Size(535, 20);
             this.txtRegexp.TabIndex = 3;
             // 
             // panel3
             // 
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(10, 406);
+            this.panel3.Location = new System.Drawing.Point(10, 506);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(564, 10);
+            this.panel3.Size = new System.Drawing.Size(664, 10);
             this.panel3.TabIndex = 11;
             // 
             // panel4
@@ -419,16 +424,16 @@
             this.panel4.Controls.Add(this.btnCancel);
             this.panel4.Controls.Add(this.btnOk);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel4.Location = new System.Drawing.Point(10, 416);
+            this.panel4.Location = new System.Drawing.Point(10, 516);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(564, 35);
+            this.panel4.Size = new System.Drawing.Size(664, 35);
             this.panel4.TabIndex = 12;
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnCancel.Location = new System.Drawing.Point(414, 0);
+            this.btnCancel.Location = new System.Drawing.Point(514, 0);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(150, 35);
             this.btnCancel.TabIndex = 1;
@@ -458,7 +463,7 @@
             this.tbcMain.Location = new System.Drawing.Point(10, 156);
             this.tbcMain.Name = "tbcMain";
             this.tbcMain.SelectedIndex = 0;
-            this.tbcMain.Size = new System.Drawing.Size(564, 250);
+            this.tbcMain.Size = new System.Drawing.Size(664, 350);
             this.tbcMain.TabIndex = 13;
             // 
             // tabTriggerActions
@@ -468,7 +473,7 @@
             this.tabTriggerActions.Location = new System.Drawing.Point(4, 22);
             this.tabTriggerActions.Name = "tabTriggerActions";
             this.tabTriggerActions.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTriggerActions.Size = new System.Drawing.Size(556, 224);
+            this.tabTriggerActions.Size = new System.Drawing.Size(656, 324);
             this.tabTriggerActions.TabIndex = 0;
             this.tabTriggerActions.Text = "Trigger actions";
             this.tabTriggerActions.UseVisualStyleBackColor = true;
@@ -479,7 +484,7 @@
             this.tabTriggerCondition.Location = new System.Drawing.Point(4, 22);
             this.tabTriggerCondition.Name = "tabTriggerCondition";
             this.tabTriggerCondition.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTriggerCondition.Size = new System.Drawing.Size(556, 224);
+            this.tabTriggerCondition.Size = new System.Drawing.Size(656, 324);
             this.tabTriggerCondition.TabIndex = 5;
             this.tabTriggerCondition.Text = "Trigger condition";
             this.tabTriggerCondition.UseVisualStyleBackColor = true;
@@ -490,7 +495,7 @@
             this.cndCondition.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cndCondition.Location = new System.Drawing.Point(3, 3);
             this.cndCondition.Name = "cndCondition";
-            this.cndCondition.Size = new System.Drawing.Size(550, 218);
+            this.cndCondition.Size = new System.Drawing.Size(650, 318);
             this.cndCondition.TabIndex = 4;
             // 
             // tabScheduling
@@ -499,7 +504,7 @@
             this.tabScheduling.Location = new System.Drawing.Point(4, 22);
             this.tabScheduling.Name = "tabScheduling";
             this.tabScheduling.Padding = new System.Windows.Forms.Padding(7);
-            this.tabScheduling.Size = new System.Drawing.Size(556, 224);
+            this.tabScheduling.Size = new System.Drawing.Size(656, 324);
             this.tabScheduling.TabIndex = 2;
             this.tabScheduling.Text = "Scheduling";
             this.tabScheduling.UseVisualStyleBackColor = true;
@@ -511,8 +516,10 @@
             this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
-            this.tableLayoutPanel15.Controls.Add(this.cbxSequential, 0, 7);
-            this.tableLayoutPanel15.Controls.Add(this.cbxEditAutofire, 0, 6);
+            this.tableLayoutPanel15.Controls.Add(this.expMutexName, 1, 6);
+            this.tableLayoutPanel15.Controls.Add(this.lblMutexCapture, 0, 6);
+            this.tableLayoutPanel15.Controls.Add(this.cbxSequential, 0, 8);
+            this.tableLayoutPanel15.Controls.Add(this.cbxEditAutofire, 0, 7);
             this.tableLayoutPanel15.Controls.Add(this.cbxTriggerSource, 1, 0);
             this.tableLayoutPanel15.Controls.Add(this.lblTriggerSource, 0, 0);
             this.tableLayoutPanel15.Controls.Add(this.cbxRefireWithinPeriod, 1, 4);
@@ -527,7 +534,7 @@
             this.tableLayoutPanel15.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel15.Location = new System.Drawing.Point(7, 7);
             this.tableLayoutPanel15.Name = "tableLayoutPanel15";
-            this.tableLayoutPanel15.RowCount = 8;
+            this.tableLayoutPanel15.RowCount = 9;
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -536,8 +543,33 @@
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel15.Size = new System.Drawing.Size(542, 207);
+            this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel15.Size = new System.Drawing.Size(642, 233);
             this.tableLayoutPanel15.TabIndex = 6;
+            // 
+            // expMutexName
+            // 
+            this.expMutexName.AutoSize = true;
+            this.tableLayoutPanel15.SetColumnSpan(this.expMutexName, 2);
+            this.expMutexName.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expMutexName.Expression = "";
+            this.expMutexName.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            this.expMutexName.Location = new System.Drawing.Point(282, 164);
+            this.expMutexName.Name = "expMutexName";
+            this.expMutexName.ReadOnly = false;
+            this.expMutexName.Size = new System.Drawing.Size(357, 20);
+            this.expMutexName.TabIndex = 18;
+            // 
+            // lblMutexCapture
+            // 
+            this.lblMutexCapture.AutoSize = true;
+            this.lblMutexCapture.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblMutexCapture.Location = new System.Drawing.Point(3, 161);
+            this.lblMutexCapture.Name = "lblMutexCapture";
+            this.lblMutexCapture.Size = new System.Drawing.Size(273, 26);
+            this.lblMutexCapture.TabIndex = 17;
+            this.lblMutexCapture.Text = "Mutex to capture on fire";
+            this.lblMutexCapture.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // cbxSequential
             // 
@@ -545,9 +577,9 @@
             this.cbxSequential.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tableLayoutPanel15.SetColumnSpan(this.cbxSequential, 3);
             this.cbxSequential.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxSequential.Location = new System.Drawing.Point(3, 187);
+            this.cbxSequential.Location = new System.Drawing.Point(3, 213);
             this.cbxSequential.Name = "cbxSequential";
-            this.cbxSequential.Size = new System.Drawing.Size(536, 17);
+            this.cbxSequential.Size = new System.Drawing.Size(636, 17);
             this.cbxSequential.TabIndex = 16;
             this.cbxSequential.Text = "Sequential execution";
             this.cbxSequential.UseVisualStyleBackColor = true;
@@ -558,9 +590,9 @@
             this.cbxEditAutofire.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tableLayoutPanel15.SetColumnSpan(this.cbxEditAutofire, 3);
             this.cbxEditAutofire.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxEditAutofire.Location = new System.Drawing.Point(3, 164);
+            this.cbxEditAutofire.Location = new System.Drawing.Point(3, 190);
             this.cbxEditAutofire.Name = "cbxEditAutofire";
-            this.cbxEditAutofire.Size = new System.Drawing.Size(536, 17);
+            this.cbxEditAutofire.Size = new System.Drawing.Size(636, 17);
             this.cbxEditAutofire.TabIndex = 15;
             this.cbxEditAutofire.Text = "Autofire trigger after it has been edited";
             this.cbxEditAutofire.UseVisualStyleBackColor = true;
@@ -577,7 +609,7 @@
             "None"});
             this.cbxTriggerSource.Location = new System.Drawing.Point(282, 3);
             this.cbxTriggerSource.Name = "cbxTriggerSource";
-            this.cbxTriggerSource.Size = new System.Drawing.Size(257, 21);
+            this.cbxTriggerSource.Size = new System.Drawing.Size(357, 21);
             this.cbxTriggerSource.TabIndex = 14;
             // 
             // lblTriggerSource
@@ -602,7 +634,7 @@
             "Do not allow the trigger to fire again"});
             this.cbxRefireWithinPeriod.Location = new System.Drawing.Point(282, 111);
             this.cbxRefireWithinPeriod.Name = "cbxRefireWithinPeriod";
-            this.cbxRefireWithinPeriod.Size = new System.Drawing.Size(257, 21);
+            this.cbxRefireWithinPeriod.Size = new System.Drawing.Size(357, 21);
             this.cbxRefireWithinPeriod.TabIndex = 12;
             // 
             // lblRefireWithinPeriod
@@ -627,7 +659,7 @@
             "...and do not allow the trigger to fire again"});
             this.cbxRefireOption2.Location = new System.Drawing.Point(282, 57);
             this.cbxRefireOption2.Name = "cbxRefireOption2";
-            this.cbxRefireOption2.Size = new System.Drawing.Size(257, 21);
+            this.cbxRefireOption2.Size = new System.Drawing.Size(357, 21);
             this.cbxRefireOption2.TabIndex = 10;
             // 
             // lblScheduleFrom
@@ -664,7 +696,7 @@
             "The end of the trigger refire period"});
             this.cbxScheduleFrom.Location = new System.Drawing.Point(282, 84);
             this.cbxScheduleFrom.Name = "cbxScheduleFrom";
-            this.cbxScheduleFrom.Size = new System.Drawing.Size(257, 21);
+            this.cbxScheduleFrom.Size = new System.Drawing.Size(357, 21);
             this.cbxScheduleFrom.TabIndex = 4;
             // 
             // cbxRefireOption1
@@ -678,7 +710,7 @@
             "Keep all actions previously queued from this trigger..."});
             this.cbxRefireOption1.Location = new System.Drawing.Point(282, 30);
             this.cbxRefireOption1.Name = "cbxRefireOption1";
-            this.cbxRefireOption1.Size = new System.Drawing.Size(257, 21);
+            this.cbxRefireOption1.Size = new System.Drawing.Size(357, 21);
             this.cbxRefireOption1.TabIndex = 3;
             // 
             // lblRefireOption1
@@ -702,7 +734,7 @@
             this.expRefirePeriod.Location = new System.Drawing.Point(282, 138);
             this.expRefirePeriod.Name = "expRefirePeriod";
             this.expRefirePeriod.ReadOnly = false;
-            this.expRefirePeriod.Size = new System.Drawing.Size(257, 20);
+            this.expRefirePeriod.Size = new System.Drawing.Size(357, 20);
             this.expRefirePeriod.TabIndex = 7;
             // 
             // tabDebugging
@@ -711,7 +743,7 @@
             this.tabDebugging.Location = new System.Drawing.Point(4, 22);
             this.tabDebugging.Name = "tabDebugging";
             this.tabDebugging.Padding = new System.Windows.Forms.Padding(7);
-            this.tabDebugging.Size = new System.Drawing.Size(556, 224);
+            this.tabDebugging.Size = new System.Drawing.Size(656, 324);
             this.tabDebugging.TabIndex = 3;
             this.tabDebugging.Text = "Debugging";
             this.tabDebugging.UseVisualStyleBackColor = true;
@@ -732,7 +764,7 @@
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
-            this.tableLayoutPanel16.Size = new System.Drawing.Size(542, 27);
+            this.tableLayoutPanel16.Size = new System.Drawing.Size(642, 27);
             this.tableLayoutPanel16.TabIndex = 3;
             // 
             // cbxLoggingLevel
@@ -749,7 +781,7 @@
             "(inherit from configuration)"});
             this.cbxLoggingLevel.Location = new System.Drawing.Point(115, 3);
             this.cbxLoggingLevel.Name = "cbxLoggingLevel";
-            this.cbxLoggingLevel.Size = new System.Drawing.Size(424, 21);
+            this.cbxLoggingLevel.Size = new System.Drawing.Size(524, 21);
             this.cbxLoggingLevel.TabIndex = 3;
             // 
             // lblLoggingLevel
@@ -765,25 +797,54 @@
             // 
             // tabDescription
             // 
-            this.tabDescription.Controls.Add(this.txtDescription);
+            this.tabDescription.Controls.Add(this.tableLayoutPanel23);
             this.tabDescription.Location = new System.Drawing.Point(4, 22);
             this.tabDescription.Name = "tabDescription";
             this.tabDescription.Padding = new System.Windows.Forms.Padding(7);
-            this.tabDescription.Size = new System.Drawing.Size(556, 224);
+            this.tabDescription.Size = new System.Drawing.Size(656, 324);
             this.tabDescription.TabIndex = 4;
             this.tabDescription.Text = "Description";
             this.tabDescription.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel23
+            // 
+            this.tableLayoutPanel23.AutoSize = true;
+            this.tableLayoutPanel23.ColumnCount = 1;
+            this.tableLayoutPanel23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel23.Controls.Add(this.chkReadmeTrigger, 0, 1);
+            this.tableLayoutPanel23.Controls.Add(this.txtDescription, 0, 0);
+            this.tableLayoutPanel23.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel23.Location = new System.Drawing.Point(7, 7);
+            this.tableLayoutPanel23.Name = "tableLayoutPanel23";
+            this.tableLayoutPanel23.RowCount = 2;
+            this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel23.Size = new System.Drawing.Size(642, 310);
+            this.tableLayoutPanel23.TabIndex = 3;
+            // 
+            // chkReadmeTrigger
+            // 
+            this.chkReadmeTrigger.AutoSize = true;
+            this.chkReadmeTrigger.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkReadmeTrigger.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkReadmeTrigger.Location = new System.Drawing.Point(3, 288);
+            this.chkReadmeTrigger.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
+            this.chkReadmeTrigger.Name = "chkReadmeTrigger";
+            this.chkReadmeTrigger.Size = new System.Drawing.Size(637, 17);
+            this.chkReadmeTrigger.TabIndex = 8;
+            this.chkReadmeTrigger.Text = "Specify trigger as readme for repositories";
+            this.chkReadmeTrigger.UseVisualStyleBackColor = true;
             // 
             // txtDescription
             // 
             this.txtDescription.AcceptsReturn = true;
             this.txtDescription.AcceptsTab = true;
             this.txtDescription.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtDescription.Location = new System.Drawing.Point(7, 7);
+            this.txtDescription.Location = new System.Drawing.Point(3, 3);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtDescription.Size = new System.Drawing.Size(542, 210);
+            this.txtDescription.Size = new System.Drawing.Size(636, 277);
             this.txtDescription.TabIndex = 0;
             this.txtDescription.WordWrap = false;
             // 
@@ -795,7 +856,7 @@
             this.panel5.Location = new System.Drawing.Point(10, 105);
             this.panel5.Name = "panel5";
             this.panel5.Padding = new System.Windows.Forms.Padding(0, 0, 0, 10);
-            this.panel5.Size = new System.Drawing.Size(564, 51);
+            this.panel5.Size = new System.Drawing.Size(664, 51);
             this.panel5.TabIndex = 14;
             this.panel5.Visible = false;
             // 
@@ -807,7 +868,7 @@
             this.lblReadOnly.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblReadOnly.Location = new System.Drawing.Point(0, 0);
             this.lblReadOnly.Name = "lblReadOnly";
-            this.lblReadOnly.Size = new System.Drawing.Size(564, 41);
+            this.lblReadOnly.Size = new System.Drawing.Size(664, 41);
             this.lblReadOnly.TabIndex = 0;
             this.lblReadOnly.Text = "You are in read-only mode, as the configuration of remote triggers can\'t be edite" +
     "d locally. If you wish to edit the trigger, you will need to make a local copy o" +
@@ -820,7 +881,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(584, 461);
+            this.ClientSize = new System.Drawing.Size(684, 561);
             this.Controls.Add(this.tbcMain);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.panel1);
@@ -828,7 +889,7 @@
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel4);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.MinimumSize = new System.Drawing.Size(500, 500);
+            this.MinimumSize = new System.Drawing.Size(700, 600);
             this.Name = "TriggerForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.ShowInTaskbar = false;
@@ -857,6 +918,8 @@
             this.tableLayoutPanel16.PerformLayout();
             this.tabDescription.ResumeLayout(false);
             this.tabDescription.PerformLayout();
+            this.tableLayoutPanel23.ResumeLayout(false);
+            this.tableLayoutPanel23.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -924,5 +987,9 @@
         private System.Windows.Forms.Label lblReadOnly;
         private System.Windows.Forms.CheckBox cbxEditAutofire;
         private System.Windows.Forms.CheckBox cbxSequential;
+        private CustomControls.ExpressionTextBox expMutexName;
+        private System.Windows.Forms.Label lblMutexCapture;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel23;
+        private System.Windows.Forms.CheckBox chkReadmeTrigger;
     }
 }

@@ -22,7 +22,7 @@ namespace TriggernometryProxy
         private bool CornerPopupVisible = false;
         private Control CornerPopup = null;
         private bool complained = false;
-
+        
         public ProxyPlugin()
         {
             CosturaUtility.Initialize();
@@ -185,7 +185,7 @@ namespace TriggernometryProxy
         {
             Instance.path = Path.Combine(ActGlobals.oFormActMain.AppDataFolder.FullName, "Config");
             Instance.pluginPath = Instance.path;
-            string name = null;
+            string name = null;            
             foreach (ActPluginData p in ActGlobals.oFormActMain.ActPlugins)
             {
                 if (p.pluginObj == this)
@@ -325,8 +325,8 @@ namespace TriggernometryProxy
                     {
                         ActPluginPrevious = p;
                         System.Diagnostics.FileVersionInfo vi = System.Diagnostics.FileVersionInfo.GetVersionInfo(p.pluginFile.FullName);
-                        int[] expectedActVer = new int[4] { 2, 0, 1, 5 };
-                        string expectedActVers = "2.0.1.5";
+                        int[] expectedActVer = new int[4] { 2, 0, 4, 6 };
+                        string expectedActVers = "2.0.4.6";
                         int[] currentActVer = new int[4] { vi.FileMajorPart, vi.FileMinorPart, vi.FileBuildPart, vi.FilePrivatePart };                        
                         for (int i = 0; i < 4; i++)
                         {

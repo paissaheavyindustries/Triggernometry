@@ -19,6 +19,7 @@ namespace Triggernometry.Forms
         bool cancomplain;
         internal RealPlugin plug;
         private bool firstchange = true;
+        private List<Configuration.Substitution> subs = new List<Configuration.Substitution>();
 
         public ConfigurationForm()
         {
@@ -57,6 +58,7 @@ namespace Triggernometry.Forms
                 nudCacheJsonExpiry.Value = 10080;
                 nudCacheRepoExpiry.Value = 518400;
                 nudCacheFileExpiry.Value = 518400;
+                dgvSubstitutions.RowCount = 0;
             }
             else
             {
@@ -84,6 +86,9 @@ namespace Triggernometry.Forms
                 dummy = (int)nudCacheJsonExpiry.Value;
                 nudCacheRepoExpiry.Value = a.CacheRepoExpiry;
                 nudCacheFileExpiry.Value = a.CacheFileExpiry;
+                subs.AddRange(a.Substitutions);
+                subs.Sort();
+                dgvSubstitutions.RowCount = a.Substitutions.Count;
                 SetupJobOrder(a);
             }
             if (a.StartupTriggerType == Configuration.StartupTriggerTypeEnum.Trigger)
@@ -166,6 +171,8 @@ namespace Triggernometry.Forms
                 temp.Add(oi.JobId.ToString());
             }
             a.FfxivCustomPartyOrder = String.Join(", ", temp);
+            a.Substitutions.Clear();
+            a.Substitutions.AddRange(subs);
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
@@ -571,6 +578,175 @@ namespace Triggernometry.Forms
             {
                 Process.Start("explorer.exe", path);
             }
+        }
+
+        private void dgvSubstitutions_SelectionChanged(object sender, EventArgs e)
+        {
+            btnSubEdit.Enabled = (dgvSubstitutions.SelectedRows.Count == 1);
+            btnSubRemove.Enabled = (dgvSubstitutions.SelectedRows.Count > 0);
+        }
+
+        private void dgvSubstitutions_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
+        {
+            if (e.RowIndex >= subs.Count)
+            {
+                return;
+            }
+            Configuration.Substitution sub = subs.ElementAt(e.RowIndex);
+            switch (e.ColumnIndex)
+            {
+                case 0:
+                    e.Value = sub.SearchFor;
+                    break;
+                case 1:
+                    e.Value = sub.ReplaceWith;
+                    break;
+                case 2:
+                    {
+                        List<string> items = new List<string>();
+                        if ((sub.Scope & Configuration.Substitution.SubstitutionScopeEnum.CaptureGroup) ==  Configuration.Substitution.SubstitutionScopeEnum.CaptureGroup)
+                        {
+                            items.Add(I18n.Translate("internal/ConfigurationForm/subsregexgroup", "capture groups"));
+                        }
+                        if ((sub.Scope & Configuration.Substitution.SubstitutionScopeEnum.NumericExpression) == Configuration.Substitution.SubstitutionScopeEnum.NumericExpression)
+                        {
+                            items.Add(I18n.Translate("internal/ConfigurationForm/subsnumexpr", "numeric expressions"));
+                        }
+                        if ((sub.Scope & Configuration.Substitution.SubstitutionScopeEnum.StringExpression) == Configuration.Substitution.SubstitutionScopeEnum.StringExpression)
+                        {
+                            items.Add(I18n.Translate("internal/ConfigurationForm/subsstrexpr", "string expressions"));
+                        }
+                        if ((sub.Scope & Configuration.Substitution.SubstitutionScopeEnum.TextToSpeech) == Configuration.Substitution.SubstitutionScopeEnum.TextToSpeech)
+                        {
+                            items.Add(I18n.Translate("internal/ConfigurationForm/substts", "text to speech"));
+                        }
+                        if (items.Count > 0)
+                        {
+                            e.Value = Capitalize(String.Join(", ", items));
+                        }
+                        else
+                        {
+                            e.Value = I18n.Translate("internal/ConfigurationForm/subsnone", "None (inactive)");
+                        }
+                    }                    
+                    break;
+            }
+        }
+
+        private string Capitalize(string str)
+        {
+            if (str == null)
+            {
+                return null;
+            }
+            if (str.Length > 1)
+            {
+                return char.ToUpper(str[0]) + str.Substring(1);
+            }
+            return str.ToUpper();
+        }
+
+        private void btnSubAdd_Click(object sender, EventArgs e)
+        {
+            using (Forms.SubstitutionForm sf = new Forms.SubstitutionForm())
+            {
+                sf.SettingsFromSubstitution(null);
+                sf.Text = I18n.Translate("internal/UserInterface/addsubstitution", "Add new substitution");
+                sf.btnOk.Text = I18n.Translate("internal/UserInterface/add", "Add");
+                if (sf.ShowDialog() == DialogResult.OK)
+                {
+                    Configuration.Substitution sub = new Configuration.Substitution();
+                    sf.SettingsToSubstitution(sub);
+                    subs.Add(sub);
+                    subs.Sort();
+                    dgvSubstitutions.RowCount = subs.Count;
+                    dgvSubstitutions.Refresh();
+                    for (int i = 0; i < subs.Count; i++)
+                    {
+                        if (subs[i].CompareTo(sub) == 0)
+                        {
+                            dgvSubstitutions.ClearSelection();
+                            dgvSubstitutions.Rows[i].Selected = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void btnSubEdit_Click(object sender, EventArgs e)
+        {
+            using (Forms.SubstitutionForm sf = new Forms.SubstitutionForm())
+            {
+                DataGridViewRow r = dgvSubstitutions.SelectedRows[0];
+                Configuration.Substitution sub = subs[r.Index];
+                sf.SettingsFromSubstitution(sub);
+                sf.Text = I18n.Translate("internal/UserInterface/editsubstitution", "Edit substitution '{0}'", sub.SearchFor);
+                sf.btnOk.Text = I18n.Translate("internal/UserInterface/savechanges", "Save changes");
+                if (sf.ShowDialog() == DialogResult.OK)
+                {
+                    sf.SettingsToSubstitution(sub);
+                    subs.Sort();
+                    dgvSubstitutions.Refresh();
+                    for (int i = 0; i < subs.Count; i++)
+                    {
+                        if (subs[i].CompareTo(sub) == 0)
+                        {
+                            dgvSubstitutions.ClearSelection();
+                            dgvSubstitutions.Rows[i].Selected = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void btnSubRemove_Click(object sender, EventArgs e)
+        {
+            string temp;
+            if (dgvSubstitutions.SelectedRows.Count > 1)
+            {
+                temp = I18n.Translate("internal/ConfigurationForm/areyousurepluralsub", "Are you sure you want to remove the selected substitutions?");
+            }
+            else
+            {
+                temp = I18n.Translate("internal/ConfigurationForm/areyousuresingularsub", "Are you sure you want to remove the selected substitution?");
+            }
+            switch (MessageBox.Show(this, temp, I18n.Translate("internal/ConfigurationForm/confirmremoval", "Confirm removal"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+            {
+                case DialogResult.Yes:
+                    List<Configuration.Substitution> toRem = new List<Configuration.Substitution>();
+                    foreach (DataGridViewRow r in dgvSubstitutions.SelectedRows)
+                    {
+                        toRem.Add(subs[r.Index]);
+                    }
+                    foreach (Configuration.Substitution sub in toRem)
+                    {
+                        subs.Remove(sub);
+                    }
+                    dgvSubstitutions.ClearSelection();
+                    dgvSubstitutions.RowCount = subs.Count;
+                    dgvSubstitutions.Refresh();
+                    break;
+            }
+        }
+
+        private void dgvSubstitutions_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                if (btnSubRemove.Enabled == true)
+                {
+                    btnSubRemove_Click(this, null);
+                }
+            }
+        }
+
+        private void dgvSubstitutions_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            dgvSubstitutions.ClearSelection();
+            dgvSubstitutions.Rows[e.RowIndex].Selected = true;
+            btnSubEdit_Click(sender, null);
         }
 
     }

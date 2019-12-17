@@ -122,6 +122,8 @@ namespace Triggernometry.Forms
             btnActionDown.Enabled = false;
             btnRemoveAction.Enabled = false;
             panel5.Visible = true;
+            expMutexName.Enabled = false;
+            chkReadmeTrigger.Enabled = false;
         }
 
         private void txtRegexp_TextChanged(object sender, EventArgs e)
@@ -154,6 +156,7 @@ namespace Triggernometry.Forms
                 cbxLoggingLevel.SelectedIndex = 5;
                 txtDescription.Text = "";
                 cndCondition.ConditionToEdit = new ConditionGroup() { Enabled = false };
+                expMutexName.Expression = "";
             }
             else
             {
@@ -236,6 +239,7 @@ namespace Triggernometry.Forms
                     cx.Enabled = false;
                 }
                 cndCondition.ConditionToEdit = cx;
+                expMutexName.Expression = t._MutexToCapture;
             }
         }
 
@@ -305,6 +309,7 @@ namespace Triggernometry.Forms
                      select tx;
             t.Actions.AddRange(ix);
             t.Condition = cndCondition.ConditionToEdit;
+            t._MutexToCapture = expMutexName.Expression;
         }
 
         private void txtName_TextChanged(object sender, EventArgs e)
@@ -340,6 +345,18 @@ namespace Triggernometry.Forms
             btnRemoveAction.Enabled = IsReadonly == false && (dgvActions.SelectedRows.Count > 0);
             btnActionUp.Enabled = IsReadonly == false && (dgvActions.SelectedRows.Count == 1 && dgvActions.SelectedRows[0].Index > 0);
             btnActionDown.Enabled = IsReadonly == false && (dgvActions.SelectedRows.Count == 1 && dgvActions.SelectedRows[0].Index < (Actions.Count - 1));
+        }
+
+        internal void EnterReadmeMode()
+        {
+            grpGeneral.Visible = false;
+            chkReadmeTrigger.Visible = false;
+            panel1.Visible = false;
+            panel5.Visible = false;
+            tbcMain.TabPages.RemoveAt(0);
+            tbcMain.TabPages.RemoveAt(0);
+            tbcMain.TabPages.RemoveAt(0);
+            tbcMain.TabPages.RemoveAt(0);
         }
 
         private void btnEditAction_Click(object sender, EventArgs e)

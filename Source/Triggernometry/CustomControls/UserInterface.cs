@@ -24,7 +24,8 @@ namespace Triggernometry.CustomControls
             RemoteRepo = 3,
             RemoteRepoUnavailable = 4,
             LimitedFolderClosed = 5,
-            LimitedFolderOpen = 6
+            LimitedFolderOpen = 6,
+            Readme = 7
         }
 
         internal WMPLib.WindowsMediaPlayer wmp;
@@ -451,6 +452,7 @@ namespace Triggernometry.CustomControls
                     treeView1.SelectedNode.Expand();
                     f.Parent = (Folder)treeView1.SelectedNode.Tag;
                     f.Parent.Folders.Add(f);
+                    RecolorStartingFromNode(tn.Parent, tn.Parent.Checked, true);
                     treeView1.Sort();
                     treeView1.SelectedNode = tn;
                 }
@@ -487,7 +489,9 @@ namespace Triggernometry.CustomControls
                     t.Parent.Triggers.Add(t);
                     treeView1.Sort();
                     treeView1.SelectedNode = tn;
+                    t.ZoneBlocked = (t.PassesZoneRestriction(plug.currentZone) == false);
                     plug.AddTrigger(t);
+                    RecolorStartingFromNode(tn.Parent, tn.Parent.Checked, true);
                     if (t._EditAutofire == true)
                     {
                         ForceFireTrigger(t);
@@ -545,7 +549,7 @@ namespace Triggernometry.CustomControls
                         btnRemoveTrigger.Enabled = (IsPartOfRemote(treeView1.SelectedNode) == false);
                         btnEdit.Enabled = true;
                         btnImportTrigger.Enabled = false;
-                        btnExportTrigger.Enabled = true;
+                        btnExportTrigger.Enabled = (treeView1.SelectedNode.ImageIndex != (int)ImageIndices.Readme);
                     }
                     else if (treeView1.SelectedNode.Tag is Folder)
                     {
@@ -586,8 +590,16 @@ namespace Triggernometry.CustomControls
                     }
                     tf.imgs = imageList1;
                     tf.trv = treeView1;
-                    tf.Text = I18n.Translate("internal/UserInterface/edittrigger", "Edit trigger '{0}'", t.Name);
-                    tf.btnOk.Text = I18n.Translate("internal/UserInterface/savechanges", "Save changes");
+                    if (t.Repo != null && treeView1.SelectedNode.ImageIndex == (int)ImageIndices.Readme)
+                    {
+                        tf.EnterReadmeMode();
+                        tf.Text = I18n.Translate("internal/UserInterface/edittriggerreadme", "Instructions for repository '{0}'", t.Repo.Name);
+                    }
+                    else
+                    {
+                        tf.Text = I18n.Translate("internal/UserInterface/edittrigger", "Edit trigger '{0}'", t.Name);
+                        tf.btnOk.Text = I18n.Translate("internal/UserInterface/savechanges", "Save changes");
+                    }
                     tf.wmp = wmp;
                     tf.tts = tts;
                     if (tf.ShowDialog() == DialogResult.OK)
@@ -660,6 +672,7 @@ namespace Triggernometry.CustomControls
                         treeView1.Sort();
                         treeView1.SelectedNode = tn;
                     }
+                    plug.ZoneChanged(plug.currentZone);
                 }
             }
         }
@@ -696,39 +709,79 @@ namespace Triggernometry.CustomControls
 
         internal void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
-            ctxAdd.Enabled = btnAdd.Enabled;
-            ctxEdit.Enabled = btnEdit.Enabled;
-            ctxUpdate.Enabled = btnUpdate.Enabled;
-            ctxAddTrigger.Visible = btnAddTrigger.Enabled;
-            ctxAddTrigger.Enabled = btnAdd.Enabled && btnAddTrigger.Enabled;
-            ctxAddFolder.Enabled = btnAddTriggerFolder.Enabled;
-            ctxAddFolder.Visible = btnAdd.Enabled && btnAddTriggerFolder.Enabled;
-            ctxAddRepo.Enabled = btnAddRepo.Enabled;
-            ctxAddRepo.Visible = btnAdd.Enabled && btnAddRepo.Enabled;
-            ctxAddRepoList.Enabled = btnAddRepo.Enabled;
-            ctxAddRepoList.Visible = btnAdd.Enabled && btnAddRepo.Enabled;
-            ctxDelete.Enabled = btnRemoveTrigger.Enabled;
-            ctxImport.Enabled = btnImportTrigger.Enabled;
-            ctxExport.Enabled = btnExportTrigger.Enabled;
-            ctxFire.Visible = cfg.DeveloperMode;
-            toolStripSeparator12.Visible = cfg.DeveloperMode;
-            ctxCopy.Enabled = (treeView1.SelectedNode != null);
-            ctxPaste.Enabled = ctxAddTrigger.Enabled == true && (
-                (cfg.UseOsClipboard == false && (Clipboard != null && Clipboard.Length > 0))
-                ||
-                (cfg.UseOsClipboard == true && System.Windows.Forms.Clipboard.ContainsText() == true)
-            );
-            if (treeView1.SelectedNode != null)
+            if (treeView1.SelectedNode != null && treeView1.SelectedNode.ImageIndex == (int)ImageIndices.Readme)
             {
-                ctxCollapse.Enabled = (treeView1.SelectedNode.Nodes.Count > 0);
-                ctxExpand.Enabled = ctxCollapse.Enabled;                
-                ctxFire.Enabled = (treeView1.SelectedNode.Tag is Trigger);
+                ctxAdd.Visible = false;
+                ctxUpdate.Visible = false;
+                ctxEdit.Visible = false;
+                ctxFire.Visible = false;
+                ctxCollapse.Visible = false;
+                ctxExpand.Visible = false;
+                ctxImport.Visible = false;
+                ctxExport.Visible = false;
+                ctxCopy.Visible = false;
+                ctxPaste.Visible = false;
+                ctxDelete.Visible = false;
+                ctxReadme.Visible = true;
+                toolStripSeparator2.Visible = false;
+                toolStripSeparator4.Visible = false;
+                toolStripSeparator7.Visible = false;
+                toolStripSeparator11.Visible = false;
+                toolStripSeparator12.Visible = false;
             }
             else
             {
-                ctxCollapse.Enabled = true;
-                ctxExpand.Enabled = true;
-                ctxFire.Enabled = false;
+                ctxAdd.Visible = true;
+                ctxUpdate.Visible = true;
+                ctxEdit.Visible = true;
+                ctxFire.Visible = true;
+                ctxCollapse.Visible = true;
+                ctxExpand.Visible = true;
+                ctxImport.Visible = true;
+                ctxExport.Visible = true;
+                ctxCopy.Visible = true;
+                ctxPaste.Visible = true;
+                ctxDelete.Visible = true;
+                ctxReadme.Visible = false;
+                toolStripSeparator2.Visible = true;
+                toolStripSeparator4.Visible = true;
+                toolStripSeparator7.Visible = true;
+                toolStripSeparator11.Visible = true;
+                toolStripSeparator12.Visible = true;
+                ctxAdd.Enabled = btnAdd.Enabled;
+                ctxEdit.Enabled = btnEdit.Enabled;
+                ctxUpdate.Enabled = btnUpdate.Enabled;
+                ctxAddTrigger.Visible = btnAddTrigger.Enabled;
+                ctxAddTrigger.Enabled = btnAdd.Enabled && btnAddTrigger.Enabled;
+                ctxAddFolder.Enabled = btnAddTriggerFolder.Enabled;
+                ctxAddFolder.Visible = btnAdd.Enabled && btnAddTriggerFolder.Enabled;
+                ctxAddRepo.Enabled = btnAddRepo.Enabled;
+                ctxAddRepo.Visible = btnAdd.Enabled && btnAddRepo.Enabled;
+                ctxAddRepoList.Enabled = btnAddRepo.Enabled;
+                ctxAddRepoList.Visible = btnAdd.Enabled && btnAddRepo.Enabled;
+                ctxDelete.Enabled = btnRemoveTrigger.Enabled;
+                ctxImport.Enabled = btnImportTrigger.Enabled;
+                ctxExport.Enabled = btnExportTrigger.Enabled;
+                ctxFire.Visible = cfg.DeveloperMode;
+                toolStripSeparator12.Visible = cfg.DeveloperMode;
+                ctxCopy.Enabled = (treeView1.SelectedNode != null);
+                ctxPaste.Enabled = ctxAddTrigger.Enabled == true && (
+                    (cfg.UseOsClipboard == false && (Clipboard != null && Clipboard.Length > 0))
+                    ||
+                    (cfg.UseOsClipboard == true && System.Windows.Forms.Clipboard.ContainsText() == true)
+                );
+                if (treeView1.SelectedNode != null)
+                {
+                    ctxCollapse.Enabled = (treeView1.SelectedNode.Nodes.Count > 0);
+                    ctxExpand.Enabled = ctxCollapse.Enabled;
+                    ctxFire.Enabled = (treeView1.SelectedNode.Tag is Trigger);
+                }
+                else
+                {
+                    ctxCollapse.Enabled = true;
+                    ctxExpand.Enabled = true;
+                    ctxFire.Enabled = false;
+                }
             }
         }
 
@@ -1233,7 +1286,7 @@ namespace Triggernometry.CustomControls
 
         private void viewVariablesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (Forms.VariableForm vf = new Forms.VariableForm())
+            using (Forms.StateForm vf = new Forms.StateForm())
             {
                 vf.plug = plug;
                 vf.ShowDialog();
@@ -1249,7 +1302,16 @@ namespace Triggernometry.CustomControls
                 pstate = tnx.Checked;
                 tnx = tnx.Parent;
             }
-            tn.ForeColor = (tn.Checked == true && pstate == true) ? treeView1.ForeColor : disabledNodeColor;
+            if (tn.ImageIndex == (int)ImageIndices.Readme)
+            {
+                tn.ForeColor = treeView1.ForeColor;
+                tn.BackColor = tn.Checked == true ? Color.Yellow : Color.White;
+                return;
+            }
+            else
+            {
+                tn.ForeColor = (tn.Checked == true && pstate == true) ? treeView1.ForeColor : disabledNodeColor;
+            }
             if (o is Trigger)
             {
                 Trigger t = (Trigger)o;
@@ -1587,6 +1649,7 @@ namespace Triggernometry.CustomControls
                     treeView1.SelectedNode.Expand();
                     treeView1.Sort();
                     treeView1.SelectedNode = tn;
+                    RecolorStartingFromNode(tn.Parent, tn.Parent.Checked, true);
                     btnUpdate_Click(sender, e);
                 }
             }
@@ -1729,6 +1792,24 @@ namespace Triggernometry.CustomControls
                         ifo.BuildTreeFromExport(exp, tn, r.Root, true);
                         tn.ImageIndex = (int)ImageIndices.RemoteRepo;
                         tn.SelectedImageIndex = tn.ImageIndex;
+                        if (r.ReadmeTriggers.Count > 0)
+                        {
+                            foreach (Trigger t in r.ReadmeTriggers)
+                            {
+                                TreeNode tx = plug.LocateNodeHostingTrigger(tn, t);
+                                if (tx != null)
+                                {
+                                    TreeNode rn = new TreeNode();
+                                    rn.Text = tx.Text;
+                                    rn.Checked = tx.Checked;
+                                    rn.Tag = tx.Tag;
+                                    rn.ImageIndex = (int)ImageIndices.Readme;
+                                    rn.SelectedImageIndex = (int)ImageIndices.Readme;                                    
+                                    tn.Nodes.Add(rn);
+                                    rn.EnsureVisible();
+                                }
+                            }
+                        }
                         RecolorStartingFromNode(tn, r.Enabled, false);
                         return;
                     }
@@ -1809,6 +1890,7 @@ namespace Triggernometry.CustomControls
                         r.Parent = rfo;
                         treeView1.Nodes[1].Nodes.Add(tn);
                         treeView1.Nodes[1].Expand();
+                        RecolorStartingFromNode(tn.Parent, tn.Parent.Checked, true);
                         treeView1.Sort();
                         UpdateRepository(tn);
                     }
@@ -1887,7 +1969,7 @@ namespace Triggernometry.CustomControls
             ctx.ttshook = plug.TtsPlaybackSmart;
             ctx.triggered = DateTime.UtcNow;
             ctx.force = Action.TriggerForceTypeEnum.SkipAll;
-            t.Fire(plug, ctx);
+            t.Fire(plug, ctx, null);
         }
 
         private void btnCornerPopup_Click(object sender, EventArgs e)
@@ -1903,6 +1985,19 @@ namespace Triggernometry.CustomControls
 
         private void button1_Click(object sender, EventArgs e)
         {
+        }
+
+        internal void LocateTreeNode(TreeNode tn)
+        {
+            treeView1.SelectedNode = tn;
+            treeView1.SelectedNode.EnsureVisible();
+            treeView1.Focus();
+            FindForm().Focus();
+        }
+
+        private void ctxReadme_Click(object sender, EventArgs e)
+        {
+            btnEdit_Click(sender, e);
         }
 
     }

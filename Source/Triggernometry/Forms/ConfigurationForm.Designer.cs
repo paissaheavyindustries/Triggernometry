@@ -161,6 +161,15 @@
             this.grpFfxivEventLogging = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
             this.chkFfxivLogNetwork = new System.Windows.Forms.CheckBox();
+            this.tabSubstitutions = new System.Windows.Forms.TabPage();
+            this.dgvSubstitutions = new Triggernometry.CustomControls.DataGridViewEx();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tlsSubstitutions = new System.Windows.Forms.ToolStrip();
+            this.btnSubAdd = new System.Windows.Forms.ToolStripButton();
+            this.btnSubEdit = new System.Windows.Forms.ToolStripButton();
+            this.btnSubRemove = new System.Windows.Forms.ToolStripButton();
             this.tabMisc = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
@@ -226,6 +235,9 @@
             this.toolStrip1.SuspendLayout();
             this.grpFfxivEventLogging.SuspendLayout();
             this.tableLayoutPanel9.SuspendLayout();
+            this.tabSubstitutions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSubstitutions)).BeginInit();
+            this.tlsSubstitutions.SuspendLayout();
             this.tabMisc.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel11.SuspendLayout();
@@ -612,6 +624,7 @@
             this.tbcMain.Controls.Add(this.tabCaching);
             this.tbcMain.Controls.Add(this.tabEndpoint);
             this.tbcMain.Controls.Add(this.tabFFXIV);
+            this.tbcMain.Controls.Add(this.tabSubstitutions);
             this.tbcMain.Controls.Add(this.tabMisc);
             this.tbcMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbcMain.Location = new System.Drawing.Point(10, 10);
@@ -1986,6 +1999,110 @@
             this.chkFfxivLogNetwork.Text = "Log network events";
             this.chkFfxivLogNetwork.UseVisualStyleBackColor = true;
             // 
+            // tabSubstitutions
+            // 
+            this.tabSubstitutions.Controls.Add(this.dgvSubstitutions);
+            this.tabSubstitutions.Controls.Add(this.tlsSubstitutions);
+            this.tabSubstitutions.Location = new System.Drawing.Point(4, 22);
+            this.tabSubstitutions.Name = "tabSubstitutions";
+            this.tabSubstitutions.Padding = new System.Windows.Forms.Padding(7);
+            this.tabSubstitutions.Size = new System.Drawing.Size(556, 390);
+            this.tabSubstitutions.TabIndex = 6;
+            this.tabSubstitutions.Text = "Substitutions";
+            this.tabSubstitutions.UseVisualStyleBackColor = true;
+            // 
+            // dgvSubstitutions
+            // 
+            this.dgvSubstitutions.AllowUserToAddRows = false;
+            this.dgvSubstitutions.AllowUserToDeleteRows = false;
+            this.dgvSubstitutions.AllowUserToResizeRows = false;
+            this.dgvSubstitutions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvSubstitutions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column1,
+            this.Column2,
+            this.Column3});
+            this.dgvSubstitutions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvSubstitutions.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dgvSubstitutions.Location = new System.Drawing.Point(7, 32);
+            this.dgvSubstitutions.Name = "dgvSubstitutions";
+            this.dgvSubstitutions.RowHeadersVisible = false;
+            this.dgvSubstitutions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvSubstitutions.ShowCellErrors = false;
+            this.dgvSubstitutions.ShowEditingIcon = false;
+            this.dgvSubstitutions.ShowRowErrors = false;
+            this.dgvSubstitutions.Size = new System.Drawing.Size(542, 351);
+            this.dgvSubstitutions.TabIndex = 20;
+            this.dgvSubstitutions.VirtualMode = true;
+            this.dgvSubstitutions.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSubstitutions_CellDoubleClick);
+            this.dgvSubstitutions.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvSubstitutions_CellValueNeeded);
+            this.dgvSubstitutions.SelectionChanged += new System.EventHandler(this.dgvSubstitutions_SelectionChanged);
+            this.dgvSubstitutions.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvSubstitutions_KeyDown);
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Search for";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column1.Width = 150;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Replace with";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column2.Width = 150;
+            // 
+            // Column3
+            // 
+            this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column3.HeaderText = "Scope";
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            this.Column3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // tlsSubstitutions
+            // 
+            this.tlsSubstitutions.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.tlsSubstitutions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnSubAdd,
+            this.btnSubEdit,
+            this.btnSubRemove});
+            this.tlsSubstitutions.Location = new System.Drawing.Point(7, 7);
+            this.tlsSubstitutions.Name = "tlsSubstitutions";
+            this.tlsSubstitutions.Size = new System.Drawing.Size(542, 25);
+            this.tlsSubstitutions.TabIndex = 19;
+            // 
+            // btnSubAdd
+            // 
+            this.btnSubAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnSubAdd.Image")));
+            this.btnSubAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSubAdd.Name = "btnSubAdd";
+            this.btnSubAdd.Size = new System.Drawing.Size(115, 22);
+            this.btnSubAdd.Text = "Add substitution";
+            this.btnSubAdd.Click += new System.EventHandler(this.btnSubAdd_Click);
+            // 
+            // btnSubEdit
+            // 
+            this.btnSubEdit.Enabled = false;
+            this.btnSubEdit.Image = ((System.Drawing.Image)(resources.GetObject("btnSubEdit.Image")));
+            this.btnSubEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSubEdit.Name = "btnSubEdit";
+            this.btnSubEdit.Size = new System.Drawing.Size(113, 22);
+            this.btnSubEdit.Text = "Edit substitution";
+            this.btnSubEdit.Click += new System.EventHandler(this.btnSubEdit_Click);
+            // 
+            // btnSubRemove
+            // 
+            this.btnSubRemove.Enabled = false;
+            this.btnSubRemove.Image = ((System.Drawing.Image)(resources.GetObject("btnSubRemove.Image")));
+            this.btnSubRemove.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSubRemove.Name = "btnSubRemove";
+            this.btnSubRemove.Size = new System.Drawing.Size(136, 22);
+            this.btnSubRemove.Text = "Remove substitution";
+            this.btnSubRemove.Click += new System.EventHandler(this.btnSubRemove_Click);
+            // 
             // tabMisc
             // 
             this.tabMisc.Controls.Add(this.groupBox1);
@@ -2287,6 +2404,11 @@
             this.grpFfxivEventLogging.PerformLayout();
             this.tableLayoutPanel9.ResumeLayout(false);
             this.tableLayoutPanel9.PerformLayout();
+            this.tabSubstitutions.ResumeLayout(false);
+            this.tabSubstitutions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSubstitutions)).EndInit();
+            this.tlsSubstitutions.ResumeLayout(false);
+            this.tlsSubstitutions.PerformLayout();
             this.tabMisc.ResumeLayout(false);
             this.tabMisc.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -2453,5 +2575,14 @@
         private System.Windows.Forms.NumericUpDown nudCacheFileExpiry;
         private System.Windows.Forms.TextBox txtCacheFileCount;
         private System.Windows.Forms.Panel panel17;
+        private System.Windows.Forms.TabPage tabSubstitutions;
+        private CustomControls.DataGridViewEx dgvSubstitutions;
+        private System.Windows.Forms.ToolStrip tlsSubstitutions;
+        private System.Windows.Forms.ToolStripButton btnSubAdd;
+        private System.Windows.Forms.ToolStripButton btnSubEdit;
+        private System.Windows.Forms.ToolStripButton btnSubRemove;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
     }
 }

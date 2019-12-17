@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Triggernometry
 {
@@ -31,6 +33,8 @@ namespace Triggernometry
         }
 
         internal Folder Parent { get; set; }
+
+        internal bool ZoneBlocked { get; set; } = false;
 
         [XmlAttribute]
         public bool Enabled { get; set; }		
@@ -81,6 +85,24 @@ namespace Triggernometry
             set
             {
                 _Sequential = Boolean.Parse(value);
+            }
+        }
+
+        internal bool _IsReadme { get; set; } = false;
+        [XmlAttribute]
+        public string IsReadme
+        {
+            get
+            {
+                if (_IsReadme == false)
+                {
+                    return null;
+                }
+                return _IsReadme.ToString();
+            }
+            set
+            {
+                _IsReadme = Boolean.Parse(value);
             }
         }
 
@@ -253,6 +275,24 @@ namespace Triggernometry
             set
             {
                 _RefirePeriodExpression = value;
+            }
+        }
+
+        internal string _MutexToCapture { get; set; } = "";
+        [XmlAttribute]
+        public string MutexToCapture
+        {
+            get
+            {
+                if (_MutexToCapture == "")
+                {
+                    return null;
+                }
+                return _MutexToCapture;
+            }
+            set
+            {
+                _MutexToCapture = value;
             }
         }
 
@@ -573,10 +613,90 @@ namespace Triggernometry
             p.UnfilteredAddToLog(level, message);
         }
 
-        internal void Fire(RealPlugin p, Context ctx)
+        internal void DeferredFire(RealPlugin p, Context ctx, RealPlugin.MutexInformation mi, RealPlugin.MutexTicket m)
+        {
+            using (m)
+            {
+                mi.Acquire(ctx, m);
+                if (Fire(p, ctx, mi) == false)
+                {
+                    mi.Release(ctx);
+                }
+            }
+        }
+
+        internal bool PassesZoneRestriction(string zone)
+        {
+            return Parent.PassesZoneRestriction(zone);
+        }
+
+        internal void QueueActions(Context ctx, DateTime curtime, RealPlugin.MutexInformation mtx)
+        {
+            RealPlugin p = ctx.plug;
+            System.Diagnostics.Debug.WriteLine("### queuing actions for " + ctx.ToString());
+            if (_Sequential == false)
+            {
+                var ix = from tx in Actions
+                         orderby tx.OrderNumber ascending
+                         select tx;
+                foreach (Action a in ix)
+                {
+                    if (a._Enabled == true)
+                    {
+                        curtime = curtime.AddMilliseconds(ctx.EvaluateNumericExpression(TriggerContextLogger, p, a._ExecutionDelayExpression));
+                        p.QueueAction(ctx, this, mtx, a, curtime);
+                    }
+                }
+            }
+            else
+            {
+                Action prev = null;
+                Action first = null;
+                var ix = from tx in Actions
+                         orderby tx.OrderNumber ascending
+                         select tx;
+                foreach (Action a in ix)
+                {
+                    if (a._Enabled == false)
+                    {
+                        continue;
+                    }
+                    if (prev != null)
+                    {
+                        prev.NextAction = a;
+                    }
+                    else
+                    {
+                        first = a;
+                        curtime = curtime.AddMilliseconds(ctx.EvaluateNumericExpression(TriggerContextLogger, p, a._ExecutionDelayExpression));
+                    }
+                    prev = a;
+                }
+                if (first != null)
+                {
+                    p.QueueAction(ctx, this, mtx, first, curtime);
+                }
+            }
+        }
+
+        internal bool Fire(RealPlugin p, Context ctx, RealPlugin.MutexInformation mtx)
 		{
             try
             {
+                if (mtx == null && _MutexToCapture != "")
+                {
+                    string mn = ctx.EvaluateStringExpression(TriggerContextLogger, p, _MutexToCapture);
+                    RealPlugin.MutexInformation mi = ctx.plug.GetMutex(mn);
+                    RealPlugin.MutexTicket m = mi.QueueForAcquisition(ctx);
+                    Task t = new Task(() => {
+                        using (m)
+                        {                            
+                            DeferredFire(ctx.plug, ctx, mi, m);                            
+                        }
+                    });
+                    t.Start();
+                    return true;
+                }
                 if ((ctx.force & Action.TriggerForceTypeEnum.SkipConditions) == 0)
                 {
                     if (Condition != null && Condition.Enabled == true)
@@ -584,7 +704,7 @@ namespace Triggernometry
                         if (Condition.CheckCondition(ctx, TriggerContextLogger, ctx.plug) == false)
                         {
                             AddToLog(p, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/trignotfired", "Trigger '{0}' not fired, condition not met", LogName));
-                            return;
+                            return false;
                         }
                     }
                 }
@@ -649,7 +769,7 @@ namespace Triggernometry
                         if (_PrevActionsRefire == RefireEnum.Deny)
                         {
                             AddToLog(p, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/removefromqueuenorefire", "Removed {0} instance(s) of trigger '{1}' actions from queue, refire denied", exx, LogName));
-                            return;
+                            return false;
                         }
                         else
                         {
@@ -670,58 +790,17 @@ namespace Triggernometry
                     if (exx > 0)
                     {
                         AddToLog(p, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/refiredenied", "{0} instance(s) of trigger '{1}' actions in queue, refire denied", exx, LogName));
-                        return;
+                        return false;
                     }
                 }
-                if (_Sequential == false)
-                {
-                    var ix = from tx in Actions
-                             orderby tx.OrderNumber ascending
-                             select tx;
-                    foreach (Action a in ix)
-                    {
-                        if (a._Enabled == true)
-                        {
-                            curtime = curtime.AddMilliseconds(ctx.EvaluateNumericExpression(TriggerContextLogger, p, a._ExecutionDelayExpression));
-                            p.QueueAction(ctx, this, a, curtime);
-                        }
-                    }
-                }
-                else
-                {
-                    Action prev = null;
-                    Action first = null;
-                    var ix = from tx in Actions
-                             orderby tx.OrderNumber ascending
-                             select tx;
-                    foreach (Action a in ix)
-                    {
-                        if (a._Enabled == false)
-                        {
-                            continue;
-                        }
-                        if (prev != null)
-                        {
-                            prev.NextAction = a;
-                        }
-                        else
-                        {
-                            first = a;
-                            curtime = curtime.AddMilliseconds(ctx.EvaluateNumericExpression(TriggerContextLogger, p, a._ExecutionDelayExpression));
-                        }
-                        prev = a;
-                    }
-                    if (first != null)
-                    {
-                        p.QueueAction(ctx, this, first, curtime);
-                    }
-                }
+                QueueActions(ctx, curtime, mtx);
             }
             catch (Exception ex)
             {
                 AddToLog(p, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Trigger/firingexception", "Trigger '{0}' didn't fire due to exception: {1}", LogName, ex.Message));
             }
-		}
+            return false;
+        }
 
         public void TriggerContextLogger(object o, string msg)
         {

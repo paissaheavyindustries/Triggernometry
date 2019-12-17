@@ -215,6 +215,12 @@
     <Compile Include="Forms\SearchForm.Designer.cs">
       <DependentUpon>SearchForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SubstitutionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SubstitutionForm.Designer.cs">
+      <DependentUpon>SubstitutionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\VariableEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -309,11 +315,11 @@
     <Compile Include="Variables\Variable.cs" />
     <Compile Include="Variables\VariableScalar.cs" />
     <Compile Include="Variables\VariableDictionary.cs" />
-    <Compile Include="Forms\VariableForm.cs">
+    <Compile Include="Forms\StateForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\VariableForm.Designer.cs">
-      <DependentUpon>VariableForm.cs</DependentUpon>
+    <Compile Include="Forms\StateForm.Designer.cs">
+      <DependentUpon>StateForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Variables\VariableList.cs" />
     <Compile Include="Variables\VariableTable.cs" />
@@ -452,6 +458,9 @@
     <EmbeddedResource Include="Forms\SearchForm.resx">
       <DependentUpon>SearchForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SubstitutionForm.resx">
+      <DependentUpon>SubstitutionForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\VariableEditorForm.resx">
       <DependentUpon>VariableEditorForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -472,8 +481,8 @@
       <DependentUpon>UserInterface.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\VariableForm.resx">
-      <DependentUpon>VariableForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\StateForm.resx">
+      <DependentUpon>StateForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
