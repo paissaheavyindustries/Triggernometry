@@ -30,6 +30,7 @@ namespace Triggernometry.PluginBridges
             new VariableDictionary(), new VariableDictionary(), new VariableDictionary(), new VariableDictionary()
         });
         public static int NumPartyMembers = 0;
+        public static int PrevNumPartyMembers = 0;
         public static VariableDictionary Myself;
 
         internal static bool ckw = false;
@@ -41,35 +42,40 @@ namespace Triggernometry.PluginBridges
 
         private delegate void NetworkReceiveDelegate(string connection, long epoch, byte[] message);
 
+        public static void ClearCombatant(VariableDictionary vc)
+        {
+            vc.SetValue("name", "");
+            vc.SetValue("currenthp", 0);
+            vc.SetValue("currentmp", 0);
+            vc.SetValue("currentgp", 0);
+            vc.SetValue("currentcp", 0);
+            vc.SetValue("maxhp", 0);
+            vc.SetValue("maxmp", 0);
+            vc.SetValue("maxgp", 0);
+            vc.SetValue("maxcp", 0);
+            vc.SetValue("level", 0);
+            vc.SetValue("jobid", 0);
+            vc.SetValue("job", "");
+            vc.SetValue("role", "");
+            vc.SetValue("x", 0);
+            vc.SetValue("y", 0);
+            vc.SetValue("z", 0);
+            vc.SetValue("id", "");
+            vc.SetValue("inparty", 0);
+            vc.SetValue("inalliance", 0);
+            vc.SetValue("order", 0);
+            vc.SetValue("casttargetid", 0);
+            vc.SetValue("targetid", 0);
+            vc.SetValue("heading", 0);
+            vc.SetValue("distance", 0);
+            vc.SetValue("worldid", 0);
+            vc.SetValue("worldname", "");
+            vc.SetValue("currentworldid", 0);
+        }
+
         public static void SetupNullCombatant()
         {
-            NullCombatant.SetValue("name", "");
-            NullCombatant.SetValue("currenthp", 0);
-            NullCombatant.SetValue("currentmp", 0);
-            NullCombatant.SetValue("currentgp", 0);
-            NullCombatant.SetValue("currentcp", 0);
-            NullCombatant.SetValue("maxhp", 0);
-            NullCombatant.SetValue("maxmp", 0);
-            NullCombatant.SetValue("maxgp", 0);
-            NullCombatant.SetValue("maxcp", 0);
-            NullCombatant.SetValue("level", 0);
-            NullCombatant.SetValue("jobid", 0);
-            NullCombatant.SetValue("job", "");
-            NullCombatant.SetValue("role", "");
-            NullCombatant.SetValue("x", 0);
-            NullCombatant.SetValue("y", 0);
-            NullCombatant.SetValue("z", 0);
-            NullCombatant.SetValue("id", "");
-            NullCombatant.SetValue("inparty", 0);
-            NullCombatant.SetValue("inalliance", 0);
-            NullCombatant.SetValue("order", 0);
-            NullCombatant.SetValue("casttargetid", 0);
-            NullCombatant.SetValue("targetid", 0);
-            NullCombatant.SetValue("heading", 0);
-            NullCombatant.SetValue("distance", 0);
-            NullCombatant.SetValue("worldid", 0);
-            NullCombatant.SetValue("worldname", "");
-            NullCombatant.SetValue("currentworldid", 0);
+            ClearCombatant(NullCombatant);
         }
 
         public static void SubscribeToNetworkEvents(RealPlugin p)
@@ -445,6 +451,16 @@ namespace Triggernometry.PluginBridges
                         }
                     }
                     phase = 7;
+                    NumPartyMembers = ex;
+                    if (PrevNumPartyMembers > NumPartyMembers)
+                    {
+                        for (int i = NumPartyMembers; i < PrevNumPartyMembers; i++)
+                        {
+                            ClearCombatant(PartyMembers[i]);
+                        }
+                    }
+                    PrevNumPartyMembers = NumPartyMembers;
+                    phase = 8;
                     if (cfg.FfxivPartyOrdering == Configuration.FfxivPartyOrderingEnum.CustomSelfFirst)
                     {
                         //DebugPlayerSorting("a1", PartyMembers);
@@ -469,8 +485,6 @@ namespace Triggernometry.PluginBridges
                         }
                         //DebugPlayerSorting("b2", PartyMembers);
                     }
-                    phase = 8;
-                    NumPartyMembers = ex;
                 }
             }
             catch (Exception ex)

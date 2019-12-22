@@ -157,6 +157,7 @@ namespace Triggernometry.Forms
                 txtDescription.Text = "";
                 cndCondition.ConditionToEdit = new ConditionGroup() { Enabled = false };
                 expMutexName.Expression = "";
+                chkReadmeTrigger.Checked = false;
             }
             else
             {
@@ -240,6 +241,7 @@ namespace Triggernometry.Forms
                 }
                 cndCondition.ConditionToEdit = cx;
                 expMutexName.Expression = t._MutexToCapture;
+                chkReadmeTrigger.Checked = t._IsReadme;
             }
         }
 
@@ -310,6 +312,7 @@ namespace Triggernometry.Forms
             t.Actions.AddRange(ix);
             t.Condition = cndCondition.ConditionToEdit;
             t._MutexToCapture = expMutexName.Expression;
+            t._IsReadme = chkReadmeTrigger.Checked;
         }
 
         private void txtName_TextChanged(object sender, EventArgs e)
