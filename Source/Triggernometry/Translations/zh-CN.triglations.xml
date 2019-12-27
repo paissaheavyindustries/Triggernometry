@@ -716,9 +716,9 @@
         <TranslationEntry Key="internal/Action/scriptexecerror" Translation="脚本执行错误" />
         <TranslationEntry Key="internal/Action/shortscripterror" Translation="{0} @ 行 {1}" />
         <TranslationEntry Key="internal/Action/tableappended" Translation="表格变量 ({0}) 已追加至表格变量 ({1}) 后" />
-        <TranslationEntry Key="internal/Action/tableappendnotexist" Translation="表格变量 ({0}) 无法追加至表格变量 ({1}) 后，因为表格变量 ({1}) 并不存在" />
+        <TranslationEntry Key="internal/Action/tableappendnotexist" Translation="表格变量 ({0}) 无法追加至表格变量 ({1}) 后，因为该表格变量并不存在" />
         <TranslationEntry Key="internal/Action/tablecopied" Translation="表格变量 ({0}) 已复制为表格变量 ({1})" />
-        <TranslationEntry Key="internal/Action/tablecopynotexist" Translation="表格变量 ({0}) 无法复制为表格变量 ({1})，因为表格变量 ({1}) 并不存在" />
+        <TranslationEntry Key="internal/Action/tablecopynotexist" Translation="表格变量 ({0}) 无法复制为表格变量 ({1})，因为该表格变量并不存在" />
         <TranslationEntry Key="internal/Action/tableresized" Translation="表格变量 ({0}) 已调整为 ({2}) 行 ({1}) 列大小" />
         <TranslationEntry Key="internal/Action/tableunset" Translation="摧毁表格变量 ({0})" />
         <TranslationEntry Key="internal/Action/trigdisable" Translation="触发器 '{0}' 已停用" />
@@ -816,7 +816,7 @@
         <TranslationEntry Key="internal/ffxiv/oldactplugin" Translation="FFXIV解析插件的版本 ({0}) 低于要求 ({1})，某些功能可能无法正常工作" />
         <TranslationEntry Key="internal/ffxiv/partytoobig" Translation="小队构成中有超过 {0} 名成员" />
         <TranslationEntry Key="internal/ffxiv/procexception" Translation="搜索 FFXIV 进程时出现异常: {0}" />
-        <TranslationEntry Key="internal/ffxiv/updateexception" Translation="FFXIV状态更新中的异常： {0}" />
+        <TranslationEntry Key="internal/ffxiv/updateexception" Translation="FFXIV状态更新中的异常： {0}，在阶段 {1}" />
         <TranslationEntry Key="internal/ImportForm/back" Translation="&lt; 返回" />
         <TranslationEntry Key="internal/ImportForm/cancel" Translation="取消" />
         <TranslationEntry Key="internal/ImportForm/dangerdisk" Translation="一些被导入的触发器包含执行任意文件操作的行为，这些触发器可能会很危险，恶意触发器甚至可能损害您的系统和安全性。为方便检索，这些触发器已经被高亮。" />
@@ -1107,7 +1107,7 @@
         <TranslationEntry Key="LogForm/ctxSelectionToClipboard" Translation="复制选择到剪贴板" />
         <TranslationEntry Key="LogForm/lblEventLevel" Translation="事件级别" />
         <TranslationEntry Key="LogForm/lblRegularExpression" Translation="正则表达式" />
-        <TranslationEntry Key="LogForm/lblStatus" Translation="显示日志数量：{0} / {1}" />
+        <TranslationEntry Key="LogForm/lblStatus" Translation="状态" />
         <TranslationEntry Key="plugin/Toast/no" Translation="No" />
         <TranslationEntry Key="plugin/Toast/ok" Translation="确定" />
         <TranslationEntry Key="plugin/Toast/yes" Translation="Yes" />
