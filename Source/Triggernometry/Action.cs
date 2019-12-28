@@ -1986,7 +1986,7 @@ namespace Triggernometry
                                             }
                                             vt.Resize(w, h);
                                         }
-                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarunset", "Table variable ({0}) resized to ({1},{2})", varname, w, h));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tableresized", "Table variable ({0}) resized to ({1},{2})", varname, w, h));
                                         break;
                                     }
                                 case TableVariableOpEnum.Unset:

@@ -212,7 +212,7 @@ namespace Triggernometry.Forms
                         if (a.ActionType == Action.ActionTypeEnum.ExecuteScript)
                         {
                             if (RegexMatches(rex, a._ExecScriptAssembliesExpression) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitscriptassy", "Action #{0} script assemblies", i), Match = tn });
-                            if (RegexMatches(rex, a._ExecScriptExpression) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitscriptassy", "Action #{0} script", i), Match = tn });
+                            if (RegexMatches(rex, a._ExecScriptExpression) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitscriptcode", "Action #{0} script", i), Match = tn });
                         }
                         if (a.ActionType == Action.ActionTypeEnum.Folder)
                         {
@@ -274,7 +274,7 @@ namespace Triggernometry.Forms
                         }
                         if (a.ActionType == Action.ActionTypeEnum.Trigger)
                         {
-                            if (RegexMatches(rex, a._TriggerId.ToString()) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hittriggerid", "Action #{0} trigger ID", i), Match = tn });
+                            if (RegexMatches(rex, a._TriggerId.ToString()) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitactiontriggerid", "Action #{0} trigger ID", i), Match = tn });
                             if (RegexMatches(rex, a._TriggerText) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitactiontriggertext", "Action #{0} trigger firing text", i), Match = tn });
                             if (RegexMatches(rex, a._TriggerZone) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hittriggerzone", "Action #{0} trigger firing zone", i), Match = tn });
                         }
