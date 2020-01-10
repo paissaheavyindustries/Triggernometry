@@ -228,8 +228,8 @@
         <TranslationEntry Key="ActionForm/lblFolderOp" Translation="操作" />
         <TranslationEntry Key="ActionForm/lblInitialValues" Translation="初始值" />
         <TranslationEntry Key="ActionForm/lblJsonEndpoint" Translation="目标 URL" />
-        <TranslationEntry Key="ActionForm/lblJsonFiring" Translation="响应触发表达式" />
-        <TranslationEntry Key="ActionForm/lblJsonInstructions" Translation="如果已定义响应触发表达式，则将根据计算的字符串表达式的结果生成日志行。 日志行将像任何其他行一样处理，就像它来自ACT本身一样。&#xD;&#xA;&#xD;&#xA;要将端点的响应添加到此表达式，请使用特殊变量“_response”。 是可用的。 特殊变量仅在此操作执行的上下文中有效。&#xD;&#xA;" />
+        <TranslationEntry Key="ActionForm/lblJsonFiring" Translation="响应结果生成字符串表达式" />
+        <TranslationEntry Key="ActionForm/lblJsonInstructions" Translation="如果已定义响应结果生成字符串表达式，则将根据该表达式计算的结果生成日志行。日志行将像普通的网络日志一样被插件处理。&#xD;&#xA;&#xD;&#xA;要将响应内容添加到此表达式，请使用特殊变量 &quot;_response&quot;。此特殊变量仅在本操作执行的上下文中有效。&#xD;&#xA;" />
         <TranslationEntry Key="ActionForm/lblJsonPayload" Translation="要发送的内容" />
         <TranslationEntry Key="ActionForm/lblKeypress" Translation="要发送的 Keycode" />
         <TranslationEntry Key="ActionForm/lblKeypresses" Translation="要发送的按键命令" />
