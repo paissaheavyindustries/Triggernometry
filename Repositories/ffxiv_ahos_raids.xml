@@ -6,7 +6,7 @@
         <Folders>
           <Folder Id="ee150910-3894-483d-afac-bc53a28de43f" Name="2.0 - A Realm Reborn" Enabled="true">
             <Folders>
-              <Folder ZoneFilterEnabled="True" Id="c7b0681e-cdb0-41dc-934f-6723fa70481f" ZoneFilterRegularExpression="Syrcus\ Tower" Name="2.3? - Syrcus Tower" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="c7b0681e-cdb0-41dc-934f-6723fa70481f" ZoneFilterRegularExpression="Syrcus\ Tower" Name="2.3 - Syrcus Tower" Enabled="true">
                 <Folders />
                 <Triggers>
                   <Trigger Enabled="true" Name="Curtain Call" Id="2680b23f-f4ca-4be1-b4b7-91bd085522c3" RegularExpression="Amon readies Curtain Call.">
@@ -21,7 +21,7 @@
                   </Trigger>
                 </Triggers>
               </Folder>
-              <Folder Id="a5e981e0-f003-4aaa-84c5-54113b8f12b1" Name="2.1? - The Labyrinth of the Ancients" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="a5e981e0-f003-4aaa-84c5-54113b8f12b1" ZoneFilterRegularExpression="The\ Labyrinth\ Of\ The\ Ancients" Name="2.1 - The Labyrinth of the Ancients" Enabled="true">
                 <Folders />
                 <Triggers>
                   <Trigger Enabled="true" Name="Ancient Flare" Id="90e68276-52e4-4f80-9afe-839735edb991" RegularExpression="2b:Phlegethon readies Ancient Flare">
@@ -42,16 +42,180 @@
                   </Trigger>
                 </Triggers>
               </Folder>
+              <Folder ZoneFilterEnabled="True" Id="561c4301-bdba-45e8-b88d-fba8f8de50cc" ZoneFilterRegularExpression="The\ World\ Of\ Darkness" Name="2.5 - The World of Darkness" Enabled="true">
+                <Folders />
+                <Triggers>
+                  <Trigger Enabled="true" Name="Zero-Form Particle Beam" Id="efa5979b-85f8-4757-8a96-2bcc32f97220" RegularExpression="14:CE1:Cloud Of Darkness starts using Zero-Form Particle Beam on Cloud Of Darkness">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="out of front" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Shockwave" Id="8668ce7f-954e-4ff2-a5c2-90c88d308860" RegularExpression="14:D58:(?&gt;Roaring|Moaning|Howling) Atomos starts using Shockwave on (?&gt;Roaring|Moaning|Howling) Atomos.&#xA;">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="knockback" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Mortal Gaze" Id="af2758ba-e5ca-4819-822c-29016360c733" RegularExpression="14:(?&gt;CD1|DAB):Angra Mainyu starts using Mortal Gaze on Angra Mainyu">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="look away" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                </Triggers>
+              </Folder>
             </Folders>
             <Triggers />
           </Folder>
           <Folder Id="35ce09b1-71aa-42b8-af9e-6de85aba6819" Name="3.0 - Heavensward" Enabled="true">
-            <Folders />
+            <Folders>
+              <Folder ZoneFilterEnabled="True" Id="fcd3ae3a-3823-40ff-82f0-23799c76e0d6" ZoneFilterRegularExpression="The\ Void\ Ark" Name="3.1 - The Void Ark" Enabled="true">
+                <Folders />
+                <Triggers>
+                  <Trigger Enabled="true" Name="Shockwave Stomp" Id="7c80a20f-1587-4682-ad11-c8efe4063499" RegularExpression="14:145D:Sawtooth starts using Shockwave Stomp on Sawtooth">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Hide" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Corrosive Bile" Id="0cad6b89-00e6-4519-b918-1a8082e7a3a8" RegularExpression="14:1436:Cuchulainn starts using Corrosive Bile on Cuchulainn">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Out of Front" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Flailing Tentacles" Id="261a8cc8-40a0-4a9d-89c6-de3d0ca21f5a" RegularExpression="14:143A:Cuchulainn starts using Flailing Tentacles on Cuchulainn">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Away from tentacles" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Sickle Strike - TB" Id="38931d1c-bb87-4679-9166-3e5776943ca1" RegularExpression="14:1421:Echidna starts using Sickle Strike on (?&lt;player&gt;[a-zA-Z-' ]{3,21})">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Buster on ${player}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Abyssal Reaper" Id="c21945a8-6565-4f06-b228-619ede30909f" RegularExpression="14:1418:Echidna starts using Abyssal Reaper on Echidna">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="get away" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Petrifaction" Id="1e0aeae8-8a30-4538-9c62-6c12c8649512" RegularExpression="14:1422:Echidna starts using Petrifaction on Echidna">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="look away" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                </Triggers>
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="3ffab478-dbb0-4897-a24a-db8273e0e159" ZoneFilterRegularExpression="The\ Weeping\ City\ Of\ Mhach" Name="3.3 - The Weeping City of Mhach" Enabled="true">
+                <Folders />
+                <Triggers>
+                  <Trigger Enabled="true" Name="Frond Affeared" Id="ea6b2db6-e419-4703-baf5-2f4b377a9c1b" RegularExpression="14:183A:Arachne Eve starts using Frond Affeared on Arachne Eve">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="look away" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Mortal Ray" Id="9c5f20d7-c07f-4e66-9d61-86db3a921e86" RegularExpression="14:17D4:Summoned Haagenti starts using Mortal Ray on Summoned Haagenti">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="look away" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Mega Death" Id="24b47e9b-bd14-4e88-ad0b-68b8576dad44" RegularExpression="14:17CA:Forgall starts using Mega Death on Forgall">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="go in puddle" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Flaring Epigraph" Id="1bf0f8eb-9ac9-400c-a95c-a404229a7723" RegularExpression="14:1856:Headstone starts using Flaring Epigraph on Headstone">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Go in bubble" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
+                  </Trigger>
+                </Triggers>
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="43bd9ae6-0bfc-453e-9c11-23d074956ed4" ZoneFilterRegularExpression="Dun\ Scaith" Name="3.5 - Dun Scaith" Enabled="true">
+                <Folders />
+                <Triggers>
+                  <Trigger Enabled="true" Name="Shadethrust" Id="e385a44c-1cfb-468d-888c-0e94c2e36033" RegularExpression="14:1C1A:Diabolos Hollow starts using Shadethrust on Unknown">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="out of front" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Hollow Nightmare" Id="3ab4593e-b2bd-4270-91c1-96395f82c4af" RegularExpression="14:1C20:Diabolos Hollow starts using Hollow Nightmare on Diabolos Hollow">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="look away" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Nightmare" Id="861d7f93-ae72-46e6-bbcf-78e754a6d206" RegularExpression="14:1C0E:Diabolos starts using Nightmare on Diabolos">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="look away ??" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
+                  </Trigger>
+                </Triggers>
+              </Folder>
+            </Folders>
             <Triggers />
           </Folder>
           <Folder Id="52be45e8-ebaa-4682-8a53-3774c23b010a" Name="4.0 - Stormblood" Enabled="true">
             <Folders>
-              <Folder Id="8f47d154-0c83-45e2-87e2-a64796125f39" Name="4.1 - The Royal City of Rabanastre" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="8f47d154-0c83-45e2-87e2-a64796125f39" ZoneFilterRegularExpression="The\ Royal\ City\ Of\ Rabanastre" Name="4.1 - The Royal City of Rabanastre" Enabled="true">
                 <Folders />
                 <Triggers />
               </Folder>
@@ -120,12 +284,59 @@
                   </Trigger>
                 </Triggers>
               </Folder>
+              <Folder ZoneFilterEnabled="True" Id="3b6a89a9-ec99-4640-afcd-10b2221936f9" ZoneFilterRegularExpression="The\ Orbonne\ Monastery" Name="4.5 - The Orobonne Monastery" Enabled="true">
+                <Folders />
+                <Triggers>
+                  <Trigger Enabled="true" Name="Doom" Id="ed8a8f82-e4e5-4696-a26f-ecd6baa54204" RegularExpression="14:3751:The Thunder God starts using Cleansing Strike on The Thunder God">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Top Off Doom" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="TG HS" Id="2362cd51-d8e7-400a-ab73-5c02a1399eaa" RegularExpression="14:374[9A]:The Thunder God starts using T.G. Holy Sword on The Thunder God">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="TG HS sides" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="TG HS in/out" Id="cbade727-78a2-41f9-8563-e3f6b6d792c0" RegularExpression="14:37(?&gt;4F|50):The Thunder God starts using T.G. Holy Sword on The Thunder God">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="TG HS in or out" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Puddle" Id="645414b9-cef0-4378-b9e0-6034c2b58566" RegularExpression="15:[A-F0-9]{8}:The Thunder God:375E:Shadowblade:[A-F0-9]{8}:(?&lt;player&gt;[a-zA-Z-' ]{3,21}):">
+                    <Actions>
+                      <Action OrderNumber="1" PlaySpeechMyself="True" UseTTSTextExpression="Drop Puddle Away" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="true" Grouping="And">
+                      <ConditionSingle Enabled="true" ExpressionL="${player}" ExpressionTypeL="String" ExpressionR="${_ffxivplayer}" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                    </Condition>
+                    <Conditions />
+                  </Trigger>
+                </Triggers>
+              </Folder>
             </Folders>
             <Triggers />
           </Folder>
           <Folder Id="38783115-0014-4dd7-aa45-77f690928f14" Name="5.0 - Shadowbringers" Enabled="true">
             <Folders>
-              <Folder Id="943c63fc-397c-4bb7-9371-afc34c772198" Name="5.1 - The Copied Factory" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="943c63fc-397c-4bb7-9371-afc34c772198" ZoneFilterRegularExpression="The\ Copied\ Factory" Name="5.1 - The Copied Factory" Enabled="true">
                 <Folders />
                 <Triggers>
                   <Trigger Enabled="true" Name="Clanging Blow" Id="c282a1a9-6aa0-4d31-98ea-e400dd5b75f0" RegularExpression="14:48CE:Serial-Jointed Command Model starts using Clanging Blow on (?&lt;player&gt;[a-zA-Z-' ]{1,31})">
@@ -307,12 +518,65 @@
       <Folder Id="bc48e557-c9c3-4135-a8ff-e2b2469710c2" Name="8-Man Raids" Enabled="true">
         <Folders>
           <Folder Id="a2722f7d-6170-48cc-be00-a71dd93ea9f1" Name="2.0 - A Realm Reborn" Enabled="true">
-            <Folders />
+            <Folders>
+              <Folder ZoneFilterEnabled="True" Id="2f79f85d-f76d-42a3-b042-2c49bb012be8" ZoneFilterRegularExpression="The\ Binding\ Coil\ Of\ Bahamut\ -\ Turn\ \(1\)" Name="01 - The Binding Coil of Bahamut - Turn 1" Enabled="true">
+                <Folders />
+                <Triggers />
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="68a973cb-88b4-431e-a835-7ad5cb509ebb" ZoneFilterRegularExpression="The\ Binding\ Coil\ Of\ Bahamut\ -\ Turn\ \(2\)" Name="02  - The Binding Coil of Bahamut - Turn 2" Enabled="true">
+                <Folders />
+                <Triggers />
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="11a18a20-6edf-4088-96ef-4b682b0ee46f" ZoneFilterRegularExpression="The\ Binding\ Coil\ Of\ Bahamut\ -\ Turn\ \(3\)" Name="03 - The Binding Coil of Bahamut - Turn 3" Enabled="true">
+                <Folders />
+                <Triggers />
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="c8f538f8-5187-499a-a95a-040f6dc409c1" ZoneFilterRegularExpression="The\ Binding\ Coil\ Of\ Bahamut\ -\ Turn\ \(4\)" Name="04 - The Binding Coil of Bahamut - Turn 4" Enabled="true">
+                <Folders />
+                <Triggers />
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="c6adcdb7-7836-4848-88ec-66896ce808bb" ZoneFilterRegularExpression="The\ Binding\ Coil\ Of\ Bahamut\ -\ Turn\ \(5\)" Name="05 - The Binding Coil of Bahamut - Turn 5" Enabled="true">
+                <Folders />
+                <Triggers />
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="cb99e091-eb82-4e2d-bf76-deb155cb87d0" ZoneFilterRegularExpression="The\ Second\ Coil\ Of\ Bahamut\ (\(Savage\)\ )?-\ Turn\ \(1\)" Name="06 - The Second Coil of Bahamut - Turn 1" Enabled="true">
+                <Folders />
+                <Triggers />
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="cb74fc13-16ce-4667-b8f4-278f5a5bb8df" ZoneFilterRegularExpression="The\ Second\ Coil\ Of\ Bahamut\ (\(Savage\)\ )?-\ Turn\ \(2\)" Name="07 - The Second Coil of Bahamut - Turn 2" Enabled="true">
+                <Folders />
+                <Triggers />
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="b04d88b5-e5d2-4684-a570-b6737baa85e6" ZoneFilterRegularExpression="The\ Second\ Coil\ Of\ Bahamut\ (\(Savage\)\ )?-\ Turn\ \(3\)" Name="08 - The Second Coil of Bahamut - Turn 3" Enabled="true">
+                <Folders />
+                <Triggers />
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="8c59787b-3c1b-4032-ac71-37d98a6761aa" ZoneFilterRegularExpression="The\ Second\ Coil\ Of\ Bahamut\ (\(Savage\)\ )?-\ Turn\ \(4\)" Name="09 - The Second Coil of Bahamut - Turn 4" Enabled="true">
+                <Folders />
+                <Triggers />
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="b34221f7-dbb8-4908-a7fe-c053ca8810d0" ZoneFilterRegularExpression="The\ Final\ Coil\ Of\ Bahamut\ -\ Turn\ \(1\)" Name="10 - The Final Coil of Bahamut - Turn 1" Enabled="true">
+                <Folders />
+                <Triggers />
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="bdbeb7e9-9f7e-4953-84c4-30eff420e350" ZoneFilterRegularExpression="The\ Final\ Coil\ Of\ Bahamut\ -\ Turn\ \(2\)" Name="11 - The Final Coil of Bahamut - Turn 2" Enabled="true">
+                <Folders />
+                <Triggers />
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="a2ceb195-776b-40b5-bbf3-aa1d48ab5751" ZoneFilterRegularExpression="The\ Final\ Coil\ Of\ Bahamut\ -\ Turn\ \(3\)" Name="12 - The Final Coil of Bahamut - Turn 3" Enabled="true">
+                <Folders />
+                <Triggers />
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="10bfb11f-13d5-4731-8c18-cf69d2359e15" ZoneFilterRegularExpression="The\ Final\ Coil\ Of\ Bahamut\ -\ Turn\ \(4\)" Name="13 - The Final Coil of Bahamut - Turn 4" Enabled="true">
+                <Folders />
+                <Triggers />
+              </Folder>
+            </Folders>
             <Triggers />
           </Folder>
           <Folder Id="4a6aa648-9273-450b-9784-940a8698a3c2" Name="3.0 - Heavensward" Enabled="true">
             <Folders>
-              <Folder Id="dcffc7a6-d89e-462b-85a7-5a7787d27fcd" Name="05 - Midas - Fist of the Son" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="dcffc7a6-d89e-462b-85a7-5a7787d27fcd" ZoneFilterRegularExpression="Alexander\ -\ The\ Fist\ Of\ The\ Son" Name="05 - Midas - The Fist Of The Son" Enabled="true">
                 <Folders />
                 <Triggers>
                   <Trigger Enabled="true" Name="Oogle" Id="f57b9dc7-ec33-47a4-aed7-faff4fd72c63" RegularExpression="starts using Oogle" DebugLevel="Info">
@@ -323,7 +587,7 @@
                   </Trigger>
                 </Triggers>
               </Folder>
-              <Folder ZoneFilterEnabled="True" Id="3dd55c98-b7b7-4a34-9cec-220d67f1cb1a" ZoneFilterRegularExpression="Alexander\ -\ The\ Cuff\ Of\ The\ Son(\ \(Savage\))?" Name="06 - Midas - Cuff of the Son" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="3dd55c98-b7b7-4a34-9cec-220d67f1cb1a" ZoneFilterRegularExpression="Alexander\ -\ The\ Cuff\ Of\ The\ Son" Name="06 - Midas - The Cuff Of The Son" Enabled="true">
                 <Folders />
                 <Triggers>
                   <Trigger Enabled="true" Name="High Arithmeticks" Id="c7630461-1424-439c-a437-dee3a44f0b49" RegularExpression="You suffer the effect of High Arithmeticks" DebugLevel="Info">
@@ -354,7 +618,7 @@
                   </Trigger>
                 </Triggers>
               </Folder>
-              <Folder ZoneFilterEnabled="True" Id="01b51068-c672-4f7d-9b12-3fd74c67ea24" ZoneFilterRegularExpression="Alexander\ -\ The\ Arm\ Of\ The\ Son(\ \(Savage\))?" Name="07 - Midas - Arm of the Son" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="01b51068-c672-4f7d-9b12-3fd74c67ea24" ZoneFilterRegularExpression="Alexander\ -\ The\ Arm\ Of\ The\ Son" Name="07 - Midas - The Arm Of The Son" Enabled="true">
                 <Folders />
                 <Triggers>
                   <Trigger Enabled="true" Name="Heart about to pop" Id="9c6db294-02c1-42df-a25b-5b3ee21792f4" RegularExpression="Shanoa readies Undying Affection" DebugLevel="Info">
@@ -381,7 +645,7 @@
                   </Trigger>
                 </Triggers>
               </Folder>
-              <Folder Id="5bf721ca-fa6e-4b89-a48e-27dbdcf44b86" Name="08 - Midas - Burden of the Son" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="5bf721ca-fa6e-4b89-a48e-27dbdcf44b86" ZoneFilterRegularExpression="Alexander\ -\ The\ Burden\ Of\ The\ Son" Name="08 - Midas - The Burden Of The Son" Enabled="true">
                 <Folders />
                 <Triggers>
                   <Trigger Enabled="true" Name="Decree Nisi A" Id="3418c131-8f53-434e-ae65-a071a311b065" RegularExpression="You suffer the effect of Final Judgment: Decree Nisi A" DebugLevel="Info">
@@ -413,7 +677,7 @@
                   </Trigger>
                 </Triggers>
               </Folder>
-              <Folder Id="4d5272f3-33b9-42b1-8247-47e816d3f44b" Name="09 - Alexander - The Eyes of the Creator" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="4d5272f3-33b9-42b1-8247-47e816d3f44b" ZoneFilterRegularExpression="Alexander\ -\ The\ Eyes\ Of\ The\ Creator" Name="09 - Alexander - The Eyes Of The Creator" Enabled="true">
                 <Folders />
                 <Triggers>
                   <Trigger Enabled="true" Name="Scrap Burst" Id="eb4c0aff-dec7-48e3-96fd-5a6dfcd41ea0" RegularExpression="Refurbisher 0 readies Scrap Burst" DebugLevel="Info">
@@ -433,7 +697,7 @@
                   </Trigger>
                 </Triggers>
               </Folder>
-              <Folder Id="a1093bf7-d294-481f-a766-d5e3e1ffdeab" Name="10 - Alexander - The Breath of the Creator" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="a1093bf7-d294-481f-a766-d5e3e1ffdeab" ZoneFilterRegularExpression="Alexander\ -\ The\ Breath\ Of\ The\ Creator" Name="10 - Alexander - The Breath Of The Creator" Enabled="true">
                 <Folders />
                 <Triggers>
                   <Trigger Enabled="true" Name="Single Charge (in)" Id="d90f3416-2840-4911-be67-017656d499c2" RegularExpression=".*:Lamebrix Strikebocks:1AB8:.*" DebugLevel="Info">
@@ -463,7 +727,7 @@
                   </Trigger>
                 </Triggers>
               </Folder>
-              <Folder Id="829e4b54-e03f-488c-a94c-28c8aeb4df0f" ZoneFilterRegularExpression="Alexander\ -\ The\ Heart\ Of\ The\ Creator" Name="11 - Alexander - The Heart of the Creator" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="829e4b54-e03f-488c-a94c-28c8aeb4df0f" ZoneFilterRegularExpression="Alexander\ -\ The\ Heart\ Of\ The\ Creator" Name="11 - Alexander - The Heart Of The Creator" Enabled="true">
                 <Folders />
                 <Triggers>
                   <Trigger Enabled="true" Name="Blastoff" Id="ad212861-b9e6-4bc3-9a3e-4d8e0e404881" RegularExpression="The Cruise Chaser uses Blastoff.">
@@ -508,7 +772,7 @@
                   </Trigger>
                 </Triggers>
               </Folder>
-              <Folder Id="37c4db3b-06a8-4787-971c-32de10c1e796" Name="12 - Alexander - The Soul of the Creator" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="37c4db3b-06a8-4787-971c-32de10c1e796" ZoneFilterRegularExpression="Alexander\ -\ The\ Soul\ Of\ The\ Creator" Name="12 - Alexander - The Soul Of The Creator" Enabled="true">
                 <Folders />
                 <Triggers>
                   <Trigger Enabled="true" Name="Sacrament" Id="72785e5b-8e14-4052-ae65-9cdf7779e338" RegularExpression="2b:Alexander Prime readies Sacrament">
@@ -543,12 +807,53 @@
                   </Trigger>
                 </Triggers>
               </Folder>
+              <Folder ZoneFilterEnabled="True" Id="67d9008b-99bd-40dc-b218-698c864c0c7f" ZoneFilterRegularExpression="Alexander\ -\ The\ Fist\ Of\ The\ Father" Name="01 - Gordias - The Fist Of The Father" Enabled="false">
+                <Folders />
+                <Triggers>
+                  <Trigger Enabled="true" Name="Hydrothermal Missile" Id="acd8b0d7-fdb8-4086-99ee-5d2003031ed2" RegularExpression="14:1119:Oppressor starts using Hydrothermal Missile on Oppressor">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Prey" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Photon Spaser" Id="add9fc9f-65eb-4a0b-a9e1-e9cdde0358aa" RegularExpression="14:1118:Oppressor starts using Photon Spaser on Oppressor">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Beam" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Resin Bomb" Id="ee666859-975a-4666-9ca5-40e52a671816" RegularExpression="14:111C:Oppressor starts using Resin Bomb on Oppressor">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Puddles" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                </Triggers>
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="2faadf0e-d8e9-49d6-b4d7-d2ffe73448c4" ZoneFilterRegularExpression="Alexander\ -\ The\ Cuff\ Of\ The\ Father" Name="02 - Gordias - The Cuff Of The Father" Enabled="false">
+                <Folders />
+                <Triggers />
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="ae221266-a116-4d2b-a5a4-eabd5c42adb7" ZoneFilterRegularExpression="Alexander\ -\ The\ Arm\ Of\ The\ Father" Name="03 - Gordias - The Arm Of The Father" Enabled="false">
+                <Folders />
+                <Triggers />
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="e648c79a-c7f5-4b9e-a9ca-094a21302c8b" ZoneFilterRegularExpression="Alexander\ -\ The\ Burden\ Of\ The\ Father" Name="04 - Gordias - The Burden Of The Father" Enabled="false">
+                <Folders />
+                <Triggers />
+              </Folder>
             </Folders>
             <Triggers />
           </Folder>
           <Folder Id="c9ecb975-abd6-4ec2-becd-55a791fb38df" Name="4.0 - Stormblood" Enabled="true">
             <Folders>
-              <Folder ZoneFilterEnabled="True" Id="f7a87b7e-e1da-4dad-bf01-c6c23d147299" ZoneFilterRegularExpression="Sigmascape\ \(V1\.0\)" Name="05 - Sigmascape V1.0" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="f7a87b7e-e1da-4dad-bf01-c6c23d147299" ZoneFilterRegularExpression="Sigmascape\ \(?V1\.0\)?" Name="05 - Sigmascape V1.0" Enabled="true">
                 <Folders>
                   <Folder ZoneFilterEnabled="True" Id="9c2e7984-5136-4bc4-b8d8-95f1f28bbee0" ZoneFilterRegularExpression="Sigmascape\ V1\.0\ \(Savage\)" Name="Sigmascape V1.0 Savage" Enabled="true">
                     <Folders />
@@ -602,7 +907,7 @@
                   </Trigger>
                 </Triggers>
               </Folder>
-              <Folder Id="825b688d-b116-430e-a481-1fa62bd5012c" ZoneFilterRegularExpression="Sigmascape\ \(V3\.0\)" Name="07 - Sigmascape V3.0" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="825b688d-b116-430e-a481-1fa62bd5012c" ZoneFilterRegularExpression="Sigmascape\ \(?V3\.0\)?" Name="07 - Sigmascape V3.0" Enabled="true">
                 <Folders>
                   <Folder Id="21ece1d6-e65c-4751-945c-7459a326ced6" ZoneFilterRegularExpression="Sigmascape\ V3\.0\ \(Savage\)" Name="Sigmascape V3.0 Savage" Enabled="true">
                     <Folders>
@@ -814,7 +1119,7 @@
                 </Folders>
                 <Triggers />
               </Folder>
-              <Folder Id="449974cf-d015-4b20-9f70-43b4b6f3e3d3" ZoneFilterRegularExpression="Sigmascape\ \(V4\.0\)" Name="08 - Sigmascape V4.0" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="449974cf-d015-4b20-9f70-43b4b6f3e3d3" ZoneFilterRegularExpression="Sigmascape\ \(?V4\.0\)?" Name="08 - Sigmascape V4.0" Enabled="true">
                 <Folders>
                   <Folder ZoneFilterEnabled="True" Id="0813f09e-a39b-4c8f-8d9e-4a77ab913587" ZoneFilterRegularExpression="Sigmascape\ V4\.0\ \(Savage\)" Name="Sigmascape V4.0 Savage" Enabled="true">
                     <Folders>
@@ -1007,7 +1312,7 @@
                   </Folder>
                 </Folders>
                 <Triggers>
-                  <Trigger Enabled="true" Name="Timely Teleport" Id="bbfa1216-04e4-41f4-bb42-6722b1524587" RegularExpression="14:(2922|....):Kefka starts using Timely Teleport on Kefka">
+                  <Trigger Enabled="true" Name="Timely Teleport" Id="bbfa1216-04e4-41f4-bb42-6722b1524587" RegularExpression="14:(2922|....):Kefka starts using Timely Teleport on Kefka" PeriodRefire="Deny" RefirePeriodExpression="10000">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="behind" TextAuraFontSize="0" ActionType="UseTTS" RefireInterrupt="True" />
                     </Actions>
@@ -1055,7 +1360,7 @@
                   </Trigger>
                 </Triggers>
               </Folder>
-              <Folder Id="18d35f2a-ca02-43c7-925f-057bbe00bda1" ZoneFilterRegularExpression="Alphascape\ \(V3\.0\)" Name="11 - Alphascape V3.0" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="18d35f2a-ca02-43c7-925f-057bbe00bda1" ZoneFilterRegularExpression="Alphascape\ \(?V3\.0\)?" Name="11 - Alphascape V3.0" Enabled="true">
                 <Folders>
                   <Folder Id="8ef06b4c-7bff-4700-974b-6280286cec14" Name="Nauticals" Enabled="false">
                     <Folders>
@@ -1434,12 +1739,12 @@
                   </Trigger>
                 </Triggers>
               </Folder>
-              <Folder Id="cc06f7db-c9fc-457c-beea-1637786e987f" ZoneFilterRegularExpression="Alphascape\ \(V2\.0\)" Name="10 - Alphascape V2.0" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="cc06f7db-c9fc-457c-beea-1637786e987f" ZoneFilterRegularExpression="Alphascape\ \(?V2\.0\)?" Name="10 - Alphascape V2.0" Enabled="true">
                 <Folders>
                   <Folder Id="0f760b84-7c11-4593-b875-eec4276270d1" Name="O10S" Enabled="true">
                     <Folders />
                     <Triggers>
-                      <Trigger Enabled="true" Name="Flip/Spin" Id="1c453281-9085-4e2f-b974-badef0d1663e" RegularExpression="15:[0-9A-F]{8}:Midgardsormr:(?&lt;id&gt;[0-9A-F]{4}):">
+                      <Trigger Enabled="false" Name="Flip/Spin" Id="1c453281-9085-4e2f-b974-badef0d1663e" RegularExpression="15:[0-9A-F]{8}:Midgardsormr:(?&lt;id&gt;[0-9A-F]{4}):">
                         <Actions>
                           <Action OrderNumber="1" UseTTSTextExpression="In or Out" TextAuraFontSize="0" ActionType="UseTTS">
                             <Condition Enabled="true" Grouping="And">
@@ -1558,16 +1863,18 @@
                             </Condition>
                           </Action>
                         </Actions>
+                        <Condition Enabled="false" Grouping="Or" />
                       </Trigger>
                       <Trigger Enabled="false" Name="Crumbling Bulwark on $char" Id="a83599ba-9174-46bc-8164-0d7d499b2e1d" RegularExpression="1A:(?&lt;char&gt;[a-zA-Z']*).*gains the effect of (Unknown_64F|Crumbling Bulwark)">
                         <Actions>
                           <Action OrderNumber="1" UseTTSTextExpression="Bulwark on ${char}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
                         </Actions>
                       </Trigger>
-                      <Trigger Enabled="false" Name="Arcane Bulwark on $char" Id="b65b8b83-171a-4453-af28-2410a54e3ed5" RegularExpression="1A:(?&lt;char&gt;[a-zA-Z']*).*gains the effect of (Unknown_64B|Arcane Bulwark)">
+                      <Trigger Enabled="true" Name="Arcane Bulwark on $char" Id="b65b8b83-171a-4453-af28-2410a54e3ed5" RegularExpression="1A:(?&lt;char&gt;[a-zA-Z']*).*gains the effect of (Unknown_64B|Arcane Bulwark)">
                         <Actions>
                           <Action OrderNumber="1" UseTTSTextExpression="Bulwark on ${char}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
                         </Actions>
+                        <Condition Enabled="false" Grouping="Or" />
                       </Trigger>
                       <Trigger Enabled="true" Name="Thou and thine fight with admirable spirit" Id="547b6aa9-25ea-439b-aa19-775f84d891e1" RegularExpression="Thou and thine fight with admirable spirit">
                         <Actions>
@@ -1581,7 +1888,7 @@
                       </Trigger>
                     </Triggers>
                   </Folder>
-                  <Folder Id="1712d9bd-8794-486d-82bf-f52c7ad7d757" Name="Alphascape V2.0 Savage" Enabled="true">
+                  <Folder ZoneFilterEnabled="True" Id="1712d9bd-8794-486d-82bf-f52c7ad7d757" ZoneFilterRegularExpression="Alphascape\ V2\.0\ \(Savage\)" Name="Alphascape V2.0 Savage" Enabled="true">
                     <Folders>
                       <Folder Id="ece90802-1b7e-443f-aa15-5edf59ba1cff" Name="Spinny Flips" Enabled="true">
                         <Folders>
@@ -1658,7 +1965,7 @@
                 </Folders>
                 <Triggers />
               </Folder>
-              <Folder Id="296e9214-1b1d-4bfa-ac20-b8a2732a4dae" Name="12 - Alphascape V4.0" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="296e9214-1b1d-4bfa-ac20-b8a2732a4dae" ZoneFilterRegularExpression="Alphascape\ \(?V4\.0\)?" Name="12 - Alphascape V4.0" Enabled="true">
                 <Folders>
                   <Folder Id="daee0974-667c-4490-9ac2-1aea0c6f891a" Name="Alphascape V4.0 (Savage)" Enabled="true">
                     <Folders>
@@ -1793,6 +2100,100 @@
                           </Trigger>
                         </Triggers>
                       </Folder>
+                      <Folder Id="45dd6bb9-0efb-4290-a588-90bf5028a1c8" Name="### - Network Lines" Enabled="true">
+                        <Folders />
+                        <Triggers>
+                          <Trigger Enabled="true" Name="Fire 3 - Spread" Id="aa0f9ecd-19eb-4107-b713-154b7992d04f" RegularExpression="15:[A-F0-9]{8}:Omega-M:3334:Superliminal Motion:">
+                            <Actions>
+                              <Action OrderNumber="1" UseTTSTextExpression="Spread" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                                <Condition Enabled="false" Grouping="Or" />
+                                <Conditions />
+                              </Action>
+                            </Actions>
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Trigger>
+                          <Trigger Enabled="true" Name="Laser Shower" Id="d66eccb1-268b-4456-bbd4-379eccf0da95" RegularExpression="14:335[23]:Omega(?&gt;-M)? starts using Laser Shower on Omega(?&gt;-M)?">
+                            <Actions>
+                              <Action OrderNumber="1" UseTTSTextExpression="aoe" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                                <Condition Enabled="false" Grouping="Or" />
+                              </Action>
+                            </Actions>
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Trigger>
+                          <Trigger Enabled="true" Name="Resonance - Local = Spread" Id="307929a6-991b-4799-ae39-2681bde9b819" RegularExpression="1A:[A-F0-9]{8}:Omega gains the effect of Local Resonance from  for 50.00 Seconds">
+                            <Actions>
+                              <Action OrderNumber="1" UseTTSTextExpression="SPREAD BOSS" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
+                            </Actions>
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Trigger>
+                          <Trigger Enabled="true" Name="Resonance - Remote = CLOSE" Id="4ab19828-f78d-4982-93a4-f881946326ab" RegularExpression="1A:[A-F0-9]{8}:Omega gains the effect of Remote Resonance from  for 50.00 Seconds">
+                            <Actions>
+                              <Action OrderNumber="1" UseTTSTextExpression="Stack BOSS" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                                <Condition Enabled="false" Grouping="Or" />
+                              </Action>
+                            </Actions>
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Trigger>
+                          <Trigger Enabled="true" Name="Fundamental Synergy - Numbers" Id="72e14a82-a86c-4567-80d7-0af1ebfdc4dd" RegularExpression="14:333C:Omega-M starts using Fundamental Synergy on Omega-M">
+                            <Actions>
+                              <Action OrderNumber="1" UseTTSTextExpression="Numbers" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                                <Condition Enabled="false" Grouping="Or" />
+                              </Action>
+                            </Actions>
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Trigger>
+                          <Trigger Enabled="true" Name="Solar Ray - Buster" Id="a13b1b3e-3c7a-4cef-a0c4-6a4bf30a3a03" RegularExpression="14:335[01]:Omega(?&gt;-M)? starts using Solar Ray" PrevActionsRefire="Deny" PeriodRefire="Deny" RefirePeriodExpression="1000">
+                            <Actions>
+                              <Action OrderNumber="1" UseTTSTextExpression="Buster" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                                <Condition Enabled="false" Grouping="Or" />
+                              </Action>
+                            </Actions>
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Trigger>
+                          <Trigger Enabled="true" Name="Packet Filter" Id="c08680cc-9d54-4fa5-90ec-80ac26d60053" RegularExpression="1A:[A-F0-9]{8}:(?&lt;player&gt;[a-zA-Z-' ]{3,21}) gains the effect of Packet Filter (?&lt;debuff&gt;M|F)">
+                            <Actions>
+                              <Action OrderNumber="1" PlaySpeechMyself="True" UseTTSTextExpression="Attack F" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                                <Condition Enabled="true" Grouping="And">
+                                  <ConditionSingle Enabled="true" ExpressionL="${debuff}" ExpressionTypeL="String" ExpressionR="M" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                                </Condition>
+                              </Action>
+                              <Action OrderNumber="2" PlaySpeechMyself="True" UseTTSTextExpression="Attack M" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                                <Condition Enabled="true" Grouping="And">
+                                  <ConditionSingle Enabled="true" ExpressionL="${debuff}" ExpressionTypeL="String" ExpressionR="F" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                                </Condition>
+                              </Action>
+                            </Actions>
+                            <Condition Enabled="true" Grouping="And">
+                              <ConditionSingle Enabled="true" ExpressionL="${player}" ExpressionTypeL="String" ExpressionR="${_ffxivplayer}" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                            </Condition>
+                          </Trigger>
+                          <Trigger Enabled="true" Name="Pile Pitch" Id="58f3032c-0b08-40fc-a7c3-9f234944b512" RegularExpression="15:[A-F0-9]{8}:Omega-M:332B:Beyond Defense:[A-F0-9]{8}:Omega-M:">
+                            <Actions>
+                              <Action OrderNumber="1" UseTTSTextExpression="Stack" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                                <Condition Enabled="false" Grouping="Or" />
+                              </Action>
+                            </Actions>
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Trigger>
+                          <Trigger Enabled="true" Name="Superliminal Motion" Id="287bd733-874c-4549-aecc-e27106df6724" RegularExpression="14:3334:Omega-M starts using Superliminal Motion on Omega-M">
+                            <Actions>
+                              <Action OrderNumber="1" UseTTSTextExpression="Behind" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                                <Condition Enabled="false" Grouping="Or" />
+                              </Action>
+                            </Actions>
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Trigger>
+                          <Trigger Enabled="true" Name="Synthetic Blades|Shield" Id="8fd39c0e-622f-4a9d-be62-953b9e949c99" RegularExpression="14:(?&gt;32FD|3301):Omega-M starts using (?&lt;cast&gt;Synthetic (?&gt;Shield|Blades)) on Omega-M">
+                            <Actions>
+                              <Action OrderNumber="1" UseTTSTextExpression="${cast}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                                <Condition Enabled="false" Grouping="Or" />
+                                <Conditions />
+                              </Action>
+                            </Actions>
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Trigger>
+                        </Triggers>
+                      </Folder>
                     </Folders>
                     <Triggers>
                       <Trigger Enabled="true" Name="Diffuse Wave Cannon (Front/back safe)" Id="cae34aed-49c0-4c6c-b5bd-ce43b6c2a1a6" RegularExpression="Omega starts using Unknown_3368 on Omega">
@@ -1809,7 +2210,7 @@
                   </Folder>
                 </Folders>
                 <Triggers>
-                  <Trigger Enabled="true" Name="Tank Buster" Id="88e95f81-0f11-43df-bc31-04f8f9fcf5b2" RegularExpression="2b:Omega-[MF] readies Solar Ray" PrevActionsRefire="Deny" PeriodRefire="Deny" RefirePeriodExpression="1000">
+                  <Trigger Enabled="false" Name="Tank Buster" Id="88e95f81-0f11-43df-bc31-04f8f9fcf5b2" RegularExpression="2b:Omega-[MF] readies Solar Ray" PrevActionsRefire="Deny" PeriodRefire="Deny" RefirePeriodExpression="1000">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="tank buster" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireRequeue="False">
                         <Condition Enabled="false" Grouping="Or" />
@@ -1825,7 +2226,7 @@
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
                   </Trigger>
-                  <Trigger Enabled="true" Name="Laser Shower" Id="dd4291e2-cb71-473e-8f17-2f4c83a715e4" RegularExpression="2b:Omega-(M|F) readies Laser Shower" PrevActionsRefire="Deny" PeriodRefire="Deny" RefirePeriodExpression="1000">
+                  <Trigger Enabled="false" Name="Laser Shower" Id="dd4291e2-cb71-473e-8f17-2f4c83a715e4" RegularExpression="2b:Omega-(M|F) readies Laser Shower" PrevActionsRefire="Deny" PeriodRefire="Deny" RefirePeriodExpression="1000">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="AOE" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True">
                         <Condition Enabled="false" Grouping="Or" />
@@ -1833,24 +2234,24 @@
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
                   </Trigger>
-                  <Trigger Enabled="true" Name="Beyond Defence" Id="62cfc931-bf85-4527-ab59-75221e666d02" RegularExpression="2B:Omega-M starts using Beyond Defense on Omega-M">
+                  <Trigger Enabled="false" Name="Beyond Defence" Id="62cfc931-bf85-4527-ab59-75221e666d02" RegularExpression="2B:Omega-M starts using Beyond Defense on Omega-M">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="Spread" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
                   </Trigger>
-                  <Trigger Enabled="true" Name="Fire 3" Id="a9a05611-2091-464d-a253-18b7f43a22be" RegularExpression="2b:Omega-F uses Superliminal Motion">
+                  <Trigger Enabled="false" Name="Fire 3" Id="a9a05611-2091-464d-a253-18b7f43a22be" RegularExpression="2b:Omega-F uses Superliminal Motion">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="SPREAD" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
                     </Actions>
                   </Trigger>
-                  <Trigger Enabled="true" Name="Local = Spread" Id="1148a396-0ad2-4c5d-902c-1e679aa63aba" RegularExpression="1A:[\w]+:Omega gains the effect of Local Resonance from  for 50.00 Seconds">
+                  <Trigger Enabled="false" Name="Local = Spread" Id="1148a396-0ad2-4c5d-902c-1e679aa63aba" RegularExpression="1A:[\w]+:Omega gains the effect of Local Resonance from  for 50.00 Seconds">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="SPREAD BOSS" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
                   </Trigger>
-                  <Trigger Enabled="true" Name="Numbers" Id="c9894830-5ad0-4ee0-8406-aa17cf5f7a91" RegularExpression="2b:Omega-M readies Fundamental Synergy" PrevActionsRefire="Deny" PeriodRefire="Deny">
+                  <Trigger Enabled="false" Name="Numbers" Id="c9894830-5ad0-4ee0-8406-aa17cf5f7a91" RegularExpression="2b:Omega-M readies Fundamental Synergy" PrevActionsRefire="Deny" PeriodRefire="Deny">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="Numbers" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireRequeue="False" />
                     </Actions>
@@ -1860,28 +2261,28 @@
                       <Action OrderNumber="1" UseTTSTextExpression="Infinite Limit on ${target}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
                     </Actions>
                   </Trigger>
-                  <Trigger Enabled="true" Name="Packet Filter F" Id="df185050-660a-4dd2-9fa8-2e0ad7a2d5df" RegularExpression="You suffer the effect of Packet Filter F">
+                  <Trigger Enabled="false" Name="Packet Filter F" Id="df185050-660a-4dd2-9fa8-2e0ad7a2d5df" RegularExpression="You suffer the effect of Packet Filter F">
                     <Actions>
                       <Action OrderNumber="1" PlaySpeechMyself="True" UseTTSTextExpression="Attack M" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
                     </Actions>
                   </Trigger>
-                  <Trigger Enabled="true" Name="Packet Filter M" Id="b11c37c5-82c5-4006-9e91-e5aac3326369" RegularExpression="You suffer the effect of Packet Filter M">
+                  <Trigger Enabled="false" Name="Packet Filter M" Id="b11c37c5-82c5-4006-9e91-e5aac3326369" RegularExpression="You suffer the effect of Packet Filter M">
                     <Actions>
                       <Action OrderNumber="1" PlaySpeechMyself="True" UseTTSTextExpression="Attack F" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
                     </Actions>
                   </Trigger>
-                  <Trigger Enabled="true" Name="Remote = CLOSE" Id="eabecb3b-e7f2-4d6f-b381-4feb19b5cd04" RegularExpression="1A:[\w]+:Omega gains the effect of Remote Resonance from  for 50.00 Seconds">
+                  <Trigger Enabled="false" Name="Remote = CLOSE" Id="eabecb3b-e7f2-4d6f-b381-4feb19b5cd04" RegularExpression="1A:[\w]+:Omega gains the effect of Remote Resonance from  for 50.00 Seconds">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="Stack BOSSES" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
                   </Trigger>
-                  <Trigger Enabled="true" Name="Pile Pitch" Id="bf0d7406-a0d9-4dee-afaf-7d6635210e42" RegularExpression="2b:Omega-M uses Beyond Defense">
+                  <Trigger Enabled="false" Name="Pile Pitch" Id="bf0d7406-a0d9-4dee-afaf-7d6635210e42" RegularExpression="2b:Omega-M uses Beyond Defense">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="Stack" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
                     </Actions>
                   </Trigger>
-                  <Trigger Enabled="true" Name="Short Stack" Id="29a46f01-37e8-4bc9-91b3-f4b334ef5231" RegularExpression="1A:[\w]+:(?&lt;FirstName&gt;[a-zA-Z'\-]*) (?&lt;LastName&gt;[a-zA-Z'\-]*) gains the effect of (:Unknown_680|Critical Synchronization Bug) from (?:.*) for (?&lt;Duration&gt;[0-9]{1,2})\.00 Seconds\." DebugLevel="Verbose" PeriodRefire="Deny" RefirePeriodExpression="60000">
+                  <Trigger Enabled="false" Name="Short Stack" Id="29a46f01-37e8-4bc9-91b3-f4b334ef5231" RegularExpression="1A:[\w]+:(?&lt;FirstName&gt;[a-zA-Z'\-]*) (?&lt;LastName&gt;[a-zA-Z'\-]*) gains the effect of (:Unknown_680|Critical Synchronization Bug) from (?:.*) for (?&lt;Duration&gt;[0-9]{1,2})\.00 Seconds\." DebugLevel="Verbose" PeriodRefire="Deny" RefirePeriodExpression="60000">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="${FirstName}, short stack" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="true" Grouping="And">
@@ -1891,17 +2292,17 @@
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
                   </Trigger>
-                  <Trigger Enabled="true" Name="Superliminal Motion" Id="4fcd0538-a66e-4c25-b468-0fc58cb38896" RegularExpression="2b:Omega-F readies Superliminal Motion">
+                  <Trigger Enabled="false" Name="Superliminal Motion" Id="4fcd0538-a66e-4c25-b468-0fc58cb38896" RegularExpression="2b:Omega-F readies Superliminal Motion">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="BEHIND" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
                     </Actions>
                   </Trigger>
-                  <Trigger Enabled="true" Name="Synthetic Blades" Id="2d845596-fcc8-4f8e-a602-bda06f01cc6a" RegularExpression="2b:Omega-F readies Synthetic Blades">
+                  <Trigger Enabled="false" Name="Synthetic Blades" Id="2d845596-fcc8-4f8e-a602-bda06f01cc6a" RegularExpression="2b:Omega-F readies Synthetic Blades">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="Synthetic Blades" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
                     </Actions>
                   </Trigger>
-                  <Trigger Enabled="true" Name="Synthetic Shield" Id="94e1d562-7dc9-4fcb-b6cf-c3594f646471" RegularExpression="2b:Omega-M readies Synthetic Shield">
+                  <Trigger Enabled="false" Name="Synthetic Shield" Id="94e1d562-7dc9-4fcb-b6cf-c3594f646471" RegularExpression="2b:Omega-M readies Synthetic Shield">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="Synthetic Shield" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
@@ -1911,7 +2312,7 @@
                   </Trigger>
                 </Triggers>
               </Folder>
-              <Folder Id="f92829e4-24a5-48b8-9fec-587263baef9c" ZoneFilterRegularExpression="Alphascape\ V1\.0\ \(Savage\)" Name="09 - Alphascape V1.0" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="f92829e4-24a5-48b8-9fec-587263baef9c" ZoneFilterRegularExpression="Alphascape\ \(?V1\.0\)?" Name="09 - Alphascape V1.0" Enabled="true">
                 <Folders>
                   <Folder Id="37d529fe-910e-4392-ae3d-524c7132e87b" Name="V1S" Enabled="true">
                     <Folders />
@@ -2108,7 +2509,7 @@
                   </Trigger>
                 </Triggers>
               </Folder>
-              <Folder Id="660b9d88-3086-4b6d-bbf7-a86c8d551a75" Name="01 - Deltascape V1.0" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="660b9d88-3086-4b6d-bbf7-a86c8d551a75" ZoneFilterRegularExpression="Deltascape\ \(?V1\.0\)?" Name="01 - Deltascape V1.0" Enabled="true">
                 <Folders />
                 <Triggers>
                   <Trigger Enabled="true" Name="Clamp" Id="a56ca1e2-f893-4407-b860-f927997d4c6b" RegularExpression="2b:Alte Roite readies Clamp">
@@ -2145,7 +2546,7 @@
                   </Trigger>
                 </Triggers>
               </Folder>
-              <Folder Id="6357f28c-2aea-4205-8f06-e58effd44a8d" ZoneFilterRegularExpression="Deltascape\ V3\.0\ \(Savage\)" Name="03 - Deltascape V3.0" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="6357f28c-2aea-4205-8f06-e58effd44a8d" ZoneFilterRegularExpression="Deltascape\ \(?V3\.0\)?" Name="03 - Deltascape V3.0" Enabled="true">
                 <Folders>
                   <Folder Id="e7f6c628-7a8d-4fc6-a824-f3acfee72d73" Name="spellblades from reddit" Enabled="true">
                     <Folders />
@@ -2227,7 +2628,7 @@
                   </Trigger>
                 </Triggers>
               </Folder>
-              <Folder Id="68be24d7-c685-4547-8e7e-040474796d11" Name="02 - Deltascape V2.0" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="68be24d7-c685-4547-8e7e-040474796d11" ZoneFilterRegularExpression="Deltascape\ \(?V2\.0\)?" Name="02 - Deltascape V2.0" Enabled="true">
                 <Folders />
                 <Triggers>
                   <Trigger Enabled="true" Name="Earthquake" Id="a0fc7b26-79fd-4268-86c7-87ba99037c03" RegularExpression="2b:Catastrophe readies Earthquake">
@@ -2296,7 +2697,7 @@
                   </Trigger>
                 </Triggers>
               </Folder>
-              <Folder ZoneFilterEnabled="True" Id="31a6c159-270d-4606-be4d-1e7873a233cd" ZoneFilterRegularExpression="Deltascape\ V4\.0(\ \(Savage\))?" Name="04 - Deltascape V4.0" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="31a6c159-270d-4606-be4d-1e7873a233cd" ZoneFilterRegularExpression="Deltascape\ \(?V4\.0\)?" Name="04 - Deltascape V4.0" Enabled="true">
                 <Folders>
                   <Folder Id="d86d193a-ad23-4caf-8022-45f66d8b8cf1" Name="Exdeath Door" Enabled="true">
                     <Folders />
@@ -2446,14 +2847,14 @@
                         </Actions>
                         <Condition Enabled="false" Grouping="And" />
                       </Trigger>
-                      <Trigger Enabled="true" Name="Black|White Wound Setup" Id="95b22d29-2dca-4c7d-9105-cfefc439b828" RegularExpression="1A:[A-F0-9]{8}:(?&lt;player&gt;[a-zA-Z-' ]{1,31}) (?&lt;debuff&gt;gains|loses) the effect of (?&lt;o4swound&gt;White|Black) Wound from  for 9999\.00 Seconds">
+                      <Trigger Enabled="true" Sequential="True" Name="Black|White Wound Setup" Id="95b22d29-2dca-4c7d-9105-cfefc439b828" RegularExpression="1A:[A-F0-9]{8}:(?&lt;player&gt;[a-zA-Z-' ]{1,31}) (?&lt;debuff&gt;gains|loses) the effect of (?&lt;o4swound&gt;White|Black) Wound from  for 9999\.00 Seconds">
                         <Actions>
                           <Action OrderNumber="1" VariableName="wound" VariableExpression="${wound}" TextAuraFontSize="0" ActionType="Variable" RefireInterrupt="True">
                             <Condition Enabled="true" Grouping="And">
                               <ConditionSingle Enabled="true" ExpressionL="${debuff}" ExpressionTypeL="String" ExpressionR="loses" ExpressionTypeR="String" ConditionType="StringEqualCase" />
                             </Condition>
                           </Action>
-                          <Action OrderNumber="2" VariableOp="SetString" VariableName="o4swound" VariableExpression="${o4swound}" TextAuraFontSize="0" ActionType="Variable" ExecutionDelayExpression="5" Asynchronous="False" RefireInterrupt="True">
+                          <Action OrderNumber="2" VariableOp="SetString" VariableName="o4swound" VariableExpression="${o4swound}" TextAuraFontSize="0" ActionType="Variable" RefireInterrupt="True">
                             <Condition Enabled="true" Grouping="And">
                               <ConditionSingle Enabled="true" ExpressionL="${debuff}" ExpressionTypeL="String" ExpressionR="gains" ExpressionTypeR="String" ConditionType="StringEqualCase" />
                             </Condition>
@@ -2515,7 +2916,7 @@
                   </Trigger>
                 </Triggers>
               </Folder>
-              <Folder Id="e46a126c-0f82-40da-8bc8-b593656ace68" ZoneFilterRegularExpression="Sigmascape\ V2\.0\ \(Savage\)" Name="06 - Sigmascape V2.0" Enabled="true">
+              <Folder ZoneFilterEnabled="True" Id="e46a126c-0f82-40da-8bc8-b593656ace68" ZoneFilterRegularExpression="Sigmascape\ \(?V2\.0\)?" Name="06 - Sigmascape V2.0" Enabled="true">
                 <Folders />
                 <Triggers>
                   <Trigger Enabled="true" Name="Demonic Howl" Id="a70b1b69-f8d2-494c-95d4-ee8f07ffb4d4" RegularExpression="Demon Chadarnook readies Demonic Howl">
@@ -2653,43 +3054,6 @@
                             <Condition Enabled="true" Grouping="And">
                               <ConditionSingle Enabled="true" ExpressionL="${cast}" ExpressionTypeL="String" ExpressionR="44E4" ExpressionTypeR="String" ConditionType="StringEqualCase" />
                             </Condition>
-                          </Action>
-                        </Actions>
-                        <Condition Enabled="false" Grouping="Or" />
-                      </Trigger>
-                    </Triggers>
-                  </Folder>
-                  <Folder Id="cbdcd402-97ac-4dbc-8640-b5f820c844ef" Name="old" Enabled="false">
-                    <Folders />
-                    <Triggers>
-                      <Trigger Enabled="false" Name="Eden's Flare" Id="d9de5d99-859a-46e7-8eca-86a96b2440b2" RegularExpression="2b:Eden Prime begins casting Eden's Flare">
-                        <Actions>
-                          <Action OrderNumber="1" UseTTSTextExpression="Go in" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
-                            <Condition Enabled="false" Grouping="Or" />
-                          </Action>
-                        </Actions>
-                        <Condition Enabled="false" Grouping="Or" />
-                      </Trigger>
-                      <Trigger Enabled="false" Name="Eden's Gravity" Id="d5b85466-6be2-4553-b788-af21f212388b" RegularExpression="2b:Eden Prime begins casting Eden's Gravity">
-                        <Actions>
-                          <Action OrderNumber="1" UseTTSTextExpression="AoE" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
-                            <Condition Enabled="false" Grouping="Or" />
-                          </Action>
-                        </Actions>
-                        <Condition Enabled="false" Grouping="Or" />
-                      </Trigger>
-                      <Trigger Enabled="false" Name="Pure Light" Id="9cc03f42-b427-457b-be4d-161c65517150" RegularExpression="2b:Eden Prime begins casting Pure Light">
-                        <Actions>
-                          <Action OrderNumber="1" UseTTSTextExpression="Go Behind" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
-                            <Condition Enabled="false" Grouping="Or" />
-                          </Action>
-                        </Actions>
-                        <Condition Enabled="false" Grouping="Or" />
-                      </Trigger>
-                      <Trigger Enabled="false" Name="Spear of Paradise" Id="7ccbc6d9-7136-41db-ac94-ec2a87c35feb" RegularExpression="2b:Eden Prime begins casting Spear of Paradise">
-                        <Actions>
-                          <Action OrderNumber="1" UseTTSTextExpression="Tank Buster" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
-                            <Condition Enabled="false" Grouping="Or" />
                           </Action>
                         </Actions>
                         <Condition Enabled="false" Grouping="Or" />
@@ -3133,7 +3497,7 @@
                   </Folder>
                 </Folders>
                 <Triggers>
-                  <Trigger Enabled="true" Name="Rip Current" Id="72133a3c-74a9-4b05-a56a-7cafaf0fe49d" RegularExpression="2b:Leviathan begins casting Rip Current">
+                  <Trigger Enabled="true" Name="Rip Current" Id="72133a3c-74a9-4b05-a56a-7cafaf0fe49d" RegularExpression="14:....:Leviathan starts using Rip Current on Leviathan.&#xA;">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="Tank Buster" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
@@ -3141,7 +3505,7 @@
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
                   </Trigger>
-                  <Trigger Enabled="true" Name="Tidal Roar" Id="236dab37-7d50-434b-a617-98ece15864cd" RegularExpression="14:3FDC:Leviathan starts using Tidal Roar">
+                  <Trigger Enabled="true" Name="Tidal Roar" Id="236dab37-7d50-434b-a617-98ece15864cd" RegularExpression="14:(3FDC|3FC4):Leviathan starts using Tidal Roar">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="AoE" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
@@ -3149,7 +3513,7 @@
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
                   </Trigger>
-                  <Trigger Enabled="true" Name="Tidal Wave" Id="c295a2d0-8c43-44fb-84a1-d4314484b20e" RegularExpression="14:3FF1:Leviathan starts using Tidal Wave">
+                  <Trigger Enabled="true" Name="Tidal Wave" Id="c295a2d0-8c43-44fb-84a1-d4314484b20e" RegularExpression="14:(3FF1|3FD2):Leviathan starts using Tidal Wave">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="Knockback" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" ExecutionDelayExpression="8000">
                         <Condition Enabled="false" Grouping="Or" />
@@ -3157,7 +3521,7 @@
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
                   </Trigger>
-                  <Trigger Enabled="true" Name="Tsunami" Id="06bc4de1-2159-4023-969f-24196d4888ef" RegularExpression="14:3FF3:Leviathan starts using Tsunami">
+                  <Trigger Enabled="true" Name="Tsunami" Id="06bc4de1-2159-4023-969f-24196d4888ef" RegularExpression="14:(3FF3|3FD4):Leviathan starts using Tsunami">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="AoE" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
@@ -3165,16 +3529,16 @@
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
                   </Trigger>
-                  <Trigger Enabled="true" Name="Undersea Quake" Id="35161aa1-6a77-48ef-8caa-34900c24d9b3" RegularExpression="14:(?&lt;id&gt;3FEF|3FEE):Leviathan starts using Undersea Quake">
+                  <Trigger Enabled="true" Name="Undersea Quake" Id="35161aa1-6a77-48ef-8caa-34900c24d9b3" RegularExpression="14:(?&lt;id&gt;3FEF|3FEE|3FD0|3FCF):Leviathan starts using Undersea Quake">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="Go Middle" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="true" Grouping="And">
-                          <ConditionSingle Enabled="true" ExpressionL="${id}" ExpressionTypeL="String" ExpressionR="3FEF" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${id}" ExpressionTypeL="String" ExpressionR="3FEF|3FD0" ExpressionTypeR="String" ConditionType="StringEqualCase" />
                         </Condition>
                       </Action>
                       <Action OrderNumber="2" UseTTSTextExpression="Go Sides" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="true" Grouping="And">
-                          <ConditionSingle Enabled="true" ExpressionL="${id}" ExpressionTypeL="String" ExpressionR="3FEE" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${id}" ExpressionTypeL="String" ExpressionR="3FEE|3FCF" ExpressionTypeR="String" ConditionType="StringEqualCase" />
                         </Condition>
                       </Action>
                     </Actions>
@@ -3376,7 +3740,7 @@
                               <ConditionSingle Enabled="true" ExpressionL="${id}" ExpressionTypeL="String" ExpressionR="412F" ExpressionTypeR="String" ConditionType="StringEqualCase" />
                             </Condition>
                           </Action>
-                          <Action OrderNumber="2" PlaySpeechMyself="True" UseTTSTextExpression="Right ... then Left" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                          <Action OrderNumber="2" UseTTSTextExpression="Right ... then Left" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                             <Condition Enabled="true" Grouping="And">
                               <ConditionSingle Enabled="true" ExpressionL="${id}" ExpressionTypeL="String" ExpressionR="4130" ExpressionTypeR="String" ConditionType="StringEqualCase" />
                             </Condition>
@@ -4524,7 +4888,7 @@
                             </Actions>
                             <Condition Enabled="false" Grouping="Or" />
                           </Trigger>
-                          <Trigger Enabled="false" Name="README - https://discordapp.com/channels/374517624228544512/399219257302450196/560323108263690251" Id="eaff2773-5501-40e1-883b-265539e57886" RegularExpression="https://discordapp.com/channels/374517624228544512/399219257302450196/560323108263690251" Description="Illidra Ethorn - 27/03/2019&#xD;&#xA;Player Marking Trigger&#xD;&#xA;&#xD;&#xA;I made a neat player marking trigger that allows you to easily mark ffxiv players in your own triggers.&#xD;&#xA;&#xD;&#xA;If you try to mark many players in quick succession, it'll queue up to prevent inputting too many actions at once.&#xD;&#xA;&#xD;&#xA;Here it is: https://pastebin.com/zhC1ezqA&#xD;&#xA;&#xD;&#xA;Setting it up:&#xD;&#xA;- Move the PlayerMarker folder to be under the Root folder: https://i.imgur.com/AjBeqo0.png&#xD;&#xA;- Ensure your triggernometry config is set up to order party members properly: https://i.imgur.com/mlyexNA.png&#xD;&#xA;- Set up a new hotbar in game with keybinds F1-F9 (you can utilize other keybinds, but you'll have to figure that out and modify the trigger on your own)&#xD;&#xA;- Make 9 macros in game with the following code:&#xD;&#xA;/mk attack &lt;1&gt;&#xD;&#xA;/mk attack &lt;2&gt;&#xD;&#xA;...&#xD;&#xA;/mk attack &lt;8&gt;&#xD;&#xA;/merror off&#xD;&#xA;/mk clear &lt;1&gt;&#xD;&#xA;/mk clear &lt;2&gt;&#xD;&#xA;/mk clear &lt;3&gt;&#xD;&#xA;/mk clear &lt;4&gt;&#xD;&#xA;/mk clear &lt;5&gt;&#xD;&#xA;/mk clear &lt;6&gt;&#xD;&#xA;/mk clear &lt;7&gt;&#xD;&#xA;/mk clear &lt;8&gt;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;- Set the /mk attack macros to be in order of the players they will mark (the /mk attack &lt;1&gt; macro will be on F1, etc...)&#xD;&#xA;- Set the /mk clear &lt;1-8&gt; macro to be on F9&#xD;&#xA;&#xD;&#xA;Example of using it: &#xD;&#xA;https://i.imgur.com/MsXNtJE.png&#xD;&#xA;https://i.imgur.com/gpFVLlZ.png&#xD;&#xA;&#xD;&#xA;Example Trigger: https://pastebin.com/McKWV0KH&#xD;&#xA;&#xD;&#xA;To use the example trigger:&#xD;&#xA;Type in /e M4rk: (player name in your party) to mark them">
+                          <Trigger Enabled="false" Source="None" Name="README - https://discordapp.com/channels/374517624228544512/399219257302450196/560323108263690251" Id="eaff2773-5501-40e1-883b-265539e57886" RegularExpression="https://discordapp.com/channels/374517624228544512/399219257302450196/560323108263690251" Description="Illidra Ethorn - 27/03/2019&#xD;&#xA;Player Marking Trigger&#xD;&#xA;&#xD;&#xA;I made a neat player marking trigger that allows you to easily mark ffxiv players in your own triggers.&#xD;&#xA;&#xD;&#xA;If you try to mark many players in quick succession, it'll queue up to prevent inputting too many actions at once.&#xD;&#xA;&#xD;&#xA;Here it is: https://pastebin.com/zhC1ezqA&#xD;&#xA;&#xD;&#xA;Setting it up:&#xD;&#xA;- Move the PlayerMarker folder to be under the Root folder: https://i.imgur.com/AjBeqo0.png&#xD;&#xA;- Ensure your triggernometry config is set up to order party members properly: https://i.imgur.com/mlyexNA.png&#xD;&#xA;- Set up a new hotbar in game with keybinds F1-F9 (you can utilize other keybinds, but you'll have to figure that out and modify the trigger on your own)&#xD;&#xA;- Make 9 macros in game with the following code:&#xD;&#xA;/mk attack &lt;1&gt;&#xD;&#xA;/mk attack &lt;2&gt;&#xD;&#xA;...&#xD;&#xA;/mk attack &lt;8&gt;&#xD;&#xA;/merror off&#xD;&#xA;/mk clear &lt;1&gt;&#xD;&#xA;/mk clear &lt;2&gt;&#xD;&#xA;/mk clear &lt;3&gt;&#xD;&#xA;/mk clear &lt;4&gt;&#xD;&#xA;/mk clear &lt;5&gt;&#xD;&#xA;/mk clear &lt;6&gt;&#xD;&#xA;/mk clear &lt;7&gt;&#xD;&#xA;/mk clear &lt;8&gt;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;- Set the /mk attack macros to be in order of the players they will mark (the /mk attack &lt;1&gt; macro will be on F1, etc...)&#xD;&#xA;- Set the /mk clear &lt;1-8&gt; macro to be on F9&#xD;&#xA;&#xD;&#xA;Example of using it: &#xD;&#xA;https://i.imgur.com/MsXNtJE.png&#xD;&#xA;https://i.imgur.com/gpFVLlZ.png&#xD;&#xA;&#xD;&#xA;Example Trigger: https://pastebin.com/McKWV0KH&#xD;&#xA;&#xD;&#xA;To use the example trigger:&#xD;&#xA;Type in /e M4rk: (player name in your party) to mark them">
                             <Actions />
                             <Condition Enabled="false" Grouping="Or" />
                           </Trigger>
@@ -4758,7 +5122,7 @@
             </Folders>
             <Triggers />
           </Folder>
-          <Folder Id="0e452034-caed-4b4a-b424-3617e4baf87c" Name="80 - 1 - The Epic of Alexander (Ultimate)" Enabled="true">
+          <Folder ZoneFilterEnabled="True" Id="0e452034-caed-4b4a-b424-3617e4baf87c" ZoneFilterRegularExpression="The\ Epic\ Of\ Alexander\ \(Ultimate\)" Name="80 - 1 - The Epic of Alexander (Ultimate)" Enabled="true">
             <Folders>
               <Folder Id="45cf8f09-4dbe-4447-846b-5cf8d1bc23bd" Name="Made From Log - NEEDS TESTING" Enabled="true">
                 <Folders />
@@ -4950,9 +5314,9 @@
                       <Folder Id="aae83a89-36a7-4fcf-8cd6-cc2f4f11daed" Name="Final Word debuffs" Enabled="true">
                         <Folders />
                         <Triggers>
-                          <Trigger Enabled="true" Name="Contact Prohibiton" Id="951c6160-5bb9-4d6d-8815-9d88d1bb74f1" RegularExpression="You suffer the effect of Final Word: Contact Prohibiton.">
+                          <Trigger Enabled="true" Name="Contact Prohibiton" Id="951c6160-5bb9-4d6d-8815-9d88d1bb74f1" RegularExpression="You suffer the effect of Final Word: Contact Prohibition.">
                             <Actions>
-                              <Action OrderNumber="1" UseTTSTextExpression="Contact Prohibiton" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                              <Action OrderNumber="1" UseTTSTextExpression="Contact Prohibition" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                                 <Condition Enabled="false" Grouping="Or" />
                               </Action>
                             </Actions>
