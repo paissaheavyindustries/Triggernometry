@@ -730,6 +730,9 @@ namespace Triggernometry
                                         case "hex2dec": // hex2dec()
                                             val = "" + int.Parse(funcval, System.Globalization.NumberStyles.HexNumber);
                                             break;
+                                        case "dec2hex": // dec2hex()
+                                            val = int.Parse(funcval).ToString("X");
+                                            break;
                                         case "padleft": // padleft(charcode,length)
                                             if (argc != 2)
                                             {
