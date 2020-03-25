@@ -3943,7 +3943,6 @@
                         <Condition Enabled="true" Grouping="And">
                           <ConditionSingle Enabled="true" ExpressionL="${player}" ExpressionTypeL="String" ExpressionR="${_ffxivplayer}" ExpressionTypeR="String" ConditionType="StringEqualCase" />
                         </Condition>
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
@@ -3996,10 +3995,11 @@
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
                   </Trigger>
-                  <Trigger Enabled="true" Name="Eruption" Id="454d2fd2-3e89-4ad7-bffb-2f3b0f924047" RegularExpression="\[.{14}14:4C17:Ifrit starts using Eruption">
+                  <Trigger Enabled="true" Name="Eruption" Id="454d2fd2-3e89-4ad7-bffb-2f3b0f924047" RegularExpression="\[.{14}14:4C17:Ifrit starts using Eruption" PeriodRefire="Deny" RefirePeriodExpression="100">
                     <Actions>
                       <Action OrderNumber="1" UseTTSTextExpression="Eruption" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
