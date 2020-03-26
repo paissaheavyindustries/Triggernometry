@@ -87,6 +87,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionProps.cs" />
+    <Compile Include="Aura\Aura.cs" />
+    <Compile Include="Aura\AuraImage.cs" />
+    <Compile Include="Aura\AuraText.cs" />
+    <Compile Include="Aura\Manager.cs" />
+    <Compile Include="Aura\Renderer\Winforms.cs" />
+    <Compile Include="Aura\Renderer\RendererBase.cs" />
+    <Compile Include="Aura\Renderer\Scarborough.cs" />
     <Compile Include="CustomControls\ConditionViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -502,28 +509,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="newtranslations.txt" />
-    <Content Include="Repositories\examples.xml" />
-    <Content Include="Repositories\ffxiv_ahos_dungeons.xml" />
-    <Content Include="Repositories\ffxiv_ahos_jobs.xml" />
-    <Content Include="Repositories\ffxiv_ahos_misc.xml" />
-    <Content Include="Repositories\ffxiv_ahos_raidbuffs.xml" />
-    <Content Include="Repositories\ffxiv_ahos_raids.xml" />
-    <Content Include="Repositories\ffxiv_ahos_trials.xml" />
-    <Content Include="Repositories\ffxiv_crafting.xml" />
-    <Content Include="Repositories\ffxiv_debugging.xml" />
-    <Content Include="Repositories\ffxiv_gathering.xml" />
-    <Content Include="Repositories\manifest.xml" />
-    <Content Include="Repositories\Resources\animationtest.gif" />
-    <Content Include="Repositories\Resources\ComboGIF.gif" />
-    <Content Include="Translations\default.triglations.xml" />
-    <Content Include="Translations\Finnish.triglations.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="readme.md" />
-    <None Include="Repositories\readme.md" />
-    <None Include="Repositories\Resources\readme.md" />
-    <None Include="Translations\readme.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

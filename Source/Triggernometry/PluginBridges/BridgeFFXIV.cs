@@ -399,7 +399,7 @@ namespace Triggernometry.PluginBridges
                 Int64 now = DateTime.Now.Ticks;
                 if (((now - old) / TimeSpan.TicksPerMillisecond) < 1000)
                 {
-                    return;
+                    //return;
                 }
                 Interlocked.Exchange(ref LastCheck, now);
                 object plug = null;

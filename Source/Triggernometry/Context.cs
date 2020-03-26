@@ -508,6 +508,7 @@ namespace Triggernometry
                                 string gprop = mx.Groups["prop"].Value;
                                 switch (gprop)
                                 {
+                                    case "w":
                                     case "width":
                                         {
                                             lock (plug.tablevariables)
@@ -518,6 +519,7 @@ namespace Triggernometry
                                             }
                                         }
                                         break;
+                                    case "h":
                                     case "height":
                                         {
                                             lock (plug.tablevariables)
@@ -573,6 +575,7 @@ namespace Triggernometry
                                 string gprop = mx.Groups["prop"].Value;
                                 switch (gprop)
                                 {
+                                    case "w":
                                     case "width":
                                         {
                                             lock (plug.tablevariables)
@@ -583,6 +586,7 @@ namespace Triggernometry
                                             }
                                         }
                                         break;
+                                    case "h":
                                     case "height":
                                         {
                                             lock (plug.tablevariables)
@@ -635,6 +639,7 @@ namespace Triggernometry
                                 string gprop = mx.Groups["prop"].Value;
                                 switch (gprop)
                                 {
+                                    case "w":
                                     case "width":
                                         {
                                             lock (plug.tablevariables)
@@ -645,6 +650,7 @@ namespace Triggernometry
                                             }
                                         }
                                         break;
+                                    case "h":
                                     case "height":
                                         {
                                             lock (plug.tablevariables)
@@ -948,9 +954,11 @@ namespace Triggernometry
                                                     val = item.Top.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "w":
+                                                case "width":
                                                     val = item.Width.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "h":
+                                                case "height":
                                                     val = item.Height.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "opacity":
@@ -979,9 +987,11 @@ namespace Triggernometry
                                                     val = acf.Top.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "w":
+                                                case "width":
                                                     val = acf.Width.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "h":
+                                                case "height":
                                                     val = acf.Height.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "opacity":
@@ -1021,9 +1031,11 @@ namespace Triggernometry
                                                     val = item.Top.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "w":
+                                                case "width":
                                                     val = item.Width.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "h":
+                                                case "height":
                                                     val = item.Height.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "opacity":
@@ -1049,9 +1061,11 @@ namespace Triggernometry
                                                     val = acf.Top.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "w":
+                                                case "width":
                                                     val = acf.Width.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "h":
+                                                case "height":
                                                     val = acf.Height.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "opacity":
@@ -1128,6 +1142,13 @@ namespace Triggernometry
                     {
                         return newexpr;
                     }
+                }
+            }
+            if (plug != null)
+            {
+                if (plug.cfg.LogVariableExpansions == false)
+                {
+                    return newexpr;
                 }
             }
             if (newexpr.CompareTo(expr) != 0)

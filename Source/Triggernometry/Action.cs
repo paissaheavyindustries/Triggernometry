@@ -881,6 +881,12 @@ namespace Triggernometry
                         }
                     }
                     break;
+                case ActionTypeEnum.Placeholder:
+                    temp += I18n.Translate("internal/Action/descplaceholder", "Placeholder");
+                    break;
+                case ActionTypeEnum.NamedCallback:
+                    temp += I18n.Translate("internal/Action/descnamedcallback", "Invoke named callback ({0}) with parameter ({1})", _NamedCallbackName, _NamedCallbackParam);
+                    break;
                 default:
                     temp += I18n.Translate("internal/Action/descunknown", "unknown action type");
                     break;
@@ -1722,7 +1728,15 @@ namespace Triggernometry
                             }
                             else
                             {
-                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, ctx.EvaluateStringExpression(ActionContextLogger, ctx, _LogMessageText));
+                                RealPlugin.DebugLevelEnum dl = RealPlugin.DebugLevelEnum.Error;
+                                switch (_LogLevel)
+                                {
+                                    case LogMessageEnum.Error: dl = RealPlugin.DebugLevelEnum.Error; break;
+                                    case LogMessageEnum.Info: dl = RealPlugin.DebugLevelEnum.Info; break;
+                                    case LogMessageEnum.Verbose: dl = RealPlugin.DebugLevelEnum.Verbose; break;
+                                    case LogMessageEnum.Warning: dl = RealPlugin.DebugLevelEnum.Warning; break;
+                                }
+                                AddToLog(ctx, dl, ctx.EvaluateStringExpression(ActionContextLogger, ctx, _LogMessageText));
                             }
                         }
                         break;
@@ -1838,6 +1852,10 @@ namespace Triggernometry
 						{
                             ctx.soundhook(ctx, this);
                         }
+                        break;
+                    #endregion
+                    #region Implementation - Placeholder
+                    case ActionTypeEnum.Placeholder:
                         break;
                     #endregion
                     #region Implementation - Play speech
@@ -2209,6 +2227,16 @@ namespace Triggernometry
                         }
                         break;
                     #endregion
+                    #region Implementation - Named callback
+                    case ActionTypeEnum.NamedCallback:
+                        {
+                            string cbname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _NamedCallbackName);
+                            string cbparm = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _NamedCallbackParam);
+                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/callbackinvoke", "Invoking named callback ({0}) with parameter ({1})", cbname, cbparm));
+                            ctx.plug.InvokeNamedCallback(cbname, cbparm);
+                        }
+                        break;
+                        #endregion
                 }
             }
 			catch (Exception ex)
@@ -2381,6 +2409,7 @@ namespace Triggernometry
             a._TextAuraBackgroundClInt = _TextAuraBackgroundClInt;
             a._TextAuraUseOutline = _TextAuraUseOutline;
             a._LogMessageText = _LogMessageText;
+            a._LogLevel = _LogLevel;
             a._DiscordTts = _DiscordTts;
             a._ListVariableExpression = _ListVariableExpression;
             a._ListVariableExpressionType = _ListVariableExpressionType;
@@ -2419,6 +2448,8 @@ namespace Triggernometry
             a._MutexName = _MutexName;
             a._Description = _Description;
             a._DescriptionOverride = _DescriptionOverride;
+            a._NamedCallbackParam = _NamedCallbackParam;
+            a._NamedCallbackName = _NamedCallbackName;
         }
 
         private string PostJson(Context ctx, string url, string json, bool expectNoContent)

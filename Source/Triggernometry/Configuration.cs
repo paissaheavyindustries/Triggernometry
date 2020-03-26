@@ -264,6 +264,9 @@ namespace Triggernometry
         [XmlAttribute]
         public int CacheFileExpiry { get; set; }
 
+        [XmlAttribute]
+        public bool LogVariableExpansions { get; set; }
+
         internal bool isnew;
         internal DateTime lastWrite;
 
@@ -288,6 +291,7 @@ namespace Triggernometry
             UseScarborough = true;
             WarnAdmin = true;
             DeveloperMode = false;
+            LogVariableExpansions = false;
             StartupTriggerType = StartupTriggerTypeEnum.Trigger;
             EventSeparator = "";
             StartupTriggerId = Guid.Empty;

@@ -36,7 +36,9 @@ namespace Triggernometry
             WindowMessage,
             DiskFile,
             TableVariable,
-            Mutex
+            Mutex,
+            Placeholder,
+            NamedCallback
         }
 
         public enum VariableOpEnum
@@ -177,6 +179,14 @@ namespace Triggernometry
         {
             Release,
             Acquire
+        }
+
+        public enum LogMessageEnum
+        {
+            Error,
+            Warning,
+            Info,
+            Verbose
         }
 
         [Flags]
@@ -1147,6 +1157,27 @@ namespace Triggernometry
             }
         }
 
+        internal LogMessageEnum _LogLevel { get; set; } = LogMessageEnum.Error;
+        [XmlAttribute]
+        public string LogLevel
+        {
+            get
+            {
+                if (_LogLevel != LogMessageEnum.Error)
+                {
+                    return _LogLevel.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _LogLevel = (LogMessageEnum)Enum.Parse(typeof(LogMessageEnum), value);
+            }
+        }
+
         #endregion
         #region Action specific properties - Message box
 
@@ -1232,6 +1263,45 @@ namespace Triggernometry
         }
 
         #endregion
+        #region Action specific properties - Named callback
+
+        internal string _NamedCallbackName = "";
+        [XmlAttribute]
+        public string NamedCallbackName
+        {
+            get
+            {
+                if (_NamedCallbackName == "")
+                {
+                    return null;
+                }
+                return _NamedCallbackName;
+            }
+            set
+            {
+                _NamedCallbackName = value;
+            }
+        }
+
+        internal string _NamedCallbackParam = "";
+        [XmlAttribute]
+        public string NamedCallbackParam
+        {
+            get
+            {
+                if (_NamedCallbackParam == "")
+                {
+                    return null;
+                }
+                return _NamedCallbackParam;
+            }
+            set
+            {
+                _NamedCallbackParam = value;
+            }
+        }
+
+        #endregion
         #region Action specific properties - OBS
 
         internal ObsControlTypeEnum _OBSControlType { get; set; } = ObsControlTypeEnum.StartStreaming;
@@ -1291,6 +1361,8 @@ namespace Triggernometry
             }
         }
 
+        #endregion
+        #region Action specific properties - Placeholder
         #endregion
         #region Action specific properties - Play sound
 

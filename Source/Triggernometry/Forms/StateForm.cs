@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -46,6 +47,9 @@ namespace Triggernometry.Forms
                     break;
                 case 5:
                     RefreshTextAuras();
+                    break;
+                case 6:
+                    RefreshNamedCallbacks();
                     break;
             }
         }
@@ -879,6 +883,44 @@ namespace Triggernometry.Forms
                             e.Value = kp.Value.ctx != null ? kp.Value.ctx.ToString() : "(unknown)";
                             break;
                     }
+                }
+            }
+        }
+        #endregion
+
+        #region Named callbacks
+        private void RefreshNamedCallbacks()
+        {
+        }
+
+        private void btnCallbackRefresh_Click(object sender, EventArgs e)
+        {
+            RefreshNamedCallbacks();
+        }
+
+        private void dgvCallback_SelectionChanged(object sender, EventArgs e)
+        {
+            dgvCallback.ClearSelection();
+        }
+
+        private void dgvCallback_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
+        {
+            lock (plug.callbacksById)
+            {
+                if (e.RowIndex >= plug.callbacksById.Count)
+                {
+                    return;
+                }
+                int cbid = plug.callbacksById.Keys.ElementAt(e.RowIndex);
+                RealPlugin.NamedCallback cb = plug.callbacksById[cbid];
+                switch (e.ColumnIndex)
+                {
+                    case 0:
+                        e.Value = cb.Id.ToString(CultureInfo.InvariantCulture);
+                        break;
+                    case 1:
+                        e.Value = cb.Name;
+                        break;
                 }
             }
         }

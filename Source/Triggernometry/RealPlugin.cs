@@ -39,6 +39,24 @@ namespace Triggernometry
             Inherit
         }
 
+        public class NamedCallback
+        {
+
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public Delegate Callback { get; set; }
+            public object Obj { get; set; }
+
+            public void Invoke(string val)
+            {
+                Callback.DynamicInvoke(new object[] { Obj, val });
+            }
+
+        }
+
+        internal Dictionary<int, NamedCallback> callbacksById = new Dictionary<int, NamedCallback>();
+        internal Dictionary<string, List<NamedCallback>> callbacksByName = new Dictionary<string, List<NamedCallback>>();
+
         public class CustomTriggerProxy
         {
 
@@ -2655,7 +2673,7 @@ namespace Triggernometry
             }            
         }
 
-        internal void LogLineQueuerMass(IEnumerable<string> text, string zone)
+        internal void LogLineQueuerMass(IEnumerable<string> text, string zone, LogEvent.SourceEnum src)
         {
             int max = text.Count();
             int i = 0;
@@ -2665,6 +2683,7 @@ namespace Triggernometry
                 lex[i] = new LogEvent();
                 lex[i].Text = x;
                 lex[i].Zone = zone;
+                lex[i].Source = src;
                 lex[i].Timestamp = DateTime.Now;
                 i++;
             }
@@ -2929,7 +2948,7 @@ namespace Triggernometry
         {
             try
             {
-                string preamble = String.Format("{0}|{1}|", messagetype, sequence);
+                string preamble = String.Format("{0:00}|{1}|", messagetype, sequence);
                 if (cfg.EventSeparator.Length > 0)
                 {
                     string[] lines = message.Split(new string[] { cfg.EventSeparator }, StringSplitOptions.RemoveEmptyEntries);
@@ -3328,6 +3347,67 @@ namespace Triggernometry
                 return i;
             }
             return 0;
+        }
+
+        internal void InvokeNamedCallback(string name, string val)
+        {
+            List<NamedCallback> cbs = new List<NamedCallback>();
+            lock (callbacksByName)
+            {
+                if (callbacksByName.ContainsKey(name) == true)
+                {
+                    cbs.AddRange(callbacksByName[name]);
+                }
+            }
+            foreach (NamedCallback nc in cbs)
+            {
+                try
+                {
+                    nc.Invoke(val);
+                }
+                catch (Exception ex)
+                {
+                    FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/NamedCallback/exception", "Exception occurred when invoking named callback {0}: {1}", name, ex.Message));
+                }
+            }
+        }
+
+        public void RegisterNamedCallback(int id, string name, Delegate del, object o)
+        {
+            
+            NamedCallback nc = new NamedCallback();
+            nc.Id = id;
+            nc.Callback = del;
+            nc.Obj = o;
+            nc.Name = name;
+            lock (callbacksById)
+            {
+                callbacksById[id] = nc;
+                if (callbacksByName.ContainsKey(name) == false)
+                {
+                    callbacksByName[name] = new List<NamedCallback>();
+                }
+                callbacksByName[name].Add(nc);
+            }
+        }
+
+        public void UnregisterNamedCallback(int id)
+        {
+            lock (callbacksById)
+            {
+                NamedCallback nc = null;
+                if (callbacksById.ContainsKey(id) == false)
+                {
+                    return;
+                }
+                nc = callbacksById[id];
+                callbacksById.Remove(id);
+                callbacksByName[nc.Name].Remove(nc);
+                if (callbacksByName[nc.Name].Count == 0)
+                {
+                    callbacksByName.Remove(nc.Name);
+                }
+            }
         }
 
     }

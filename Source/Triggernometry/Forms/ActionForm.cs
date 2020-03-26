@@ -323,6 +323,8 @@ namespace Triggernometry.Forms
                 expMutexName.Expression = "";
                 txtDescription.Text = "";
                 chkOverrideDesc.Checked = false;
+                expCallbackName.Expression = "";
+                expCallbackParam.Expression = "";
             }
             else
             {
@@ -489,6 +491,7 @@ namespace Triggernometry.Forms
                 cbxProcessLog.Checked = a._LogProcess;
                 expTextAuraTTLTick.Expression = a._TextAuraTTLTickExpression;
                 expLogMessageText.Expression = a._LogMessageText;
+                cbxLogMessageLevel.SelectedIndex = (int)a._LogLevel;
                 FontInfoContainer fic = new FontInfoContainer();
                 fic.Name = a._TextAuraFontName;
                 fic.Size = a._TextAuraFontSize;
@@ -538,6 +541,8 @@ namespace Triggernometry.Forms
                 expMutexName.Expression = a._MutexName;
                 txtDescription.Text = a._Description;
                 chkOverrideDesc.Checked = a._DescriptionOverride;
+                expCallbackName.Expression = a._NamedCallbackName;
+                expCallbackParam.Expression = a._NamedCallbackParam;
             }
         }
 
@@ -712,6 +717,7 @@ namespace Triggernometry.Forms
             a._TextAuraOTickExpression = expTextAuraOTick.Expression;
             a._TextAuraTTLTickExpression = expTextAuraTTLTick.Expression;
             a._LogMessageText = expLogMessageText.Expression;
+            a._LogLevel = (Action.LogMessageEnum)cbxLogMessageLevel.SelectedIndex;
             FontInfoContainer fic = (FontInfoContainer)txtTextAuraFont.Tag;
             a._TextAuraFontName = fic.Name;
             a._TextAuraFontSize = fic.Size;
@@ -739,6 +745,8 @@ namespace Triggernometry.Forms
             a._MutexName = expMutexName.Expression;
             a._Description = txtDescription.Text;
             a._DescriptionOverride = chkOverrideDesc.Checked;
+            a._NamedCallbackName = expCallbackName.Expression;
+            a._NamedCallbackParam = expCallbackParam.Expression;
         }
 
         private void TestAction(bool liveValues)
