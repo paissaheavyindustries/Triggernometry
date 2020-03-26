@@ -355,7 +355,7 @@
         </Actions>
         <Condition Enabled="false" Grouping="Or" />
       </Trigger>
-      <Trigger Enabled="true" Sequential="True" Name="Divination" Id="5cf01d1d-69ac-4d91-ada8-f95d9648aec7" RegularExpression="1(6|5):[A-Z0-9]{8}:(?&lt;caster&gt;[a-zA-Z-' ]{1,31}):40A8:Divination:[\w]{8}:[\w-' ]{1,31}:(?&lt;power&gt;\d)0F:" DebugLevel="Warning" PrevActions="Interrupt" PeriodRefire="Deny" RefirePeriodExpression="2000">
+      <Trigger Enabled="true" Sequential="True" Name="Divination" Id="5cf01d1d-69ac-4d91-ada8-f95d9648aec7" RegularExpression="1(6|5):[A-Z0-9]{8}:(?&lt;caster&gt;[a-zA-Z-' ]{1,31}):40A8:Divination:[\w]{8}:[\w-' ]{1,31}:(?&lt;power&gt;\d)0E:" DebugLevel="Warning" PrevActions="Interrupt" PeriodRefire="Deny" RefirePeriodExpression="2000">
         <Actions>
           <Action OrderNumber="1" AuraName="Divination" AuraImage="https://xivapi.com/i/003000/003553.png" AuraXIniExpression="${var:RaidAuraX}+320" AuraYIniExpression="${var:RaidAuraY}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura" ExecutionDelayExpression="1" Asynchronous="False">
             <Condition Enabled="false" Grouping="Or" />
@@ -372,12 +372,15 @@
               <ConditionSingle Enabled="true" ExpressionL="${power}" ExpressionTypeL="String" ExpressionR="5" ExpressionTypeR="String" ConditionType="StringEqualCase" />
             </Condition>
           </Action>
+          <Action OrderNumber="5" TextAuraFontSize="15.75" TextAuraName="Power" TextAuraExpression="${power}%" TextAuraXIniExpression="${var:RaidAuraX}+311" TextAuraYIniExpression="${var:RaidAuraY}-5" TextAuraWIniExpression="59" TextAuraHIniExpression="35" TextAuraOIniExpression="100" TextAuraTTLTickExpression="15-${_since}" TextAuraUseOutline="True" TextAuraFontName="Microsoft Sans Serif" ActionType="TextAura" ExecutionDelayExpression="1" Asynchronous="False">
+            <Condition Enabled="false" Grouping="Or" />
+          </Action>
         </Actions>
         <Condition Enabled="true" Grouping="And">
           <ConditionSingle Enabled="true" ExpressionL="${_ffxivparty[${caster}].inparty}" ExpressionTypeL="String" ExpressionR="1" ExpressionTypeR="Numeric" ConditionType="NumericEqual" />
         </Condition>
       </Trigger>
-      <Trigger Enabled="true" Sequential="True" Name="AST Cards" Id="b725ea68-9313-48c7-9237-30f6d11d4592" RegularExpression="15:[\w]{8}:(?&lt;cardcaster&gt;[\w-' ]{1,31}):(?&lt;cardID&gt;1[\w]{3}):(?&lt;card&gt;[\w ]{1,15}):[\w]{8}:(?&lt;cardtarget&gt;[\w-' ]{1,31}):(?&lt;cardpower&gt;\d)0F:" DebugLevel="Warning">
+      <Trigger Enabled="true" Sequential="True" Name="AST Cards" Id="b725ea68-9313-48c7-9237-30f6d11d4592" RegularExpression="15:[\w]{8}:(?&lt;cardcaster&gt;[\w-' ]{1,31}):(?&lt;cardID&gt;1[\w]{3}):(?&lt;card&gt;[\w ]{1,15}):[\w]{8}:(?&lt;cardtarget&gt;[\w-' ]{1,31}):(?&lt;cardpower&gt;\d)0E:" DebugLevel="Warning">
         <Actions>
           <Action OrderNumber="1" AuraName="TheBalance" AuraImage="https://xivapi.com/i/003000/003110.png" AuraXIniExpression="${var:RaidAuraX}+360" AuraYIniExpression="${var:RaidAuraY}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" AuraTTLTickExpression="15-${_since}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura" ExecutionDelayExpression="1" Asynchronous="False">
             <Condition Enabled="true" Grouping="And">
@@ -419,7 +422,10 @@
               <ConditionSingle Enabled="true" ExpressionL="${card}" ExpressionTypeL="String" ExpressionR="Lord Of Crowns" ExpressionTypeR="String" ConditionType="StringEqualCase" />
             </Condition>
           </Action>
-          <Action OrderNumber="9" TextAuraFontSize="15.75" TextAuraName="CardDuration" TextAuraExpression="${numeric:+15-${_since}}" TextAuraXIniExpression="${var:RaidAuraX}+350" TextAuraYIniExpression="${var:RaidAuraY}+11" TextAuraWIniExpression="59" TextAuraHIniExpression="35" TextAuraOIniExpression="100" TextAuraTTLTickExpression="15-${_since}" TextAuraUseOutline="True" TextAuraFontName="Microsoft Sans Serif" ActionType="TextAura" ExecutionDelayExpression="1" Asynchronous="False">
+          <Action OrderNumber="9" AuraImageMode="StretchImage" AuraName="CardBorder" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/ComboGIF.gif" AuraXIniExpression="${var:RaidAuraX}+360" AuraYIniExpression="${var:RaidAuraY}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" AuraTTLTickExpression="15-${_since}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura" ExecutionDelayExpression="1" Asynchronous="False">
+            <Condition Enabled="false" Grouping="Or" />
+          </Action>
+          <Action OrderNumber="10" TextAuraFontSize="15.75" TextAuraName="CardDuration" TextAuraExpression="${numeric:+15-${_since}}" TextAuraXIniExpression="${var:RaidAuraX}+350" TextAuraYIniExpression="${var:RaidAuraY}+11" TextAuraWIniExpression="59" TextAuraHIniExpression="35" TextAuraOIniExpression="100" TextAuraTTLTickExpression="15-${_since}" TextAuraUseOutline="True" TextAuraFontName="Microsoft Sans Serif" ActionType="TextAura" ExecutionDelayExpression="1" Asynchronous="False">
             <Condition Enabled="true" Grouping="Or">
               <ConditionSingle Enabled="true" ExpressionL="${card}" ExpressionTypeL="String" ExpressionR="The Balance" ExpressionTypeR="String" ConditionType="StringEqualCase" />
               <ConditionSingle Enabled="true" ExpressionL="${card}" ExpressionTypeL="String" ExpressionR="The Bole" ExpressionTypeR="String" ConditionType="StringEqualCase" />
@@ -431,7 +437,7 @@
               <ConditionSingle Enabled="true" ExpressionL="${card}" ExpressionTypeL="String" ExpressionR="Lady Of Crowns" ExpressionTypeR="String" ConditionType="StringEqualCase" />
             </Condition>
           </Action>
-          <Action OrderNumber="10" TextAuraFontSize="15.75" TextAuraName="CardPower" TextAuraExpression="${cardpower}%" TextAuraXIniExpression="${var:RaidAuraX}+351" TextAuraYIniExpression="${var:RaidAuraY}-5" TextAuraWIniExpression="59" TextAuraHIniExpression="35" TextAuraOIniExpression="100" TextAuraTTLTickExpression="15-${_since}" TextAuraUseOutline="True" TextAuraFontName="Microsoft Sans Serif" ActionType="TextAura" ExecutionDelayExpression="1" Asynchronous="False">
+          <Action OrderNumber="11" TextAuraFontSize="15.75" TextAuraName="CardPower" TextAuraExpression="${cardpower}%" TextAuraXIniExpression="${var:RaidAuraX}+351" TextAuraYIniExpression="${var:RaidAuraY}-5" TextAuraWIniExpression="59" TextAuraHIniExpression="35" TextAuraOIniExpression="100" TextAuraTTLTickExpression="15-${_since}" TextAuraUseOutline="True" TextAuraFontName="Microsoft Sans Serif" ActionType="TextAura" ExecutionDelayExpression="1" Asynchronous="False">
             <Condition Enabled="true" Grouping="Or">
               <ConditionSingle Enabled="true" ExpressionL="${card}" ExpressionTypeL="String" ExpressionR="The Balance" ExpressionTypeR="String" ConditionType="StringEqualCase" />
               <ConditionSingle Enabled="true" ExpressionL="${card}" ExpressionTypeL="String" ExpressionR="The Bole" ExpressionTypeR="String" ConditionType="StringEqualCase" />

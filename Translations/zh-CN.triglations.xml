@@ -22,7 +22,7 @@
         <TranslationEntry Key="ActionForm/cbxActionType[Generic JSON operation]" Translation="通用JSON操作" />
         <TranslationEntry Key="ActionForm/cbxActionType[Image aura operation]" Translation="图片显示(Aura)" />
         <TranslationEntry Key="ActionForm/cbxActionType[Launch process]" Translation="启动程序进程" />
-        <TranslationEntry Key="ActionForm/cbxActionType[List variable operation]" Translation="变量列表操作" />
+        <TranslationEntry Key="ActionForm/cbxActionType[List variable operation]" Translation="列表变量操作" />
         <TranslationEntry Key="ActionForm/cbxActionType[Log message]" Translation="日志消息" />
         <TranslationEntry Key="ActionForm/cbxActionType[Mutex operation]" Translation="互斥锁操作（Mutex）" />
         <TranslationEntry Key="ActionForm/cbxActionType[OBS remote control operation]" Translation="OBS远程控制操作" />
@@ -83,8 +83,8 @@
         <TranslationEntry Key="ActionForm/cbxLvarOperation[Sort list in an alphabetically descending order]" Translation="按字母顺序降序排序列表" />
         <TranslationEntry Key="ActionForm/cbxLvarOperation[Sort list in an ascending order based on FFXIV party job order]" Translation="根据FFXIV职业排序顺序以升序对列表进行排序" />
         <TranslationEntry Key="ActionForm/cbxLvarOperation[Split a scalar variable into a list variable (separator in expression)]" Translation="将标量变量拆分为列表变量(表达式中的分隔符)" />
-        <TranslationEntry Key="ActionForm/cbxLvarOperation[Unset all list variables]" Translation="摧毁所有列表变量" />
-        <TranslationEntry Key="ActionForm/cbxLvarOperation[Unset list variable]" Translation="摧毁列表变量" />
+        <TranslationEntry Key="ActionForm/cbxLvarOperation[Unset all list variables]" Translation="销毁所有列表变量" />
+        <TranslationEntry Key="ActionForm/cbxLvarOperation[Unset list variable]" Translation="销毁列表变量" />
         <TranslationEntry Key="ActionForm/cbxLvarOperation[Unset list variables matching regular expression]" Translation="销毁命中正则表达式的列表变量" />
         <TranslationEntry Key="ActionForm/cbxMessageBoxIcon[Error]" Translation="错误" />
         <TranslationEntry Key="ActionForm/cbxMessageBoxIcon[Information]" Translation="信息" />
@@ -144,8 +144,8 @@
         <TranslationEntry Key="ActionForm/cbxTvarOpType[Unset table variables matching regular expression]" Translation="销毁命中正则表达式的表格变量" />
         <TranslationEntry Key="ActionForm/cbxVariableOp[Set scalar variable value with numeric expression]" Translation="使用数字表达式设置标量变量值" />
         <TranslationEntry Key="ActionForm/cbxVariableOp[Set scalar variable value with string expression]" Translation="使用字符串表达式设置标量变量值" />
-        <TranslationEntry Key="ActionForm/cbxVariableOp[Unset all scalar variables]" Translation="摧毁所有标量变量" />
-        <TranslationEntry Key="ActionForm/cbxVariableOp[Unset scalar variable]" Translation="摧毁标量变量" />
+        <TranslationEntry Key="ActionForm/cbxVariableOp[Unset all scalar variables]" Translation="销毁所有标量变量" />
+        <TranslationEntry Key="ActionForm/cbxVariableOp[Unset scalar variable]" Translation="销毁标量变量" />
         <TranslationEntry Key="ActionForm/cbxVariableOp[Unset scalar variables matching regular expression]" Translation="销毁命中正则表达式的标量变量" />
         <TranslationEntry Key="ActionForm/chkExecuteAsync" Translation="异步执行，不会阻止执行其他操作" />
         <TranslationEntry Key="ActionForm/chkOverrideDesc" Translation="覆盖自动生成的操作描述" />
@@ -228,8 +228,8 @@
         <TranslationEntry Key="ActionForm/lblFolderOp" Translation="操作" />
         <TranslationEntry Key="ActionForm/lblInitialValues" Translation="初始值" />
         <TranslationEntry Key="ActionForm/lblJsonEndpoint" Translation="目标 URL" />
-        <TranslationEntry Key="ActionForm/lblJsonFiring" Translation="响应触发表达式" />
-        <TranslationEntry Key="ActionForm/lblJsonInstructions" Translation="如果已定义响应触发表达式，则将根据计算的字符串表达式的结果生成日志行。 日志行将像任何其他行一样处理，就像它来自ACT本身一样。&#xD;&#xA;&#xD;&#xA;要将端点的响应添加到此表达式，请使用特殊变量“_response”。 是可用的。 特殊变量仅在此操作执行的上下文中有效。&#xD;&#xA;" />
+        <TranslationEntry Key="ActionForm/lblJsonFiring" Translation="响应结果生成字符串表达式" />
+        <TranslationEntry Key="ActionForm/lblJsonInstructions" Translation="如果已定义响应结果生成字符串表达式，则将根据该表达式计算的结果生成日志行。日志行将像普通的网络日志一样被插件处理。&#xD;&#xA;&#xD;&#xA;要将响应内容添加到此表达式，请使用特殊变量 &quot;_response&quot;。此特殊变量仅在本操作执行的上下文中有效。&#xD;&#xA;" />
         <TranslationEntry Key="ActionForm/lblJsonPayload" Translation="要发送的内容" />
         <TranslationEntry Key="ActionForm/lblKeypress" Translation="要发送的 Keycode" />
         <TranslationEntry Key="ActionForm/lblKeypresses" Translation="要发送的按键命令" />
@@ -613,9 +613,9 @@
         <TranslationEntry Key="internal/Action/desclistsortffxivasc" Translation="排序列表变量 ({0}) 根据FFXIV职业排序顺序以升序排序列表" />
         <TranslationEntry Key="internal/Action/desclistsortffxivdesc" Translation="排序列表变量 ({0}) 根据FFXIV职业排序顺序以降序排序列表" />
         <TranslationEntry Key="internal/Action/desclistsplit" Translation="使用 ({2}) 作为分隔符拆分标量变量 ({0}) 为列表变量 ({1})" />
-        <TranslationEntry Key="internal/Action/desclistunset" Translation="摧毁列表变量 ({0})" />
-        <TranslationEntry Key="internal/Action/desclistunsetall" Translation="摧毁所有列表变量" />
-        <TranslationEntry Key="internal/Action/desclistunsetregex" Translation="摧毁命中正则表达式 ({0}) 的列表变量" />
+        <TranslationEntry Key="internal/Action/desclistunset" Translation="销毁列表变量 ({0})" />
+        <TranslationEntry Key="internal/Action/desclistunsetall" Translation="销毁所有列表变量" />
+        <TranslationEntry Key="internal/Action/desclistunsetregex" Translation="销毁命中正则表达式 ({0}) 的列表变量" />
         <TranslationEntry Key="internal/Action/desclogmessage" Translation="日志消息 ({0})" />
         <TranslationEntry Key="internal/Action/descmsgbox" Translation="显示消息框提示 ({0}) 使用图标 ({1})" />
         <TranslationEntry Key="internal/Action/descobshidesource" Translation="在 OBS 的场景 ({1}) 隐藏来源 ({0})" />
@@ -637,15 +637,15 @@
         <TranslationEntry Key="internal/Action/descprocessmessage" Translation="处理消息 ({0}) 为日志行" />
         <TranslationEntry Key="internal/Action/descscalarnumeric" Translation="设置标量变量 ({0}) 数值表达式的值 ({1})" />
         <TranslationEntry Key="internal/Action/descscalarstring" Translation="设置标量变量 ({0}) 字符串表达式的值 ({1})" />
-        <TranslationEntry Key="internal/Action/descscalarunset" Translation="摧毁标量变量 ({0})" />
-        <TranslationEntry Key="internal/Action/descscalarunsetall" Translation="摧毁所有标量变量" />
-        <TranslationEntry Key="internal/Action/descscalarunsetregex" Translation="摧毁命中正则表达式 ({0}) 的标量变量" />
+        <TranslationEntry Key="internal/Action/descscalarunset" Translation="销毁标量变量 ({0})" />
+        <TranslationEntry Key="internal/Action/descscalarunsetall" Translation="销毁所有标量变量" />
+        <TranslationEntry Key="internal/Action/descscalarunsetregex" Translation="销毁命中正则表达式 ({0}) 的标量变量" />
         <TranslationEntry Key="internal/Action/desctablenumeric" Translation="从数值表达式中将值 ({3}) 设置到表格变量 ({0}) 的行 ({2}) 列 ({1}) 处" />
         <TranslationEntry Key="internal/Action/desctableresize" Translation="将表格变量 ({0}) 调整为 ({2}) 行 ({1}) 列大小" />
         <TranslationEntry Key="internal/Action/desctablestring" Translation="从文本表达式中将值 ({3}) 设置到表格变量 ({0}) 的行 ({2}) 列 ({1}) 处" />
-        <TranslationEntry Key="internal/Action/desctableunset" Translation="摧毁表格变量 ({0})" />
-        <TranslationEntry Key="internal/Action/desctableunsetall" Translation="摧毁所有表格变量" />
-        <TranslationEntry Key="internal/Action/desctableunsetregex" Translation="摧毁命中正则表达式 ({0}) 的表格变量" />
+        <TranslationEntry Key="internal/Action/desctableunset" Translation="销毁表格变量 ({0})" />
+        <TranslationEntry Key="internal/Action/desctableunsetall" Translation="销毁所有表格变量" />
+        <TranslationEntry Key="internal/Action/desctableunsetregex" Translation="销毁命中正则表达式 ({0}) 的表格变量" />
         <TranslationEntry Key="internal/Action/desctextauraact" Translation="激活命中正则表达式 ({1}) 的文本 Aura ({0})" />
         <TranslationEntry Key="internal/Action/desctextauradeact" Translation="停用文本Aura ({0})" />
         <TranslationEntry Key="internal/Action/desctextauradeactall" Translation="停用所有的文本Aura" />
@@ -690,7 +690,7 @@
         <TranslationEntry Key="internal/Action/listsortdesc" Translation="列表变量 ({0}) 按降序排序" />
         <TranslationEntry Key="internal/Action/listsortffxivasc" Translation="列表变量 ({0}) 根据FFXIV职业排序顺序以升序排序列表" />
         <TranslationEntry Key="internal/Action/listsortffxivdesc" Translation="列表变量 ({0}) 根据FFXIV职业排序顺序以降序排序列表" />
-        <TranslationEntry Key="internal/Action/listunset" Translation="摧毁列表变量 ({0})" />
+        <TranslationEntry Key="internal/Action/listunset" Translation="销毁列表变量 ({0})" />
         <TranslationEntry Key="internal/Action/mutexacquire" Translation="独占访问互斥锁 ({0})（acquire mutex）" />
         <TranslationEntry Key="internal/Action/mutexrelease" Translation="释放互斥锁 ({0})（release mutex）" />
         <TranslationEntry Key="internal/Action/nofolderwithid" Translation="没有找到带有id ({0}) 的分组" />
@@ -702,12 +702,12 @@
         <TranslationEntry Key="internal/Action/obsconnectok" Translation="OBS 接口连接成功" />
         <TranslationEntry Key="internal/Action/obscontrolerror" Translation="由于错误，无法执行OBS控制操作" />
         <TranslationEntry Key="internal/Action/obscontrolexception" Translation="由于异常，无法执行OBS控制操作: " />
-        <TranslationEntry Key="internal/Action/regexlistunset" Translation="所有命中正则表达式 ({0}) 的列表变量已摧毁" />
-        <TranslationEntry Key="internal/Action/regexscalarunset" Translation="所有命中正则表达式 ({0}) 的标量变量已摧毁" />
-        <TranslationEntry Key="internal/Action/regextableunset" Translation="所有命中正则表达式 ({0}) 的表格变量已摧毁" />
+        <TranslationEntry Key="internal/Action/regexlistunset" Translation="所有命中正则表达式 ({0}) 的列表变量已销毁" />
+        <TranslationEntry Key="internal/Action/regexscalarunset" Translation="所有命中正则表达式 ({0}) 的标量变量已销毁" />
+        <TranslationEntry Key="internal/Action/regextableunset" Translation="所有命中正则表达式 ({0}) 的表格变量已销毁" />
         <TranslationEntry Key="internal/Action/scalarlistsplit" Translation="已使用 ({2}) 作为分隔符拆分标量变量 ({0}) 为列表变量 ({1})" />
         <TranslationEntry Key="internal/Action/scalarset" Translation="标量变量 ({0}) 值设置为 ({1})" />
-        <TranslationEntry Key="internal/Action/scalarunset" Translation="标量变量 ({0}) 已摧毁" />
+        <TranslationEntry Key="internal/Action/scalarunset" Translation="标量变量 ({0}) 已销毁" />
         <TranslationEntry Key="internal/Action/scripterror" Translation="脚本错误: {0} @ 行 {1}" />
         <TranslationEntry Key="internal/Action/scripterroris" Translation="这个错误是:" />
         <TranslationEntry Key="internal/Action/scripterrorplural" Translation="编译脚本时发生错误 {0} " />
@@ -720,7 +720,7 @@
         <TranslationEntry Key="internal/Action/tablecopied" Translation="表格变量 ({0}) 已复制为表格变量 ({1})" />
         <TranslationEntry Key="internal/Action/tablecopynotexist" Translation="表格变量 ({0}) 无法复制为表格变量 ({1})，因为该表格变量并不存在" />
         <TranslationEntry Key="internal/Action/tableresized" Translation="表格变量 ({0}) 已调整为 ({2}) 行 ({1}) 列大小" />
-        <TranslationEntry Key="internal/Action/tableunset" Translation="摧毁表格变量 ({0})" />
+        <TranslationEntry Key="internal/Action/tableunset" Translation="销毁表格变量 ({0})" />
         <TranslationEntry Key="internal/Action/trigdisable" Translation="触发器 '{0}' 已停用" />
         <TranslationEntry Key="internal/Action/trigenable" Translation="触发器 '{0}' 已启用" />
         <TranslationEntry Key="internal/Action/waitingprocexit" Translation="等待进程退出" />
@@ -1258,17 +1258,17 @@
         <TranslationEntry Key="StateForm/btnListAdd" Translation="添加变量" />
         <TranslationEntry Key="StateForm/btnListEdit" Translation="修改变量" />
         <TranslationEntry Key="StateForm/btnListRefresh" Translation="刷新" />
-        <TranslationEntry Key="StateForm/btnListRemove" Translation="摧毁变量" />
+        <TranslationEntry Key="StateForm/btnListRemove" Translation="销毁变量" />
         <TranslationEntry Key="StateForm/btnMutexForce" Translation="强制释放" />
         <TranslationEntry Key="StateForm/btnMutexRefresh" Translation="刷新" />
         <TranslationEntry Key="StateForm/btnScalarAdd" Translation="添加变量" />
         <TranslationEntry Key="StateForm/btnScalarEdit" Translation="修改变量" />
         <TranslationEntry Key="StateForm/btnScalarRefresh" Translation="刷新" />
-        <TranslationEntry Key="StateForm/btnScalarRemove" Translation="摧毁变量" />
+        <TranslationEntry Key="StateForm/btnScalarRemove" Translation="销毁变量" />
         <TranslationEntry Key="StateForm/btnTableAdd" Translation="添加变量" />
         <TranslationEntry Key="StateForm/btnTableEdit" Translation="修改变量" />
         <TranslationEntry Key="StateForm/btnTableRefresh" Translation="刷新" />
-        <TranslationEntry Key="StateForm/btnTableRemove" Translation="摧毁变量" />
+        <TranslationEntry Key="StateForm/btnTableRemove" Translation="销毁变量" />
         <TranslationEntry Key="StateForm/btnTextForce" Translation="强制禁用" />
         <TranslationEntry Key="StateForm/btnTextRefresh" Translation="刷新" />
         <TranslationEntry Key="StateForm/colListChangedBy" Translation="修改来源" />
