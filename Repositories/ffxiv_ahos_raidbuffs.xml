@@ -372,9 +372,6 @@
               <ConditionSingle Enabled="true" ExpressionL="${power}" ExpressionTypeL="String" ExpressionR="5" ExpressionTypeR="String" ConditionType="StringEqualCase" />
             </Condition>
           </Action>
-          <Action OrderNumber="5" TextAuraFontSize="15.75" TextAuraName="Power" TextAuraExpression="${power}%" TextAuraXIniExpression="${var:RaidAuraX}+311" TextAuraYIniExpression="${var:RaidAuraY}-5" TextAuraWIniExpression="59" TextAuraHIniExpression="35" TextAuraOIniExpression="100" TextAuraTTLTickExpression="15-${_since}" TextAuraUseOutline="True" TextAuraFontName="Microsoft Sans Serif" ActionType="TextAura" ExecutionDelayExpression="1" Asynchronous="False">
-            <Condition Enabled="false" Grouping="Or" />
-          </Action>
         </Actions>
         <Condition Enabled="true" Grouping="And">
           <ConditionSingle Enabled="true" ExpressionL="${_ffxivparty[${caster}].inparty}" ExpressionTypeL="String" ExpressionR="1" ExpressionTypeR="Numeric" ConditionType="NumericEqual" />
@@ -422,10 +419,7 @@
               <ConditionSingle Enabled="true" ExpressionL="${card}" ExpressionTypeL="String" ExpressionR="Lord Of Crowns" ExpressionTypeR="String" ConditionType="StringEqualCase" />
             </Condition>
           </Action>
-          <Action OrderNumber="9" AuraImageMode="StretchImage" AuraName="CardBorder" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/ComboGIF.gif" AuraXIniExpression="${var:RaidAuraX}+360" AuraYIniExpression="${var:RaidAuraY}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" AuraTTLTickExpression="15-${_since}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura" ExecutionDelayExpression="1" Asynchronous="False">
-            <Condition Enabled="false" Grouping="Or" />
-          </Action>
-          <Action OrderNumber="10" TextAuraFontSize="15.75" TextAuraName="CardDuration" TextAuraExpression="${numeric:+15-${_since}}" TextAuraXIniExpression="${var:RaidAuraX}+350" TextAuraYIniExpression="${var:RaidAuraY}+11" TextAuraWIniExpression="59" TextAuraHIniExpression="35" TextAuraOIniExpression="100" TextAuraTTLTickExpression="15-${_since}" TextAuraUseOutline="True" TextAuraFontName="Microsoft Sans Serif" ActionType="TextAura" ExecutionDelayExpression="1" Asynchronous="False">
+          <Action OrderNumber="9" TextAuraFontSize="15.75" TextAuraName="CardDuration" TextAuraExpression="${numeric:+15-${_since}}" TextAuraXIniExpression="${var:RaidAuraX}+350" TextAuraYIniExpression="${var:RaidAuraY}+11" TextAuraWIniExpression="59" TextAuraHIniExpression="35" TextAuraOIniExpression="100" TextAuraTTLTickExpression="15-${_since}" TextAuraUseOutline="True" TextAuraFontName="Microsoft Sans Serif" ActionType="TextAura" ExecutionDelayExpression="1" Asynchronous="False">
             <Condition Enabled="true" Grouping="Or">
               <ConditionSingle Enabled="true" ExpressionL="${card}" ExpressionTypeL="String" ExpressionR="The Balance" ExpressionTypeR="String" ConditionType="StringEqualCase" />
               <ConditionSingle Enabled="true" ExpressionL="${card}" ExpressionTypeL="String" ExpressionR="The Bole" ExpressionTypeR="String" ConditionType="StringEqualCase" />
@@ -437,7 +431,7 @@
               <ConditionSingle Enabled="true" ExpressionL="${card}" ExpressionTypeL="String" ExpressionR="Lady Of Crowns" ExpressionTypeR="String" ConditionType="StringEqualCase" />
             </Condition>
           </Action>
-          <Action OrderNumber="11" TextAuraFontSize="15.75" TextAuraName="CardPower" TextAuraExpression="${cardpower}%" TextAuraXIniExpression="${var:RaidAuraX}+351" TextAuraYIniExpression="${var:RaidAuraY}-5" TextAuraWIniExpression="59" TextAuraHIniExpression="35" TextAuraOIniExpression="100" TextAuraTTLTickExpression="15-${_since}" TextAuraUseOutline="True" TextAuraFontName="Microsoft Sans Serif" ActionType="TextAura" ExecutionDelayExpression="1" Asynchronous="False">
+          <Action OrderNumber="10" TextAuraFontSize="15.75" TextAuraName="CardPower" TextAuraExpression="${cardpower}%" TextAuraXIniExpression="${var:RaidAuraX}+351" TextAuraYIniExpression="${var:RaidAuraY}-5" TextAuraWIniExpression="59" TextAuraHIniExpression="35" TextAuraOIniExpression="100" TextAuraTTLTickExpression="15-${_since}" TextAuraUseOutline="True" TextAuraFontName="Microsoft Sans Serif" ActionType="TextAura" ExecutionDelayExpression="1" Asynchronous="False">
             <Condition Enabled="true" Grouping="Or">
               <ConditionSingle Enabled="true" ExpressionL="${card}" ExpressionTypeL="String" ExpressionR="The Balance" ExpressionTypeR="String" ConditionType="StringEqualCase" />
               <ConditionSingle Enabled="true" ExpressionL="${card}" ExpressionTypeL="String" ExpressionR="The Bole" ExpressionTypeR="String" ConditionType="StringEqualCase" />
@@ -457,7 +451,7 @@
           </ConditionGroup>
         </Condition>
       </Trigger>
-      <Trigger Enabled="true" IsReadme="True" Name="AA - README - Raid Buffs Setup (Read Description)" Id="5b303e94-1f7b-4f7e-87a3-6f4a1ecfc7a1" RegularExpression="" Description="HOW TO SET THIS UP ?&#xD;&#xA;&#xD;&#xA;1 - Make a folder in your Local Triggers, name it whatever you want.&#xD;&#xA;&#xD;&#xA;2 - Copy&amp;Paste the &quot;AA Aura Config&quot; trigger in that new folder&#xD;&#xA;&#xD;&#xA;3 - Select said folder as a Startup Folder under : Options -&gt; Edit Configuration -&gt; General -&gt; Startup Folder&#xD;&#xA;&#xD;&#xA;4 - Edit the Actions in the&quot;AA Aura Config&quot; Trigger to place the starting image where you want, the rest will stay alligned&#xD;&#xA;&#xD;&#xA;5 - YOU ARE DONE !!&#xD;&#xA;&#xD;&#xA;Optional - Download and select Trick Attack sound file from DeadCatFish soundpack here : https://onedrive.live.com/?cid=8485af4f28fc460f&amp;id=8485AF4F28FC460F%21248&amp;authkey=%21ANLpmdeIRpsF%5FTk">
+      <Trigger Enabled="true" Source="None" IsReadme="True" Name="AA - README - Raid Buffs Setup (Read Description)" Id="5b303e94-1f7b-4f7e-87a3-6f4a1ecfc7a1" RegularExpression="" Description="HOW TO SET THIS UP ?&#xD;&#xA;&#xD;&#xA;1 - Make a folder in your Local Triggers, name it whatever you want.&#xD;&#xA;&#xD;&#xA;2 - Copy&amp;Paste the &quot;AA Aura Config&quot; trigger in that new folder&#xD;&#xA;&#xD;&#xA;3 - Select said folder as a Startup Folder under : Options -&gt; Edit Configuration -&gt; General -&gt; Startup Folder&#xD;&#xA;&#xD;&#xA;4 - Edit the Actions in the&quot;AA Aura Config&quot; Trigger to place the starting image where you want, the rest will stay alligned&#xD;&#xA;&#xD;&#xA;5 - YOU ARE DONE !!&#xD;&#xA;&#xD;&#xA;Optional - Download and select Trick Attack sound file from DeadCatFish soundpack here : https://onedrive.live.com/?cid=8485af4f28fc460f&amp;id=8485AF4F28FC460F%21248&amp;authkey=%21ANLpmdeIRpsF%5FTk">
         <Actions />
         <Condition Enabled="false" Grouping="Or" />
       </Trigger>
@@ -465,39 +459,55 @@
         <Actions>
           <Action OrderNumber="1" AuraName="RaidAuraTest" AuraImage="https://i.imgur.com/5Zp7kJi.jpg" AuraXIniExpression="652" AuraYIniExpression="248" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura" Asynchronous="False">
             <Condition Enabled="false" Grouping="Or" />
+            <Conditions />
           </Action>
           <Action OrderNumber="2" AuraName="TeamCDTest" AuraImage="https://i.imgur.com/1tHAv05.jpg" AuraXIniExpression="1293" AuraYIniExpression="310" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura" Asynchronous="False">
             <Condition Enabled="false" Grouping="Or" />
+            <Conditions />
           </Action>
           <Action OrderNumber="3" AuraName="RegenTrackerTest" AuraImage="https://i.imgur.com/QUo7Rl7.jpg" AuraXIniExpression="1270" AuraYIniExpression="321" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura" Asynchronous="False">
             <Condition Enabled="false" Grouping="Or" />
+            <Conditions />
           </Action>
-          <Action OrderNumber="4" VariableOp="SetNumeric" VariableName="RaidAuraX" VariableExpression="${_imageaura[RaidAuraTest].x}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" ExecutionDelayExpression="1000" Asynchronous="False">
+          <Action OrderNumber="4" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Placeholder" Description="^^ Move Image in Above Actions ^^" DescriptionOverride="True">
             <Condition Enabled="false" Grouping="Or" />
+            <Conditions />
           </Action>
-          <Action OrderNumber="5" VariableOp="SetNumeric" VariableName="RaidAuraY" VariableExpression="${_imageaura[RaidAuraTest].y}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" Asynchronous="False">
+          <Action OrderNumber="5" VariableOp="SetNumeric" VariableName="RaidAuraX" VariableExpression="${_imageaura[RaidAuraTest].x}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" ExecutionDelayExpression="1000" Asynchronous="False">
             <Condition Enabled="false" Grouping="Or" />
+            <Conditions />
           </Action>
-          <Action OrderNumber="6" VariableOp="SetNumeric" VariableName="TeamCDX" VariableExpression="${_imageaura[TeamCDTest].x}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" Asynchronous="False">
+          <Action OrderNumber="6" VariableOp="SetNumeric" VariableName="RaidAuraY" VariableExpression="${_imageaura[RaidAuraTest].y}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" Asynchronous="False">
             <Condition Enabled="false" Grouping="Or" />
+            <Conditions />
           </Action>
-          <Action OrderNumber="7" VariableOp="SetNumeric" VariableName="TeamCDY" VariableExpression="${_imageaura[TeamCDTest].y}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" Asynchronous="False">
+          <Action OrderNumber="7" VariableOp="SetNumeric" VariableName="TeamCDX" VariableExpression="${_imageaura[TeamCDTest].x}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" Asynchronous="False">
             <Condition Enabled="false" Grouping="Or" />
+            <Conditions />
           </Action>
-          <Action OrderNumber="8" VariableOp="SetNumeric" VariableName="RegenTrackerX" VariableExpression="${_imageaura[RegenTrackerTest].x}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" Asynchronous="False">
+          <Action OrderNumber="8" VariableOp="SetNumeric" VariableName="TeamCDY" VariableExpression="${_imageaura[TeamCDTest].y}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" Asynchronous="False">
             <Condition Enabled="false" Grouping="Or" />
+            <Conditions />
           </Action>
-          <Action OrderNumber="9" VariableOp="SetNumeric" VariableName="RegenTrackerY" VariableExpression="${_imageaura[RegenTrackerTest].y}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" Asynchronous="False">
+          <Action OrderNumber="9" VariableOp="SetNumeric" VariableName="RegenTrackerX" VariableExpression="${_imageaura[RegenTrackerTest].x}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" Asynchronous="False">
             <Condition Enabled="false" Grouping="Or" />
+            <Conditions />
           </Action>
-          <Action OrderNumber="10" AuraOp="DeactivateAura" AuraName="RaidAuraTest" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura" ExecutionDelayExpression="2000" Asynchronous="False">
+          <Action OrderNumber="10" VariableOp="SetNumeric" VariableName="RegenTrackerY" VariableExpression="${_imageaura[RegenTrackerTest].y}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" Asynchronous="False">
             <Condition Enabled="false" Grouping="Or" />
+            <Conditions />
           </Action>
-          <Action OrderNumber="11" AuraOp="DeactivateAura" AuraName="TeamCDTest" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura" Asynchronous="False">
+          <Action OrderNumber="11" AuraOp="DeactivateAura" AuraName="RaidAuraTest" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura" ExecutionDelayExpression="2000" Asynchronous="False">
             <Condition Enabled="false" Grouping="Or" />
+            <Conditions />
           </Action>
-          <Action OrderNumber="12" AuraOp="DeactivateAura" AuraName="RegenTrackerTest" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura" Asynchronous="False">
+          <Action OrderNumber="12" AuraOp="DeactivateAura" AuraName="TeamCDTest" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura" Asynchronous="False">
             <Condition Enabled="false" Grouping="Or" />
+            <Conditions />
+          </Action>
+          <Action OrderNumber="13" AuraOp="DeactivateAura" AuraName="RegenTrackerTest" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura" Asynchronous="False">
+            <Condition Enabled="false" Grouping="Or" />
+            <Conditions />
           </Action>
         </Actions>
         <Condition Enabled="false" Grouping="Or" />
