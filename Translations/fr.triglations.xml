@@ -1,4 +1,4 @@
-"O<?xml version="1.0"?>
+<?xml version="1.0"?>
 <Language LanguageName="Français" MissingKeyHandling="DefaultLanguage">
   <Translations>
     <TranslationEntry Key="AboutForm" Translation="À Propos" />
@@ -52,7 +52,7 @@
     <TranslationEntry Key="ActionForm/cbxLoggingLevel[(inherit from trigger)]" Translation="(hériter de la Trigger)" />
     <TranslationEntry Key="ActionForm/cbxLoggingLevel[All informational messages]" Translation="Tous les messages d'information" />
     <TranslationEntry Key="ActionForm/cbxLoggingLevel[Errors and warnings]" Translation="Erreurs et avertissements" />
-    <TranslationEntry Key="ActionForm/cbxLoggingLevel[Errors only]" Translation="Erreurs seulement" />Commencer l'enregistrement
+    <TranslationEntry Key="ActionForm/cbxLoggingLevel[Errors only]" Translation="Erreurs seulement" />
     <TranslationEntry Key="ActionForm/cbxLoggingLevel[Nothing]" Translation="Rien" />
     <TranslationEntry Key="ActionForm/cbxLoggingLevel[Verbose debug]" Translation="Verbose debug" />
     <TranslationEntry Key="ActionForm/cbxLvarExpType[Numeric]" Translation="Numerique" />
@@ -808,7 +808,7 @@
     <TranslationEntry Key="Plugin/UserInterface/ctxExport" Translation="Exporter" />
     <TranslationEntry Key="Plugin/UserInterface/ctxImport" Translation="Importer" />
     <TranslationEntry Key="Plugin/UserInterface/ctxPaste" Translation="Coller" />
-    <TranslationEntry Key="Plugin/UserInterface/errThing1" Translation="Des erreurs ont été rencontrées" /
+    <TranslationEntry Key="Plugin/UserInterface/errThing1" Translation="Des erreurs ont été rencontrées" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeCreate" Translation="Lorsque vous fermez cet écran de bienvenue, vous verrez l'interface utilisateur principale de Triggernometry. Sélectionnez simplement le dossier dans lequel vous souhaitez créer une trigger (ou racine) et appuyez sur le bouton Ajouter dans le coin supérieur gauche.&#xD;&#xA;&#xD;&#xA;Voici le bouton que vous devriez rechercher:" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeCreateHeader" Translation="Comment puis-je créer une nouvelle trigger?" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeDifferences" Translation="Triggernometry offre des fonctionnalités étendues, telles que plusieurs types d'action (auras et autres) et l'exécution conditionnelle lorsque certaines mesures ne sont prises que si les conditions sont remplies (par exemple, les besoins de nom de joueur à être quelque chose de spécifique)." />
