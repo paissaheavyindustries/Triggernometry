@@ -1012,7 +1012,7 @@
             </Folders>
             <Triggers />
           </Folder>
-          <Folder ZoneFilterEnabled="True" Id="549e4bdb-f776-41c2-bbeb-a1ff390c6c2c" ZoneFilterRegularExpression="Memoria\ Miseria\ \(Extreme\)" Name="5.25 - Memoria Miseria" Enabled="true">
+          <Folder ZoneFilterEnabled="True" Id="549e4bdb-f776-41c2-bbeb-a1ff390c6c2c" ZoneFilterRegularExpression="Memoria\ Misera\ \(Extreme\)" Name="5.25 - Memoria Miseria" Enabled="true">
             <Folders>
               <Folder Id="42186227-5453-43ce-8624-f0e1fa5abb24" Name="Gunshields" Enabled="true">
                 <Folders />
