@@ -125,15 +125,19 @@
             <Actions>
               <Action OrderNumber="1" TextAuraOp="DeactivateAura" TextAuraFontSize="8.25" TextAuraName="HolmgangTeamCDText" TextAuraFontName="Microsoft Sans Serif" ActionType="TextAura">
                 <Condition Enabled="false" Grouping="Or" />
+                <Conditions />
               </Action>
               <Action OrderNumber="2" AuraName="HolmgangTeamCD" AuraImage="https://xivapi.com/i/000000/000266.png" AuraXIniExpression="${var:TeamCDX}+40" AuraYIniExpression="${var:TeamCDY}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura" ExecutionDelayExpression="1" Asynchronous="False" RefireInterrupt="True">
                 <Condition Enabled="false" Grouping="Or" />
+                <Conditions />
               </Action>
-              <Action OrderNumber="3" TextAuraFontSize="15.75" TextAuraName="HolmgangTeamCDText" TextAuraExpression="${numeric:+180-${_since}}" TextAuraXIniExpression="${var:TeamCDX}+32" TextAuraYIniExpression="${var:TeamCDY}+12" TextAuraWIniExpression="59" TextAuraHIniExpression="35" TextAuraOIniExpression="100" TextAuraTTLTickExpression="240-${_since}" TextAuraUseOutline="True" TextAuraFontName="Microsoft Sans Serif" ActionType="TextAura" ExecutionDelayExpression="1" Asynchronous="False">
+              <Action OrderNumber="3" TextAuraFontSize="15.75" TextAuraName="HolmgangTeamCDText" TextAuraExpression="${numeric:+240-${_since}}" TextAuraXIniExpression="${var:TeamCDX}+32" TextAuraYIniExpression="${var:TeamCDY}+12" TextAuraWIniExpression="59" TextAuraHIniExpression="35" TextAuraOIniExpression="100" TextAuraTTLTickExpression="240-${_since}" TextAuraUseOutline="True" TextAuraFontName="Microsoft Sans Serif" ActionType="TextAura" ExecutionDelayExpression="1" Asynchronous="False">
                 <Condition Enabled="false" Grouping="Or" />
+                <Conditions />
               </Action>
               <Action OrderNumber="4" AuraImageMode="StretchImage" AuraName="HolmgangTeamCDBorder" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/ComboGIF.gif" AuraXIniExpression="${var:TeamCDX}+40" AuraYIniExpression="${var:TeamCDY}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" AuraTTLTickExpression="8-${_since}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura" ExecutionDelayExpression="1" Asynchronous="False" RefireInterrupt="True">
                 <Condition Enabled="false" Grouping="Or" />
+                <Conditions />
               </Action>
             </Actions>
             <Condition Enabled="true" Grouping="And">

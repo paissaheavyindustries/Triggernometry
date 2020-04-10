@@ -1097,7 +1097,7 @@
                         <Condition Enabled="true" Grouping="And">
                           <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="8" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                           <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="6656" ExpressionTypeR="Numeric" ConditionType="NumericGreater" />
-                          <ConditionSingle Enabled="true" ExpressionL="VarisEX8Counter" ExpressionTypeL="String" ExpressionR="1" ExpressionTypeR="String" ConditionType="NumericEqual" />
+                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEX8Counter}" ExpressionTypeL="String" ExpressionR="1" ExpressionTypeR="String" ConditionType="NumericEqual" />
                         </Condition>
                         <Conditions />
                       </Action>
@@ -1105,7 +1105,7 @@
                         <Condition Enabled="true" Grouping="And">
                           <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="8" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                           <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="5632" ExpressionTypeR="Numeric" ConditionType="NumericGreater" />
-                          <ConditionSingle Enabled="true" ExpressionL="VarisEX8Counter" ExpressionTypeL="String" ExpressionR="2" ExpressionTypeR="String" ConditionType="NumericEqual" />
+                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEX8Counter}" ExpressionTypeL="String" ExpressionR="2" ExpressionTypeR="String" ConditionType="NumericEqual" />
                         </Condition>
                         <Conditions />
                       </Action>
@@ -1113,7 +1113,7 @@
                         <Condition Enabled="true" Grouping="And">
                           <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="8" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                           <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="7600" ExpressionTypeR="Numeric" ConditionType="NumericGreater" />
-                          <ConditionSingle Enabled="true" ExpressionL="VarisEX8Counter" ExpressionTypeL="String" ExpressionR="3" ExpressionTypeR="String" ConditionType="NumericGreaterEqual" />
+                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEX8Counter}" ExpressionTypeL="String" ExpressionR="3" ExpressionTypeR="String" ConditionType="NumericGreaterEqual" />
                         </Condition>
                         <Conditions />
                       </Action>
