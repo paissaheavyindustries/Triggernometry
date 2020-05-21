@@ -5081,41 +5081,53 @@
                         <Triggers>
                           <Trigger Enabled="true" Sequential="True" Name="Grand Octet Cast" Id="26ece632-28d9-42a0-8d96-9816fcee19f0" RegularExpression="\[.{14}14:26E7:Bahamut Prime starts using Grand Octet on Bahamut Prime">
                             <Actions>
-                              <Action OrderNumber="1" AuraImageMode="Zoom" AuraName="Octet${tvarcl:UCOB[NAME][1]}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarcl:UCOB[JOB][1]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
+                              <Action OrderNumber="1" AuraImageMode="Zoom" AuraName="UCOBOctet${tvarcl:UCOB[NAME][1]}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarcl:UCOB[JOB][1]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
                                 <Condition Enabled="false" Grouping="Or" />
+                                <Conditions />
                               </Action>
-                              <Action OrderNumber="2" AuraImageMode="Zoom" AuraName="Octet${tvarcl:UCOB[NAME][2]}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarcl:UCOB[JOB][2]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}+40" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
+                              <Action OrderNumber="2" AuraImageMode="Zoom" AuraName="UCOBOctet${tvarcl:UCOB[NAME][2]}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarcl:UCOB[JOB][2]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}+40" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
                                 <Condition Enabled="false" Grouping="Or" />
+                                <Conditions />
                               </Action>
-                              <Action OrderNumber="3" AuraImageMode="Zoom" AuraName="Octet${tvarcl:UCOB[NAME][3]}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarcl:UCOB[JOB][3]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}+40*2" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
+                              <Action OrderNumber="3" AuraImageMode="Zoom" AuraName="UCOBOctet${tvarcl:UCOB[NAME][3]}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarcl:UCOB[JOB][3]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}+40*2" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
                                 <Condition Enabled="false" Grouping="Or" />
+                                <Conditions />
                               </Action>
-                              <Action OrderNumber="4" AuraImageMode="Zoom" AuraName="Octet${tvarcl:UCOB[NAME][4]}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarcl:UCOB[JOB][4]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}+40*3" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
+                              <Action OrderNumber="4" AuraImageMode="Zoom" AuraName="UCOBOctet${tvarcl:UCOB[NAME][4]}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarcl:UCOB[JOB][4]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}+40*3" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
                                 <Condition Enabled="false" Grouping="Or" />
+                                <Conditions />
                               </Action>
-                              <Action OrderNumber="5" AuraImageMode="Zoom" AuraName="Octet${tvarcl:UCOB[NAME][5]}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarcl:UCOB[JOB][5]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}+40*4" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
+                              <Action OrderNumber="5" AuraImageMode="Zoom" AuraName="UCOBOctet${tvarcl:UCOB[NAME][5]}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarcl:UCOB[JOB][5]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}+40*4" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
                                 <Condition Enabled="false" Grouping="Or" />
+                                <Conditions />
                               </Action>
-                              <Action OrderNumber="6" AuraImageMode="Zoom" AuraName="Octet${tvarcl:UCOB[NAME][6]}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarcl:UCOB[JOB][6]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}+40*5" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
+                              <Action OrderNumber="6" AuraImageMode="Zoom" AuraName="UCOBOctet${tvarcl:UCOB[NAME][6]}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarcl:UCOB[JOB][6]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}+40*5" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
                                 <Condition Enabled="false" Grouping="Or" />
+                                <Conditions />
                               </Action>
-                              <Action OrderNumber="7" AuraImageMode="Zoom" AuraName="Octet${tvarcl:UCOB[NAME][7]}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarcl:UCOB[JOB][7]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}+40*6" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
+                              <Action OrderNumber="7" AuraImageMode="Zoom" AuraName="UCOBOctet${tvarcl:UCOB[NAME][7]}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarcl:UCOB[JOB][7]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}+40*6" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
                                 <Condition Enabled="false" Grouping="Or" />
+                                <Conditions />
                               </Action>
-                              <Action OrderNumber="8" AuraImageMode="Zoom" AuraName="Octet${tvarcl:UCOB[NAME][8]}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarcl:UCOB[JOB][8]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}+40*7" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
+                              <Action OrderNumber="8" AuraImageMode="Zoom" AuraName="UCOBOctet${tvarcl:UCOB[NAME][8]}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarcl:UCOB[JOB][8]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}+40*7" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
                                 <Condition Enabled="false" Grouping="Or" />
+                                <Conditions />
                               </Action>
                               <Action OrderNumber="9" LogLevel="-1" VariableName="UCOB-Tenstrike" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
                                 <Condition Enabled="false" Grouping="Or" />
+                                <Conditions />
                               </Action>
                               <Action OrderNumber="10" LogLevel="-1" VariableOp="SetNumeric" VariableName="UCOB-Octet" VariableExpression="1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
                                 <Condition Enabled="false" Grouping="Or" />
+                                <Conditions />
                               </Action>
-                              <Action OrderNumber="11" AuraOp="DeactivateAuraRegex" AuraName="Octet" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura" ExecutionDelayExpression="40000">
+                              <Action OrderNumber="11" AuraOp="DeactivateAuraRegex" AuraName="UCOBOctet" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura" ExecutionDelayExpression="40000">
                                 <Condition Enabled="false" Grouping="Or" />
+                                <Conditions />
                               </Action>
                               <Action OrderNumber="12" LogLevel="-1" VariableName="UCOB-Octet" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
                                 <Condition Enabled="false" Grouping="Or" />
+                                <Conditions />
                               </Action>
                             </Actions>
                             <Condition Enabled="false" Grouping="Or" />
@@ -5138,8 +5150,9 @@
                           </Trigger>
                           <Trigger Enabled="true" Name="Tenstrike Trio Earthshakers Player" Id="f2bc9a42-e68e-4bca-b998-99a1b5462240" RegularExpression="1B:[A-F0-9]{8}:(?&lt;player&gt;[a-zA-Z-' ]{3,21}):0000:[A-F0-9]{4}:0028:">
                             <Actions>
-                              <Action OrderNumber="1" AuraName="Tenstrike${player}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarrl:UCOB[${player}][1]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}+40*(${_imageaura[Hatch${_ffxivplayer[1].name}].w}+${_imageaura[Hatch${_ffxivplayer[2].name}].w}+${_imageaura[Hatch${_ffxivplayer[3].name}].w}+${_imageaura[Hatch${_ffxivplayer[4].name}].w}+${_imageaura[Hatch${_ffxivplayer[5].name}].w}+${_imageaura[Hatch${_ffxivplayer[6].name}].w}+${_imageaura[Hatch${_ffxivplayer[7].name}].w}+${_imageaura[Hatch${_ffxivplayer[8].na+40*(${_imageaura[Tenstrike${_ffxivplayer[1].name}].w}+${_imageaura[Tenstrike${_ffxivplayer[2].name}].w}+${_imageaura[Tenstrike${_ffxivplayer[3].name}].w}+${_imageaura[Tenstrike${_ffxivplayer[4].name}].w}+${_imageaura[Tenstrike${_ffxivplayer[5].name}].w}+${_imageaura[Tenstrike${_ffxivplayer[6].name}].w}+${_imageaura[Tenstrike${_ffxivplayer[7].name}].w}+${_imageaura[Tenstrike${_ffxivplayer[8].name}].w})me}].w})" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" AuraTTLTickExpression="5-${_since}" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
+                              <Action OrderNumber="1" AuraName="UCOBTenstrike${player}" AuraImage="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/Resources/FFXIV/${tvarrl:UCOB[${player}][1]}.png" AuraXIniExpression="${tvar:UCOB[3][2]}+40*(${_imageaura[Hatch${_ffxivplayer[1].name}].w}+${_imageaura[Hatch${_ffxivplayer[2].name}].w}+${_imageaura[Hatch${_ffxivplayer[3].name}].w}+${_imageaura[Hatch${_ffxivplayer[4].name}].w}+${_imageaura[Hatch${_ffxivplayer[5].name}].w}+${_imageaura[Hatch${_ffxivplayer[6].name}].w}+${_imageaura[Hatch${_ffxivplayer[7].name}].w}+${_imageaura[Hatch${_ffxivplayer[8].na+40*(${_imageaura[Tenstrike${_ffxivplayer[1].name}].w}+${_imageaura[Tenstrike${_ffxivplayer[2].name}].w}+${_imageaura[Tenstrike${_ffxivplayer[3].name}].w}+${_imageaura[Tenstrike${_ffxivplayer[4].name}].w}+${_imageaura[Tenstrike${_ffxivplayer[5].name}].w}+${_imageaura[Tenstrike${_ffxivplayer[6].name}].w}+${_imageaura[Tenstrike${_ffxivplayer[7].name}].w}+${_imageaura[Tenstrike${_ffxivplayer[8].name}].w})me}].w})" AuraYIniExpression="${tvar:UCOB[4][2]}" AuraWIniExpression="40" AuraHIniExpression="40" AuraOIniExpression="100" AuraTTLTickExpression="5-${_since}" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
                                 <Condition Enabled="false" Grouping="Or" />
+                                <Conditions />
                               </Action>
                             </Actions>
                             <Condition Enabled="false" Grouping="Or" />
@@ -5352,7 +5365,7 @@
                             <Condition Enabled="false" Grouping="Or" />
                             <Conditions />
                           </Action>
-                          <Action OrderNumber="2" AuraOp="DeactivateAuraRegex" AuraName="UCOB-" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
+                          <Action OrderNumber="2" AuraOp="DeactivateAuraRegex" AuraName="UCOB" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
                             <Condition Enabled="false" Grouping="Or" />
                             <Conditions />
                           </Action>
