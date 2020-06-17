@@ -5250,18 +5250,21 @@
                               <ConditionSingle Enabled="true" ExpressionL="${player}" ExpressionTypeL="String" ExpressionR="${_ffxivplayer}" ExpressionTypeR="String" ConditionType="StringNotEqualCase" />
                               <ConditionSingle Enabled="true" ExpressionL="${var:UCOB-Octet}" ExpressionTypeL="Numeric" ExpressionR="1" ExpressionTypeR="Numeric" ConditionType="NumericLess" />
                             </Condition>
+                            <Conditions />
                           </Action>
                           <Action OrderNumber="2" PlaySpeechMyself="True" UseTTSTextExpression="Dive ${var:UCOB-DiveCounter}" TextAuraFontSize="0" ActionType="UseTTS" RefireInterrupt="True">
                             <Condition Enabled="true" Grouping="And">
                               <ConditionSingle Enabled="true" ExpressionL="${var:UCOB-Octet}" ExpressionTypeL="Numeric" ExpressionR="1" ExpressionTypeR="Numeric" ConditionType="NumericLess" />
                               <ConditionSingle Enabled="true" ExpressionL="${player}" ExpressionTypeL="String" ExpressionR="${_ffxivplayer}" ExpressionTypeR="String" ConditionType="StringEqualCase" />
                             </Condition>
+                            <Conditions />
                           </Action>
                           <Action OrderNumber="3" VariableOp="SetNumeric" VariableName="UCOB-DiveCounter" VariableExpression="1" TextAuraFontSize="0" ActionType="Variable" ExecutionDelayExpression="20000" RefireInterrupt="True">
                             <Condition Enabled="true" Grouping="And">
                               <ConditionSingle Enabled="true" ExpressionL="${var:UCOB-Octet}" ExpressionTypeL="Numeric" ExpressionR="1" ExpressionTypeR="Numeric" ConditionType="NumericLess" />
                               <ConditionSingle Enabled="true" ExpressionL="${player}" ExpressionTypeL="String" ExpressionR="${_ffxivplayer}" ExpressionTypeR="String" ConditionType="StringEqualCase" />
                             </Condition>
+                            <Conditions />
                           </Action>
                         </Actions>
                         <Condition Enabled="false" Grouping="Or" />
@@ -5278,9 +5281,15 @@
                         <Actions>
                           <Action OrderNumber="1" LogLevel="-1" VariableOp="SetNumeric" VariableName="UCOB-Tenstrike" VariableExpression="0" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
                             <Condition Enabled="false" Grouping="Or" />
+                            <Conditions />
                           </Action>
                           <Action OrderNumber="2" AuraOp="DeactivateAuraRegex" AuraName="UCOB" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Aura">
                             <Condition Enabled="false" Grouping="Or" />
+                            <Conditions />
+                          </Action>
+                          <Action OrderNumber="3" LogLevel="-1" VariableOp="SetNumeric" VariableName="UCOB-DiveCounter" VariableExpression="1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
+                            <Condition Enabled="false" Grouping="Or" />
+                            <Conditions />
                           </Action>
                         </Actions>
                         <Condition Enabled="false" Grouping="Or" />
@@ -5471,7 +5480,7 @@
                     <Folders>
                       <Folder Id="4b3698db-2963-459c-9c59-50db89dae5f7" Name="Gaols Marking (From @Lombrax) (Needs to be setup)" Enabled="false">
                         <Folders>
-                          <Folder Id="03c23560-d7fd-4992-a6fc-cb1b652fddeb" Name="PlayerMarker" Enabled="true">
+                          <Folder Id="03c23560-d7fd-4992-a6fc-cb1b652fddeb" Name="PlayerMarker" Enabled="false">
                             <Folders />
                             <Triggers>
                               <Trigger Enabled="false" Name="Mark Player" Id="2cc19b1c-cff4-4dd8-bcd5-2f634dc27f6c" RegularExpression="(?&lt;player&gt;[a-zA-Z-' ]{1,31})" Scheduling="FromLastAction" RefirePeriodExpression="200">
