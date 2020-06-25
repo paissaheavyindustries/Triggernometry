@@ -75,10 +75,29 @@
                   <Action OrderNumber="1" UseTTSTextExpression="Activate" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
                 </Actions>
               </Trigger>
-              <Trigger Enabled="true" Name="Astraea" Id="02dabf9b-d5ec-48b9-b287-1d64faaa4a05" RegularExpression="03:Added new combatant Astraea">
+              <Trigger Enabled="true" Name="Astraea" Id="02dabf9b-d5ec-48b9-b287-1d64faaa4a05" RegularExpression="03:[A-F0-9]{8}:Added new combatant Astraea">
                 <Actions>
                   <Action OrderNumber="1" PlaySpeechMyself="True" UseTTSTextExpression="Kill Mob" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
                 </Actions>
+                <Condition Enabled="true" Grouping="And">
+                  <ConditionSingle Enabled="true" ExpressionL="${var:KeeperOfTheLakeLockLastBoss}" ExpressionTypeL="Numeric" ExpressionR="1" ExpressionTypeR="Numeric" ConditionType="NumericEqual" />
+                </Condition>
+              </Trigger>
+              <Trigger Enabled="true" Name="Lock Last Boss" Id="08d4c24f-b7e8-43c6-b7ed-9234bb3deb16" RegularExpression="\[.{14}00:0839:The Forsworn Promise will be sealed off in 15 seconds!&#xA;">
+                <Actions>
+                  <Action OrderNumber="1" LogLevel="-1" VariableOp="SetNumeric" VariableName="KeeperOfTheLakeLockLastBoss" VariableExpression="1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Action>
+                </Actions>
+                <Condition Enabled="false" Grouping="Or" />
+              </Trigger>
+              <Trigger Enabled="true" Name="Unlock Last Boss" Id="009122d3-c81c-4708-8f69-a02dd7c8ec03" RegularExpression="\[.{14}00:0839:The Forsworn Promise is no longer sealed!&#xA;">
+                <Actions>
+                  <Action OrderNumber="1" LogLevel="-1" VariableName="KeeperOfTheLakeLockLastBoss" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Action>
+                </Actions>
+                <Condition Enabled="false" Grouping="Or" />
               </Trigger>
             </Triggers>
           </Folder>
@@ -318,7 +337,7 @@
       </Folder>
       <Folder Id="2ad45796-3061-4bd4-96a1-aa5389321779" Name="4.0 - Stormblood" Enabled="true">
         <Folders>
-          <Folder ZoneFilterEnabled="True" Id="96ca710e-bc93-4dbe-b7a1-ec784da8af0f" ZoneFilterRegularExpression="Shisui\ of\ theViolet\ Tides" Name="63 - Shisui of the Violet Tides" Enabled="true">
+          <Folder ZoneFilterEnabled="True" Id="96ca710e-bc93-4dbe-b7a1-ec784da8af0f" ZoneFilterRegularExpression="Shisui\ Of\ The\ Violet\ Tides" Name="63 - Shisui of the Violet Tides" Enabled="true">
             <Folders />
             <Triggers>
               <Trigger Enabled="true" Name="Seduce" Id="9b7fa463-8e44-4932-84a5-5c9a3f7948a9" RegularExpression="14:1F7A:Ruby Princess starts using Seduce on Ruby Princess">
@@ -595,7 +614,7 @@
               </Trigger>
             </Triggers>
           </Folder>
-          <Folder Id="d8bba5a4-db3f-4368-83a3-a2db8ae645d8" Name="79 - Mt. Gulg" Enabled="true">
+          <Folder ZoneFilterEnabled="True" Id="d8bba5a4-db3f-4368-83a3-a2db8ae645d8" ZoneFilterRegularExpression="Mt\.\ Gulg" Name="79 - Mt. Gulg" Enabled="true">
             <Folders />
             <Triggers>
               <Trigger Enabled="true" Name="Lumen Infinitum" Id="271931aa-ac66-4855-a67b-798b3ff48b75" RegularExpression="2b:The forgiven cruelty readies Lumen Infinitum">
@@ -606,15 +625,38 @@
                 </Actions>
                 <Condition Enabled="false" Grouping="Or" />
               </Trigger>
+              <Trigger Enabled="true" Name="First Boss Buster - Rake" Id="66384b5d-7c19-4dd3-a56e-b54d3c3f9c5a" RegularExpression="14:3CFB:Forgiven Cruelty starts using Rake on (?&lt;player&gt;[a-zA-Z-' ]{3,21})">
+                <Actions>
+                  <Action OrderNumber="1" PlaySpeechMyself="True" UseTTSTextExpression="Buster" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Action>
+                </Actions>
+                <Condition Enabled="false" Grouping="Or" />
+              </Trigger>
+              <Trigger Enabled="true" Name="Second Boss Buster - Catechism" Id="e2084d66-e831-4f1d-9a69-cd98ebeeedf3" RegularExpression="14:3D09:Forgiven Whimsy starts using Catechism on Forgiven Whimsy">
+                <Actions>
+                  <Action OrderNumber="1" PlaySpeechMyself="True" UseTTSTextExpression="Buster" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Action>
+                </Actions>
+                <Condition Enabled="false" Grouping="Or" />
+              </Trigger>
             </Triggers>
           </Folder>
           <Folder Id="9ef45b2a-6146-40cb-b5e9-565309614126" Name="80 - The Grand Cosmos" Enabled="true">
             <Folders />
             <Triggers>
-              <Trigger Enabled="true" Name="Scorching Right" Id="ce491ba1-ed5b-42de-9764-799251bf1431" RegularExpression="14:4762:Lugus starts using Scorching Right on Lugus">
+              <Trigger Enabled="true" Name="Scorching Right" Id="ce491ba1-ed5b-42de-9764-799251bf1431" RegularExpression="14:476[23]:Lugus starts using Scorching (?&lt;move&gt;Right|Left) on Lugus">
                 <Actions>
                   <Action OrderNumber="1" UseTTSTextExpression="Go Left" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
-                    <Condition Enabled="false" Grouping="Or" />
+                    <Condition Enabled="true" Grouping="And">
+                      <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Right" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                    </Condition>
+                  </Action>
+                  <Action OrderNumber="2" UseTTSTextExpression="Go Right" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                    <Condition Enabled="true" Grouping="And">
+                      <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Left" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                    </Condition>
                   </Action>
                 </Actions>
                 <Condition Enabled="false" Grouping="Or" />
@@ -622,6 +664,67 @@
               <Trigger Enabled="true" Name="Mortal Flame" Id="14cd1964-21fa-41ac-9aca-02db4b00475b" RegularExpression="1A:[A-F0-9]{8}:(?&lt;player&gt;[a-zA-Z-' ]{1,31}) gains the effect of Mortal Flame from Lugus">
                 <Actions>
                   <Action OrderNumber="1" UseTTSTextExpression="Pass Flame to Furniture" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Action>
+                </Actions>
+                <Condition Enabled="false" Grouping="Or" />
+              </Trigger>
+              <Trigger Enabled="true" Name="Shadowbolt - First Boss TB" Id="9ff81236-8cbc-4f90-b252-91db590e60b5" RegularExpression="14:4769:Seeker Of Solitude starts using Shadowbolt on (?&lt;player&gt;[a-zA-Z-' ]{3,21})">
+                <Actions>
+                  <Action OrderNumber="1" UseTTSTextExpression="Buster on ${player}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Action>
+                </Actions>
+                <Condition Enabled="false" Grouping="Or" />
+              </Trigger>
+              <Trigger Enabled="true" Name="Storm Of Color - Second Boss TB" Id="a10f9b93-bfc6-408d-8f20-d01c68e8b5de" RegularExpression="14:471B:Leannan Sith starts using Storm Of Color on (?&lt;player&gt;[a-zA-Z-' ]{3,21})">
+                <Actions>
+                  <Action OrderNumber="1" UseTTSTextExpression="Buster on ${player}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Action>
+                </Actions>
+                <Condition Enabled="false" Grouping="Or" />
+              </Trigger>
+            </Triggers>
+          </Folder>
+          <Folder ZoneFilterEnabled="True" Id="77d30f1c-060d-467c-b7c3-b073be010bef" ZoneFilterRegularExpression="Anamnesis\ Anyder" Name="80 - Anamnesis Anyder" Enabled="true">
+            <Folders />
+            <Triggers>
+              <Trigger Enabled="true" Name="Luminour Ray" Id="15fe5359-d19a-4d85-bf5a-8709b3101f9e" RegularExpression="\[.{14}14:4E26:Unknown starts using Luminous Ray on Unknown">
+                <Actions>
+                  <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="out of front" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Action>
+                </Actions>
+                <Condition Enabled="false" Grouping="Or" />
+              </Trigger>
+              <Trigger Enabled="true" Name="Raging Glower" Id="11fda54c-1c05-4e88-b7cd-79e0ba51b463" RegularExpression="\[.{14}14:4B56:Kyklops starts using Raging Glower on Kyklops">
+                <Actions>
+                  <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="out of front" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Action>
+                </Actions>
+                <Condition Enabled="false" Grouping="Or" />
+              </Trigger>
+              <Trigger Enabled="true" Name="Eye of the Cyclone" Id="66914faf-eade-4e70-a9ee-1edd24dc8d79" RegularExpression="\[.{14}14:4B57:Kyklops starts using Eye Of The Cyclone on Kyklops">
+                <Actions>
+                  <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="go in" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Action>
+                </Actions>
+                <Condition Enabled="false" Grouping="Or" />
+              </Trigger>
+              <Trigger Enabled="true" Name="2,000-Mina Swing" Id="a613fee3-1556-46b3-a486-d8eaf46be20d" RegularExpression="\[.{14}14:4B55:Kyklops starts using 2,000-Mina Swing on Kyklops">
+                <Actions>
+                  <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="go out" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Action>
+                </Actions>
+                <Condition Enabled="false" Grouping="Or" />
+              </Trigger>
+              <Trigger Enabled="true" Name="Swipe" Id="49d87d12-abd3-48c3-98af-550fdf6cb8eb" RegularExpression="\[.{14}14:4B54:Kyklops starts using 2,000-Mina Swipe on Kyklops">
+                <Actions>
+                  <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="out of front - swipe" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                     <Condition Enabled="false" Grouping="Or" />
                   </Action>
                 </Actions>
@@ -717,7 +820,7 @@
           </Trigger>
         </Triggers>
       </Folder>
-      <Folder Id="fdf8bbe5-ba22-4b4e-b6e6-a170de1a7f80" Name="# - BLU - Masked Carnival" Enabled="true">
+      <Folder FFXIVJobFilterEnabled="True" FFXIVJobFilter="34359738368" Id="fdf8bbe5-ba22-4b4e-b6e6-a170de1a7f80" Name="# - BLU - Masked Carnival" Enabled="true">
         <Folders>
           <Folder Id="49cc0f6d-c86c-4afe-8073-0448cb46f78a" Name="25" Enabled="true">
             <Folders />
@@ -726,11 +829,9 @@
                 <Actions>
                   <Action OrderNumber="1" UseTTSTextExpression="Out" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Action>
                 </Actions>
                 <Condition Enabled="false" Grouping="Or" />
-                <Conditions />
               </Trigger>
             </Triggers>
           </Folder>
@@ -741,11 +842,9 @@
                 <Actions>
                   <Action OrderNumber="1" UseTTSTextExpression="interupt" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Action>
                 </Actions>
                 <Condition Enabled="false" Grouping="Or" />
-                <Conditions />
               </Trigger>
             </Triggers>
           </Folder>
@@ -756,11 +855,9 @@
                 <Actions>
                   <Action OrderNumber="1" UseTTSTextExpression="out" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Action>
                 </Actions>
                 <Condition Enabled="false" Grouping="Or" />
-                <Conditions />
               </Trigger>
             </Triggers>
           </Folder>
@@ -771,11 +868,9 @@
                 <Actions>
                   <Action OrderNumber="1" UseTTSTextExpression="interupt" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Action>
                 </Actions>
                 <Condition Enabled="false" Grouping="Or" />
-                <Conditions />
               </Trigger>
             </Triggers>
           </Folder>
@@ -786,21 +881,17 @@
                 <Actions>
                   <Action OrderNumber="1" UseTTSTextExpression="diamondback" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Action>
                 </Actions>
                 <Condition Enabled="false" Grouping="Or" />
-                <Conditions />
               </Trigger>
-              <Trigger Enabled="true" Name="imp song" Id="0da6fb61-fbbc-498a-ad0d-d1d274ae0487" RegularExpression="14:3978|3998:Ultros starts using Imp Song">
+              <Trigger Enabled="true" Name="imp song" Id="0da6fb61-fbbc-498a-ad0d-d1d274ae0487" RegularExpression="14:(?&gt;3978|3998):Ultros starts using Imp Song">
                 <Actions>
                   <Action OrderNumber="1" UseTTSTextExpression="silence" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Action>
                 </Actions>
                 <Condition Enabled="false" Grouping="Or" />
-                <Conditions />
               </Trigger>
             </Triggers>
           </Folder>
