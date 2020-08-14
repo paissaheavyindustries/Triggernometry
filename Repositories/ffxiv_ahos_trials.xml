@@ -92,6 +92,42 @@
                 <Condition Enabled="false" Grouping="Or" />
                 <Conditions />
               </Trigger>
+              <Trigger Enabled="true" Name="Frost Staff/Sword" Id="6dc21b88-803a-4116-8adf-c8d0af220ff8" RegularExpression="15:[A-F0-9]{8}:Shiva:(?&lt;frost&gt;536[67]):Frost Staff:">
+                <Actions>
+                  <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="Frost Staff" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                    <Condition Enabled="true" Grouping="Or">
+                      <ConditionSingle Enabled="true" ExpressionL="${frost}" ExpressionTypeL="String" ExpressionR="5367" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                    </Condition>
+                    <Conditions />
+                  </Action>
+                  <Action OrderNumber="2" LogLevel="-1" UseTTSTextExpression="Frost Blade" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                    <Condition Enabled="true" Grouping="Or">
+                      <ConditionSingle Enabled="true" ExpressionL="${frost}" ExpressionTypeL="String" ExpressionR="5366" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                    </Condition>
+                    <Conditions />
+                  </Action>
+                </Actions>
+                <Condition Enabled="false" Grouping="Or" />
+                <Conditions />
+              </Trigger>
+              <Trigger Enabled="true" Name="Avalanche Marker" Id="f5b38cb5-6c83-4c06-8759-7cbf7d180c6a" RegularExpression="\[.{14}1B:[0-9A-F]{8}:(?&lt;char&gt;[a-zA-Z' ]{3,21}):[0-9A-F]{4}:[0-9A-F]{4}:001A:">
+                <Actions>
+                  <Action OrderNumber="1" LogLevel="-1" PlaySpeechMyself="True" UseTTSTextExpression="MARKER ON YOU" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                    <Condition Enabled="true" Grouping="And">
+                      <ConditionSingle Enabled="true" ExpressionL="${char}" ExpressionTypeL="String" ExpressionR="${_ffxivplayer}" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                    </Condition>
+                    <Conditions />
+                  </Action>
+                  <Action OrderNumber="2" LogLevel="-1" PlaySpeechMyself="True" UseTTSTextExpression="Avoid laser" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" Enabled="False" ActionType="UseTTS">
+                    <Condition Enabled="true" Grouping="Not">
+                      <ConditionSingle Enabled="true" ExpressionL="${char}" ExpressionTypeL="String" ExpressionR="${_ffxivplayer}" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                    </Condition>
+                    <Conditions />
+                  </Action>
+                </Actions>
+                <Condition Enabled="false" Grouping="Or" />
+                <Conditions />
+              </Trigger>
             </Triggers>
           </Folder>
         </Folders>
