@@ -1094,89 +1094,96 @@
               <Folder Id="42186227-5453-43ce-8624-f0e1fa5abb24" Name="Gunshields" Enabled="true">
                 <Folders />
                 <Triggers>
-                  <Trigger Enabled="true" Sequential="True" Name="Charge Gauge" Id="b2756ae6-e360-4382-9671-afe7eeb7fe69" RegularExpression="\[.{14}21:[A-F0-9]{8}:8000000C:27:(?&lt;VarisEXGauge&gt;[0-9A-F]{2,4}):" PrevActionsRefire="Deny" PeriodRefire="Deny" RefirePeriodExpression="200">
+                  <Trigger Enabled="true" Sequential="True" Name="Charge Gauge" Id="b2756ae6-e360-4382-9671-afe7eeb7fe69" RegularExpression="\[.{14}21:[A-F0-9]{8}:8000000C:27:(?&lt;VarisEXGauge&gt;[0-9A-F]{2,4}):" PrevActionsRefire="Deny" PeriodRefire="Deny" RefirePeriodExpression="2000">
                     <Actions>
-                      <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="Knockback in 5" VariableOp="SetString" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                      <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="Knockback in 5" VariableOp="SetString" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireRequeue="False">
                         <Condition Enabled="true" Grouping="And">
                           <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="7" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                           <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="8192" ExpressionTypeR="Numeric" ConditionType="NumericGreaterEqual" />
                         </Condition>
+                        <Conditions />
                       </Action>
-                      <Action OrderNumber="2" LogLevel="-1" UseTTSTextExpression="Shields in 5" VariableOp="SetString" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                      <Action OrderNumber="2" LogLevel="-1" UseTTSTextExpression="Knockback in 5" VariableName="VarisEXGunshield" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" ExecutionDelayExpression="1">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="7" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                          <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="8192" ExpressionTypeR="Numeric" ConditionType="NumericGreaterEqual" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="3" LogLevel="-1" UseTTSTextExpression="Shields in 5" VariableOp="SetString" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireRequeue="False">
                         <Condition Enabled="true" Grouping="And">
                           <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="9" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                           <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="5376" ExpressionTypeR="Numeric" ConditionType="NumericGreater" />
                           <ConditionSingle Enabled="true" ExpressionL="${var:VarisEX9Counter}" ExpressionTypeL="Numeric" ExpressionR="1" ExpressionTypeR="Numeric" ConditionType="NumericEqual" />
                         </Condition>
+                        <Conditions />
                       </Action>
-                      <Action OrderNumber="3" LogLevel="-1" UseTTSTextExpression="Shields in 5" VariableOp="SetString" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                      <Action OrderNumber="4" LogLevel="-1" UseTTSTextExpression="Knockback in 5" VariableName="VarisEXGunshield" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" ExecutionDelayExpression="1">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="9" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                          <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="5376" ExpressionTypeR="Numeric" ConditionType="NumericGreaterEqual" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="5" LogLevel="-1" UseTTSTextExpression="Shields in 5" VariableOp="SetString" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireRequeue="False">
                         <Condition Enabled="true" Grouping="And">
                           <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="9" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                           <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="7550" ExpressionTypeR="Numeric" ConditionType="NumericGreater" />
                           <ConditionSingle Enabled="true" ExpressionL="${var:VarisEX9Counter}" ExpressionTypeL="Numeric" ExpressionR="2" ExpressionTypeR="Numeric" ConditionType="NumericEqual" />
                         </Condition>
+                        <Conditions />
                       </Action>
-                      <Action OrderNumber="4" LogLevel="-1" UseTTSTextExpression="Spread Out" VariableOp="SetString" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                      <Action OrderNumber="6" LogLevel="-1" UseTTSTextExpression="Knockback in 5" VariableName="VarisEXGunshield" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" ExecutionDelayExpression="1">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="9" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                          <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="7550" ExpressionTypeR="Numeric" ConditionType="NumericGreaterEqual" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="7" LogLevel="-1" UseTTSTextExpression="Spread Out" VariableOp="SetString" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireRequeue="False">
                         <Condition Enabled="true" Grouping="And">
                           <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="8" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                           <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="6656" ExpressionTypeR="Numeric" ConditionType="NumericGreaterEqual" />
                           <ConditionSingle Enabled="true" ExpressionL="${var:VarisEX8Counter}" ExpressionTypeL="Numeric" ExpressionR="1" ExpressionTypeR="Numeric" ConditionType="NumericEqual" />
                         </Condition>
+                        <Conditions />
                       </Action>
-                      <Action OrderNumber="5" LogLevel="-1" UseTTSTextExpression="Spread Out" VariableOp="SetString" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                      <Action OrderNumber="8" LogLevel="-1" UseTTSTextExpression="Knockback in 5" VariableName="VarisEXGunshield" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" ExecutionDelayExpression="1">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="8" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                          <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="6656" ExpressionTypeR="Numeric" ConditionType="NumericGreaterEqual" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="9" LogLevel="-1" UseTTSTextExpression="Spread Out" VariableOp="SetString" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireRequeue="False">
                         <Condition Enabled="true" Grouping="And">
                           <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="8" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                           <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="5632" ExpressionTypeR="Numeric" ConditionType="NumericGreater" />
                           <ConditionSingle Enabled="true" ExpressionL="${var:VarisEX8Counter}" ExpressionTypeL="Numeric" ExpressionR="2" ExpressionTypeR="Numeric" ConditionType="NumericEqual" />
                         </Condition>
+                        <Conditions />
                       </Action>
-                      <Action OrderNumber="6" LogLevel="-1" UseTTSTextExpression="Spread Out" VariableOp="SetString" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                      <Action OrderNumber="10" LogLevel="-1" UseTTSTextExpression="Knockback in 5" VariableName="VarisEXGunshield" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" ExecutionDelayExpression="1">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="8" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                          <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="5632" ExpressionTypeR="Numeric" ConditionType="NumericGreaterEqual" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="11" LogLevel="-1" UseTTSTextExpression="Spread Out" VariableOp="SetString" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireRequeue="False">
                         <Condition Enabled="true" Grouping="And">
                           <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="8" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                           <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="7600" ExpressionTypeR="Numeric" ConditionType="NumericGreater" />
                           <ConditionSingle Enabled="true" ExpressionL="${var:VarisEX8Counter}" ExpressionTypeL="Numeric" ExpressionR="3" ExpressionTypeR="Numeric" ConditionType="NumericGreaterEqual" />
                         </Condition>
+                        <Conditions />
                       </Action>
-                      <Action OrderNumber="7" LogLevel="-1" UseTTSTextExpression="Knockback in 5" VariableName="VarisEXGunshield" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" ExecutionDelayExpression="1">
-                        <Condition Enabled="true" Grouping="And">
-                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="7" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
-                          <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="8192" ExpressionTypeR="Numeric" ConditionType="NumericGreaterEqual" />
-                        </Condition>
-                      </Action>
-                      <Action OrderNumber="8" LogLevel="-1" UseTTSTextExpression="Shields in 5" VariableName="VarisEXGunshield" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
-                        <Condition Enabled="true" Grouping="And">
-                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="9" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
-                          <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="5376" ExpressionTypeR="Numeric" ConditionType="NumericGreater" />
-                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEX9Counter}" ExpressionTypeL="Numeric" ExpressionR="1" ExpressionTypeR="Numeric" ConditionType="NumericEqual" />
-                        </Condition>
-                      </Action>
-                      <Action OrderNumber="9" LogLevel="-1" UseTTSTextExpression="Shields in 5" VariableName="VarisEXGunshield" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
-                        <Condition Enabled="true" Grouping="And">
-                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="9" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
-                          <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="7550" ExpressionTypeR="Numeric" ConditionType="NumericGreater" />
-                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEX9Counter}" ExpressionTypeL="Numeric" ExpressionR="2" ExpressionTypeR="Numeric" ConditionType="NumericEqual" />
-                        </Condition>
-                      </Action>
-                      <Action OrderNumber="10" LogLevel="-1" UseTTSTextExpression="Spread Out" VariableName="VarisEXGunshield" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
+                      <Action OrderNumber="12" LogLevel="-1" UseTTSTextExpression="Knockback in 5" VariableName="VarisEXGunshield" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" ExecutionDelayExpression="1">
                         <Condition Enabled="true" Grouping="And">
                           <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="8" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
-                          <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="6656" ExpressionTypeR="Numeric" ConditionType="NumericGreater" />
-                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEX8Counter}" ExpressionTypeL="String" ExpressionR="1" ExpressionTypeR="String" ConditionType="NumericEqual" />
+                          <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="7600" ExpressionTypeR="Numeric" ConditionType="NumericGreaterEqual" />
                         </Condition>
-                      </Action>
-                      <Action OrderNumber="11" LogLevel="-1" UseTTSTextExpression="Spread Out" VariableName="VarisEXGunshield" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
-                        <Condition Enabled="true" Grouping="And">
-                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="8" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
-                          <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="5632" ExpressionTypeR="Numeric" ConditionType="NumericGreater" />
-                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEX8Counter}" ExpressionTypeL="String" ExpressionR="2" ExpressionTypeR="String" ConditionType="NumericEqual" />
-                        </Condition>
-                      </Action>
-                      <Action OrderNumber="12" LogLevel="-1" UseTTSTextExpression="Spread Out" VariableName="VarisEXGunshield" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
-                        <Condition Enabled="true" Grouping="And">
-                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEXGunshield}" ExpressionTypeL="String" ExpressionR="8" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
-                          <ConditionSingle Enabled="true" ExpressionL="hex2dec(${VarisEXGauge})" ExpressionTypeL="Numeric" ExpressionR="7600" ExpressionTypeR="Numeric" ConditionType="NumericGreater" />
-                          <ConditionSingle Enabled="true" ExpressionL="${var:VarisEX8Counter}" ExpressionTypeL="String" ExpressionR="3" ExpressionTypeR="String" ConditionType="NumericGreaterEqual" />
-                        </Condition>
+                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
