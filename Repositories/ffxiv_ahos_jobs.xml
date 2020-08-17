@@ -2,7 +2,7 @@
 <TriggernometryExport Version="1">
   <ExportedFolder Id="71eef6b3-cdd0-4301-a6c4-37b20cbd2381" Name="FFXIV Battle Jobs" Enabled="true">
     <Folders>
-      <Folder FFXIVJobFilterEnabled="True" FFXIVJobFilter="4471128064" Id="8fb3d089-d715-4765-b42f-22c31faa18c5" Name="Healer" Enabled="true">
+      <Folder FFXIVJobFilterEnabled="True" FFXIVJobFilter="4471128096" Id="8fb3d089-d715-4765-b42f-22c31faa18c5" Name="Healer" Enabled="true">
         <Folders>
           <Folder FFXIVJobFilterEnabled="True" FFXIVJobFilter="4294967296" Id="dfec9376-0169-45fd-aa2e-629cf54a87ca" Name="AST" Enabled="true">
             <Folders />
@@ -123,13 +123,11 @@
                     <Condition Enabled="true" Grouping="And">
                       <ConditionSingle Enabled="true" ExpressionL="${_ffxivparty[${_ffxivplayer}].level}" ExpressionTypeL="String" ExpressionR="68" ExpressionTypeR="Numeric" ConditionType="NumericGreaterEqual" />
                     </Condition>
-                    <Conditions />
                   </Action>
                   <Action OrderNumber="2" PlaySpeechMyself="True" UseTTSTextExpression="${spell}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" ExecutionDelayExpression="30000">
                     <Condition Enabled="true" Grouping="And">
                       <ConditionSingle Enabled="true" ExpressionL="${_ffxivparty[${_ffxivplayer}].level}" ExpressionTypeL="String" ExpressionR="68" ExpressionTypeR="Numeric" ConditionType="NumericLess" />
                     </Condition>
-                    <Conditions />
                   </Action>
                 </Actions>
                 <Condition Enabled="true" Grouping="And">
@@ -733,7 +731,7 @@
         </Folders>
         <Triggers />
       </Folder>
-      <Folder FFXIVJobFilterEnabled="True" FFXIVJobFilter="9129426946" Id="85b0e659-41c7-4453-b9bf-a4640bb8452a" Name="Melee DPS" Enabled="true">
+      <Folder FFXIVJobFilterEnabled="True" FFXIVJobFilter="9397862410" Id="85b0e659-41c7-4453-b9bf-a4640bb8452a" Name="Melee DPS" Enabled="true">
         <Folders>
           <Folder FFXIVJobFilterEnabled="True" FFXIVJobFilter="536870912" Id="a8c57da5-3981-4917-b497-7db3d7f2747a" Name="NIN" Enabled="true">
             <Folders />
@@ -1125,7 +1123,7 @@
         </Folders>
         <Triggers />
       </Folder>
-      <Folder FFXIVJobFilterEnabled="True" FFXIVJobFilter="138516889600" Id="7192dce5-dc0b-430e-9213-f83e6d780231" Name="Physical Ranged DPS" Enabled="true">
+      <Folder FFXIVJobFilterEnabled="True" FFXIVJobFilter="138516889616" Id="7192dce5-dc0b-430e-9213-f83e6d780231" Name="Physical Ranged DPS" Enabled="true">
         <Folders>
           <Folder FFXIVJobFilterEnabled="True" FFXIVJobFilter="1073741824" Id="59aacf27-d073-46ad-8118-6e4157a94e93" Name="MCH" Enabled="true">
             <Folders />
@@ -1424,7 +1422,7 @@
         </Folders>
         <Triggers />
       </Folder>
-      <Folder FFXIVJobFilterEnabled="True" FFXIVJobFilter="70868271104" Id="c77825dc-563e-4543-8939-621960d9d164" Name="Tank" Enabled="true">
+      <Folder FFXIVJobFilterEnabled="True" FFXIVJobFilter="70868271109" Id="c77825dc-563e-4543-8939-621960d9d164" Name="Tank" Enabled="true">
         <Folders>
           <Folder FFXIVJobFilterEnabled="True" FFXIVJobFilter="262145" Id="e4b69aae-0d16-4612-ab41-ab3c443d5932" Name="PLD" Enabled="true">
             <Folders />
