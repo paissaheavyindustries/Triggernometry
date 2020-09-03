@@ -493,157 +493,127 @@
                     <Actions>
                       <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="Buster on ${char}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="true" Grouping="Or">
                       <ConditionSingle Enabled="true" ExpressionL="${char}" ExpressionTypeL="String" ExpressionR="${_ffxivplayer}" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                     </Condition>
-                    <Conditions />
                   </Trigger>
                   <Trigger Enabled="true" Name="Beam Cannons" Id="d8945ebe-e984-4268-953c-9de50bf5e758" RegularExpression="\[.{14}14:5073:">
                     <Actions>
                       <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="go to narrow intersect" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Trigger>
                   <Trigger Enabled="true" Name="Puppet Aegis Aerial Support Surface Laser" Id="2b2e8f15-a8eb-4480-b658-b51e8668dc53" RegularExpression="\[.{14}1B:[0-9A-F]{8}:(?&lt;char&gt;[a-zA-Z' ]{3,21}):[0-9A-F]{4}:[0-9A-F]{4}:0017:">
                     <Actions>
                       <Action OrderNumber="1" LogLevel="-1" PlaySpeechMyself="True" UseTTSTextExpression="get away, chasing laser" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Trigger>
                   <Trigger Enabled="true" Name="refraction cannons 2" Id="5deffd28-a1d5-4d82-9ef1-3269f7b56e7e" RegularExpression="\[.{14}14:507F:">
                     <Actions>
                       <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="go between wings" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Trigger>
                   <Trigger Enabled="true" Name="refraction cannons 1" Id="410477bc-43c1-4cdb-b6ec-68f47ee2c547" RegularExpression="\[.{14}14:5080:">
                     <Actions>
                       <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="get under wings" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Trigger>
                   <Trigger Enabled="true" Name="life's last song" Id="c0c3e69a-7487-470e-bb18-c38fae3d619a" RegularExpression="\[.{14}14:50B3:">
                     <Actions>
                       <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="dodge into ring gap" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Trigger>
                   <Trigger Enabled="true" Name="light maneuver martial arrm target" Id="49869b80-87d2-4b06-ae06-1b8526efd6bf" RegularExpression="\[.{14}14:5213:">
                     <Actions>
                       <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="buster" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Trigger>
                   <Trigger Enabled="true" Name="Puppet Aegis Aerial Support Surface Laser" Id="077d92b4-d3b1-440d-b8fc-7a59bce73f27" RegularExpression="\[.{14}1B:[0-9A-F]{8}:(?&lt;char&gt;[a-zA-Z' ]{3,21}):[0-9A-F]{4}:[0-9A-F]{4}:0017:" PrevActionsRefire="Deny" PeriodRefire="Deny" RefirePeriodExpression="200">
                     <Actions>
                       <Action OrderNumber="1" LogLevel="-1" PlaySpeechMyself="True" UseTTSTextExpression="get away, chasing laser" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="true" Grouping="Or">
                       <ConditionSingle Enabled="true" ExpressionL="${char}" ExpressionTypeL="String" ExpressionR="${_ffxivplayer}" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                     </Condition>
-                    <Conditions />
                   </Trigger>
                   <Trigger Enabled="true" Name="sword charges" Id="37f8f3a8-2ef2-4fb1-9226-35abcd67aa23" RegularExpression="\[.{14}14:4FAB">
                     <Actions>
                       <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="dodge charges" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Trigger>
                   <Trigger Enabled="true" Name="heavy volt array" Id="68ca7bd7-7dd1-462f-9418-0feddbd73ab0" RegularExpression="\[.{14}14:5006:">
                     <Actions>
                       <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="aoe" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Trigger>
                   <Trigger Enabled="true" Name="Puppet Heavy Active Laser Turret Initial" Id="e087f852-e355-48ca-b3dd-e162839b3ec2" RegularExpression="\[.{14}14:4FED:">
                     <Actions>
                       <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="get outside upper laser" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Trigger>
                   <Trigger Enabled="true" Name="Puppet Heavy Active Laser Turret Move" Id="eb20df1f-141d-47d6-90c9-eaabadcf5ebb" RegularExpression="\[.{14}14:5086:">
                     <Actions>
                       <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="move" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Trigger>
                   <Trigger Enabled="true" Name="Puppet Heavy Unconventional Voltage" Id="f01b6c51-2ed3-4818-8927-fa62eaa4f649" RegularExpression="\[.{14}1B:[0-9A-F]{8}:(?&lt;char&gt;[a-zA-Z' ]{3,21}):[0-9A-F]{4}:[0-9A-F]{4}:00AC:" PeriodRefire="Deny" RefirePeriodExpression="200">
                     <Actions>
                       <Action OrderNumber="1" LogLevel="-1" PlaySpeechMyself="True" UseTTSTextExpression="Cleave on YOU" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="true" Grouping="Or">
                       <ConditionSingle Enabled="true" ExpressionL="${char}" ExpressionTypeL="String" ExpressionR="${_ffxivplayer}" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                     </Condition>
-                    <Conditions />
                   </Trigger>
                   <Trigger Enabled="true" Name="revolving laser" Id="523fc06d-371b-4d8a-9c1f-c6cd24aa68fb" RegularExpression="\[.{14}14:5000:">
                     <Actions>
                       <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="go in" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Trigger>
                   <Trigger Enabled="true" Name="Synthetize compound" Id="705f4c2e-c8b7-43ec-a334-f55879ebba6b" RegularExpression="\[.{14}:14:4FEC:">
                     <Actions>
                       <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="turn towers blue" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Trigger>
                   <Trigger Enabled="true" Name="mechanical dissection" Id="75263487-af24-4146-ac28-8445f1252db4" RegularExpression="\[.{14}14:51B(?&lt;move&gt;[34]):">
                     <Actions>
@@ -651,37 +621,30 @@
                         <Condition Enabled="true" Grouping="Or">
                           <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="3" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                         </Condition>
-                        <Conditions />
                       </Action>
                       <Action OrderNumber="2" LogLevel="-1" UseTTSTextExpression="go in" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="true" Grouping="Or">
                           <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="4" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                         </Condition>
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Trigger>
                   <Trigger Enabled="true" Name="energy compression" Id="3ef1af4b-8399-46a7-8ab3-48690d1ce448" RegularExpression="\[.{14}14:51A6:">
                     <Actions>
                       <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="towers" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Trigger>
                   <Trigger Enabled="true" Name="Laser" Id="633c6b55-e158-403f-83ab-21e48b688005" RegularExpression="\[.{14}14:541B:">
                     <Actions>
                       <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="avoid lasers" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
-                    <Conditions />
                   </Trigger>
                 </Triggers>
               </Folder>
@@ -5699,10 +5662,10 @@
                     <Folders>
                       <Folder Id="4b3698db-2963-459c-9c59-50db89dae5f7" Name="Gaols Marking (From @Lombrax) (Needs to be setup)" Enabled="false">
                         <Folders>
-                          <Folder Id="03c23560-d7fd-4992-a6fc-cb1b652fddeb" Name="PlayerMarker" Enabled="false">
+                          <Folder Id="03c23560-d7fd-4992-a6fc-cb1b652fddeb" Name="PlayerMarker (KEEP FOLDER AND TRIGGERS UNCHECKED)" Enabled="false">
                             <Folders />
                             <Triggers>
-                              <Trigger Enabled="false" Name="Mark Player" Id="2cc19b1c-cff4-4dd8-bcd5-2f634dc27f6c" RegularExpression="(?&lt;player&gt;[a-zA-Z-' ]{1,31})" Scheduling="FromLastAction" RefirePeriodExpression="200">
+                              <Trigger Enabled="false" Source="None" Name="Mark Player" Id="2cc19b1c-cff4-4dd8-bcd5-2f634dc27f6c" RegularExpression="(?&lt;player&gt;[a-zA-Z-' ]{1,31})" Scheduling="FromLastAction" RefirePeriodExpression="200">
                                 <Actions>
                                   <Action OrderNumber="1" KeyPressExpression="{F1}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="KeyPress" Asynchronous="False">
                                     <Condition Enabled="true" Grouping="And">
@@ -5757,7 +5720,7 @@
                                 </Actions>
                                 <Condition Enabled="false" Grouping="Or" />
                               </Trigger>
-                              <Trigger Enabled="false" Name="Unmark All" Id="e9fba4e2-77b2-48b0-ad57-855a07c39ec2" RegularExpression="">
+                              <Trigger Enabled="false" Source="None" Name="Unmark All" Id="e9fba4e2-77b2-48b0-ad57-855a07c39ec2" RegularExpression="">
                                 <Actions>
                                   <Action OrderNumber="1" KeyPressExpression="{F9}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="KeyPress" />
                                 </Actions>
