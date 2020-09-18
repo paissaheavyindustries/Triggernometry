@@ -359,10 +359,13 @@
           <Folder ZoneFilterEnabled="True" Id="52b850f6-1355-4e25-92af-54842f72ca42" ZoneFilterRegularExpression="Bardam's\ Mettle" Name="65 - Bardam's Mettle" Enabled="true">
             <Folders />
             <Triggers>
-              <Trigger Enabled="true" Name="Eye of the Fierce" Id="70885390-3950-4bba-8928-8c9996348455" RegularExpression="The yol uses Eye of the Fierce.">
+              <Trigger Enabled="true" Name="Eye of the Fierce" Id="70885390-3950-4bba-8928-8c9996348455" RegularExpression="\[.{14}14:1F0D:">
                 <Actions>
-                  <Action OrderNumber="1" UseTTSTextExpression="Look Away" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
+                  <Action OrderNumber="1" UseTTSTextExpression="Look Away" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                    <Conditions />
+                  </Action>
                 </Actions>
+                <Condition Enabled="false" Grouping="Or" />
               </Trigger>
             </Triggers>
           </Folder>
