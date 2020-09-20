@@ -475,7 +475,6 @@
                 <Actions>
                   <Action OrderNumber="1" PlaySpeechMyself="True" UseTTSTextExpression="${spell}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" ExecutionDelayExpression="119000">
                     <Condition Enabled="false" Grouping="And" />
-                    <Conditions />
                   </Action>
                 </Actions>
                 <Condition Enabled="true" Grouping="And">
@@ -501,13 +500,11 @@
                     <Condition Enabled="true" Grouping="And">
                       <ConditionSingle Enabled="true" ExpressionL="${_ffxivparty[${_ffxivplayer}].level}" ExpressionTypeL="String" ExpressionR="74" ExpressionTypeR="Numeric" ConditionType="NumericGreaterEqual" />
                     </Condition>
-                    <Conditions />
                   </Action>
                   <Action OrderNumber="2" PlaySpeechMyself="True" UseTTSTextExpression="${spell}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" ExecutionDelayExpression="10000">
                     <Condition Enabled="true" Grouping="And">
                       <ConditionSingle Enabled="true" ExpressionL="${_ffxivparty[${_ffxivplayer}].level}" ExpressionTypeL="String" ExpressionR="74" ExpressionTypeR="Numeric" ConditionType="NumericLess" />
                     </Condition>
-                    <Conditions />
                   </Action>
                 </Actions>
                 <Condition Enabled="true" Grouping="And">
@@ -799,10 +796,11 @@
                   <ConditionSingle Enabled="true" ExpressionL="${player}" ExpressionTypeL="String" ExpressionR="${_ffxivplayer}" ExpressionTypeR="String" ConditionType="StringEqualCase" />
                 </Condition>
               </Trigger>
-              <Trigger Enabled="true" Name="Shadow Fang" Id="2041fc75-300a-4004-94e5-a0a753abdd14" RegularExpression="1[56]:[A-Z0-9]{8}:(?&lt;player&gt;[a-zA-Z-' ]{2,31}):8D1:(?&lt;spell&gt;[a-zA-Z ]{1,31}):" PeriodRefire="Deny" RefirePeriodExpression="1000">
+              <Trigger Enabled="true" Name="Shadow Fang" Id="2041fc75-300a-4004-94e5-a0a753abdd14" RegularExpression="1[56]:[A-Z0-9]{8}:(?&lt;player&gt;[a-zA-Z-' ]{2,31}):8D1:(?&lt;spell&gt;[a-zA-Z ]{1,31}):" PrevActions="Interrupt" PeriodRefire="Deny" RefirePeriodExpression="1000">
                 <Actions>
-                  <Action OrderNumber="1" PlaySpeechMyself="True" UseTTSTextExpression="${spell}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" ExecutionDelayExpression="69000">
+                  <Action OrderNumber="1" PlaySpeechMyself="True" UseTTSTextExpression="${spell}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" ExecutionDelayExpression="67000">
                     <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
                   </Action>
                 </Actions>
                 <Condition Enabled="true" Grouping="And">
