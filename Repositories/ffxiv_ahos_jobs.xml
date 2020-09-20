@@ -1139,10 +1139,11 @@
                   <ConditionSingle Enabled="true" ExpressionL="${player}" ExpressionTypeL="String" ExpressionR="${_ffxivplayer}" ExpressionTypeR="String" ConditionType="StringEqualCase" />
                 </Condition>
               </Trigger>
-              <Trigger Enabled="true" Name="Drill" Id="ee3455d9-9207-4e59-94ec-561575dfac5a" RegularExpression="1[56]:[A-Z0-9]{8}:(?&lt;player&gt;[a-zA-Z-' ]{2,31}):4072:(?&lt;spell&gt;[a-zA-Z ]{1,31}):" PeriodRefire="Deny" RefirePeriodExpression="1000">
+              <Trigger Enabled="true" Name="Drill" Id="ee3455d9-9207-4e59-94ec-561575dfac5a" RegularExpression="1[56]:[A-Z0-9]{8}:(?&lt;player&gt;[a-zA-Z-' ]{2,31}):4072:(?&lt;spell&gt;[a-zA-Z ]{1,31}):" PrevActions="Interrupt" PeriodRefire="Deny" RefirePeriodExpression="1000">
                 <Actions>
                   <Action OrderNumber="1" PlaySpeechMyself="True" UseTTSTextExpression="${spell}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" ExecutionDelayExpression="19000">
                     <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
                   </Action>
                 </Actions>
                 <Condition Enabled="true" Grouping="And">
@@ -1209,7 +1210,7 @@
                   <ConditionSingle Enabled="true" ExpressionL="${player}" ExpressionTypeL="String" ExpressionR="${_ffxivplayer}" ExpressionTypeR="String" ConditionType="StringEqualCase" />
                 </Condition>
               </Trigger>
-              <Trigger Enabled="true" Name="Hot Shot/Air Anchor" Id="5b4dab3e-76dd-4d30-9466-b8f316bd6e7b" RegularExpression="1[56]:[A-Z0-9]{8}:(?&lt;player&gt;[a-zA-Z-' ]{2,31}):(?&gt;B38|4074):(?&lt;spell&gt;[a-zA-Z ]{1,31}):" PeriodRefire="Deny" RefirePeriodExpression="1000">
+              <Trigger Enabled="true" Name="Hot Shot/Air Anchor" Id="5b4dab3e-76dd-4d30-9466-b8f316bd6e7b" RegularExpression="1[56]:[A-Z0-9]{8}:(?&lt;player&gt;[a-zA-Z-' ]{2,31}):(?&gt;B38|4074):(?&lt;spell&gt;[a-zA-Z ]{1,31}):" PrevActions="Interrupt" PeriodRefire="Deny" RefirePeriodExpression="1000">
                 <Actions>
                   <Action OrderNumber="1" PlaySpeechMyself="True" UseTTSTextExpression="${spell}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" ExecutionDelayExpression="37000">
                     <Condition Enabled="false" Grouping="Or" />
@@ -1603,10 +1604,11 @@
                   <ConditionSingle Enabled="true" ExpressionL="${player}" ExpressionTypeL="String" ExpressionR="${_ffxivplayer}" ExpressionTypeR="String" ConditionType="StringEqualCase" />
                 </Condition>
               </Trigger>
-              <Trigger Enabled="true" Name="Raw Intuition" Id="e11c811a-8b57-481e-a2cb-322c5da1beed" RegularExpression="1[56]:[A-Z0-9]{8}:(?&lt;player&gt;[a-zA-Z-' ]{2,31}):DDF:(?&lt;spell&gt;[a-zA-Z ]{1,31}):" PeriodRefire="Deny" RefirePeriodExpression="1000">
+              <Trigger Enabled="true" Name="Raw Intuition/Nascent Flash" Id="e11c811a-8b57-481e-a2cb-322c5da1beed" RegularExpression="1[56]:[A-Z0-9]{8}:(?&lt;player&gt;[a-zA-Z-' ]{2,31}):(?&gt;DDF|4050):(?&lt;spell&gt;[a-zA-Z ]{1,31}):" PrevActions="Interrupt" PeriodRefire="Deny" RefirePeriodExpression="1000">
                 <Actions>
                   <Action OrderNumber="1" PlaySpeechMyself="True" UseTTSTextExpression="${spell}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" ExecutionDelayExpression="24000">
                     <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
                   </Action>
                 </Actions>
                 <Condition Enabled="true" Grouping="And">
