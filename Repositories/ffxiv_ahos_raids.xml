@@ -1765,71 +1765,6 @@
                           </Trigger>
                         </Triggers>
                       </Folder>
-                      <Folder Id="56bf5b31-1a7a-4bfb-9871-faa76d1c48ca" Name="Spins" Enabled="true">
-                        <Folders>
-                          <Folder Id="8eac8c93-b7f2-4427-9f43-f1f7f8ffa6b2" Name="First Move" Enabled="true">
-                            <Folders />
-                            <Triggers>
-                              <Trigger Enabled="true" Name="Larboard 1" Id="570f7b25-057d-400e-bb92-7932bbf3804a" RegularExpression="14:(3264|3283):Omega starts using Larboard Wave Cannon on Omega">
-                                <Actions>
-                                  <Action OrderNumber="1" UseTTSTextExpression="Right" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
-                                  <Action OrderNumber="2" VariableOp="SetString" VariableName="OmegaPattern" VariableExpression="Lar" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" />
-                                </Actions>
-                                <Condition Enabled="false" Grouping="Or" />
-                              </Trigger>
-                              <Trigger Enabled="true" Name="Starboard 1" Id="c239822d-377d-42ae-b8b2-e3e4f6d0780c" RegularExpression="14:(3262|3281):Omega starts using Starboard Wave Cannon on Omeg">
-                                <Actions>
-                                  <Action OrderNumber="1" UseTTSTextExpression="Left" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
-                                  <Action OrderNumber="2" VariableOp="SetString" VariableName="OmegaPattern" VariableExpression="Star" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" />
-                                </Actions>
-                                <Condition Enabled="false" Grouping="Or" />
-                              </Trigger>
-                            </Triggers>
-                          </Folder>
-                          <Folder Id="1e55ea82-d438-4d16-badb-c5749067858d" Name="Second Move" Enabled="true">
-                            <Folders />
-                            <Triggers>
-                              <Trigger Enabled="true" Name="Larboard 2" Id="e0914a8a-03f4-475f-b612-eeefcf32754a" RegularExpression="14:(3265|3283):Omega starts using Larboard Wave Cannon on Omega">
-                                <Actions>
-                                  <Action OrderNumber="1" UseTTSTextExpression="Move" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
-                                    <Condition Enabled="true" Grouping="And">
-                                      <ConditionSingle Enabled="true" ExpressionL="${var:OmegaPattern}" ExpressionTypeL="String" ExpressionR="Lar" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
-                                    </Condition>
-                                  </Action>
-                                  <Action OrderNumber="2" UseTTSTextExpression="Stay" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
-                                    <Condition Enabled="true" Grouping="And">
-                                      <ConditionSingle Enabled="true" ExpressionL="${var:OmegaPattern}" ExpressionTypeL="String" ExpressionR="Star" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
-                                    </Condition>
-                                  </Action>
-                                  <Action OrderNumber="3" VariableOp="SetString" VariableName="OmegaPattern" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" ExecutionDelayExpression="200">
-                                    <Condition Enabled="false" Grouping="Or" />
-                                  </Action>
-                                </Actions>
-                                <Condition Enabled="false" Grouping="Or" />
-                              </Trigger>
-                              <Trigger Enabled="true" Name="Starboard 2" Id="91d29446-3b40-44cf-acf7-1f5cf1124a0c" RegularExpression="14:(3263|3282):Omega starts using Starboard Wave Cannon on Omega">
-                                <Actions>
-                                  <Action OrderNumber="1" UseTTSTextExpression="Stay" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
-                                    <Condition Enabled="true" Grouping="And">
-                                      <ConditionSingle Enabled="true" ExpressionL="${var:OmegaPattern}" ExpressionTypeL="String" ExpressionR="Lar" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
-                                    </Condition>
-                                  </Action>
-                                  <Action OrderNumber="2" UseTTSTextExpression="Move" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
-                                    <Condition Enabled="true" Grouping="And">
-                                      <ConditionSingle Enabled="true" ExpressionL="${var:OmegaPattern}" ExpressionTypeL="String" ExpressionR="Star" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
-                                    </Condition>
-                                  </Action>
-                                  <Action OrderNumber="3" VariableOp="SetString" VariableName="OmegaPattern" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" ExecutionDelayExpression="200">
-                                    <Condition Enabled="false" Grouping="Or" />
-                                  </Action>
-                                </Actions>
-                                <Condition Enabled="false" Grouping="Or" />
-                              </Trigger>
-                            </Triggers>
-                          </Folder>
-                        </Folders>
-                        <Triggers />
-                      </Folder>
                       <Folder Id="26ce8e16-e095-4a7c-9b27-5f409e7956d2" Name="Looper" Enabled="true">
                         <Folders />
                         <Triggers>
@@ -1863,6 +1798,71 @@
                         </Actions>
                       </Trigger>
                     </Triggers>
+                  </Folder>
+                  <Folder Id="56bf5b31-1a7a-4bfb-9871-faa76d1c48ca" Name="Spins" Enabled="true">
+                    <Folders>
+                      <Folder Id="8eac8c93-b7f2-4427-9f43-f1f7f8ffa6b2" Name="First Move" Enabled="true">
+                        <Folders />
+                        <Triggers>
+                          <Trigger Enabled="true" Name="Larboard 1" Id="570f7b25-057d-400e-bb92-7932bbf3804a" RegularExpression="14:(3264|3283):Omega starts using Larboard Wave Cannon on Omega">
+                            <Actions>
+                              <Action OrderNumber="1" UseTTSTextExpression="Right" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
+                              <Action OrderNumber="2" VariableOp="SetString" VariableName="OmegaPattern" VariableExpression="Lar" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" />
+                            </Actions>
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Trigger>
+                          <Trigger Enabled="true" Name="Starboard 1" Id="c239822d-377d-42ae-b8b2-e3e4f6d0780c" RegularExpression="14:(3262|3281):Omega starts using Starboard Wave Cannon on Omeg">
+                            <Actions>
+                              <Action OrderNumber="1" UseTTSTextExpression="Left" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
+                              <Action OrderNumber="2" VariableOp="SetString" VariableName="OmegaPattern" VariableExpression="Star" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" />
+                            </Actions>
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Trigger>
+                        </Triggers>
+                      </Folder>
+                      <Folder Id="1e55ea82-d438-4d16-badb-c5749067858d" Name="Second Move" Enabled="true">
+                        <Folders />
+                        <Triggers>
+                          <Trigger Enabled="true" Name="Larboard 2" Id="e0914a8a-03f4-475f-b612-eeefcf32754a" RegularExpression="14:(3265|3283):Omega starts using Larboard Wave Cannon on Omega">
+                            <Actions>
+                              <Action OrderNumber="1" UseTTSTextExpression="Move" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                                <Condition Enabled="true" Grouping="And">
+                                  <ConditionSingle Enabled="true" ExpressionL="${var:OmegaPattern}" ExpressionTypeL="String" ExpressionR="Lar" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                                </Condition>
+                              </Action>
+                              <Action OrderNumber="2" UseTTSTextExpression="Stay" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                                <Condition Enabled="true" Grouping="And">
+                                  <ConditionSingle Enabled="true" ExpressionL="${var:OmegaPattern}" ExpressionTypeL="String" ExpressionR="Star" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                                </Condition>
+                              </Action>
+                              <Action OrderNumber="3" VariableOp="SetString" VariableName="OmegaPattern" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" ExecutionDelayExpression="200">
+                                <Condition Enabled="false" Grouping="Or" />
+                              </Action>
+                            </Actions>
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Trigger>
+                          <Trigger Enabled="true" Name="Starboard 2" Id="91d29446-3b40-44cf-acf7-1f5cf1124a0c" RegularExpression="14:(3263|3282):Omega starts using Starboard Wave Cannon on Omega">
+                            <Actions>
+                              <Action OrderNumber="1" UseTTSTextExpression="Stay" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                                <Condition Enabled="true" Grouping="And">
+                                  <ConditionSingle Enabled="true" ExpressionL="${var:OmegaPattern}" ExpressionTypeL="String" ExpressionR="Lar" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                                </Condition>
+                              </Action>
+                              <Action OrderNumber="2" UseTTSTextExpression="Move" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                                <Condition Enabled="true" Grouping="And">
+                                  <ConditionSingle Enabled="true" ExpressionL="${var:OmegaPattern}" ExpressionTypeL="String" ExpressionR="Star" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                                </Condition>
+                              </Action>
+                              <Action OrderNumber="3" VariableOp="SetString" VariableName="OmegaPattern" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable" ExecutionDelayExpression="200">
+                                <Condition Enabled="false" Grouping="Or" />
+                              </Action>
+                            </Actions>
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Trigger>
+                        </Triggers>
+                      </Folder>
+                    </Folders>
+                    <Triggers />
                   </Folder>
                 </Folders>
                 <Triggers>
@@ -3673,14 +3673,12 @@
                           <ConditionSingle Enabled="true" ExpressionL="${id}" ExpressionTypeL="String" ExpressionR="3FEF" ExpressionTypeR="String" ConditionType="StringEqualCase" />
                           <ConditionSingle Enabled="true" ExpressionL="${id}" ExpressionTypeL="String" ExpressionR="3FD0" ExpressionTypeR="String" ConditionType="StringEqualCase" />
                         </Condition>
-                        <Conditions />
                       </Action>
                       <Action OrderNumber="2" UseTTSTextExpression="Go Sides" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                         <Condition Enabled="true" Grouping="Or">
                           <ConditionSingle Enabled="true" ExpressionL="${id}" ExpressionTypeL="String" ExpressionR="3FEE" ExpressionTypeR="String" ConditionType="StringEqualCase" />
                           <ConditionSingle Enabled="true" ExpressionL="${id}" ExpressionTypeL="String" ExpressionR="3FCF" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                         </Condition>
-                        <Conditions />
                       </Action>
                     </Actions>
                     <Condition Enabled="false" Grouping="Or" />
@@ -6000,7 +5998,6 @@
                               <ConditionSingle Enabled="true" ExpressionL="${pos}" ExpressionTypeL="String" ExpressionR="95,88" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                               <ConditionSingle Enabled="true" ExpressionL="${pos}" ExpressionTypeL="String" ExpressionR="105,112" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                             </Condition>
-                            <Conditions />
                           </Action>
                           <Action OrderNumber="2" LogLevel="-1" UseTTSTextExpression="Right" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                             <Condition Enabled="true" Grouping="Or">
@@ -6009,11 +6006,9 @@
                               <ConditionSingle Enabled="true" ExpressionL="${pos}" ExpressionTypeL="String" ExpressionR="105,88" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                               <ConditionSingle Enabled="true" ExpressionL="${pos}" ExpressionTypeL="String" ExpressionR="95,112" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
                             </Condition>
-                            <Conditions />
                           </Action>
                         </Actions>
                         <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Trigger>
                     </Triggers>
                   </Folder>
@@ -6027,6 +6022,24 @@
                           </Action>
                         </Actions>
                         <Condition Enabled="false" Grouping="Or" />
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Titan Back Left/Right (@Kidd Ikuto)" Id="1ad8c250-797f-48d1-9415-43ba9c389149" RegularExpression="15:[A-F0-9]{8}:Titan:2B68:Unknown_2B68:.*?:(?&lt;pos&gt;\d{2,3}\.\d{1,2}:113\.7)">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Back n Right" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                            <Condition Enabled="true" Grouping="Or">
+                              <ConditionSingle Enabled="true" ExpressionL="${pos}" ExpressionTypeL="String" ExpressionR="86.3:113.7" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                            </Condition>
+                            <Conditions />
+                          </Action>
+                          <Action OrderNumber="2" UseTTSTextExpression="Back n Left" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                            <Condition Enabled="true" Grouping="Or">
+                              <ConditionSingle Enabled="true" ExpressionL="${pos}" ExpressionTypeL="String" ExpressionR="113.7:113.7" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                            </Condition>
+                            <Conditions />
+                          </Action>
+                        </Actions>
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
                       </Trigger>
                     </Triggers>
                   </Folder>
