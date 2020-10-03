@@ -35,15 +35,12 @@
         <Actions>
           <Action OrderNumber="1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="EndEncounter">
             <Condition Enabled="false" Grouping="Or" />
-            <Conditions />
           </Action>
           <Action OrderNumber="2" LogLevel="-1" TextAuraOp="DeactivateAuraRegex" TextAuraFontSize="8.25" TextAuraName="[HN]QPotTimerText" TextAuraFontName="Microsoft Sans Serif" ActionType="TextAura">
             <Condition Enabled="false" Grouping="Or" />
-            <Conditions />
           </Action>
           <Action OrderNumber="3" LogLevel="-1" TextAuraOp="DeactivateAura" TextAuraFontSize="8.25" TextAuraName="MiscRepoPullDuration" TextAuraFontName="Microsoft Sans Serif" ActionType="TextAura">
             <Condition Enabled="false" Grouping="Or" />
-            <Conditions />
           </Action>
         </Actions>
         <Condition Enabled="false" Grouping="Or" />
@@ -55,7 +52,7 @@
           </Action>
         </Actions>
         <Condition Enabled="true" Grouping="And">
-          <ConditionSingle Enabled="true" ExpressionL="${_ffxivparty[${player}].inparty}" ExpressionTypeL="String" ExpressionR="1" ExpressionTypeR="Numeric" ConditionType="StringEqualCase" />
+          <ConditionSingle Enabled="true" ExpressionL="${_ffxivparty[${player}].inparty}" ExpressionTypeL="Numeric" ExpressionR="1" ExpressionTypeR="Numeric" ConditionType="NumericEqual" />
         </Condition>
       </Trigger>
       <Trigger Enabled="false" Name="Missed Combo" Id="2fa95c21-7b80-480c-8d33-4b6d5424e996" RegularExpression="1[56]:[A-F0-9]{8}:(?&lt;player&gt;[a-zA-Z-' ]{1,31}):(?&lt;skillID&gt;0F|DD3|DD2|4049|25|2A|2D|404E|E27|E30|4054|3F0B|3F11|3F15|4E|54|57|58|1CE5|405D|8C2|8CF|4068|DEB|1D37|1D3A|1D36|1D39|1D38|1D3D|1D3C|1CF4|1CF5|3E76|3E7A|1D68|1D69|1D58|1D5C):(?&lt;skill&gt;[a-zA-Z' ]{1,50}):[A-F0-9]{8}:[\w-'èéêîïôàæûç, ]{1,99}:7[125]0\d03:" PeriodRefire="Deny" RefirePeriodExpression="500">
@@ -198,7 +195,7 @@
               <ConditionSingle Enabled="true" ExpressionL="${CD}" ExpressionTypeL="Numeric" ExpressionR="0" ExpressionTypeR="Numeric" ConditionType="NumericGreater" />
             </Condition>
           </Action>
-          <Action OrderNumber="2" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" TriggerId="57bc8eba-e410-48e1-80a3-ffa0402dc3f5" TriggerText="Battle commencing in ${numeric:${CD}-1} seconds!" ActionType="Trigger">
+          <Action OrderNumber="2" LogLevel="-1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" TriggerId="57bc8eba-e410-48e1-80a3-ffa0402dc3f5" TriggerText="Battle commencing in ${numeric:${CD}-1} seconds!" ActionType="Trigger" ExecutionDelayExpression="1000">
             <Condition Enabled="true" Grouping="And">
               <ConditionSingle Enabled="true" ExpressionL="${CD}" ExpressionTypeL="Numeric" ExpressionR="1" ExpressionTypeR="Numeric" ConditionType="NumericGreaterEqual" />
             </Condition>
