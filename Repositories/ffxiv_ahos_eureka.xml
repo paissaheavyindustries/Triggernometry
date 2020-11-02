@@ -1,0 +1,1321 @@
+<?xml version="1.0"?>
+<TriggernometryExport Version="1">
+  <ExportedFolder Id="1c7904cf-3f2d-4f97-b3c9-928ff3227e7a" Name="Eureka-Like" Enabled="true">
+    <Folders>
+      <Folder ZoneFilterEnabled="True" Id="ab39a924-fa39-4a07-99a8-249af19bf4fe" ZoneFilterRegularExpression="The\ Bozjan\ Southern\ Front" Name="Eureka 2.0 (Bozja)" Enabled="true">
+        <Folders>
+          <Folder Id="f77a98a9-e6bb-47ab-b4d9-0887f63f8b11" Name="Castrum Lacus Litore" Enabled="true">
+            <Folders>
+              <Folder Id="7ffe56c6-ec2b-4c00-aed2-d97b58e8dcbe" Name="2. Adrammelech (from @Clovi)" Enabled="true">
+                <Folders />
+                <Triggers>
+                  <Trigger Enabled="true" Name="Accursed Becoming" Id="dab1cc04-22c5-4cd7-80db-23b6239e9dd6" RegularExpression="\[.{14}14:4F7B:">
+                    <Actions>
+                      <Action OrderNumber="1" LogLevel="-1" VariableOp="SetString" VariableName="accursed_becoming_tts" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="2" LogLevel="-1" UseTTSTextExpression="${var:accursed_becoming_tts}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" ExecutionDelayExpression="2000">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Accursed Becoming (Orbs)" Id="d431a14c-ba12-4f88-b5d6-f6f7e019cc83" RegularExpression="23:[0-9A-F]{8}:(?&lt;name&gt;.*) Orb:[0-9A-F]{8}:Adrammelech:">
+                    <Actions>
+                      <Action OrderNumber="1" LogLevel="-1" VariableOp="SetString" VariableName="accursed_becoming_tts" VariableExpression="${var:accursed_becoming_tts}, Water" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${name}" ExpressionTypeL="String" ExpressionR="Aqueous" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${var:accursed_becoming_tts}" ExpressionTypeL="String" ExpressionR=", Water" ExpressionTypeR="String" ConditionType="StringNotEqualNocase" />
+                        </Condition>
+                      </Action>
+                      <Action OrderNumber="2" LogLevel="-1" VariableOp="SetString" VariableName="accursed_becoming_tts" VariableExpression="${var:accursed_becoming_tts}, Earth" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${name}" ExpressionTypeL="String" ExpressionR="Sabulous" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${var:accursed_becoming_tts}" ExpressionTypeL="String" ExpressionR=", Earth" ExpressionTypeR="String" ConditionType="StringNotEqualNocase" />
+                        </Condition>
+                      </Action>
+                      <Action OrderNumber="3" LogLevel="-1" VariableOp="SetString" VariableName="accursed_becoming_tts" VariableExpression="${var:accursed_becoming_tts}, Ice" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${name}" ExpressionTypeL="String" ExpressionR="Frozen" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${var:accursed_becoming_tts}" ExpressionTypeL="String" ExpressionR=", Ice" ExpressionTypeR="String" ConditionType="StringNotEqualNocase" />
+                        </Condition>
+                      </Action>
+                      <Action OrderNumber="4" LogLevel="-1" VariableOp="SetString" VariableName="accursed_becoming_tts" VariableExpression="${var:accursed_becoming_tts}, Thunder" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${name}" ExpressionTypeL="String" ExpressionR="Charged" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${var:accursed_becoming_tts}" ExpressionTypeL="String" ExpressionR=", Thunder" ExpressionTypeR="String" ConditionType="StringNotEqualNocase" />
+                        </Condition>
+                      </Action>
+                      <Action OrderNumber="5" LogLevel="-1" VariableOp="SetString" VariableName="accursed_becoming_tts" VariableExpression="${var:accursed_becoming_tts}, Wind" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${name}" ExpressionTypeL="String" ExpressionR="Vortical" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${var:accursed_becoming_tts}" ExpressionTypeL="String" ExpressionR=", Wind" ExpressionTypeR="String" ConditionType="StringNotEqualNocase" />
+                        </Condition>
+                      </Action>
+                      <Action OrderNumber="6" LogLevel="-1" VariableOp="SetString" VariableName="accursed_becoming_tts" VariableExpression="${var:accursed_becoming_tts}, Fire" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${name}" ExpressionTypeL="String" ExpressionR="Torrid" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${var:accursed_becoming_tts}" ExpressionTypeL="String" ExpressionR=", Fire" ExpressionTypeR="String" ConditionType="StringNotEqualNocase" />
+                        </Condition>
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                </Triggers>
+              </Folder>
+              <Folder Id="2831c4eb-c854-47b7-9552-80d2a81fb5fe" Name="1 - Brionac" Enabled="true">
+                <Folders />
+                <Triggers>
+                  <Trigger Enabled="true" Name="Anti-Warmachina Weaponry - Brionac.&#xA;" Id="4dcb0775-f8ac-4065-882b-d6638ba7c349" RegularExpression="\[.{14}14:51CD:">
+                    <Actions>
+                      <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="attack core" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" ExecutionDelayExpression="5000">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="False Thunder - Brionac" Id="77681859-5c1d-440e-b78f-db4e89c2ca0f" RegularExpression="\[.{14}14:51C(?&lt;move&gt;[EF]):">
+                    <Actions>
+                      <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="go left" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="Or">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="E" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                        </Condition>
+                      </Action>
+                      <Action OrderNumber="2" LogLevel="-1" UseTTSTextExpression="go right" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="Or">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="F" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                        </Condition>
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                </Triggers>
+              </Folder>
+            </Folders>
+            <Triggers />
+          </Folder>
+          <Folder Id="54caec0b-36db-413e-8d8b-20a0f0bf52bb" Name="from Clovi" Enabled="true">
+            <Folders>
+              <Folder Id="ecc0daf5-a98b-4fb5-8a9d-7a989150bcbe" Name="5.0 - Bozja" Enabled="true">
+                <Folders />
+                <Triggers>
+                  <Trigger Enabled="true" Name="readies" Id="a1ea15a5-cd66-4448-a6ac-fb092d69471c" RegularExpression="00:[0-9a-f]{4}:(?&lt;caster&gt;.*) readies (?&lt;move&gt;.*)\.">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Go South" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" Enabled="False" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Akbaba" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="South Wind" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="2" UseTTSTextExpression="Go North" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" Enabled="False" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="North Wind" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Akbaba" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="3" UseTTSTextExpression="Go East" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" Enabled="False" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="East Wind" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Akbaba" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="4" UseTTSTextExpression="Go West" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" Enabled="False" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="West Wind" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Akbaba" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="5" UseTTSTextExpression="Beam" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Piercing Barrage" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Akbaba" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="6" UseTTSTextExpression="Get Behind" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" Enabled="False" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Broadside Barrage" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Akbaba" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="7" UseTTSTextExpression="Get Away" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Rolling Barrage" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Akbaba" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="8" UseTTSTextExpression="Dive Bombs" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" Enabled="False" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Lava Spit" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Canis Dirus" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="9" UseTTSTextExpression="Double Dash" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" Enabled="False" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Hellpounce" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Canis Dirus" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="10" UseTTSTextExpression="Go Middle" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" Enabled="False" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="The Dragon's Breath" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Canis Dirus" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="11" UseTTSTextExpression="Go Sides" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" Enabled="False" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="The Lion's Breath" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Canis Dirus" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="12" UseTTSTextExpression="Side, Then Back" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Taloned Gaze" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Spartoi" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="13" UseTTSTextExpression="Back, Then Sides" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Taloned Wings" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Spartoi" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="14" UseTTSTextExpression="Hands" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Grasping Rancor" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Spartoi" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="15" UseTTSTextExpression="Check Lasers" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Electrochemical Transfer" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="The Patriot" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="16" UseTTSTextExpression="Hidden Mines" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Lightning Rod" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="The Patriot" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="17" UseTTSTextExpression="Cross, Go Cardinals" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Choco Meteor Stream" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Red Comet" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="18" UseTTSTextExpression="Exaflare and Towers" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Choco Meteor Strike" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Red Comet" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="19" UseTTSTextExpression="Rotating Meteors" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Choco Meteorain" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Red Comet" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="20" UseTTSTextExpression="Cleave" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Wild Horn" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Chlevnik" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="21" UseTTSTextExpression="Check Zombies" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Zombie Bile" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Chlevnik" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="22" UseTTSTextExpression="Behind Zombies" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Blazing Meteor" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Chlevnik" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="23" UseTTSTextExpression="Beam" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Zombie Breath" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Chlevnik" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="24" UseTTSTextExpression="Check Safe Spots" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Satellite Laser" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="The Dáinsleif" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="25" UseTTSTextExpression="Go Sides" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${move}" ExpressionTypeL="String" ExpressionR="Train" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="The Mark XIII-X magitek laborer" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                  <Trigger Enabled="false" Name="starts using on ${char}" Id="4d51b828-c1d2-4dad-ae7f-6ec7ba0777a4" RegularExpression="14:(?&lt;id&gt;[0-9A-F]{4}):(?&lt;caster&gt;.*) starts using (?&lt;move&gt;.*) on (?&lt;char&gt;.*)\.">
+                    <Actions>
+                      <Action OrderNumber="1" PlaySpeechMyself="True" UseTTSTextExpression="Get Away" TextAuraFontSize="0" ActionType="UseTTS" RefireInterrupt="True">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Ying-Yang" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${id}" ExpressionTypeL="String" ExpressionR="340C" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                      </Action>
+                      <Action OrderNumber="2" PlaySpeechMyself="True" UseTTSTextExpression="Go In" TextAuraFontSize="0" ActionType="UseTTS" RefireInterrupt="True">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Ying-Yang" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${id}" ExpressionTypeL="String" ExpressionR="340D" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                      </Action>
+                      <Action OrderNumber="3" PlaySpeechMyself="True" UseTTSTextExpression="Go Right" TextAuraFontSize="0" ActionType="UseTTS" RefireInterrupt="True">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Ying-Yang" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${id}" ExpressionTypeL="String" ExpressionR="340B" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                      </Action>
+                      <Action OrderNumber="4" PlaySpeechMyself="True" UseTTSTextExpression="Go Left" TextAuraFontSize="0" ActionType="UseTTS" RefireInterrupt="True">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${caster}" ExpressionTypeL="String" ExpressionR="Ying-Yang" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${id}" ExpressionTypeL="String" ExpressionR="340A" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                      </Action>
+                    </Actions>
+                  </Trigger>
+                  <Trigger Enabled="false" Name="Unable to Join" Id="16d58a96-9884-4d07-bdde-1759c7112342" RegularExpression="You were unable to join the following critical engagement">
+                    <Actions>
+                      <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="Unable to Join" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                  <Trigger Enabled="false" Name="Critical Engagement" Id="9d368fd6-dd61-4aec-a135-0b9bf561b12b" RegularExpression="\[.{14}00:0039:Resistance forces have initiated a critical engagement nearby. You have been granted permission to engage the enemy.&#xA;">
+                    <Actions>
+                      <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="Critical Engagement" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                  <Trigger Enabled="false" Name="Joined Critical Engagement" Id="7d9e5140-5417-4f3b-a00b-ff69b7447c7b" RegularExpression="You have joined the critical engagement">
+                    <Actions>
+                      <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="Joined Critical Engagement" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                  <Trigger Enabled="false" Name="Castrum Ready" Id="195ef0d9-d347-4937-b40e-de47f15a3132" RegularExpression="The assault on Castrum Lacus Litore has begun">
+                    <Actions>
+                      <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="Castrum Ready" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                </Triggers>
+              </Folder>
+            </Folders>
+            <Triggers />
+          </Folder>
+          <Folder Id="d1618ed8-03e5-4320-a35f-429eb9db651c" Name="Zone 1 Critical Engagements" Enabled="true">
+            <Folders>
+              <Folder Id="c60f4f55-8347-4930-95e1-1f96b8c996d9" Name="Canis Dirius (Zone 1 CE)" Enabled="true">
+                <Folders />
+                <Triggers>
+                  <Trigger Enabled="true" Name="Lava Spit (divebombs)" Id="36baaae5-a66f-4465-8b6f-636910a3d4e3" RegularExpression="\[.{14}14:5038:">
+                    <Actions>
+                      <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="Divebomb" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Hellpounce (double dash)" Id="c420bfc8-d19c-4e12-bd22-0fa17de0fb9e" RegularExpression="\[.{14}14:503B:">
+                    <Actions>
+                      <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="double dash" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="The Dragon's Breath (go middle)" Id="894ea23d-8206-49d9-8d36-e9c998782ff8" RegularExpression="\[.{14}14:50(?&gt;3F|4[01]):" PrevActionsRefire="Deny" PeriodRefire="Deny" RefirePeriodExpression="100">
+                    <Actions>
+                      <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="go middlee" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="The Lion's Breath (go sides)" Id="9e302267-bdd9-4c4e-a0a4-75da0a6bcde9" RegularExpression="\[.{14}14:503[DE]:">
+                    <Actions>
+                      <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="go sides" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
+                  </Trigger>
+                </Triggers>
+              </Folder>
+              <Folder Id="bbf76bd2-7c19-45fc-ae9d-e491ab0ac77b" Name="Akbaba (Zone1 Critical Engagement)" Enabled="true">
+                <Folders />
+                <Triggers>
+                  <Trigger Enabled="true" Name="NESW Wind (to change callout with ID instead of skill name)" Id="1daf9bbf-62f9-47bc-b83d-23ffd86e3c20" RegularExpression="\[.{14}14:4ED[0123]:Akbaba starts using (?&lt;wind&gt;.*?) Wind on Akbaba">
+                    <Actions>
+                      <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="${wind} knockback" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Big Cleave" Id="74c9d490-9422-426a-bc2f-4ad854f9d7a8" RegularExpression="\[.{14}14:4ECE:">
+                    <Actions>
+                      <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="go behind" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                </Triggers>
+              </Folder>
+              <Folder Id="b6c774b6-f15d-4136-9f87-f286994c73af" Name="Peerifool" Enabled="true">
+                <Folders />
+                <Triggers>
+                  <Trigger Enabled="true" Name="Tender/Jealous Anaphylaxis (buff)" Id="891c8d3a-b1b0-40e9-97a8-2cc2bc14a75a" RegularExpression="\[.{14}1[AE]:[A-F0-9]{8}:(?&lt;player&gt;[a-zA-Z-' ]{3,21}) (?&lt;status&gt;gains|loses) the effect of (?&lt;buff&gt;Tender|Jealous) Anaphylaxis">
+                    <Actions>
+                      <Action OrderNumber="1" LogLevel="-1" VariableOp="SetString" VariableName="BozjaHeartDebuffCE" VariableExpression="${buff}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
+                        <Condition Enabled="true" Grouping="And">
+                          <ConditionSingle Enabled="true" ExpressionL="${player}" ExpressionTypeL="String" ExpressionR="${_ffxivplayer}" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Tender/jealous Anaphylaxis (cast)" Id="8e5a8428-0c7d-4845-83da-e0f37c4c9f4a" RegularExpression="\[.{14}14:502[67]:">
+                    <Actions>
+                      <Action OrderNumber="1" LogLevel="-1" PlaySpeechMyself="True" UseTTSTextExpression="go blue" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="Or">
+                          <ConditionSingle Enabled="true" ExpressionL="${varBozjaHeartDebuffCE}" ExpressionTypeL="String" ExpressionR="Tender" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                      <Action OrderNumber="2" LogLevel="-1" PlaySpeechMyself="True" UseTTSTextExpression="go red" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="Or">
+                          <ConditionSingle Enabled="true" ExpressionL="${varBozjaHeartDebuffCE}" ExpressionTypeL="String" ExpressionR="Jealous" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                        </Condition>
+                        <Conditions />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                    <Conditions />
+                  </Trigger>
+                </Triggers>
+              </Folder>
+            </Folders>
+            <Triggers />
+          </Folder>
+          <Folder Id="7ef2bcd7-5db7-4bac-a19b-5be5cfd1be60" Name="Zone 2 Critical Engagement" Enabled="true">
+            <Folders>
+              <Folder Id="36f44487-cc0f-4825-ac6a-00117c084ae0" Name="Spartoi (zone 2 Critical Engagement)" Enabled="true">
+                <Folders />
+                <Triggers>
+                  <Trigger Enabled="false" Name="o9s back.sides dodge - WIP" Id="d6e144b7-95f9-49e7-9806-3fb20527885c" RegularExpression="\[.{14}14:4EA0:">
+                    <Actions>
+                      <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="4EA0 - back&amp;front then sides maybe" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Action>
+                    </Actions>
+                    <Condition Enabled="false" Grouping="Or" />
+                  </Trigger>
+                </Triggers>
+              </Folder>
+            </Folders>
+            <Triggers />
+          </Folder>
+          <Folder Id="a64c0b5b-9a4b-4f13-a5c3-e33f9f77f9b9" Name="Zone 3 Critical Engagements" Enabled="true">
+            <Folders />
+            <Triggers />
+          </Folder>
+        </Folders>
+        <Triggers />
+      </Folder>
+      <Folder Id="69684c78-95df-4555-8132-5376cba42cc1" Name="Eureka" Enabled="true">
+        <Folders>
+          <Folder Id="21cc15f8-55ae-4ded-b18d-77a109c065b0" Name="BA" Enabled="true">
+            <Folders>
+              <Folder Id="50251550-3b6b-4fcd-85d4-bf06d63256b7" Name="Absolute Virtue" Enabled="true">
+                <Folders />
+                <Triggers>
+                  <Trigger Enabled="true" Name="Absolute Virtue gains the effect of (?&lt;element&gt;.*) Essence" Id="524e0bb2-04cc-4471-8859-d816b29417f5" RegularExpression="Absolute Virtue gains the effect of (?&lt;element&gt;.*) Essence">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Go Light" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" ExecutionDelayExpression="1000">
+                        <Condition Enabled="true" Grouping="Or">
+                          <ConditionSingle Enabled="true" ExpressionL="${element}" ExpressionTypeL="String" ExpressionR="Umbral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${element}" ExpressionTypeL="String" ExpressionR="Umbral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${element}" ExpressionTypeL="String" ExpressionR="Umbral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                      </Action>
+                      <Action OrderNumber="2" UseTTSTextExpression="Go Dark" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="Or">
+                          <ConditionSingle Enabled="true" ExpressionL="${element}" ExpressionTypeL="String" ExpressionR="Astral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${element}" ExpressionTypeL="String" ExpressionR="Astral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${element}" ExpressionTypeL="String" ExpressionR="Astral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                      </Action>
+                    </Actions>
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Relative Virtue gains the effect of (?&lt;element&gt;.*) Essence" Id="5d093fb6-bff9-4eb6-b5a0-7c8c176eca87" RegularExpression="Relative Virtue gains the effect of (?&lt;element&gt;.*) Essence">
+                    <Actions>
+                      <Action OrderNumber="1" ListVariableOp="Push" ListVariableName="rvlist" ListVariableExpression="${element}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="ListVariable" Asynchronous="False" />
+                      <Action OrderNumber="2" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" TriggerId="b2defef1-c1e7-4fb4-9213-2162203f4c20" TriggerText="Colors: Relative Virtue" ActionType="Trigger" ExecutionDelayExpression="1000" RefireRequeue="False" />
+                    </Actions>
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Colors: Relative Virtue" Id="b2defef1-c1e7-4fb4-9213-2162203f4c20" RegularExpression="Colors: Relative Virtue">
+                    <Actions>
+                      <Action OrderNumber="1" ListVariableOp="PopLast" ListVariableName="rvlist" ListVariableTarget="rv" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="ListVariable" Asynchronous="False" />
+                      <Action OrderNumber="2" UseTTSTextExpression="Go Light" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="Or">
+                          <ConditionSingle Enabled="true" ExpressionL="${var:rv}" ExpressionTypeL="String" ExpressionR="Umbral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${var:rv}" ExpressionTypeL="String" ExpressionR="Umbral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                      </Action>
+                      <Action OrderNumber="3" UseTTSTextExpression="Go Dark" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="Or">
+                          <ConditionSingle Enabled="true" ExpressionL="${var:rv}" ExpressionTypeL="String" ExpressionR="Astral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${var:rv}" ExpressionTypeL="String" ExpressionR="Astral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                      </Action>
+                      <Action OrderNumber="4" ListVariableOp="PopLast" ListVariableName="rvlist" ListVariableTarget="rv" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="ListVariable" ExecutionDelayExpression="5000" Asynchronous="False" />
+                      <Action OrderNumber="5" UseTTSTextExpression="Go Light" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="Or">
+                          <ConditionSingle Enabled="true" ExpressionL="${var:rv}" ExpressionTypeL="String" ExpressionR="Umbral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${var:rv}" ExpressionTypeL="String" ExpressionR="Umbral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                      </Action>
+                      <Action OrderNumber="6" UseTTSTextExpression="Go Dark" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="Or">
+                          <ConditionSingle Enabled="true" ExpressionL="${var:rv}" ExpressionTypeL="String" ExpressionR="Astral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${var:rv}" ExpressionTypeL="String" ExpressionR="Astral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                      </Action>
+                      <Action OrderNumber="7" ListVariableOp="PopLast" ListVariableName="rvlist" ListVariableTarget="rv" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="ListVariable" ExecutionDelayExpression="5000" Asynchronous="False" />
+                      <Action OrderNumber="8" UseTTSTextExpression="Go Light" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="Or">
+                          <ConditionSingle Enabled="true" ExpressionL="${var:rv}" ExpressionTypeL="String" ExpressionR="Umbral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${var:rv}" ExpressionTypeL="String" ExpressionR="Umbral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                      </Action>
+                      <Action OrderNumber="9" UseTTSTextExpression="Go Dark" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="Or">
+                          <ConditionSingle Enabled="true" ExpressionL="${var:rv}" ExpressionTypeL="String" ExpressionR="Astral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${var:rv}" ExpressionTypeL="String" ExpressionR="Astral" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                      </Action>
+                    </Actions>
+                  </Trigger>
+                </Triggers>
+              </Folder>
+              <Folder Id="628a6797-3980-4e94-9068-ddbcb65c793c" Name="Proto Ozma" Enabled="true">
+                <Folders />
+                <Triggers>
+                  <Trigger Enabled="true" Name="Ozma Stellation" Id="b009cda0-4c10-48ef-9610-0275ea38db24" RegularExpression="Proto Ozma gains the effect of Stellation.">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Go Far" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
+                    </Actions>
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Ozma Pyramid" Id="de301cd1-2def-49ea-b5fc-8ef748de2ce7" RegularExpression="Proto Ozma gains the effect of Pyramid.">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Get Off" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
+                    </Actions>
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Ozma Cube" Id="f5ea07e2-7bc2-46be-bb2c-5c0f87c4dbf4" RegularExpression="Proto Ozma gains the effect of Cube.">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Get Close" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
+                    </Actions>
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Clone Stellation" Id="1032d63a-2b93-41e7-8685-97ad8e453cb5" RegularExpression="Ozmashade:37B2(.*)-17:77.3121">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Get Close" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
+                    </Actions>
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Clone Pyramid" Id="a13d9cf5-e125-47be-aa4a-bef5536e7121" RegularExpression="Ozmashade:37A4(.*)-17:77.3121">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Get Off" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
+                    </Actions>
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Clone Cube" Id="911e77d4-0e07-4fbd-b7a1-1ca6d7bdeec3" RegularExpression="Ozmashade:379E(.*)-17:77.3121">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Go Far" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
+                    </Actions>
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Acceleration Bomb" Id="6ef6777a-87ec-4c6e-8622-1786fcd0334b" RegularExpression="You suffer the effect of Acceleration Bomb">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Stop Moving Soon" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
+                    </Actions>
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Holy" Id="5845e8d0-bad6-4803-b417-ea0974170381" RegularExpression="Proto Ozma readies Holy">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Knockback" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
+                    </Actions>
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Meteor" Id="0ce8855d-bef4-402e-a56f-7075d3d35bb4" RegularExpression="1B:[0-9A-F]{8}:(?&lt;name&gt;[a-zA-Z']+ [a-zA-Z']+):[0-9A-F]{4}:[0-9A-F]{4}:0039:">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Meteor" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                        <Condition Enabled="true" Grouping="Or">
+                          <ConditionSingle Enabled="true" ExpressionL="${_ffxivplayer}" ExpressionTypeL="String" ExpressionR="${name}" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                          <ConditionSingle Enabled="true" ExpressionL="${_ffxivplayer}" ExpressionTypeL="String" ExpressionR="${name}" ExpressionTypeR="String" ConditionType="StringEqualCase" />
+                        </Condition>
+                      </Action>
+                    </Actions>
+                  </Trigger>
+                  <Trigger Enabled="true" Name="Black Hole" Id="4ac3b665-f446-405f-9bec-58ee28ae01f4" RegularExpression="Proto Ozma loses the effect of (Cube|Pyramid|Stellation)">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="Black Hole" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" />
+                    </Actions>
+                  </Trigger>
+                </Triggers>
+              </Folder>
+              <Folder Id="ce875b8f-3482-4473-a54e-8ca1a417ef68" Name="Imported ACT triggers (16-Apr-20 22:02:01)" Enabled="true">
+                <Folders>
+                  <Folder Id="8e09edaf-bf35-4a2a-b2d5-482d2bc497a9" Name="Arsenal" Enabled="true">
+                    <Folders />
+                    <Triggers>
+                      <Trigger Enabled="true" Name="Art (readies|begins casting) Legendary Geas" Id="60fe2235-a75e-46b9-897a-51b6ddabc5b9" RegularExpression="Art (readies|begins casting) Legendary Geas">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="dont move" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Art (readies|begins casting) Legendcarver" Id="b46a47ea-0b1e-492c-8ab4-a3868a92356d" RegularExpression="Art (readies|begins casting) Legendcarver">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="circle" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Art (readies|begins casting) Legendspinner" Id="ec2d8cff-d0a6-493e-83fa-e737f76eb3a0" RegularExpression="Art (readies|begins casting) Legendspinner">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="donut" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Art uses Mythcall (unsupported timers)" Id="932822fe-e78b-4ca8-82fb-3396824e3f33" RegularExpression="Art uses Mythcall">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="copy spears" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="false" Name="Owain (readies|begins casting) Acallam Na Senorach (unsupported timers)" Id="e72e1eb8-e5a7-47fd-8235-9cd90843db25" RegularExpression="Owain (readies|begins casting) Acallam Na Senorach">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="A O E" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="false" Name="Owain (readies|begins casting) Thricecull (unsupported timers)" Id="d64a3845-9eab-4f1e-8b76-f0a54e1a3536" RegularExpression="Owain (readies|begins casting) Thricecull">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Tank Buster" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="false" Name="Owain starts using Unknown_393A on Owain (unsupported timers)" Id="a26334ec-1bd6-491e-9276-c9f99c63b758" RegularExpression="Owain starts using Unknown_393A on Owain">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="ICE" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="false" Name="Owain starts using Unknown_393B on Owain (unsupported timers)" Id="957389e4-c835-4e4f-91cf-6405f4d179f3" RegularExpression="Owain starts using Unknown_393B on Owain">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Fire" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="false" Name="Owain readies Mythcall" Id="5dd1d07e-87cc-4ea4-ad23-4c777e86d6d7" RegularExpression="Owain readies Mythcall">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Spears" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="false" Name="Owain readies Spiritcull" Id="2b9fa7db-4b4a-42ff-9e17-bf0ce8687ac7" RegularExpression="Owain readies Spiritcull">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Stack or spread" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="false" Name="Owain begins casting Elemental Magicks" Id="b5b8684c-3226-4f19-a5c2-95d538396070" RegularExpression="Owain begins casting Elemental Magicks">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Hug spear" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Raiden readies Bitter Barbs" Id="b46f70c3-ace9-4d40-99ce-1eff87c476a5" RegularExpression="Raiden readies Bitter Barbs">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Break tethers" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Raiden readies Ame-no-Sakahoko (unsupported timers)" Id="83b724ba-a0c8-4594-8cb1-e3060314946f" RegularExpression="Raiden readies Ame-no-Sakahoko">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="get outside" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="false" Name="Raiden readies Cloud to Ground (unsupported timers)" Id="23f44e36-041c-442f-8378-7109104c3542" RegularExpression="Raiden readies Cloud to Ground">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="exaflares" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Raiden readies For Honor (unsupported timers)" Id="652c8b85-ed3f-41e0-8bf4-219ef655a206" RegularExpression="Raiden readies For Honor">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="run away" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="false" Name="Raiden readies Lancing Bolt (unsupported timers)" Id="92816fff-500f-40e6-a569-ecc6b83e798a" RegularExpression="Raiden readies Lancing Bolt">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="spread spears" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="false" Name="Raiden readies Shingan (unsupported timers)" Id="a1fcbd81-4932-47ef-a3d2-f3a731105abb" RegularExpression="Raiden readies Shingan">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="tank buster" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="false" Name="Raiden readies Whirling Zantetsuken (unsupported timers)" Id="e9768982-8026-4b8f-8132-fb6a85649414" RegularExpression="Raiden readies Whirling Zantetsuken">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="inside hitbox" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="false" Name="Raiden readies Lateral Zantetsuken" Id="cdf1027f-c3b8-44cc-8904-eb9fce4edb2e" RegularExpression="Raiden readies Lateral Zantetsuken">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Check Side" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Raiden readies Levinwhorl" Id="288fb7a1-0247-4148-aeea-6557027ea8f4" RegularExpression="Raiden readies Levinwhorl">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Stay at edge" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="false" Name="Raiden readies Shingan" Id="4d765cdd-3a74-47ab-a308-f32aa8f403a8" RegularExpression="Raiden readies Shingan">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Buster" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Raiden readies Spirits of the Fallen" Id="18f2782b-9f89-49ab-8159-c3e77665514c" RegularExpression="Raiden readies Spirits of the Fallen">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Raidbuster" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="false" Name="Raiden readies Thundercall" Id="15ed7eb6-64da-45d9-ab11-c300e6fa8821" RegularExpression="Raiden readies Thundercall">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Avoid Edges" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="00:282b:Proto Ozma readies Shooting Star." Id="e875a926-e2fc-4858-a0d5-c7e3db56630f" RegularExpression="00:282b:Proto Ozma readies Shooting Star.">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Knockback" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Proto Ozma gains the effect of Stellation." Id="128382db-e754-4b7e-9ff4-c6ab907fa11f" RegularExpression="Proto Ozma gains the effect of Stellation.">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Go Far" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Proto Ozma gains the effect of Pyramid." Id="08fb832b-0b48-4219-8b33-cec5deceb1ec" RegularExpression="Proto Ozma gains the effect of Pyramid.">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Get Off" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Proto Ozma gains the effect of Cube." Id="e497c6bd-cc60-455a-87f5-41f70ac31a89" RegularExpression="Proto Ozma gains the effect of Cube.">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Get Close" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Ozmashade:37B2(.*)-17:77.3121" Id="951da3bc-e219-4345-ae9c-61688fba88ad" RegularExpression="Ozmashade:37B2(.*)-17:77.3121">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Get Close" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Ozmashade:37A4(.*)-17:77.3121" Id="5b909a0a-cb4e-49b8-a60d-ef97423911fe" RegularExpression="Ozmashade:37A4(.*)-17:77.3121">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Get Off" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Ozmashade:379E(.*)-17:77.3121" Id="94b39882-f621-4401-825c-be13ab6b4c0f" RegularExpression="Ozmashade:379E(.*)-17:77.3121">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Go Far" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="You suffer the effect of Acceleration Bomb" Id="74d7646b-4b8e-4798-b34f-8c1a05f40dec" RegularExpression="You suffer the effect of Acceleration Bomb">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="stop moving soon" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="1B:[0-9A-F]{8}:YOUR NAME:[0-9A-F]{4}:[0-9A-F]{4}:0039:" Id="07c1426f-ba4c-409f-b78f-2cf48aa2529c" RegularExpression="1B:[0-9A-F]{8}:YOUR NAME:[0-9A-F]{4}:[0-9A-F]{4}:0039:">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Meteor" ActionType="UseTTS" />
+                        </Actions>
+                      </Trigger>
+                    </Triggers>
+                  </Folder>
+                </Folders>
+                <Triggers />
+              </Folder>
+              <Folder Id="0cc8da82-c343-4a5e-a5f1-ec9e77a4bd6b" Name="# LOG LINES BA" Enabled="true">
+                <Folders>
+                  <Folder Id="6c9ad454-1eb9-4278-b9c7-cb683b511679" Name="Owain" Enabled="true">
+                    <Folders />
+                    <Triggers>
+                      <Trigger Enabled="true" Name="Acallam Na Senorach" Id="4bbcc945-4ef4-4420-80f1-b30c3837f342" RegularExpression="\[.{14}14:3946:Owain starts using Acallam Na Senorach on Owain">
+                        <Actions>
+                          <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="AoE" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Action>
+                        </Actions>
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Elemental Magicks" Id="3fcc963b-dafe-43d0-921d-6c35acaba9cf" RegularExpression="\[.{14}14:393(?&lt;spell&gt;[AB]):Owain starts using Elemental Magicks on Owain">
+                        <Actions>
+                          <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="hug ice spear" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                            <Condition Enabled="true" Grouping="And">
+                              <ConditionSingle Enabled="true" ExpressionL="${spell}" ExpressionTypeL="String" ExpressionR="A" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                            </Condition>
+                          </Action>
+                          <Action OrderNumber="2" LogLevel="-1" UseTTSTextExpression="hug fire spear" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                            <Condition Enabled="true" Grouping="And">
+                              <ConditionSingle Enabled="true" ExpressionL="${spell}" ExpressionTypeL="String" ExpressionR="B" ExpressionTypeR="String" ConditionType="StringEqualNocase" />
+                            </Condition>
+                          </Action>
+                        </Actions>
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Mythcall" Id="1ef2cc03-1a5a-4311-b113-a1de832baf39" RegularExpression="\[.{14}14:3936:Owain starts using Mythcall on Owain">
+                        <Actions>
+                          <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="spears" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Action>
+                        </Actions>
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Spiritcull" Id="84cca013-e1f1-413e-ad49-a448674df830" RegularExpression="\[.{14}14:393E:Owain starts using Spiritcull on Owain">
+                        <Actions>
+                          <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="Stack or spread" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Action>
+                        </Actions>
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Thricecull" Id="d882ae51-0bc0-4050-81ac-bc608434abaf" RegularExpression="\.{14}14:3945:Owain starts using Thricecull on (?&lt;target&gt;[a-zA-Z-' ]{3,21})">
+                        <Actions>
+                          <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="Buster on ${target}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Action>
+                        </Actions>
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Trigger>
+                    </Triggers>
+                  </Folder>
+                  <Folder Id="1a24007d-6ac3-490c-9cfb-93f2afb9f4f0" Name="Raiden" Enabled="true">
+                    <Folders />
+                    <Triggers>
+                      <Trigger Enabled="true" Name="Cloud To Ground" Id="1ab15b26-9a09-4da7-a500-29dcc04d269b" RegularExpression="\[.{14}14:3870:Raiden starts using Cloud To Ground on Raiden">
+                        <Actions>
+                          <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="exaflares" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Action>
+                        </Actions>
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Lancing Bolt" Id="0dbf7dab-380d-4509-94c1-68fb06b1fdbd" RegularExpression="\[.{14}14:3876:Raiden starts using Lancing Bolt on Raiden">
+                        <Actions>
+                          <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="spread spear" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Action>
+                        </Actions>
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Lateral Zantetsuken" Id="818c3870-6fbb-4b8d-aeb7-d25f6633d31f" RegularExpression="\[.{14}14:386B:Raiden starts using Lateral Zantetsuken on Raiden">
+                        <Actions>
+                          <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="check sides" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Action>
+                        </Actions>
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Shingan" Id="77110b04-25c5-4115-861b-7d270bf3e605" RegularExpression="\[.{14}14:387B:Raiden starts using Shingan on (?&lt;target&gt;[a-zA-Z-' ]{3,21})">
+                        <Actions>
+                          <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="Buster ${target}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Action>
+                        </Actions>
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Thundercall" Id="adc8b28f-b27a-42db-a63b-09e3990da8f3" RegularExpression="\[.{14}14:387F:Raiden starts using Thundercall on Raiden">
+                        <Actions>
+                          <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="Raidbuster" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Action>
+                        </Actions>
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Trigger>
+                      <Trigger Enabled="true" Name="Whirling Zantetsuken" Id="3831a4b8-2bfb-49b4-ac38-e4cb9b92051d" RegularExpression="\[.{14}14:386A:Raiden starts using Whirling Zantetsuken on Raiden">
+                        <Actions>
+                          <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="go in hitbox" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                            <Condition Enabled="false" Grouping="Or" />
+                          </Action>
+                        </Actions>
+                        <Condition Enabled="false" Grouping="Or" />
+                      </Trigger>
+                    </Triggers>
+                  </Folder>
+                </Folders>
+                <Triggers />
+              </Folder>
+            </Folders>
+            <Triggers />
+          </Folder>
+          <Folder Id="f73f148e-cb47-475f-ae2c-5ac498cdce02" Name="Eureka Callouts" Enabled="false">
+            <Folders>
+              <Folder ZoneFilterEnabled="True" Id="1b92a74b-7de0-4f13-9992-cc9d487719a6" ZoneFilterRegularExpression="Eureka\ Anemos" Name="1. Anemos" Enabled="true">
+                <Folders>
+                  <Folder Id="7676598a-9bce-406c-96e1-873a36539933" Name="Level 1 - 9" Enabled="true">
+                    <Folders />
+                    <Triggers>
+                      <Trigger Enabled="true" Name="[Lvl. 1] Sabotender Corrido" Id="6358d309-c25c-4dbb-948a-edcae8ead818" RegularExpression="Added new combatant (?&lt;hunt&gt;Sabotender Corrido)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 2] The Lord Of Anemos" Id="b557adef-5f12-4996-bc1b-a8f5eaf87491" RegularExpression="Added new combatant (?&lt;hunt&gt;The Lord Of Anemos)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 3] Teles" Id="93d614c4-3b16-46e8-9520-fa1159c226cb" RegularExpression="Added new combatant (?&lt;hunt&gt;Teles)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 4] Emperor Of Anemos" Id="16e2edf3-0b36-4c77-9227-2feb0620e3fc" RegularExpression="Added new combatant (?&lt;hunt&gt;The Emperor Of Anemos)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 5] Callisto" Id="4142a52a-a9b9-4dd7-9f5a-cba3fa18974d" RegularExpression="Added new combatant (?&lt;hunt&gt;Callisto)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 6] Number" Id="ee610ccd-4cc4-41c2-92f5-6253075e8e53" RegularExpression="Added new combatant (?&lt;hunt&gt;Number)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 7] Jahannam" Id="b067477e-e1b8-4f02-b41a-383a996166c7" RegularExpression="Added new combatant (?&lt;hunt&gt;Jahannam)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 8] Amemet" Id="3b93e8a9-bb91-4e47-bf60-38e65f526fab" RegularExpression="Added new combatant (?&lt;hunt&gt;Amemet)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 9] Caym" Id="0e7ccd5b-96dc-4047-b2b0-0d6e60e778bb" RegularExpression="Added new combatant (?&lt;hunt&gt;Caym)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                    </Triggers>
+                  </Folder>
+                  <Folder Id="ab722e01-924d-4812-976e-71459392dff8" Name="Level 10 - 20" Enabled="true">
+                    <Folders />
+                    <Triggers>
+                      <Trigger Enabled="true" Name="[Lvl. 11] Serket" Id="5a34f5da-a730-4c1c-9b1e-d36e3e7c6f42" RegularExpression="Added new combatant (?&lt;hunt&gt;Serket)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 10] Bombadeel" Id="680fed31-6556-4604-a8d1-7ce557c0d533" RegularExpression="Added new combatant (?&lt;hunt&gt;Bombadeel)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 13] The White Rider" Id="38b2b1de-9361-44b9-ae17-7e09a40a2922" RegularExpression="Added new combatant (?&lt;hunt&gt;The White Rider)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 12] Judgmental Julika" Id="30fef727-0041-4639-8f59-f027cbf69d1a" RegularExpression="Added new combatant (?&lt;hunt&gt;Judgmental Julika)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 16] King Hazmat" Id="7299b6c9-1058-4158-a643-8986aaba2a06" RegularExpression="Added new combatant (?&lt;hunt&gt;King Hazmat)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 14] Polyphemus" Id="4d28b699-cbd1-406d-b816-fd1960e8bbef" RegularExpression="Added new combatant (?&lt;hunt&gt;Polyphemus)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 20] Pazuzu" Id="a88d8250-6379-4c7b-a650-6eefba50ae7c" RegularExpression="Added new combatant (?&lt;hunt&gt;Pazuzu)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 15] Simurgh's Strider" Id="2b03030c-7a92-4aba-9435-919258b89e82" RegularExpression="Added new combatant (?&lt;hunt&gt;Simurgh's Strider)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 17] Fafnir" Id="3bad4846-4542-4d70-9454-42564df0d1b5" RegularExpression="Added new combatant (?&lt;hunt&gt;Fafnir)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 18] Amarok" Id="f18f6a5b-e275-4927-a4cb-9ed761dfefe0" RegularExpression="Added new combatant (?&lt;hunt&gt;Amarok)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 19] Lamashtu" Id="1266b4b6-04b1-4d97-91f4-e3a936bb6a2f" RegularExpression="Added new combatant (?&lt;hunt&gt;Lamashtu)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                    </Triggers>
+                  </Folder>
+                </Folders>
+                <Triggers>
+                  <Trigger Enabled="true" Name="Anemos Elemental" Id="71b2d6a4-69ac-4608-8e5a-231eee0b0eae" RegularExpression="Added new combatant (?&lt;hunt&gt;Anemos Elemental)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="${hunt} Nearby" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                    </Actions>
+                  </Trigger>
+                </Triggers>
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="73d12e93-7f14-4ce3-8fda-abdb6481d12e" ZoneFilterRegularExpression="The\ Forbidden\ Land,\ Eureka\ Pagos" Name="2. Pagos" Enabled="true">
+                <Folders>
+                  <Folder Id="97035d53-fbf8-4d38-b0db-e15b62fcf0e3" Name="Level 20 - 29" Enabled="true">
+                    <Folders />
+                    <Triggers>
+                      <Trigger Enabled="true" Name="[Lvl. 23] Glavoid" Id="9b582613-207e-4f03-a04b-986168ab2c1c" RegularExpression="Added new combatant (?&lt;hunt&gt;Glavoid|The Glavoid)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 20] Snow Queen" Id="07d66730-311c-4082-a47a-96babdfa7cf8" RegularExpression="Added new combatant (?&lt;hunt&gt;The Snow Queen|Snow Queen)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 21] Taxim" Id="c8cb075a-e215-46fe-a70f-ff939675f666" RegularExpression="Added new combatant (?&lt;hunt&gt;Taxim|The Taxim)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 22] Ash Dragon" Id="b947f4a7-04db-4c3b-9d18-b4d2bd2bfa5c" RegularExpression="Added new combatant (?&lt;hunt&gt;The Ash Dragon|Ash Dragon)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 25] Hakutaku" Id="aaad21b6-41c4-4615-a6c1-85aafd4bf085" RegularExpression="Added new combatant (?&lt;hunt&gt;Hakutaku|The Hakutaku)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 24] Anapos" Id="825cff06-0647-4d31-b8d2-ee9589a73bf0" RegularExpression="Added new combatant (?&lt;hunt&gt;Anapos|The Anapos)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 29] King Arthro" Id="fc8242a7-7841-43e4-aa5e-367b9a49c31b" RegularExpression="Added new combatant (?&lt;hunt&gt;King Arthro|The King Arthro)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 27] Asag" Id="77f3e44c-381b-4188-bb4f-45b4f54b4158" RegularExpression="Added new combatant (?&lt;hunt&gt;Asag|The Asag)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 28] Surabhi" Id="cb84a4ae-b6c7-4117-9422-a2fe78a8c683" RegularExpression="Added new combatant (?&lt;hunt&gt;Surabhi|The Surabhi)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 26] King Igloo" Id="2703dbe1-e293-4268-9135-334bb086a59d" RegularExpression="Added new combatant (?&lt;hunt&gt;King Igloo)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                    </Triggers>
+                  </Folder>
+                  <Folder Id="22349248-d07b-44b5-aa3d-95d827cc466e" Name="Level 30 - 35" Enabled="true">
+                    <Folders />
+                    <Triggers>
+                      <Trigger Enabled="true" Name="[Lvl. 34] Arch Angra Mainyu" Id="887cb75b-a0b3-402c-a8af-aec49204744b" RegularExpression="Added new combatant (?&lt;hunt&gt;Arch Angra Mainyu|Angra Mainyu)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 31] Holy Cow" Id="e324903c-99da-48bd-85fb-e754c39dd839" RegularExpression="Added new combatant (?&lt;hunt&gt;Holy Cow|The Holy Cow)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 35] Louhi" Id="ca218a83-16d4-4384-88bc-454d6aeaaf7f" RegularExpression="Added new combatant (?&lt;hunt&gt;Louhi|The Louhi)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 35] Copycat Cassie" Id="d9a70184-45a7-48c6-b8ab-7d530a410560" RegularExpression="Added new combatant (?&lt;hunt&gt;Copycat Cassie)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 30] Eldertaur + Mindertaur (Brothers)" Id="01aaf330-18a9-4c0c-bd00-411d5d9b841a" RegularExpression="Added new combatant (?&lt;hunt&gt;Eldertaur)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="Brother In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 33] Eye of Horus" Id="6b8e80d2-5321-4ded-bea7-767a5034319c" RegularExpression="Added new combatant (?&lt;hunt&gt;Horus|Eye of Horus)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 32] Hadhayosh" Id="303464c4-50a3-4a5a-8a81-bc0255afc2f0" RegularExpression="Added new combatant (?&lt;hunt&gt;Hadhayosh|The Hadhayosh)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                    </Triggers>
+                  </Folder>
+                </Folders>
+                <Triggers>
+                  <Trigger Enabled="true" Name="Pagos Elemental" Id="04448fff-14cc-434f-9bb6-725ab317f627" RegularExpression="Added new combatant (?&lt;hunt&gt;Pagos Elemental)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="${hunt} Nearby" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                    </Actions>
+                  </Trigger>
+                </Triggers>
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="76fb9098-8d32-4474-b76e-c04e6adfe925" ZoneFilterRegularExpression="The\ Forbidden\ Land,\ Eureka\ Pyros" Name="3. Pyros" Enabled="true">
+                <Folders>
+                  <Folder Id="2453ee1b-bc04-4217-b9c5-5eb39fb3becd" Name="Level 35 - 39" Enabled="true">
+                    <Folders />
+                    <Triggers>
+                      <Trigger Enabled="true" Name="[Lvl. 38] Graffiacane" Id="1a3b5941-0239-489f-bf10-9cc18e7b7675" RegularExpression="Added new combatant (?&lt;hunt&gt;Graffiacane)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 39] Askalaphos" Id="3b82cc3f-d569-48a8-9ba6-01b53fbe580a" RegularExpression="Added new combatant (?&lt;hunt&gt;Askalaphos)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 37] The Sophist" Id="8226ffe2-960f-4661-9d04-772985fa5fb1" RegularExpression="Added new combatant (?&lt;hunt&gt;The Sophist)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 36] Flauros" Id="bbb9e8f6-3132-4468-956d-4f5c09d6508a" RegularExpression="Added new combatant (?&lt;hunt&gt;Flauros)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 35] Leucosia" Id="cfc3ea84-2cdf-4c1a-99c2-b3c2c9a4914b" RegularExpression="Added new combatant (?&lt;hunt&gt;Leucosia)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                    </Triggers>
+                  </Folder>
+                  <Folder Id="8069c364-239d-4ecf-8488-34284e256580" Name="Level 40 - 50" Enabled="true">
+                    <Folders />
+                    <Triggers>
+                      <Trigger Enabled="true" Name="[Lvl. 40] Grand Duke Batym" Id="d8226bba-d330-417f-ba49-c8940e617e35" RegularExpression="Added new combatant (?&lt;hunt&gt;Grand Duke Batym)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 41] Aetolus" Id="fa8b6fd2-cccc-486b-83af-4847961ccb8a" RegularExpression="Added new combatant (?&lt;hunt&gt;Aetolus)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 42] Lesath" Id="bf7d022b-3046-4607-8593-a70a4fe4ac60" RegularExpression="Added new combatant (?&lt;hunt&gt;Lesath)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 43] Eldthurs" Id="5c2ec378-ffd5-474f-b549-56194edfdbc5" RegularExpression="Added new combatant (?&lt;hunt&gt;Eldthurs)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 44] Iris" Id="6d72d81f-e647-4287-b28b-b7e89df0c7b0" RegularExpression="Added new combatant (?&lt;hunt&gt;Iris)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 46] Dux" Id="2558999d-d640-46a3-97ea-4f9a3f3ff205" RegularExpression="Added new combatant (?&lt;hunt&gt;Dux)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 50] Penthesilea" Id="76be7394-e5ef-48aa-a0bb-5e054f5de9c2" RegularExpression="Added new combatant (?&lt;hunt&gt;Penthesilea)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 45] Lamebrix Strikebocks" Id="a4997440-4378-47a7-93e2-fea53a838b84" RegularExpression="Added new combatant (?&lt;hunt&gt;Lamebrix Strikebocks)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 48] Glaukopis" Id="83523faa-20c0-4f8a-884a-ab6574c5de11" RegularExpression="Added new combatant (?&lt;hunt&gt;Glaukopis)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 47] Lumber Jack" Id="008de5b6-2a28-47ce-9d83-d6478b6d61fc" RegularExpression="Added new combatant (?&lt;hunt&gt;The Weeping Willow|Lumber Jack)\." PeriodRefire="Deny" RefirePeriodExpression="900">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 50] Skoll" Id="a391a0f0-827d-4441-8a8d-0bbba61e6669" RegularExpression="Added new combatant (?&lt;hunt&gt;Skoll)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 49] Ying-Yang" Id="81625565-e097-4378-8404-79891f6e5039" RegularExpression="Added new combatant (?&lt;hunt&gt;Ying-Yang)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                    </Triggers>
+                  </Folder>
+                </Folders>
+                <Triggers>
+                  <Trigger Enabled="true" Name="Pyros Elemental" Id="e643a0e2-2f5b-4973-b05a-52a108190ff7" RegularExpression="Added new combatant (?&lt;hunt&gt;Pyros Elemental)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                    <Actions>
+                      <Action OrderNumber="1" UseTTSTextExpression="${hunt} Nearby" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                    </Actions>
+                  </Trigger>
+                </Triggers>
+              </Folder>
+              <Folder ZoneFilterEnabled="True" Id="fe5b3caf-d5f9-410e-a659-c3579da28cb6" ZoneFilterRegularExpression="The\ Forbidden\ Land,\ Eureka\ Hydatos" Name="4. Hydatos" Enabled="true">
+                <Folders>
+                  <Folder Id="8ab438bb-7769-4ee7-8d91-a9ea7fe914af" Name="Notorious Monsters" Enabled="true">
+                    <Folders />
+                    <Triggers>
+                      <Trigger Enabled="true" Name="[Lvl. 52] Molech" Id="04bcbc02-ddda-4f99-9fe7-9105a45cf6a1" RegularExpression="Added new combatant (?&lt;hunt&gt;Molech)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 57] Leuke" Id="95811433-7ef3-44a6-ac1e-1ea2c09aae05" RegularExpression="Added new combatant (?&lt;hunt&gt;Leuke)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 55] Daphne" Id="2aec7979-66c4-46b2-9f5c-d45cf6c14b7b" RegularExpression="Added new combatant (?&lt;hunt&gt;Daphne)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 59] Ceto" Id="393f209b-5631-414b-b73b-854488a70f7d" RegularExpression="Added new combatant (?&lt;hunt&gt;Ceto)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 56] King Goldemar" Id="92f0cdde-6f97-4d2f-a473-ad0df101fee3" RegularExpression="Added new combatant (?&lt;hunt&gt;King Goldemar)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 51] Stegodon" Id="f85ec6d9-96a5-4df1-ac41-e95f86a7c703" RegularExpression="Added new combatant (?&lt;hunt&gt;Stegodon)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 60] Ovni" Id="18d7928a-a8a2-45d8-ba02-f1b6fcf8d948" RegularExpression="Added new combatant (?&lt;hunt&gt;Ovni)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 54] Frostmane" Id="101cc271-191b-4420-8ac2-b63e98c094bf" RegularExpression="Added new combatant (?&lt;hunt&gt;Frostmane)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 50] Khalamari" Id="89669620-e336-4d89-9c42-0f8688848f0b" RegularExpression="Added new combatant (?&lt;hunt&gt;Khalamari)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 53] Piasa" Id="aec2fc3c-ad59-4ef1-89b6-7fc77061e9b4" RegularExpression="Added new combatant (?&lt;hunt&gt;Piasa)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 58] Barong" Id="653841a5-5685-4367-878d-081577ecea9f" RegularExpression="Added new combatant (?&lt;hunt&gt;Barong)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                      <Trigger Enabled="true" Name="[Lvl. 60] Provenance Watcher" Id="b0a12538-b53a-4c75-9001-920ddfa0528a" RegularExpression="Added new combatant (?&lt;hunt&gt;Provenance Watcher)\." PeriodRefire="Deny" RefirePeriodExpression="900000">
+                        <Actions>
+                          <Action OrderNumber="1" UseTTSTextExpression="${hunt} In Zone" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS" RefireInterrupt="True" />
+                        </Actions>
+                      </Trigger>
+                    </Triggers>
+                  </Folder>
+                </Folders>
+                <Triggers>
+                  <Trigger Enabled="true" Name="Hydatos Elemental" Id="0dcb790e-6ca0-454c-bd41-4a2670fe33bc" RegularExpression="Added new combatant (?&lt;hunt&gt;Hydatos Elemental)\.">
+                    <Actions />
+                  </Trigger>
+                </Triggers>
+              </Folder>
+            </Folders>
+            <Triggers />
+          </Folder>
+        </Folders>
+        <Triggers />
+      </Folder>
+    </Folders>
+    <Triggers />
+  </ExportedFolder>
+</TriggernometryExport>
