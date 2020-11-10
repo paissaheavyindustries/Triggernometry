@@ -4929,7 +4929,7 @@
                   <Folder Id="76d2aadd-1b39-4677-86e8-ef08fb323ecb" Name="P1 - Twintania" Enabled="true">
                     <Folders />
                     <Triggers>
-                      <Trigger Enabled="true" Name="Twistaaaaaaaaaaaaa" Id="2788661a-bafd-4717-9e87-9c7644faa3ac" RegularExpression="14:26AA:Twintania starts using Twister on Twintania">
+                      <Trigger Enabled="true" Name="Twistaaaaaaaaaaaaa" Id="2788661a-bafd-4717-9e87-9c7644faa3ac" RegularExpression="\[.{14}14:26AA:">
                         <Actions>
                           <Action OrderNumber="1" UseTTSTextExpression="Twister" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                             <Condition Enabled="false" Grouping="Or" />
@@ -4937,7 +4937,7 @@
                         </Actions>
                         <Condition Enabled="false" Grouping="Or" />
                       </Trigger>
-                      <Trigger Enabled="true" Name="Hatch Mark" Id="5489209c-6667-479c-a2bc-28ed29361cd3" RegularExpression="1B:[A-F0-9]{8}:(?&lt;name&gt;[a-zA-Z' ]{1,31}):0000:[0-9]{4}:0076" PeriodRefire="Deny" RefirePeriodExpression="1000">
+                      <Trigger Enabled="true" Name="Hatch Mark" Id="5489209c-6667-479c-a2bc-28ed29361cd3" RegularExpression="\[.{14}1B:[A-F0-9]{8}:(?&lt;name&gt;[a-zA-Z' ]{1,31}):0000:[0-9]{4}:0076" PeriodRefire="Deny" RefirePeriodExpression="1000">
                         <Actions>
                           <Action OrderNumber="1" UseTTSTextExpression="Hatch" TextAuraFontSize="0" ActionType="UseTTS" RefireInterrupt="True">
                             <Condition Enabled="false" Grouping="Or" />
@@ -4945,7 +4945,7 @@
                         </Actions>
                         <Condition Enabled="false" Grouping="And" />
                       </Trigger>
-                      <Trigger Enabled="true" Name="Death Sentence" Id="6a6ec18a-ae89-4204-a41f-9fc3fb1edd8a" RegularExpression="14:26A9:Twintania starts using Death Sentence on (?&lt;player&gt;[a-zA-Z-' ]{1,31})">
+                      <Trigger Enabled="true" Name="Death Sentence" Id="6a6ec18a-ae89-4204-a41f-9fc3fb1edd8a" RegularExpression="\[.{14}14:26A9:Twintania starts using Death Sentence on (?&lt;player&gt;[a-zA-Z-' ]{1,31})">
                         <Actions>
                           <Action OrderNumber="1" UseTTSTextExpression="Buster on ${player}" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
                             <Condition Enabled="false" Grouping="Or" />
@@ -6013,7 +6013,54 @@
                     </Triggers>
                   </Folder>
                   <Folder Id="97fecaf1-58b5-4626-90dc-c2aef8c6e060" Name="P4 - Ultima" Enabled="true">
-                    <Folders />
+                    <Folders>
+                      <Folder Id="707ba21d-14b8-4437-9004-b711c970b399" Name="PrimalRoulette  (from @Forgotten Freedom)" Enabled="true">
+                        <Folders />
+                        <Triggers>
+                          <Trigger Enabled="true" Name="Primal Roulette" Id="705ab158-f3be-4a55-8eaf-13f991fa9234" RegularExpression="\[.{14}14:2CD(?&lt;primal&gt;[345]):">
+                            <Actions>
+                              <Action OrderNumber="1" LogLevel="-1" VariableOp="SetNumeric" VariableName="primalcounter" VariableExpression="${var:primalcounter}+1" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
+                                <Condition Enabled="false" Grouping="Or" />
+                                <Conditions />
+                              </Action>
+                              <Action OrderNumber="2" LogLevel="-1" UseTTSTextExpression="Garuda" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                                <Condition Enabled="true" Grouping="And">
+                                  <ConditionSingle Enabled="true" ExpressionL="${primal}" ExpressionTypeL="Numeric" ExpressionR="3" ExpressionTypeR="Numeric" ConditionType="NumericEqual" />
+                                  <ConditionSingle Enabled="true" ExpressionL="${var:primalcounter}" ExpressionTypeL="Numeric" ExpressionR="3" ExpressionTypeR="Numeric" ConditionType="NumericGreater" />
+                                </Condition>
+                                <Conditions />
+                              </Action>
+                              <Action OrderNumber="3" LogLevel="-1" UseTTSTextExpression="Ifrit" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                                <Condition Enabled="true" Grouping="And">
+                                  <ConditionSingle Enabled="true" ExpressionL="${primal}" ExpressionTypeL="Numeric" ExpressionR="4" ExpressionTypeR="Numeric" ConditionType="NumericEqual" />
+                                  <ConditionSingle Enabled="true" ExpressionL="${var:primalcounter}" ExpressionTypeL="Numeric" ExpressionR="3" ExpressionTypeR="Numeric" ConditionType="NumericGreater" />
+                                </Condition>
+                                <Conditions />
+                              </Action>
+                              <Action OrderNumber="4" LogLevel="-1" UseTTSTextExpression="Titan" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
+                                <Condition Enabled="true" Grouping="And">
+                                  <ConditionSingle Enabled="true" ExpressionL="${primal}" ExpressionTypeL="Numeric" ExpressionR="5" ExpressionTypeR="Numeric" ConditionType="NumericEqual" />
+                                  <ConditionSingle Enabled="true" ExpressionL="${var:primalcounter}" ExpressionTypeL="Numeric" ExpressionR="3" ExpressionTypeR="Numeric" ConditionType="NumericGreater" />
+                                </Condition>
+                                <Conditions />
+                              </Action>
+                            </Actions>
+                            <Condition Enabled="false" Grouping="Or" />
+                            <Conditions />
+                          </Trigger>
+                          <Trigger Enabled="true" Name="Reset" Id="7563a507-1492-42a8-9971-5a27e8a2e997" RegularExpression="\[.{14}21:[A-F0-9]{8}:400000(?&gt;03|10)">
+                            <Actions>
+                              <Action OrderNumber="1" LogLevel="-1" VariableName="primalcounter" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="Variable">
+                                <Condition Enabled="false" Grouping="Or" />
+                                <Conditions />
+                              </Action>
+                            </Actions>
+                            <Condition Enabled="false" Grouping="Or" />
+                            <Conditions />
+                          </Trigger>
+                        </Triggers>
+                      </Folder>
+                    </Folders>
                     <Triggers>
                       <Trigger Enabled="true" Name="Homing Lasers" Id="e6e09e95-2079-4ad8-8a76-37ff627f7d79" RegularExpression="14:2B7B:The Ultima Weapon starts using Homing Lasers on (?&lt;player&gt;[a-zA-Z-' ]{1,31})">
                         <Actions>
@@ -6037,30 +6084,6 @@
                           </Action>
                         </Actions>
                         <Condition Enabled="false" Grouping="Or" />
-                      </Trigger>
-                      <Trigger Enabled="true" Name="Primal Roulette (from @Forgotten Freedom)" Id="aaf7fbcf-0e00-4b30-915a-559aba4715b1" RegularExpression="\[.{14}14:2DC(?&lt;primal&gt;[345]):">
-                        <Actions>
-                          <Action OrderNumber="1" LogLevel="-1" UseTTSTextExpression="Garuda" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
-                            <Condition Enabled="true" Grouping="Or">
-                              <ConditionSingle Enabled="true" ExpressionL="${primal}" ExpressionTypeL="Numeric" ExpressionR="3" ExpressionTypeR="Numeric" ConditionType="NumericEqual" />
-                            </Condition>
-                            <Conditions />
-                          </Action>
-                          <Action OrderNumber="2" LogLevel="-1" UseTTSTextExpression="Ifrit" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
-                            <Condition Enabled="true" Grouping="Or">
-                              <ConditionSingle Enabled="true" ExpressionL="${primal}" ExpressionTypeL="Numeric" ExpressionR="4" ExpressionTypeR="Numeric" ConditionType="NumericEqual" />
-                            </Condition>
-                            <Conditions />
-                          </Action>
-                          <Action OrderNumber="3" LogLevel="-1" UseTTSTextExpression="Titan" TextAuraFontSize="8.25" TextAuraFontName="Microsoft Sans Serif" ActionType="UseTTS">
-                            <Condition Enabled="true" Grouping="Or">
-                              <ConditionSingle Enabled="true" ExpressionL="${primal}" ExpressionTypeL="Numeric" ExpressionR="5" ExpressionTypeR="Numeric" ConditionType="NumericEqual" />
-                            </Condition>
-                            <Conditions />
-                          </Action>
-                        </Actions>
-                        <Condition Enabled="false" Grouping="Or" />
-                        <Conditions />
                       </Trigger>
                     </Triggers>
                   </Folder>
