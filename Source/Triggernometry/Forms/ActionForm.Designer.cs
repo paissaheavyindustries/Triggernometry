@@ -233,6 +233,8 @@
             this.cbxLvarOperation = new System.Windows.Forms.ComboBox();
             this.tabObsControl = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel18 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblObsJSONPayload = new System.Windows.Forms.Label();
+            this.expObsJSONPayload = new Triggernometry.CustomControls.ExpressionTextBox();
             this.expObsSourceName = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblObsSourceName = new System.Windows.Forms.Label();
             this.cbxObsOpType = new System.Windows.Forms.ComboBox();
@@ -297,6 +299,14 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.cbxMutexOp = new System.Windows.Forms.ComboBox();
+            this.tabPlaceholder = new System.Windows.Forms.TabPage();
+            this.lblPlaceholderNoParams = new System.Windows.Forms.Label();
+            this.tabNamedCallback = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel24 = new System.Windows.Forms.TableLayoutPanel();
+            this.expCallbackParam = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.lblCallbackParam = new System.Windows.Forms.Label();
+            this.lblCallbackName = new System.Windows.Forms.Label();
+            this.expCallbackName = new Triggernometry.CustomControls.ExpressionTextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
@@ -335,14 +345,6 @@
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.expressionTextBox1 = new Triggernometry.CustomControls.ExpressionTextBox();
             this.expressionTextBox2 = new Triggernometry.CustomControls.ExpressionTextBox();
-            this.tabPlaceholder = new System.Windows.Forms.TabPage();
-            this.tabNamedCallback = new System.Windows.Forms.TabPage();
-            this.lblPlaceholderNoParams = new System.Windows.Forms.Label();
-            this.tableLayoutPanel24 = new System.Windows.Forms.TableLayoutPanel();
-            this.expCallbackParam = new Triggernometry.CustomControls.ExpressionTextBox();
-            this.lblCallbackParam = new System.Windows.Forms.Label();
-            this.lblCallbackName = new System.Windows.Forms.Label();
-            this.expCallbackName = new Triggernometry.CustomControls.ExpressionTextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.grpGeneralSettings.SuspendLayout();
             this.tbcActionSettings.SuspendLayout();
@@ -393,6 +395,9 @@
             this.tableLayoutPanel21.SuspendLayout();
             this.tabMutex.SuspendLayout();
             this.tableLayoutPanel22.SuspendLayout();
+            this.tabPlaceholder.SuspendLayout();
+            this.tabNamedCallback.SuspendLayout();
+            this.tableLayoutPanel24.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel6.SuspendLayout();
             this.tbcAction.SuspendLayout();
@@ -406,9 +411,6 @@
             this.tabDescription.SuspendLayout();
             this.tableLayoutPanel23.SuspendLayout();
             this.panel8.SuspendLayout();
-            this.tabPlaceholder.SuspendLayout();
-            this.tabNamedCallback.SuspendLayout();
-            this.tableLayoutPanel24.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -3245,27 +3247,55 @@
             this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel18.Controls.Add(this.lblObsJSONPayload, 0, 3);
+            this.tableLayoutPanel18.Controls.Add(this.expObsJSONPayload, 1, 3);
             this.tableLayoutPanel18.Controls.Add(this.expObsSourceName, 1, 2);
             this.tableLayoutPanel18.Controls.Add(this.lblObsSourceName, 0, 2);
             this.tableLayoutPanel18.Controls.Add(this.cbxObsOpType, 1, 0);
             this.tableLayoutPanel18.Controls.Add(this.lblObsOpType, 0, 0);
-            this.tableLayoutPanel18.Controls.Add(this.btnObsWebsocketLink, 2, 4);
+            this.tableLayoutPanel18.Controls.Add(this.btnObsWebsocketLink, 2, 5);
             this.tableLayoutPanel18.Controls.Add(this.lblObsSceneName, 0, 1);
             this.tableLayoutPanel18.Controls.Add(this.expObsSceneName, 1, 1);
-            this.tableLayoutPanel18.Controls.Add(this.lblObsWebsocketInfo, 1, 3);
-            this.tableLayoutPanel18.Controls.Add(this.txtObsWebsocketLink, 1, 4);
+            this.tableLayoutPanel18.Controls.Add(this.lblObsWebsocketInfo, 1, 4);
+            this.tableLayoutPanel18.Controls.Add(this.txtObsWebsocketLink, 1, 5);
             this.tableLayoutPanel18.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel18.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel18.Name = "tableLayoutPanel18";
-            this.tableLayoutPanel18.RowCount = 5;
+            this.tableLayoutPanel18.RowCount = 6;
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel18.Size = new System.Drawing.Size(542, 151);
+            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel18.Size = new System.Drawing.Size(542, 171);
             this.tableLayoutPanel18.TabIndex = 3;
+            // 
+            // lblObsJSONPayload
+            // 
+            this.lblObsJSONPayload.AutoSize = true;
+            this.lblObsJSONPayload.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblObsJSONPayload.Location = new System.Drawing.Point(3, 79);
+            this.lblObsJSONPayload.Name = "lblObsJSONPayload";
+            this.lblObsJSONPayload.Size = new System.Drawing.Size(76, 26);
+            this.lblObsJSONPayload.TabIndex = 26;
+            this.lblObsJSONPayload.Text = "JSON payload";
+            this.lblObsJSONPayload.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // expObsJSONPayload
+            // 
+            this.expObsJSONPayload.AutoSize = true;
+            this.tableLayoutPanel18.SetColumnSpan(this.expObsJSONPayload, 2);
+            this.expObsJSONPayload.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expObsJSONPayload.Expression = "";
+            this.expObsJSONPayload.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            this.expObsJSONPayload.Location = new System.Drawing.Point(85, 82);
+            this.expObsJSONPayload.Name = "expObsJSONPayload";
+            this.expObsJSONPayload.ReadOnly = false;
+            this.expObsJSONPayload.Size = new System.Drawing.Size(454, 20);
+            this.expObsJSONPayload.TabIndex = 25;
+            this.expObsJSONPayload.EnabledChanged += new System.EventHandler(this.expObsJSONPayload_EnabledChanged);
             // 
             // expObsSourceName
             // 
@@ -3311,7 +3341,8 @@
             "Save replay buffer",
             "Set scene",
             "Show source",
-            "Hide source"});
+            "Hide source",
+            "Other command"});
             this.cbxObsOpType.Location = new System.Drawing.Point(85, 3);
             this.cbxObsOpType.Name = "cbxObsOpType";
             this.cbxObsOpType.Size = new System.Drawing.Size(454, 21);
@@ -3333,10 +3364,10 @@
             // 
             this.btnObsWebsocketLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnObsWebsocketLink.Image = ((System.Drawing.Image)(resources.GetObject("btnObsWebsocketLink.Image")));
-            this.btnObsWebsocketLink.Location = new System.Drawing.Point(502, 125);
+            this.btnObsWebsocketLink.Location = new System.Drawing.Point(502, 151);
             this.btnObsWebsocketLink.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnObsWebsocketLink.Name = "btnObsWebsocketLink";
-            this.btnObsWebsocketLink.Size = new System.Drawing.Size(37, 26);
+            this.btnObsWebsocketLink.Size = new System.Drawing.Size(37, 20);
             this.btnObsWebsocketLink.TabIndex = 17;
             this.btnObsWebsocketLink.UseVisualStyleBackColor = true;
             this.btnObsWebsocketLink.Click += new System.EventHandler(this.button5_Click);
@@ -3370,7 +3401,7 @@
             // 
             this.lblObsWebsocketInfo.AutoSize = true;
             this.tableLayoutPanel18.SetColumnSpan(this.lblObsWebsocketInfo, 2);
-            this.lblObsWebsocketInfo.Location = new System.Drawing.Point(85, 79);
+            this.lblObsWebsocketInfo.Location = new System.Drawing.Point(85, 105);
             this.lblObsWebsocketInfo.Name = "lblObsWebsocketInfo";
             this.lblObsWebsocketInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
             this.lblObsWebsocketInfo.Size = new System.Drawing.Size(452, 46);
@@ -3381,7 +3412,7 @@
             // txtObsWebsocketLink
             // 
             this.txtObsWebsocketLink.Dock = System.Windows.Forms.DockStyle.Top;
-            this.txtObsWebsocketLink.Location = new System.Drawing.Point(85, 128);
+            this.txtObsWebsocketLink.Location = new System.Drawing.Point(85, 154);
             this.txtObsWebsocketLink.Name = "txtObsWebsocketLink";
             this.txtObsWebsocketLink.ReadOnly = true;
             this.txtObsWebsocketLink.Size = new System.Drawing.Size(414, 20);
@@ -4124,6 +4155,102 @@
             this.cbxMutexOp.Size = new System.Drawing.Size(454, 21);
             this.cbxMutexOp.TabIndex = 21;
             // 
+            // tabPlaceholder
+            // 
+            this.tabPlaceholder.Controls.Add(this.lblPlaceholderNoParams);
+            this.tabPlaceholder.Location = new System.Drawing.Point(4, 25);
+            this.tabPlaceholder.Name = "tabPlaceholder";
+            this.tabPlaceholder.Size = new System.Drawing.Size(542, 264);
+            this.tabPlaceholder.TabIndex = 22;
+            this.tabPlaceholder.Text = "Placeholder";
+            this.tabPlaceholder.UseVisualStyleBackColor = true;
+            // 
+            // lblPlaceholderNoParams
+            // 
+            this.lblPlaceholderNoParams.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblPlaceholderNoParams.Location = new System.Drawing.Point(0, 0);
+            this.lblPlaceholderNoParams.Name = "lblPlaceholderNoParams";
+            this.lblPlaceholderNoParams.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
+            this.lblPlaceholderNoParams.Size = new System.Drawing.Size(542, 264);
+            this.lblPlaceholderNoParams.TabIndex = 17;
+            this.lblPlaceholderNoParams.Text = "This action has no configurable parameters.";
+            this.lblPlaceholderNoParams.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tabNamedCallback
+            // 
+            this.tabNamedCallback.Controls.Add(this.tableLayoutPanel24);
+            this.tabNamedCallback.Location = new System.Drawing.Point(4, 25);
+            this.tabNamedCallback.Name = "tabNamedCallback";
+            this.tabNamedCallback.Size = new System.Drawing.Size(542, 264);
+            this.tabNamedCallback.TabIndex = 23;
+            this.tabNamedCallback.Text = "Callback";
+            this.tabNamedCallback.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel24
+            // 
+            this.tableLayoutPanel24.AutoSize = true;
+            this.tableLayoutPanel24.ColumnCount = 2;
+            this.tableLayoutPanel24.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel24.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel24.Controls.Add(this.expCallbackParam, 1, 1);
+            this.tableLayoutPanel24.Controls.Add(this.lblCallbackParam, 0, 1);
+            this.tableLayoutPanel24.Controls.Add(this.lblCallbackName, 0, 0);
+            this.tableLayoutPanel24.Controls.Add(this.expCallbackName, 1, 0);
+            this.tableLayoutPanel24.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel24.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel24.Name = "tableLayoutPanel24";
+            this.tableLayoutPanel24.RowCount = 2;
+            this.tableLayoutPanel24.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel24.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel24.Size = new System.Drawing.Size(542, 52);
+            this.tableLayoutPanel24.TabIndex = 3;
+            // 
+            // expCallbackParam
+            // 
+            this.expCallbackParam.AutoSize = true;
+            this.expCallbackParam.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expCallbackParam.Expression = "";
+            this.expCallbackParam.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            this.expCallbackParam.Location = new System.Drawing.Point(107, 29);
+            this.expCallbackParam.Name = "expCallbackParam";
+            this.expCallbackParam.ReadOnly = false;
+            this.expCallbackParam.Size = new System.Drawing.Size(432, 20);
+            this.expCallbackParam.TabIndex = 16;
+            // 
+            // lblCallbackParam
+            // 
+            this.lblCallbackParam.AutoSize = true;
+            this.lblCallbackParam.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCallbackParam.Location = new System.Drawing.Point(3, 26);
+            this.lblCallbackParam.Name = "lblCallbackParam";
+            this.lblCallbackParam.Size = new System.Drawing.Size(98, 26);
+            this.lblCallbackParam.TabIndex = 15;
+            this.lblCallbackParam.Text = "Callback parameter";
+            this.lblCallbackParam.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblCallbackName
+            // 
+            this.lblCallbackName.AutoSize = true;
+            this.lblCallbackName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCallbackName.Location = new System.Drawing.Point(3, 0);
+            this.lblCallbackName.Name = "lblCallbackName";
+            this.lblCallbackName.Size = new System.Drawing.Size(98, 26);
+            this.lblCallbackName.TabIndex = 7;
+            this.lblCallbackName.Text = "Callback name";
+            this.lblCallbackName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // expCallbackName
+            // 
+            this.expCallbackName.AutoSize = true;
+            this.expCallbackName.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expCallbackName.Expression = "";
+            this.expCallbackName.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            this.expCallbackName.Location = new System.Drawing.Point(107, 3);
+            this.expCallbackName.Name = "expCallbackName";
+            this.expCallbackName.ReadOnly = false;
+            this.expCallbackName.Size = new System.Drawing.Size(432, 20);
+            this.expCallbackName.TabIndex = 14;
+            // 
             // panel2
             // 
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -4556,102 +4683,6 @@
             this.expressionTextBox2.Size = new System.Drawing.Size(474, 20);
             this.expressionTextBox2.TabIndex = 14;
             // 
-            // tabPlaceholder
-            // 
-            this.tabPlaceholder.Controls.Add(this.lblPlaceholderNoParams);
-            this.tabPlaceholder.Location = new System.Drawing.Point(4, 25);
-            this.tabPlaceholder.Name = "tabPlaceholder";
-            this.tabPlaceholder.Size = new System.Drawing.Size(542, 264);
-            this.tabPlaceholder.TabIndex = 22;
-            this.tabPlaceholder.Text = "Placeholder";
-            this.tabPlaceholder.UseVisualStyleBackColor = true;
-            // 
-            // tabNamedCallback
-            // 
-            this.tabNamedCallback.Controls.Add(this.tableLayoutPanel24);
-            this.tabNamedCallback.Location = new System.Drawing.Point(4, 25);
-            this.tabNamedCallback.Name = "tabNamedCallback";
-            this.tabNamedCallback.Size = new System.Drawing.Size(542, 264);
-            this.tabNamedCallback.TabIndex = 23;
-            this.tabNamedCallback.Text = "Callback";
-            this.tabNamedCallback.UseVisualStyleBackColor = true;
-            // 
-            // lblPlaceholderNoParams
-            // 
-            this.lblPlaceholderNoParams.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblPlaceholderNoParams.Location = new System.Drawing.Point(0, 0);
-            this.lblPlaceholderNoParams.Name = "lblPlaceholderNoParams";
-            this.lblPlaceholderNoParams.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
-            this.lblPlaceholderNoParams.Size = new System.Drawing.Size(542, 264);
-            this.lblPlaceholderNoParams.TabIndex = 17;
-            this.lblPlaceholderNoParams.Text = "This action has no configurable parameters.";
-            this.lblPlaceholderNoParams.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // tableLayoutPanel24
-            // 
-            this.tableLayoutPanel24.AutoSize = true;
-            this.tableLayoutPanel24.ColumnCount = 2;
-            this.tableLayoutPanel24.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel24.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel24.Controls.Add(this.expCallbackParam, 1, 1);
-            this.tableLayoutPanel24.Controls.Add(this.lblCallbackParam, 0, 1);
-            this.tableLayoutPanel24.Controls.Add(this.lblCallbackName, 0, 0);
-            this.tableLayoutPanel24.Controls.Add(this.expCallbackName, 1, 0);
-            this.tableLayoutPanel24.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel24.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel24.Name = "tableLayoutPanel24";
-            this.tableLayoutPanel24.RowCount = 2;
-            this.tableLayoutPanel24.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel24.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel24.Size = new System.Drawing.Size(542, 52);
-            this.tableLayoutPanel24.TabIndex = 3;
-            // 
-            // expCallbackParam
-            // 
-            this.expCallbackParam.AutoSize = true;
-            this.expCallbackParam.Dock = System.Windows.Forms.DockStyle.Top;
-            this.expCallbackParam.Expression = "";
-            this.expCallbackParam.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expCallbackParam.Location = new System.Drawing.Point(107, 29);
-            this.expCallbackParam.Name = "expCallbackParam";
-            this.expCallbackParam.ReadOnly = false;
-            this.expCallbackParam.Size = new System.Drawing.Size(432, 20);
-            this.expCallbackParam.TabIndex = 16;
-            // 
-            // lblCallbackParam
-            // 
-            this.lblCallbackParam.AutoSize = true;
-            this.lblCallbackParam.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblCallbackParam.Location = new System.Drawing.Point(3, 26);
-            this.lblCallbackParam.Name = "lblCallbackParam";
-            this.lblCallbackParam.Size = new System.Drawing.Size(98, 26);
-            this.lblCallbackParam.TabIndex = 15;
-            this.lblCallbackParam.Text = "Callback parameter";
-            this.lblCallbackParam.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblCallbackName
-            // 
-            this.lblCallbackName.AutoSize = true;
-            this.lblCallbackName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblCallbackName.Location = new System.Drawing.Point(3, 0);
-            this.lblCallbackName.Name = "lblCallbackName";
-            this.lblCallbackName.Size = new System.Drawing.Size(98, 26);
-            this.lblCallbackName.TabIndex = 7;
-            this.lblCallbackName.Text = "Callback name";
-            this.lblCallbackName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // expCallbackName
-            // 
-            this.expCallbackName.AutoSize = true;
-            this.expCallbackName.Dock = System.Windows.Forms.DockStyle.Top;
-            this.expCallbackName.Expression = "";
-            this.expCallbackName.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expCallbackName.Location = new System.Drawing.Point(107, 3);
-            this.expCallbackName.Name = "expCallbackName";
-            this.expCallbackName.ReadOnly = false;
-            this.expCallbackName.Size = new System.Drawing.Size(432, 20);
-            this.expCallbackName.TabIndex = 14;
-            // 
             // ActionForm
             // 
             this.AcceptButton = this.btnOk;
@@ -4765,6 +4796,11 @@
             this.tabMutex.PerformLayout();
             this.tableLayoutPanel22.ResumeLayout(false);
             this.tableLayoutPanel22.PerformLayout();
+            this.tabPlaceholder.ResumeLayout(false);
+            this.tabNamedCallback.ResumeLayout(false);
+            this.tabNamedCallback.PerformLayout();
+            this.tableLayoutPanel24.ResumeLayout(false);
+            this.tableLayoutPanel24.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
@@ -4787,11 +4823,6 @@
             this.tableLayoutPanel23.ResumeLayout(false);
             this.tableLayoutPanel23.PerformLayout();
             this.panel8.ResumeLayout(false);
-            this.tabPlaceholder.ResumeLayout(false);
-            this.tabNamedCallback.ResumeLayout(false);
-            this.tabNamedCallback.PerformLayout();
-            this.tableLayoutPanel24.ResumeLayout(false);
-            this.tableLayoutPanel24.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -5112,5 +5143,7 @@
         private System.Windows.Forms.Label lblCallbackParam;
         private System.Windows.Forms.Label lblCallbackName;
         private CustomControls.ExpressionTextBox expCallbackName;
+        private System.Windows.Forms.Label lblObsJSONPayload;
+        private CustomControls.ExpressionTextBox expObsJSONPayload;
     }
 }

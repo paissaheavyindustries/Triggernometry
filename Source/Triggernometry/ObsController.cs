@@ -177,6 +177,14 @@ namespace Triggernometry
             }
         }
 
+        internal void JSONPayload(string jsonpayload)
+        {
+            if(jsonpayload != null && jsonpayload != "")
+            {
+                SendRequest(jsonpayload);
+            }
+        }
+
         protected string NewMessageID()
         {
             Guid g = Guid.NewGuid();

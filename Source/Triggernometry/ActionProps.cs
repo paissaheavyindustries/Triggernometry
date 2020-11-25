@@ -166,7 +166,8 @@ namespace Triggernometry
             SaveReplayBuffer,
             SetScene,
             ShowSource,
-            HideSource
+            HideSource,
+            JSONPayload
         }
 
         public enum KeypressTypeEnum
@@ -1358,6 +1359,24 @@ namespace Triggernometry
             set
             {
                 _OBSSourceName = value;
+            }
+        }
+
+        internal string _OBSJSONPayload = "";
+        [XmlAttribute]
+        public string OBSJSONPayload
+        {
+            get
+            {
+                if (_OBSJSONPayload == "")
+                {
+                    return null;
+                }
+                return _OBSJSONPayload;
+            }
+            set
+            {
+                _OBSJSONPayload = value;
             }
         }
 
