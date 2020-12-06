@@ -887,6 +887,35 @@ namespace Triggernometry
                 case ActionTypeEnum.NamedCallback:
                     temp += I18n.Translate("internal/Action/descnamedcallback", "Invoke named callback ({0}) with parameter ({1})", _NamedCallbackName, _NamedCallbackParam);
                     break;
+                case ActionTypeEnum.Mouse:
+                    {
+                        string coorddesc = "";
+                        switch (_MouseCoordType)
+                        {
+                            case MouseCoordEnum.Absolute:
+                                coorddesc = I18n.Translate("internal/Action/descmousecoordabsolute", "to absolute coordinates");
+                                break;
+                            case MouseCoordEnum.Relative:
+                                coorddesc = I18n.Translate("internal/Action/descmousecoordrelative", "by relative coordinates");
+                                break;
+                        }
+                        switch (_MouseOpType)
+                            {
+                                case MouseOpEnum.Move:
+                                    temp += I18n.Translate("internal/Action/descmousemove", "Move mouse {0} X: {1} Y: {2}", coorddesc, _MouseX, _MouseY);
+                                    break;
+                                case MouseOpEnum.LeftClick:
+                                    temp += I18n.Translate("internal/Action/descmouselmb", "Move mouse {0} X: {1} Y: {2} and left click", coorddesc, _MouseX, _MouseY);
+                                    break;
+                                case MouseOpEnum.MiddleClick:
+                                    temp += I18n.Translate("internal/Action/descmousemmb", "Move mouse {0} X: {1} Y: {2} and middle click", coorddesc, _MouseX, _MouseY);
+                                    break;
+                                case MouseOpEnum.RightClick:
+                                    temp += I18n.Translate("internal/Action/descmousermb", "Move mouse {0} X: {1} Y: {2} and right click", coorddesc, _MouseX, _MouseY);
+                                    break;
+                            }
+                    }
+                    break;
                 default:
                     temp += I18n.Translate("internal/Action/descunknown", "unknown action type");
                     break;
@@ -2227,6 +2256,41 @@ namespace Triggernometry
                         }
                         break;
                     #endregion
+                    #region Implementation - Mouse
+                    case ActionTypeEnum.Mouse:
+                        {
+                            int mousex = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _MouseX);
+                            int mousey = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _MouseY);
+                            RealPlugin.WindowsUtils.MouseEventFlags flags = 0;
+                            switch (_MouseCoordType)
+                            {
+                                case MouseCoordEnum.Absolute:
+                                    flags |= RealPlugin.WindowsUtils.MouseEventFlags.ABSOLUTE;
+                                    break;
+                                case MouseCoordEnum.Relative:
+                                    break;
+                            }
+                            switch (_MouseOpType)
+                            {
+                                case MouseOpEnum.Move:
+                                    RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                    break;
+                                case MouseOpEnum.LeftClick:
+                                    RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE | RealPlugin.WindowsUtils.MouseEventFlags.LEFTDOWN, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                    RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE | RealPlugin.WindowsUtils.MouseEventFlags.LEFTUP, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                    break;
+                                case MouseOpEnum.MiddleClick:
+                                    RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE | RealPlugin.WindowsUtils.MouseEventFlags.MIDDLEDOWN, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                    RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE | RealPlugin.WindowsUtils.MouseEventFlags.MIDDLEUP, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                    break;
+                                case MouseOpEnum.RightClick:
+                                    RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE | RealPlugin.WindowsUtils.MouseEventFlags.RIGHTDOWN, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                    RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE | RealPlugin.WindowsUtils.MouseEventFlags.RIGHTUP, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                    break;
+                            }
+                        }
+                        break;
+                    #endregion
                     #region Implementation - Named callback
                     case ActionTypeEnum.NamedCallback:
                         {
@@ -2450,6 +2514,10 @@ namespace Triggernometry
             a._DescriptionOverride = _DescriptionOverride;
             a._NamedCallbackParam = _NamedCallbackParam;
             a._NamedCallbackName = _NamedCallbackName;
+            a._MouseOpType = _MouseOpType;
+            a._MouseCoordType = _MouseCoordType;
+            a._MouseX = _MouseX;
+            a._MouseY = _MouseY;
         }
 
         private string PostJson(Context ctx, string url, string json, bool expectNoContent)

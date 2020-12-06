@@ -326,7 +326,11 @@ namespace Scarborough
             {
                 if (_window == null)
                 {
-                    AdjustSurface();
+                    if (AdjustSurface() == false)
+                    {
+                        AdjustVisibility();
+                        return;
+                    }
                 }
                 LoadImageOnDemand();
                 NeedImage = false;
@@ -357,11 +361,16 @@ namespace Scarborough
             {
                 return;
             }
-            AdjustSurface();
+            if (AdjustSurface() == false)
+            {
+                AdjustVisibility();
+                return;
+            }
+            AdjustVisibility();
             NeedRender = false;            
             _graphics.BeginScene();
             _graphics.ClearScene(_bgColor);
-            if (Owner.RenderingActive == false)
+            if (Owner.RenderingActive == false || InvalidSize == true)
             {
                 _graphics.EndScene();
                 return;

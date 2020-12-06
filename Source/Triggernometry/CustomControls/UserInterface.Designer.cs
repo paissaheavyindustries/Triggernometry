@@ -52,6 +52,7 @@
             this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             this.ctxExpand = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxCollapse = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxReadme = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnAdd = new System.Windows.Forms.ToolStripDropDownButton();
             this.btnAddTriggerFolder = new System.Windows.Forms.ToolStripMenuItem();
@@ -96,7 +97,6 @@
             this.pnlToastSpace = new System.Windows.Forms.Panel();
             this.pnlWelcome = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
             this.btnCloseWelcome = new System.Windows.Forms.Button();
             this.chkWelcome = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -104,32 +104,30 @@
             this.lblWelcomeResourcesHeader = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.lblWelcomeImport = new System.Windows.Forms.Label();
-            this.lblWelcomeCreate = new System.Windows.Forms.Label();
+            this.lblWelcomeStart = new System.Windows.Forms.Label();
             this.lblWelcomeImportHeader = new System.Windows.Forms.Label();
-            this.lblWelcomeCreateHeader = new System.Windows.Forms.Label();
-            this.lblWelcomeSpse = new System.Windows.Forms.Label();
-            this.lblWelcomeSpseHeader = new System.Windows.Forms.Label();
-            this.lblWelcomeDifferencesHeader = new System.Windows.Forms.Label();
+            this.lblWelcomeStartHeader = new System.Windows.Forms.Label();
             this.lblWelcomeThanks = new System.Windows.Forms.Label();
             this.lblWelcomeIntro = new System.Windows.Forms.Label();
-            this.lblWelcomeDifferences = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.prgStatus = new System.Windows.Forms.ToolStripProgressBar();
             this.tlsStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ctxReadme = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.panel4 = new System.Windows.Forms.Panel();
             this.treeView1 = new Triggernometry.CustomControls.TreeViewEx();
             this.contextMenuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.pnlUi.SuspendLayout();
             this.pnlWelcome.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // imageList1
@@ -166,21 +164,21 @@
             this.ctxCollapse,
             this.ctxReadme});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 320);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(169, 298);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // ctxFire
             // 
             this.ctxFire.Image = ((System.Drawing.Image)(resources.GetObject("ctxFire.Image")));
             this.ctxFire.Name = "ctxFire";
-            this.ctxFire.Size = new System.Drawing.Size(180, 22);
+            this.ctxFire.Size = new System.Drawing.Size(168, 22);
             this.ctxFire.Text = "Fire";
             this.ctxFire.Click += new System.EventHandler(this.ctxFire_Click);
             // 
             // toolStripSeparator12
             // 
             this.toolStripSeparator12.Name = "toolStripSeparator12";
-            this.toolStripSeparator12.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator12.Size = new System.Drawing.Size(165, 6);
             // 
             // ctxAdd
             // 
@@ -191,7 +189,7 @@
             this.ctxAddRepoList});
             this.ctxAdd.Image = ((System.Drawing.Image)(resources.GetObject("ctxAdd.Image")));
             this.ctxAdd.Name = "ctxAdd";
-            this.ctxAdd.Size = new System.Drawing.Size(180, 22);
+            this.ctxAdd.Size = new System.Drawing.Size(168, 22);
             this.ctxAdd.Text = "Add";
             // 
             // ctxAddFolder
@@ -230,7 +228,7 @@
             // 
             this.ctxUpdate.Image = ((System.Drawing.Image)(resources.GetObject("ctxUpdate.Image")));
             this.ctxUpdate.Name = "ctxUpdate";
-            this.ctxUpdate.Size = new System.Drawing.Size(180, 22);
+            this.ctxUpdate.Size = new System.Drawing.Size(168, 22);
             this.ctxUpdate.Text = "Update";
             this.ctxUpdate.Click += new System.EventHandler(this.ctxUpdate_Click);
             // 
@@ -238,21 +236,21 @@
             // 
             this.ctxEdit.Image = ((System.Drawing.Image)(resources.GetObject("ctxEdit.Image")));
             this.ctxEdit.Name = "ctxEdit";
-            this.ctxEdit.Size = new System.Drawing.Size(180, 22);
+            this.ctxEdit.Size = new System.Drawing.Size(168, 22);
             this.ctxEdit.Text = "Edit";
             this.ctxEdit.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(165, 6);
             // 
             // ctxCopy
             // 
             this.ctxCopy.Image = ((System.Drawing.Image)(resources.GetObject("ctxCopy.Image")));
             this.ctxCopy.Name = "ctxCopy";
             this.ctxCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.ctxCopy.Size = new System.Drawing.Size(180, 22);
+            this.ctxCopy.Size = new System.Drawing.Size(168, 22);
             this.ctxCopy.Text = "Copy";
             this.ctxCopy.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
@@ -261,20 +259,20 @@
             this.ctxPaste.Image = ((System.Drawing.Image)(resources.GetObject("ctxPaste.Image")));
             this.ctxPaste.Name = "ctxPaste";
             this.ctxPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.ctxPaste.Size = new System.Drawing.Size(180, 22);
+            this.ctxPaste.Size = new System.Drawing.Size(168, 22);
             this.ctxPaste.Text = "Paste";
             this.ctxPaste.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(165, 6);
             // 
             // ctxImport
             // 
             this.ctxImport.Image = ((System.Drawing.Image)(resources.GetObject("ctxImport.Image")));
             this.ctxImport.Name = "ctxImport";
-            this.ctxImport.Size = new System.Drawing.Size(180, 22);
+            this.ctxImport.Size = new System.Drawing.Size(168, 22);
             this.ctxImport.Text = "Import";
             this.ctxImport.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
             // 
@@ -282,33 +280,33 @@
             // 
             this.ctxExport.Image = ((System.Drawing.Image)(resources.GetObject("ctxExport.Image")));
             this.ctxExport.Name = "ctxExport";
-            this.ctxExport.Size = new System.Drawing.Size(180, 22);
+            this.ctxExport.Size = new System.Drawing.Size(168, 22);
             this.ctxExport.Text = "Export";
             this.ctxExport.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(165, 6);
             // 
             // ctxDelete
             // 
             this.ctxDelete.Image = ((System.Drawing.Image)(resources.GetObject("ctxDelete.Image")));
             this.ctxDelete.Name = "ctxDelete";
-            this.ctxDelete.Size = new System.Drawing.Size(180, 22);
+            this.ctxDelete.Size = new System.Drawing.Size(168, 22);
             this.ctxDelete.Text = "Remove";
             this.ctxDelete.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
             // toolStripSeparator11
             // 
             this.toolStripSeparator11.Name = "toolStripSeparator11";
-            this.toolStripSeparator11.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator11.Size = new System.Drawing.Size(165, 6);
             // 
             // ctxExpand
             // 
             this.ctxExpand.Image = ((System.Drawing.Image)(resources.GetObject("ctxExpand.Image")));
             this.ctxExpand.Name = "ctxExpand";
-            this.ctxExpand.Size = new System.Drawing.Size(180, 22);
+            this.ctxExpand.Size = new System.Drawing.Size(168, 22);
             this.ctxExpand.Text = "Expand all";
             this.ctxExpand.Click += new System.EventHandler(this.ctxExpand_Click);
             // 
@@ -316,9 +314,17 @@
             // 
             this.ctxCollapse.Image = ((System.Drawing.Image)(resources.GetObject("ctxCollapse.Image")));
             this.ctxCollapse.Name = "ctxCollapse";
-            this.ctxCollapse.Size = new System.Drawing.Size(180, 22);
+            this.ctxCollapse.Size = new System.Drawing.Size(168, 22);
             this.ctxCollapse.Text = "Collapse all";
             this.ctxCollapse.Click += new System.EventHandler(this.ctxCollapse_Click);
+            // 
+            // ctxReadme
+            // 
+            this.ctxReadme.Image = ((System.Drawing.Image)(resources.GetObject("ctxReadme.Image")));
+            this.ctxReadme.Name = "ctxReadme";
+            this.ctxReadme.Size = new System.Drawing.Size(168, 22);
+            this.ctxReadme.Text = "Open instructions";
+            this.ctxReadme.Click += new System.EventHandler(this.ctxReadme_Click);
             // 
             // toolStrip1
             // 
@@ -679,7 +685,7 @@
             this.pnlUi.Controls.Add(this.pnlToastSpace);
             this.pnlUi.Location = new System.Drawing.Point(8, 99);
             this.pnlUi.Name = "pnlUi";
-            this.pnlUi.Size = new System.Drawing.Size(800, 372);
+            this.pnlUi.Size = new System.Drawing.Size(474, 372);
             this.pnlUi.TabIndex = 4;
             // 
             // btnCornerPopup
@@ -700,48 +706,36 @@
             this.pnlToastSpace.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlToastSpace.Location = new System.Drawing.Point(0, 0);
             this.pnlToastSpace.Name = "pnlToastSpace";
-            this.pnlToastSpace.Size = new System.Drawing.Size(800, 40);
+            this.pnlToastSpace.Size = new System.Drawing.Size(474, 40);
             this.pnlToastSpace.TabIndex = 5;
             this.pnlToastSpace.Visible = false;
             // 
             // pnlWelcome
             // 
             this.pnlWelcome.Controls.Add(this.panel1);
-            this.pnlWelcome.Location = new System.Drawing.Point(848, 77);
+            this.pnlWelcome.Controls.Add(this.panel4);
+            this.pnlWelcome.Location = new System.Drawing.Point(553, 60);
             this.pnlWelcome.Name = "pnlWelcome";
             this.pnlWelcome.Padding = new System.Windows.Forms.Padding(30);
-            this.pnlWelcome.Size = new System.Drawing.Size(472, 585);
+            this.pnlWelcome.Size = new System.Drawing.Size(767, 585);
             this.pnlWelcome.TabIndex = 5;
             // 
             // panel1
             // 
             this.panel1.AutoScroll = true;
-            this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.tableLayoutPanel1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(30, 30);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(412, 525);
+            this.panel1.Size = new System.Drawing.Size(707, 435);
             this.panel1.TabIndex = 1;
-            // 
-            // panel2
-            // 
-            this.panel2.AutoSize = true;
-            this.panel2.Controls.Add(this.btnCloseWelcome);
-            this.panel2.Controls.Add(this.chkWelcome);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 733);
-            this.panel2.Name = "panel2";
-            this.panel2.Padding = new System.Windows.Forms.Padding(0, 30, 0, 0);
-            this.panel2.Size = new System.Drawing.Size(395, 97);
-            this.panel2.TabIndex = 1;
             // 
             // btnCloseWelcome
             // 
             this.btnCloseWelcome.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnCloseWelcome.Location = new System.Drawing.Point(0, 47);
+            this.btnCloseWelcome.Location = new System.Drawing.Point(5, 5);
             this.btnCloseWelcome.Name = "btnCloseWelcome";
-            this.btnCloseWelcome.Size = new System.Drawing.Size(395, 50);
+            this.btnCloseWelcome.Size = new System.Drawing.Size(697, 50);
             this.btnCloseWelcome.TabIndex = 16;
             this.btnCloseWelcome.Text = "I\'m ready to start! Let\'s go!";
             this.btnCloseWelcome.UseVisualStyleBackColor = true;
@@ -753,10 +747,11 @@
             this.chkWelcome.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkWelcome.Checked = true;
             this.chkWelcome.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkWelcome.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkWelcome.Location = new System.Drawing.Point(0, 30);
+            this.chkWelcome.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.chkWelcome.Location = new System.Drawing.Point(0, 0);
             this.chkWelcome.Name = "chkWelcome";
-            this.chkWelcome.Size = new System.Drawing.Size(395, 17);
+            this.chkWelcome.Padding = new System.Windows.Forms.Padding(0, 10, 0, 3);
+            this.chkWelcome.Size = new System.Drawing.Size(707, 30);
             this.chkWelcome.TabIndex = 15;
             this.chkWelcome.Text = "Show this Welcome Screen on startup";
             this.chkWelcome.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -768,27 +763,21 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.lblWelcomeResources, 0, 8);
-            this.tableLayoutPanel1.Controls.Add(this.lblWelcomeResourcesHeader, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.pictureBox2, 1, 6);
-            this.tableLayoutPanel1.Controls.Add(this.lblWelcomeImport, 1, 5);
-            this.tableLayoutPanel1.Controls.Add(this.lblWelcomeCreate, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.lblWelcomeImportHeader, 1, 4);
-            this.tableLayoutPanel1.Controls.Add(this.lblWelcomeCreateHeader, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.lblWelcomeSpse, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.lblWelcomeSpseHeader, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.lblWelcomeDifferencesHeader, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.lblWelcomeResources, 1, 6);
+            this.tableLayoutPanel1.Controls.Add(this.lblWelcomeResourcesHeader, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.pictureBox2, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.lblWelcomeImport, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.lblWelcomeStart, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.lblWelcomeImportHeader, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.lblWelcomeStartHeader, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.lblWelcomeThanks, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblWelcomeIntro, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.lblWelcomeDifferences, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.linkLabel1, 0, 9);
+            this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.linkLabel1, 1, 7);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 10;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowCount = 8;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -797,16 +786,16 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(395, 733);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(707, 366);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // lblWelcomeResources
             // 
             this.lblWelcomeResources.AutoSize = true;
-            this.lblWelcomeResources.Location = new System.Drawing.Point(3, 589);
+            this.lblWelcomeResources.Location = new System.Drawing.Point(356, 274);
             this.lblWelcomeResources.Name = "lblWelcomeResources";
             this.lblWelcomeResources.Padding = new System.Windows.Forms.Padding(10);
-            this.lblWelcomeResources.Size = new System.Drawing.Size(191, 124);
+            this.lblWelcomeResources.Size = new System.Drawing.Size(333, 72);
             this.lblWelcomeResources.TabIndex = 15;
             this.lblWelcomeResources.Text = resources.GetString("lblWelcomeResources.Text");
             // 
@@ -816,10 +805,10 @@
             this.lblWelcomeResourcesHeader.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.lblWelcomeResourcesHeader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblWelcomeResourcesHeader.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
-            this.lblWelcomeResourcesHeader.Location = new System.Drawing.Point(3, 553);
+            this.lblWelcomeResourcesHeader.Location = new System.Drawing.Point(356, 238);
             this.lblWelcomeResourcesHeader.Name = "lblWelcomeResourcesHeader";
             this.lblWelcomeResourcesHeader.Padding = new System.Windows.Forms.Padding(5);
-            this.lblWelcomeResourcesHeader.Size = new System.Drawing.Size(191, 36);
+            this.lblWelcomeResourcesHeader.Size = new System.Drawing.Size(348, 36);
             this.lblWelcomeResourcesHeader.TabIndex = 14;
             this.lblWelcomeResourcesHeader.Text = "Where can I find more resources, triggers, or help with Triggernometry?";
             // 
@@ -827,10 +816,10 @@
             // 
             this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(217, 527);
+            this.pictureBox2.Location = new System.Drawing.Point(373, 212);
             this.pictureBox2.Margin = new System.Windows.Forms.Padding(20, 0, 0, 10);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(178, 16);
+            this.pictureBox2.Size = new System.Drawing.Size(334, 16);
             this.pictureBox2.TabIndex = 13;
             this.pictureBox2.TabStop = false;
             // 
@@ -838,22 +827,22 @@
             // 
             this.lblWelcomeImport.AutoSize = true;
             this.lblWelcomeImport.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
-            this.lblWelcomeImport.Location = new System.Drawing.Point(200, 377);
+            this.lblWelcomeImport.Location = new System.Drawing.Point(356, 114);
             this.lblWelcomeImport.Name = "lblWelcomeImport";
             this.lblWelcomeImport.Padding = new System.Windows.Forms.Padding(10);
-            this.lblWelcomeImport.Size = new System.Drawing.Size(192, 137);
+            this.lblWelcomeImport.Size = new System.Drawing.Size(348, 85);
             this.lblWelcomeImport.TabIndex = 11;
             this.lblWelcomeImport.Text = resources.GetString("lblWelcomeImport.Text");
             // 
-            // lblWelcomeCreate
+            // lblWelcomeStart
             // 
-            this.lblWelcomeCreate.AutoSize = true;
-            this.lblWelcomeCreate.Location = new System.Drawing.Point(3, 377);
-            this.lblWelcomeCreate.Name = "lblWelcomeCreate";
-            this.lblWelcomeCreate.Padding = new System.Windows.Forms.Padding(10);
-            this.lblWelcomeCreate.Size = new System.Drawing.Size(191, 150);
-            this.lblWelcomeCreate.TabIndex = 10;
-            this.lblWelcomeCreate.Text = resources.GetString("lblWelcomeCreate.Text");
+            this.lblWelcomeStart.AutoSize = true;
+            this.lblWelcomeStart.Location = new System.Drawing.Point(3, 114);
+            this.lblWelcomeStart.Name = "lblWelcomeStart";
+            this.lblWelcomeStart.Padding = new System.Windows.Forms.Padding(10);
+            this.lblWelcomeStart.Size = new System.Drawing.Size(334, 98);
+            this.lblWelcomeStart.TabIndex = 10;
+            this.lblWelcomeStart.Text = resources.GetString("lblWelcomeStart.Text");
             // 
             // lblWelcomeImportHeader
             // 
@@ -862,62 +851,25 @@
             this.lblWelcomeImportHeader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblWelcomeImportHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWelcomeImportHeader.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
-            this.lblWelcomeImportHeader.Location = new System.Drawing.Point(200, 328);
+            this.lblWelcomeImportHeader.Location = new System.Drawing.Point(356, 78);
             this.lblWelcomeImportHeader.Name = "lblWelcomeImportHeader";
             this.lblWelcomeImportHeader.Padding = new System.Windows.Forms.Padding(5);
-            this.lblWelcomeImportHeader.Size = new System.Drawing.Size(192, 49);
+            this.lblWelcomeImportHeader.Size = new System.Drawing.Size(348, 36);
             this.lblWelcomeImportHeader.TabIndex = 9;
             this.lblWelcomeImportHeader.Text = "I have this XML file which is supposed to have some triggers. How do I use it?";
             // 
-            // lblWelcomeCreateHeader
+            // lblWelcomeStartHeader
             // 
-            this.lblWelcomeCreateHeader.AutoSize = true;
-            this.lblWelcomeCreateHeader.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblWelcomeCreateHeader.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblWelcomeCreateHeader.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
-            this.lblWelcomeCreateHeader.Location = new System.Drawing.Point(3, 328);
-            this.lblWelcomeCreateHeader.Name = "lblWelcomeCreateHeader";
-            this.lblWelcomeCreateHeader.Padding = new System.Windows.Forms.Padding(5);
-            this.lblWelcomeCreateHeader.Size = new System.Drawing.Size(191, 49);
-            this.lblWelcomeCreateHeader.TabIndex = 8;
-            this.lblWelcomeCreateHeader.Text = "How can I create a new trigger?";
-            // 
-            // lblWelcomeSpse
-            // 
-            this.lblWelcomeSpse.AutoSize = true;
-            this.lblWelcomeSpse.Location = new System.Drawing.Point(200, 139);
-            this.lblWelcomeSpse.Name = "lblWelcomeSpse";
-            this.lblWelcomeSpse.Padding = new System.Windows.Forms.Padding(10);
-            this.lblWelcomeSpse.Size = new System.Drawing.Size(192, 189);
-            this.lblWelcomeSpse.TabIndex = 7;
-            this.lblWelcomeSpse.Text = resources.GetString("lblWelcomeSpse.Text");
-            // 
-            // lblWelcomeSpseHeader
-            // 
-            this.lblWelcomeSpseHeader.AutoSize = true;
-            this.lblWelcomeSpseHeader.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblWelcomeSpseHeader.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblWelcomeSpseHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWelcomeSpseHeader.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
-            this.lblWelcomeSpseHeader.Location = new System.Drawing.Point(200, 103);
-            this.lblWelcomeSpseHeader.Name = "lblWelcomeSpseHeader";
-            this.lblWelcomeSpseHeader.Padding = new System.Windows.Forms.Padding(5);
-            this.lblWelcomeSpseHeader.Size = new System.Drawing.Size(192, 36);
-            this.lblWelcomeSpseHeader.TabIndex = 5;
-            this.lblWelcomeSpseHeader.Text = "How is this different from SpecialSpellTimer or Cactbot?";
-            // 
-            // lblWelcomeDifferencesHeader
-            // 
-            this.lblWelcomeDifferencesHeader.AutoSize = true;
-            this.lblWelcomeDifferencesHeader.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.lblWelcomeDifferencesHeader.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblWelcomeDifferencesHeader.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
-            this.lblWelcomeDifferencesHeader.Location = new System.Drawing.Point(3, 103);
-            this.lblWelcomeDifferencesHeader.Name = "lblWelcomeDifferencesHeader";
-            this.lblWelcomeDifferencesHeader.Padding = new System.Windows.Forms.Padding(5);
-            this.lblWelcomeDifferencesHeader.Size = new System.Drawing.Size(191, 36);
-            this.lblWelcomeDifferencesHeader.TabIndex = 4;
-            this.lblWelcomeDifferencesHeader.Text = "How is this different from usual ACT triggers?";
+            this.lblWelcomeStartHeader.AutoSize = true;
+            this.lblWelcomeStartHeader.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lblWelcomeStartHeader.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblWelcomeStartHeader.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
+            this.lblWelcomeStartHeader.Location = new System.Drawing.Point(3, 78);
+            this.lblWelcomeStartHeader.Name = "lblWelcomeStartHeader";
+            this.lblWelcomeStartHeader.Padding = new System.Windows.Forms.Padding(5);
+            this.lblWelcomeStartHeader.Size = new System.Drawing.Size(347, 36);
+            this.lblWelcomeStartHeader.TabIndex = 8;
+            this.lblWelcomeStartHeader.Text = "Where can I find triggers to use in Triggernometry?";
             // 
             // lblWelcomeThanks
             // 
@@ -928,7 +880,7 @@
             this.lblWelcomeThanks.Location = new System.Drawing.Point(3, 0);
             this.lblWelcomeThanks.Margin = new System.Windows.Forms.Padding(3, 0, 3, 30);
             this.lblWelcomeThanks.Name = "lblWelcomeThanks";
-            this.lblWelcomeThanks.Size = new System.Drawing.Size(389, 50);
+            this.lblWelcomeThanks.Size = new System.Drawing.Size(701, 25);
             this.lblWelcomeThanks.TabIndex = 0;
             this.lblWelcomeThanks.Text = "Thank you for installing Triggernometry!";
             this.lblWelcomeThanks.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -938,39 +890,33 @@
             this.lblWelcomeIntro.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.lblWelcomeIntro, 2);
             this.lblWelcomeIntro.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblWelcomeIntro.Location = new System.Drawing.Point(3, 80);
+            this.lblWelcomeIntro.Location = new System.Drawing.Point(3, 55);
             this.lblWelcomeIntro.Margin = new System.Windows.Forms.Padding(3, 0, 3, 10);
             this.lblWelcomeIntro.Name = "lblWelcomeIntro";
-            this.lblWelcomeIntro.Size = new System.Drawing.Size(389, 13);
+            this.lblWelcomeIntro.Size = new System.Drawing.Size(701, 13);
             this.lblWelcomeIntro.TabIndex = 1;
             this.lblWelcomeIntro.Text = "Here are some answers to commonly asked questions to get you started:";
             this.lblWelcomeIntro.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lblWelcomeDifferences
-            // 
-            this.lblWelcomeDifferences.AutoSize = true;
-            this.lblWelcomeDifferences.Location = new System.Drawing.Point(3, 139);
-            this.lblWelcomeDifferences.Name = "lblWelcomeDifferences";
-            this.lblWelcomeDifferences.Padding = new System.Windows.Forms.Padding(10);
-            this.lblWelcomeDifferences.Size = new System.Drawing.Size(190, 124);
-            this.lblWelcomeDifferences.TabIndex = 6;
-            this.lblWelcomeDifferences.Text = resources.GetString("lblWelcomeDifferences.Text");
-            // 
             // pictureBox1
             // 
+            this.pictureBox1.BackColor = System.Drawing.Color.White;
+            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(20, 527);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(20, 0, 0, 10);
+            this.pictureBox1.Location = new System.Drawing.Point(20, 212);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(20, 0, 20, 10);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(177, 16);
+            this.tableLayoutPanel1.SetRowSpan(this.pictureBox1, 3);
+            this.pictureBox1.Size = new System.Drawing.Size(313, 124);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 12;
             this.pictureBox1.TabStop = false;
             // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(0, 713);
+            this.linkLabel1.Location = new System.Drawing.Point(353, 346);
             this.linkLabel1.Margin = new System.Windows.Forms.Padding(0);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Padding = new System.Windows.Forms.Padding(17, 0, 0, 0);
@@ -1005,13 +951,28 @@
             this.tlsStatus.Size = new System.Drawing.Size(39, 17);
             this.tlsStatus.Text = "Ready";
             // 
-            // ctxReadme
+            // panel3
             // 
-            this.ctxReadme.Image = ((System.Drawing.Image)(resources.GetObject("ctxReadme.Image")));
-            this.ctxReadme.Name = "ctxReadme";
-            this.ctxReadme.Size = new System.Drawing.Size(180, 22);
-            this.ctxReadme.Text = "Open instructions";
-            this.ctxReadme.Click += new System.EventHandler(this.ctxReadme_Click);
+            this.panel3.AutoSize = true;
+            this.panel3.BackColor = System.Drawing.SystemColors.Info;
+            this.panel3.Controls.Add(this.btnCloseWelcome);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel3.Location = new System.Drawing.Point(0, 30);
+            this.panel3.Name = "panel3";
+            this.panel3.Padding = new System.Windows.Forms.Padding(5);
+            this.panel3.Size = new System.Drawing.Size(707, 60);
+            this.panel3.TabIndex = 17;
+            // 
+            // panel4
+            // 
+            this.panel4.AutoSize = true;
+            this.panel4.Controls.Add(this.chkWelcome);
+            this.panel4.Controls.Add(this.panel3);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel4.Location = new System.Drawing.Point(30, 465);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(707, 90);
+            this.panel4.TabIndex = 2;
             // 
             // treeView1
             // 
@@ -1025,7 +986,7 @@
             this.treeView1.Name = "treeView1";
             this.treeView1.SelectedImageIndex = 0;
             this.treeView1.ShowNodeToolTips = true;
-            this.treeView1.Size = new System.Drawing.Size(800, 332);
+            this.treeView1.Size = new System.Drawing.Size(474, 332);
             this.treeView1.TabIndex = 2;
             this.treeView1.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterCheck);
             this.treeView1.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeCollapse);
@@ -1051,16 +1012,18 @@
             this.toolStrip1.PerformLayout();
             this.pnlUi.ResumeLayout(false);
             this.pnlWelcome.ResumeLayout(false);
+            this.pnlWelcome.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1115,18 +1078,13 @@
         internal System.Windows.Forms.Panel pnlWelcome;
         private System.Windows.Forms.Label lblWelcomeThanks;
         private System.Windows.Forms.Label lblWelcomeIntro;
-        private System.Windows.Forms.Label lblWelcomeSpseHeader;
-        private System.Windows.Forms.Label lblWelcomeDifferencesHeader;
-        private System.Windows.Forms.Label lblWelcomeDifferences;
-        private System.Windows.Forms.Label lblWelcomeSpse;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblWelcomeImport;
-        private System.Windows.Forms.Label lblWelcomeCreate;
+        private System.Windows.Forms.Label lblWelcomeStart;
         private System.Windows.Forms.Label lblWelcomeImportHeader;
-        private System.Windows.Forms.Label lblWelcomeCreateHeader;
+        private System.Windows.Forms.Label lblWelcomeStartHeader;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnCloseWelcome;
         private System.Windows.Forms.CheckBox chkWelcome;
         private System.Windows.Forms.Label lblWelcomeResources;
@@ -1157,5 +1115,7 @@
         public System.Windows.Forms.Button btnCornerPopup;
         private System.Windows.Forms.ToolStripMenuItem btnSearch;
         private System.Windows.Forms.ToolStripMenuItem ctxReadme;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panel4;
     }
 }

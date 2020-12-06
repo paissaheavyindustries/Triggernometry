@@ -269,10 +269,12 @@ namespace Triggernometry
 
         internal bool isnew;
         internal DateTime lastWrite;
+        internal string corruptRecoveryError;
 
         public Configuration()
         {
             Version = 1;
+            corruptRecoveryError = "";
             UpdateNotifications = UpdateNotificationsEnum.Undefined;
             DefaultRepository = UpdateNotificationsEnum.Undefined;
             Root = new Folder();
