@@ -42,6 +42,7 @@ namespace Scarborough
         internal Triggernometry.RealPlugin plug { get; set; }
 
         internal bool Changed { get; set; }
+        internal bool InvalidSize { get; set; }
 
         private int _Left;
         internal int Left
@@ -251,8 +252,35 @@ namespace Scarborough
             }
         }
 
-        protected void AdjustSurface()
-        {            
+        protected void AdjustVisibility()
+        {
+            if (_window == null)
+            {
+                return;
+            }
+            if (_window.IsVisible == true)
+            {
+                if (InvalidSize == true || Owner.RenderingActive == false)
+                {
+                    _window.Hide();
+                }
+            }
+            else
+            {
+                if (InvalidSize == false && Owner.RenderingActive == true)
+                {
+                    _window.Show();
+                }
+            }
+        }
+
+        protected bool AdjustSurface()
+        {
+            InvalidSize = (Width <= 0 || Height <= 0);
+            if (InvalidSize == true)
+            {
+                return false;
+            }
             if (_window == null)
             {
                 _window = new OverlayWindow(Left, Top, Width, Height)
@@ -287,22 +315,7 @@ namespace Scarborough
                     _graphics.Resize(Width, Height);
                 }
             }
-        }
-
-        internal void Show()
-        {
-            if (_window != null)
-            {
-                _window.Show();
-            }
-        }
-
-        internal void Hide()
-        {
-            if (_window != null)
-            {
-                _window.Hide();
-            }
+            return true;
         }
 
     }

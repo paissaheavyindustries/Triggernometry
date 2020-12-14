@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
@@ -399,7 +399,7 @@ namespace Triggernometry.PluginBridges
                 Int64 now = DateTime.Now.Ticks;
                 if (((now - old) / TimeSpan.TicksPerMillisecond) < 1000)
                 {
-                    //return;
+                    return;
                 }
                 Interlocked.Exchange(ref LastCheck, now);
                 object plug = null;
@@ -442,13 +442,21 @@ namespace Triggernometry.PluginBridges
                             phase = 5;
                             PopulateClumpFromCombatant(PartyMembers[ex], cmx, 1, nump == 2 ? 1 : 0, ex + 1);
                             phase = 6;
+                            for (int i = 0; i < ex; i++)
+                            {
+                                if (PartyMembers[ex].CompareTo(PartyMembers[i]) == 0)
+                                {
+                                    ex--;
+                                    break;
+                                }
+                            }
                             ex++;
                             if (ex >= PartyMembers.Count)
                             {
                                 // full party found
                                 break;
                             }
-                        }
+                        }   
                     }
                     phase = 7;
                     NumPartyMembers = ex;

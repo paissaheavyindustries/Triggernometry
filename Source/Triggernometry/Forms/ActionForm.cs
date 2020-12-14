@@ -325,6 +325,10 @@ namespace Triggernometry.Forms
                 chkOverrideDesc.Checked = false;
                 expCallbackName.Expression = "";
                 expCallbackParam.Expression = "";
+                cbxMouseOp.SelectedIndex = 0;
+                cbxMouseCoord.SelectedIndex = 0;
+                expMouseX.Expression = "";
+                expMouseY.Expression = "";
             }
             else
             {
@@ -543,6 +547,10 @@ namespace Triggernometry.Forms
                 chkOverrideDesc.Checked = a._DescriptionOverride;
                 expCallbackName.Expression = a._NamedCallbackName;
                 expCallbackParam.Expression = a._NamedCallbackParam;
+                cbxMouseOp.SelectedIndex = (int)a._MouseOpType;
+                cbxMouseCoord.SelectedIndex = (int)a._MouseCoordType;
+                expMouseX.Expression = a._MouseX;
+                expMouseY.Expression = a._MouseY;
             }
         }
 
@@ -747,6 +755,10 @@ namespace Triggernometry.Forms
             a._DescriptionOverride = chkOverrideDesc.Checked;
             a._NamedCallbackName = expCallbackName.Expression;
             a._NamedCallbackParam = expCallbackParam.Expression;
+            a._MouseOpType = (Action.MouseOpEnum)cbxMouseOp.SelectedIndex;
+            a._MouseCoordType = (Action.MouseCoordEnum)cbxMouseCoord.SelectedIndex;
+            a._MouseX = expMouseX.Expression;
+            a._MouseY = expMouseY.Expression;
         }
 
         private void TestAction(bool liveValues)

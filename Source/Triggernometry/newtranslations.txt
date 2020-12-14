@@ -1,35 +1,66 @@
-﻿RepositoryForm/lblAudioOverride
-Audio output setting override
+﻿removed: ----------------------
 
-RepositoryForm/cbxAudioOverride[As defined in repository]
-As defined in repository
+Plugin/UserInterface/lblWelcomeSpseHeader
+Plugin/UserInterface/lblWelcomeSpse
+Plugin/UserInterface/lblWelcomeDifferencesHeader
+Plugin/UserInterface/lblWelcomeDifferences
+Plugin/UserInterface/lblWelcomeCreateHeader
+Plugin/UserInterface/lblWelcomeCreate
 
-RepositoryForm/cbxAudioOverride[Audio override setting always on]
-Audio override setting always on
+updated: ----------------------
 
-RepositoryForm/cbxAudioOverride[Audio override setting always off]
-Audio override setting always off
+internal/Plugin/repoexportnull
+Data for repository {0} could not be unserialized, make sure you are running the latest version of Triggernometry
 
-ConfigurationForm/cbxTestLive
-Set testing with live values as the default action test method
+added: ----------------------
 
-ConfigurationForm/cbxTestLive
-Enable aura hardware acceleration
+ActionForm/cbxActionType[Mouse operation]
+Mouse operation
 
-ConfigurationForm/lblMonitorWindow
-Monitor window for showing/hiding aura
+ActionForm/cbxMouseOp[Move mouse]
+Move mouse
 
-ConfigurationForm/grpUserInterface
- User interface 
+ActionForm/cbxMouseOp[Left click]
+Left click
 
-ActionForm/lblReadOnly
-You are in read-only mode, as the configuration of remote triggers can't be edited locally. If you wish to edit the action, you will need to make a local copy of the trigger.
+ActionForm/cbxMouseOp[Middle click]
+Middle click
 
-internal/Context/lastindexofargerror
-Lastindexof function requires one argument, {0} were given
+ActionForm/cbxMouseOp[Right click]
+Right click
 
-Plugin/UserInterface/ctxCollapseAll
-Collapse all
+ActionForm/cbxMouseCoord[Absolute]
+Absolute
 
-Plugin/UserInterface/ctxExpand
-Expand all
+ActionForm/cbxMouseCoord[Relative]
+Relative
+
+internal/Action/descmousecoordabsolute
+to absolute coordinates
+
+internal/Action/descmousecoordrelative
+by relative coordinates
+
+internal/Action/descmousemove
+Move mouse {0} X: {1} Y: {2}
+
+internal/Action/descmouselmb
+Move mouse {0} X: {1} Y: {2} and left click
+
+internal/Action/descmousemmb
+Move mouse {0} X: {1} Y: {2} and middle click
+
+internal/Action/descmousermb
+Move mouse {0} X: {1} Y: {2} and right click
+
+internal/Plugin/cfgcorrupted
+Configuration file '{0}' appears to have been corrupted, loading previous configuration file '{1}'
+
+Plugin/UserInterface/lblWelcomeStartHeader
+Where can I find triggers to use in Triggernometry?
+
+Plugin/UserInterface/lblWelcomeStart
+When you start Triggernometry for the first time, you will generally see an empty view with "Local Triggers" and "Remote Triggers".&#xD;&#xA;&#xD;&#xA;To access a lot of premade triggers for Triggernometry, you can right-click on "Remote Triggers", and choose to add a repository from list:
+
+internal/Context/compareargerror
+Compare function requires one or two arguments, {0} were given

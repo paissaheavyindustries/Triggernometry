@@ -38,7 +38,8 @@ namespace Triggernometry
             TableVariable,
             Mutex,
             Placeholder,
-            NamedCallback
+            NamedCallback,
+            Mouse
         }
 
         public enum VariableOpEnum
@@ -210,6 +211,20 @@ namespace Triggernometry
             Underline = 4,
             Strikeout = 8,
             Outline = 16
+        }
+
+        public enum MouseOpEnum
+        {
+            Move,
+            LeftClick,
+            MiddleClick,
+            RightClick
+        }
+
+        public enum MouseCoordEnum
+        {
+            Absolute,
+            Relative
         }
 
         #endregion
@@ -1217,6 +1232,87 @@ namespace Triggernometry
             set
             {
                 _MessageBoxText = value;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Mouse
+
+        internal MouseOpEnum _MouseOpType { get; set; } = MouseOpEnum.Move;
+        [XmlAttribute]
+        public string MouseOpType
+        {
+            get
+            {
+                if (_MouseOpType != MouseOpEnum.Move)
+                {
+                    return _MouseOpType.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _MouseOpType = (MouseOpEnum)Enum.Parse(typeof(MouseOpEnum), value);
+            }
+        }
+
+        internal MouseCoordEnum _MouseCoordType { get; set; } = MouseCoordEnum.Absolute;
+        [XmlAttribute]
+        public string MouseCoordType
+        {
+            get
+            {
+                if (_MouseCoordType != MouseCoordEnum.Absolute)
+                {
+                    return _MouseCoordType.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _MouseCoordType = (MouseCoordEnum)Enum.Parse(typeof(MouseCoordEnum), value);
+            }
+        }
+
+        internal string _MouseX = "0";
+        [XmlAttribute]
+        public string MouseX
+        {
+            get
+            {
+                if (_MouseX == "0")
+                {
+                    return null;
+                }
+                return _MouseX.ToString();
+            }
+            set
+            {
+                _MouseX = value;
+            }
+        }
+
+        internal string _MouseY = "0";
+        [XmlAttribute]
+        public string MouseY
+        {
+            get
+            {
+                if (_MouseY == "0")
+                {
+                    return null;
+                }
+                return _MouseY.ToString();
+            }
+            set
+            {
+                _MouseY = value;
             }
         }
 

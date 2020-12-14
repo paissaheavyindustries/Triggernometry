@@ -1835,6 +1835,10 @@ namespace Triggernometry.CustomControls
 
         private void UpdateRepository(TreeNode tnupdate)
         {
+            if (tnupdate == null)
+            {
+                return;
+            }
             if (tnupdate.Tag is RepositoryFolder)
             {
                 RepositoryFolder rfo = (RepositoryFolder)tnupdate.Tag;

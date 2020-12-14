@@ -787,6 +787,25 @@ namespace Triggernometry
                                                 val = "" + funcval.IndexOf(args[0]);
                                             }
                                             break;
+                                        case "compare": // compare(stringtocompare) or compare(stringtocompare, ignorecase)
+                                            if (argc != 1 && argc != 2)
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/compareargerror", "Compare function requires one or two arguments, {0} were given", argc));
+                                            }
+                                            else
+                                            {
+                                                switch (argc)
+                                                {
+                                                    case 1:
+                                                        val = "" + String.Compare(funcval, args[0], true);
+                                                        break;
+                                                    case 2:
+                                                        bool ignoreCase = bool.Parse(args[1]);
+                                                        val = "" + String.Compare(funcval, args[0], ignoreCase);
+                                                        break;
+                                                }                                                                                                
+                                            }
+                                            break;
                                         case "lastindexof": // lastindexof(stringtosearch)
                                             if (argc != 1)
                                             {
