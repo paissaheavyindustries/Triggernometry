@@ -1058,7 +1058,7 @@ namespace Triggernometry
                                     AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/warndiscordtrunc", "Discord message too long, capping to {0}", msg.Length));
                                 }
                                 var wh = new JavaScriptSerializer().Serialize(new { content = msg, tts = true });
-                                PostJson(ctx, url, wh, true);
+                                SendJson(ctx, HTTPMethodEnum.POST, url, wh, true);
                             }
                             else
                             {
@@ -1068,7 +1068,7 @@ namespace Triggernometry
                                     AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/warndiscordtrunc", "Discord message too long, capping to {0}", msg.Length));
                                 }
                                 var wh = new JavaScriptSerializer().Serialize(new { content = msg });
-                                PostJson(ctx, url, wh, true);
+                                SendJson(ctx, HTTPMethodEnum.POST, url, wh, true);
                             }
                         }
                         break;
@@ -1412,13 +1412,13 @@ namespace Triggernometry
                                 }
                                 if (fromcache == false)
                                 {
-                                    response = PostJson(ctx, endpoint, payload, false);
+                                    response = SendJson(ctx, _JsonOperationType, endpoint, payload, false);
                                     File.WriteAllText(fn, response);
                                 }
                             }
                             else
                             {
-                                response = PostJson(ctx, endpoint, payload, false);
+                                response = SendJson(ctx, _JsonOperationType, endpoint, payload, false);
                             }
                             if (_JsonFiringExpression != null && _JsonFiringExpression.Trim().Length > 0)
                             {
@@ -2485,6 +2485,7 @@ namespace Triggernometry
             a._OBSSceneName = _OBSSceneName;
             a._OBSSourceName = _OBSSourceName;
             a._LogProcess = _LogProcess;
+            a._JsonOperationType = _JsonOperationType;
             a._JsonCacheRequest = _JsonCacheRequest;
             a._JsonEndpointExpression = _JsonEndpointExpression;
             a._JsonFiringExpression = _JsonFiringExpression;
@@ -2520,18 +2521,26 @@ namespace Triggernometry
             a._MouseY = _MouseY;
         }
 
-        private string PostJson(Context ctx, string url, string json, bool expectNoContent)
+        private string SendJson(Context ctx, Action.HTTPMethodEnum method, string url, string json, bool expectNoContent)
         {
             try
             {                
                 var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
-                httpWebRequest.ContentType = "application/json";
-                httpWebRequest.Method = "POST";
-                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                switch (method)
                 {
-                    streamWriter.Write(json);
-                    streamWriter.Flush();
-                    streamWriter.Close();
+                    case HTTPMethodEnum.POST:
+                        httpWebRequest.ContentType = "application/json";
+                        httpWebRequest.Method = "POST";
+                        using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                        {
+                            streamWriter.Write(json);
+                            streamWriter.Flush();
+                            streamWriter.Close();
+                        }
+                        break;
+                    case HTTPMethodEnum.GET:
+                        httpWebRequest.Method = "GET";
+                        break;
                 }
                 var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
                 if (httpResponse.StatusCode != HttpStatusCode.NoContent && expectNoContent == true)

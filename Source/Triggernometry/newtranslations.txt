@@ -14,6 +14,12 @@ Data for repository {0} could not be unserialized, make sure you are running the
 
 added: ----------------------
 
+ActionForm/cbsJsonType[POST]
+POST
+
+ActionForm/cbsJsonType[GET]
+GET
+
 ActionForm/cbxActionType[Mouse operation]
 Mouse operation
 

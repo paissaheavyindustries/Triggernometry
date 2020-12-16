@@ -274,6 +274,7 @@ namespace Triggernometry.Forms
                 expTextAuraHTick.Expression = "";
                 expTextAuraOTick.Expression = "";
                 expTextAuraTTLTick.Expression = "";
+                cbxJsonType.SelectedIndex = 0;
                 expJsonEndpoint.Expression = "";
                 expJsonFiring.Expression = "";
                 expJsonPayload.Expression = "";
@@ -442,6 +443,7 @@ namespace Triggernometry.Forms
                 expObsSceneName.Expression = a._OBSSceneName;
                 expObsSourceName.Expression = a._OBSSourceName;
                 cbxTextAuraOp.SelectedIndex = (int)a._TextAuraOp;
+                cbxJsonType.SelectedIndex = (int)a._JsonOperationType;
                 expJsonEndpoint.Expression = a._JsonEndpointExpression;
                 expJsonFiring.Expression = a._JsonFiringExpression;
                 expJsonPayload.Expression = a._JsonPayloadExpression;
@@ -672,6 +674,7 @@ namespace Triggernometry.Forms
             a._OBSControlType = (Action.ObsControlTypeEnum)cbxObsOpType.SelectedIndex;
             a._OBSSceneName = expObsSceneName.Expression;
             a._OBSSourceName = expObsSourceName.Expression;
+            a._JsonOperationType = (Action.HTTPMethodEnum)cbxJsonType.SelectedIndex;
             a._JsonEndpointExpression = expJsonEndpoint.Expression;
             a._JsonFiringExpression = expJsonFiring.Expression;
             a._JsonPayloadExpression = expJsonPayload.Expression;

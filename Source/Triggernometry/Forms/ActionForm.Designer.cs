@@ -353,6 +353,8 @@
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.expressionTextBox1 = new Triggernometry.CustomControls.ExpressionTextBox();
             this.expressionTextBox2 = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.lblJsonType = new System.Windows.Forms.Label();
+            this.cbxJsonType = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.grpGeneralSettings.SuspendLayout();
             this.tbcActionSettings.SuspendLayout();
@@ -3419,24 +3421,28 @@
             this.jsonTableLayout.ColumnCount = 2;
             this.jsonTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.jsonTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.jsonTableLayout.Controls.Add(this.cbxJsonCache, 0, 3);
-            this.jsonTableLayout.Controls.Add(this.lblJsonInstructions, 1, 4);
-            this.jsonTableLayout.Controls.Add(this.expJsonFiring, 1, 2);
-            this.jsonTableLayout.Controls.Add(this.lblJsonFiring, 0, 2);
-            this.jsonTableLayout.Controls.Add(this.expJsonPayload, 1, 1);
-            this.jsonTableLayout.Controls.Add(this.lblJsonPayload, 0, 1);
+            this.jsonTableLayout.Controls.Add(this.cbxJsonType, 1, 1);
+            this.jsonTableLayout.Controls.Add(this.lblJsonType, 0, 1);
+            this.jsonTableLayout.Controls.Add(this.cbxJsonCache, 0, 4);
+            this.jsonTableLayout.Controls.Add(this.lblJsonInstructions, 1, 5);
+            this.jsonTableLayout.Controls.Add(this.expJsonFiring, 1, 3);
+            this.jsonTableLayout.Controls.Add(this.lblJsonFiring, 0, 3);
+            this.jsonTableLayout.Controls.Add(this.expJsonPayload, 1, 2);
+            this.jsonTableLayout.Controls.Add(this.lblJsonPayload, 0, 2);
             this.jsonTableLayout.Controls.Add(this.lblJsonEndpoint, 0, 0);
             this.jsonTableLayout.Controls.Add(this.expJsonEndpoint, 1, 0);
             this.jsonTableLayout.Dock = System.Windows.Forms.DockStyle.Top;
             this.jsonTableLayout.Location = new System.Drawing.Point(0, 0);
             this.jsonTableLayout.Name = "jsonTableLayout";
-            this.jsonTableLayout.RowCount = 5;
+            this.jsonTableLayout.RowCount = 7;
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.jsonTableLayout.Size = new System.Drawing.Size(542, 216);
+            this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.jsonTableLayout.Size = new System.Drawing.Size(542, 263);
             this.jsonTableLayout.TabIndex = 3;
             // 
             // cbxJsonCache
@@ -3445,7 +3451,7 @@
             this.cbxJsonCache.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.jsonTableLayout.SetColumnSpan(this.cbxJsonCache, 3);
             this.cbxJsonCache.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cbxJsonCache.Location = new System.Drawing.Point(3, 83);
+            this.cbxJsonCache.Location = new System.Drawing.Point(3, 110);
             this.cbxJsonCache.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.cbxJsonCache.Name = "cbxJsonCache";
             this.cbxJsonCache.Size = new System.Drawing.Size(537, 17);
@@ -3456,7 +3462,7 @@
             // lblJsonInstructions
             // 
             this.lblJsonInstructions.AutoSize = true;
-            this.lblJsonInstructions.Location = new System.Drawing.Point(142, 105);
+            this.lblJsonInstructions.Location = new System.Drawing.Point(142, 132);
             this.lblJsonInstructions.Name = "lblJsonInstructions";
             this.lblJsonInstructions.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
             this.lblJsonInstructions.Size = new System.Drawing.Size(395, 111);
@@ -3469,7 +3475,7 @@
             this.expJsonFiring.Dock = System.Windows.Forms.DockStyle.Top;
             this.expJsonFiring.Expression = "";
             this.expJsonFiring.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expJsonFiring.Location = new System.Drawing.Point(142, 55);
+            this.expJsonFiring.Location = new System.Drawing.Point(142, 82);
             this.expJsonFiring.Name = "expJsonFiring";
             this.expJsonFiring.ReadOnly = false;
             this.expJsonFiring.Size = new System.Drawing.Size(397, 20);
@@ -3479,7 +3485,7 @@
             // 
             this.lblJsonFiring.AutoSize = true;
             this.lblJsonFiring.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblJsonFiring.Location = new System.Drawing.Point(3, 52);
+            this.lblJsonFiring.Location = new System.Drawing.Point(3, 79);
             this.lblJsonFiring.Name = "lblJsonFiring";
             this.lblJsonFiring.Size = new System.Drawing.Size(133, 26);
             this.lblJsonFiring.TabIndex = 19;
@@ -3492,7 +3498,7 @@
             this.expJsonPayload.Dock = System.Windows.Forms.DockStyle.Top;
             this.expJsonPayload.Expression = "";
             this.expJsonPayload.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expJsonPayload.Location = new System.Drawing.Point(142, 29);
+            this.expJsonPayload.Location = new System.Drawing.Point(142, 56);
             this.expJsonPayload.Name = "expJsonPayload";
             this.expJsonPayload.ReadOnly = false;
             this.expJsonPayload.Size = new System.Drawing.Size(397, 20);
@@ -3502,7 +3508,7 @@
             // 
             this.lblJsonPayload.AutoSize = true;
             this.lblJsonPayload.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblJsonPayload.Location = new System.Drawing.Point(3, 26);
+            this.lblJsonPayload.Location = new System.Drawing.Point(3, 53);
             this.lblJsonPayload.Name = "lblJsonPayload";
             this.lblJsonPayload.Size = new System.Drawing.Size(133, 26);
             this.lblJsonPayload.TabIndex = 15;
@@ -4797,6 +4803,30 @@
             this.expressionTextBox2.Size = new System.Drawing.Size(474, 20);
             this.expressionTextBox2.TabIndex = 14;
             // 
+            // lblJsonType
+            // 
+            this.lblJsonType.AutoSize = true;
+            this.lblJsonType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblJsonType.Location = new System.Drawing.Point(3, 26);
+            this.lblJsonType.Name = "lblJsonType";
+            this.lblJsonType.Size = new System.Drawing.Size(133, 27);
+            this.lblJsonType.TabIndex = 23;
+            this.lblJsonType.Text = "HTTP method";
+            this.lblJsonType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbxJsonType
+            // 
+            this.cbxJsonType.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxJsonType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxJsonType.FormattingEnabled = true;
+            this.cbxJsonType.Items.AddRange(new object[] {
+            "POST",
+            "GET"});
+            this.cbxJsonType.Location = new System.Drawing.Point(142, 29);
+            this.cbxJsonType.Name = "cbxJsonType";
+            this.cbxJsonType.Size = new System.Drawing.Size(397, 21);
+            this.cbxJsonType.TabIndex = 24;
+            // 
             // ActionForm
             // 
             this.AcceptButton = this.btnOk;
@@ -5271,5 +5301,7 @@
         private System.Windows.Forms.Label lblMouseCoord;
         private System.Windows.Forms.Label lblMouseOp;
         private System.Windows.Forms.ComboBox cbxMouseOp;
+        private System.Windows.Forms.ComboBox cbxJsonType;
+        private System.Windows.Forms.Label lblJsonType;
     }
 }

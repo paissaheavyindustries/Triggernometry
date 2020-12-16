@@ -227,6 +227,12 @@ namespace Triggernometry
             Relative
         }
 
+        public enum HTTPMethodEnum
+        {
+            POST,
+            GET
+        }
+
         #endregion
 
         #region Action specific properties - Beep
@@ -787,6 +793,24 @@ namespace Triggernometry
 
         #endregion
         #region Action specific properties - JSON
+
+        internal HTTPMethodEnum _JsonOperationType { get; set; } = HTTPMethodEnum.POST;
+        [XmlAttribute]
+        public string JsonOperationType
+        {
+            get
+            {
+                if (_JsonOperationType == HTTPMethodEnum.POST)
+                {
+                    return null;
+                }
+                return _JsonOperationType.ToString();
+            }
+            set
+            {
+                _JsonOperationType = (HTTPMethodEnum)Enum.Parse(typeof(HTTPMethodEnum), value);
+            }
+        }
 
         internal bool _JsonCacheRequest { get; set; } = false;
         [XmlAttribute]
