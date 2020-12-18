@@ -275,6 +275,7 @@ namespace Triggernometry.Forms
                 expTextAuraHTick.Expression = "";
                 expTextAuraOTick.Expression = "";
                 expTextAuraTTLTick.Expression = "";
+                cbxJsonType.SelectedIndex = 0;
                 expJsonEndpoint.Expression = "";
                 expJsonFiring.Expression = "";
                 expJsonPayload.Expression = "";
@@ -326,6 +327,10 @@ namespace Triggernometry.Forms
                 chkOverrideDesc.Checked = false;
                 expCallbackName.Expression = "";
                 expCallbackParam.Expression = "";
+                cbxMouseOp.SelectedIndex = 0;
+                cbxMouseCoord.SelectedIndex = 0;
+                expMouseX.Expression = "";
+                expMouseY.Expression = "";
             }
             else
             {
@@ -440,6 +445,7 @@ namespace Triggernometry.Forms
                 expObsSourceName.Expression = a._OBSSourceName;
                 expObsJSONPayload.Expression = a._OBSJSONPayload;
                 cbxTextAuraOp.SelectedIndex = (int)a._TextAuraOp;
+                cbxJsonType.SelectedIndex = (int)a._JsonOperationType;
                 expJsonEndpoint.Expression = a._JsonEndpointExpression;
                 expJsonFiring.Expression = a._JsonFiringExpression;
                 expJsonPayload.Expression = a._JsonPayloadExpression;
@@ -545,6 +551,10 @@ namespace Triggernometry.Forms
                 chkOverrideDesc.Checked = a._DescriptionOverride;
                 expCallbackName.Expression = a._NamedCallbackName;
                 expCallbackParam.Expression = a._NamedCallbackParam;
+                cbxMouseOp.SelectedIndex = (int)a._MouseOpType;
+                cbxMouseCoord.SelectedIndex = (int)a._MouseCoordType;
+                expMouseX.Expression = a._MouseX;
+                expMouseY.Expression = a._MouseY;
             }
         }
 
@@ -667,6 +677,7 @@ namespace Triggernometry.Forms
             a._OBSSceneName = expObsSceneName.Expression;
             a._OBSSourceName = expObsSourceName.Expression;
             a._OBSJSONPayload = expObsJSONPayload.Expression;
+            a._JsonOperationType = (Action.HTTPMethodEnum)cbxJsonType.SelectedIndex;
             a._JsonEndpointExpression = expJsonEndpoint.Expression;
             a._JsonFiringExpression = expJsonFiring.Expression;
             a._JsonPayloadExpression = expJsonPayload.Expression;
@@ -750,6 +761,10 @@ namespace Triggernometry.Forms
             a._DescriptionOverride = chkOverrideDesc.Checked;
             a._NamedCallbackName = expCallbackName.Expression;
             a._NamedCallbackParam = expCallbackParam.Expression;
+            a._MouseOpType = (Action.MouseOpEnum)cbxMouseOp.SelectedIndex;
+            a._MouseCoordType = (Action.MouseCoordEnum)cbxMouseCoord.SelectedIndex;
+            a._MouseX = expMouseX.Expression;
+            a._MouseY = expMouseY.Expression;
         }
 
         private void TestAction(bool liveValues)

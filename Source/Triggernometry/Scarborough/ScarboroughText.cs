@@ -203,7 +203,11 @@ namespace Scarborough
             {
                 if (_window == null)
                 {
-                    AdjustSurface();
+                    if (AdjustSurface() == false)
+                    {
+                        AdjustVisibility();
+                        return;
+                    }
                 }
                 LoadFontOnDemand();
                 NeedFont = false;
@@ -229,10 +233,15 @@ namespace Scarborough
             {
                 return;
             }
-            AdjustSurface();
+            if (AdjustSurface() == false)
+            {
+                AdjustVisibility();
+                return;
+            }
+            AdjustVisibility();
             NeedRender = false;
             _graphics.BeginScene();
-            if (Owner.RenderingActive == false)
+            if (Owner.RenderingActive == false || InvalidSize == true)
             {
                 Color tempBgColor = new Color();
                 _graphics.ClearScene(tempBgColor);

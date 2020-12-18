@@ -125,7 +125,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADU
-        EAAAAk1TRnQBSQFMAgEBCAEAAQgBCgEIAQoBEgEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EAAAAk1TRnQBSQFMAgEBCAEAAVgBCgFYAQoBEgEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABSAMAATADAAEBAQABCAUAAYABDRgAAYACAAGAAwACgAEAAYADAAGAAQABgAEAAoACAAPAAQABwAHc
         AcABAAHwAcoBpgEAATMFAAEzAQABMwEAATMBAAIzAgADFgEAAxwBAAMiAQADKQEAA1UBAANNAQADQgEA
         AzkBAAGAAXwB/wEAAlAB/wEAAZMBAAHWAQAB/wHsAcwBAAHGAdYB7wEAAdYC5wEAAZABqQGtAgAB/wEz
@@ -875,30 +875,112 @@
 
 This is the button you should be looking out for:</value>
   </data>
-  <data name="lblWelcomeCreate.Text" xml:space="preserve">
-    <value>When you close this Welcome Screen, you will see Triggernometry's main user interface. Simply select the folder where you want to create a trigger to (or Root), and hit the Add button in the top-left corner.
+  <data name="lblWelcomeStart.Text" xml:space="preserve">
+    <value>When you start Triggernometry for the first time, you will generally see an empty view with "Local Triggers" and "Remote Triggers".
 
-This is the button you should be looking out for:</value>
-  </data>
-  <data name="lblWelcomeSpse.Text" xml:space="preserve">
-    <value>Plugins such as SpecialSpellTimer and Cactbot provide great generalized tools and functionality out of the box, with no extra fuss.
-
-Triggernometry is more of a DIY building kit, providing you with accessible options to build your own custom tools and functionality. It doesn't come with timelines or callouts out of the box, and as such it's a little bit more involved to get started with.</value>
-  </data>
-  <data name="lblWelcomeDifferences.Text" xml:space="preserve">
-    <value>Triggernometry provides extended capabilities, such as more action types (auras and such), and conditional execution where certain actions are only taken if conditions are met (for example, player name needs to be something specific).</value>
+To access a lot of premade triggers for Triggernometry, you can right-click on "Remote Triggers", and choose to add a repository from list:</value>
   </data>
   <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAADIAAAAQCAIAAADbObvbAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        EgAACxIB0t1+/AAAAAd0SU1FB+ILEQUYIy6aOgIAAAF3SURBVEhL1ZLBSsNAEIbnoTysz6KnNj6GCBY8
-        pBFE9OxFRAQhbWN7UMQHqEJpm2p78WLrC1RbT/6bnaa76RDBgq0fQ5j5d5P9SEJfa8l/0NouRRs75yg0
-        HK0IRwtCjachCg1HuVQ9Iq/KQxYsbh7GPMwQQwGaWthaHOUQB0p5nlJBzIFLxaPFJTEU+L2Wtgpic+XI
-        YTmt9H8ylWqlhQ2812Hmk/HCSBoVBHMDMcyFcPBD+/22NbprjYyTqfrj8KY5rDe14mSRrrbput1kUikS
-        FSu6Q6o1dC6GWRJtC5waNd9OG4OT+uA46h/V+gfXL6Wr573L3u5F7+z+VdSyXfRh6bHzQ2GTDGIowUJE
-        us98RDih7AQbzG0W+gW4JF7LaQE8iJtPC0jg8xktjkRCPLzc4QF0ynhfIRosmCaJeJMY/gB9WNhaHEmE
-        BVJ+m4eEtq+oEOoOawnK9+e7xDAXQQuVr/UH0Nhia78GIRQajlaEo7U+rKXWePwN8zXqcerxgyUAAAAA
-        SUVORK5CYII=
+        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
+        7t3/ByGA2vGOQ5FfAAAAAElFTkSuQmCC
 </value>
   </data>
   <metadata name="statusStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">

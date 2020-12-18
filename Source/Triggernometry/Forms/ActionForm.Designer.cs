@@ -307,6 +307,16 @@
             this.lblCallbackParam = new System.Windows.Forms.Label();
             this.lblCallbackName = new System.Windows.Forms.Label();
             this.expCallbackName = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.tabMouse = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel25 = new System.Windows.Forms.TableLayoutPanel();
+            this.cbxMouseCoord = new System.Windows.Forms.ComboBox();
+            this.expMouseY = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.lblMouseY = new System.Windows.Forms.Label();
+            this.lblMouseX = new System.Windows.Forms.Label();
+            this.expMouseX = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.lblMouseCoord = new System.Windows.Forms.Label();
+            this.lblMouseOp = new System.Windows.Forms.Label();
+            this.cbxMouseOp = new System.Windows.Forms.ComboBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
@@ -345,6 +355,8 @@
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.expressionTextBox1 = new Triggernometry.CustomControls.ExpressionTextBox();
             this.expressionTextBox2 = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.lblJsonType = new System.Windows.Forms.Label();
+            this.cbxJsonType = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.grpGeneralSettings.SuspendLayout();
             this.tbcActionSettings.SuspendLayout();
@@ -398,6 +410,8 @@
             this.tabPlaceholder.SuspendLayout();
             this.tabNamedCallback.SuspendLayout();
             this.tableLayoutPanel24.SuspendLayout();
+            this.tabMouse.SuspendLayout();
+            this.tableLayoutPanel25.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel6.SuspendLayout();
             this.tbcAction.SuspendLayout();
@@ -475,7 +489,8 @@
             "Table variable operation",
             "Mutex operation",
             "Placeholder",
-            "Named callback operation"});
+            "Named callback operation",
+            "Mouse operation"});
             this.cbxActionType.Location = new System.Drawing.Point(69, 3);
             this.cbxActionType.Name = "cbxActionType";
             this.cbxActionType.Size = new System.Drawing.Size(472, 21);
@@ -530,6 +545,7 @@
             this.tbcActionSettings.Controls.Add(this.tabMutex);
             this.tbcActionSettings.Controls.Add(this.tabPlaceholder);
             this.tbcActionSettings.Controls.Add(this.tabNamedCallback);
+            this.tbcActionSettings.Controls.Add(this.tabMouse);
             this.tbcActionSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbcActionSettings.Location = new System.Drawing.Point(3, 3);
             this.tbcActionSettings.Margin = new System.Windows.Forms.Padding(0);
@@ -3436,24 +3452,28 @@
             this.jsonTableLayout.ColumnCount = 2;
             this.jsonTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.jsonTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.jsonTableLayout.Controls.Add(this.cbxJsonCache, 0, 3);
-            this.jsonTableLayout.Controls.Add(this.lblJsonInstructions, 1, 4);
-            this.jsonTableLayout.Controls.Add(this.expJsonFiring, 1, 2);
-            this.jsonTableLayout.Controls.Add(this.lblJsonFiring, 0, 2);
-            this.jsonTableLayout.Controls.Add(this.expJsonPayload, 1, 1);
-            this.jsonTableLayout.Controls.Add(this.lblJsonPayload, 0, 1);
+            this.jsonTableLayout.Controls.Add(this.cbxJsonType, 1, 1);
+            this.jsonTableLayout.Controls.Add(this.lblJsonType, 0, 1);
+            this.jsonTableLayout.Controls.Add(this.cbxJsonCache, 0, 4);
+            this.jsonTableLayout.Controls.Add(this.lblJsonInstructions, 1, 5);
+            this.jsonTableLayout.Controls.Add(this.expJsonFiring, 1, 3);
+            this.jsonTableLayout.Controls.Add(this.lblJsonFiring, 0, 3);
+            this.jsonTableLayout.Controls.Add(this.expJsonPayload, 1, 2);
+            this.jsonTableLayout.Controls.Add(this.lblJsonPayload, 0, 2);
             this.jsonTableLayout.Controls.Add(this.lblJsonEndpoint, 0, 0);
             this.jsonTableLayout.Controls.Add(this.expJsonEndpoint, 1, 0);
             this.jsonTableLayout.Dock = System.Windows.Forms.DockStyle.Top;
             this.jsonTableLayout.Location = new System.Drawing.Point(0, 0);
             this.jsonTableLayout.Name = "jsonTableLayout";
-            this.jsonTableLayout.RowCount = 5;
+            this.jsonTableLayout.RowCount = 7;
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.jsonTableLayout.Size = new System.Drawing.Size(542, 216);
+            this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.jsonTableLayout.Size = new System.Drawing.Size(542, 263);
             this.jsonTableLayout.TabIndex = 3;
             // 
             // cbxJsonCache
@@ -3462,7 +3482,7 @@
             this.cbxJsonCache.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.jsonTableLayout.SetColumnSpan(this.cbxJsonCache, 3);
             this.cbxJsonCache.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cbxJsonCache.Location = new System.Drawing.Point(3, 83);
+            this.cbxJsonCache.Location = new System.Drawing.Point(3, 110);
             this.cbxJsonCache.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.cbxJsonCache.Name = "cbxJsonCache";
             this.cbxJsonCache.Size = new System.Drawing.Size(537, 17);
@@ -3473,7 +3493,7 @@
             // lblJsonInstructions
             // 
             this.lblJsonInstructions.AutoSize = true;
-            this.lblJsonInstructions.Location = new System.Drawing.Point(142, 105);
+            this.lblJsonInstructions.Location = new System.Drawing.Point(142, 132);
             this.lblJsonInstructions.Name = "lblJsonInstructions";
             this.lblJsonInstructions.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
             this.lblJsonInstructions.Size = new System.Drawing.Size(395, 111);
@@ -3486,7 +3506,7 @@
             this.expJsonFiring.Dock = System.Windows.Forms.DockStyle.Top;
             this.expJsonFiring.Expression = "";
             this.expJsonFiring.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expJsonFiring.Location = new System.Drawing.Point(142, 55);
+            this.expJsonFiring.Location = new System.Drawing.Point(142, 82);
             this.expJsonFiring.Name = "expJsonFiring";
             this.expJsonFiring.ReadOnly = false;
             this.expJsonFiring.Size = new System.Drawing.Size(397, 20);
@@ -3496,7 +3516,7 @@
             // 
             this.lblJsonFiring.AutoSize = true;
             this.lblJsonFiring.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblJsonFiring.Location = new System.Drawing.Point(3, 52);
+            this.lblJsonFiring.Location = new System.Drawing.Point(3, 79);
             this.lblJsonFiring.Name = "lblJsonFiring";
             this.lblJsonFiring.Size = new System.Drawing.Size(133, 26);
             this.lblJsonFiring.TabIndex = 19;
@@ -3509,7 +3529,7 @@
             this.expJsonPayload.Dock = System.Windows.Forms.DockStyle.Top;
             this.expJsonPayload.Expression = "";
             this.expJsonPayload.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expJsonPayload.Location = new System.Drawing.Point(142, 29);
+            this.expJsonPayload.Location = new System.Drawing.Point(142, 56);
             this.expJsonPayload.Name = "expJsonPayload";
             this.expJsonPayload.ReadOnly = false;
             this.expJsonPayload.Size = new System.Drawing.Size(397, 20);
@@ -3519,7 +3539,7 @@
             // 
             this.lblJsonPayload.AutoSize = true;
             this.lblJsonPayload.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblJsonPayload.Location = new System.Drawing.Point(3, 26);
+            this.lblJsonPayload.Location = new System.Drawing.Point(3, 53);
             this.lblJsonPayload.Name = "lblJsonPayload";
             this.lblJsonPayload.Size = new System.Drawing.Size(133, 26);
             this.lblJsonPayload.TabIndex = 15;
@@ -4251,6 +4271,137 @@
             this.expCallbackName.Size = new System.Drawing.Size(432, 20);
             this.expCallbackName.TabIndex = 14;
             // 
+            // tabMouse
+            // 
+            this.tabMouse.Controls.Add(this.tableLayoutPanel25);
+            this.tabMouse.Location = new System.Drawing.Point(4, 25);
+            this.tabMouse.Name = "tabMouse";
+            this.tabMouse.Size = new System.Drawing.Size(542, 264);
+            this.tabMouse.TabIndex = 24;
+            this.tabMouse.Text = "Mouse";
+            this.tabMouse.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel25
+            // 
+            this.tableLayoutPanel25.AutoSize = true;
+            this.tableLayoutPanel25.ColumnCount = 2;
+            this.tableLayoutPanel25.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel25.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel25.Controls.Add(this.cbxMouseCoord, 1, 1);
+            this.tableLayoutPanel25.Controls.Add(this.expMouseY, 1, 3);
+            this.tableLayoutPanel25.Controls.Add(this.lblMouseY, 0, 3);
+            this.tableLayoutPanel25.Controls.Add(this.lblMouseX, 0, 2);
+            this.tableLayoutPanel25.Controls.Add(this.expMouseX, 1, 2);
+            this.tableLayoutPanel25.Controls.Add(this.lblMouseCoord, 0, 1);
+            this.tableLayoutPanel25.Controls.Add(this.lblMouseOp, 0, 0);
+            this.tableLayoutPanel25.Controls.Add(this.cbxMouseOp, 1, 0);
+            this.tableLayoutPanel25.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel25.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel25.Name = "tableLayoutPanel25";
+            this.tableLayoutPanel25.RowCount = 4;
+            this.tableLayoutPanel25.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel25.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel25.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel25.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel25.Size = new System.Drawing.Size(542, 106);
+            this.tableLayoutPanel25.TabIndex = 7;
+            // 
+            // cbxMouseCoord
+            // 
+            this.cbxMouseCoord.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxMouseCoord.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxMouseCoord.FormattingEnabled = true;
+            this.cbxMouseCoord.Items.AddRange(new object[] {
+            "Absolute",
+            "Relative"});
+            this.cbxMouseCoord.Location = new System.Drawing.Point(102, 30);
+            this.cbxMouseCoord.Name = "cbxMouseCoord";
+            this.cbxMouseCoord.Size = new System.Drawing.Size(437, 21);
+            this.cbxMouseCoord.TabIndex = 25;
+            // 
+            // expMouseY
+            // 
+            this.expMouseY.AutoSize = true;
+            this.expMouseY.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expMouseY.Expression = "";
+            this.expMouseY.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
+            this.expMouseY.Location = new System.Drawing.Point(102, 83);
+            this.expMouseY.Name = "expMouseY";
+            this.expMouseY.ReadOnly = false;
+            this.expMouseY.Size = new System.Drawing.Size(437, 20);
+            this.expMouseY.TabIndex = 24;
+            // 
+            // lblMouseY
+            // 
+            this.lblMouseY.AutoSize = true;
+            this.lblMouseY.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblMouseY.Location = new System.Drawing.Point(3, 80);
+            this.lblMouseY.Name = "lblMouseY";
+            this.lblMouseY.Size = new System.Drawing.Size(93, 26);
+            this.lblMouseY.TabIndex = 23;
+            this.lblMouseY.Text = "Y coordinate";
+            this.lblMouseY.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblMouseX
+            // 
+            this.lblMouseX.AutoSize = true;
+            this.lblMouseX.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblMouseX.Location = new System.Drawing.Point(3, 54);
+            this.lblMouseX.Name = "lblMouseX";
+            this.lblMouseX.Size = new System.Drawing.Size(93, 26);
+            this.lblMouseX.TabIndex = 22;
+            this.lblMouseX.Text = "X coordinate";
+            this.lblMouseX.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // expMouseX
+            // 
+            this.expMouseX.AutoSize = true;
+            this.expMouseX.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expMouseX.Expression = "";
+            this.expMouseX.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
+            this.expMouseX.Location = new System.Drawing.Point(102, 57);
+            this.expMouseX.Name = "expMouseX";
+            this.expMouseX.ReadOnly = false;
+            this.expMouseX.Size = new System.Drawing.Size(437, 20);
+            this.expMouseX.TabIndex = 16;
+            // 
+            // lblMouseCoord
+            // 
+            this.lblMouseCoord.AutoSize = true;
+            this.lblMouseCoord.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblMouseCoord.Location = new System.Drawing.Point(3, 27);
+            this.lblMouseCoord.Name = "lblMouseCoord";
+            this.lblMouseCoord.Size = new System.Drawing.Size(93, 27);
+            this.lblMouseCoord.TabIndex = 15;
+            this.lblMouseCoord.Text = "Coordinate system";
+            this.lblMouseCoord.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblMouseOp
+            // 
+            this.lblMouseOp.AutoSize = true;
+            this.lblMouseOp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblMouseOp.Location = new System.Drawing.Point(3, 0);
+            this.lblMouseOp.Name = "lblMouseOp";
+            this.lblMouseOp.Size = new System.Drawing.Size(93, 27);
+            this.lblMouseOp.TabIndex = 7;
+            this.lblMouseOp.Text = "Operation";
+            this.lblMouseOp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbxMouseOp
+            // 
+            this.cbxMouseOp.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxMouseOp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxMouseOp.FormattingEnabled = true;
+            this.cbxMouseOp.Items.AddRange(new object[] {
+            "Move mouse",
+            "Left click",
+            "Middle click",
+            "Right click"});
+            this.cbxMouseOp.Location = new System.Drawing.Point(102, 3);
+            this.cbxMouseOp.Name = "cbxMouseOp";
+            this.cbxMouseOp.Size = new System.Drawing.Size(437, 21);
+            this.cbxMouseOp.TabIndex = 21;
+            // 
             // panel2
             // 
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -4683,6 +4834,30 @@
             this.expressionTextBox2.Size = new System.Drawing.Size(474, 20);
             this.expressionTextBox2.TabIndex = 14;
             // 
+            // lblJsonType
+            // 
+            this.lblJsonType.AutoSize = true;
+            this.lblJsonType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblJsonType.Location = new System.Drawing.Point(3, 26);
+            this.lblJsonType.Name = "lblJsonType";
+            this.lblJsonType.Size = new System.Drawing.Size(133, 27);
+            this.lblJsonType.TabIndex = 23;
+            this.lblJsonType.Text = "HTTP method";
+            this.lblJsonType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbxJsonType
+            // 
+            this.cbxJsonType.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxJsonType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxJsonType.FormattingEnabled = true;
+            this.cbxJsonType.Items.AddRange(new object[] {
+            "POST",
+            "GET"});
+            this.cbxJsonType.Location = new System.Drawing.Point(142, 29);
+            this.cbxJsonType.Name = "cbxJsonType";
+            this.cbxJsonType.Size = new System.Drawing.Size(397, 21);
+            this.cbxJsonType.TabIndex = 24;
+            // 
             // ActionForm
             // 
             this.AcceptButton = this.btnOk;
@@ -4801,6 +4976,10 @@
             this.tabNamedCallback.PerformLayout();
             this.tableLayoutPanel24.ResumeLayout(false);
             this.tableLayoutPanel24.PerformLayout();
+            this.tabMouse.ResumeLayout(false);
+            this.tabMouse.PerformLayout();
+            this.tableLayoutPanel25.ResumeLayout(false);
+            this.tableLayoutPanel25.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
@@ -5145,5 +5324,17 @@
         private CustomControls.ExpressionTextBox expCallbackName;
         private System.Windows.Forms.Label lblObsJSONPayload;
         private CustomControls.ExpressionTextBox expObsJSONPayload;
+        private System.Windows.Forms.TabPage tabMouse;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel25;
+        private System.Windows.Forms.ComboBox cbxMouseCoord;
+        private CustomControls.ExpressionTextBox expMouseY;
+        private System.Windows.Forms.Label lblMouseY;
+        private System.Windows.Forms.Label lblMouseX;
+        private CustomControls.ExpressionTextBox expMouseX;
+        private System.Windows.Forms.Label lblMouseCoord;
+        private System.Windows.Forms.Label lblMouseOp;
+        private System.Windows.Forms.ComboBox cbxMouseOp;
+        private System.Windows.Forms.ComboBox cbxJsonType;
+        private System.Windows.Forms.Label lblJsonType;
     }
 }
