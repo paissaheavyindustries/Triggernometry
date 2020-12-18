@@ -14,6 +14,12 @@ Data for repository {0} could not be unserialized, make sure you are running the
 
 added: ----------------------
 
+ActionForm/cbxObsOpType[Custom JSON payload]
+Custom JSON payload
+
+ActionForm/lblObsJSONPayload
+JSON payload
+
 ActionForm/cbsJsonType[POST]
 POST
 
@@ -46,6 +52,9 @@ to absolute coordinates
 
 internal/Action/descmousecoordrelative
 by relative coordinates
+
+internal/Action/descobsjsonpayload
+Send custom JSON payload to OBS
 
 internal/Action/descmousemove
 Move mouse {0} X: {1} Y: {2}

@@ -730,14 +730,7 @@ namespace Triggernometry
                             }
                             break;
                         case ObsControlTypeEnum.JSONPayload:
-                            if(_OBSJSONPayload != null && _OBSJSONPayload != "")
-                            {
-                                temp += I18n.Translate("internal/Action/descobsjsonpayload", "Send {0} to OBS websocket plugin", _OBSJSONPayload);
-                            }
-                            else
-                            {
-                                temp += I18n.Translate("internal/Action/descobsjsonpayloaddefault", "Send a custom JSON request to OBS websocket plugin");
-                            }
+                            temp += I18n.Translate("internal/Action/descobsjsonpayload", "Send custom JSON payload to OBS");
                             break;
                     }
                     break; 

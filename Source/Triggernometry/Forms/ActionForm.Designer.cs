@@ -3358,7 +3358,7 @@
             "Set scene",
             "Show source",
             "Hide source",
-            "Other command"});
+            "Custom JSON payload"});
             this.cbxObsOpType.Location = new System.Drawing.Point(85, 3);
             this.cbxObsOpType.Name = "cbxObsOpType";
             this.cbxObsOpType.Size = new System.Drawing.Size(454, 21);
