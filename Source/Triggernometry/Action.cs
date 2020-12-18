@@ -729,6 +729,16 @@ namespace Triggernometry
                                 temp += I18n.Translate("internal/Action/descobshidesourcecurrent", "hide source ({0}) on current OBS scene", _OBSSourceName);
                             }
                             break;
+                        case ObsControlTypeEnum.JSONPayload:
+                            if(_OBSJSONPayload != null && _OBSJSONPayload != "")
+                            {
+                                temp += I18n.Translate("internal/Action/descobsjsonpayload", "Send {0} to OBS websocket plugin", _OBSJSONPayload);
+                            }
+                            else
+                            {
+                                temp += I18n.Translate("internal/Action/descobsjsonpayloaddefault", "Send a custom JSON request to OBS websocket plugin");
+                            }
+                            break;
                     }
                     break; 
                 case ActionTypeEnum.Variable:
@@ -1861,6 +1871,12 @@ namespace Triggernometry
                                                     ctx.plug._obs.HideSource(scn, src);
                                                 }
                                                 break;
+                                            case ObsControlTypeEnum.JSONPayload:
+                                                {
+                                                    string json = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSJSONPayload);
+                                                    ctx.plug._obs.JSONPayload(json);
+                                                }
+                                                break;
                                         }
                                     }
                                     catch (Exception ex)
@@ -2484,6 +2500,7 @@ namespace Triggernometry
             a._OBSControlType = _OBSControlType;
             a._OBSSceneName = _OBSSceneName;
             a._OBSSourceName = _OBSSourceName;
+            a._OBSJSONPayload = _OBSJSONPayload;
             a._LogProcess = _LogProcess;
             a._JsonOperationType = _JsonOperationType;
             a._JsonCacheRequest = _JsonCacheRequest;
