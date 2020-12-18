@@ -1824,6 +1824,11 @@ namespace Triggernometry.Forms
             lblTvarTarget.Enabled = expTvarTarget.Enabled;
         }
 
+        private void cbxJsonType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            expJsonPayload.Enabled = (cbxJsonType.SelectedIndex == 0);
+        }
+
     }
 
 }

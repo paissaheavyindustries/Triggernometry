@@ -244,6 +244,8 @@
             this.txtObsWebsocketLink = new System.Windows.Forms.TextBox();
             this.tabGenericJson = new System.Windows.Forms.TabPage();
             this.jsonTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.cbxJsonType = new System.Windows.Forms.ComboBox();
+            this.lblJsonType = new System.Windows.Forms.Label();
             this.cbxJsonCache = new System.Windows.Forms.CheckBox();
             this.lblJsonInstructions = new System.Windows.Forms.Label();
             this.expJsonFiring = new Triggernometry.CustomControls.ExpressionTextBox();
@@ -353,8 +355,6 @@
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.expressionTextBox1 = new Triggernometry.CustomControls.ExpressionTextBox();
             this.expressionTextBox2 = new Triggernometry.CustomControls.ExpressionTextBox();
-            this.lblJsonType = new System.Windows.Forms.Label();
-            this.cbxJsonType = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.grpGeneralSettings.SuspendLayout();
             this.tbcActionSettings.SuspendLayout();
@@ -3445,6 +3445,31 @@
             this.jsonTableLayout.Size = new System.Drawing.Size(542, 263);
             this.jsonTableLayout.TabIndex = 3;
             // 
+            // cbxJsonType
+            // 
+            this.cbxJsonType.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxJsonType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxJsonType.FormattingEnabled = true;
+            this.cbxJsonType.Items.AddRange(new object[] {
+            "POST",
+            "GET"});
+            this.cbxJsonType.Location = new System.Drawing.Point(142, 29);
+            this.cbxJsonType.Name = "cbxJsonType";
+            this.cbxJsonType.Size = new System.Drawing.Size(397, 21);
+            this.cbxJsonType.TabIndex = 24;
+            this.cbxJsonType.SelectedIndexChanged += new System.EventHandler(this.cbxJsonType_SelectedIndexChanged);
+            // 
+            // lblJsonType
+            // 
+            this.lblJsonType.AutoSize = true;
+            this.lblJsonType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblJsonType.Location = new System.Drawing.Point(3, 26);
+            this.lblJsonType.Name = "lblJsonType";
+            this.lblJsonType.Size = new System.Drawing.Size(133, 27);
+            this.lblJsonType.TabIndex = 23;
+            this.lblJsonType.Text = "HTTP method";
+            this.lblJsonType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // cbxJsonCache
             // 
             this.cbxJsonCache.AutoSize = true;
@@ -4802,30 +4827,6 @@
             this.expressionTextBox2.ReadOnly = false;
             this.expressionTextBox2.Size = new System.Drawing.Size(474, 20);
             this.expressionTextBox2.TabIndex = 14;
-            // 
-            // lblJsonType
-            // 
-            this.lblJsonType.AutoSize = true;
-            this.lblJsonType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblJsonType.Location = new System.Drawing.Point(3, 26);
-            this.lblJsonType.Name = "lblJsonType";
-            this.lblJsonType.Size = new System.Drawing.Size(133, 27);
-            this.lblJsonType.TabIndex = 23;
-            this.lblJsonType.Text = "HTTP method";
-            this.lblJsonType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // cbxJsonType
-            // 
-            this.cbxJsonType.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cbxJsonType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxJsonType.FormattingEnabled = true;
-            this.cbxJsonType.Items.AddRange(new object[] {
-            "POST",
-            "GET"});
-            this.cbxJsonType.Location = new System.Drawing.Point(142, 29);
-            this.cbxJsonType.Name = "cbxJsonType";
-            this.cbxJsonType.Size = new System.Drawing.Size(397, 21);
-            this.cbxJsonType.TabIndex = 24;
             // 
             // ActionForm
             // 
