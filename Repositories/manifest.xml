@@ -20,14 +20,14 @@
 					<Categories>
 					</Categories>
 					<Repositories>
-						<Repository Name="Final Fantasy XIV crafting triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_crafting.xml" Description="Includes some simple triggers related to crafting. Note that some triggers may require you to do edits to suit your environment." />
+						<Repository Name="Final Fantasy XIV crafting triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry-Triggers/main/Repositories/ffxiv_crafting.xml" Description="Includes some simple triggers related to crafting. Note that some triggers may require you to do edits to suit your environment." />
 					</Repositories>
 				</Category>
 				<Category Name="Debugging" Description="Triggers related to debugging Final Fantasy XIV related features in Triggernometry.">
 					<Categories>
 					</Categories>
 					<Repositories>
-						<Repository Name="Final Fantasy XIV debugging triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_debugging.xml" Description="Includes some simple triggers related to debugging and outputting information related to Final Fantasy XIV functions." />
+						<Repository Name="Final Fantasy XIV debugging triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry-Triggers/main/Repositories/ffxiv_debugging.xml" Description="Includes some simple triggers related to debugging and outputting information related to Final Fantasy XIV functions." />
 					</Repositories>
 				</Category>
 				<Category Name="Visual DoT timers by Zeffuro" Description="Triggers for tracking DoTs for Final Fantasy XIV jobs. Trigger collection created by Zeffuro (Discord: Zeffuro#3033).">
@@ -41,7 +41,7 @@
 					<Categories>
 					</Categories>
 					<Repositories>
-						<Repository Name="Final Fantasy XIV gathering triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/ffxiv_gathering.xml" Description="Includes some simple triggers related to gathering." />
+						<Repository Name="Final Fantasy XIV gathering triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry-Triggers/main/Repositories/ffxiv_gathering.xml" Description="Includes some simple triggers related to gathering." />
 					</Repositories>
 				</Category>
 			</Categories>
@@ -50,7 +50,7 @@
 			<Categories>
 			</Categories>
 			<Repositories>
-				<Repository Name="Triggernometry example triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry/master/Repositories/examples.xml" Description="Triggers that demonstrate Triggernometry functionality." />
+				<Repository Name="Triggernometry example triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry-Triggers/main/Repositories/examples.xml" Description="Triggers that demonstrate Triggernometry functionality." />
 			</Repositories>
 		</Category>		
 	</Categories>
