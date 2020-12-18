@@ -257,6 +257,7 @@ namespace Triggernometry.Forms
                 cbxObsOpType.SelectedIndex = 0;
                 expObsSceneName.Expression = "";
                 expObsSourceName.Expression = "";
+                expObsJSONPayload.Expression = "";
                 cbxTextAuraOp.SelectedIndex = 0;
                 cbxTextAuraAlignment.SelectedIndex = 4;
                 expTextAuraName.Expression = "";
@@ -442,6 +443,7 @@ namespace Triggernometry.Forms
                 cbxObsOpType.SelectedIndex = (int)a._OBSControlType;
                 expObsSceneName.Expression = a._OBSSceneName;
                 expObsSourceName.Expression = a._OBSSourceName;
+                expObsJSONPayload.Expression = a._OBSJSONPayload;
                 cbxTextAuraOp.SelectedIndex = (int)a._TextAuraOp;
                 cbxJsonType.SelectedIndex = (int)a._JsonOperationType;
                 expJsonEndpoint.Expression = a._JsonEndpointExpression;
@@ -674,6 +676,7 @@ namespace Triggernometry.Forms
             a._OBSControlType = (Action.ObsControlTypeEnum)cbxObsOpType.SelectedIndex;
             a._OBSSceneName = expObsSceneName.Expression;
             a._OBSSourceName = expObsSourceName.Expression;
+            a._OBSJSONPayload = expObsJSONPayload.Expression;
             a._JsonOperationType = (Action.HTTPMethodEnum)cbxJsonType.SelectedIndex;
             a._JsonEndpointExpression = expJsonEndpoint.Expression;
             a._JsonFiringExpression = expJsonFiring.Expression;
@@ -1668,8 +1671,9 @@ namespace Triggernometry.Forms
 
         private void cbxObsOpType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            expObsSceneName.Enabled = (cbxObsOpType.SelectedIndex >= 10);
-            expObsSourceName.Enabled = (cbxObsOpType.SelectedIndex >= 11);
+            expObsSceneName.Enabled = (cbxObsOpType.SelectedIndex >= 10 && cbxObsOpType.SelectedIndex <= 12);
+            expObsSourceName.Enabled = (cbxObsOpType.SelectedIndex >= 11 && cbxObsOpType.SelectedIndex <= 12);
+            expObsJSONPayload.Enabled = (cbxObsOpType.SelectedIndex >= 13);
         }
 
         private void cbxKeypressMethod_SelectedIndexChanged(object sender, EventArgs e)
@@ -1722,6 +1726,11 @@ namespace Triggernometry.Forms
         private void expObsSourceName_EnabledChanged(object sender, EventArgs e)
         {
             lblObsSourceName.Enabled = expObsSourceName.Enabled;
+        }
+
+        private void expObsJSONPayload_EnabledChanged(object sender, EventArgs e)
+        {
+            lblObsJSONPayload.Enabled = expObsJSONPayload.Enabled;
         }
 
         private void cbxTvarOpType_SelectedIndexChanged(object sender, EventArgs e)
@@ -1823,12 +1832,6 @@ namespace Triggernometry.Forms
         {
             lblTvarTarget.Enabled = expTvarTarget.Enabled;
         }
-
-        private void cbxJsonType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            expJsonPayload.Enabled = (cbxJsonType.SelectedIndex == 0);
-        }
-
     }
 
 }
