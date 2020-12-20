@@ -266,6 +266,11 @@ namespace Triggernometry
                             }
                             found = true;
                         }
+                        else if (x == "_ffxivzoneid")
+                        {
+                            val = PluginBridges.BridgeFFXIV.ZoneID.ToString();
+                            found = true;
+                        }
                         else if (x == "_ffxivpartyorder")
                         {
                             val = plug.cfg.FfxivPartyOrdering + " " + plug.cfg.FfxivCustomPartyOrder;

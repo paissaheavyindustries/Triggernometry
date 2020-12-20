@@ -100,6 +100,8 @@ namespace Triggernometry.Forms
             chkFfxivClassFilterEnabled.Enabled = false;
             txtZoneFilterRegex.ReadOnly = true;
             txtEventFilterRegex.ReadOnly = true;
+            chkFfxivZoneFilter.Enabled = false;
+            txtFfxivZoneFilterRegex.Enabled = false;
         }
 
         internal void JobFilterFromInt(Int64 val)
@@ -155,7 +157,9 @@ namespace Triggernometry.Forms
                 txtZoneFilterRegex.Text = "";
                 txtEventFilterRegex.Text = "";
                 chkFfxivClassFilterEnabled.Checked = false;
-                chkFfxivClassFilter.ClearSelected();                
+                chkFfxivClassFilter.ClearSelected();
+                chkFfxivZoneFilter.Checked = false;
+                txtFfxivZoneFilterRegex.Text = "";
             }
             else
             { 
@@ -165,7 +169,9 @@ namespace Triggernometry.Forms
 				txtZoneFilterRegex.Text = f.ZoneFilterRegularExpression;
 				txtEventFilterRegex.Text = f.EventFilterRegularExpression;
                 chkFfxivClassFilterEnabled.Checked = f._FFXIVJobFilterEnabled;
+                chkFfxivZoneFilter.Checked = f._FFXIVZoneFilterEnabled;
                 JobFilterFromInt(f._FFXIVJobFilter);
+                txtFfxivZoneFilterRegex.Text = f.FfxivZoneFilterRegularExpression;
             }
         }
 
@@ -178,6 +184,8 @@ namespace Triggernometry.Forms
 			f.EventFilterRegularExpression = txtEventFilterRegex.Text;
             f._FFXIVJobFilterEnabled = chkFfxivClassFilterEnabled.Checked;
             f._FFXIVJobFilter = JobfilterToInt();
+            f._FFXIVZoneFilterEnabled = chkFfxivZoneFilter.Checked;
+            f.FfxivZoneFilterRegularExpression = txtFfxivZoneFilterRegex.Text;
         }
 
         private void txtName_TextChanged(object sender, EventArgs e)
@@ -203,12 +211,23 @@ namespace Triggernometry.Forms
 
         private void btnGetCurZone_Click(object sender, EventArgs e)
         {
-            txtZoneFilterRegex.Text = Regex.Escape(plug.CurrentZoneHook());
+            txtZoneFilterRegex.Text = "^" + Regex.Escape(plug.CurrentZoneHook()) + "$";
         }
 
         private void chkFfxivClassFilter_SelectedIndexChanged(object sender, EventArgs e)
         {
             chkFfxivClassFilter.ClearSelected();
+        }
+
+        private void btnGetCurFfxivZone_Click(object sender, EventArgs e)
+        {
+            txtFfxivZoneFilterRegex.Text = "^" + PluginBridges.BridgeFFXIV.ZoneID.ToString() + "$";
+        }
+
+        private void chkFfxivZoneFilter_CheckedChanged(object sender, EventArgs e)
+        {
+            txtFfxivZoneFilterRegex.Enabled = chkFfxivZoneFilter.Checked;
+            btnGetCurFfxivZone.Enabled = chkFfxivZoneFilter.Checked;
         }
 
     }

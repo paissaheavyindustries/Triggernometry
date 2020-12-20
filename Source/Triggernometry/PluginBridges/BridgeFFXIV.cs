@@ -23,6 +23,8 @@ namespace Triggernometry.PluginBridges
         public static Int64 TickNum = 0;
         public static uint PlayerId = 0;
 
+        public static uint ZoneID = 0;
+
         public static Configuration cfg;
 
         public static List<VariableDictionary> PartyMembers = new List<VariableDictionary>(new VariableDictionary[8] {
@@ -98,7 +100,7 @@ namespace Triggernometry.PluginBridges
                     throw new ArgumentException("DataSubscription not initialized");
                 }
                 EventInfo ei = subs.GetType().GetEvent("ParsedLogLine", BindingFlags.GetField | BindingFlags.Public | BindingFlags.Instance);
-                if (subs == null)
+                if (ei == null)
                 {
                     throw new ArgumentException("No ParsedLogLine found");
                 }
@@ -107,6 +109,18 @@ namespace Triggernometry.PluginBridges
                 Delegate handler = Delegate.CreateDelegate(deltype, p, mix);
                 ei.AddEventHandler(subs, handler);
                 LogMessage(RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/ffxiv/networksubok", "Subscribed to FFXIV network events"));
+                ei = subs.GetType().GetEvent("ZoneChanged", BindingFlags.GetField | BindingFlags.Public | BindingFlags.Instance);
+                if (ei != null)
+                {
+                    mix = p.GetType().GetMethod("ZoneChangeDelegate");
+                    deltype = ei.EventHandlerType;
+                    handler = Delegate.CreateDelegate(deltype, p, mix);
+                    ei.AddEventHandler(subs, handler);                    
+                }
+                else
+                {
+                    LogMessage(RealPlugin.DebugLevelEnum.Error, "No ZoneChanged found");
+                }
             }
             catch (Exception ex)
             {
