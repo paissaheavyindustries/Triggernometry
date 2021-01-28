@@ -3,20 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Triggernometry.Variables
 {
 
+    [XmlRoot(ElementName = "VariableTable")]
     public class VariableTable : Variable
     {
 
-        public Variable[][] Values = null;
+        public class VariableTableRow
+        {
+
+            [XmlArrayItem(ElementName = "VariableScalar", Type = typeof(VariableScalar))]
+            [XmlArrayItem(ElementName = "VariableList", Type = typeof(VariableList))]
+            [XmlArrayItem(ElementName = "VariableTable", Type = typeof(VariableTable))]
+            public List<Variable> Values { get; set; } = new List<Variable>();
+
+        }
+
+        public List<VariableTableRow> Rows { get; set; } = new List<VariableTableRow>();
 
         public int Width
         {
             get
             {
-                return Values != null && Values.Length > 0 ? Values[0].Length : 0;
+                return Rows != null && Rows.Count > 0 ? Rows[0].Values.Count : 0;
             }
         }
 
@@ -24,7 +36,7 @@ namespace Triggernometry.Variables
         {
             get
             {
-                return Values != null ? Values.Length : 0;
+                return Rows != null ? Rows.Count : 0;
             }
         }
 
@@ -117,7 +129,7 @@ namespace Triggernometry.Variables
         {
             if (newWidth == 0 || newHeight == 0)
             {
-                Values = null;
+                Rows.Clear();
                 return;
             }
             if (newWidth == -1)
@@ -129,23 +141,30 @@ namespace Triggernometry.Variables
                 newHeight = Height;
             }
             int oldWidth = Width;
-            if (Height != newHeight)
+            if (Height < newHeight)
             {
-                int oldHeight = Height;
-                Array.Resize<Variable[]>(ref Values, newHeight);
-                while (oldHeight < newHeight)
+                while (Height < newHeight)
                 {
-                    Values[oldHeight] = new Variable[newWidth];
-                    oldHeight++;
+                    Rows.Add(new VariableTableRow());
                 }
+            }
+            else if (Height > newHeight)
+            {
+                int num = Height - newHeight;
+                Rows.RemoveRange(Height - (1 + num), num);
             }
             if (newWidth != oldWidth)
             {
                 for (int i = 0; i < Height; i++)
                 {
-                    if (Values[i].Length != newWidth)
+                    if (Rows[i].Values.Count > newWidth)
                     {
-                        Array.Resize<Variable>(ref Values[i], newWidth);
+                        int num = Rows[i].Values.Count - newWidth;
+                        Rows[i].Values.RemoveRange(Rows[i].Values.Count - (1 + num), num);
+                    }
+                    else if (Rows[i].Values.Count < newWidth)
+                    {
+                        Rows[i].Values.AddRange(new Variable[newWidth - Rows[i].Values.Count]);
                     }
                 }
             }
@@ -170,7 +189,7 @@ namespace Triggernometry.Variables
             {
                 return;
             }
-            Values[y][x] = value;
+            Rows[y].Values[x] = value;
             LastChanger = changer;
             LastChanged = DateTime.Now;
         }
@@ -183,7 +202,7 @@ namespace Triggernometry.Variables
             {
                 return new VariableScalar();
             }
-            Variable v = Values[y][x];
+            Variable v = Rows[y].Values[x];
             return v != null ? v : new VariableScalar();
         }
 
@@ -200,7 +219,7 @@ namespace Triggernometry.Variables
             {
                 for (int x = 0; x < vt.Width; x++)
                 {
-                    Values[my][x] = vt.Values[y][x];
+                    Rows[my].Values[x] = vt.Rows[y].Values[x];
                 }
                 my++;
             }
@@ -221,7 +240,7 @@ namespace Triggernometry.Variables
             }
             for (int y = 0; y < Height; y++)
             {
-                if (Values[y][0].CompareTo(value) == 0)
+                if (Rows[y].Values[0].CompareTo(value) == 0)
                 {
                     return y + 1;
                 }
@@ -242,7 +261,7 @@ namespace Triggernometry.Variables
             }
             for (int x = 0; x < Width; x++)
             {
-                if (Values[0][x].CompareTo(value) == 0)
+                if (Rows[0].Values[x].CompareTo(value) == 0)
                 {
                     return x + 1;
                 }
@@ -255,20 +274,23 @@ namespace Triggernometry.Variables
             Resize(Width > 0 ? Width : 1, Height + 1);
             for (int y = Height - 1; y > index; y--)
             {
-                Values[y] = Values[y - 1];
+                Rows[y] = Rows[y - 1];
             }
-            if (index >= Values.Length)
+            if (index >= Height)
             {
-                index = Values.Length - 1;
+                index = Height - 1;
             }
-            Values[index] = new Variable[Width];
+            VariableScalar[] vs = new VariableScalar[Width];
+            Rows[index] = new VariableTableRow();
+            Rows[index].Values = new List<Variable>();
+            Rows[index].Values.AddRange(vs);
         }
 
         public void RemoveRow(int index)
         {
             for (int y = index; y < Height - 1; y++)
             {
-                Values[y] = Values[y + 1];
+                Rows[y] = Rows[y + 1];
             }
             Resize(Width, Height - 1);
         }
@@ -280,13 +302,13 @@ namespace Triggernometry.Variables
             {
                 for (int x = Width - 1; x > index; x--)
                 {
-                    Values[y][x] = Values[y][x - 1];
+                    Rows[y].Values[x] = Rows[y].Values[x - 1];
                 }
                 if (index >= Width)
                 {
                     index = Width - 1;
                 }
-                Values[y][index] = new VariableScalar();
+                Rows[y].Values[index] = new VariableScalar();
             }
         }
 
@@ -296,7 +318,7 @@ namespace Triggernometry.Variables
             {
                 for (int x = index; x < Width - 1; x++)
                 {
-                    Values[y][x] = Values[y][x + 1];
+                    Rows[y].Values[x] = Rows[y].Values[x + 1];
                 }
             }
             Resize(Width - 1, Height);

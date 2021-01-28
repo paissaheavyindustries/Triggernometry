@@ -135,7 +135,7 @@ namespace Triggernometry.Forms
             else if (VariableToEdit is VariableTable)
             {
                 VariableTable v = (VariableTable)VariableToEdit;
-                Variable vx = e.RowIndex < v.Height && e.ColumnIndex < v.Width ? v.Values[e.RowIndex][e.ColumnIndex] : null;
+                Variable vx = e.RowIndex < v.Height && e.ColumnIndex < v.Width ? v.Rows[e.RowIndex].Values[e.ColumnIndex] : null;
                 e.Value = vx != null ? vx.ToString() : "";
             }
         }
@@ -155,7 +155,7 @@ namespace Triggernometry.Forms
             else if (VariableToEdit is VariableTable)
             {
                 VariableTable v = (VariableTable)VariableToEdit;
-                v.Values[e.RowIndex][e.ColumnIndex] = new VariableScalar() { Value = (e != null && e.Value != null) ? e.Value.ToString() : "" };
+                v.Rows[e.RowIndex].Values[e.ColumnIndex] = new VariableScalar() { Value = (e != null && e.Value != null) ? e.Value.ToString() : "" };
             }
         }
 

@@ -337,11 +337,11 @@ namespace Triggernometry
                         }
                     case CndTypeEnum.ListContains:
                         {
-                            lock (ctx.plug.listvariables)
+                            lock (ctx.plug.sessionvars.List)
                             {
-                                if (ctx.plug.listvariables.ContainsKey(lval) == true)
+                                if (ctx.plug.sessionvars.List.ContainsKey(lval) == true)
                                 {
-                                    if (ctx.plug.listvariables[lval].IndexOf(rval) > 0)
+                                    if (ctx.plug.sessionvars.List[lval].IndexOf(rval) > 0)
                                     {
                                         return true;
                                     }
@@ -351,11 +351,11 @@ namespace Triggernometry
                         }
                     case CndTypeEnum.ListDoesNotContain:
                         {
-                            lock (ctx.plug.listvariables)
+                            lock (ctx.plug.sessionvars.List)
                             {
-                                if (ctx.plug.listvariables.ContainsKey(lval) == true)
+                                if (ctx.plug.sessionvars.List.ContainsKey(lval) == true)
                                 {
-                                    if (ctx.plug.listvariables[lval].IndexOf(rval) > 0)
+                                    if (ctx.plug.sessionvars.List[lval].IndexOf(rval) > 0)
                                     {
                                         return false;
                                     }

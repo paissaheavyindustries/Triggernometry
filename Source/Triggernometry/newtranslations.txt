@@ -14,6 +14,34 @@ Data for repository {0} could not be unserialized, make sure you are running the
 
 added: ----------------------
 
+    <TranslationEntry Key="StateForm/btnPeScalarAdd" Translation="Add variable" />
+    <TranslationEntry Key="StateForm/btnPeScalarEdit" Translation="Edit variable" />
+    <TranslationEntry Key="StateForm/btnPeScalarRefresh" Translation="Refresh" />
+    <TranslationEntry Key="StateForm/btnPeScalarRemove" Translation="Remove variable" />
+    <TranslationEntry Key="StateForm/btnPeScalarRemoveAll" Translation="Remove all variables" />
+    <TranslationEntry Key="StateForm/btnPeListAdd" Translation="Add variable" />
+    <TranslationEntry Key="StateForm/btnPeListEdit" Translation="Edit variable" />
+    <TranslationEntry Key="StateForm/btnPeListRefresh" Translation="Refresh" />
+    <TranslationEntry Key="StateForm/btnPeListRemove" Translation="Remove variable" />
+    <TranslationEntry Key="StateForm/btnPeListRemoveAll" Translation="Remove all variables" />
+    <TranslationEntry Key="StateForm/btnPeTableAdd" Translation="Add variable" />
+    <TranslationEntry Key="StateForm/btnPeTableEdit" Translation="Edit variable" />
+    <TranslationEntry Key="StateForm/btnPeTableRefresh" Translation="Refresh" />
+    <TranslationEntry Key="StateForm/btnPeTableRemove" Translation="Remove variable" />
+    <TranslationEntry Key="StateForm/btnPeTableRemoveAll" Translation="Remove all variables" />
+    <TranslationEntry Key="StateForm/btnScalarRemoveAll" Translation="Remove all variables" />
+    <TranslationEntry Key="StateForm/btnListRemoveAll" Translation="Remove all variables" />
+    <TranslationEntry Key="StateForm/btnTableRemoveAll" Translation="Remove all variables" />
+
+FolderForm/chkFfxivZoneFilter
+Restrict event processing only to when currently in given zone ID
+
+FolderForm/lblFfxivZoneId
+Zone ID
+
+FolderForm/btnGetCurFfxivZone
+Retrieve current zone ID
+
 ActionForm/cbxObsOpType[Custom JSON payload]
 Custom JSON payload
 

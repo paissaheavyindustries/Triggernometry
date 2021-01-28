@@ -440,9 +440,7 @@ namespace Triggernometry
         internal List<Trigger> Triggers;
         internal List<Trigger> ActiveTextTriggers;
         internal List<Trigger> ActiveFFXIVNetworkTriggers;
-        internal Dictionary<string, VariableScalar> scalarvariables;
-        internal Dictionary<string, VariableList> listvariables;
-        internal Dictionary<string, VariableTable> tablevariables;
+        internal VariableStore sessionvars;
         internal Dictionary<string, Forms.AuraContainerForm> imageauras;
         internal Dictionary<string, Forms.AuraContainerForm> textauras;
         internal bool DisableLogging;
@@ -1115,9 +1113,7 @@ namespace Triggernometry
             Triggers = new List<Trigger>();
             ActiveTextTriggers = new List<Trigger>();
             ActiveFFXIVNetworkTriggers = new List<Trigger>();
-            scalarvariables = new Dictionary<string, VariableScalar>();
-            listvariables = new Dictionary<string, VariableList>();
-            tablevariables = new Dictionary<string, VariableTable>();
+            sessionvars = new VariableStore();
             imageauras = new Dictionary<string, Forms.AuraContainerForm>();
             textauras = new Dictionary<string, Forms.AuraContainerForm>();
             ThreadPool.SetMinThreads(10, 10);
@@ -1845,6 +1841,7 @@ namespace Triggernometry
                 {
                     cfg.ShowWelcome = false;
                 }
+                ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
                 BackupConfiguration();
                 FixDuplicateFolderReferences(null, cfg, null);
                 PluginBridges.BridgeFFXIV.cfg = cfg;
@@ -3172,7 +3169,7 @@ namespace Triggernometry
                 FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/cfgsave", "Saving configuration to '{0}'", filename));
                 XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
                 string test = "";
-                ns.Add("", "");                
+                ns.Add("", "");
                 XmlSerializer xs = new XmlSerializer(typeof(Configuration));
                 using (MemoryStream ms = new MemoryStream())
                 {

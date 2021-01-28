@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace Triggernometry.Variables
 {
 
+    [XmlRoot(ElementName = "VariableList")]
     public class VariableList : Variable
     {
 
+        [XmlArrayItem(ElementName = "VariableScalar", Type = typeof(VariableScalar))]
+        [XmlArrayItem(ElementName = "VariableList", Type = typeof(VariableList))]
+        [XmlArrayItem(ElementName = "VariableTable", Type = typeof(VariableTable))]
         public List<Variable> Values { get; set; } = new List<Variable>();
 
         public override string ToString()

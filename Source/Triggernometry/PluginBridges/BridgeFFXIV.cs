@@ -315,6 +315,8 @@ namespace Triggernometry.PluginBridges
             vc.SetValue("worldid", cmx.WorldID);
             vc.SetValue("worldname", cmx.WorldName);
             vc.SetValue("currentworldid", cmx.CurrentWorldID);
+            vc.SetValue("homeworldid", cmx.WorldID);
+            vc.SetValue("homeworldname", cmx.WorldName);
         }
 
         private static object GetInstance()

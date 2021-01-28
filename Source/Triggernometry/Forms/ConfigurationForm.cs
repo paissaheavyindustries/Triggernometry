@@ -29,7 +29,7 @@ namespace Triggernometry.Forms
             label5.Tag = I18n.DoNotTranslate;
             label6.Tag = I18n.DoNotTranslate;
             RestoredSavedDimensions();
-            tbcMain.TabPages.Remove(tabEndpoint);
+            tbcMain.TabPages.Remove(tabEndpoint);            
         }
 
         internal void SettingsFromConfiguration(Configuration a)

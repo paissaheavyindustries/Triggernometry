@@ -267,6 +267,8 @@ namespace Triggernometry
         [XmlAttribute]
         public bool LogVariableExpansions { get; set; }
 
+        public Variables.VariableStore PersistentVariables { get; set; }
+
         internal bool isnew;
         internal DateTime lastWrite;
         internal string corruptRecoveryError;
@@ -275,6 +277,7 @@ namespace Triggernometry
         {
             Version = 1;
             corruptRecoveryError = "";
+            PersistentVariables = new Variables.VariableStore();
             UpdateNotifications = UpdateNotificationsEnum.Undefined;
             DefaultRepository = UpdateNotificationsEnum.Undefined;
             Root = new Folder();

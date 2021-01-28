@@ -122,30 +122,44 @@ namespace Triggernometry
             return new DateTime(eorzeaTicks).TimeOfDay;
         }
 
-        private VariableList GetListVariable(RealPlugin p, string varname, bool createNew)
+        private VariableScalar GetScalarVariable(VariableStore vs, string varname, bool createNew)
         {
-            if (p.listvariables.ContainsKey(varname) == true)
+            if (vs.Scalar.ContainsKey(varname) == true)
             {
-                return p.listvariables[varname];
+                return vs.Scalar[varname];
             }
-            VariableList vl = new VariableList();
+            VariableScalar vl = new VariableScalar();
             if (createNew == true)
             {
-                p.listvariables[varname] = vl;
+                vs.Scalar[varname] = vl;
             }
             return vl;
         }
 
-        private VariableTable GetTableVariable(RealPlugin p, string varname, bool createNew)
+        private VariableList GetListVariable(VariableStore vs, string varname, bool createNew)
         {
-            if (p.tablevariables.ContainsKey(varname) == true)
+            if (vs.List.ContainsKey(varname) == true)
             {
-                return p.tablevariables[varname];
+                return vs.List[varname];
+            }
+            VariableList vl = new VariableList();
+            if (createNew == true)
+            {
+                vs.List[varname] = vl;
+            }
+            return vl;
+        }
+
+        private VariableTable GetTableVariable(VariableStore vs, string varname, bool createNew)
+        {
+            if (vs.Table.ContainsKey(varname) == true)
+            {
+                return vs.Table[varname];
             }
             VariableTable vl = new VariableTable();
             if (createNew == true)
             {
-                p.tablevariables[varname] = vl;
+                vs.Table[varname] = vl;
             }
             return vl;
         }
@@ -374,28 +388,22 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
-                        else if (x.IndexOf("evar:") == 0)
+                        // check if scalar variable exists
+                        else if ((x.IndexOf("evar:") == 0) || (x.IndexOf("epvar:") == 0))
                         {
-                            string varname = x.Substring(5);
-                            lock (plug.scalarvariables) // verified
+                            Variables.VariableStore store;
+                            if (x.IndexOf("evar:") == 0)
                             {
-                                if (plug.scalarvariables.ContainsKey(varname) == true)
-                                {
-                                    val = "1";
-                                }
-                                else
-                                {
-                                    val = "0";
-                                }
-                                found = true;
+                                store = plug.sessionvars;
                             }
-                        }
-                        else if (x.IndexOf("elvar:") == 0)
-                        {
+                            else
+                            {
+                                store = plug.cfg.PersistentVariables;
+                            }
                             string varname = x.Substring(6);
-                            lock (plug.listvariables) // verified
+                            lock (store.Scalar) // verified
                             {
-                                if (plug.listvariables.ContainsKey(varname) == true)
+                                if (store.Scalar.ContainsKey(varname) == true)
                                 {
                                     val = "1";
                                 }
@@ -406,12 +414,22 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
-                        else if (x.IndexOf("etvar:") == 0)
+                        // check if list variable exists
+                        else if ((x.IndexOf("elvar:") == 0) || (x.IndexOf("eplvar:") == 0))
                         {
+                            Variables.VariableStore store;
+                            if (x.IndexOf("elvar:") == 0)
+                            {
+                                store = plug.sessionvars;
+                            }
+                            else
+                            {
+                                store = plug.cfg.PersistentVariables;
+                            }
                             string varname = x.Substring(6);
-                            lock (plug.tablevariables) // verified
+                            lock (store.List) // verified
                             {
-                                if (plug.tablevariables.ContainsKey(varname) == true)
+                                if (store.List.ContainsKey(varname) == true)
                                 {
                                     val = "1";
                                 }
@@ -422,20 +440,64 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
-                        else if (x.IndexOf("var:") == 0)
+                        // check if table variable exists
+                        else if ((x.IndexOf("etvar:") == 0) || (x.IndexOf("eptvar:") == 0))
                         {
+                            Variables.VariableStore store;
+                            if (x.IndexOf("etvar:") == 0)
+                            {
+                                store = plug.sessionvars;
+                            }
+                            else
+                            {
+                                store = plug.cfg.PersistentVariables;
+                            }
+                            string varname = x.Substring(6);
+                            lock (store.Table) // verified
+                            {
+                                if (store.Table.ContainsKey(varname) == true)
+                                {
+                                    val = "1";
+                                }
+                                else
+                                {
+                                    val = "0";
+                                }
+                                found = true;
+                            }
+                        }
+                        // retrieve scalar variable value
+                        else if ((x.IndexOf("var:") == 0) || (x.IndexOf("pvar:") == 0))
+                        {
+                            Variables.VariableStore store;
+                            if (x.IndexOf("var:") == 0)
+                            {
+                                store = plug.sessionvars;
+                            }
+                            else
+                            {
+                                store = plug.cfg.PersistentVariables;
+                            }
                             string varname = x.Substring(4);
-                            lock (plug.scalarvariables) // verified
+                            lock (store.Scalar) // verified
                             {
-                                if (plug.scalarvariables.ContainsKey(varname) == true)
-                                {
-                                    val = plug.scalarvariables[varname].Value;
-                                    found = true;
-                                }
+                                VariableScalar vs = GetScalarVariable(store, varname, false);
+                                val = vs.Value;
+                                found = true;
                             }
                         }
-                        else if (x.IndexOf("lvar:") == 0)
+                        // retrieve list variable value
+                        else if ((x.IndexOf("lvar:") == 0) || (x.IndexOf("plvar:") == 0))
                         {
+                            Variables.VariableStore store;
+                            if (x.IndexOf("lvar:") == 0)
+                            {
+                                store = plug.sessionvars;
+                            }
+                            else
+                            {
+                                store = plug.cfg.PersistentVariables;
+                            }
                             string varname = x.Substring(5);
                             mx = rexlprp.Match(varname);
                             if (mx.Success == true)
@@ -446,9 +508,9 @@ namespace Triggernometry
                                 {
                                     case "size":
                                         {
-                                            lock (plug.listvariables)
+                                            lock (store.List)
                                             {
-                                                VariableList vl = GetListVariable(plug, gname, false);
+                                                VariableList vl = GetListVariable(store, gname, false);
                                                 val = vl.Size().ToString();
                                                 found = true;
                                             }
@@ -457,9 +519,9 @@ namespace Triggernometry
                                     case "indexof":
                                         {
                                             string garg = mx.Groups["arg"].Value;
-                                            lock (plug.listvariables)
+                                            lock (store.List)
                                             {
-                                                VariableList vl = GetListVariable(plug, gname, false);
+                                                VariableList vl = GetListVariable(store, gname, false);
                                                 val = vl.IndexOf(garg).ToString();
                                                 found = true;
                                             }
@@ -468,9 +530,9 @@ namespace Triggernometry
                                     case "lastindexof":
                                         {
                                             string garg = mx.Groups["arg"].Value;
-                                            lock (plug.listvariables)
+                                            lock (store.List)
                                             {
-                                                VariableList vl = GetListVariable(plug, gname, false);
+                                                VariableList vl = GetListVariable(store, gname, false);
                                                 val = vl.LastIndexOf(garg).ToString();
                                                 found = true;
                                             }
@@ -485,9 +547,9 @@ namespace Triggernometry
                                 {
                                     string gname = mx.Groups["name"].Value;
                                     string gindex = mx.Groups["index"].Value;
-                                    lock (plug.listvariables)
+                                    lock (store.List)
                                     {
-                                        VariableList vl = GetListVariable(plug, gname, false);
+                                        VariableList vl = GetListVariable(store, gname, false);
                                         if (gindex == "last")
                                         {
                                             gindex = vl.Size().ToString();
@@ -503,8 +565,18 @@ namespace Triggernometry
                                 }
                             }
                         }
+                        // retrieve table variable value
                         else if (x.IndexOf("tvar:") == 0)
                         {
+                            Variables.VariableStore store;
+                            if (x.IndexOf("lvar:") == 0)
+                            {
+                                store = plug.sessionvars;
+                            }
+                            else
+                            {
+                                store = plug.cfg.PersistentVariables;
+                            }
                             string varname = x.Substring(5);
                             mx = rexlprp.Match(varname);
                             if (mx.Success == true)
@@ -516,9 +588,9 @@ namespace Triggernometry
                                     case "w":
                                     case "width":
                                         {
-                                            lock (plug.tablevariables)
+                                            lock (store.Table)
                                             {
-                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                VariableTable vt = GetTableVariable(store, gname, false);
                                                 val = vt.Width.ToString();
                                                 found = true;
                                             }
@@ -527,9 +599,9 @@ namespace Triggernometry
                                     case "h":
                                     case "height":
                                         {
-                                            lock (plug.tablevariables)
+                                            lock (store.Table)
                                             {
-                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                VariableTable vt = GetTableVariable(store, gname, false);
                                                 val = vt.Height.ToString();
                                                 found = true;
                                             }
@@ -545,9 +617,9 @@ namespace Triggernometry
                                     string gname = mx.Groups["name"].Value;
                                     string gcol = mx.Groups["column"].Value;
                                     string grow = mx.Groups["row"].Value;
-                                    lock (plug.tablevariables)
+                                    lock (store.Table)
                                     {
-                                        VariableTable vt = GetTableVariable(plug, gname, false);
+                                        VariableTable vt = GetTableVariable(store, gname, false);
                                         if (gcol == "last")
                                         {
                                             gcol = vt.Width.ToString();
@@ -570,8 +642,18 @@ namespace Triggernometry
                                 }
                             }
                         }
-                        else if (x.IndexOf("tvarrl:") == 0)
+                        // row-based table lookup
+                        else if ((x.IndexOf("tvarrl:") == 0) || (x.IndexOf("ptvarrl:") == 0))
                         {
+                            Variables.VariableStore store;
+                            if (x.IndexOf("tvarrl:") == 0)
+                            {
+                                store = plug.sessionvars;
+                            }
+                            else
+                            {
+                                store = plug.cfg.PersistentVariables;
+                            }
                             string varname = x.Substring(7);
                             mx = rexlprp.Match(varname);
                             if (mx.Success == true)
@@ -583,9 +665,9 @@ namespace Triggernometry
                                     case "w":
                                     case "width":
                                         {
-                                            lock (plug.tablevariables)
+                                            lock (store.Table)
                                             {
-                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                VariableTable vt = GetTableVariable(store, gname, false);
                                                 val = (vt.Width > 0 ? vt.Width - 1 :0).ToString();
                                                 found = true;
                                             }
@@ -594,9 +676,9 @@ namespace Triggernometry
                                     case "h":
                                     case "height":
                                         {
-                                            lock (plug.tablevariables)
+                                            lock (store.Table)
                                             {
-                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                VariableTable vt = GetTableVariable(store, gname, false);
                                                 val = vt.Height.ToString();
                                                 found = true;
                                             }
@@ -612,9 +694,9 @@ namespace Triggernometry
                                     string gname = mx.Groups["name"].Value;
                                     string gheader = mx.Groups["column"].Value;
                                     string gindex = mx.Groups["row"].Value;
-                                    lock (plug.tablevariables)
+                                    lock (store.Table)
                                     {
-                                        VariableTable vt = GetTableVariable(plug, gname, false);
+                                        VariableTable vt = GetTableVariable(store, gname, false);
                                         if (gindex == "last")
                                         {
                                             gindex = (vt.Width > 0 ? vt.Width - 1 : 0).ToString();
@@ -634,8 +716,18 @@ namespace Triggernometry
                                 }
                             }
                         }
-                        else if (x.IndexOf("tvarcl:") == 0)
+                        // column-based table lookup
+                        else if ((x.IndexOf("tvarcl:") == 0) || (x.IndexOf("ptvarcl:") == 0))
                         {
+                            Variables.VariableStore store;
+                            if (x.IndexOf("tvarcl:") == 0)
+                            {
+                                store = plug.sessionvars;
+                            }
+                            else
+                            {
+                                store = plug.cfg.PersistentVariables;
+                            }
                             string varname = x.Substring(7);
                             mx = rexlprp.Match(varname);
                             if (mx.Success == true)
@@ -647,9 +739,9 @@ namespace Triggernometry
                                     case "w":
                                     case "width":
                                         {
-                                            lock (plug.tablevariables)
+                                            lock (store.Table)
                                             {
-                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                VariableTable vt = GetTableVariable(store, gname, false);
                                                 val = vt.Width.ToString();
                                                 found = true;
                                             }
@@ -658,9 +750,9 @@ namespace Triggernometry
                                     case "h":
                                     case "height":
                                         {
-                                            lock (plug.tablevariables)
+                                            lock (store.Table)
                                             {
-                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                VariableTable vt = GetTableVariable(store, gname, false);
                                                 val = (vt.Height > 0 ? vt.Height - 1 : 0).ToString();
                                                 found = true;
                                             }
@@ -676,9 +768,9 @@ namespace Triggernometry
                                     string gname = mx.Groups["name"].Value;
                                     string gheader = mx.Groups["column"].Value;
                                     string gindex = mx.Groups["row"].Value;
-                                    lock (plug.tablevariables)
+                                    lock (store.Table)
                                     {
-                                        VariableTable vt = GetTableVariable(plug, gname, false);
+                                        VariableTable vt = GetTableVariable(store, gname, false);
                                         if (gindex == "last")
                                         {
                                             gindex = (vt.Height > 0 ? vt.Height - 1 : 0).ToString();
