@@ -144,6 +144,10 @@ namespace Triggernometry.Forms
 
         private void dgvScalarVariables_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0)
+            {
+                return;
+            }
             dgvScalarVariables.ClearSelection();
             dgvScalarVariables.Rows[e.RowIndex].Selected = true;
             btnScalarEdit_Click(sender, null);
@@ -151,6 +155,10 @@ namespace Triggernometry.Forms
 
         private void dgvPeScalarVariables_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0)
+            {
+                return;
+            }
             dgvPeScalarVariables.ClearSelection();
             dgvPeScalarVariables.Rows[e.RowIndex].Selected = true;
             btnPeScalarEdit_Click(sender, null);
@@ -390,6 +398,10 @@ namespace Triggernometry.Forms
 
         private void dgvListVariables_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0)
+            {
+                return;
+            }
             dgvListVariables.ClearSelection();
             dgvListVariables.Rows[e.RowIndex].Selected = true;
             btnListEdit_Click(sender, null);
@@ -397,6 +409,10 @@ namespace Triggernometry.Forms
 
         private void dgvPeListVariables_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0)
+            {
+                return;
+            }
             dgvPeListVariables.ClearSelection();
             dgvPeListVariables.Rows[e.RowIndex].Selected = true;
             btnPeListEdit_Click(sender, null);
@@ -639,6 +655,10 @@ namespace Triggernometry.Forms
 
         private void dgvTableVariables_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0)
+            {
+                return;
+            }
             dgvTableVariables.ClearSelection();
             dgvTableVariables.Rows[e.RowIndex].Selected = true;
             btnTableEdit_Click(sender, null);
@@ -646,6 +666,10 @@ namespace Triggernometry.Forms
 
         private void dgvPeTableVariables_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0)
+            {
+                return;
+            }
             dgvPeTableVariables.ClearSelection();
             dgvPeTableVariables.Rows[e.RowIndex].Selected = true;
             btnPeTableEdit_Click(sender, null);

@@ -1327,7 +1327,7 @@ namespace Triggernometry
                                         {
                                             f.Enabled = false;
                                             TreeNode tn;
-                                            if (ctx.trig.Repo == null)
+                                            if (ctx.trig == null || ctx.trig.Repo == null)
                                             {
                                                 tn = ctx.plug.LocateNodeHostingFolder(ctx.plug.ui.treeView1.Nodes[0], f);
                                             }
@@ -1350,7 +1350,7 @@ namespace Triggernometry
                                         {
                                             f.Enabled = true;
                                             TreeNode tn;
-                                            if (ctx.trig.Repo == null)
+                                            if (ctx.trig == null || ctx.trig.Repo == null)
                                             {
                                                 tn = ctx.plug.LocateNodeHostingFolder(ctx.plug.ui.treeView1.Nodes[0], f);
                                             }
@@ -2196,7 +2196,7 @@ namespace Triggernometry
                                         {
                                             t.Enabled = true;
                                             TreeNode tn;
-                                            if (ctx.trig.Repo == null)
+                                            if (ctx.trig == null || ctx.trig.Repo == null)
                                             {
                                                 tn = ctx.plug.LocateNodeHostingTrigger(ctx.plug.ui.treeView1.Nodes[0], t);
                                             }
@@ -2219,7 +2219,7 @@ namespace Triggernometry
                                         {
                                             t.Enabled = false;
                                             TreeNode tn;
-                                            if (ctx.trig.Repo == null)
+                                            if (ctx.trig == null || ctx.trig.Repo == null)
                                             {
                                                 tn = ctx.plug.LocateNodeHostingTrigger(ctx.plug.ui.treeView1.Nodes[0], t);
                                             }
@@ -2285,16 +2285,34 @@ namespace Triggernometry
                                     RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
                                     break;
                                 case MouseOpEnum.LeftClick:
-                                    RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE | RealPlugin.WindowsUtils.MouseEventFlags.LEFTDOWN, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
-                                    RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE | RealPlugin.WindowsUtils.MouseEventFlags.LEFTUP, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                    Task.Run(() =>
+                                    {
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                        Thread.Sleep(10);
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.LEFTDOWN, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                        Thread.Sleep(10);
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.LEFTUP, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                    });
                                     break;
                                 case MouseOpEnum.MiddleClick:
-                                    RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE | RealPlugin.WindowsUtils.MouseEventFlags.MIDDLEDOWN, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
-                                    RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE | RealPlugin.WindowsUtils.MouseEventFlags.MIDDLEUP, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                    Task.Run(() =>
+                                    {
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                        Thread.Sleep(10);
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MIDDLEDOWN, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                        Thread.Sleep(10);
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MIDDLEUP, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                    });
                                     break;
                                 case MouseOpEnum.RightClick:
-                                    RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE | RealPlugin.WindowsUtils.MouseEventFlags.RIGHTDOWN, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
-                                    RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE | RealPlugin.WindowsUtils.MouseEventFlags.RIGHTUP, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                    Task.Run(() =>
+                                    {
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                        Thread.Sleep(10);
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.RIGHTDOWN, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                        Thread.Sleep(10);
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.RIGHTUP, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                    });
                                     break;
                             }
                         }

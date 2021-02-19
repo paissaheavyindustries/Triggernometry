@@ -145,7 +145,9 @@ namespace Triggernometry.Variables
             {
                 while (Height < newHeight)
                 {
-                    Rows.Add(new VariableTableRow());
+                    VariableTableRow vtr = new VariableTableRow();
+                    vtr.Values.AddRange(new Variable[newWidth]);
+                    Rows.Add(vtr);
                 }
             }
             else if (Height > newHeight)

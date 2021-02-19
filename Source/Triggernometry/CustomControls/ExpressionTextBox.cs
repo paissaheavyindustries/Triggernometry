@@ -172,6 +172,38 @@ namespace Triggernometry.CustomControls
             UpdateBackground();
         }
 
+        private void panel1_Click(object sender, EventArgs e)
+        {
+            ToggleExpand();
+        }
+
+        private void panel1_DoubleClick(object sender, EventArgs e)
+        {
+            ToggleExpand();
+        }
+
+        private void ToggleExpand()
+        {
+            if (textBox1.Multiline == true)
+            {
+                textBox1.Multiline = false;
+                textBox1.MinimumSize = new Size(textBox1.MinimumSize.Width, 0);
+                textBox1.ScrollBars = ScrollBars.None;
+                Image tmp = panel1.BackgroundImage;
+                panel1.BackgroundImage = panel2.BackgroundImage;
+                panel2.BackgroundImage = tmp;
+            }
+            else
+            {
+                textBox1.Multiline = true;
+                textBox1.MinimumSize = new Size(textBox1.MinimumSize.Width, 100);
+                textBox1.ScrollBars = ScrollBars.Both;
+                Image tmp = panel1.BackgroundImage;
+                panel1.BackgroundImage = panel2.BackgroundImage;
+                panel2.BackgroundImage = tmp;
+            }
+        }
+
     }
 
 }
