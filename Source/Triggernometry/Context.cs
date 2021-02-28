@@ -569,7 +569,7 @@ namespace Triggernometry
                         else if (x.IndexOf("tvar:") == 0)
                         {
                             Variables.VariableStore store;
-                            if (x.IndexOf("lvar:") == 0)
+                            if (x.IndexOf("tvar:") == 0)
                             {
                                 store = plug.sessionvars;
                             }
