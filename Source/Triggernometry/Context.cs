@@ -392,15 +392,17 @@ namespace Triggernometry
                         else if ((x.IndexOf("evar:") == 0) || (x.IndexOf("epvar:") == 0))
                         {
                             Variables.VariableStore store;
+                            string varname;
                             if (x.IndexOf("evar:") == 0)
                             {
                                 store = plug.sessionvars;
+                                varname = x.Substring(5);
                             }
                             else
                             {
                                 store = plug.cfg.PersistentVariables;
-                            }
-                            string varname = x.Substring(6);
+                                varname = x.Substring(6);
+                            }                            
                             lock (store.Scalar) // verified
                             {
                                 if (store.Scalar.ContainsKey(varname) == true)
@@ -418,15 +420,17 @@ namespace Triggernometry
                         else if ((x.IndexOf("elvar:") == 0) || (x.IndexOf("eplvar:") == 0))
                         {
                             Variables.VariableStore store;
+                            string varname;
                             if (x.IndexOf("elvar:") == 0)
                             {
                                 store = plug.sessionvars;
+                                varname = x.Substring(6);
                             }
                             else
                             {
                                 store = plug.cfg.PersistentVariables;
-                            }
-                            string varname = x.Substring(6);
+                                varname = x.Substring(7);
+                            }                            
                             lock (store.List) // verified
                             {
                                 if (store.List.ContainsKey(varname) == true)
@@ -444,15 +448,17 @@ namespace Triggernometry
                         else if ((x.IndexOf("etvar:") == 0) || (x.IndexOf("eptvar:") == 0))
                         {
                             Variables.VariableStore store;
+                            string varname;
                             if (x.IndexOf("etvar:") == 0)
                             {
                                 store = plug.sessionvars;
+                                varname = x.Substring(6);
                             }
                             else
                             {
                                 store = plug.cfg.PersistentVariables;
+                                varname = x.Substring(7);
                             }
-                            string varname = x.Substring(6);
                             lock (store.Table) // verified
                             {
                                 if (store.Table.ContainsKey(varname) == true)
@@ -470,15 +476,17 @@ namespace Triggernometry
                         else if ((x.IndexOf("var:") == 0) || (x.IndexOf("pvar:") == 0))
                         {
                             Variables.VariableStore store;
+                            string varname;
                             if (x.IndexOf("var:") == 0)
                             {
                                 store = plug.sessionvars;
+                                varname = x.Substring(4);
                             }
                             else
                             {
                                 store = plug.cfg.PersistentVariables;
+                                varname = x.Substring(5);
                             }
-                            string varname = x.Substring(4);
                             lock (store.Scalar) // verified
                             {
                                 VariableScalar vs = GetScalarVariable(store, varname, false);
@@ -490,15 +498,17 @@ namespace Triggernometry
                         else if ((x.IndexOf("lvar:") == 0) || (x.IndexOf("plvar:") == 0))
                         {
                             Variables.VariableStore store;
+                            string varname;
                             if (x.IndexOf("lvar:") == 0)
                             {
                                 store = plug.sessionvars;
+                                varname = x.Substring(5);
                             }
                             else
                             {
                                 store = plug.cfg.PersistentVariables;
+                                varname = x.Substring(6);
                             }
-                            string varname = x.Substring(5);
                             mx = rexlprp.Match(varname);
                             if (mx.Success == true)
                             {
@@ -566,18 +576,20 @@ namespace Triggernometry
                             }
                         }
                         // retrieve table variable value
-                        else if (x.IndexOf("tvar:") == 0)
+                        else if ((x.IndexOf("tvar:") == 0) || (x.IndexOf("ptvar:") == 0))
                         {
                             Variables.VariableStore store;
+                            string varname;
                             if (x.IndexOf("tvar:") == 0)
                             {
                                 store = plug.sessionvars;
+                                varname = x.Substring(5);
                             }
                             else
                             {
                                 store = plug.cfg.PersistentVariables;
+                                varname = x.Substring(6);
                             }
-                            string varname = x.Substring(5);
                             mx = rexlprp.Match(varname);
                             if (mx.Success == true)
                             {
@@ -646,15 +658,17 @@ namespace Triggernometry
                         else if ((x.IndexOf("tvarrl:") == 0) || (x.IndexOf("ptvarrl:") == 0))
                         {
                             Variables.VariableStore store;
+                            string varname;
                             if (x.IndexOf("tvarrl:") == 0)
                             {
                                 store = plug.sessionvars;
+                                varname = x.Substring(7);
                             }
                             else
                             {
                                 store = plug.cfg.PersistentVariables;
+                                varname = x.Substring(8);
                             }
-                            string varname = x.Substring(7);
                             mx = rexlprp.Match(varname);
                             if (mx.Success == true)
                             {
@@ -720,15 +734,17 @@ namespace Triggernometry
                         else if ((x.IndexOf("tvarcl:") == 0) || (x.IndexOf("ptvarcl:") == 0))
                         {
                             Variables.VariableStore store;
+                            string varname;
                             if (x.IndexOf("tvarcl:") == 0)
                             {
                                 store = plug.sessionvars;
+                                varname = x.Substring(7);
                             }
                             else
                             {
                                 store = plug.cfg.PersistentVariables;
+                                varname = x.Substring(8);
                             }
-                            string varname = x.Substring(7);
                             mx = rexlprp.Match(varname);
                             if (mx.Success == true)
                             {
