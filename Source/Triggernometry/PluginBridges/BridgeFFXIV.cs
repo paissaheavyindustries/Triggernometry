@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
@@ -22,6 +22,8 @@ namespace Triggernometry.PluginBridges
         public static Int64 LastCheck = 0;
         public static Int64 TickNum = 0;
         public static uint PlayerId = 0;
+
+        public static uint ZoneID = 0;
 
         public static Configuration cfg;
 
@@ -98,7 +100,7 @@ namespace Triggernometry.PluginBridges
                     throw new ArgumentException("DataSubscription not initialized");
                 }
                 EventInfo ei = subs.GetType().GetEvent("ParsedLogLine", BindingFlags.GetField | BindingFlags.Public | BindingFlags.Instance);
-                if (subs == null)
+                if (ei == null)
                 {
                     throw new ArgumentException("No ParsedLogLine found");
                 }
@@ -107,6 +109,18 @@ namespace Triggernometry.PluginBridges
                 Delegate handler = Delegate.CreateDelegate(deltype, p, mix);
                 ei.AddEventHandler(subs, handler);
                 LogMessage(RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/ffxiv/networksubok", "Subscribed to FFXIV network events"));
+                ei = subs.GetType().GetEvent("ZoneChanged", BindingFlags.GetField | BindingFlags.Public | BindingFlags.Instance);
+                if (ei != null)
+                {
+                    mix = p.GetType().GetMethod("ZoneChangeDelegate");
+                    deltype = ei.EventHandlerType;
+                    handler = Delegate.CreateDelegate(deltype, p, mix);
+                    ei.AddEventHandler(subs, handler);                    
+                }
+                else
+                {
+                    LogMessage(RealPlugin.DebugLevelEnum.Error, "No ZoneChanged found");
+                }
             }
             catch (Exception ex)
             {
@@ -301,6 +315,8 @@ namespace Triggernometry.PluginBridges
             vc.SetValue("worldid", cmx.WorldID);
             vc.SetValue("worldname", cmx.WorldName);
             vc.SetValue("currentworldid", cmx.CurrentWorldID);
+            vc.SetValue("homeworldid", cmx.WorldID);
+            vc.SetValue("homeworldname", cmx.WorldName);
         }
 
         private static object GetInstance()
@@ -442,13 +458,21 @@ namespace Triggernometry.PluginBridges
                             phase = 5;
                             PopulateClumpFromCombatant(PartyMembers[ex], cmx, 1, nump == 2 ? 1 : 0, ex + 1);
                             phase = 6;
+                            for (int i = 0; i < ex; i++)
+                            {
+                                if (PartyMembers[ex].CompareTo(PartyMembers[i]) == 0)
+                                {
+                                    ex--;
+                                    break;
+                                }
+                            }
                             ex++;
                             if (ex >= PartyMembers.Count)
                             {
                                 // full party found
                                 break;
                             }
-                        }
+                        }   
                     }
                     phase = 7;
                     NumPartyMembers = ex;

@@ -36,7 +36,10 @@ namespace Triggernometry
             WindowMessage,
             DiskFile,
             TableVariable,
-            Mutex
+            Mutex,
+            Placeholder,
+            NamedCallback,
+            Mouse
         }
 
         public enum VariableOpEnum
@@ -164,7 +167,8 @@ namespace Triggernometry
             SaveReplayBuffer,
             SetScene,
             ShowSource,
-            HideSource
+            HideSource,
+            JSONPayload
         }
 
         public enum KeypressTypeEnum
@@ -177,6 +181,14 @@ namespace Triggernometry
         {
             Release,
             Acquire
+        }
+
+        public enum LogMessageEnum
+        {
+            Error,
+            Warning,
+            Info,
+            Verbose
         }
 
         [Flags]
@@ -200,6 +212,26 @@ namespace Triggernometry
             Underline = 4,
             Strikeout = 8,
             Outline = 16
+        }
+
+        public enum MouseOpEnum
+        {
+            Move,
+            LeftClick,
+            MiddleClick,
+            RightClick
+        }
+
+        public enum MouseCoordEnum
+        {
+            Absolute,
+            Relative
+        }
+
+        public enum HTTPMethodEnum
+        {
+            POST,
+            GET
         }
 
         #endregion
@@ -763,6 +795,24 @@ namespace Triggernometry
         #endregion
         #region Action specific properties - JSON
 
+        internal HTTPMethodEnum _JsonOperationType { get; set; } = HTTPMethodEnum.POST;
+        [XmlAttribute]
+        public string JsonOperationType
+        {
+            get
+            {
+                if (_JsonOperationType == HTTPMethodEnum.POST)
+                {
+                    return null;
+                }
+                return _JsonOperationType.ToString();
+            }
+            set
+            {
+                _JsonOperationType = (HTTPMethodEnum)Enum.Parse(typeof(HTTPMethodEnum), value);
+            }
+        }
+
         internal bool _JsonCacheRequest { get; set; } = false;
         [XmlAttribute]
         public string JsonCacheRequest
@@ -1147,6 +1197,27 @@ namespace Triggernometry
             }
         }
 
+        internal LogMessageEnum _LogLevel { get; set; } = LogMessageEnum.Error;
+        [XmlAttribute]
+        public string LogLevel
+        {
+            get
+            {
+                if (_LogLevel != LogMessageEnum.Error)
+                {
+                    return _LogLevel.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _LogLevel = (LogMessageEnum)Enum.Parse(typeof(LogMessageEnum), value);
+            }
+        }
+
         #endregion
         #region Action specific properties - Message box
 
@@ -1190,6 +1261,87 @@ namespace Triggernometry
         }
 
         #endregion
+        #region Action specific properties - Mouse
+
+        internal MouseOpEnum _MouseOpType { get; set; } = MouseOpEnum.Move;
+        [XmlAttribute]
+        public string MouseOpType
+        {
+            get
+            {
+                if (_MouseOpType != MouseOpEnum.Move)
+                {
+                    return _MouseOpType.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _MouseOpType = (MouseOpEnum)Enum.Parse(typeof(MouseOpEnum), value);
+            }
+        }
+
+        internal MouseCoordEnum _MouseCoordType { get; set; } = MouseCoordEnum.Absolute;
+        [XmlAttribute]
+        public string MouseCoordType
+        {
+            get
+            {
+                if (_MouseCoordType != MouseCoordEnum.Absolute)
+                {
+                    return _MouseCoordType.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _MouseCoordType = (MouseCoordEnum)Enum.Parse(typeof(MouseCoordEnum), value);
+            }
+        }
+
+        internal string _MouseX = "0";
+        [XmlAttribute]
+        public string MouseX
+        {
+            get
+            {
+                if (_MouseX == "0")
+                {
+                    return null;
+                }
+                return _MouseX.ToString();
+            }
+            set
+            {
+                _MouseX = value;
+            }
+        }
+
+        internal string _MouseY = "0";
+        [XmlAttribute]
+        public string MouseY
+        {
+            get
+            {
+                if (_MouseY == "0")
+                {
+                    return null;
+                }
+                return _MouseY.ToString();
+            }
+            set
+            {
+                _MouseY = value;
+            }
+        }
+
+        #endregion
         #region Action specific properties - Mutex
 
         internal MutexOpEnum _MutexOpType { get; set; } = MutexOpEnum.Release;
@@ -1228,6 +1380,45 @@ namespace Triggernometry
             set
             {
                 _MutexName = value;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Named callback
+
+        internal string _NamedCallbackName = "";
+        [XmlAttribute]
+        public string NamedCallbackName
+        {
+            get
+            {
+                if (_NamedCallbackName == "")
+                {
+                    return null;
+                }
+                return _NamedCallbackName;
+            }
+            set
+            {
+                _NamedCallbackName = value;
+            }
+        }
+
+        internal string _NamedCallbackParam = "";
+        [XmlAttribute]
+        public string NamedCallbackParam
+        {
+            get
+            {
+                if (_NamedCallbackParam == "")
+                {
+                    return null;
+                }
+                return _NamedCallbackParam;
+            }
+            set
+            {
+                _NamedCallbackParam = value;
             }
         }
 
@@ -1291,6 +1482,26 @@ namespace Triggernometry
             }
         }
 
+        internal string _OBSJSONPayload = "";
+        [XmlAttribute]
+        public string OBSJSONPayload
+        {
+            get
+            {
+                if (_OBSJSONPayload == "")
+                {
+                    return null;
+                }
+                return _OBSJSONPayload;
+            }
+            set
+            {
+                _OBSJSONPayload = value;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Placeholder
         #endregion
         #region Action specific properties - Play sound
 

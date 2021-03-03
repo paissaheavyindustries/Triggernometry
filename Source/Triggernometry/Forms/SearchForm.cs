@@ -83,6 +83,7 @@ namespace Triggernometry.Forms
         {
             statusStrip1.Visible = false;
             lblResultInfo.Visible = false;
+            expSearchTerm.Focus();
         }
 
         private void ExpSearchTerm_OnEnter()

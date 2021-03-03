@@ -1,35 +1,109 @@
-﻿RepositoryForm/lblAudioOverride
-Audio output setting override
+﻿removed: ----------------------
 
-RepositoryForm/cbxAudioOverride[As defined in repository]
-As defined in repository
+Plugin/UserInterface/lblWelcomeSpseHeader
+Plugin/UserInterface/lblWelcomeSpse
+Plugin/UserInterface/lblWelcomeDifferencesHeader
+Plugin/UserInterface/lblWelcomeDifferences
+Plugin/UserInterface/lblWelcomeCreateHeader
+Plugin/UserInterface/lblWelcomeCreate
 
-RepositoryForm/cbxAudioOverride[Audio override setting always on]
-Audio override setting always on
+updated: ----------------------
 
-RepositoryForm/cbxAudioOverride[Audio override setting always off]
-Audio override setting always off
+internal/Plugin/repoexportnull
+Data for repository {0} could not be unserialized, make sure you are running the latest version of Triggernometry
 
-ConfigurationForm/cbxTestLive
-Set testing with live values as the default action test method
+added: ----------------------
 
-ConfigurationForm/cbxTestLive
-Enable aura hardware acceleration
+    <TranslationEntry Key="StateForm/btnPeScalarAdd" Translation="Add variable" />
+    <TranslationEntry Key="StateForm/btnPeScalarEdit" Translation="Edit variable" />
+    <TranslationEntry Key="StateForm/btnPeScalarRefresh" Translation="Refresh" />
+    <TranslationEntry Key="StateForm/btnPeScalarRemove" Translation="Remove variable" />
+    <TranslationEntry Key="StateForm/btnPeScalarRemoveAll" Translation="Remove all variables" />
+    <TranslationEntry Key="StateForm/btnPeListAdd" Translation="Add variable" />
+    <TranslationEntry Key="StateForm/btnPeListEdit" Translation="Edit variable" />
+    <TranslationEntry Key="StateForm/btnPeListRefresh" Translation="Refresh" />
+    <TranslationEntry Key="StateForm/btnPeListRemove" Translation="Remove variable" />
+    <TranslationEntry Key="StateForm/btnPeListRemoveAll" Translation="Remove all variables" />
+    <TranslationEntry Key="StateForm/btnPeTableAdd" Translation="Add variable" />
+    <TranslationEntry Key="StateForm/btnPeTableEdit" Translation="Edit variable" />
+    <TranslationEntry Key="StateForm/btnPeTableRefresh" Translation="Refresh" />
+    <TranslationEntry Key="StateForm/btnPeTableRemove" Translation="Remove variable" />
+    <TranslationEntry Key="StateForm/btnPeTableRemoveAll" Translation="Remove all variables" />
+    <TranslationEntry Key="StateForm/btnScalarRemoveAll" Translation="Remove all variables" />
+    <TranslationEntry Key="StateForm/btnListRemoveAll" Translation="Remove all variables" />
+    <TranslationEntry Key="StateForm/btnTableRemoveAll" Translation="Remove all variables" />
 
-ConfigurationForm/lblMonitorWindow
-Monitor window for showing/hiding aura
+FolderForm/chkFfxivZoneFilter
+Restrict event processing only to when currently in given zone ID
 
-ConfigurationForm/grpUserInterface
- User interface 
+FolderForm/lblFfxivZoneId
+Zone ID
 
-ActionForm/lblReadOnly
-You are in read-only mode, as the configuration of remote triggers can't be edited locally. If you wish to edit the action, you will need to make a local copy of the trigger.
+FolderForm/btnGetCurFfxivZone
+Retrieve current zone ID
 
-internal/Context/lastindexofargerror
-Lastindexof function requires one argument, {0} were given
+ActionForm/cbxObsOpType[Custom JSON payload]
+Custom JSON payload
 
-Plugin/UserInterface/ctxCollapseAll
-Collapse all
+ActionForm/lblObsJSONPayload
+JSON payload
 
-Plugin/UserInterface/ctxExpand
-Expand all
+ActionForm/cbsJsonType[POST]
+POST
+
+ActionForm/cbsJsonType[GET]
+GET
+
+ActionForm/cbxActionType[Mouse operation]
+Mouse operation
+
+ActionForm/cbxMouseOp[Move mouse]
+Move mouse
+
+ActionForm/cbxMouseOp[Left click]
+Left click
+
+ActionForm/cbxMouseOp[Middle click]
+Middle click
+
+ActionForm/cbxMouseOp[Right click]
+Right click
+
+ActionForm/cbxMouseCoord[Absolute]
+Absolute
+
+ActionForm/cbxMouseCoord[Relative]
+Relative
+
+internal/Action/descmousecoordabsolute
+to absolute coordinates
+
+internal/Action/descmousecoordrelative
+by relative coordinates
+
+internal/Action/descobsjsonpayload
+Send custom JSON payload to OBS
+
+internal/Action/descmousemove
+Move mouse {0} X: {1} Y: {2}
+
+internal/Action/descmouselmb
+Move mouse {0} X: {1} Y: {2} and left click
+
+internal/Action/descmousemmb
+Move mouse {0} X: {1} Y: {2} and middle click
+
+internal/Action/descmousermb
+Move mouse {0} X: {1} Y: {2} and right click
+
+internal/Plugin/cfgcorrupted
+Configuration file '{0}' appears to have been corrupted, loading previous configuration file '{1}'
+
+Plugin/UserInterface/lblWelcomeStartHeader
+Where can I find triggers to use in Triggernometry?
+
+Plugin/UserInterface/lblWelcomeStart
+When you start Triggernometry for the first time, you will generally see an empty view with "Local Triggers" and "Remote Triggers".&#xD;&#xA;&#xD;&#xA;To access a lot of premade triggers for Triggernometry, you can right-click on "Remote Triggers", and choose to add a repository from list:
+
+internal/Context/compareargerror
+Compare function requires one or two arguments, {0} were given

@@ -1423,5 +1423,27 @@
     <TranslationEntry Key="VariableEditorForm/btnRowRemove" Translation="Remove row" />
     <TranslationEntry Key="VariableEditorForm/grpGeneral" Translation=" General settings " />
     <TranslationEntry Key="VariableEditorForm/lblVariableName" Translation="Variable name" />
+	<!-- new in 1.1.3.1 -->
+    <TranslationEntry Key="ActionForm/lblLogMessageLevel" Translation="Variable name" />
+    <TranslationEntry Key="ActionForm/cbxLoggingLevel[Error]" Translation="Error" />
+    <TranslationEntry Key="ActionForm/cbxLoggingLevel[Warning]" Translation="Warning" />
+    <TranslationEntry Key="ActionForm/cbxLoggingLevel[Info]" Translation="Info" />
+    <TranslationEntry Key="ActionForm/cbxLoggingLevel[Verbose]" Translation="Verbose" />
+    <TranslationEntry Key="TestInputForm/lblEventDestination" Translation="Destination" />
+    <TranslationEntry Key="TestInputForm/cbxEventDestination[Normal log line]" Translation="Normal log line" />
+    <TranslationEntry Key="TestInputForm/cbxEventDestination[FFXIV network event]" Translation="FFXIV network event" />
+    <TranslationEntry Key="ConfigurationForm/chkLogVariableExpansions" Translation="Log variable expansions" />
+    <TranslationEntry Key="internal/NamedCallback/exception" Translation="Exception occurred when invoking named callback {0}: {1}" />
+    <TranslationEntry Key="StateForm/tabNamedCallbacks" Translation="Named callbacks" />
+    <TranslationEntry Key="StateForm/colCallbackId" Translation="Id" />
+    <TranslationEntry Key="StateForm/colCallbackName" Translation="Name" />
+    <TranslationEntry Key="ActionForm/cbxActionType[Placeholder]" Translation="Placeholder" />
+    <TranslationEntry Key="ActionForm/cbxActionType[Named callback operation]" Translation="Named callback operation" />
+	<TranslationEntry Key="ActionForm/lblPlaceholderNoParams" Translation="This action has no configurable parameters." />
+	<TranslationEntry Key="internal/Action/descplaceholder" Translation="Placeholder" />
+	<TranslationEntry Key="internal/Action/descnamedcallback" Translation="Invoke named callback ({0}) with parameter ({1})" />
+	<TranslationEntry Key="internal/Action/callbackinvoke" Translation="Invoking named callback ({0}) with parameter ({1})" />	
+	<TranslationEntry Key="ActionForm/lblCallbackName" Translation="Callback name" />
+	<TranslationEntry Key="ActionForm/lblCallbackParam" Translation="Callback parameter" />
   </Translations>
 </Language>

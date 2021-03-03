@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using Costura;
 using System.Drawing;
+using System.Threading;
 
 namespace TriggernometryProxy
 {
@@ -22,10 +23,58 @@ namespace TriggernometryProxy
         private bool CornerPopupVisible = false;
         private Control CornerPopup = null;
         private bool complained = false;
+        private int callbackIdCounter = 0;
+        private List<Tuple<int, string, CustomCallbackDelegate, object>> queuedRegs = new List<Tuple<int, string, CustomCallbackDelegate, object>>();
+
+        public delegate void CustomCallbackDelegate(object o, string param);
         
         public ProxyPlugin()
         {
             CosturaUtility.Initialize();
+        }
+
+        public int RegisterNamedCallback(string name, CustomCallbackDelegate callback, object o)
+        {
+            if (name == null)
+            {
+                throw new ArgumentNullException("name");
+            }
+            if (callback == null)
+            {
+                throw new ArgumentNullException("callback");
+            }
+            int newid = Interlocked.Increment(ref callbackIdCounter);
+            lock (this)
+            {
+                if (Instance != null)
+                {
+                    Instance.RegisterNamedCallback(newid, name, callback, o);
+                }
+                else
+                {
+                    queuedRegs.Add(new Tuple<int, string, CustomCallbackDelegate, object>(newid, name, callback, o));
+                }
+            }
+            return newid;
+        }
+
+        public void UnregisterNamedCallback(int id)
+        {
+            lock (this)
+            {
+                if (Instance != null)
+                {
+                    Instance.UnregisterNamedCallback(id);
+                }
+                else
+                {
+                    var ex = (from ix in queuedRegs where ix.Item1 == id select ix).ToList();
+                    foreach (var x in ex)
+                    {
+                        queuedRegs.Remove(x);
+                    }
+                }
+            }
         }
 
         public void FailsafeRegisterHook(string hookname, string methodname)
@@ -58,7 +107,15 @@ namespace TriggernometryProxy
 
         public void InitPlugin(TabPage pluginScreenSpace, Label pluginStatusText)
         {
-            Instance = new Triggernometry.RealPlugin();
+            lock (this)
+            {
+                Instance = new Triggernometry.RealPlugin();
+                foreach (Tuple<int, string, CustomCallbackDelegate, object> t in queuedRegs)
+                {
+                    Instance.RegisterNamedCallback(t.Item1, t.Item2, t.Item3, t.Item4);
+                }
+                queuedRegs.Clear();
+            }
             Instance.mainform = ActGlobals.oFormActMain;
             Version iv = typeof(Triggernometry.RealPlugin).Assembly.GetName().Version;
             Version ip = typeof(ProxyPlugin).Assembly.GetName().Version;
@@ -82,7 +139,7 @@ namespace TriggernometryProxy
             FailsafeRegisterHook("InstanceHook", "GetInstance");
             GetPluginNameAndPath();
             ActGlobals.oFormActMain.OnLogLineRead += OFormActMain_OnLogLineRead;
-            Instance.InitPlugin(pluginScreenSpace, pluginStatusText);      
+            Instance.InitPlugin(pluginScreenSpace, pluginStatusText);
         }
 
         public void LocateTab(TabPage tp)

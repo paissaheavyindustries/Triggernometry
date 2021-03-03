@@ -14,8 +14,55 @@ namespace Triggernometry
     public class Folder
     {
 
-		private Regex rexz;
+		private Regex rexz, rexxivz;
 		private string _ZoneFilterRegularExpression;
+        private string _FfxivZoneFilterRegularExpression;
+
+        internal bool _FFXIVZoneFilterEnabled { get; set; } = false;
+        [XmlAttribute]
+        public string FFXIVZoneFilterEnabled
+        {
+            get
+            {
+                if (_FFXIVZoneFilterEnabled == false)
+                {
+                    return null;
+                }
+                return _FFXIVZoneFilterEnabled.ToString();
+            }
+            set
+            {
+                _FFXIVZoneFilterEnabled = Boolean.Parse(value);
+            }
+        }
+
+        [XmlAttribute]
+        public string FfxivZoneFilterRegularExpression
+        {
+            get
+            {
+                if (_FfxivZoneFilterRegularExpression == "")
+                {
+                    return null;
+                }
+                return _FfxivZoneFilterRegularExpression;
+            }
+            set
+            {
+                if (_FfxivZoneFilterRegularExpression != value)
+                {
+                    _FfxivZoneFilterRegularExpression = value;
+                    try
+                    {
+                        rexxivz = new Regex(_FfxivZoneFilterRegularExpression);
+                    }
+                    catch (Exception)
+                    {
+                        rexxivz = null;
+                    }
+                }
+            }
+        }
 
         internal bool _FFXIVJobFilterEnabled { get; set; } = false;
         [XmlAttribute]
@@ -217,6 +264,8 @@ namespace Triggernometry
                 (_EventFilterEnabled == true)
                 ||
                 (_FFXIVJobFilterEnabled == true)
+                ||
+                (_FFXIVZoneFilterEnabled == true)
             );
         }
 
@@ -226,9 +275,13 @@ namespace Triggernometry
             Folder f = this;
             while (f != null && ret == true)
             {
-                if (f._ZoneFilterEnabled == true)
+                if (ret == true && f._ZoneFilterEnabled == true)
                 {
                     ret = f.rexz != null ? f.rexz.IsMatch(zone) : false;
+                }
+                if (ret == true && f._FFXIVZoneFilterEnabled == true)
+                {
+                    ret = f.rexxivz != null ? f.rexxivz.IsMatch(PluginBridges.BridgeFFXIV.ZoneID.ToString()) : false;
                 }
                 f = f.Parent;
             }
@@ -253,6 +306,10 @@ namespace Triggernometry
 				{
 					ret = f.rexe != null ? f.rexe.IsMatch(evtext) : false;
 				}
+                if (ret == true && f._FFXIVZoneFilterEnabled == true)
+                {
+                    ret = f.rexxivz != null ? f.rexxivz.IsMatch(PluginBridges.BridgeFFXIV.ZoneID.ToString()) : false;
+                }
                 if (ret == true && f._FFXIVJobFilterEnabled == true)
                 {
                     VariableDictionary vc = PluginBridges.BridgeFFXIV.GetMyself();

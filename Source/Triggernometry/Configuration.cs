@@ -264,12 +264,20 @@ namespace Triggernometry
         [XmlAttribute]
         public int CacheFileExpiry { get; set; }
 
+        [XmlAttribute]
+        public bool LogVariableExpansions { get; set; }
+
+        public Variables.VariableStore PersistentVariables { get; set; }
+
         internal bool isnew;
         internal DateTime lastWrite;
+        internal string corruptRecoveryError;
 
         public Configuration()
         {
             Version = 1;
+            corruptRecoveryError = "";
+            PersistentVariables = new Variables.VariableStore();
             UpdateNotifications = UpdateNotificationsEnum.Undefined;
             DefaultRepository = UpdateNotificationsEnum.Undefined;
             Root = new Folder();
@@ -288,6 +296,7 @@ namespace Triggernometry
             UseScarborough = true;
             WarnAdmin = true;
             DeveloperMode = false;
+            LogVariableExpansions = false;
             StartupTriggerType = StartupTriggerTypeEnum.Trigger;
             EventSeparator = "";
             StartupTriggerId = Guid.Empty;

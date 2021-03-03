@@ -122,30 +122,44 @@ namespace Triggernometry
             return new DateTime(eorzeaTicks).TimeOfDay;
         }
 
-        private VariableList GetListVariable(RealPlugin p, string varname, bool createNew)
+        private VariableScalar GetScalarVariable(VariableStore vs, string varname, bool createNew)
         {
-            if (p.listvariables.ContainsKey(varname) == true)
+            if (vs.Scalar.ContainsKey(varname) == true)
             {
-                return p.listvariables[varname];
+                return vs.Scalar[varname];
             }
-            VariableList vl = new VariableList();
+            VariableScalar vl = new VariableScalar();
             if (createNew == true)
             {
-                p.listvariables[varname] = vl;
+                vs.Scalar[varname] = vl;
             }
             return vl;
         }
 
-        private VariableTable GetTableVariable(RealPlugin p, string varname, bool createNew)
+        private VariableList GetListVariable(VariableStore vs, string varname, bool createNew)
         {
-            if (p.tablevariables.ContainsKey(varname) == true)
+            if (vs.List.ContainsKey(varname) == true)
             {
-                return p.tablevariables[varname];
+                return vs.List[varname];
+            }
+            VariableList vl = new VariableList();
+            if (createNew == true)
+            {
+                vs.List[varname] = vl;
+            }
+            return vl;
+        }
+
+        private VariableTable GetTableVariable(VariableStore vs, string varname, bool createNew)
+        {
+            if (vs.Table.ContainsKey(varname) == true)
+            {
+                return vs.Table[varname];
             }
             VariableTable vl = new VariableTable();
             if (createNew == true)
             {
-                p.tablevariables[varname] = vl;
+                vs.Table[varname] = vl;
             }
             return vl;
         }
@@ -266,6 +280,11 @@ namespace Triggernometry
                             }
                             found = true;
                         }
+                        else if (x == "_ffxivzoneid")
+                        {
+                            val = PluginBridges.BridgeFFXIV.ZoneID.ToString();
+                            found = true;
+                        }
                         else if (x == "_ffxivpartyorder")
                         {
                             val = plug.cfg.FfxivPartyOrdering + " " + plug.cfg.FfxivCustomPartyOrder;
@@ -369,12 +388,24 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
-                        else if (x.IndexOf("evar:") == 0)
+                        // check if scalar variable exists
+                        else if ((x.IndexOf("evar:") == 0) || (x.IndexOf("epvar:") == 0))
                         {
-                            string varname = x.Substring(5);
-                            lock (plug.scalarvariables) // verified
+                            Variables.VariableStore store;
+                            string varname;
+                            if (x.IndexOf("evar:") == 0)
                             {
-                                if (plug.scalarvariables.ContainsKey(varname) == true)
+                                store = plug.sessionvars;
+                                varname = x.Substring(5);
+                            }
+                            else
+                            {
+                                store = plug.cfg.PersistentVariables;
+                                varname = x.Substring(6);
+                            }                            
+                            lock (store.Scalar) // verified
+                            {
+                                if (store.Scalar.ContainsKey(varname) == true)
                                 {
                                     val = "1";
                                 }
@@ -385,12 +416,24 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
-                        else if (x.IndexOf("elvar:") == 0)
+                        // check if list variable exists
+                        else if ((x.IndexOf("elvar:") == 0) || (x.IndexOf("eplvar:") == 0))
                         {
-                            string varname = x.Substring(6);
-                            lock (plug.listvariables) // verified
+                            Variables.VariableStore store;
+                            string varname;
+                            if (x.IndexOf("elvar:") == 0)
                             {
-                                if (plug.listvariables.ContainsKey(varname) == true)
+                                store = plug.sessionvars;
+                                varname = x.Substring(6);
+                            }
+                            else
+                            {
+                                store = plug.cfg.PersistentVariables;
+                                varname = x.Substring(7);
+                            }                            
+                            lock (store.List) // verified
+                            {
+                                if (store.List.ContainsKey(varname) == true)
                                 {
                                     val = "1";
                                 }
@@ -401,12 +444,24 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
-                        else if (x.IndexOf("etvar:") == 0)
+                        // check if table variable exists
+                        else if ((x.IndexOf("etvar:") == 0) || (x.IndexOf("eptvar:") == 0))
                         {
-                            string varname = x.Substring(6);
-                            lock (plug.tablevariables) // verified
+                            Variables.VariableStore store;
+                            string varname;
+                            if (x.IndexOf("etvar:") == 0)
                             {
-                                if (plug.tablevariables.ContainsKey(varname) == true)
+                                store = plug.sessionvars;
+                                varname = x.Substring(6);
+                            }
+                            else
+                            {
+                                store = plug.cfg.PersistentVariables;
+                                varname = x.Substring(7);
+                            }
+                            lock (store.Table) // verified
+                            {
+                                if (store.Table.ContainsKey(varname) == true)
                                 {
                                     val = "1";
                                 }
@@ -417,21 +472,43 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
-                        else if (x.IndexOf("var:") == 0)
+                        // retrieve scalar variable value
+                        else if ((x.IndexOf("var:") == 0) || (x.IndexOf("pvar:") == 0))
                         {
-                            string varname = x.Substring(4);
-                            lock (plug.scalarvariables) // verified
+                            Variables.VariableStore store;
+                            string varname;
+                            if (x.IndexOf("var:") == 0)
                             {
-                                if (plug.scalarvariables.ContainsKey(varname) == true)
-                                {
-                                    val = plug.scalarvariables[varname].Value;
-                                    found = true;
-                                }
+                                store = plug.sessionvars;
+                                varname = x.Substring(4);
+                            }
+                            else
+                            {
+                                store = plug.cfg.PersistentVariables;
+                                varname = x.Substring(5);
+                            }
+                            lock (store.Scalar) // verified
+                            {
+                                VariableScalar vs = GetScalarVariable(store, varname, false);
+                                val = vs.Value;
+                                found = true;
                             }
                         }
-                        else if (x.IndexOf("lvar:") == 0)
+                        // retrieve list variable value
+                        else if ((x.IndexOf("lvar:") == 0) || (x.IndexOf("plvar:") == 0))
                         {
-                            string varname = x.Substring(5);
+                            Variables.VariableStore store;
+                            string varname;
+                            if (x.IndexOf("lvar:") == 0)
+                            {
+                                store = plug.sessionvars;
+                                varname = x.Substring(5);
+                            }
+                            else
+                            {
+                                store = plug.cfg.PersistentVariables;
+                                varname = x.Substring(6);
+                            }
                             mx = rexlprp.Match(varname);
                             if (mx.Success == true)
                             {
@@ -441,9 +518,9 @@ namespace Triggernometry
                                 {
                                     case "size":
                                         {
-                                            lock (plug.listvariables)
+                                            lock (store.List)
                                             {
-                                                VariableList vl = GetListVariable(plug, gname, false);
+                                                VariableList vl = GetListVariable(store, gname, false);
                                                 val = vl.Size().ToString();
                                                 found = true;
                                             }
@@ -452,9 +529,9 @@ namespace Triggernometry
                                     case "indexof":
                                         {
                                             string garg = mx.Groups["arg"].Value;
-                                            lock (plug.listvariables)
+                                            lock (store.List)
                                             {
-                                                VariableList vl = GetListVariable(plug, gname, false);
+                                                VariableList vl = GetListVariable(store, gname, false);
                                                 val = vl.IndexOf(garg).ToString();
                                                 found = true;
                                             }
@@ -463,9 +540,9 @@ namespace Triggernometry
                                     case "lastindexof":
                                         {
                                             string garg = mx.Groups["arg"].Value;
-                                            lock (plug.listvariables)
+                                            lock (store.List)
                                             {
-                                                VariableList vl = GetListVariable(plug, gname, false);
+                                                VariableList vl = GetListVariable(store, gname, false);
                                                 val = vl.LastIndexOf(garg).ToString();
                                                 found = true;
                                             }
@@ -480,9 +557,9 @@ namespace Triggernometry
                                 {
                                     string gname = mx.Groups["name"].Value;
                                     string gindex = mx.Groups["index"].Value;
-                                    lock (plug.listvariables)
+                                    lock (store.List)
                                     {
-                                        VariableList vl = GetListVariable(plug, gname, false);
+                                        VariableList vl = GetListVariable(store, gname, false);
                                         if (gindex == "last")
                                         {
                                             gindex = vl.Size().ToString();
@@ -498,9 +575,21 @@ namespace Triggernometry
                                 }
                             }
                         }
-                        else if (x.IndexOf("tvar:") == 0)
+                        // retrieve table variable value
+                        else if ((x.IndexOf("tvar:") == 0) || (x.IndexOf("ptvar:") == 0))
                         {
-                            string varname = x.Substring(5);
+                            Variables.VariableStore store;
+                            string varname;
+                            if (x.IndexOf("tvar:") == 0)
+                            {
+                                store = plug.sessionvars;
+                                varname = x.Substring(5);
+                            }
+                            else
+                            {
+                                store = plug.cfg.PersistentVariables;
+                                varname = x.Substring(6);
+                            }
                             mx = rexlprp.Match(varname);
                             if (mx.Success == true)
                             {
@@ -508,21 +597,23 @@ namespace Triggernometry
                                 string gprop = mx.Groups["prop"].Value;
                                 switch (gprop)
                                 {
+                                    case "w":
                                     case "width":
                                         {
-                                            lock (plug.tablevariables)
+                                            lock (store.Table)
                                             {
-                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                VariableTable vt = GetTableVariable(store, gname, false);
                                                 val = vt.Width.ToString();
                                                 found = true;
                                             }
                                         }
                                         break;
+                                    case "h":
                                     case "height":
                                         {
-                                            lock (plug.tablevariables)
+                                            lock (store.Table)
                                             {
-                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                VariableTable vt = GetTableVariable(store, gname, false);
                                                 val = vt.Height.ToString();
                                                 found = true;
                                             }
@@ -538,9 +629,9 @@ namespace Triggernometry
                                     string gname = mx.Groups["name"].Value;
                                     string gcol = mx.Groups["column"].Value;
                                     string grow = mx.Groups["row"].Value;
-                                    lock (plug.tablevariables)
+                                    lock (store.Table)
                                     {
-                                        VariableTable vt = GetTableVariable(plug, gname, false);
+                                        VariableTable vt = GetTableVariable(store, gname, false);
                                         if (gcol == "last")
                                         {
                                             gcol = vt.Width.ToString();
@@ -563,9 +654,21 @@ namespace Triggernometry
                                 }
                             }
                         }
-                        else if (x.IndexOf("tvarrl:") == 0)
+                        // row-based table lookup
+                        else if ((x.IndexOf("tvarrl:") == 0) || (x.IndexOf("ptvarrl:") == 0))
                         {
-                            string varname = x.Substring(7);
+                            Variables.VariableStore store;
+                            string varname;
+                            if (x.IndexOf("tvarrl:") == 0)
+                            {
+                                store = plug.sessionvars;
+                                varname = x.Substring(7);
+                            }
+                            else
+                            {
+                                store = plug.cfg.PersistentVariables;
+                                varname = x.Substring(8);
+                            }
                             mx = rexlprp.Match(varname);
                             if (mx.Success == true)
                             {
@@ -573,21 +676,23 @@ namespace Triggernometry
                                 string gprop = mx.Groups["prop"].Value;
                                 switch (gprop)
                                 {
+                                    case "w":
                                     case "width":
                                         {
-                                            lock (plug.tablevariables)
+                                            lock (store.Table)
                                             {
-                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                VariableTable vt = GetTableVariable(store, gname, false);
                                                 val = (vt.Width > 0 ? vt.Width - 1 :0).ToString();
                                                 found = true;
                                             }
                                         }
                                         break;
+                                    case "h":
                                     case "height":
                                         {
-                                            lock (plug.tablevariables)
+                                            lock (store.Table)
                                             {
-                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                VariableTable vt = GetTableVariable(store, gname, false);
                                                 val = vt.Height.ToString();
                                                 found = true;
                                             }
@@ -603,9 +708,9 @@ namespace Triggernometry
                                     string gname = mx.Groups["name"].Value;
                                     string gheader = mx.Groups["column"].Value;
                                     string gindex = mx.Groups["row"].Value;
-                                    lock (plug.tablevariables)
+                                    lock (store.Table)
                                     {
-                                        VariableTable vt = GetTableVariable(plug, gname, false);
+                                        VariableTable vt = GetTableVariable(store, gname, false);
                                         if (gindex == "last")
                                         {
                                             gindex = (vt.Width > 0 ? vt.Width - 1 : 0).ToString();
@@ -625,9 +730,21 @@ namespace Triggernometry
                                 }
                             }
                         }
-                        else if (x.IndexOf("tvarcl:") == 0)
+                        // column-based table lookup
+                        else if ((x.IndexOf("tvarcl:") == 0) || (x.IndexOf("ptvarcl:") == 0))
                         {
-                            string varname = x.Substring(7);
+                            Variables.VariableStore store;
+                            string varname;
+                            if (x.IndexOf("tvarcl:") == 0)
+                            {
+                                store = plug.sessionvars;
+                                varname = x.Substring(7);
+                            }
+                            else
+                            {
+                                store = plug.cfg.PersistentVariables;
+                                varname = x.Substring(8);
+                            }
                             mx = rexlprp.Match(varname);
                             if (mx.Success == true)
                             {
@@ -635,21 +752,23 @@ namespace Triggernometry
                                 string gprop = mx.Groups["prop"].Value;
                                 switch (gprop)
                                 {
+                                    case "w":
                                     case "width":
                                         {
-                                            lock (plug.tablevariables)
+                                            lock (store.Table)
                                             {
-                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                VariableTable vt = GetTableVariable(store, gname, false);
                                                 val = vt.Width.ToString();
                                                 found = true;
                                             }
                                         }
                                         break;
+                                    case "h":
                                     case "height":
                                         {
-                                            lock (plug.tablevariables)
+                                            lock (store.Table)
                                             {
-                                                VariableTable vt = GetTableVariable(plug, gname, false);
+                                                VariableTable vt = GetTableVariable(store, gname, false);
                                                 val = (vt.Height > 0 ? vt.Height - 1 : 0).ToString();
                                                 found = true;
                                             }
@@ -665,9 +784,9 @@ namespace Triggernometry
                                     string gname = mx.Groups["name"].Value;
                                     string gheader = mx.Groups["column"].Value;
                                     string gindex = mx.Groups["row"].Value;
-                                    lock (plug.tablevariables)
+                                    lock (store.Table)
                                     {
-                                        VariableTable vt = GetTableVariable(plug, gname, false);
+                                        VariableTable vt = GetTableVariable(store, gname, false);
                                         if (gindex == "last")
                                         {
                                             gindex = (vt.Height > 0 ? vt.Height - 1 : 0).ToString();
@@ -779,6 +898,25 @@ namespace Triggernometry
                                             else
                                             {
                                                 val = "" + funcval.IndexOf(args[0]);
+                                            }
+                                            break;
+                                        case "compare": // compare(stringtocompare) or compare(stringtocompare, ignorecase)
+                                            if (argc != 1 && argc != 2)
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/compareargerror", "Compare function requires one or two arguments, {0} were given", argc));
+                                            }
+                                            else
+                                            {
+                                                switch (argc)
+                                                {
+                                                    case 1:
+                                                        val = "" + String.Compare(funcval, args[0], true);
+                                                        break;
+                                                    case 2:
+                                                        bool ignoreCase = bool.Parse(args[1]);
+                                                        val = "" + String.Compare(funcval, args[0], ignoreCase);
+                                                        break;
+                                                }                                                                                                
                                             }
                                             break;
                                         case "lastindexof": // lastindexof(stringtosearch)
@@ -951,9 +1089,11 @@ namespace Triggernometry
                                                     val = item.Top.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "w":
+                                                case "width":
                                                     val = item.Width.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "h":
+                                                case "height":
                                                     val = item.Height.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "opacity":
@@ -982,9 +1122,11 @@ namespace Triggernometry
                                                     val = acf.Top.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "w":
+                                                case "width":
                                                     val = acf.Width.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "h":
+                                                case "height":
                                                     val = acf.Height.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "opacity":
@@ -1024,9 +1166,11 @@ namespace Triggernometry
                                                     val = item.Top.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "w":
+                                                case "width":
                                                     val = item.Width.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "h":
+                                                case "height":
                                                     val = item.Height.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "opacity":
@@ -1052,9 +1196,11 @@ namespace Triggernometry
                                                     val = acf.Top.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "w":
+                                                case "width":
                                                     val = acf.Width.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "h":
+                                                case "height":
                                                     val = acf.Height.ToString(CultureInfo.InvariantCulture);
                                                     break;
                                                 case "opacity":
@@ -1131,6 +1277,13 @@ namespace Triggernometry
                     {
                         return newexpr;
                     }
+                }
+            }
+            if (plug != null)
+            {
+                if (plug.cfg.LogVariableExpansions == false)
+                {
+                    return newexpr;
                 }
             }
             if (newexpr.CompareTo(expr) != 0)

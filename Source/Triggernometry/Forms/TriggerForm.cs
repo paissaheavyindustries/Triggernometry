@@ -683,6 +683,25 @@ namespace Triggernometry.Forms
             PasteSelectedAction();
         }
 
+        private void dgvActions_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.RowIndex >= Actions.Count)
+            {
+                return;
+            }
+            Action a = Actions[e.RowIndex];
+            if (a.ActionType == Action.ActionTypeEnum.Placeholder)
+            {
+                e.CellStyle.BackColor = SystemColors.InactiveCaption;
+                e.CellStyle.ForeColor = SystemColors.InactiveCaptionText;
+            }
+            else
+            {
+                e.CellStyle.BackColor = dgvActions.DefaultCellStyle.BackColor;
+                e.CellStyle.ForeColor = dgvActions.DefaultCellStyle.ForeColor;
+            }
+        }
+
     }
 
 }

@@ -20,6 +20,7 @@ namespace Triggernometry.Forms
         {
             InitializeComponent();
             Shown += TestInputForm_Shown;
+            cbxEventDestination.SelectedIndex = 0;
             RestoredSavedDimensions();
         }
 
@@ -40,6 +41,7 @@ namespace Triggernometry.Forms
                 txtEvent.SelectAll();
             }
         }
+
     }
 
 }

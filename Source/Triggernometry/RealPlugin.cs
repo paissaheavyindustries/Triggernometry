@@ -19,8 +19,16 @@ using System.Runtime.InteropServices;
 using Triggernometry.Variables;
 
 /*
-- implemented new variable editor
-- added special variables _ffxivprocid and _ffxivprocname to retrieve FFXIV process ID and name respectively
+- #29 focus now on search box when opening search window
+- #31 added mouse operation as trigger action
+- #33 network triggers now work properly in zone locked folders
+- #36 network message sequence will no longer be interpreted as date
+- #38 updated repo serialization error message to prompt users to update
+- #39 automatically loads previous configuration file if current one was broken
+- #43 welcome screen reworked to be more helpful and to not hide the start button
+- #47 added compare function for string comparison
+- #50 made hw acceleration handle zero or negative aura sizes
+- #51 added a check that a node was actually selected in tree
 */
 
 namespace Triggernometry
@@ -38,6 +46,24 @@ namespace Triggernometry
             Verbose,
             Inherit
         }
+
+        public class NamedCallback
+        {
+
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public Delegate Callback { get; set; }
+            public object Obj { get; set; }
+
+            public void Invoke(string val)
+            {
+                Callback.DynamicInvoke(new object[] { Obj, val });
+            }
+
+        }
+
+        internal Dictionary<int, NamedCallback> callbacksById = new Dictionary<int, NamedCallback>();
+        internal Dictionary<string, List<NamedCallback>> callbacksByName = new Dictionary<string, List<NamedCallback>>();
 
         public class CustomTriggerProxy
         {
@@ -253,6 +279,29 @@ namespace Triggernometry
         internal class WindowsUtils
         {
 
+            [Flags]
+            public enum MouseEventFlags : uint
+            {
+                LEFTDOWN = 0x00000002,
+                LEFTUP = 0x00000004,
+                MIDDLEDOWN = 0x00000020,
+                MIDDLEUP = 0x00000040,
+                RIGHTDOWN = 0x00000008,
+                RIGHTUP = 0x00000010,
+                //XDOWN = 0x00000080,
+                //XUP = 0x00000100,
+                //WHEEL = 0x00000800,
+                MOVE = 0x00000001,
+                ABSOLUTE = 0x00008000,
+            }
+
+            public enum MouseEventDataXButtons : uint
+            {
+                NONE = 0x00000000,
+                XBUTTON1 = 0x00000001,
+                XBUTTON2 = 0x00000002,
+            }
+
             const uint WM_KEYUP = 0x101;
             const uint WM_KEYDOWN = 0x100;
 
@@ -280,6 +329,11 @@ namespace Triggernometry
             const UInt32 SW_SHOWNA = 8;
             const UInt32 SW_RESTORE = 9;
 
+            const int SM_CXSCREEN = 0x0;
+            const int SM_CYSCREEN = 0x01;
+
+            [DllImport("user32.dll")]
+            static extern int GetSystemMetrics(int smIndex);
             [DllImport("user32.dll")]
             private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
             [DllImport("user32.dll")]
@@ -291,6 +345,20 @@ namespace Triggernometry
             private static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
             [DllImport("user32.dll")]
             private static extern IntPtr GetForegroundWindow();
+            [DllImport("user32.dll")]
+            static extern void mouse_event(uint dwFlags, int dx, int dy, uint dwData, int dwExtraInfo);
+
+            public static void SendMouse(MouseEventFlags flags, MouseEventDataXButtons buttons, int x, int y)
+            {
+                if ((flags & MouseEventFlags.ABSOLUTE) == MouseEventFlags.ABSOLUTE)
+                {
+                    int mx = GetSystemMetrics(SM_CXSCREEN);
+                    int my = GetSystemMetrics(SM_CYSCREEN);
+                    x = (int)(65536.0 / mx * x);
+                    y = (int)(65536.0 / my * y);
+                }
+                mouse_event((uint)flags, x, y, (uint)buttons, 0);
+            }
 
             public static void SendKeycode(string windowtitle, int keycode)
             {
@@ -372,9 +440,7 @@ namespace Triggernometry
         internal List<Trigger> Triggers;
         internal List<Trigger> ActiveTextTriggers;
         internal List<Trigger> ActiveFFXIVNetworkTriggers;
-        internal Dictionary<string, VariableScalar> scalarvariables;
-        internal Dictionary<string, VariableList> listvariables;
-        internal Dictionary<string, VariableTable> tablevariables;
+        internal VariableStore sessionvars;
         internal Dictionary<string, Forms.AuraContainerForm> imageauras;
         internal Dictionary<string, Forms.AuraContainerForm> textauras;
         internal bool DisableLogging;
@@ -1047,9 +1113,7 @@ namespace Triggernometry
             Triggers = new List<Trigger>();
             ActiveTextTriggers = new List<Trigger>();
             ActiveFFXIVNetworkTriggers = new List<Trigger>();
-            scalarvariables = new Dictionary<string, VariableScalar>();
-            listvariables = new Dictionary<string, VariableList>();
-            tablevariables = new Dictionary<string, VariableTable>();
+            sessionvars = new VariableStore();
             imageauras = new Dictionary<string, Forms.AuraContainerForm>();
             textauras = new Dictionary<string, Forms.AuraContainerForm>();
             ThreadPool.SetMinThreads(10, 10);
@@ -1192,7 +1256,7 @@ namespace Triggernometry
         }
 
         internal void TriggerDisabled(Trigger t)
-        {
+        {            
             switch (t._Source)
             {
                 case Trigger.TriggerSourceEnum.Log:
@@ -1777,6 +1841,7 @@ namespace Triggernometry
                 {
                     cfg.ShowWelcome = false;
                 }
+                ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
                 BackupConfiguration();
                 FixDuplicateFolderReferences(null, cfg, null);
                 PluginBridges.BridgeFFXIV.cfg = cfg;
@@ -1799,6 +1864,10 @@ namespace Triggernometry
                 ui.Dock = DockStyle.Fill;
                 ui.plug = this;
                 pluginScreenSpace.Controls.Add(ui);
+                if (cfg.corruptRecoveryError != "")
+                {
+                    FilteredAddToLog(DebugLevelEnum.Error, cfg.corruptRecoveryError);
+                }
                 WMPUnavailable = false;
                 exwhere = I18n.Translate("internal/Plugin/inicache", "performing cache cleanup");
                 ClearCache();
@@ -2020,7 +2089,7 @@ namespace Triggernometry
                     }
                     else
                     {
-                        trans = I18n.Translate("internal/Plugin/repoexportnull", "Data for repository {0} could not be unserialized", r.Name);
+                        trans = I18n.Translate("internal/Plugin/repoexportnull", "Data for repository {0} could not be unserialized, make sure you are running the latest version of Triggernometry", r.Name);
                         FilteredAddToLog(DebugLevelEnum.Error, trans);
                         r.AddToLog(trans);
                     }
@@ -2290,7 +2359,7 @@ namespace Triggernometry
                 }
                 else
                 {
-                    trans = I18n.Translate("internal/Plugin/repoexportnull", "Data for repository {0} could not be unserialized", r.Name);
+                    trans = I18n.Translate("internal/Plugin/repoexportnull", "Data for repository {0} could not be unserialized, make sure you are running the latest version of Triggernometry", r.Name);
                     FilteredAddToLog(DebugLevelEnum.Error, trans);
                     r.AddToLog(trans);
                 }
@@ -2440,7 +2509,7 @@ namespace Triggernometry
 
         public void SaveCurrentConfig()
         {
-            SaveConfigToFile(cfg, Path.Combine(path, pluginName + ".config.xml"));
+            SaveConfigToFile(cfg, Path.Combine(path, pluginName + ".config.xml"), true);
         }
 
         private void CheckIfAdministrator()
@@ -2655,7 +2724,7 @@ namespace Triggernometry
             }            
         }
 
-        internal void LogLineQueuerMass(IEnumerable<string> text, string zone)
+        internal void LogLineQueuerMass(IEnumerable<string> text, string zone, LogEvent.SourceEnum src)
         {
             int max = text.Count();
             int i = 0;
@@ -2665,6 +2734,7 @@ namespace Triggernometry
                 lex[i] = new LogEvent();
                 lex[i].Text = x;
                 lex[i].Zone = zone;
+                lex[i].Source = src;
                 lex[i].Timestamp = DateTime.Now;
                 i++;
             }
@@ -2925,11 +2995,16 @@ namespace Triggernometry
             }
         }
 
+        public void ZoneChangeDelegate(uint ZoneID, string ZoneName)
+        {
+            PluginBridges.BridgeFFXIV.ZoneID = ZoneID;
+        }
+
         public void NetworkLogLineReceiver(uint sequence, int messagetype, string message)
         {
             try
             {
-                string preamble = String.Format("{0}|{1}|", messagetype, sequence);
+                string preamble = String.Format("{0:00}|{1}|", messagetype, sequence.ToString());
                 if (cfg.EventSeparator.Length > 0)
                 {
                     string[] lines = message.Split(new string[] { cfg.EventSeparator }, StringSplitOptions.RemoveEmptyEntries);
@@ -2940,7 +3015,7 @@ namespace Triggernometry
                         {
                             FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/ffxivnetworksplitlogline", "Split network log line: ({0})", linex));
                         }
-                        LogLineQueuer(linex, "", LogEvent.SourceEnum.NetworkFFXIV);
+                        LogLineQueuer(linex, currentZone != null ? currentZone : "", LogEvent.SourceEnum.NetworkFFXIV);
                     }
                 }
                 else
@@ -2950,7 +3025,7 @@ namespace Triggernometry
                     {
                         FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/ffxivnetworklogline", "Network log line: ({0})", linex));
                     }
-                    LogLineQueuer(linex, "", LogEvent.SourceEnum.NetworkFFXIV);
+                    LogLineQueuer(linex, currentZone != null ? currentZone : "", LogEvent.SourceEnum.NetworkFFXIV);
                 }
             }
             catch (Exception ex)
@@ -2964,20 +3039,41 @@ namespace Triggernometry
             try
             {
                 FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/cfgload", "Loading configuration from '{0}'", filename));
-                FileInfo fi = new FileInfo(filename);                
+                FileInfo fi = new FileInfo(filename);
+                string origfilename = filename;
+                string cre = "";
                 if (fi.Exists == false)
                 {
                     FilteredAddToLog(DebugLevelEnum.Warning, I18n.Translate("internal/Plugin/cfgnew", "Configuration file '{0}' does not exist, creating a new configuration", filename));
                     return new Configuration();
                 }
-                XmlSerializer xs = new XmlSerializer(typeof(Configuration));                
+                bool corruptFallback = false;
+                if (fi.Length == 0)
+                {
+                    // configuration has been corrupted, try loading previous config file instead
+                    string newfilename = filename + ".previous";
+                    fi = new FileInfo(newfilename);
+                    cre = I18n.Translate("internal/Plugin/cfgcorrupted", "Configuration file '{0}' appears to have been corrupted, loading previous configuration file '{1}'", filename, newfilename);
+                    if (fi.Exists == true)
+                    {
+                        filename = newfilename;
+                        corruptFallback = true;
+                    }
+                }
+                Configuration cx = null;
+                XmlSerializer xs = new XmlSerializer(typeof(Configuration));
                 using (FileStream fs = File.Open(filename, FileMode.Open, FileAccess.Read))
                 {
-                    Configuration cx = (Configuration)xs.Deserialize(fs);
+                    cx = (Configuration)xs.Deserialize(fs);
                     cx.isnew = false;
                     cx.lastWrite = fi.LastWriteTimeUtc;
-                    return cx;
                 }
+                if (corruptFallback == true)
+                {
+                    cx.corruptRecoveryError = cre;
+                    SaveConfigToFile(cx, origfilename, false);
+                }
+                return cx;
             }
             catch (Exception ex)
             {
@@ -3066,14 +3162,14 @@ namespace Triggernometry
             return ex;
         }
 
-        private void SaveConfigToFile(Configuration cfg, string filename)
+        private void SaveConfigToFile(Configuration cfg, string filename, bool switchprevious)
         {
             try
             {
                 FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/cfgsave", "Saving configuration to '{0}'", filename));
                 XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
                 string test = "";
-                ns.Add("", "");                
+                ns.Add("", "");
                 XmlSerializer xs = new XmlSerializer(typeof(Configuration));
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -3103,15 +3199,23 @@ namespace Triggernometry
                         sw.Flush();
                     }
                 }
-                if (File.Exists(filename + ".previous") == true)
+                if (switchprevious == true)
                 {
-                    File.Delete(filename + ".previous");
+                    if (File.Exists(filename + ".previous") == true)
+                    {
+                        File.Delete(filename + ".previous");
+                    }
+                    if (File.Exists(filename) == true)
+                    {
+                        File.Move(filename, filename + ".previous");
+                    }
+                    File.Move(filename + ".temp", filename);
                 }
-                if (File.Exists(filename) == true)
+                else
                 {
-                    File.Move(filename, filename + ".previous");
+                    File.Copy(filename + ".temp", filename, true);
+                    File.Delete(filename + ".temp");
                 }
-                File.Move(filename + ".temp", filename);
             }
             catch (Exception ex)
             {
@@ -3328,6 +3432,67 @@ namespace Triggernometry
                 return i;
             }
             return 0;
+        }
+
+        internal void InvokeNamedCallback(string name, string val)
+        {
+            List<NamedCallback> cbs = new List<NamedCallback>();
+            lock (callbacksByName)
+            {
+                if (callbacksByName.ContainsKey(name) == true)
+                {
+                    cbs.AddRange(callbacksByName[name]);
+                }
+            }
+            foreach (NamedCallback nc in cbs)
+            {
+                try
+                {
+                    nc.Invoke(val);
+                }
+                catch (Exception ex)
+                {
+                    FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/NamedCallback/exception", "Exception occurred when invoking named callback {0}: {1}", name, ex.Message));
+                }
+            }
+        }
+
+        public void RegisterNamedCallback(int id, string name, Delegate del, object o)
+        {
+            
+            NamedCallback nc = new NamedCallback();
+            nc.Id = id;
+            nc.Callback = del;
+            nc.Obj = o;
+            nc.Name = name;
+            lock (callbacksById)
+            {
+                callbacksById[id] = nc;
+                if (callbacksByName.ContainsKey(name) == false)
+                {
+                    callbacksByName[name] = new List<NamedCallback>();
+                }
+                callbacksByName[name].Add(nc);
+            }
+        }
+
+        public void UnregisterNamedCallback(int id)
+        {
+            lock (callbacksById)
+            {
+                NamedCallback nc = null;
+                if (callbacksById.ContainsKey(id) == false)
+                {
+                    return;
+                }
+                nc = callbacksById[id];
+                callbacksById.Remove(id);
+                callbacksByName[nc.Name].Remove(nc);
+                if (callbacksByName[nc.Name].Count == 0)
+                {
+                    callbacksByName.Remove(nc.Name);
+                }
+            }
         }
 
     }

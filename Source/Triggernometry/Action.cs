@@ -729,6 +729,9 @@ namespace Triggernometry
                                 temp += I18n.Translate("internal/Action/descobshidesourcecurrent", "hide source ({0}) on current OBS scene", _OBSSourceName);
                             }
                             break;
+                        case ObsControlTypeEnum.JSONPayload:
+                            temp += I18n.Translate("internal/Action/descobsjsonpayload", "Send custom JSON payload to OBS");
+                            break;
                     }
                     break; 
                 case ActionTypeEnum.Variable:
@@ -881,6 +884,41 @@ namespace Triggernometry
                         }
                     }
                     break;
+                case ActionTypeEnum.Placeholder:
+                    temp += I18n.Translate("internal/Action/descplaceholder", "Placeholder");
+                    break;
+                case ActionTypeEnum.NamedCallback:
+                    temp += I18n.Translate("internal/Action/descnamedcallback", "Invoke named callback ({0}) with parameter ({1})", _NamedCallbackName, _NamedCallbackParam);
+                    break;
+                case ActionTypeEnum.Mouse:
+                    {
+                        string coorddesc = "";
+                        switch (_MouseCoordType)
+                        {
+                            case MouseCoordEnum.Absolute:
+                                coorddesc = I18n.Translate("internal/Action/descmousecoordabsolute", "to absolute coordinates");
+                                break;
+                            case MouseCoordEnum.Relative:
+                                coorddesc = I18n.Translate("internal/Action/descmousecoordrelative", "by relative coordinates");
+                                break;
+                        }
+                        switch (_MouseOpType)
+                            {
+                                case MouseOpEnum.Move:
+                                    temp += I18n.Translate("internal/Action/descmousemove", "Move mouse {0} X: {1} Y: {2}", coorddesc, _MouseX, _MouseY);
+                                    break;
+                                case MouseOpEnum.LeftClick:
+                                    temp += I18n.Translate("internal/Action/descmouselmb", "Move mouse {0} X: {1} Y: {2} and left click", coorddesc, _MouseX, _MouseY);
+                                    break;
+                                case MouseOpEnum.MiddleClick:
+                                    temp += I18n.Translate("internal/Action/descmousemmb", "Move mouse {0} X: {1} Y: {2} and middle click", coorddesc, _MouseX, _MouseY);
+                                    break;
+                                case MouseOpEnum.RightClick:
+                                    temp += I18n.Translate("internal/Action/descmousermb", "Move mouse {0} X: {1} Y: {2} and right click", coorddesc, _MouseX, _MouseY);
+                                    break;
+                            }
+                    }
+                    break;
                 default:
                     temp += I18n.Translate("internal/Action/descunknown", "unknown action type");
                     break;
@@ -928,28 +966,28 @@ namespace Triggernometry
 
         private VariableList GetListVariable(RealPlugin p, string varname, bool createNew)
         {
-            if (p.listvariables.ContainsKey(varname) == true)
+            if (p.sessionvars.List.ContainsKey(varname) == true)
             {
-                return p.listvariables[varname];
+                return p.sessionvars.List[varname];
             }
             VariableList vl = new VariableList();
             if (createNew == true)
             {
-                p.listvariables[varname] = vl;
+                p.sessionvars.List[varname] = vl;
             }
             return vl;
         }
 
         private VariableTable GetTableVariable(RealPlugin p, string varname, bool createNew)
         {
-            if (p.tablevariables.ContainsKey(varname) == true)
+            if (p.sessionvars.Table.ContainsKey(varname) == true)
             {
-                return p.tablevariables[varname];
+                return p.sessionvars.Table[varname];
             }
             VariableTable vt = new VariableTable();
             if (createNew == true)
             {
-                p.tablevariables[varname] = vt;
+                p.sessionvars.Table[varname] = vt;
             }
             return vt;
         }
@@ -1023,7 +1061,7 @@ namespace Triggernometry
                                     AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/warndiscordtrunc", "Discord message too long, capping to {0}", msg.Length));
                                 }
                                 var wh = new JavaScriptSerializer().Serialize(new { content = msg, tts = true });
-                                PostJson(ctx, url, wh, true);
+                                SendJson(ctx, HTTPMethodEnum.POST, url, wh, true);
                             }
                             else
                             {
@@ -1033,7 +1071,7 @@ namespace Triggernometry
                                     AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/warndiscordtrunc", "Discord message too long, capping to {0}", msg.Length));
                                 }
                                 var wh = new JavaScriptSerializer().Serialize(new { content = msg });
-                                PostJson(ctx, url, wh, true);
+                                SendJson(ctx, HTTPMethodEnum.POST, url, wh, true);
                             }
                         }
                         break;
@@ -1127,13 +1165,13 @@ namespace Triggernometry
                                 case DiskFileOpEnum.ReadIntoListVariable:
                                     {
                                         string[] data = File.ReadAllLines(filename);
-                                        lock (ctx.plug.listvariables) // verified
+                                        lock (ctx.plug.sessionvars.List) // verified
                                         {
-                                            if (ctx.plug.listvariables.ContainsKey(varname) == false)
+                                            if (ctx.plug.sessionvars.List.ContainsKey(varname) == false)
                                             {
-                                                ctx.plug.listvariables[varname] = new VariableList();
+                                                ctx.plug.sessionvars.List[varname] = new VariableList();
                                             }
-                                            VariableList x = ctx.plug.listvariables[varname];
+                                            VariableList x = ctx.plug.sessionvars.List[varname];
                                             foreach (string dat in data)
                                             {
                                                 x.Push(new VariableScalar() { Value = dat }, "");
@@ -1154,13 +1192,13 @@ namespace Triggernometry
                                 case DiskFileOpEnum.ReadIntoVariable:
                                     {
                                         string data = File.ReadAllText(filename);
-                                        lock (ctx.plug.scalarvariables) // verified
+                                        lock (ctx.plug.sessionvars.Scalar) // verified
                                         {
-                                            if (ctx.plug.scalarvariables.ContainsKey(varname) == false)
+                                            if (ctx.plug.sessionvars.Scalar.ContainsKey(varname) == false)
                                             {
-                                                ctx.plug.scalarvariables[varname] = new VariableScalar();
+                                                ctx.plug.sessionvars.Scalar[varname] = new VariableScalar();
                                             }
-                                            VariableScalar x = ctx.plug.scalarvariables[varname];
+                                            VariableScalar x = ctx.plug.sessionvars.Scalar[varname];
                                             x.Value = data;
                                             if (ctx.trig != null)
                                             {
@@ -1289,7 +1327,7 @@ namespace Triggernometry
                                         {
                                             f.Enabled = false;
                                             TreeNode tn;
-                                            if (ctx.trig.Repo == null)
+                                            if (ctx.trig == null || ctx.trig.Repo == null)
                                             {
                                                 tn = ctx.plug.LocateNodeHostingFolder(ctx.plug.ui.treeView1.Nodes[0], f);
                                             }
@@ -1312,7 +1350,7 @@ namespace Triggernometry
                                         {
                                             f.Enabled = true;
                                             TreeNode tn;
-                                            if (ctx.trig.Repo == null)
+                                            if (ctx.trig == null || ctx.trig.Repo == null)
                                             {
                                                 tn = ctx.plug.LocateNodeHostingFolder(ctx.plug.ui.treeView1.Nodes[0], f);
                                             }
@@ -1377,13 +1415,13 @@ namespace Triggernometry
                                 }
                                 if (fromcache == false)
                                 {
-                                    response = PostJson(ctx, endpoint, payload, false);
+                                    response = SendJson(ctx, _JsonOperationType, endpoint, payload, false);
                                     File.WriteAllText(fn, response);
                                 }
                             }
                             else
                             {
-                                response = PostJson(ctx, endpoint, payload, false);
+                                response = SendJson(ctx, _JsonOperationType, endpoint, payload, false);
                             }
                             if (_JsonFiringExpression != null && _JsonFiringExpression.Trim().Length > 0)
                             {
@@ -1457,11 +1495,11 @@ namespace Triggernometry
                             switch (_ListVariableOp)
                             {
                                 case ListVariableOpEnum.Unset:
-                                    lock (ctx.plug.listvariables) // verified
+                                    lock (ctx.plug.sessionvars.List) // verified
                                     {
-                                        if (ctx.plug.listvariables.ContainsKey(varname) == true)
+                                        if (ctx.plug.sessionvars.List.ContainsKey(varname) == true)
                                         {
-                                            ctx.plug.listvariables.Remove(varname);
+                                            ctx.plug.sessionvars.List.Remove(varname);
                                         }
                                     }
                                     AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listunset", "List variable ({0}) unset", varname));
@@ -1469,7 +1507,7 @@ namespace Triggernometry
                                 case ListVariableOpEnum.Push:
                                     {
                                         string value = GetListExpressionValue(ctx, _ListVariableExpressionType, _ListVariableExpression);
-                                        lock (ctx.plug.listvariables)
+                                        lock (ctx.plug.sessionvars.List)
                                         {
                                             VariableList vl = GetListVariable(ctx.plug, varname, true);
                                             vl.Push(new VariableScalar() { Value = value }, changer);
@@ -1481,7 +1519,7 @@ namespace Triggernometry
                                     {
                                         string value = GetListExpressionValue(ctx, _ListVariableExpressionType, _ListVariableExpression);
                                         int index = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _ListVariableIndex);
-                                        lock (ctx.plug.listvariables)
+                                        lock (ctx.plug.sessionvars.List)
                                         {
                                             VariableList vl = GetListVariable(ctx.plug, varname, true);
                                             vl.Insert(index, value, changer);
@@ -1493,7 +1531,7 @@ namespace Triggernometry
                                     {
                                         string value = GetListExpressionValue(ctx, _ListVariableExpressionType, _ListVariableExpression);
                                         int index = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _ListVariableIndex);
-                                        lock (ctx.plug.listvariables)
+                                        lock (ctx.plug.sessionvars.List)
                                         {
                                             VariableList vl = GetListVariable(ctx.plug, varname, true);
                                             vl.Set(index, value, changer);
@@ -1504,7 +1542,7 @@ namespace Triggernometry
                                 case ListVariableOpEnum.Remove:
                                     {
                                         int index = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _ListVariableIndex);
-                                        lock (ctx.plug.listvariables)
+                                        lock (ctx.plug.sessionvars.List)
                                         {
                                             VariableList vl = GetListVariable(ctx.plug, varname, false);
                                             vl.Remove(index, changer);
@@ -1516,18 +1554,18 @@ namespace Triggernometry
                                     {
                                         string newname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ListVariableTarget);
                                         string newval = "";
-                                        lock (ctx.plug.listvariables)
+                                        lock (ctx.plug.sessionvars.List)
                                         {
                                             VariableList vl = GetListVariable(ctx.plug, varname, false);
                                             newval = vl.StackPop(changer).ToString();
                                         }
-                                        lock (ctx.plug.scalarvariables) // verified
+                                        lock (ctx.plug.sessionvars.Scalar) // verified
                                         {
-                                            if (ctx.plug.scalarvariables.ContainsKey(newname) == false)
+                                            if (ctx.plug.sessionvars.Scalar.ContainsKey(newname) == false)
                                             {
-                                                ctx.plug.scalarvariables[newname] = new VariableScalar();
+                                                ctx.plug.sessionvars.Scalar[newname] = new VariableScalar();
                                             }
-                                            VariableScalar x = ctx.plug.scalarvariables[newname];
+                                            VariableScalar x = ctx.plug.sessionvars.Scalar[newname];
                                             x.Value = newval;
                                             x.LastChanger = changer;
                                             x.LastChanged = DateTime.Now;
@@ -1539,18 +1577,18 @@ namespace Triggernometry
                                     {
                                         string newname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ListVariableTarget);
                                         string newval = "";
-                                        lock (ctx.plug.listvariables)
+                                        lock (ctx.plug.sessionvars.List)
                                         {
                                             VariableList vl = GetListVariable(ctx.plug, varname, false);
                                             newval = vl.QueuePop(changer).ToString();
                                         }
-                                        lock (ctx.plug.scalarvariables) // verified
+                                        lock (ctx.plug.sessionvars.Scalar) // verified
                                         {
-                                            if (ctx.plug.scalarvariables.ContainsKey(newname) == false)
+                                            if (ctx.plug.sessionvars.Scalar.ContainsKey(newname) == false)
                                             {
-                                                ctx.plug.scalarvariables[newname] = new VariableScalar();
+                                                ctx.plug.sessionvars.Scalar[newname] = new VariableScalar();
                                             }
-                                            VariableScalar x = ctx.plug.scalarvariables[newname];
+                                            VariableScalar x = ctx.plug.sessionvars.Scalar[newname];
                                             x.Value = newval;
                                             x.LastChanger = changer;
                                             x.LastChanged = DateTime.Now;
@@ -1560,7 +1598,7 @@ namespace Triggernometry
                                     break;
                                 case ListVariableOpEnum.SortAlphaAsc:
                                     {
-                                        lock (ctx.plug.listvariables)
+                                        lock (ctx.plug.sessionvars.List)
                                         {
                                             VariableList vl = GetListVariable(ctx.plug, varname, false);
                                             vl.SortAlphaAsc(changer);
@@ -1570,7 +1608,7 @@ namespace Triggernometry
                                     break;
                                 case ListVariableOpEnum.SortAlphaDesc:
                                     {
-                                        lock (ctx.plug.listvariables)
+                                        lock (ctx.plug.sessionvars.List)
                                         {
                                             VariableList vl = GetListVariable(ctx.plug, varname, false);
                                             vl.SortAlphaDesc(changer);
@@ -1580,7 +1618,7 @@ namespace Triggernometry
                                     break;
                                 case ListVariableOpEnum.SortFfxivPartyAsc:
                                     {
-                                        lock (ctx.plug.listvariables)
+                                        lock (ctx.plug.sessionvars.List)
                                         {
                                             VariableList vl = GetListVariable(ctx.plug, varname, false);
                                             vl.SortFfxivPartyAsc(ctx.plug.cfg, changer);
@@ -1590,7 +1628,7 @@ namespace Triggernometry
                                     break;
                                 case ListVariableOpEnum.SortFfxivPartyDesc:
                                     {
-                                        lock (ctx.plug.listvariables)
+                                        lock (ctx.plug.sessionvars.List)
                                         {
                                             VariableList vl = GetListVariable(ctx.plug, varname, false);
                                             vl.SortFfxivPartyDesc(ctx.plug.cfg, changer);
@@ -1601,7 +1639,7 @@ namespace Triggernometry
                                 case ListVariableOpEnum.Copy:
                                     {
                                         string newname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ListVariableTarget);
-                                        lock (ctx.plug.listvariables)
+                                        lock (ctx.plug.sessionvars.List)
                                         {
                                             VariableList vl = GetListVariable(ctx.plug, varname, false);
                                             VariableList newvl = new VariableList();
@@ -1609,7 +1647,7 @@ namespace Triggernometry
                                             {
                                                 newvl.Push(x.Duplicate(), changer);
                                             }
-                                            ctx.plug.listvariables[newname] = newvl;
+                                            ctx.plug.sessionvars.List[newname] = newvl;
                                         }
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listcopy", "List variable ({0}) copied to list variable ({1})", varname, newname));
                                     }
@@ -1619,7 +1657,7 @@ namespace Triggernometry
                                         string newname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ListVariableTarget);
                                         int index = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _ListVariableIndex);
                                         int rindex = index;
-                                        lock (ctx.plug.listvariables)
+                                        lock (ctx.plug.sessionvars.List)
                                         {
                                             VariableList vl = GetListVariable(ctx.plug, varname, false);
                                             VariableList newvl = GetListVariable(ctx.plug, newname, true);
@@ -1637,18 +1675,18 @@ namespace Triggernometry
                                         string separator = GetListExpressionValue(ctx, _ListVariableExpressionType, _ListVariableExpression);
                                         string newname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ListVariableTarget);
                                         string newval = "";
-                                        lock (ctx.plug.listvariables)
+                                        lock (ctx.plug.sessionvars.List)
                                         {
                                             VariableList vl = GetListVariable(ctx.plug, varname, false);
                                             newval = vl.Join(separator);
                                         }
-                                        lock (ctx.plug.scalarvariables) // verified
+                                        lock (ctx.plug.sessionvars.Scalar) // verified
                                         {
-                                            if (ctx.plug.scalarvariables.ContainsKey(newname) == false)
+                                            if (ctx.plug.sessionvars.Scalar.ContainsKey(newname) == false)
                                             {
-                                                ctx.plug.scalarvariables[newname] = new VariableScalar();
+                                                ctx.plug.sessionvars.Scalar[newname] = new VariableScalar();
                                             }
-                                            VariableScalar x = ctx.plug.scalarvariables[newname];
+                                            VariableScalar x = ctx.plug.sessionvars.Scalar[newname];
                                             x.Value = newval;
                                             x.LastChanger = changer;
                                             x.LastChanged = DateTime.Now;
@@ -1661,30 +1699,30 @@ namespace Triggernometry
                                         string separator = GetListExpressionValue(ctx, _ListVariableExpressionType, _ListVariableExpression);
                                         string newname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ListVariableTarget);
                                         string splitval = "";
-                                        lock (ctx.plug.scalarvariables) // verified
+                                        lock (ctx.plug.sessionvars.Scalar) // verified
                                         {
-                                            if (ctx.plug.scalarvariables.ContainsKey(varname) == true)
+                                            if (ctx.plug.sessionvars.Scalar.ContainsKey(varname) == true)
                                             {
-                                                splitval = ctx.plug.scalarvariables[varname].Value;
+                                                splitval = ctx.plug.sessionvars.Scalar[varname].Value;
                                             }
                                         }
                                         string[] vals = splitval.Split(new string[] { separator }, StringSplitOptions.None);
-                                        lock (ctx.plug.listvariables)
+                                        lock (ctx.plug.sessionvars.List)
                                         {
                                             VariableList newvl = new VariableList();
                                             foreach (string x in vals)
                                             {
                                                 newvl.Push(new VariableScalar() { Value = x }, changer);
                                             }
-                                            ctx.plug.listvariables[newname] = newvl;
+                                            ctx.plug.sessionvars.List[newname] = newvl;
                                         }
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarlistsplit", "Scalar variable ({0}) split into list variable ({1}) with separator ({2})", varname, newname, separator));
                                     }
                                     break;
                                 case ListVariableOpEnum.UnsetAll:
-                                    lock (ctx.plug.listvariables) // verified
+                                    lock (ctx.plug.sessionvars.List) // verified
                                     {
-                                        ctx.plug.listvariables.Clear();
+                                        ctx.plug.sessionvars.List.Clear();
                                     }
                                     AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/alllistunset", "All list variables unset"));
                                     break;
@@ -1692,9 +1730,9 @@ namespace Triggernometry
                                     {
                                         Regex rx = new Regex(_ListVariableName);
                                         List<string> toRem = new List<string>();
-                                        lock (ctx.plug.listvariables) // verified
+                                        lock (ctx.plug.sessionvars.List) // verified
                                         {
-                                            foreach (KeyValuePair<string, VariableList> kp in ctx.plug.listvariables)
+                                            foreach (KeyValuePair<string, VariableList> kp in ctx.plug.sessionvars.List)
                                             {
                                                 if (rx.IsMatch(kp.Key) == true)
                                                 {
@@ -1703,7 +1741,7 @@ namespace Triggernometry
                                             }
                                             foreach (string vn in toRem)
                                             {
-                                                ctx.plug.listvariables.Remove(vn);
+                                                ctx.plug.sessionvars.List.Remove(vn);
                                             }
                                         }
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/regexlistunset", "All list variables matching ({0}) unset", _ListVariableName));
@@ -1722,7 +1760,15 @@ namespace Triggernometry
                             }
                             else
                             {
-                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, ctx.EvaluateStringExpression(ActionContextLogger, ctx, _LogMessageText));
+                                RealPlugin.DebugLevelEnum dl = RealPlugin.DebugLevelEnum.Error;
+                                switch (_LogLevel)
+                                {
+                                    case LogMessageEnum.Error: dl = RealPlugin.DebugLevelEnum.Error; break;
+                                    case LogMessageEnum.Info: dl = RealPlugin.DebugLevelEnum.Info; break;
+                                    case LogMessageEnum.Verbose: dl = RealPlugin.DebugLevelEnum.Verbose; break;
+                                    case LogMessageEnum.Warning: dl = RealPlugin.DebugLevelEnum.Warning; break;
+                                }
+                                AddToLog(ctx, dl, ctx.EvaluateStringExpression(ActionContextLogger, ctx, _LogMessageText));
                             }
                         }
                         break;
@@ -1818,6 +1864,12 @@ namespace Triggernometry
                                                     ctx.plug._obs.HideSource(scn, src);
                                                 }
                                                 break;
+                                            case ObsControlTypeEnum.JSONPayload:
+                                                {
+                                                    string json = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSJSONPayload);
+                                                    ctx.plug._obs.JSONPayload(json);
+                                                }
+                                                break;
                                         }
                                     }
                                     catch (Exception ex)
@@ -1840,6 +1892,10 @@ namespace Triggernometry
                         }
                         break;
                     #endregion
+                    #region Implementation - Placeholder
+                    case ActionTypeEnum.Placeholder:
+                        break;
+                    #endregion
                     #region Implementation - Play speech
                     case ActionTypeEnum.UseTTS:
 						{
@@ -1856,9 +1912,9 @@ namespace Triggernometry
                             {
                                 case VariableOpEnum.UnsetAll:
                                     {
-                                        lock (ctx.plug.scalarvariables) // verified
+                                        lock (ctx.plug.sessionvars.Scalar) // verified
                                         {
-                                            ctx.plug.scalarvariables.Clear();
+                                            ctx.plug.sessionvars.Scalar.Clear();
                                         }
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/allscalarunset", "All scalar variables unset"));
                                         break;
@@ -1867,9 +1923,9 @@ namespace Triggernometry
                                     {
                                         Regex rx = new Regex(_VariableName);
                                         List<string> toRem = new List<string>();
-                                        lock (ctx.plug.scalarvariables) // verified
+                                        lock (ctx.plug.sessionvars.Scalar) // verified
                                         {
-                                            foreach (KeyValuePair<string, VariableScalar> kp in ctx.plug.scalarvariables)
+                                            foreach (KeyValuePair<string, VariableScalar> kp in ctx.plug.sessionvars.Scalar)
                                             {
                                                 if (rx.IsMatch(kp.Key) == true)
                                                 {
@@ -1878,7 +1934,7 @@ namespace Triggernometry
                                             }
                                             foreach (string vn in toRem)
                                             {
-                                                ctx.plug.scalarvariables.Remove(vn);
+                                                ctx.plug.sessionvars.Scalar.Remove(vn);
                                             }
                                         }
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/regexscalarunset", "All scalar variables matching ({0}) unset", _VariableName));
@@ -1886,11 +1942,11 @@ namespace Triggernometry
                                     }
                                 case VariableOpEnum.Unset:
                                     {
-                                        lock (ctx.plug.scalarvariables) // verified
+                                        lock (ctx.plug.sessionvars.Scalar) // verified
                                         {
-                                            if (ctx.plug.scalarvariables.ContainsKey(varname) == true)
+                                            if (ctx.plug.sessionvars.Scalar.ContainsKey(varname) == true)
                                             {
-                                                ctx.plug.scalarvariables.Remove(varname);
+                                                ctx.plug.sessionvars.Scalar.Remove(varname);
                                             }
                                         }
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarunset", "Scalar variable ({0}) unset", varname));
@@ -1907,13 +1963,13 @@ namespace Triggernometry
                                         {
                                             newval = I18n.ThingToString(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _VariableExpression));
                                         }
-                                        lock (ctx.plug.scalarvariables) // verified
+                                        lock (ctx.plug.sessionvars.Scalar) // verified
                                         {
-                                            if (ctx.plug.scalarvariables.ContainsKey(varname) == false)
+                                            if (ctx.plug.sessionvars.Scalar.ContainsKey(varname) == false)
                                             {
-                                                ctx.plug.scalarvariables[varname] = new VariableScalar();
+                                                ctx.plug.sessionvars.Scalar[varname] = new VariableScalar();
                                             }
-                                            VariableScalar x = ctx.plug.scalarvariables[varname];
+                                            VariableScalar x = ctx.plug.sessionvars.Scalar[varname];
                                             x.Value = newval;
                                             if (ctx.trig != null)
                                             {
@@ -1941,9 +1997,9 @@ namespace Triggernometry
                             {
                                 case TableVariableOpEnum.UnsetAll:
                                     {
-                                        lock (ctx.plug.tablevariables) // verified
+                                        lock (ctx.plug.sessionvars.Table) // verified
                                         {
-                                            ctx.plug.tablevariables.Clear();
+                                            ctx.plug.sessionvars.Table.Clear();
                                         }
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/alltableunset", "All table variables unset"));
                                         break;
@@ -1952,9 +2008,9 @@ namespace Triggernometry
                                     {
                                         Regex rx = new Regex(_TableVariableName);
                                         List<string> toRem = new List<string>();
-                                        lock (ctx.plug.tablevariables) // verified
+                                        lock (ctx.plug.sessionvars.Table) // verified
                                         {
-                                            foreach (KeyValuePair<string, VariableTable> kp in ctx.plug.tablevariables)
+                                            foreach (KeyValuePair<string, VariableTable> kp in ctx.plug.sessionvars.Table)
                                             {
                                                 if (rx.IsMatch(kp.Key) == true)
                                                 {
@@ -1963,7 +2019,7 @@ namespace Triggernometry
                                             }
                                             foreach (string vn in toRem)
                                             {
-                                                ctx.plug.tablevariables.Remove(vn);
+                                                ctx.plug.sessionvars.Table.Remove(vn);
                                             }
                                         }
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/regextableunset", "All table variables matching ({0}) unset", _TableVariableName));
@@ -1973,12 +2029,12 @@ namespace Triggernometry
                                     {
                                         int w = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableX);
                                         int h = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableY);
-                                        lock (ctx.plug.tablevariables) // verified
+                                        lock (ctx.plug.sessionvars.Table) // verified
                                         {
                                             VariableTable vt = null;
-                                            if (ctx.plug.tablevariables.ContainsKey(varname) == true)
+                                            if (ctx.plug.sessionvars.Table.ContainsKey(varname) == true)
                                             {
-                                                vt = ctx.plug.tablevariables[varname];
+                                                vt = ctx.plug.sessionvars.Table[varname];
                                             }
                                             else
                                             {
@@ -1991,11 +2047,11 @@ namespace Triggernometry
                                     }
                                 case TableVariableOpEnum.Unset:
                                     {
-                                        lock (ctx.plug.tablevariables) // verified
+                                        lock (ctx.plug.sessionvars.Table) // verified
                                         {
-                                            if (ctx.plug.tablevariables.ContainsKey(varname) == true)
+                                            if (ctx.plug.sessionvars.Table.ContainsKey(varname) == true)
                                             {
-                                                ctx.plug.tablevariables.Remove(varname);
+                                                ctx.plug.sessionvars.Table.Remove(varname);
                                             }
                                         }
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tableunset", "Table variable ({0}) unset", varname));
@@ -2005,12 +2061,12 @@ namespace Triggernometry
                                     {
                                         string targetname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TableVariableTarget);
                                         int res = 0;
-                                        lock (ctx.plug.tablevariables) // verified
+                                        lock (ctx.plug.sessionvars.Table) // verified
                                         {
-                                            if (ctx.plug.tablevariables.ContainsKey(varname) == true)
+                                            if (ctx.plug.sessionvars.Table.ContainsKey(varname) == true)
                                             {
-                                                VariableTable vt = ctx.plug.tablevariables[varname];
-                                                ctx.plug.tablevariables[targetname] = (VariableTable)vt.Duplicate();
+                                                VariableTable vt = ctx.plug.sessionvars.Table[varname];
+                                                ctx.plug.sessionvars.Table[targetname] = (VariableTable)vt.Duplicate();
                                                 res = 1;
                                             }
                                         }
@@ -2029,15 +2085,15 @@ namespace Triggernometry
                                     {
                                         string targetname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TableVariableTarget);
                                         int res = 0;
-                                        lock (ctx.plug.tablevariables) // verified
+                                        lock (ctx.plug.sessionvars.Table) // verified
                                         {
-                                            if (ctx.plug.tablevariables.ContainsKey(varname) == true)
+                                            if (ctx.plug.sessionvars.Table.ContainsKey(varname) == true)
                                             {
-                                                VariableTable vt = ctx.plug.tablevariables[varname];
+                                                VariableTable vt = ctx.plug.sessionvars.Table[varname];
                                                 VariableTable tgt = null;
-                                                if (ctx.plug.tablevariables.ContainsKey(targetname) == true)
+                                                if (ctx.plug.sessionvars.Table.ContainsKey(targetname) == true)
                                                 {
-                                                    tgt = ctx.plug.tablevariables[targetname];
+                                                    tgt = ctx.plug.sessionvars.Table[targetname];
                                                     string vtchanger;
                                                     if (ctx.trig != null)
                                                     {
@@ -2051,7 +2107,7 @@ namespace Triggernometry
                                                 }
                                                 else
                                                 {
-                                                    ctx.plug.tablevariables[targetname] = (VariableTable)vt.Duplicate();
+                                                    ctx.plug.sessionvars.Table[targetname] = (VariableTable)vt.Duplicate();
                                                 }
                                                 res = 1;
                                             }
@@ -2079,7 +2135,7 @@ namespace Triggernometry
                                         {
                                             newval = I18n.ThingToString(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableExpression));
                                         }
-                                        lock (ctx.plug.tablevariables) // verified
+                                        lock (ctx.plug.sessionvars.Table) // verified
                                         {
                                             VariableTable vt = GetTableVariable(ctx.plug, varname, true);
                                             int mx = Math.Max(x, vt.Width);
@@ -2140,7 +2196,7 @@ namespace Triggernometry
                                         {
                                             t.Enabled = true;
                                             TreeNode tn;
-                                            if (ctx.trig.Repo == null)
+                                            if (ctx.trig == null || ctx.trig.Repo == null)
                                             {
                                                 tn = ctx.plug.LocateNodeHostingTrigger(ctx.plug.ui.treeView1.Nodes[0], t);
                                             }
@@ -2163,7 +2219,7 @@ namespace Triggernometry
                                         {
                                             t.Enabled = false;
                                             TreeNode tn;
-                                            if (ctx.trig.Repo == null)
+                                            if (ctx.trig == null || ctx.trig.Repo == null)
                                             {
                                                 tn = ctx.plug.LocateNodeHostingTrigger(ctx.plug.ui.treeView1.Nodes[0], t);
                                             }
@@ -2209,6 +2265,69 @@ namespace Triggernometry
                         }
                         break;
                     #endregion
+                    #region Implementation - Mouse
+                    case ActionTypeEnum.Mouse:
+                        {
+                            int mousex = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _MouseX);
+                            int mousey = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _MouseY);
+                            RealPlugin.WindowsUtils.MouseEventFlags flags = 0;
+                            switch (_MouseCoordType)
+                            {
+                                case MouseCoordEnum.Absolute:
+                                    flags |= RealPlugin.WindowsUtils.MouseEventFlags.ABSOLUTE;
+                                    break;
+                                case MouseCoordEnum.Relative:
+                                    break;
+                            }
+                            switch (_MouseOpType)
+                            {
+                                case MouseOpEnum.Move:
+                                    RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                    break;
+                                case MouseOpEnum.LeftClick:
+                                    Task.Run(() =>
+                                    {
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                        Thread.Sleep(10);
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.LEFTDOWN, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                        Thread.Sleep(10);
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.LEFTUP, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                    });
+                                    break;
+                                case MouseOpEnum.MiddleClick:
+                                    Task.Run(() =>
+                                    {
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                        Thread.Sleep(10);
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MIDDLEDOWN, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                        Thread.Sleep(10);
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MIDDLEUP, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                    });
+                                    break;
+                                case MouseOpEnum.RightClick:
+                                    Task.Run(() =>
+                                    {
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.MOVE, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                        Thread.Sleep(10);
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.RIGHTDOWN, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                        Thread.Sleep(10);
+                                        RealPlugin.WindowsUtils.SendMouse(flags | RealPlugin.WindowsUtils.MouseEventFlags.RIGHTUP, RealPlugin.WindowsUtils.MouseEventDataXButtons.NONE, mousex, mousey);
+                                    });
+                                    break;
+                            }
+                        }
+                        break;
+                    #endregion
+                    #region Implementation - Named callback
+                    case ActionTypeEnum.NamedCallback:
+                        {
+                            string cbname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _NamedCallbackName);
+                            string cbparm = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _NamedCallbackParam);
+                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/callbackinvoke", "Invoking named callback ({0}) with parameter ({1})", cbname, cbparm));
+                            ctx.plug.InvokeNamedCallback(cbname, cbparm);
+                        }
+                        break;
+                        #endregion
                 }
             }
 			catch (Exception ex)
@@ -2381,6 +2500,7 @@ namespace Triggernometry
             a._TextAuraBackgroundClInt = _TextAuraBackgroundClInt;
             a._TextAuraUseOutline = _TextAuraUseOutline;
             a._LogMessageText = _LogMessageText;
+            a._LogLevel = _LogLevel;
             a._DiscordTts = _DiscordTts;
             a._ListVariableExpression = _ListVariableExpression;
             a._ListVariableExpressionType = _ListVariableExpressionType;
@@ -2391,7 +2511,9 @@ namespace Triggernometry
             a._OBSControlType = _OBSControlType;
             a._OBSSceneName = _OBSSceneName;
             a._OBSSourceName = _OBSSourceName;
+            a._OBSJSONPayload = _OBSJSONPayload;
             a._LogProcess = _LogProcess;
+            a._JsonOperationType = _JsonOperationType;
             a._JsonCacheRequest = _JsonCacheRequest;
             a._JsonEndpointExpression = _JsonEndpointExpression;
             a._JsonFiringExpression = _JsonFiringExpression;
@@ -2419,20 +2541,34 @@ namespace Triggernometry
             a._MutexName = _MutexName;
             a._Description = _Description;
             a._DescriptionOverride = _DescriptionOverride;
+            a._NamedCallbackParam = _NamedCallbackParam;
+            a._NamedCallbackName = _NamedCallbackName;
+            a._MouseOpType = _MouseOpType;
+            a._MouseCoordType = _MouseCoordType;
+            a._MouseX = _MouseX;
+            a._MouseY = _MouseY;
         }
 
-        private string PostJson(Context ctx, string url, string json, bool expectNoContent)
+        private string SendJson(Context ctx, Action.HTTPMethodEnum method, string url, string json, bool expectNoContent)
         {
             try
             {                
                 var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
-                httpWebRequest.ContentType = "application/json";
-                httpWebRequest.Method = "POST";
-                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                switch (method)
                 {
-                    streamWriter.Write(json);
-                    streamWriter.Flush();
-                    streamWriter.Close();
+                    case HTTPMethodEnum.POST:
+                        httpWebRequest.ContentType = "application/json";
+                        httpWebRequest.Method = "POST";
+                        using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                        {
+                            streamWriter.Write(json);
+                            streamWriter.Flush();
+                            streamWriter.Close();
+                        }
+                        break;
+                    case HTTPMethodEnum.GET:
+                        httpWebRequest.Method = "GET";
+                        break;
                 }
                 var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
                 if (httpResponse.StatusCode != HttpStatusCode.NoContent && expectNoContent == true)

@@ -257,6 +257,7 @@ namespace Triggernometry.Forms
                 cbxObsOpType.SelectedIndex = 0;
                 expObsSceneName.Expression = "";
                 expObsSourceName.Expression = "";
+                expObsJSONPayload.Expression = "";
                 cbxTextAuraOp.SelectedIndex = 0;
                 cbxTextAuraAlignment.SelectedIndex = 4;
                 expTextAuraName.Expression = "";
@@ -274,6 +275,7 @@ namespace Triggernometry.Forms
                 expTextAuraHTick.Expression = "";
                 expTextAuraOTick.Expression = "";
                 expTextAuraTTLTick.Expression = "";
+                cbxJsonType.SelectedIndex = 0;
                 expJsonEndpoint.Expression = "";
                 expJsonFiring.Expression = "";
                 expJsonPayload.Expression = "";
@@ -323,6 +325,12 @@ namespace Triggernometry.Forms
                 expMutexName.Expression = "";
                 txtDescription.Text = "";
                 chkOverrideDesc.Checked = false;
+                expCallbackName.Expression = "";
+                expCallbackParam.Expression = "";
+                cbxMouseOp.SelectedIndex = 0;
+                cbxMouseCoord.SelectedIndex = 0;
+                expMouseX.Expression = "";
+                expMouseY.Expression = "";
             }
             else
             {
@@ -435,7 +443,9 @@ namespace Triggernometry.Forms
                 cbxObsOpType.SelectedIndex = (int)a._OBSControlType;
                 expObsSceneName.Expression = a._OBSSceneName;
                 expObsSourceName.Expression = a._OBSSourceName;
+                expObsJSONPayload.Expression = a._OBSJSONPayload;
                 cbxTextAuraOp.SelectedIndex = (int)a._TextAuraOp;
+                cbxJsonType.SelectedIndex = (int)a._JsonOperationType;
                 expJsonEndpoint.Expression = a._JsonEndpointExpression;
                 expJsonFiring.Expression = a._JsonFiringExpression;
                 expJsonPayload.Expression = a._JsonPayloadExpression;
@@ -489,6 +499,7 @@ namespace Triggernometry.Forms
                 cbxProcessLog.Checked = a._LogProcess;
                 expTextAuraTTLTick.Expression = a._TextAuraTTLTickExpression;
                 expLogMessageText.Expression = a._LogMessageText;
+                cbxLogMessageLevel.SelectedIndex = (int)a._LogLevel;
                 FontInfoContainer fic = new FontInfoContainer();
                 fic.Name = a._TextAuraFontName;
                 fic.Size = a._TextAuraFontSize;
@@ -538,6 +549,12 @@ namespace Triggernometry.Forms
                 expMutexName.Expression = a._MutexName;
                 txtDescription.Text = a._Description;
                 chkOverrideDesc.Checked = a._DescriptionOverride;
+                expCallbackName.Expression = a._NamedCallbackName;
+                expCallbackParam.Expression = a._NamedCallbackParam;
+                cbxMouseOp.SelectedIndex = (int)a._MouseOpType;
+                cbxMouseCoord.SelectedIndex = (int)a._MouseCoordType;
+                expMouseX.Expression = a._MouseX;
+                expMouseY.Expression = a._MouseY;
             }
         }
 
@@ -659,6 +676,8 @@ namespace Triggernometry.Forms
             a._OBSControlType = (Action.ObsControlTypeEnum)cbxObsOpType.SelectedIndex;
             a._OBSSceneName = expObsSceneName.Expression;
             a._OBSSourceName = expObsSourceName.Expression;
+            a._OBSJSONPayload = expObsJSONPayload.Expression;
+            a._JsonOperationType = (Action.HTTPMethodEnum)cbxJsonType.SelectedIndex;
             a._JsonEndpointExpression = expJsonEndpoint.Expression;
             a._JsonFiringExpression = expJsonFiring.Expression;
             a._JsonPayloadExpression = expJsonPayload.Expression;
@@ -712,6 +731,7 @@ namespace Triggernometry.Forms
             a._TextAuraOTickExpression = expTextAuraOTick.Expression;
             a._TextAuraTTLTickExpression = expTextAuraTTLTick.Expression;
             a._LogMessageText = expLogMessageText.Expression;
+            a._LogLevel = (Action.LogMessageEnum)cbxLogMessageLevel.SelectedIndex;
             FontInfoContainer fic = (FontInfoContainer)txtTextAuraFont.Tag;
             a._TextAuraFontName = fic.Name;
             a._TextAuraFontSize = fic.Size;
@@ -739,6 +759,12 @@ namespace Triggernometry.Forms
             a._MutexName = expMutexName.Expression;
             a._Description = txtDescription.Text;
             a._DescriptionOverride = chkOverrideDesc.Checked;
+            a._NamedCallbackName = expCallbackName.Expression;
+            a._NamedCallbackParam = expCallbackParam.Expression;
+            a._MouseOpType = (Action.MouseOpEnum)cbxMouseOp.SelectedIndex;
+            a._MouseCoordType = (Action.MouseCoordEnum)cbxMouseCoord.SelectedIndex;
+            a._MouseX = expMouseX.Expression;
+            a._MouseY = expMouseY.Expression;
         }
 
         private void TestAction(bool liveValues)
@@ -1645,8 +1671,9 @@ namespace Triggernometry.Forms
 
         private void cbxObsOpType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            expObsSceneName.Enabled = (cbxObsOpType.SelectedIndex >= 10);
-            expObsSourceName.Enabled = (cbxObsOpType.SelectedIndex >= 11);
+            expObsSceneName.Enabled = (cbxObsOpType.SelectedIndex >= 10 && cbxObsOpType.SelectedIndex <= 12);
+            expObsSourceName.Enabled = (cbxObsOpType.SelectedIndex >= 11 && cbxObsOpType.SelectedIndex <= 12);
+            expObsJSONPayload.Enabled = (cbxObsOpType.SelectedIndex >= 13);
         }
 
         private void cbxKeypressMethod_SelectedIndexChanged(object sender, EventArgs e)
@@ -1699,6 +1726,11 @@ namespace Triggernometry.Forms
         private void expObsSourceName_EnabledChanged(object sender, EventArgs e)
         {
             lblObsSourceName.Enabled = expObsSourceName.Enabled;
+        }
+
+        private void expObsJSONPayload_EnabledChanged(object sender, EventArgs e)
+        {
+            lblObsJSONPayload.Enabled = expObsJSONPayload.Enabled;
         }
 
         private void cbxTvarOpType_SelectedIndexChanged(object sender, EventArgs e)
@@ -1799,6 +1831,11 @@ namespace Triggernometry.Forms
         private void expTvarTarget_EnabledChanged(object sender, EventArgs e)
         {
             lblTvarTarget.Enabled = expTvarTarget.Enabled;
+        }
+
+        private void cbxJsonType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            expJsonPayload.Enabled = (cbxJsonType.SelectedIndex == 0);
         }
 
     }

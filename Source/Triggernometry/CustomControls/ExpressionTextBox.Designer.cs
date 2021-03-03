@@ -33,6 +33,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.panel2 = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // panel1
@@ -44,6 +45,8 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(24, 106);
             this.panel1.TabIndex = 0;
+            this.panel1.Click += new System.EventHandler(this.panel1_Click);
+            this.panel1.DoubleClick += new System.EventHandler(this.panel1_DoubleClick);
             // 
             // textBox1
             // 
@@ -52,10 +55,22 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(407, 20);
             this.textBox1.TabIndex = 1;
+            this.textBox1.WordWrap = false;
+            // 
+            // panel2
+            // 
+            this.panel2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel2.BackgroundImage")));
+            this.panel2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.panel2.Location = new System.Drawing.Point(43, 35);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(41, 28);
+            this.panel2.TabIndex = 0;
+            this.panel2.Visible = false;
             // 
             // ExpressionTextBox
             // 
             this.AutoSize = true;
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.panel1);
             this.DoubleBuffered = true;
@@ -71,5 +86,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolTip toolTip1;
         internal System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Panel panel2;
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace Triggernometry.Variables
 {
 
+    [XmlRoot(ElementName = "VariableScalar")]
     public class VariableScalar : Variable
     {
 

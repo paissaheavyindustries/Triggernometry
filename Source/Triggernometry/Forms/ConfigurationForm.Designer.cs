@@ -162,10 +162,6 @@
             this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
             this.chkFfxivLogNetwork = new System.Windows.Forms.CheckBox();
             this.tabSubstitutions = new System.Windows.Forms.TabPage();
-            this.dgvSubstitutions = new Triggernometry.CustomControls.DataGridViewEx();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tlsSubstitutions = new System.Windows.Forms.ToolStrip();
             this.btnSubAdd = new System.Windows.Forms.ToolStripButton();
             this.btnSubEdit = new System.Windows.Forms.ToolStripButton();
@@ -186,6 +182,11 @@
             this.grpClipboard = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.chkClipboard = new System.Windows.Forms.CheckBox();
+            this.dgvSubstitutions = new Triggernometry.CustomControls.DataGridViewEx();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chkLogVariableExpansions = new System.Windows.Forms.CheckBox();
             this.panel4.SuspendLayout();
             this.grpVolAdjustment.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -236,7 +237,6 @@
             this.grpFfxivEventLogging.SuspendLayout();
             this.tableLayoutPanel9.SuspendLayout();
             this.tabSubstitutions.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvSubstitutions)).BeginInit();
             this.tlsSubstitutions.SuspendLayout();
             this.tabMisc.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -245,12 +245,13 @@
             this.tableLayoutPanel10.SuspendLayout();
             this.grpClipboard.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSubstitutions)).BeginInit();
             this.SuspendLayout();
             // 
             // panel3
             // 
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(10, 426);
+            this.panel3.Location = new System.Drawing.Point(10, 506);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(564, 10);
             this.panel3.TabIndex = 13;
@@ -260,7 +261,7 @@
             this.panel4.Controls.Add(this.btnCancel);
             this.panel4.Controls.Add(this.btnOk);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel4.Location = new System.Drawing.Point(10, 436);
+            this.panel4.Location = new System.Drawing.Point(10, 516);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(564, 35);
             this.panel4.TabIndex = 14;
@@ -408,7 +409,7 @@
             this.grpGeneral.Location = new System.Drawing.Point(7, 7);
             this.grpGeneral.Name = "grpGeneral";
             this.grpGeneral.Padding = new System.Windows.Forms.Padding(10);
-            this.grpGeneral.Size = new System.Drawing.Size(542, 83);
+            this.grpGeneral.Size = new System.Drawing.Size(542, 106);
             this.grpGeneral.TabIndex = 16;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = " Logging ";
@@ -419,17 +420,19 @@
             this.tableLayoutPanel3.ColumnCount = 2;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Controls.Add(this.chkLogVariableExpansions, 0, 3);
             this.tableLayoutPanel3.Controls.Add(this.chkLogNormalEvents, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.lblLoggingLevel, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.cbxLoggingLevel, 1, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(10, 23);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 3;
+            this.tableLayoutPanel3.RowCount = 4;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(522, 50);
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(522, 73);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
             // chkLogNormalEvents
@@ -482,7 +485,7 @@
             this.trvTrigger.MinimumSize = new System.Drawing.Size(4, 50);
             this.trvTrigger.Name = "trvTrigger";
             this.trvTrigger.ShowNodeToolTips = true;
-            this.trvTrigger.Size = new System.Drawing.Size(522, 113);
+            this.trvTrigger.Size = new System.Drawing.Size(522, 170);
             this.trvTrigger.TabIndex = 23;
             this.trvTrigger.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvTrigger_BeforeCollapse);
             this.trvTrigger.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvTrigger_BeforeExpand);
@@ -630,7 +633,7 @@
             this.tbcMain.Location = new System.Drawing.Point(10, 10);
             this.tbcMain.Name = "tbcMain";
             this.tbcMain.SelectedIndex = 0;
-            this.tbcMain.Size = new System.Drawing.Size(564, 416);
+            this.tbcMain.Size = new System.Drawing.Size(564, 496);
             this.tbcMain.TabIndex = 23;
             // 
             // tabGeneral
@@ -643,7 +646,7 @@
             this.tabGeneral.Location = new System.Drawing.Point(4, 22);
             this.tabGeneral.Name = "tabGeneral";
             this.tabGeneral.Padding = new System.Windows.Forms.Padding(7);
-            this.tabGeneral.Size = new System.Drawing.Size(556, 390);
+            this.tabGeneral.Size = new System.Drawing.Size(556, 470);
             this.tabGeneral.TabIndex = 0;
             this.tabGeneral.Text = "General";
             this.tabGeneral.UseVisualStyleBackColor = true;
@@ -654,10 +657,10 @@
             this.grpStartupTrigger.Controls.Add(this.trvTrigger);
             this.grpStartupTrigger.Controls.Add(this.tlsDirectPaste);
             this.grpStartupTrigger.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpStartupTrigger.Location = new System.Drawing.Point(7, 212);
+            this.grpStartupTrigger.Location = new System.Drawing.Point(7, 235);
             this.grpStartupTrigger.Name = "grpStartupTrigger";
             this.grpStartupTrigger.Padding = new System.Windows.Forms.Padding(10);
-            this.grpStartupTrigger.Size = new System.Drawing.Size(542, 171);
+            this.grpStartupTrigger.Size = new System.Drawing.Size(542, 228);
             this.grpStartupTrigger.TabIndex = 27;
             this.grpStartupTrigger.TabStop = false;
             this.grpStartupTrigger.Text = " Startup trigger/folder ";
@@ -696,7 +699,7 @@
             // panel11
             // 
             this.panel11.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel11.Location = new System.Drawing.Point(7, 202);
+            this.panel11.Location = new System.Drawing.Point(7, 225);
             this.panel11.Name = "panel11";
             this.panel11.Size = new System.Drawing.Size(542, 10);
             this.panel11.TabIndex = 28;
@@ -706,7 +709,7 @@
             this.grpStartup.AutoSize = true;
             this.grpStartup.Controls.Add(this.tableLayoutPanel7);
             this.grpStartup.Dock = System.Windows.Forms.DockStyle.Top;
-            this.grpStartup.Location = new System.Drawing.Point(7, 100);
+            this.grpStartup.Location = new System.Drawing.Point(7, 123);
             this.grpStartup.Name = "grpStartup";
             this.grpStartup.Padding = new System.Windows.Forms.Padding(10);
             this.grpStartup.Size = new System.Drawing.Size(542, 102);
@@ -771,7 +774,7 @@
             // panel10
             // 
             this.panel10.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel10.Location = new System.Drawing.Point(7, 90);
+            this.panel10.Location = new System.Drawing.Point(7, 113);
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(542, 10);
             this.panel10.TabIndex = 26;
@@ -2011,57 +2014,6 @@
             this.tabSubstitutions.Text = "Substitutions";
             this.tabSubstitutions.UseVisualStyleBackColor = true;
             // 
-            // dgvSubstitutions
-            // 
-            this.dgvSubstitutions.AllowUserToAddRows = false;
-            this.dgvSubstitutions.AllowUserToDeleteRows = false;
-            this.dgvSubstitutions.AllowUserToResizeRows = false;
-            this.dgvSubstitutions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvSubstitutions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column1,
-            this.Column2,
-            this.Column3});
-            this.dgvSubstitutions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvSubstitutions.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dgvSubstitutions.Location = new System.Drawing.Point(7, 32);
-            this.dgvSubstitutions.Name = "dgvSubstitutions";
-            this.dgvSubstitutions.RowHeadersVisible = false;
-            this.dgvSubstitutions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvSubstitutions.ShowCellErrors = false;
-            this.dgvSubstitutions.ShowEditingIcon = false;
-            this.dgvSubstitutions.ShowRowErrors = false;
-            this.dgvSubstitutions.Size = new System.Drawing.Size(542, 351);
-            this.dgvSubstitutions.TabIndex = 20;
-            this.dgvSubstitutions.VirtualMode = true;
-            this.dgvSubstitutions.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSubstitutions_CellDoubleClick);
-            this.dgvSubstitutions.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvSubstitutions_CellValueNeeded);
-            this.dgvSubstitutions.SelectionChanged += new System.EventHandler(this.dgvSubstitutions_SelectionChanged);
-            this.dgvSubstitutions.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvSubstitutions_KeyDown);
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Search for";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column1.Width = 150;
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Replace with";
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
-            this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column2.Width = 150;
-            // 
-            // Column3
-            // 
-            this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column3.HeaderText = "Scope";
-            this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
-            this.Column3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
             // tlsSubstitutions
             // 
             this.tlsSubstitutions.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -2301,18 +2253,82 @@
             this.chkClipboard.Text = "Use operating system clipboard";
             this.chkClipboard.UseVisualStyleBackColor = true;
             // 
+            // dgvSubstitutions
+            // 
+            this.dgvSubstitutions.AllowUserToAddRows = false;
+            this.dgvSubstitutions.AllowUserToDeleteRows = false;
+            this.dgvSubstitutions.AllowUserToResizeRows = false;
+            this.dgvSubstitutions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvSubstitutions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column1,
+            this.Column2,
+            this.Column3});
+            this.dgvSubstitutions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvSubstitutions.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dgvSubstitutions.Location = new System.Drawing.Point(7, 32);
+            this.dgvSubstitutions.Name = "dgvSubstitutions";
+            this.dgvSubstitutions.RowHeadersVisible = false;
+            this.dgvSubstitutions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvSubstitutions.ShowCellErrors = false;
+            this.dgvSubstitutions.ShowEditingIcon = false;
+            this.dgvSubstitutions.ShowRowErrors = false;
+            this.dgvSubstitutions.Size = new System.Drawing.Size(542, 351);
+            this.dgvSubstitutions.TabIndex = 20;
+            this.dgvSubstitutions.VirtualMode = true;
+            this.dgvSubstitutions.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSubstitutions_CellDoubleClick);
+            this.dgvSubstitutions.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvSubstitutions_CellValueNeeded);
+            this.dgvSubstitutions.SelectionChanged += new System.EventHandler(this.dgvSubstitutions_SelectionChanged);
+            this.dgvSubstitutions.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvSubstitutions_KeyDown);
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Search for";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column1.Width = 150;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Replace with";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column2.Width = 150;
+            // 
+            // Column3
+            // 
+            this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column3.HeaderText = "Scope";
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            this.Column3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // chkLogVariableExpansions
+            // 
+            this.chkLogVariableExpansions.AutoSize = true;
+            this.chkLogVariableExpansions.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel3.SetColumnSpan(this.chkLogVariableExpansions, 3);
+            this.chkLogVariableExpansions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkLogVariableExpansions.Location = new System.Drawing.Point(3, 53);
+            this.chkLogVariableExpansions.Name = "chkLogVariableExpansions";
+            this.chkLogVariableExpansions.Size = new System.Drawing.Size(516, 17);
+            this.chkLogVariableExpansions.TabIndex = 27;
+            this.chkLogVariableExpansions.Text = "Log variable expansions";
+            this.chkLogVariableExpansions.UseVisualStyleBackColor = true;
+            // 
             // ConfigurationForm
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(584, 481);
+            this.ClientSize = new System.Drawing.Size(584, 561);
             this.Controls.Add(this.tbcMain);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel4);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.MinimumSize = new System.Drawing.Size(600, 520);
+            this.MinimumSize = new System.Drawing.Size(600, 600);
             this.Name = "ConfigurationForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.ShowInTaskbar = false;
@@ -2406,7 +2422,6 @@
             this.tableLayoutPanel9.PerformLayout();
             this.tabSubstitutions.ResumeLayout(false);
             this.tabSubstitutions.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvSubstitutions)).EndInit();
             this.tlsSubstitutions.ResumeLayout(false);
             this.tlsSubstitutions.PerformLayout();
             this.tabMisc.ResumeLayout(false);
@@ -2423,6 +2438,7 @@
             this.grpClipboard.PerformLayout();
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSubstitutions)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2584,5 +2600,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.CheckBox chkLogVariableExpansions;
     }
 }

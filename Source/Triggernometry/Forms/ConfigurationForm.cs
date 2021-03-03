@@ -29,7 +29,7 @@ namespace Triggernometry.Forms
             label5.Tag = I18n.DoNotTranslate;
             label6.Tag = I18n.DoNotTranslate;
             RestoredSavedDimensions();
-            tbcMain.TabPages.Remove(tabEndpoint);
+            tbcMain.TabPages.Remove(tabEndpoint);            
         }
 
         internal void SettingsFromConfiguration(Configuration a)
@@ -50,6 +50,7 @@ namespace Triggernometry.Forms
                 chkWarnAdmin.Checked = true;
                 cbxTestLive.Checked = false;
                 chkLogNormalEvents.Checked = true;
+                chkLogVariableExpansions.Checked = false;
                 chkFfxivLogNetwork.Checked = false;
                 cbxEnableHwAccel.Checked = false;
                 txtMonitorWindow.Text = "";
@@ -76,6 +77,7 @@ namespace Triggernometry.Forms
                 cbxTestLive.Checked = a.TestLiveByDefault;
                 chkUpdates.Checked = (a.UpdateNotifications == Configuration.UpdateNotificationsEnum.Yes);
                 chkLogNormalEvents.Checked = a.LogNormalEvents;
+                chkLogVariableExpansions.Checked = a.LogVariableExpansions;
                 chkFfxivLogNetwork.Checked = a.FfxivLogNetwork;
                 cbxEnableHwAccel.Checked = a.UseScarborough;
                 txtMonitorWindow.Text = a.WindowToMonitor;
@@ -126,6 +128,7 @@ namespace Triggernometry.Forms
             a.WarnAdmin = chkWarnAdmin.Checked;
             a.TestLiveByDefault = cbxTestLive.Checked;
             a.LogNormalEvents = chkLogNormalEvents.Checked;
+            a.LogVariableExpansions = chkLogVariableExpansions.Checked;
             a.FfxivLogNetwork = chkFfxivLogNetwork.Checked;
             a.DeveloperMode = cbxDevMode.Checked;
             a.UseScarborough = cbxEnableHwAccel.Checked;

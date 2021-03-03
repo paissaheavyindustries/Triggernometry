@@ -36,6 +36,7 @@ namespace Triggernometry.CustomControls
         internal int numLoadedFolders;
         internal Random r = new Random();
         internal string Clipboard = "";
+        internal int selEventDestination = -1;
 
         internal Queue<Toast> Toasts = new Queue<Toast>();
 
@@ -1437,13 +1438,28 @@ namespace Triggernometry.CustomControls
         {
             using (Forms.TestInputForm ti = new Forms.TestInputForm())
             {
+                if (selEventDestination != -1)
+                {
+                    ti.cbxEventDestination.SelectedIndex = selEventDestination;
+                }
                 ti.plug = plug;
                 switch (ti.ShowDialog())
                 {
                     case DialogResult.OK:
                         string[] lines = ti.txtEvent.Lines;
                         plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeue", "Queueing {0} user log lines", lines.Count()));
-                        plug.LogLineQueuerMass(lines, ti.txtZoneName.Text);
+                        LogEvent.SourceEnum src = LogEvent.SourceEnum.Log;
+                        selEventDestination = ti.cbxEventDestination.SelectedIndex;
+                        switch (ti.cbxEventDestination.SelectedIndex)
+                        {
+                            case 0:
+                                src = LogEvent.SourceEnum.Log;
+                                break;
+                            case 1:
+                                src = LogEvent.SourceEnum.NetworkFFXIV;
+                                break;
+                        }
+                        plug.LogLineQueuerMass(lines, ti.txtZoneName.Text, src);                        
                         plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeuedone", "Done"));
                         /*
                         foreach (string line in lines)
@@ -1569,13 +1585,13 @@ namespace Triggernometry.CustomControls
 
         internal void ClearAllVariables()
         {
-            lock (plug.scalarvariables)
+            lock (plug.sessionvars.Scalar)
             {
-                plug.scalarvariables.Clear();
+                plug.sessionvars.Scalar.Clear();
             }
-            lock (plug.listvariables)
+            lock (plug.sessionvars.List)
             {
-                plug.listvariables.Clear();
+                plug.sessionvars.List.Clear();
             }
         }
 
@@ -1819,6 +1835,10 @@ namespace Triggernometry.CustomControls
 
         private void UpdateRepository(TreeNode tnupdate)
         {
+            if (tnupdate == null)
+            {
+                return;
+            }
             if (tnupdate.Tag is RepositoryFolder)
             {
                 RepositoryFolder rfo = (RepositoryFolder)tnupdate.Tag;
