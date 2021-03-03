@@ -43,12 +43,12 @@ namespace Triggernometry.Variables
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            for (int y = 0; y < Height; y++)
+            for (int y = 1; y < Height; y++)
             {
                 List<string> temp = new List<string>();
-                for (int x = 0; x < Width; x++)
+                for (int x = 1; x < Width; x++)
                 {
-                    Peek(x, y).ToString();
+                    temp.Add(Peek(x, y).ToString());
                 }
                 sb.AppendLine(String.Join(",", temp));
             }
