@@ -20,6 +20,7 @@ namespace Triggernometry
         public string Zone { get; set; }
         public SourceEnum Source { get; set; }
         public DateTime Timestamp { get; set; }
+        public bool TestMode { get; set; } = false;
 
     }
 

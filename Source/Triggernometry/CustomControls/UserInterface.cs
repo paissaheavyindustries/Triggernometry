@@ -43,6 +43,8 @@ namespace Triggernometry.CustomControls
         internal object formmgmt = new object();
         internal Forms.LogForm formlog { get; set; } = null;
         internal Forms.SearchForm formsearch { get; set; } = null;
+        internal string[] testInputHistoryLines = null;
+        internal string testInputHistoryZone = "";
 
         private Color disabledNodeColor;
 
@@ -1442,11 +1444,18 @@ namespace Triggernometry.CustomControls
                 {
                     ti.cbxEventDestination.SelectedIndex = selEventDestination;
                 }
+                if (testInputHistoryLines != null)
+                {
+                    ti.txtEvent.Lines = testInputHistoryLines;
+                }
+                ti.txtZoneName.Text = testInputHistoryZone;
                 ti.plug = plug;
                 switch (ti.ShowDialog())
                 {
                     case DialogResult.OK:
                         string[] lines = ti.txtEvent.Lines;
+                        testInputHistoryLines = lines;
+                        testInputHistoryZone = ti.txtZoneName.Text;
                         plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeue", "Queueing {0} user log lines", lines.Count()));
                         LogEvent.SourceEnum src = LogEvent.SourceEnum.Log;
                         selEventDestination = ti.cbxEventDestination.SelectedIndex;
@@ -1459,7 +1468,7 @@ namespace Triggernometry.CustomControls
                                 src = LogEvent.SourceEnum.NetworkFFXIV;
                                 break;
                         }
-                        plug.LogLineQueuerMass(lines, ti.txtZoneName.Text, src);                        
+                        plug.LogLineQueuerMass(lines, ti.txtZoneName.Text, src, true);
                         plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeuedone", "Done"));
                         /*
                         foreach (string line in lines)
