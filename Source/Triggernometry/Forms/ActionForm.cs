@@ -331,6 +331,12 @@ namespace Triggernometry.Forms
                 cbxMouseCoord.SelectedIndex = 0;
                 expMouseX.Expression = "";
                 expMouseY.Expression = "";
+                prsFileVariable.IsPersistent = false;
+                prsListSource.IsPersistent = false;
+                prsListTarget.IsPersistent = false;
+                prsScalarName.IsPersistent = false;
+                prsTableSource.IsPersistent = false;
+                prsTableTarget.IsPersistent = false;
             }
             else
             {
@@ -555,6 +561,12 @@ namespace Triggernometry.Forms
                 cbxMouseCoord.SelectedIndex = (int)a._MouseCoordType;
                 expMouseX.Expression = a._MouseX;
                 expMouseY.Expression = a._MouseY;
+                prsFileVariable.IsPersistent = a._DiskPersist;
+                prsListSource.IsPersistent = a._ListSourcePersist;
+                prsListTarget.IsPersistent = a._ListTargetPersist;
+                prsScalarName.IsPersistent = a._VariablePersist;
+                prsTableSource.IsPersistent = a._TableSourcePersist;
+                prsTableTarget.IsPersistent = a._TableTargetPersist;
             }
         }
 
@@ -765,6 +777,12 @@ namespace Triggernometry.Forms
             a._MouseCoordType = (Action.MouseCoordEnum)cbxMouseCoord.SelectedIndex;
             a._MouseX = expMouseX.Expression;
             a._MouseY = expMouseY.Expression;
+            a._DiskPersist = prsFileVariable.IsPersistent;
+            a._ListSourcePersist = prsListSource.IsPersistent;
+            a._ListTargetPersist = prsListTarget.IsPersistent;
+            a._VariablePersist = prsScalarName.IsPersistent;
+            a._TableSourcePersist = prsTableSource.IsPersistent;
+            a._TableTargetPersist = prsTableTarget.IsPersistent;
         }
 
         private void TestAction(bool liveValues)
@@ -801,6 +819,7 @@ namespace Triggernometry.Forms
                     break;
             }
             expVariableName.Enabled = (cbxVariableOp.SelectedIndex != 3);
+            prsScalarName.Enabled = expVariableName.Enabled;
             expVariableExpression.Enabled = (cbxVariableOp.SelectedIndex == 1 || cbxVariableOp.SelectedIndex == 2);
             expVariableName.ExpressionType = (cbxVariableOp.SelectedIndex == 4) ? CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex : CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
         }
@@ -1502,6 +1521,8 @@ namespace Triggernometry.Forms
                     expLvarIndex.Enabled = false;
                     break;
             }
+            prsListSource.Enabled = expLvarName.Enabled;
+            prsListTarget.Enabled = expLvarTarget.Enabled;
         }
 
         private void expVariableName_EnabledChanged(object sender, EventArgs e)
@@ -1801,6 +1822,8 @@ namespace Triggernometry.Forms
                     expTvarTarget.Enabled = true;
                     break;
             }
+            prsTableSource.Enabled = expTvarName.Enabled;
+            prsTableTarget.Enabled = expTvarTarget.Enabled;
         }
 
         private void expTvarName_EnabledChanged(object sender, EventArgs e)

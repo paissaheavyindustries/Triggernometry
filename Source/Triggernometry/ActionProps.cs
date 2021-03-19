@@ -408,6 +408,24 @@ namespace Triggernometry
             }
         }
 
+        internal bool _DiskPersist { get; set; } = false;
+        [XmlAttribute]
+        public string DiskPersist
+        {
+            get
+            {
+                if (_DiskPersist == false)
+                {
+                    return null;
+                }
+                return _DiskPersist.ToString();
+            }
+            set
+            {
+                _DiskPersist = Boolean.Parse(value);
+            }
+        }
+
         #endregion
         #region Action specific properties - Execute script
 
@@ -1158,6 +1176,42 @@ namespace Triggernometry
             }
         }
 
+        internal bool _ListSourcePersist { get; set; } = false;
+        [XmlAttribute]
+        public string ListSourcePersist
+        {
+            get
+            {
+                if (_ListSourcePersist == false)
+                {
+                    return null;
+                }
+                return _ListSourcePersist.ToString();
+            }
+            set
+            {
+                _ListSourcePersist = Boolean.Parse(value);
+            }
+        }
+
+        internal bool _ListTargetPersist { get; set; } = false;
+        [XmlAttribute]
+        public string ListTargetPersist
+        {
+            get
+            {
+                if (_ListTargetPersist == false)
+                {
+                    return null;
+                }
+                return _ListTargetPersist.ToString();
+            }
+            set
+            {
+                _ListTargetPersist = Boolean.Parse(value);
+            }
+        }
+
         #endregion
         #region Action specific properties - Log message
 
@@ -1730,6 +1784,24 @@ namespace Triggernometry
             }
         }
 
+        internal bool _VariablePersist { get; set; } = false;
+        [XmlAttribute]
+        public string VariablePersist
+        {
+            get
+            {
+                if (_VariablePersist == false)
+                {
+                    return null;
+                }
+                return _VariablePersist.ToString();
+            }
+            set
+            {
+                _VariablePersist = Boolean.Parse(value);
+            }
+        }
+
         #endregion
         #region Action specific properties - Table variable
 
@@ -1862,6 +1934,42 @@ namespace Triggernometry
             set
             {
                 _TableVariableY = value;
+            }
+        }
+
+        internal bool _TableSourcePersist { get; set; } = false;
+        [XmlAttribute]
+        public string TableSourcePersist
+        {
+            get
+            {
+                if (_TableSourcePersist == false)
+                {
+                    return null;
+                }
+                return _TableSourcePersist.ToString();
+            }
+            set
+            {
+                _TableSourcePersist = Boolean.Parse(value);
+            }
+        }
+
+        internal bool _TableTargetPersist { get; set; } = false;
+        [XmlAttribute]
+        public string TableTargetPersist
+        {
+            get
+            {
+                if (_TableTargetPersist == false)
+                {
+                    return null;
+                }
+                return _TableTargetPersist.ToString();
+            }
+            set
+            {
+                _TableTargetPersist = Boolean.Parse(value);
             }
         }
 

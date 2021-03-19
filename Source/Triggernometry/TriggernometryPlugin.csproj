@@ -100,6 +100,12 @@
     <Compile Include="CustomControls\ConditionViewer.Designer.cs">
       <DependentUpon>ConditionViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="CustomControls\PersistenceSwitch.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\PersistenceSwitch.Designer.cs">
+      <DependentUpon>PersistenceSwitch.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomControls\PrettyCaption.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -413,6 +419,9 @@
   <ItemGroup>
     <EmbeddedResource Include="CustomControls\ConditionViewer.resx">
       <DependentUpon>ConditionViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomControls\PersistenceSwitch.resx">
+      <DependentUpon>PersistenceSwitch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CustomControls\PrettyCaption.resx">
       <DependentUpon>PrettyCaption.cs</DependentUpon>

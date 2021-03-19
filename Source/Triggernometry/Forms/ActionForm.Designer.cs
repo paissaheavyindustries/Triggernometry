@@ -126,6 +126,7 @@
             this.lblVariableName = new System.Windows.Forms.Label();
             this.lblVariableOp = new System.Windows.Forms.Label();
             this.cbxVariableOp = new System.Windows.Forms.ComboBox();
+            this.prsScalarName = new Triggernometry.CustomControls.PersistenceSwitch();
             this.tabImageAura = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
             this.btnHide = new System.Windows.Forms.Button();
@@ -219,6 +220,8 @@
             this.expLogMessageText = new Triggernometry.CustomControls.ExpressionTextBox();
             this.tabListVariable = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel17 = new System.Windows.Forms.TableLayoutPanel();
+            this.prsListTarget = new Triggernometry.CustomControls.PersistenceSwitch();
+            this.prsListSource = new Triggernometry.CustomControls.PersistenceSwitch();
             this.cbxLvarExpType = new System.Windows.Forms.ComboBox();
             this.lblLvarExpType = new System.Windows.Forms.Label();
             this.expLvarTarget = new Triggernometry.CustomControls.ExpressionTextBox();
@@ -270,6 +273,7 @@
             this.lblWmsgWarning = new System.Windows.Forms.Label();
             this.tabFile = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel20 = new System.Windows.Forms.TableLayoutPanel();
+            this.prsFileVariable = new Triggernometry.CustomControls.PersistenceSwitch();
             this.cbxFileOpCache = new System.Windows.Forms.CheckBox();
             this.expFileOpVariable = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblFileOpVariable = new System.Windows.Forms.Label();
@@ -357,6 +361,8 @@
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.expressionTextBox1 = new Triggernometry.CustomControls.ExpressionTextBox();
             this.expressionTextBox2 = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.prsTableSource = new Triggernometry.CustomControls.PersistenceSwitch();
+            this.prsTableTarget = new Triggernometry.CustomControls.PersistenceSwitch();
             this.tableLayoutPanel1.SuspendLayout();
             this.grpGeneralSettings.SuspendLayout();
             this.tbcActionSettings.SuspendLayout();
@@ -1682,15 +1688,17 @@
             // tableLayoutPanel9
             // 
             this.tableLayoutPanel9.AutoSize = true;
-            this.tableLayoutPanel9.ColumnCount = 2;
+            this.tableLayoutPanel9.ColumnCount = 3;
             this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel9.Controls.Add(this.expVariableExpression, 1, 2);
             this.tableLayoutPanel9.Controls.Add(this.lblVariableExpression, 0, 2);
             this.tableLayoutPanel9.Controls.Add(this.expVariableName, 1, 1);
             this.tableLayoutPanel9.Controls.Add(this.lblVariableName, 0, 1);
             this.tableLayoutPanel9.Controls.Add(this.lblVariableOp, 0, 0);
             this.tableLayoutPanel9.Controls.Add(this.cbxVariableOp, 1, 0);
+            this.tableLayoutPanel9.Controls.Add(this.prsScalarName, 2, 1);
             this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel9.Name = "tableLayoutPanel9";
@@ -1698,13 +1706,13 @@
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel9.Size = new System.Drawing.Size(542, 79);
             this.tableLayoutPanel9.TabIndex = 6;
             // 
             // expVariableExpression
             // 
             this.expVariableExpression.AutoSize = true;
+            this.tableLayoutPanel9.SetColumnSpan(this.expVariableExpression, 2);
             this.expVariableExpression.Dock = System.Windows.Forms.DockStyle.Top;
             this.expVariableExpression.Expression = "";
             this.expVariableExpression.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
@@ -1735,7 +1743,7 @@
             this.expVariableName.Location = new System.Drawing.Point(115, 30);
             this.expVariableName.Name = "expVariableName";
             this.expVariableName.ReadOnly = false;
-            this.expVariableName.Size = new System.Drawing.Size(424, 20);
+            this.expVariableName.Size = new System.Drawing.Size(394, 20);
             this.expVariableName.TabIndex = 16;
             this.expVariableName.EnabledChanged += new System.EventHandler(this.expVariableName_EnabledChanged);
             // 
@@ -1763,6 +1771,7 @@
             // 
             // cbxVariableOp
             // 
+            this.tableLayoutPanel9.SetColumnSpan(this.cbxVariableOp, 2);
             this.cbxVariableOp.Dock = System.Windows.Forms.DockStyle.Top;
             this.cbxVariableOp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxVariableOp.FormattingEnabled = true;
@@ -1777,6 +1786,19 @@
             this.cbxVariableOp.Size = new System.Drawing.Size(424, 21);
             this.cbxVariableOp.TabIndex = 21;
             this.cbxVariableOp.SelectedIndexChanged += new System.EventHandler(this.cbxVariableOp_SelectedIndexChanged);
+            // 
+            // prsScalarName
+            // 
+            this.prsScalarName.AutoSize = true;
+            this.prsScalarName.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("prsScalarName.BackgroundImage")));
+            this.prsScalarName.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.prsScalarName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.prsScalarName.IsPersistent = false;
+            this.prsScalarName.Location = new System.Drawing.Point(515, 30);
+            this.prsScalarName.Name = "prsScalarName";
+            this.prsScalarName.Size = new System.Drawing.Size(24, 20);
+            this.prsScalarName.TabIndex = 24;
+            this.prsScalarName.Tag = ((object)(resources.GetObject("prsScalarName.Tag")));
             // 
             // tabImageAura
             // 
@@ -3055,9 +3077,12 @@
             // tableLayoutPanel17
             // 
             this.tableLayoutPanel17.AutoSize = true;
-            this.tableLayoutPanel17.ColumnCount = 2;
+            this.tableLayoutPanel17.ColumnCount = 3;
             this.tableLayoutPanel17.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel17.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel17.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel17.Controls.Add(this.prsListTarget, 2, 5);
+            this.tableLayoutPanel17.Controls.Add(this.prsListSource, 2, 1);
             this.tableLayoutPanel17.Controls.Add(this.cbxLvarExpType, 1, 2);
             this.tableLayoutPanel17.Controls.Add(this.lblLvarExpType, 0, 2);
             this.tableLayoutPanel17.Controls.Add(this.expLvarTarget, 1, 5);
@@ -3083,8 +3108,35 @@
             this.tableLayoutPanel17.Size = new System.Drawing.Size(542, 158);
             this.tableLayoutPanel17.TabIndex = 7;
             // 
+            // prsListTarget
+            // 
+            this.prsListTarget.AutoSize = true;
+            this.prsListTarget.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("prsListTarget.BackgroundImage")));
+            this.prsListTarget.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.prsListTarget.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.prsListTarget.IsPersistent = false;
+            this.prsListTarget.Location = new System.Drawing.Point(515, 135);
+            this.prsListTarget.Name = "prsListTarget";
+            this.prsListTarget.Size = new System.Drawing.Size(24, 20);
+            this.prsListTarget.TabIndex = 31;
+            this.prsListTarget.Tag = ((object)(resources.GetObject("prsListTarget.Tag")));
+            // 
+            // prsListSource
+            // 
+            this.prsListSource.AutoSize = true;
+            this.prsListSource.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("prsListSource.BackgroundImage")));
+            this.prsListSource.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.prsListSource.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.prsListSource.IsPersistent = false;
+            this.prsListSource.Location = new System.Drawing.Point(515, 30);
+            this.prsListSource.Name = "prsListSource";
+            this.prsListSource.Size = new System.Drawing.Size(24, 20);
+            this.prsListSource.TabIndex = 30;
+            this.prsListSource.Tag = ((object)(resources.GetObject("prsListSource.Tag")));
+            // 
             // cbxLvarExpType
             // 
+            this.tableLayoutPanel17.SetColumnSpan(this.cbxLvarExpType, 2);
             this.cbxLvarExpType.Dock = System.Windows.Forms.DockStyle.Top;
             this.cbxLvarExpType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxLvarExpType.FormattingEnabled = true;
@@ -3118,7 +3170,7 @@
             this.expLvarTarget.Location = new System.Drawing.Point(119, 135);
             this.expLvarTarget.Name = "expLvarTarget";
             this.expLvarTarget.ReadOnly = false;
-            this.expLvarTarget.Size = new System.Drawing.Size(420, 20);
+            this.expLvarTarget.Size = new System.Drawing.Size(390, 20);
             this.expLvarTarget.TabIndex = 27;
             this.expLvarTarget.EnabledChanged += new System.EventHandler(this.expLvarTarget_EnabledChanged);
             // 
@@ -3136,6 +3188,7 @@
             // expLvarIndex
             // 
             this.expLvarIndex.AutoSize = true;
+            this.tableLayoutPanel17.SetColumnSpan(this.expLvarIndex, 2);
             this.expLvarIndex.Dock = System.Windows.Forms.DockStyle.Top;
             this.expLvarIndex.Expression = "";
             this.expLvarIndex.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
@@ -3160,6 +3213,7 @@
             // expLvarValue
             // 
             this.expLvarValue.AutoSize = true;
+            this.tableLayoutPanel17.SetColumnSpan(this.expLvarValue, 2);
             this.expLvarValue.Dock = System.Windows.Forms.DockStyle.Top;
             this.expLvarValue.Expression = "";
             this.expLvarValue.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
@@ -3190,7 +3244,7 @@
             this.expLvarName.Location = new System.Drawing.Point(119, 30);
             this.expLvarName.Name = "expLvarName";
             this.expLvarName.ReadOnly = false;
-            this.expLvarName.Size = new System.Drawing.Size(420, 20);
+            this.expLvarName.Size = new System.Drawing.Size(390, 20);
             this.expLvarName.TabIndex = 16;
             this.expLvarName.EnabledChanged += new System.EventHandler(this.expLvarName_EnabledChanged);
             // 
@@ -3218,6 +3272,7 @@
             // 
             // cbxLvarOperation
             // 
+            this.tableLayoutPanel17.SetColumnSpan(this.cbxLvarOperation, 2);
             this.cbxLvarOperation.Dock = System.Windows.Forms.DockStyle.Top;
             this.cbxLvarOperation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxLvarOperation.FormattingEnabled = true;
@@ -3770,7 +3825,8 @@
             this.tableLayoutPanel20.ColumnCount = 3;
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel20.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel20.Controls.Add(this.prsFileVariable, 2, 2);
             this.tableLayoutPanel20.Controls.Add(this.cbxFileOpCache, 0, 3);
             this.tableLayoutPanel20.Controls.Add(this.expFileOpVariable, 1, 2);
             this.tableLayoutPanel20.Controls.Add(this.lblFileOpVariable, 0, 2);
@@ -3789,6 +3845,19 @@
             this.tableLayoutPanel20.Size = new System.Drawing.Size(542, 106);
             this.tableLayoutPanel20.TabIndex = 4;
             // 
+            // prsFileVariable
+            // 
+            this.prsFileVariable.AutoSize = true;
+            this.prsFileVariable.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("prsFileVariable.BackgroundImage")));
+            this.prsFileVariable.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.prsFileVariable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.prsFileVariable.IsPersistent = false;
+            this.prsFileVariable.Location = new System.Drawing.Point(515, 56);
+            this.prsFileVariable.Name = "prsFileVariable";
+            this.prsFileVariable.Size = new System.Drawing.Size(24, 20);
+            this.prsFileVariable.TabIndex = 31;
+            this.prsFileVariable.Tag = ((object)(resources.GetObject("prsFileVariable.Tag")));
+            // 
             // cbxFileOpCache
             // 
             this.cbxFileOpCache.AutoSize = true;
@@ -3806,14 +3875,13 @@
             // expFileOpVariable
             // 
             this.expFileOpVariable.AutoSize = true;
-            this.tableLayoutPanel20.SetColumnSpan(this.expFileOpVariable, 2);
             this.expFileOpVariable.Dock = System.Windows.Forms.DockStyle.Top;
             this.expFileOpVariable.Expression = "";
             this.expFileOpVariable.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
             this.expFileOpVariable.Location = new System.Drawing.Point(85, 56);
             this.expFileOpVariable.Name = "expFileOpVariable";
             this.expFileOpVariable.ReadOnly = false;
-            this.expFileOpVariable.Size = new System.Drawing.Size(454, 20);
+            this.expFileOpVariable.Size = new System.Drawing.Size(424, 20);
             this.expFileOpVariable.TabIndex = 24;
             // 
             // lblFileOpVariable
@@ -3916,9 +3984,12 @@
             // tableLayoutPanel21
             // 
             this.tableLayoutPanel21.AutoSize = true;
-            this.tableLayoutPanel21.ColumnCount = 2;
+            this.tableLayoutPanel21.ColumnCount = 3;
             this.tableLayoutPanel21.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel21.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel21.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel21.Controls.Add(this.prsTableTarget, 2, 6);
+            this.tableLayoutPanel21.Controls.Add(this.prsTableSource, 2, 1);
             this.tableLayoutPanel21.Controls.Add(this.expTvarRow, 1, 5);
             this.tableLayoutPanel21.Controls.Add(this.lblTvarRow, 0, 5);
             this.tableLayoutPanel21.Controls.Add(this.cbxTvarExpType, 1, 2);
@@ -3950,6 +4021,7 @@
             // expTvarRow
             // 
             this.expTvarRow.AutoSize = true;
+            this.tableLayoutPanel21.SetColumnSpan(this.expTvarRow, 2);
             this.expTvarRow.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTvarRow.Expression = "";
             this.expTvarRow.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
@@ -3973,6 +4045,7 @@
             // 
             // cbxTvarExpType
             // 
+            this.tableLayoutPanel21.SetColumnSpan(this.cbxTvarExpType, 2);
             this.cbxTvarExpType.Dock = System.Windows.Forms.DockStyle.Top;
             this.cbxTvarExpType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxTvarExpType.FormattingEnabled = true;
@@ -4006,7 +4079,7 @@
             this.expTvarTarget.Location = new System.Drawing.Point(119, 161);
             this.expTvarTarget.Name = "expTvarTarget";
             this.expTvarTarget.ReadOnly = false;
-            this.expTvarTarget.Size = new System.Drawing.Size(420, 20);
+            this.expTvarTarget.Size = new System.Drawing.Size(390, 20);
             this.expTvarTarget.TabIndex = 27;
             this.expTvarTarget.EnabledChanged += new System.EventHandler(this.expTvarTarget_EnabledChanged);
             // 
@@ -4024,6 +4097,7 @@
             // expTvarColumn
             // 
             this.expTvarColumn.AutoSize = true;
+            this.tableLayoutPanel21.SetColumnSpan(this.expTvarColumn, 2);
             this.expTvarColumn.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTvarColumn.Expression = "";
             this.expTvarColumn.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
@@ -4048,6 +4122,7 @@
             // expTvarValue
             // 
             this.expTvarValue.AutoSize = true;
+            this.tableLayoutPanel21.SetColumnSpan(this.expTvarValue, 2);
             this.expTvarValue.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTvarValue.Expression = "";
             this.expTvarValue.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
@@ -4078,7 +4153,7 @@
             this.expTvarName.Location = new System.Drawing.Point(119, 30);
             this.expTvarName.Name = "expTvarName";
             this.expTvarName.ReadOnly = false;
-            this.expTvarName.Size = new System.Drawing.Size(420, 20);
+            this.expTvarName.Size = new System.Drawing.Size(390, 20);
             this.expTvarName.TabIndex = 16;
             this.expTvarName.EnabledChanged += new System.EventHandler(this.expTvarName_EnabledChanged);
             // 
@@ -4106,6 +4181,7 @@
             // 
             // cbxTvarOpType
             // 
+            this.tableLayoutPanel21.SetColumnSpan(this.cbxTvarOpType, 2);
             this.cbxTvarOpType.Dock = System.Windows.Forms.DockStyle.Top;
             this.cbxTvarOpType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxTvarOpType.FormattingEnabled = true;
@@ -4859,6 +4935,32 @@
             this.expressionTextBox2.Size = new System.Drawing.Size(474, 20);
             this.expressionTextBox2.TabIndex = 14;
             // 
+            // prsTableSource
+            // 
+            this.prsTableSource.AutoSize = true;
+            this.prsTableSource.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("prsTableSource.BackgroundImage")));
+            this.prsTableSource.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.prsTableSource.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.prsTableSource.IsPersistent = false;
+            this.prsTableSource.Location = new System.Drawing.Point(515, 30);
+            this.prsTableSource.Name = "prsTableSource";
+            this.prsTableSource.Size = new System.Drawing.Size(24, 20);
+            this.prsTableSource.TabIndex = 32;
+            this.prsTableSource.Tag = ((object)(resources.GetObject("prsTableSource.Tag")));
+            // 
+            // prsTableTarget
+            // 
+            this.prsTableTarget.AutoSize = true;
+            this.prsTableTarget.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("prsTableTarget.BackgroundImage")));
+            this.prsTableTarget.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.prsTableTarget.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.prsTableTarget.IsPersistent = false;
+            this.prsTableTarget.Location = new System.Drawing.Point(515, 161);
+            this.prsTableTarget.Name = "prsTableTarget";
+            this.prsTableTarget.Size = new System.Drawing.Size(24, 20);
+            this.prsTableTarget.TabIndex = 33;
+            this.prsTableTarget.Tag = ((object)(resources.GetObject("prsTableTarget.Tag")));
+            // 
             // ActionForm
             // 
             this.AcceptButton = this.btnOk;
@@ -5337,5 +5439,11 @@
         private System.Windows.Forms.ComboBox cbxMouseOp;
         private System.Windows.Forms.ComboBox cbxJsonType;
         private System.Windows.Forms.Label lblJsonType;
+        private CustomControls.PersistenceSwitch prsScalarName;
+        private CustomControls.PersistenceSwitch prsListTarget;
+        private CustomControls.PersistenceSwitch prsListSource;
+        private CustomControls.PersistenceSwitch prsFileVariable;
+        private CustomControls.PersistenceSwitch prsTableTarget;
+        private CustomControls.PersistenceSwitch prsTableSource;
     }
 }
