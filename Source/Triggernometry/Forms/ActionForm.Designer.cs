@@ -285,6 +285,8 @@
             this.lblFileWarning = new System.Windows.Forms.Label();
             this.tabTableVariable = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel21 = new System.Windows.Forms.TableLayoutPanel();
+            this.prsTableTarget = new Triggernometry.CustomControls.PersistenceSwitch();
+            this.prsTableSource = new Triggernometry.CustomControls.PersistenceSwitch();
             this.expTvarRow = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblTvarRow = new System.Windows.Forms.Label();
             this.cbxTvarExpType = new System.Windows.Forms.ComboBox();
@@ -361,8 +363,8 @@
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.expressionTextBox1 = new Triggernometry.CustomControls.ExpressionTextBox();
             this.expressionTextBox2 = new Triggernometry.CustomControls.ExpressionTextBox();
-            this.prsTableSource = new Triggernometry.CustomControls.PersistenceSwitch();
-            this.prsTableTarget = new Triggernometry.CustomControls.PersistenceSwitch();
+            this.lblJsonHeaders = new System.Windows.Forms.Label();
+            this.expJsonHeaders = new Triggernometry.CustomControls.ExpressionTextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.grpGeneralSettings.SuspendLayout();
             this.tbcActionSettings.SuspendLayout();
@@ -557,7 +559,7 @@
             this.tbcActionSettings.Margin = new System.Windows.Forms.Padding(0);
             this.tbcActionSettings.Name = "tbcActionSettings";
             this.tbcActionSettings.SelectedIndex = 0;
-            this.tbcActionSettings.Size = new System.Drawing.Size(550, 293);
+            this.tbcActionSettings.Size = new System.Drawing.Size(550, 343);
             this.tbcActionSettings.TabIndex = 0;
             // 
             // tabSystemBeep
@@ -2453,7 +2455,7 @@
             this.tabTextAura.Controls.Add(this.tableLayoutPanel13);
             this.tabTextAura.Location = new System.Drawing.Point(4, 25);
             this.tabTextAura.Name = "tabTextAura";
-            this.tabTextAura.Size = new System.Drawing.Size(542, 264);
+            this.tabTextAura.Size = new System.Drawing.Size(542, 314);
             this.tabTextAura.TabIndex = 12;
             this.tabTextAura.Text = "TextAura";
             this.tabTextAura.UseVisualStyleBackColor = true;
@@ -3496,7 +3498,7 @@
             this.tabGenericJson.Controls.Add(this.jsonTableLayout);
             this.tabGenericJson.Location = new System.Drawing.Point(4, 25);
             this.tabGenericJson.Name = "tabGenericJson";
-            this.tabGenericJson.Size = new System.Drawing.Size(542, 264);
+            this.tabGenericJson.Size = new System.Drawing.Size(542, 314);
             this.tabGenericJson.TabIndex = 17;
             this.tabGenericJson.Text = "JSON";
             this.tabGenericJson.UseVisualStyleBackColor = true;
@@ -3507,12 +3509,14 @@
             this.jsonTableLayout.ColumnCount = 2;
             this.jsonTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.jsonTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.jsonTableLayout.Controls.Add(this.expJsonHeaders, 1, 3);
+            this.jsonTableLayout.Controls.Add(this.lblJsonHeaders, 0, 3);
             this.jsonTableLayout.Controls.Add(this.cbxJsonType, 1, 1);
             this.jsonTableLayout.Controls.Add(this.lblJsonType, 0, 1);
-            this.jsonTableLayout.Controls.Add(this.cbxJsonCache, 0, 4);
-            this.jsonTableLayout.Controls.Add(this.lblJsonInstructions, 1, 5);
-            this.jsonTableLayout.Controls.Add(this.expJsonFiring, 1, 3);
-            this.jsonTableLayout.Controls.Add(this.lblJsonFiring, 0, 3);
+            this.jsonTableLayout.Controls.Add(this.cbxJsonCache, 0, 5);
+            this.jsonTableLayout.Controls.Add(this.lblJsonInstructions, 1, 6);
+            this.jsonTableLayout.Controls.Add(this.expJsonFiring, 1, 4);
+            this.jsonTableLayout.Controls.Add(this.lblJsonFiring, 0, 4);
             this.jsonTableLayout.Controls.Add(this.expJsonPayload, 1, 2);
             this.jsonTableLayout.Controls.Add(this.lblJsonPayload, 0, 2);
             this.jsonTableLayout.Controls.Add(this.lblJsonEndpoint, 0, 0);
@@ -3520,7 +3524,8 @@
             this.jsonTableLayout.Dock = System.Windows.Forms.DockStyle.Top;
             this.jsonTableLayout.Location = new System.Drawing.Point(0, 0);
             this.jsonTableLayout.Name = "jsonTableLayout";
-            this.jsonTableLayout.RowCount = 7;
+            this.jsonTableLayout.RowCount = 8;
+            this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -3528,7 +3533,7 @@
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.jsonTableLayout.Size = new System.Drawing.Size(542, 263);
+            this.jsonTableLayout.Size = new System.Drawing.Size(542, 289);
             this.jsonTableLayout.TabIndex = 3;
             // 
             // cbxJsonType
@@ -3562,7 +3567,7 @@
             this.cbxJsonCache.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.jsonTableLayout.SetColumnSpan(this.cbxJsonCache, 3);
             this.cbxJsonCache.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cbxJsonCache.Location = new System.Drawing.Point(3, 110);
+            this.cbxJsonCache.Location = new System.Drawing.Point(3, 136);
             this.cbxJsonCache.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.cbxJsonCache.Name = "cbxJsonCache";
             this.cbxJsonCache.Size = new System.Drawing.Size(537, 17);
@@ -3573,7 +3578,7 @@
             // lblJsonInstructions
             // 
             this.lblJsonInstructions.AutoSize = true;
-            this.lblJsonInstructions.Location = new System.Drawing.Point(142, 132);
+            this.lblJsonInstructions.Location = new System.Drawing.Point(142, 158);
             this.lblJsonInstructions.Name = "lblJsonInstructions";
             this.lblJsonInstructions.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
             this.lblJsonInstructions.Size = new System.Drawing.Size(395, 111);
@@ -3586,7 +3591,7 @@
             this.expJsonFiring.Dock = System.Windows.Forms.DockStyle.Top;
             this.expJsonFiring.Expression = "";
             this.expJsonFiring.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expJsonFiring.Location = new System.Drawing.Point(142, 82);
+            this.expJsonFiring.Location = new System.Drawing.Point(142, 108);
             this.expJsonFiring.Name = "expJsonFiring";
             this.expJsonFiring.ReadOnly = false;
             this.expJsonFiring.Size = new System.Drawing.Size(397, 20);
@@ -3596,7 +3601,7 @@
             // 
             this.lblJsonFiring.AutoSize = true;
             this.lblJsonFiring.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblJsonFiring.Location = new System.Drawing.Point(3, 79);
+            this.lblJsonFiring.Location = new System.Drawing.Point(3, 105);
             this.lblJsonFiring.Name = "lblJsonFiring";
             this.lblJsonFiring.Size = new System.Drawing.Size(133, 26);
             this.lblJsonFiring.TabIndex = 19;
@@ -4017,6 +4022,32 @@
             this.tableLayoutPanel21.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel21.Size = new System.Drawing.Size(542, 184);
             this.tableLayoutPanel21.TabIndex = 8;
+            // 
+            // prsTableTarget
+            // 
+            this.prsTableTarget.AutoSize = true;
+            this.prsTableTarget.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("prsTableTarget.BackgroundImage")));
+            this.prsTableTarget.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.prsTableTarget.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.prsTableTarget.IsPersistent = false;
+            this.prsTableTarget.Location = new System.Drawing.Point(515, 161);
+            this.prsTableTarget.Name = "prsTableTarget";
+            this.prsTableTarget.Size = new System.Drawing.Size(24, 20);
+            this.prsTableTarget.TabIndex = 33;
+            this.prsTableTarget.Tag = ((object)(resources.GetObject("prsTableTarget.Tag")));
+            // 
+            // prsTableSource
+            // 
+            this.prsTableSource.AutoSize = true;
+            this.prsTableSource.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("prsTableSource.BackgroundImage")));
+            this.prsTableSource.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.prsTableSource.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.prsTableSource.IsPersistent = false;
+            this.prsTableSource.Location = new System.Drawing.Point(515, 30);
+            this.prsTableSource.Name = "prsTableSource";
+            this.prsTableSource.Size = new System.Drawing.Size(24, 20);
+            this.prsTableSource.TabIndex = 32;
+            this.prsTableSource.Tag = ((object)(resources.GetObject("prsTableSource.Tag")));
             // 
             // expTvarRow
             // 
@@ -4506,7 +4537,7 @@
             // panel2
             // 
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(10, 456);
+            this.panel2.Location = new System.Drawing.Point(10, 506);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(564, 10);
             this.panel2.TabIndex = 5;
@@ -4517,7 +4548,7 @@
             this.panel3.Controls.Add(this.btnCancel);
             this.panel3.Controls.Add(this.btnOk);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(10, 466);
+            this.panel3.Location = new System.Drawing.Point(10, 516);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(564, 35);
             this.panel3.TabIndex = 6;
@@ -4602,7 +4633,7 @@
             this.tbcAction.Location = new System.Drawing.Point(10, 131);
             this.tbcAction.Name = "tbcAction";
             this.tbcAction.SelectedIndex = 0;
-            this.tbcAction.Size = new System.Drawing.Size(564, 325);
+            this.tbcAction.Size = new System.Drawing.Size(564, 375);
             this.tbcAction.TabIndex = 7;
             // 
             // tabActionSettings
@@ -4612,7 +4643,7 @@
             this.tabActionSettings.Location = new System.Drawing.Point(4, 22);
             this.tabActionSettings.Name = "tabActionSettings";
             this.tabActionSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabActionSettings.Size = new System.Drawing.Size(556, 299);
+            this.tabActionSettings.Size = new System.Drawing.Size(556, 349);
             this.tabActionSettings.TabIndex = 0;
             this.tabActionSettings.Text = "Action-specific settings";
             this.tabActionSettings.UseVisualStyleBackColor = true;
@@ -4935,31 +4966,28 @@
             this.expressionTextBox2.Size = new System.Drawing.Size(474, 20);
             this.expressionTextBox2.TabIndex = 14;
             // 
-            // prsTableSource
+            // lblJsonHeaders
             // 
-            this.prsTableSource.AutoSize = true;
-            this.prsTableSource.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("prsTableSource.BackgroundImage")));
-            this.prsTableSource.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.prsTableSource.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.prsTableSource.IsPersistent = false;
-            this.prsTableSource.Location = new System.Drawing.Point(515, 30);
-            this.prsTableSource.Name = "prsTableSource";
-            this.prsTableSource.Size = new System.Drawing.Size(24, 20);
-            this.prsTableSource.TabIndex = 32;
-            this.prsTableSource.Tag = ((object)(resources.GetObject("prsTableSource.Tag")));
+            this.lblJsonHeaders.AutoSize = true;
+            this.lblJsonHeaders.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblJsonHeaders.Location = new System.Drawing.Point(3, 79);
+            this.lblJsonHeaders.Name = "lblJsonHeaders";
+            this.lblJsonHeaders.Size = new System.Drawing.Size(133, 26);
+            this.lblJsonHeaders.TabIndex = 25;
+            this.lblJsonHeaders.Text = "Headers to send";
+            this.lblJsonHeaders.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // prsTableTarget
+            // expJsonHeaders
             // 
-            this.prsTableTarget.AutoSize = true;
-            this.prsTableTarget.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("prsTableTarget.BackgroundImage")));
-            this.prsTableTarget.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.prsTableTarget.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.prsTableTarget.IsPersistent = false;
-            this.prsTableTarget.Location = new System.Drawing.Point(515, 161);
-            this.prsTableTarget.Name = "prsTableTarget";
-            this.prsTableTarget.Size = new System.Drawing.Size(24, 20);
-            this.prsTableTarget.TabIndex = 33;
-            this.prsTableTarget.Tag = ((object)(resources.GetObject("prsTableTarget.Tag")));
+            this.expJsonHeaders.AutoSize = true;
+            this.expJsonHeaders.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expJsonHeaders.Expression = "";
+            this.expJsonHeaders.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            this.expJsonHeaders.Location = new System.Drawing.Point(142, 82);
+            this.expJsonHeaders.Name = "expJsonHeaders";
+            this.expJsonHeaders.ReadOnly = false;
+            this.expJsonHeaders.Size = new System.Drawing.Size(397, 20);
+            this.expJsonHeaders.TabIndex = 26;
             // 
             // ActionForm
             // 
@@ -4967,7 +4995,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(584, 511);
+            this.ClientSize = new System.Drawing.Size(584, 561);
             this.Controls.Add(this.tbcAction);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel3);
@@ -4975,7 +5003,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.grpGeneralSettings);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.MinimumSize = new System.Drawing.Size(600, 550);
+            this.MinimumSize = new System.Drawing.Size(600, 600);
             this.Name = "ActionForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.ShowInTaskbar = false;
@@ -5445,5 +5473,7 @@
         private CustomControls.PersistenceSwitch prsFileVariable;
         private CustomControls.PersistenceSwitch prsTableTarget;
         private CustomControls.PersistenceSwitch prsTableSource;
+        private System.Windows.Forms.Label lblJsonHeaders;
+        private CustomControls.ExpressionTextBox expJsonHeaders;
     }
 }

@@ -885,6 +885,24 @@ namespace Triggernometry
             }
         }
 
+        internal string _JsonHeaderExpression = "";
+        [XmlAttribute]
+        public string JsonHeaderExpression
+        {
+            get
+            {
+                if (_JsonHeaderExpression == "")
+                {
+                    return null;
+                }
+                return _JsonHeaderExpression;
+            }
+            set
+            {
+                _JsonHeaderExpression = value;
+            }
+        }
+
         internal string _JsonFiringExpression = "";
         [XmlAttribute]
         public string JsonFiringExpression

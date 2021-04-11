@@ -49,6 +49,12 @@ Zone ID
 FolderForm/btnGetCurFfxivZone
 Retrieve current zone ID
 
+ActionForm/lblJsonHeaders
+Headers to send
+
+internal/SearchForm/hitjsonheaders
+Action #{0} JSON header expression
+
 ActionForm/cbxObsOpType[Custom JSON payload]
 Custom JSON payload
 

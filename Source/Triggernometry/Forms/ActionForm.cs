@@ -455,6 +455,7 @@ namespace Triggernometry.Forms
                 expJsonEndpoint.Expression = a._JsonEndpointExpression;
                 expJsonFiring.Expression = a._JsonFiringExpression;
                 expJsonPayload.Expression = a._JsonPayloadExpression;
+                expJsonHeaders.Expression = a._JsonHeaderExpression;
                 cbxJsonCache.Checked = a._JsonCacheRequest;
                 expWmsgTitle.Expression = a._WmsgTitle;
                 expWmsgCode.Expression = a._WmsgCode;
@@ -692,6 +693,7 @@ namespace Triggernometry.Forms
             a._JsonOperationType = (Action.HTTPMethodEnum)cbxJsonType.SelectedIndex;
             a._JsonEndpointExpression = expJsonEndpoint.Expression;
             a._JsonFiringExpression = expJsonFiring.Expression;
+            a._JsonHeaderExpression = expJsonHeaders.Expression;
             a._JsonPayloadExpression = expJsonPayload.Expression;
             a._JsonCacheRequest = cbxJsonCache.Checked;
             a._TextAuraOp = (Action.AuraOpEnum)cbxTextAuraOp.SelectedIndex;

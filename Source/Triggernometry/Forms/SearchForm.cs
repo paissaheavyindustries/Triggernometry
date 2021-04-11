@@ -224,6 +224,7 @@ namespace Triggernometry.Forms
                             if (RegexMatches(rex, a._JsonEndpointExpression) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitjsonendpoint", "Action #{0} JSON endpoint", i), Match = tn });
                             if (RegexMatches(rex, a._JsonFiringExpression) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitjsonfiring", "Action #{0} JSON firing expression", i), Match = tn });
                             if (RegexMatches(rex, a._JsonPayloadExpression) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitjsonpayload", "Action #{0} JSON payload expression", i), Match = tn });
+                            if (RegexMatches(rex, a._JsonHeaderExpression) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitjsonheaders", "Action #{0} JSON header expression", i), Match = tn });
                         }
                         if (a.ActionType == Action.ActionTypeEnum.KeyPress)
                         {

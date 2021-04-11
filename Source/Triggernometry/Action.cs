@@ -1067,7 +1067,7 @@ namespace Triggernometry
                                     AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/warndiscordtrunc", "Discord message too long, capping to {0}", msg.Length));
                                 }
                                 var wh = new JavaScriptSerializer().Serialize(new { content = msg, tts = true });
-                                SendJson(ctx, HTTPMethodEnum.POST, url, wh, true);
+                                SendJson(ctx, HTTPMethodEnum.POST, url, wh, null, true);
                             }
                             else
                             {
@@ -1077,7 +1077,7 @@ namespace Triggernometry
                                     AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/warndiscordtrunc", "Discord message too long, capping to {0}", msg.Length));
                                 }
                                 var wh = new JavaScriptSerializer().Serialize(new { content = msg });
-                                SendJson(ctx, HTTPMethodEnum.POST, url, wh, true);
+                                SendJson(ctx, HTTPMethodEnum.POST, url, wh, null, true);
                             }
                         }
                         break;
@@ -1398,11 +1398,18 @@ namespace Triggernometry
                             string response = "";
                             string endpoint = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _JsonEndpointExpression);
                             string payload = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _JsonPayloadExpression);
+                            string headers = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _JsonHeaderExpression).Trim();
+                            List<string> headerslist = new List<string>();
+                            if (headers.Length > 0)
+                            {
+                                headerslist.AddRange(headers.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+                            }
                             if (_JsonCacheRequest == true)
                             {
                                 string endpointh = ctx.plug.GenerateHash(endpoint);
                                 string payloadh = ctx.plug.GenerateHash(payload);
-                                string fh = ctx.plug.GenerateHash(endpointh + payloadh);
+                                string headersh = ctx.plug.GenerateHash(headers);
+                                string fh = ctx.plug.GenerateHash(endpointh + payloadh + headers);
                                 string fn = Path.Combine(ctx.plug.path, "TriggernometryJsonCache");
                                 if (Directory.Exists(fn) == false)
                                 {
@@ -1422,13 +1429,13 @@ namespace Triggernometry
                                 }
                                 if (fromcache == false)
                                 {
-                                    response = SendJson(ctx, _JsonOperationType, endpoint, payload, false);
+                                    response = SendJson(ctx, _JsonOperationType, endpoint, payload, headerslist, false);
                                     File.WriteAllText(fn, response);
                                 }
                             }
                             else
                             {
-                                response = SendJson(ctx, _JsonOperationType, endpoint, payload, false);
+                                response = SendJson(ctx, _JsonOperationType, endpoint, payload, headerslist, false);
                             }
                             if (_JsonFiringExpression != null && _JsonFiringExpression.Trim().Length > 0)
                             {
@@ -2568,6 +2575,7 @@ namespace Triggernometry
             a._JsonOperationType = _JsonOperationType;
             a._JsonCacheRequest = _JsonCacheRequest;
             a._JsonEndpointExpression = _JsonEndpointExpression;
+            a._JsonHeaderExpression = _JsonHeaderExpression;
             a._JsonFiringExpression = _JsonFiringExpression;
             a._JsonPayloadExpression = _JsonPayloadExpression;
             a.Condition = (ConditionGroup)(Condition != null ? ((ConditionGroup)Condition).Duplicate() : null);
@@ -2607,11 +2615,18 @@ namespace Triggernometry
             a._VariablePersist = _VariablePersist;
         }
 
-        private string SendJson(Context ctx, Action.HTTPMethodEnum method, string url, string json, bool expectNoContent)
+        private string SendJson(Context ctx, Action.HTTPMethodEnum method, string url, string json, IEnumerable<string> headers, bool expectNoContent)
         {
             try
             {                
                 var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+                if (headers != null && headers.Count() > 0)
+                {
+                    foreach (string hdr in headers)
+                    {
+                        httpWebRequest.Headers.Add(hdr);
+                    }
+                }
                 switch (method)
                 {
                     case HTTPMethodEnum.POST:
