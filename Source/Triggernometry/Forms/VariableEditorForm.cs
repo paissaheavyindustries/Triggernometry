@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -396,6 +397,15 @@ namespace Triggernometry.Forms
             RestoreEdit();
         }
 
+        private void btnSaveAsCsv_Click(object sender, EventArgs e) 
+        {
+            saveFileDialog1.FileName = txtVariableName.Text + ".csv";
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK) 
+            {
+                VariableTable v = (VariableTable)VariableToEdit;
+                File.WriteAllText(saveFileDialog1.FileName, v.ToString());
+            }
+        }
     }
 
 }
