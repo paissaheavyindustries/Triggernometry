@@ -190,8 +190,10 @@ namespace Triggernometry.PluginBridges
                 case "30": return "NIN";
                 case "19": return "PLD";
                 case "35": return "RDM";
+                case "39": return "RPR";
                 case "34": return "SAM";
                 case "28": return "SCH";
+                case "40": return "SGE";
                 case "27": return "SMN";
                 case "21": return "WAR";
                 case "24": return "WHM";
@@ -227,47 +229,49 @@ namespace Triggernometry.PluginBridges
             switch (id)
             {
                 // JOBS
+                case "19": return "Tank";
+                case "21": return "Tank";
+                case "32": return "Tank";
+                case "37": return "Tank";
+                case "24": return "Healer";
+                case "28": return "Healer";
                 case "33": return "Healer";
+                case "40": return "Healer";
+                case "20": return "DPS";
+                case "22": return "DPS";
                 case "23": return "DPS";
                 case "25": return "DPS";
+                case "27": return "DPS";
+                case "30": return "DPS";
+                case "31": return "DPS";
+                case "34": return "DPS";
+                case "35": return "DPS";
                 case "36": return "DPS";
                 case "38": return "DPS";
-                case "32": return "Tank";
-                case "22": return "DPS";
-                case "37": return "Tank";
-                case "31": return "DPS";
-                case "20": return "DPS";
-                case "30": return "DPS";
-                case "19": return "Tank";
-                case "35": return "DPS";
-                case "34": return "DPS";
-                case "28": return "Healer";
-                case "27": return "DPS";
-                case "21": return "Tank";
-                case "24": return "Healer";
+                case "39": return "DPS";
                 // CRAFTERS
-                case "14": return "Crafter";
-                case "10": return "Crafter";
-                case "9": return "Crafter";
                 case "8": return "Crafter";
-                case "15": return "Crafter";
+                case "9": return "Crafter";
+                case "10": return "Crafter";
                 case "11": return "Crafter";
                 case "12": return "Crafter";
                 case "13": return "Crafter";
+                case "14": return "Crafter";
+                case "15": return "Crafter";
                 // GATHERERS
+                case "16": return "Gatherer";
                 case "17": return "Gatherer";
                 case "18": return "Gatherer";
-                case "16": return "Gatherer";
                 // CLASSES
-                case "26": return "Healer";
-                case "5": return "DPS";
-                case "6": return "Healer";
                 case "1": return "Tank";
-                case "4": return "DPS";
                 case "3": return "Tank";
+                case "6": return "Healer";
+                case "26": return "Healer";
                 case "2": return "DPS";
-                case "29": return "DPS";
+                case "4": return "DPS";
+                case "5": return "DPS";
                 case "7": return "DPS";
+                case "29": return "DPS";
             }
             return "";
         }
