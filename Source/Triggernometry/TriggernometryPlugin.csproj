@@ -143,6 +143,12 @@
     <Compile Include="Forms\AuraDesignForm.Designer.cs">
       <DependentUpon>AuraDesignForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\AutoCompleteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AutoCompleteForm.Designer.cs">
+      <DependentUpon>AutoCompleteForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\BenchmarkForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -441,6 +447,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AuraDesignForm.resx">
       <DependentUpon>AuraDesignForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AutoCompleteForm.resx">
+      <DependentUpon>AutoCompleteForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BenchmarkForm.resx">
       <DependentUpon>BenchmarkForm.cs</DependentUpon>

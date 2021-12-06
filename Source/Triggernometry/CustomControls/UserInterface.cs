@@ -1467,6 +1467,9 @@ namespace Triggernometry.CustomControls
                             case 1:
                                 src = LogEvent.SourceEnum.NetworkFFXIV;
                                 break;
+                            case 2:
+                                src = LogEvent.SourceEnum.ACT;
+                                break;
                         }
                         plug.LogLineQueuerMass(lines, ti.txtZoneName.Text, src, true);
                         plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeuedone", "Done"));

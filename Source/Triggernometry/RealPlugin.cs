@@ -440,6 +440,7 @@ namespace Triggernometry
         internal List<Trigger> Triggers;
         internal List<Trigger> ActiveTextTriggers;
         internal List<Trigger> ActiveFFXIVNetworkTriggers;
+        internal List<Trigger> ActiveACTTriggers;
         internal VariableStore sessionvars;
         internal Dictionary<string, Forms.AuraContainerForm> imageauras;
         internal Dictionary<string, Forms.AuraContainerForm> textauras;
@@ -1113,6 +1114,7 @@ namespace Triggernometry
             Triggers = new List<Trigger>();
             ActiveTextTriggers = new List<Trigger>();
             ActiveFFXIVNetworkTriggers = new List<Trigger>();
+            ActiveACTTriggers = new List<Trigger>();
             sessionvars = new VariableStore();
             imageauras = new Dictionary<string, Forms.AuraContainerForm>();
             textauras = new Dictionary<string, Forms.AuraContainerForm>();
@@ -1146,6 +1148,12 @@ namespace Triggernometry
                                 ActiveFFXIVNetworkTriggers.Add(t);
                             }
                             break;
+                        case Trigger.TriggerSourceEnum.ACT:
+                            lock (ActiveACTTriggers)
+                            {
+                                ActiveACTTriggers.Add(t);
+                            }
+                            break;
                         case Trigger.TriggerSourceEnum.None:
                             break;
                     }
@@ -1171,6 +1179,12 @@ namespace Triggernometry
                             ActiveFFXIVNetworkTriggers.Remove(t);
                         }
                         break;
+                    case Trigger.TriggerSourceEnum.ACT:
+                        lock (ActiveACTTriggers)
+                        {
+                            ActiveACTTriggers.Remove(t);
+                        }
+                        break;
                     case Trigger.TriggerSourceEnum.None:
                         break;
                 }
@@ -1186,6 +1200,12 @@ namespace Triggernometry
                         lock (ActiveFFXIVNetworkTriggers)
                         {
                             ActiveFFXIVNetworkTriggers.Add(t);
+                        }
+                        break;
+                    case Trigger.TriggerSourceEnum.ACT:
+                        lock (ActiveACTTriggers)
+                        {
+                            ActiveACTTriggers.Add(t);
                         }
                         break;
                     case Trigger.TriggerSourceEnum.None:
@@ -1215,6 +1235,15 @@ namespace Triggernometry
                             if (ActiveFFXIVNetworkTriggers.Contains(t) == true)
                             {
                                 ActiveFFXIVNetworkTriggers.Remove(t);
+                            }
+                        }
+                        break;
+                    case Trigger.TriggerSourceEnum.ACT:
+                        lock (ActiveACTTriggers)
+                        {
+                            if (ActiveACTTriggers.Contains(t) == true)
+                            {
+                                ActiveACTTriggers.Remove(t);
                             }
                         }
                         break;
@@ -1251,6 +1280,17 @@ namespace Triggernometry
                         }
                     }
                     break;
+                case Trigger.TriggerSourceEnum.ACT:
+                    lock (ActiveACTTriggers)
+                    {
+                        if (ActiveACTTriggers.Contains(t) == false)
+                        {
+                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigaddbook", "Trigger '{0}' added to bookkeeping", t.LogName));
+                            ActiveACTTriggers.Add(t);
+                            return;
+                        }
+                    }
+                    break;
                 case Trigger.TriggerSourceEnum.None:
                     break;            }
         }
@@ -1277,6 +1317,17 @@ namespace Triggernometry
                         {
                             FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigrembook", "Trigger '{0}' removed from bookkeeping", t.LogName));
                             ActiveFFXIVNetworkTriggers.Remove(t);
+                            return;
+                        }
+                    }
+                    break;
+                case Trigger.TriggerSourceEnum.ACT:
+                    lock (ActiveACTTriggers)
+                    {
+                        if (ActiveACTTriggers.Contains(t) == true)
+                        {
+                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigrembook", "Trigger '{0}' removed from bookkeeping", t.LogName));
+                            ActiveACTTriggers.Remove(t);
                             return;
                         }
                     }
@@ -2916,6 +2967,19 @@ namespace Triggernometry
                         }
                     }
                     break;
+                case LogEvent.SourceEnum.ACT:
+                    lock (ActiveACTTriggers) // verified
+                    {
+                        foreach (Trigger t in ActiveACTTriggers)
+                        {
+                            if (t.ZoneBlocked == true && le.TestMode == false)
+                            {
+                                continue;
+                            }
+                            TestTrigger(t, le, Action.TriggerForceTypeEnum.NoSkip);
+                        }
+                    }
+                    break;
             }
             double del = (DateTime.Now - le.Timestamp).TotalMilliseconds;
             if (del > 100.0)
@@ -2950,6 +3014,17 @@ namespace Triggernometry
             FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/zoneupdate", "Zone update to '{0}' - allowed triggers: {1}, restricted triggers: {2}", zone, numa, numb));
         }
 
+        public void ExtendedACTEvents(string[] data)
+        {
+            switch (data[0])
+            {
+                case "OnCombatStart":
+                case "OnCombatEnd":
+                    LogLineQueuer(data[0], currentZone != null ? currentZone : "", LogEvent.SourceEnum.ACT);
+                    break;
+            }
+        }
+
         public void OnLogLineRead(bool isImport, string logLine, string detectedZone)
         {
             if (isImport == true)
@@ -2980,7 +3055,7 @@ namespace Triggernometry
                 }
                 else
                 {
-                    if (logLine.Substring(logLine.Length - 5) != "] FB:")
+                    if (logLine != "" && (logLine.Length < 5 || logLine.Substring(logLine.Length - 5) != "] FB:"))
                     {
                         if (cfg.LogNormalEvents == true)
                         {

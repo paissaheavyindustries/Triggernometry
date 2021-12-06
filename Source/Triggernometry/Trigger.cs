@@ -44,7 +44,8 @@ namespace Triggernometry
         {
             Log,
             FFXIVNetwork,
-            None
+            None,
+            ACT
         }
 
         internal TriggerSourceEnum _Source { get; set; } = TriggerSourceEnum.Log;

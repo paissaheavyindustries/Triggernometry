@@ -849,8 +849,42 @@ namespace Triggernometry
                                         case "hex2dec": // hex2dec()
                                             val = "" + int.Parse(funcval, System.Globalization.NumberStyles.HexNumber);
                                             break;
+                                        case "hex2float": // hex2float()
+                                            {
+                                                Int32 bytesArray = Int32.Parse(funcval, System.Globalization.NumberStyles.HexNumber);
+                                                val = "" + BitConverter.ToSingle(BitConverter.GetBytes(bytesArray), 0);
+                                            }
+                                            break;
+                                        case "hex2double": // hex2double()
+                                            {
+                                                Int64 bytesArray = Int64.Parse(funcval, System.Globalization.NumberStyles.HexNumber);
+                                                val = "" + BitConverter.ToDouble(BitConverter.GetBytes(bytesArray), 0);
+                                            }
+                                            break;
+                                        case "float2hex":
+                                            {
+                                                byte[] bytesArray = BitConverter.GetBytes(float.Parse(funcval));
+                                                Array.Reverse(bytesArray, 0, bytesArray.Length);
+                                                val = BitConverter.ToString(bytesArray).Replace("-", "");
+                                            }
+                                            break;
+                                        case "double2hex":
+                                            {
+                                                Int64 bytesArray = BitConverter.DoubleToInt64Bits(double.Parse(funcval));
+                                                val = bytesArray.ToString("X");
+                                            }
+                                            break;
                                         case "dec2hex": // dec2hex()
                                             val = int.Parse(funcval).ToString("X");
+                                            break;
+                                        case "dec2hex2": // dec2hex2()
+                                            val = int.Parse(funcval).ToString("X2");
+                                            break;
+                                        case "dec2hex4": // dec2hex4()
+                                            val = int.Parse(funcval).ToString("X4");
+                                            break;
+                                        case "dec2hex8": // dec2hex8()
+                                            val = int.Parse(funcval).ToString("X8");
                                             break;
                                         case "padleft": // padleft(charcode,length)
                                             if (argc != 2)

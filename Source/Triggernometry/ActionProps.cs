@@ -1287,6 +1287,10 @@ namespace Triggernometry
             set
             {
                 _LogLevel = (LogMessageEnum)Enum.Parse(typeof(LogMessageEnum), value);
+                if ((int)_LogLevel == -1)
+                {
+                    _LogLevel = LogMessageEnum.Error;
+                }
             }
         }
 
@@ -1383,7 +1387,7 @@ namespace Triggernometry
         {
             get
             {
-                if (_MouseX == "0")
+                if (_MouseX == "0" || _MouseX == "")
                 {
                     return null;
                 }
@@ -1401,7 +1405,7 @@ namespace Triggernometry
         {
             get
             {
-                if (_MouseY == "0")
+                if (_MouseY == "0" || _MouseY == "")
                 {
                     return null;
                 }

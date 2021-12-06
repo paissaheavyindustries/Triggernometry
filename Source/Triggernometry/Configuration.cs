@@ -303,7 +303,7 @@ namespace Triggernometry
             isnew = true;
             lastWrite = DateTime.Now;
             FfxivPartyOrdering = FfxivPartyOrderingEnum.Legacy;
-            FfxivCustomPartyOrder = "19, 1, 21, 3, 32, 37, 24, 6, 28, 33, 20, 2, 22, 4, 30, 29, 34, 23, 5, 31, 38, 25, 7, 27, 26, 35, 36";
+            FfxivCustomPartyOrder = "19, 1, 21, 3, 32, 37, 24, 6, 28, 33, 40, 20, 2, 22, 4, 30, 29, 34, 39, 23, 5, 31, 38, 25, 7, 27, 26, 35, 36";
             ShowWelcome = true;
             WindowToMonitor = "FINAL FANTASY XIV";
             CacheImageExpiry = 518400;
@@ -324,6 +324,7 @@ namespace Triggernometry
         Conjurer	6
         Scholar		28
         Astrologian	33
+        Sage        40
         Monk		20
         Pugilist	2
         Dragoon		22
@@ -331,6 +332,7 @@ namespace Triggernometry
         Ninja		30
         Rogue		29
         Samurai		34
+        Reaper      39
         Bard		23
         Archer		5
         Machinist	31

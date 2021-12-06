@@ -265,10 +265,12 @@ namespace Triggernometry.Forms
                 expTextAuraXIni.Expression = "";
                 expTextAuraYIni.Expression = "";
                 cbxProcessLog.Checked = false;
+                cbxLogMessageTarget.SelectedIndex = 0;
                 expTextAuraWIni.Expression = "";
                 expTextAuraHIni.Expression = "";
                 expTextAuraOIni.Expression = "";
                 expLogMessageText.Expression = "";
+                cbxLogMessageLevel.SelectedIndex = 0;
                 expTextAuraXTick.Expression = "";
                 expTextAuraYTick.Expression = "";
                 expTextAuraWTick.Expression = "";
@@ -504,6 +506,7 @@ namespace Triggernometry.Forms
                 expTextAuraHTick.Expression = a._TextAuraHTickExpression;
                 expTextAuraOTick.Expression = a._TextAuraOTickExpression;
                 cbxProcessLog.Checked = a._LogProcess;
+                cbxLogMessageTarget.SelectedIndex = 0; // todo
                 expTextAuraTTLTick.Expression = a._TextAuraTTLTickExpression;
                 expLogMessageText.Expression = a._LogMessageText;
                 cbxLogMessageLevel.SelectedIndex = (int)a._LogLevel;
@@ -569,6 +572,7 @@ namespace Triggernometry.Forms
                 prsTableSource.IsPersistent = a._TableSourcePersist;
                 prsTableTarget.IsPersistent = a._TableTargetPersist;
             }
+            cbxProcessLog_CheckedChanged(null, null);
         }
 
         internal void SettingsToAction(Action a)
@@ -1861,6 +1865,12 @@ namespace Triggernometry.Forms
         private void cbxJsonType_SelectedIndexChanged(object sender, EventArgs e)
         {
             expJsonPayload.Enabled = (cbxJsonType.SelectedIndex == 0);
+        }
+
+        private void cbxProcessLog_CheckedChanged(object sender, EventArgs e)
+        {
+            cbxLogMessageTarget.Enabled = cbxProcessLog.Checked;
+            lblLogMessageTarget.Enabled = cbxLogMessageTarget.Enabled;
         }
 
     }

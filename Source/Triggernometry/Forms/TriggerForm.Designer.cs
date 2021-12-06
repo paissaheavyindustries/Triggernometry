@@ -607,7 +607,8 @@
             this.cbxTriggerSource.Items.AddRange(new object[] {
             "Normal log lines",
             "FFXIV network events",
-            "None"});
+            "None",
+            "ACT events"});
             this.cbxTriggerSource.Location = new System.Drawing.Point(282, 3);
             this.cbxTriggerSource.Name = "cbxTriggerSource";
             this.cbxTriggerSource.Size = new System.Drawing.Size(357, 21);

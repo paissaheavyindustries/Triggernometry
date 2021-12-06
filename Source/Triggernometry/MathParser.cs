@@ -34,6 +34,20 @@ namespace Triggernometry
             return xy;
         }
 
+        public double Hex2FloatFunction(string[] x)
+        {
+            Int32 bytesArray = Int32.Parse(x[0], System.Globalization.NumberStyles.HexNumber);
+            float f = BitConverter.ToSingle(BitConverter.GetBytes(bytesArray), 0);
+            return (double)f;
+        }
+
+        public double Hex2DoubleFunction(string[] x)
+        {
+            Int64 bytesArray = Int64.Parse(x[0], System.Globalization.NumberStyles.HexNumber);
+            double d = BitConverter.ToDouble(BitConverter.GetBytes(bytesArray), 0);
+            return d;
+        }
+
         public double IfFunction(double a, double b, double c)
         {
             return (a == 0) ? c : b;
@@ -164,8 +178,6 @@ namespace Triggernometry
                 LocalFunctions.Add("arctan2", x => Math.Atan2(x[0], x[1]));
                 LocalFunctions.Add("distance", x => Math.Sqrt(Math.Pow((x[2]-x[0]), 2.0) + Math.Pow((x[3] - x[1]), 2.0)));
 
-                LocalFunctions.Add("max", x => Math.Max(x[0], x[1]));
-                LocalFunctions.Add("min", x => Math.Min(x[0], x[1]));
                 LocalFunctions.Add("random", x => RandomNumber(x[0], x[1]));
 
                 LocalFunctions.Add("sqrt", x => Math.Sqrt(x[0]));
@@ -210,6 +222,25 @@ namespace Triggernometry
                     }
                 });
 
+                LocalFunctions.Add("max", x =>
+                {
+                    double max = x[0];
+                    for (int i = 1; i < x.Count(); i++)
+                    {
+                        max = Math.Max(x[i], max);
+                    }
+                    return max;
+                });
+
+                LocalFunctions.Add("min", x => {
+                    double min = x[0];
+                    for (int i = 1; i < x.Count(); i++)
+                    {
+                        min = Math.Min(x[i], min);
+                    }
+                    return min;
+                });
+
                 //LocalFunctions.Add("round", x => Math.Round(x[0]));
                 LocalFunctions.Add("truncate", x => x[0] < 0 ? -Math.Floor(-x[0]) : Math.Floor(x[0]));
                 LocalFunctions.Add("floor", x => Math.Floor(x[0]));
@@ -221,6 +252,10 @@ namespace Triggernometry
                 LocalFunctions.Add("if", x => IfFunction(x[0], x[1], x[2]));
 
                 LocalStringFunctions.Add("hex2dec", x => Hex2DecFunction(x));
+                LocalStringFunctions.Add("hex2float", x => Hex2FloatFunction(x));
+                LocalStringFunctions.Add("hex2double", x => Hex2DoubleFunction(x));
+
+                LocalStringFunctions.Add("X8float", x => Hex2FloatFunction(x));
             }
 
             if (loadPreDefinedVariables)

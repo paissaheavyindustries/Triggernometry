@@ -327,6 +327,7 @@ namespace Triggernometry.Forms
             order.Add(new FfxivJobOrderItem() { Name = "Conjurer", JobId = 6 });
             order.Add(new FfxivJobOrderItem() { Name = "Scholar", JobId = 28 });
             order.Add(new FfxivJobOrderItem() { Name = "Astrologian", JobId = 33 });
+            order.Add(new FfxivJobOrderItem() { Name = "Sage", JobId = 40 });
             order.Add(new FfxivJobOrderItem() { Name = "Monk", JobId = 20 });
             order.Add(new FfxivJobOrderItem() { Name = "Pugilist", JobId = 2 });
             order.Add(new FfxivJobOrderItem() { Name = "Dragoon", JobId = 22 });
@@ -334,6 +335,7 @@ namespace Triggernometry.Forms
             order.Add(new FfxivJobOrderItem() { Name = "Ninja", JobId = 30 });
             order.Add(new FfxivJobOrderItem() { Name = "Rogue", JobId = 29 });
             order.Add(new FfxivJobOrderItem() { Name = "Samurai", JobId = 34 });
+            order.Add(new FfxivJobOrderItem() { Name = "Reaper", JobId = 39 });
             order.Add(new FfxivJobOrderItem() { Name = "Bard", JobId = 23 });
             order.Add(new FfxivJobOrderItem() { Name = "Archer", JobId = 5 });
             order.Add(new FfxivJobOrderItem() { Name = "Machinist", JobId = 31 });

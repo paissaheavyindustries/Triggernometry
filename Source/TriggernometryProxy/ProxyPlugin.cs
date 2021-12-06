@@ -139,7 +139,19 @@ namespace TriggernometryProxy
             FailsafeRegisterHook("InstanceHook", "GetInstance");
             GetPluginNameAndPath();
             ActGlobals.oFormActMain.OnLogLineRead += OFormActMain_OnLogLineRead;
+            ActGlobals.oFormActMain.OnCombatStart += OFormActMain_OnCombatStart;
+            ActGlobals.oFormActMain.OnCombatEnd += OFormActMain_OnCombatEnd;
             Instance.InitPlugin(pluginScreenSpace, pluginStatusText);
+        }
+
+        private void OFormActMain_OnCombatStart(bool isImport, CombatToggleEventArgs encounterInfo)
+        {
+            ExtendedACTEvents(new string[] { "OnCombatStart" });
+        }
+
+        private void OFormActMain_OnCombatEnd(bool isImport, CombatToggleEventArgs encounterInfo)
+        {
+            ExtendedACTEvents(new string[] { "OnCombatEnd" });
         }
 
         public void LocateTab(TabPage tp)
@@ -227,10 +239,17 @@ namespace TriggernometryProxy
         }
 
         public void DeInitPlugin()
-        {            
+        {
+            ActGlobals.oFormActMain.OnCombatEnd -= OFormActMain_OnCombatEnd;
+            ActGlobals.oFormActMain.OnCombatStart -= OFormActMain_OnCombatStart;
             ActGlobals.oFormActMain.OnLogLineRead -= OFormActMain_OnLogLineRead;
             Instance.DeInitPlugin();
             HideCornerNotification();
+        }
+
+        private void ExtendedACTEvents(string[] data)
+        {
+            Instance.ExtendedACTEvents(data);
         }
 
         private void OFormActMain_OnLogLineRead(bool isImport, LogLineEventArgs logInfo)
@@ -371,7 +390,11 @@ namespace TriggernometryProxy
                         (String.Compare(tn, ActPluginType, true) == 0)
                     )
                     &&
-                    (String.Compare(p.lblPluginStatus.Text, "FFXIV Plugin Started.", true) == 0)
+                    (
+                        (String.Compare(p.lblPluginStatus.Text, "FFXIV Plugin Started.", true) == 0)
+                        ||
+                        (String.Compare(p.lblPluginStatus.Text, "FFXIV_ACT_Plugin Started.", true) == 0)
+                    )
                 )
                 {
                     if (ActPluginPrevious == p)

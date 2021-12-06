@@ -130,7 +130,8 @@
             this.cbxEventDestination.FormattingEnabled = true;
             this.cbxEventDestination.Items.AddRange(new object[] {
             "Normal log line",
-            "FFXIV network event"});
+            "FFXIV network event",
+            "ACT event"});
             this.cbxEventDestination.Location = new System.Drawing.Point(70, 3);
             this.cbxEventDestination.Name = "cbxEventDestination";
             this.cbxEventDestination.Size = new System.Drawing.Size(421, 21);
