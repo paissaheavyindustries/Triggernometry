@@ -1,6 +1,7 @@
-﻿################################################################################
+################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
 /CaptureStrings
 /Translations/olddefault.triglations.xml
+Source/.idea/

@@ -27,7 +27,7 @@ namespace TriggernometryProxy
         private List<Tuple<int, string, CustomCallbackDelegate, object>> queuedRegs = new List<Tuple<int, string, CustomCallbackDelegate, object>>();
 
         public delegate void CustomCallbackDelegate(object o, string param);
-        
+
         public ProxyPlugin()
         {
             CosturaUtility.Initialize();
@@ -146,12 +146,14 @@ namespace TriggernometryProxy
 
         private void OFormActMain_OnCombatStart(bool isImport, CombatToggleEventArgs encounterInfo)
         {
-            ExtendedACTEvents(new string[] { "OnCombatStart" });
+            if (!Instance.InCombatHook())
+                ExtendedACTEvents("OnCombatStart");
         }
 
         private void OFormActMain_OnCombatEnd(bool isImport, CombatToggleEventArgs encounterInfo)
         {
-            ExtendedACTEvents(new string[] { "OnCombatEnd" });
+            if (Instance.InCombatHook())
+                ExtendedACTEvents("OnCombatEnd");
         }
 
         public void LocateTab(TabPage tp)
@@ -204,7 +206,7 @@ namespace TriggernometryProxy
                 if (CornerPopupVisible == true)
                 {
                     return;
-                }         
+                }
                 MethodInfo mi = ActGlobals.oFormActMain.GetType().GetMethod("CornerControlAdd");
                 if (mi != null)
                 {
@@ -247,7 +249,7 @@ namespace TriggernometryProxy
             HideCornerNotification();
         }
 
-        private void ExtendedACTEvents(string[] data)
+        private void ExtendedACTEvents(params string[] data)
         {
             Instance.ExtendedACTEvents(data);
         }
@@ -261,7 +263,7 @@ namespace TriggernometryProxy
         {
             Instance.path = Path.Combine(ActGlobals.oFormActMain.AppDataFolder.FullName, "Config");
             Instance.pluginPath = Instance.path;
-            string name = null;            
+            string name = null;
             foreach (ActPluginData p in ActGlobals.oFormActMain.ActPlugins)
             {
                 if (p.pluginObj == this)
@@ -407,7 +409,7 @@ namespace TriggernometryProxy
                         System.Diagnostics.FileVersionInfo vi = System.Diagnostics.FileVersionInfo.GetVersionInfo(p.pluginFile.FullName);
                         int[] expectedActVer = new int[4] { 2, 0, 4, 6 };
                         string expectedActVers = "2.0.4.6";
-                        int[] currentActVer = new int[4] { vi.FileMajorPart, vi.FileMinorPart, vi.FileBuildPart, vi.FilePrivatePart };                        
+                        int[] currentActVer = new int[4] { vi.FileMajorPart, vi.FileMinorPart, vi.FileBuildPart, vi.FilePrivatePart };
                         for (int i = 0; i < 4; i++)
                         {
                             if (currentActVer[i] > expectedActVer[i])
@@ -415,7 +417,7 @@ namespace TriggernometryProxy
                                 break;
                             }
                             if (currentActVer[i] < expectedActVer[i])
-                            {                                
+                            {
                                 return new Triggernometry.RealPlugin.PluginWrapper() { pluginObj = p.pluginObj, state = 2, fileversion = vi.FileVersion.ToString(), expectedversion = expectedActVers };
                             }
                         }

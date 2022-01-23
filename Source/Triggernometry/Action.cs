@@ -20,11 +20,11 @@ namespace Triggernometry
 
     /*
 	Confirm the triggers to import.
-	
+
 	At least one of triggers you are trying to import includes one of more actions that are set to launch an external process.
 	These triggers may be dangerous and as such they are not included in the import by default.
 	To import these triggers, you will have to confirm them manually one by one.
-	
+
 	*/
     public partial class Action
     {
@@ -405,7 +405,7 @@ namespace Triggernometry
                 temp += ", ";
             }
             switch (ActionType)
-            { 
+            {
                 case ActionTypeEnum.Trigger:
                     {
                         Trigger t = ctx.plug.GetTriggerById(_TriggerId, ctx.trig != null ? ctx.trig.Repo : null);
@@ -420,7 +420,7 @@ namespace Triggernometry
                                     temp += I18n.Translate("internal/Action/desctrigcancelall", "cancel all actions queued from all triggers");
                                     break;
                                 case TriggerOpEnum.FireTrigger:
-                                    
+
                                     temp += I18n.Translate("internal/Action/desctrigfire", "fire trigger ({0})", t.Name);
                                     List<string> ex = new List<string>();
                                     if (_TriggerForceType == TriggerForceTypeEnum.SkipAll)
@@ -733,7 +733,7 @@ namespace Triggernometry
                             temp += I18n.Translate("internal/Action/descobsjsonpayload", "Send custom JSON payload to OBS");
                             break;
                     }
-                    break; 
+                    break;
                 case ActionTypeEnum.Variable:
                     switch (_VariableOp)
                     {
@@ -842,12 +842,12 @@ namespace Triggernometry
                     {
                         if (_LogProcess == true)
                         {
-                            temp += I18n.Translate("internal/Action/descprocessmessage", "process message ({0}) as log line", _LogMessageText);
+                            temp += I18n.Translate("internal/Action/descprocessmessage", "process message ({0}) as ({1}) log line", _LogMessageText, _LogSource.ToString());
                         }
                         else
                         {
                             temp += I18n.Translate("internal/Action/desclogmessage", "log message ({0})", _LogMessageText);
-                        }                        
+                        }
                     }
                     break;
                 case ActionTypeEnum.WindowMessage:
@@ -1035,7 +1035,7 @@ namespace Triggernometry
 						{
 							double freq = ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _SystemBeepFreqExpression);
                             if (freq < 37.0)
-                            {                                
+                            {
                                 freq = 37.0;
                                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/beepfreqlo", "Beep frequency below limit, capping to {0}", freq));
                             }
@@ -1089,7 +1089,7 @@ namespace Triggernometry
                             string varname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _DiskFileOpVar);
                             VariableStore vs = (_DiskPersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                             if (_DiskFileOp == DiskFileOpEnum.ReadCSVIntoTableVariable || _DiskFileOp == DiskFileOpEnum.ReadIntoListVariable || _DiskFileOp == DiskFileOpEnum.ReadIntoVariable)
-                            {                                
+                            {
                                 Uri u = new Uri(filename);
                                 if (u.IsFile == false)
                                 {
@@ -1700,7 +1700,7 @@ namespace Triggernometry
                                         }
                                         vs = (_ListTargetPersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List)
-                                        {                                            
+                                        {
                                             VariableList newvl = GetListVariable(vs, targetname, true);
                                             foreach (Variable x in vl.Values)
                                             {
@@ -1803,7 +1803,7 @@ namespace Triggernometry
                         {
                             if (_LogProcess == true)
                             {
-                                ctx.plug.LogLineQueuer(ctx.EvaluateStringExpression(ActionContextLogger, ctx, _LogMessageText), "", LogEvent.SourceEnum.Log);
+                                ctx.plug.LogLineQueuer(ctx.EvaluateStringExpression(ActionContextLogger, ctx, _LogMessageText), "", _LogSource);
                             }
                             else
                             {
@@ -2198,7 +2198,7 @@ namespace Triggernometry
                                         {
                                             VariableTable vt = GetTableVariable(vs, sourcename, true);
                                             int mx = Math.Max(x, vt.Width);
-                                            int my = Math.Max(y, vt.Height);                                            
+                                            int my = Math.Max(y, vt.Height);
                                             if (mx != vt.Width || my != vt.Height)
                                             {
                                                 vt.Resize(mx, my);
@@ -2412,9 +2412,9 @@ namespace Triggernometry
             {
                 do
                 {
-                    wmp = null;                    
+                    wmp = null;
                     foreach (WindowsMediaPlayer x in players)
-                    {                        
+                    {
                         if (x.playState == WMPPlayState.wmppsStopped)
                         {
                             wmp = x;
@@ -2434,7 +2434,7 @@ namespace Triggernometry
             WindowsMediaPlayer wmp = (WindowsMediaPlayer)pMediaObject;
             lock (players) // verified
             {
-                players.Remove(wmp);                
+                players.Remove(wmp);
             }
         }
 
@@ -2560,6 +2560,7 @@ namespace Triggernometry
             a._TextAuraUseOutline = _TextAuraUseOutline;
             a._LogMessageText = _LogMessageText;
             a._LogLevel = _LogLevel;
+            a._LogSource = _LogSource;
             a._DiscordTts = _DiscordTts;
             a._ListVariableExpression = _ListVariableExpression;
             a._ListVariableExpressionType = _ListVariableExpressionType;
@@ -2618,7 +2619,7 @@ namespace Triggernometry
         private string SendJson(Context ctx, Action.HTTPMethodEnum method, string url, string json, IEnumerable<string> headers, bool expectNoContent)
         {
             try
-            {                
+            {
                 var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
                 if (headers != null && headers.Count() > 0)
                 {

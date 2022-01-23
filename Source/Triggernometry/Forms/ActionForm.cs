@@ -62,7 +62,7 @@ namespace Triggernometry.Forms
             btnTest.ContextMenuStrip = new ContextMenuStrip();
             ToolStripItem tsi = btnTest.ContextMenuStrip.Items.Add(I18n.Translate("internal/ActionForm/acttestplaceholder", "Test action with placeholder values"));
             tsi.Image = btnTest.Image;
-            tsi.Click += Tsi_Click1;            
+            tsi.Click += Tsi_Click1;
             tsi = btnTest.ContextMenuStrip.Items.Add(I18n.Translate("internal/ActionForm/acttestlive", "Test action with live values"));
             tsi.Image = btnTest.Image;
             tsi.Click += Tsi_Click2;
@@ -233,7 +233,7 @@ namespace Triggernometry.Forms
                 cbxLvarOperation.SelectedIndex = 0;
                 cbxTriggerOp.SelectedIndex = 0;
                 expTriggerText.Expression = "";
-                expTriggerZone.Expression = "";                
+                expTriggerZone.Expression = "";
                 cbxAuraOp.SelectedIndex = 0;
                 cbxAuraDisplay.SelectedIndex = 0;
                 expAuraName.Expression = "";
@@ -285,7 +285,7 @@ namespace Triggernometry.Forms
                 expWmsgTitle.Expression = "";
                 expWmsgCode.Expression = "";
                 expWmsgWparam.Expression = "";
-                expWmsgLparam.Expression = "";                
+                expWmsgLparam.Expression = "";
                 FontInfoContainer fic = new FontInfoContainer();
                 fic.Name = Font.Name;
                 fic.Size = Font.SizeInPoints;
@@ -506,7 +506,7 @@ namespace Triggernometry.Forms
                 expTextAuraHTick.Expression = a._TextAuraHTickExpression;
                 expTextAuraOTick.Expression = a._TextAuraOTickExpression;
                 cbxProcessLog.Checked = a._LogProcess;
-                cbxLogMessageTarget.SelectedIndex = 0; // todo
+                cbxLogMessageTarget.SelectedIndex = (int)a._LogSource;
                 expTextAuraTTLTick.Expression = a._TextAuraTTLTickExpression;
                 expLogMessageText.Expression = a._LogMessageText;
                 cbxLogMessageLevel.SelectedIndex = (int)a._LogLevel;
@@ -620,7 +620,7 @@ namespace Triggernometry.Forms
                 a._TriggerId = ((Trigger)tn.Tag).Id;
             }
             else
-            { 
+            {
                 a._TriggerId = Guid.Empty;
             }
             a._TriggerOp = (Action.TriggerOpEnum)cbxTriggerOp.SelectedIndex;
@@ -750,6 +750,7 @@ namespace Triggernometry.Forms
             a._TextAuraTTLTickExpression = expTextAuraTTLTick.Expression;
             a._LogMessageText = expLogMessageText.Expression;
             a._LogLevel = (Action.LogMessageEnum)cbxLogMessageLevel.SelectedIndex;
+            a._LogSource = (LogEvent.SourceEnum)cbxLogMessageTarget.SelectedIndex;
             FontInfoContainer fic = (FontInfoContainer)txtTextAuraFont.Tag;
             a._TextAuraFontName = fic.Name;
             a._TextAuraFontSize = fic.Size;
@@ -802,7 +803,7 @@ namespace Triggernometry.Forms
             ctx.ttshook = plug.TtsPlaybackSmart;
             SettingsToAction(a);
             ctx.triggered = DateTime.UtcNow;
-            a.Execute(null, ctx);		
+            a.Execute(null, ctx);
 		}
 
         private void button6_Click(object sender, EventArgs e)
@@ -932,7 +933,7 @@ namespace Triggernometry.Forms
             expAuraTTLTick.Enabled = (cbxAuraOp.SelectedIndex == 0);
             btnAuraGuide.Enabled = (cbxAuraOp.SelectedIndex == 0);
             expAuraName.Enabled = (cbxAuraOp.SelectedIndex != 2);
-            btnHide.Enabled = (cbxAuraOp.SelectedIndex != 2);            
+            btnHide.Enabled = (cbxAuraOp.SelectedIndex != 2);
         }
 
         private void expExecutionDelay_Load(object sender, EventArgs e)
@@ -954,8 +955,8 @@ namespace Triggernometry.Forms
             Bitmap bm = (Bitmap)ic.ConvertFrom(buf);
             if (bm != null && (bm.HorizontalResolution != (int)bm.HorizontalResolution || bm.VerticalResolution != (int)bm.VerticalResolution))
             {
-                // Correct a strange glitch that has been observed in the test program when converting 
-                //  from a PNG file image created by CopyImageToByteArray() - the dpi value "drifts" 
+                // Correct a strange glitch that has been observed in the test program when converting
+                //  from a PNG file image created by CopyImageToByteArray() - the dpi value "drifts"
                 //  slightly away from the nominal integer value
                 bm.SetResolution((int)(bm.HorizontalResolution + 0.5f), (int)(bm.VerticalResolution + 0.5f));
             }
@@ -967,7 +968,7 @@ namespace Triggernometry.Forms
             Context ctx = new Context();
             ctx.plug = plug;
             ctx.testmode = false;
-            ctx.trig = null;            
+            ctx.trig = null;
             ctx.triggered = DateTime.UtcNow;
             string fn = ctx.EvaluateStringExpression(null, null, expAuraImage.Expression);
             Bitmap ix;
@@ -999,7 +1000,7 @@ namespace Triggernometry.Forms
                     case 3:
                         adf.SetImageMode(PictureBoxSizeMode.Zoom);
                         break;
-                }                
+                }
                 if (
                     (expAuraXIni.Expression.Length == 0)
                     ||
@@ -1230,7 +1231,7 @@ namespace Triggernometry.Forms
                 }
                 else
                 {
-                    btnHide.BackColor = SystemColors.Control;                    
+                    btnHide.BackColor = SystemColors.Control;
                 }
             }
             if (ex >= 25)
@@ -1238,7 +1239,7 @@ namespace Triggernometry.Forms
                 btnHide.BackColor = SystemColors.Control;
                 timer1.Stop();
             }
-            timer1.Tag = ex;            
+            timer1.Tag = ex;
         }
 
         private void trvFolder_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
@@ -1716,7 +1717,7 @@ namespace Triggernometry.Forms
             expKeypress.Enabled = (cbxKeypressMethod.SelectedIndex == 1);
             lblKeypressInfo.Enabled = (cbxKeypressMethod.SelectedIndex == 1);
             txtKeyCodesLink.Enabled = (cbxKeypressMethod.SelectedIndex == 1);
-            btnKeycodesLink.Enabled = (cbxKeypressMethod.SelectedIndex == 1);            
+            btnKeycodesLink.Enabled = (cbxKeypressMethod.SelectedIndex == 1);
         }
 
         private void btnKeycodesLink_Click(object sender, EventArgs e)

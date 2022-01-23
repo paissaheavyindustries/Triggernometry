@@ -17,6 +17,7 @@ using System.Security.Principal;
 using System.Web.Script.Serialization;
 using System.Runtime.InteropServices;
 using Triggernometry.Variables;
+using Label = System.Windows.Forms.Label;
 
 /*
 - #29 focus now on search box when opening search window
@@ -141,7 +142,7 @@ namespace Triggernometry
                 //System.Diagnostics.Debug.WriteLine("### {0} - Queuing acquisition for context: {1}", this.name, ctx.ToString());
                 MutexTicket m = new MutexTicket(ctx);
                 lock (this)
-                {                    
+                {
                     acquireQueue.Add(m);
                 }
                 //System.Diagnostics.Debug.WriteLine("### {0} - Queued acquisition {1} for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
@@ -560,7 +561,7 @@ namespace Triggernometry
                         string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._AuraName);
                         FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/actimageaura", "Activating image aura '{0}'", ax));
                         try
-                        { 
+                        {
                             Scarborough.ScarboroughImage si = new Scarborough.ScarboroughImage(sc);
                             si.ImageExpression = a._AuraImage;
                             si.InitXExpression = a._AuraXIniExpression;
@@ -605,7 +606,7 @@ namespace Triggernometry
                     }
                     break;
             }
-        } 
+        }
 
         internal void LegacyImageAuraManagement(Context ctx, Action a)
         {
@@ -637,7 +638,7 @@ namespace Triggernometry
                                     acf = new Forms.AuraContainerForm(Forms.AuraContainerForm.AuraTypeEnum.Image);
                                     acf.plug = this;
                                     acf.AuraName = ax;
-                                    newAura = true;                                    
+                                    newAura = true;
                                 }
                                 acf.AuraPrepare();
                                 acf.ctx = ctx;
@@ -669,7 +670,7 @@ namespace Triggernometry
                                 if (i > 100)
                                 {
                                     i = 100;
-                                }                                
+                                }
                                 acf.PresentableOpacity = i;
                                 acf.XExpression = a._AuraXTickExpression;
                                 acf.YExpression = a._AuraYTickExpression;
@@ -907,7 +908,7 @@ namespace Triggernometry
                                     }
                                 }
                                 if (acf.AuraFont == null)
-                                {                                    
+                                {
                                     FontStyle fs = FontStyle.Regular;
                                     if ((a._TextAuraEffect & Action.TextAuraEffectEnum.Bold) != 0)
                                     {
@@ -929,7 +930,7 @@ namespace Triggernometry
                                     if (ex < 1)
                                     {
                                         ex = 1;
-                                    }                                    
+                                    }
                                     acf.AuraFont = new Font(a._TextAuraFontName, ex, fs, GraphicsUnit.Point);
                                 }
                                 acf.BackgroundColor = a._TextAuraBackgroundClInt;
@@ -1296,7 +1297,7 @@ namespace Triggernometry
         }
 
         internal void TriggerDisabled(Trigger t)
-        {            
+        {
             switch (t._Source)
             {
                 case Trigger.TriggerSourceEnum.Log:
@@ -1359,7 +1360,7 @@ namespace Triggernometry
         internal Folder GetFolderById(Guid id, Repository repo)
         {
             if (repo != null)
-            {                
+            {
                 return RecursiveFolderSearch(repo.Root, id, repo);
             }
             else
@@ -1533,7 +1534,7 @@ namespace Triggernometry
             WindowsMediaPlayer mywmp;
             if (a._PlaySoundExclusive == true)
             {
-                mywmp = new WindowsMediaPlayer();                
+                mywmp = new WindowsMediaPlayer();
                 lock (a.players) // verified
                 {
                     a.players.Add(mywmp);
@@ -1637,7 +1638,7 @@ namespace Triggernometry
             }
             if (errorWarnState == true)
             {
-                ui.HideErrorThing(null, null);                
+                ui.HideErrorThing(null, null);
             }
         }
 
@@ -1865,7 +1866,7 @@ namespace Triggernometry
 
         public void IfYouSeeThisErrorYouNeedToRestartACT()
         {
-            complainAboutReload = true;            
+            complainAboutReload = true;
         }
 
         public void InitPlugin(TabPage pluginScreenSpace, Label pluginStatusText)
@@ -2011,7 +2012,7 @@ namespace Triggernometry
                 AuraUpdateThread = new Thread(new ThreadStart(AuraUpdateThreadProc));
                 AuraUpdateThread.Name = "AuraUpdateThread";
                 AuraUpdateThread.Start();
-                _obs = new ObsController();                
+                _obs = new ObsController();
                 pluginStatusText.Text = I18n.Translate("internal/Plugin/iniready", "Ready");
                 FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/inited", "Initialized"));
                 Task tx = new Task(() =>
@@ -2567,7 +2568,7 @@ namespace Triggernometry
         {
             using (var identity = WindowsIdentity.GetCurrent())
             {
-                var principal = new WindowsPrincipal(identity);                
+                var principal = new WindowsPrincipal(identity);
                 bool ret = principal.IsInRole(WindowsBuiltInRole.Administrator);
                 if (ret == false)
                 {
@@ -2772,7 +2773,7 @@ namespace Triggernometry
             {
                 EventQueue.Enqueue(le);
                 QueueWakeupEvent.Set();
-            }            
+            }
         }
 
         internal void LogLineQueuerMass(IEnumerable<string> text, string zone, LogEvent.SourceEnum src, bool testMode)
@@ -2810,7 +2811,7 @@ namespace Triggernometry
             wh[0] = ExitEvent;
             wh[1] = QueueWakeupEvent;
             if (mainform.IsHandleCreated == false)
-            {                
+            {
                 do
                 {
                     Thread.Sleep(100);
@@ -3016,13 +3017,12 @@ namespace Triggernometry
 
         public void ExtendedACTEvents(string[] data)
         {
-            switch (data[0])
-            {
-                case "OnCombatStart":
-                case "OnCombatEnd":
-                    LogLineQueuer(data[0], currentZone != null ? currentZone : "", LogEvent.SourceEnum.ACT);
-                    break;
-            }
+            if (data.Length < 1)
+                return;
+
+            string eventString = string.Join("|", data);
+            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/actlogline", "ACT log line: ({0})", eventString));
+            LogLineQueuer(eventString, currentZone ?? "", LogEvent.SourceEnum.ACT);
         }
 
         public void OnLogLineRead(bool isImport, string logLine, string detectedZone)
@@ -3302,7 +3302,7 @@ namespace Triggernometry
         internal void QueueAction(Context ctx, Trigger t, MutexInformation m, Action a, DateTime when)
         {
             lock (ActionQueue) // verified
-            {                                
+            {
                 if (a._RefireRequeue == false || a._RefireInterrupt == true)
                 {
                     var ix = from ax in ActionQueue
@@ -3390,7 +3390,7 @@ namespace Triggernometry
                 }
             }
             while (true)
-            { 
+            {
                 switch (WaitHandle.WaitAny(wh, timeout))
                 {
                     case WaitHandle.WaitTimeout:
@@ -3399,7 +3399,7 @@ namespace Triggernometry
                             lock (ActionQueue) // verified
                             {
                                 if (ActionQueue.Count > 0)
-                                { 
+                                {
                                     tp = ActionQueue[0];
                                     ActionQueue.RemoveAt(0);
                                 }
@@ -3413,7 +3413,7 @@ namespace Triggernometry
                             {
                                 timeout = Timeout.Infinite;
                                 continue;
-                            }                            
+                            }
                         }
                     case 0:
                         {
@@ -3535,7 +3535,7 @@ namespace Triggernometry
 
         public void RegisterNamedCallback(int id, string name, Delegate del, object o)
         {
-            
+
             NamedCallback nc = new NamedCallback();
             nc.Id = id;
             nc.Callback = del;

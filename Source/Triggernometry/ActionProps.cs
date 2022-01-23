@@ -1294,6 +1294,29 @@ namespace Triggernometry
             }
         }
 
+        internal LogEvent.SourceEnum _LogSource { get; set; } = LogEvent.SourceEnum.Log;
+        [XmlAttribute]
+        public string LogSource
+        {
+            get => _LogSource <= LogEvent.SourceEnum.Log ?
+                null :
+                (_LogSource >= LogEvent.SourceEnum.ACT ?
+                    LogEvent.SourceEnum.ACT :
+                    _LogSource).ToString();
+            set
+            {
+                _LogSource = (LogEvent.SourceEnum)Enum.Parse(typeof(LogEvent.SourceEnum), value);
+                if (_LogSource < LogEvent.SourceEnum.Log)
+                {
+                    _LogSource = LogEvent.SourceEnum.Log;
+                }
+                else if (_LogSource >= LogEvent.SourceEnum.ACT)
+                {
+                    _LogSource = LogEvent.SourceEnum.ACT;
+                }
+            }
+        }
+
         #endregion
         #region Action specific properties - Message box
 
