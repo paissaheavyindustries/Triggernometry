@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -29,13 +30,27 @@ namespace Triggernometry.Forms
             label5.Tag = I18n.DoNotTranslate;
             label6.Tag = I18n.DoNotTranslate;
             RestoredSavedDimensions();
-            tbcMain.TabPages.Remove(tabEndpoint);            
+            tbcMain.TabPages.Remove(tabEndpoint);
+        }
+
+        internal void SecuritySettingsFromConfiguration(Configuration cfg)
+        {
+            IEnumerable<Configuration.APIUsage> apis = cfg.GetAPIUsages();
+            if (apis == null)
+            {
+                apis = plug.GetDefaultAPIUsages();
+            }
+            foreach (Configuration.APIUsage ap in apis)
+            {
+                dgvApiAccess.Rows.Add(new object[] { ap.Name, ap.AllowLocal, ap.AllowRemote, ap.AllowAdmin });
+            }
         }
 
         internal void SettingsFromConfiguration(Configuration a)
         {
             if (a == null)
             {
+                Configuration c = new Configuration();
                 trbSoundVolume.Value = 100;
                 trbTtsVolume.Value = 100;
                 cbxLoggingLevel.SelectedIndex = 2;
@@ -60,6 +75,7 @@ namespace Triggernometry.Forms
                 nudCacheRepoExpiry.Value = 518400;
                 nudCacheFileExpiry.Value = 518400;
                 dgvSubstitutions.RowCount = 0;
+                SecuritySettingsFromConfiguration(null);
             }
             else
             {
@@ -92,6 +108,7 @@ namespace Triggernometry.Forms
                 subs.Sort();
                 dgvSubstitutions.RowCount = a.Substitutions.Count;
                 SetupJobOrder(a);
+                SecuritySettingsFromConfiguration(a);
             }
             if (a.StartupTriggerType == Configuration.StartupTriggerTypeEnum.Trigger)
             {
@@ -171,11 +188,23 @@ namespace Triggernometry.Forms
             List<string> temp = new List<string>();
             foreach (FfxivJobOrderItem oi in lstFfxivJobOrder.Items)
             {
-                temp.Add(oi.JobId.ToString());
+                temp.Add(oi.JobId.ToString()); 
             }
             a.FfxivCustomPartyOrder = String.Join(", ", temp);
             a.Substitutions.Clear();
             a.Substitutions.AddRange(subs);
+            MethodInfo setter = a.GetType().GetMethod("AddAPIUsage", BindingFlags.NonPublic | BindingFlags.Instance);
+            foreach (DataGridViewRow r in dgvApiAccess.Rows)
+            {
+                Configuration.APIUsage au = new Configuration.APIUsage()
+                {
+                    Name = (string)r.Cells[0].Value,
+                    AllowLocal = (bool)r.Cells[1].Value,
+                    AllowRemote = (bool)r.Cells[2].Value,
+                    AllowAdmin = (bool)r.Cells[3].Value
+                };
+                setter.Invoke(a, new object[] { au, true });
+            }
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
@@ -752,6 +781,37 @@ namespace Triggernometry.Forms
             dgvSubstitutions.ClearSelection();
             dgvSubstitutions.Rows[e.RowIndex].Selected = true;
             btnSubEdit_Click(sender, null);
+        }
+
+        private void dgvApiAccess_SelectionChanged(object sender, EventArgs e)
+        {
+            dgvApiAccess.ClearSelection();
+        }
+
+        private void btnUnlockSecurity_Click(object sender, EventArgs e)
+        {
+            string temp = I18n.Translate("internal/ConfigurationForm/securityunlockwarning", "Altering any of the security settings below may expose your system to outsiders, and in the worst case, malicious users may be able to render your system inoperable or gain access to your personal information. Are you sure you understand the risks involved and know what you are doing, and still wish to continue altering these settings?");
+            switch (MessageBox.Show(this, temp, I18n.Translate("internal/ConfigurationForm/confirmsecurityunlock", "Confirm unlock"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+            {
+                case DialogResult.Yes:
+                    dgvApiAccess.Enabled = true;
+                    dgvApiAccess.ReadOnly = false;
+                    btnUnlockSecurity.Visible = false;
+                    panel18.Visible = false;
+                    break;
+            }
+        }
+
+        private void dgvApiAccess_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewRow r = dgvApiAccess.Rows[e.RowIndex];
+            DataGridViewCell c = r.Cells[e.ColumnIndex];
+            c.Value = ((bool)c.Value == false);
+        }
+
+        private void dgvApiAccess_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            dgvApiAccess_CellContentClick(sender, e);
         }
 
     }

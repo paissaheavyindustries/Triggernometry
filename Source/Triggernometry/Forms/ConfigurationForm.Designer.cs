@@ -44,6 +44,7 @@
             this.lblTtsVolume = new System.Windows.Forms.Label();
             this.grpGeneral = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.chkLogVariableExpansions = new System.Windows.Forms.CheckBox();
             this.chkLogNormalEvents = new System.Windows.Forms.CheckBox();
             this.lblLoggingLevel = new System.Windows.Forms.Label();
             this.cbxLoggingLevel = new System.Windows.Forms.ComboBox();
@@ -162,10 +163,23 @@
             this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
             this.chkFfxivLogNetwork = new System.Windows.Forms.CheckBox();
             this.tabSubstitutions = new System.Windows.Forms.TabPage();
+            this.dgvSubstitutions = new Triggernometry.CustomControls.DataGridViewEx();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tlsSubstitutions = new System.Windows.Forms.ToolStrip();
             this.btnSubAdd = new System.Windows.Forms.ToolStripButton();
             this.btnSubEdit = new System.Windows.Forms.ToolStripButton();
             this.btnSubRemove = new System.Windows.Forms.ToolStripButton();
+            this.tabSecurity = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.dgvApiAccess = new Triggernometry.CustomControls.DataGridViewEx();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Column6 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Column7 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.panel18 = new System.Windows.Forms.Panel();
+            this.btnUnlockSecurity = new System.Windows.Forms.Button();
             this.tabMisc = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
@@ -182,11 +196,6 @@
             this.grpClipboard = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.chkClipboard = new System.Windows.Forms.CheckBox();
-            this.dgvSubstitutions = new Triggernometry.CustomControls.DataGridViewEx();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chkLogVariableExpansions = new System.Windows.Forms.CheckBox();
             this.panel4.SuspendLayout();
             this.grpVolAdjustment.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -237,7 +246,11 @@
             this.grpFfxivEventLogging.SuspendLayout();
             this.tableLayoutPanel9.SuspendLayout();
             this.tabSubstitutions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSubstitutions)).BeginInit();
             this.tlsSubstitutions.SuspendLayout();
+            this.tabSecurity.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvApiAccess)).BeginInit();
             this.tabMisc.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel11.SuspendLayout();
@@ -245,7 +258,6 @@
             this.tableLayoutPanel10.SuspendLayout();
             this.grpClipboard.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvSubstitutions)).BeginInit();
             this.SuspendLayout();
             // 
             // panel3
@@ -434,6 +446,19 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.Size = new System.Drawing.Size(522, 73);
             this.tableLayoutPanel3.TabIndex = 0;
+            // 
+            // chkLogVariableExpansions
+            // 
+            this.chkLogVariableExpansions.AutoSize = true;
+            this.chkLogVariableExpansions.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel3.SetColumnSpan(this.chkLogVariableExpansions, 3);
+            this.chkLogVariableExpansions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkLogVariableExpansions.Location = new System.Drawing.Point(3, 53);
+            this.chkLogVariableExpansions.Name = "chkLogVariableExpansions";
+            this.chkLogVariableExpansions.Size = new System.Drawing.Size(516, 17);
+            this.chkLogVariableExpansions.TabIndex = 27;
+            this.chkLogVariableExpansions.Text = "Log variable expansions";
+            this.chkLogVariableExpansions.UseVisualStyleBackColor = true;
             // 
             // chkLogNormalEvents
             // 
@@ -628,6 +653,7 @@
             this.tbcMain.Controls.Add(this.tabEndpoint);
             this.tbcMain.Controls.Add(this.tabFFXIV);
             this.tbcMain.Controls.Add(this.tabSubstitutions);
+            this.tbcMain.Controls.Add(this.tabSecurity);
             this.tbcMain.Controls.Add(this.tabMisc);
             this.tbcMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbcMain.Location = new System.Drawing.Point(10, 10);
@@ -787,7 +813,7 @@
             this.tabAudio.Location = new System.Drawing.Point(4, 22);
             this.tabAudio.Name = "tabAudio";
             this.tabAudio.Padding = new System.Windows.Forms.Padding(7);
-            this.tabAudio.Size = new System.Drawing.Size(556, 390);
+            this.tabAudio.Size = new System.Drawing.Size(556, 470);
             this.tabAudio.TabIndex = 1;
             this.tabAudio.Text = "Audio";
             this.tabAudio.UseVisualStyleBackColor = true;
@@ -798,7 +824,7 @@
             this.tabCaching.Location = new System.Drawing.Point(4, 22);
             this.tabCaching.Name = "tabCaching";
             this.tabCaching.Padding = new System.Windows.Forms.Padding(7);
-            this.tabCaching.Size = new System.Drawing.Size(556, 390);
+            this.tabCaching.Size = new System.Drawing.Size(556, 470);
             this.tabCaching.TabIndex = 5;
             this.tabCaching.Text = "Caching";
             this.tabCaching.UseVisualStyleBackColor = true;
@@ -818,7 +844,7 @@
             this.panel16.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel16.Location = new System.Drawing.Point(7, 7);
             this.panel16.Name = "panel16";
-            this.panel16.Size = new System.Drawing.Size(542, 376);
+            this.panel16.Size = new System.Drawing.Size(542, 456);
             this.panel16.TabIndex = 30;
             // 
             // grpCacheFile
@@ -1607,7 +1633,7 @@
             this.tabEndpoint.Location = new System.Drawing.Point(4, 22);
             this.tabEndpoint.Name = "tabEndpoint";
             this.tabEndpoint.Padding = new System.Windows.Forms.Padding(7);
-            this.tabEndpoint.Size = new System.Drawing.Size(556, 390);
+            this.tabEndpoint.Size = new System.Drawing.Size(556, 470);
             this.tabEndpoint.TabIndex = 4;
             this.tabEndpoint.Text = "Endpoint";
             this.tabEndpoint.UseVisualStyleBackColor = true;
@@ -1808,7 +1834,7 @@
             this.tabFFXIV.Location = new System.Drawing.Point(4, 22);
             this.tabFFXIV.Name = "tabFFXIV";
             this.tabFFXIV.Padding = new System.Windows.Forms.Padding(7);
-            this.tabFFXIV.Size = new System.Drawing.Size(556, 390);
+            this.tabFFXIV.Size = new System.Drawing.Size(556, 470);
             this.tabFFXIV.TabIndex = 2;
             this.tabFFXIV.Text = "Final Fantasy XIV";
             this.tabFFXIV.UseVisualStyleBackColor = true;
@@ -1821,7 +1847,7 @@
             this.grpPartyListOrder.Location = new System.Drawing.Point(7, 73);
             this.grpPartyListOrder.Name = "grpPartyListOrder";
             this.grpPartyListOrder.Padding = new System.Windows.Forms.Padding(10);
-            this.grpPartyListOrder.Size = new System.Drawing.Size(542, 310);
+            this.grpPartyListOrder.Size = new System.Drawing.Size(542, 390);
             this.grpPartyListOrder.TabIndex = 16;
             this.grpPartyListOrder.TabStop = false;
             this.grpPartyListOrder.Text = " Party list ordering ";
@@ -1843,7 +1869,7 @@
             this.tableLayoutPanel5.RowCount = 2;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(522, 277);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(522, 357);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
             // lblFfxivJobOrder
@@ -1854,7 +1880,7 @@
             this.lblFfxivJobOrder.Location = new System.Drawing.Point(3, 27);
             this.lblFfxivJobOrder.Name = "lblFfxivJobOrder";
             this.lblFfxivJobOrder.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.lblFfxivJobOrder.Size = new System.Drawing.Size(85, 250);
+            this.lblFfxivJobOrder.Size = new System.Drawing.Size(85, 330);
             this.lblFfxivJobOrder.TabIndex = 7;
             this.lblFfxivJobOrder.Text = "Job order";
             // 
@@ -1892,7 +1918,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(94, 30);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(425, 244);
+            this.panel1.Size = new System.Drawing.Size(425, 324);
             this.panel1.TabIndex = 8;
             // 
             // lstFfxivJobOrder
@@ -1902,7 +1928,7 @@
             this.lstFfxivJobOrder.IntegralHeight = false;
             this.lstFfxivJobOrder.Location = new System.Drawing.Point(0, 25);
             this.lstFfxivJobOrder.Name = "lstFfxivJobOrder";
-            this.lstFfxivJobOrder.Size = new System.Drawing.Size(425, 219);
+            this.lstFfxivJobOrder.Size = new System.Drawing.Size(425, 299);
             this.lstFfxivJobOrder.TabIndex = 18;
             this.lstFfxivJobOrder.SelectedIndexChanged += new System.EventHandler(this.lstFfxivJobOrder_SelectedIndexChanged);
             this.lstFfxivJobOrder.EnabledChanged += new System.EventHandler(this.lstFfxivJobOrder_EnabledChanged);
@@ -2009,10 +2035,61 @@
             this.tabSubstitutions.Location = new System.Drawing.Point(4, 22);
             this.tabSubstitutions.Name = "tabSubstitutions";
             this.tabSubstitutions.Padding = new System.Windows.Forms.Padding(7);
-            this.tabSubstitutions.Size = new System.Drawing.Size(556, 390);
+            this.tabSubstitutions.Size = new System.Drawing.Size(556, 470);
             this.tabSubstitutions.TabIndex = 6;
             this.tabSubstitutions.Text = "Substitutions";
             this.tabSubstitutions.UseVisualStyleBackColor = true;
+            // 
+            // dgvSubstitutions
+            // 
+            this.dgvSubstitutions.AllowUserToAddRows = false;
+            this.dgvSubstitutions.AllowUserToDeleteRows = false;
+            this.dgvSubstitutions.AllowUserToResizeRows = false;
+            this.dgvSubstitutions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvSubstitutions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column1,
+            this.Column2,
+            this.Column3});
+            this.dgvSubstitutions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvSubstitutions.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dgvSubstitutions.Location = new System.Drawing.Point(7, 32);
+            this.dgvSubstitutions.Name = "dgvSubstitutions";
+            this.dgvSubstitutions.RowHeadersVisible = false;
+            this.dgvSubstitutions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvSubstitutions.ShowCellErrors = false;
+            this.dgvSubstitutions.ShowEditingIcon = false;
+            this.dgvSubstitutions.ShowRowErrors = false;
+            this.dgvSubstitutions.Size = new System.Drawing.Size(542, 431);
+            this.dgvSubstitutions.TabIndex = 20;
+            this.dgvSubstitutions.VirtualMode = true;
+            this.dgvSubstitutions.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSubstitutions_CellDoubleClick);
+            this.dgvSubstitutions.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvSubstitutions_CellValueNeeded);
+            this.dgvSubstitutions.SelectionChanged += new System.EventHandler(this.dgvSubstitutions_SelectionChanged);
+            this.dgvSubstitutions.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvSubstitutions_KeyDown);
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Search for";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column1.Width = 150;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Replace with";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column2.Width = 150;
+            // 
+            // Column3
+            // 
+            this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column3.HeaderText = "Scope";
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            this.Column3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tlsSubstitutions
             // 
@@ -2055,6 +2132,113 @@
             this.btnSubRemove.Text = "Remove substitution";
             this.btnSubRemove.Click += new System.EventHandler(this.btnSubRemove_Click);
             // 
+            // tabSecurity
+            // 
+            this.tabSecurity.Controls.Add(this.groupBox2);
+            this.tabSecurity.Location = new System.Drawing.Point(4, 22);
+            this.tabSecurity.Name = "tabSecurity";
+            this.tabSecurity.Padding = new System.Windows.Forms.Padding(7);
+            this.tabSecurity.Size = new System.Drawing.Size(556, 470);
+            this.tabSecurity.TabIndex = 7;
+            this.tabSecurity.Text = "Security";
+            this.tabSecurity.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.AutoSize = true;
+            this.groupBox2.Controls.Add(this.dgvApiAccess);
+            this.groupBox2.Controls.Add(this.panel18);
+            this.groupBox2.Controls.Add(this.btnUnlockSecurity);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox2.Location = new System.Drawing.Point(7, 7);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(10);
+            this.groupBox2.Size = new System.Drawing.Size(542, 456);
+            this.groupBox2.TabIndex = 20;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = " Scripting API access ";
+            // 
+            // dgvApiAccess
+            // 
+            this.dgvApiAccess.AllowUserToAddRows = false;
+            this.dgvApiAccess.AllowUserToDeleteRows = false;
+            this.dgvApiAccess.AllowUserToResizeColumns = false;
+            this.dgvApiAccess.AllowUserToResizeRows = false;
+            this.dgvApiAccess.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvApiAccess.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column4,
+            this.Column5,
+            this.Column6,
+            this.Column7});
+            this.dgvApiAccess.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvApiAccess.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dgvApiAccess.Enabled = false;
+            this.dgvApiAccess.Location = new System.Drawing.Point(10, 63);
+            this.dgvApiAccess.Name = "dgvApiAccess";
+            this.dgvApiAccess.ReadOnly = true;
+            this.dgvApiAccess.RowHeadersVisible = false;
+            this.dgvApiAccess.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvApiAccess.ShowCellErrors = false;
+            this.dgvApiAccess.ShowEditingIcon = false;
+            this.dgvApiAccess.ShowRowErrors = false;
+            this.dgvApiAccess.Size = new System.Drawing.Size(522, 383);
+            this.dgvApiAccess.TabIndex = 0;
+            this.dgvApiAccess.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApiAccess_CellContentClick);
+            this.dgvApiAccess.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApiAccess_CellContentDoubleClick);
+            this.dgvApiAccess.SelectionChanged += new System.EventHandler(this.dgvApiAccess_SelectionChanged);
+            // 
+            // Column4
+            // 
+            this.Column4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column4.HeaderText = "Namespace";
+            this.Column4.Name = "Column4";
+            this.Column4.ReadOnly = true;
+            this.Column4.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Column4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Column5
+            // 
+            this.Column5.HeaderText = "Allow for local triggers";
+            this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
+            this.Column5.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // Column6
+            // 
+            this.Column6.HeaderText = "Allow for remote triggers";
+            this.Column6.Name = "Column6";
+            this.Column6.ReadOnly = true;
+            this.Column6.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // Column7
+            // 
+            this.Column7.HeaderText = "Allow if running as admin";
+            this.Column7.Name = "Column7";
+            this.Column7.ReadOnly = true;
+            this.Column7.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // panel18
+            // 
+            this.panel18.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel18.Location = new System.Drawing.Point(10, 53);
+            this.panel18.Name = "panel18";
+            this.panel18.Size = new System.Drawing.Size(522, 10);
+            this.panel18.TabIndex = 25;
+            // 
+            // btnUnlockSecurity
+            // 
+            this.btnUnlockSecurity.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnUnlockSecurity.Image = ((System.Drawing.Image)(resources.GetObject("btnUnlockSecurity.Image")));
+            this.btnUnlockSecurity.Location = new System.Drawing.Point(10, 23);
+            this.btnUnlockSecurity.Name = "btnUnlockSecurity";
+            this.btnUnlockSecurity.Size = new System.Drawing.Size(522, 30);
+            this.btnUnlockSecurity.TabIndex = 26;
+            this.btnUnlockSecurity.Text = "Unlock security settings for editing";
+            this.btnUnlockSecurity.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnUnlockSecurity.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnUnlockSecurity.UseVisualStyleBackColor = true;
+            this.btnUnlockSecurity.Click += new System.EventHandler(this.btnUnlockSecurity_Click);
+            // 
             // tabMisc
             // 
             this.tabMisc.Controls.Add(this.groupBox1);
@@ -2067,7 +2251,7 @@
             this.tabMisc.Location = new System.Drawing.Point(4, 22);
             this.tabMisc.Name = "tabMisc";
             this.tabMisc.Padding = new System.Windows.Forms.Padding(7);
-            this.tabMisc.Size = new System.Drawing.Size(556, 390);
+            this.tabMisc.Size = new System.Drawing.Size(556, 470);
             this.tabMisc.TabIndex = 3;
             this.tabMisc.Text = "Miscellaneous";
             this.tabMisc.UseVisualStyleBackColor = true;
@@ -2253,70 +2437,6 @@
             this.chkClipboard.Text = "Use operating system clipboard";
             this.chkClipboard.UseVisualStyleBackColor = true;
             // 
-            // dgvSubstitutions
-            // 
-            this.dgvSubstitutions.AllowUserToAddRows = false;
-            this.dgvSubstitutions.AllowUserToDeleteRows = false;
-            this.dgvSubstitutions.AllowUserToResizeRows = false;
-            this.dgvSubstitutions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvSubstitutions.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column1,
-            this.Column2,
-            this.Column3});
-            this.dgvSubstitutions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvSubstitutions.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dgvSubstitutions.Location = new System.Drawing.Point(7, 32);
-            this.dgvSubstitutions.Name = "dgvSubstitutions";
-            this.dgvSubstitutions.RowHeadersVisible = false;
-            this.dgvSubstitutions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvSubstitutions.ShowCellErrors = false;
-            this.dgvSubstitutions.ShowEditingIcon = false;
-            this.dgvSubstitutions.ShowRowErrors = false;
-            this.dgvSubstitutions.Size = new System.Drawing.Size(542, 351);
-            this.dgvSubstitutions.TabIndex = 20;
-            this.dgvSubstitutions.VirtualMode = true;
-            this.dgvSubstitutions.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSubstitutions_CellDoubleClick);
-            this.dgvSubstitutions.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvSubstitutions_CellValueNeeded);
-            this.dgvSubstitutions.SelectionChanged += new System.EventHandler(this.dgvSubstitutions_SelectionChanged);
-            this.dgvSubstitutions.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvSubstitutions_KeyDown);
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Search for";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column1.Width = 150;
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Replace with";
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
-            this.Column2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column2.Width = 150;
-            // 
-            // Column3
-            // 
-            this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column3.HeaderText = "Scope";
-            this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
-            this.Column3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // chkLogVariableExpansions
-            // 
-            this.chkLogVariableExpansions.AutoSize = true;
-            this.chkLogVariableExpansions.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.tableLayoutPanel3.SetColumnSpan(this.chkLogVariableExpansions, 3);
-            this.chkLogVariableExpansions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chkLogVariableExpansions.Location = new System.Drawing.Point(3, 53);
-            this.chkLogVariableExpansions.Name = "chkLogVariableExpansions";
-            this.chkLogVariableExpansions.Size = new System.Drawing.Size(516, 17);
-            this.chkLogVariableExpansions.TabIndex = 27;
-            this.chkLogVariableExpansions.Text = "Log variable expansions";
-            this.chkLogVariableExpansions.UseVisualStyleBackColor = true;
-            // 
             // ConfigurationForm
             // 
             this.AcceptButton = this.btnOk;
@@ -2422,8 +2542,13 @@
             this.tableLayoutPanel9.PerformLayout();
             this.tabSubstitutions.ResumeLayout(false);
             this.tabSubstitutions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSubstitutions)).EndInit();
             this.tlsSubstitutions.ResumeLayout(false);
             this.tlsSubstitutions.PerformLayout();
+            this.tabSecurity.ResumeLayout(false);
+            this.tabSecurity.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvApiAccess)).EndInit();
             this.tabMisc.ResumeLayout(false);
             this.tabMisc.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -2438,7 +2563,6 @@
             this.grpClipboard.PerformLayout();
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvSubstitutions)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2601,5 +2725,14 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.CheckBox chkLogVariableExpansions;
+        private System.Windows.Forms.TabPage tabSecurity;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private CustomControls.DataGridViewEx dgvApiAccess;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Column5;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Column6;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Column7;
+        private System.Windows.Forms.Panel panel18;
+        private System.Windows.Forms.Button btnUnlockSecurity;
     }
 }

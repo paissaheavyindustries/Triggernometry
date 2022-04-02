@@ -18,19 +18,6 @@ using System.Web.Script.Serialization;
 using System.Runtime.InteropServices;
 using Triggernometry.Variables;
 
-/*
-- #29 focus now on search box when opening search window
-- #31 added mouse operation as trigger action
-- #33 network triggers now work properly in zone locked folders
-- #36 network message sequence will no longer be interpreted as date
-- #38 updated repo serialization error message to prompt users to update
-- #39 automatically loads previous configuration file if current one was broken
-- #43 welcome screen reworked to be more helpful and to not hide the start button
-- #47 added compare function for string comparison
-- #50 made hw acceleration handle zero or negative aura sizes
-- #51 added a check that a node was actually selected in tree
-*/
-
 namespace Triggernometry
 {
 
@@ -120,7 +107,7 @@ namespace Triggernometry
 
         }
 
-        internal class MutexInformation
+        public class MutexInformation
         {
 
             private string name { get; set; }
@@ -360,10 +347,17 @@ namespace Triggernometry
                 mouse_event((uint)flags, x, y, (uint)buttons, 0);
             }
 
-            public static void SendKeycode(string windowtitle, int keycode)
+            public static void SendKeycodes(string windowtitle, params int[] keycodes)
             {
-                SendMessageToWindow(windowtitle, WM_KEYDOWN, keycode, 0);
-                SendMessageToWindow(windowtitle, WM_KEYUP, keycode, 0);
+                for (int i = 0; i < keycodes.Length; i++)
+                {
+                    SendMessageToWindow(windowtitle, WM_KEYDOWN, keycodes[i], 0);
+                }
+                Thread.Sleep(10);
+                for (int i = keycodes.Length - 1; i >= 0; i--)
+                {
+                    SendMessageToWindow(windowtitle, WM_KEYUP, keycodes[i], 0);
+                }
             }
 
             public static void SendMessageToWindow(string windowtitle, uint code, int wparam, int lparam)
@@ -413,8 +407,18 @@ namespace Triggernometry
         private Queue<LogEvent> EventQueue;
         private ManualResetEvent QueueWakeupEvent;
         internal CustomControls.UserInterface ui;
-        internal Configuration cfg;
+        
+        private Configuration _cfg;
+        internal Configuration cfg
+        {
+            get
+            {
+                return _cfg;
+            }
+        }
+
         public string path { get; set; }
+        private bool isInitialized { get; set; } = false;
         internal WMPLib.WindowsMediaPlayer wmp;
         internal SpeechSynthesizer tts;
         internal Thread ActionQueueThread;
@@ -430,6 +434,7 @@ namespace Triggernometry
         public string pluginName { get; set; }
         public string pluginPath { get; set; }
         private bool firstevent = true;
+        internal bool runningAsAdmin;
         internal string currentZone = null;
         internal bool WMPUnavailable;
         internal Queue<InternalLog> log;
@@ -451,6 +456,9 @@ namespace Triggernometry
         public Form mainform { get; set; }
         internal int MinX = int.MaxValue, MinY = int.MaxValue, MaxX = int.MinValue, MaxY = int.MinValue;
         internal Dictionary<string, MutexInformation> mutexes = new Dictionary<string, MutexInformation>();
+        internal Interpreter scripting;
+        internal Dictionary<string, object> scriptingStorage = new Dictionary<string, object>();
+        private List<Configuration.APIUsage> DefaultAPIUsages = new List<Configuration.APIUsage>();
 
         public SimpleBoolDelegate InCombatHook { get; set; }
         public SimpleBoolDelegate CustomTriggerCheckHook { get; set; }
@@ -1093,6 +1101,16 @@ namespace Triggernometry
 
         public RealPlugin()
         {
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "Microsoft.CodeAnalysis", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "Microsoft.Win32", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "System.CodeDom.Compiler", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "System.Diagnostics", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "System.IO", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "System.Net", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "System.Reflection", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "System.Runtime", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "System.Security", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "System.Web", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
             ui = null;
             sc = null;
             DisableLogging = false;
@@ -1127,12 +1145,12 @@ namespace Triggernometry
             FilteredAddToLog(level, text);
         }
 
-        internal void AddTrigger(Trigger t)
+        internal void AddTrigger(Trigger t, bool parentenable)
         {
             lock (Triggers)
             {
                 Triggers.Add(t);
-                if (t.Enabled == true && t.Parent.ParentsEnabled() == true)
+                if (t.Enabled == true && parentenable == true)
                 {
                     switch (t._Source)
                     {
@@ -1868,6 +1886,45 @@ namespace Triggernometry
             complainAboutReload = true;            
         }
 
+        internal List<Configuration.APIUsage> GetDefaultAPIUsages()
+        {
+            List<Configuration.APIUsage> l = new List<Configuration.APIUsage>();
+            foreach (Configuration.APIUsage a in DefaultAPIUsages)
+            {
+                l.Add(new Configuration.APIUsage() { Name = a.Name, AllowLocal = a.AllowLocal, AllowRemote = a.AllowRemote, AllowAdmin = a.AllowAdmin });
+            }
+            return l;
+        }
+
+        private void SetupDefaultSecurity()
+        {
+            MethodInfo setter = cfg.GetType().GetMethod("AddAPIUsage", BindingFlags.NonPublic | BindingFlags.Instance);            
+            foreach (Configuration.APIUsage a in DefaultAPIUsages)
+            {
+                setter.Invoke(cfg, new object[] { a, false });                
+            }
+        }
+
+        private void AutofixConfiguration()
+        {
+            if (cfg == null)
+            {
+                return;
+            }
+            if (cfg._ShowWelcomeHasBeenSet == false && (cfg.Root.Folders.Count > 0 || cfg.Root.Triggers.Count > 0))
+            {
+                cfg.ShowWelcome = false;
+            }
+            Version v = new Version(cfg.PluginVersion);
+            if (v < new Version("1.1.6.0"))
+            {
+                if (cfg.FfxivPartyOrdering == Configuration.FfxivPartyOrderingEnum.Legacy)
+                {
+                    cfg.FfxivPartyOrdering = Configuration.FfxivPartyOrderingEnum.CustomSelfFirst;
+                }
+            }
+        }
+
         public void InitPlugin(TabPage pluginScreenSpace, Label pluginStatusText)
         {
             Language ld = new Language();
@@ -1887,11 +1944,9 @@ namespace Triggernometry
                 exwhere = I18n.Translate("internal/Plugin/inilanguages", "loading languages");
                 LoadLanguages();
                 exwhere = I18n.Translate("internal/Plugin/inicfg", "loading configuration");
-                cfg = LoadConfigFromFile(Path.Combine(path, pluginName + ".config.xml"));
-                if (cfg != null && cfg._ShowWelcomeHasBeenSet == false && (cfg.Root.Folders.Count > 0 || cfg.Root.Triggers.Count > 0))
-                {
-                    cfg.ShowWelcome = false;
-                }
+                _cfg = LoadConfigFromFile(Path.Combine(path, pluginName + ".config.xml"));
+                SetupDefaultSecurity();
+                AutofixConfiguration();
                 ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
                 BackupConfiguration();
                 FixDuplicateFolderReferences(null, cfg, null);
@@ -1963,10 +2018,7 @@ namespace Triggernometry
                 }
                 ui.SetupToasts();
                 ui.SetupLanguageMenu();
-                if (cfg.WarnAdmin == true)
-                {
-                    CheckIfAdministrator();
-                }
+                runningAsAdmin = CheckIfAdministrator(cfg.WarnAdmin);
                 exwhere = I18n.Translate("internal/Plugin/initree", "building internal data");
                 ui.BuildFullTreeFromConfiguration();
                 int PrimaryX = 0, PrimaryY = 0;
@@ -2011,7 +2063,9 @@ namespace Triggernometry
                 AuraUpdateThread = new Thread(new ThreadStart(AuraUpdateThreadProc));
                 AuraUpdateThread.Name = "AuraUpdateThread";
                 AuraUpdateThread.Start();
-                _obs = new ObsController();                
+                _obs = new ObsController();
+                exwhere = I18n.Translate("internal/Plugin/iniscripting", "setting up scripting");
+                scripting = new Interpreter(this);
                 pluginStatusText.Text = I18n.Translate("internal/Plugin/iniready", "Ready");
                 FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/inited", "Initialized"));
                 Task tx = new Task(() =>
@@ -2019,6 +2073,7 @@ namespace Triggernometry
                     RepositoryUpdates();
                 });
                 tx.Start();
+                isInitialized = true;
             }
             catch (Exception ex)
             {
@@ -2336,7 +2391,7 @@ namespace Triggernometry
         {
             //if (t.Enabled == true && parentenable == true)
             //{
-                AddTrigger(t);
+                AddTrigger(t, parentenable);
             //}
             if (t._IsReadme == true && t.Enabled == true)
             {
@@ -2351,7 +2406,7 @@ namespace Triggernometry
             {
                 ApplyRepositoryRestrictions(exp.ExportedFolder, r);
                 r.Root.Folders.Add(exp.ExportedFolder);
-                RegisterRepositoryFolder(r, exp.ExportedFolder, r.Enabled);
+                RegisterRepositoryFolder(r, exp.ExportedFolder, r.Enabled && ui.treeView1.Nodes[1].Checked);
             }
             if (exp.ExportedTrigger != null)
             {
@@ -2563,13 +2618,14 @@ namespace Triggernometry
             SaveConfigToFile(cfg, Path.Combine(path, pluginName + ".config.xml"), true);
         }
 
-        private void CheckIfAdministrator()
+        private bool CheckIfAdministrator(bool warnIfNotAdmin)
         {
+            bool ret;
             using (var identity = WindowsIdentity.GetCurrent())
             {
                 var principal = new WindowsPrincipal(identity);                
-                bool ret = principal.IsInRole(WindowsBuiltInRole.Administrator);
-                if (ret == false)
+                ret = principal.IsInRole(WindowsBuiltInRole.Administrator);
+                if (ret == false && warnIfNotAdmin == true)
                 {
                     CustomControls.Toast t = new CustomControls.Toast();
                     t.ToastText = I18n.Translate("internal/Plugin/notadministrator", "You are not running ACT as an administrator - this might prevent some triggers from working.");
@@ -2577,6 +2633,7 @@ namespace Triggernometry
                     ui.QueueToast(t);
                 }
             }
+            return ret;
         }
 
         public void DeInitPlugin()
@@ -3027,7 +3084,7 @@ namespace Triggernometry
 
         public void OnLogLineRead(bool isImport, string logLine, string detectedZone)
         {
-            if (isImport == true)
+            if (isImport == true || isInitialized == false)
             {
                 return;
             }
@@ -3121,7 +3178,10 @@ namespace Triggernometry
                 if (fi.Exists == false)
                 {
                     FilteredAddToLog(DebugLevelEnum.Warning, I18n.Translate("internal/Plugin/cfgnew", "Configuration file '{0}' does not exist, creating a new configuration", filename));
-                    return new Configuration();
+                    Configuration c = new Configuration();
+                    PropertyInfo setter = c.GetType().GetProperty("Locked", BindingFlags.NonPublic | BindingFlags.Instance);
+                    setter.SetValue(c, true);
+                    return c;
                 }
                 bool corruptFallback = false;
                 if (fi.Length == 0)
@@ -3141,6 +3201,8 @@ namespace Triggernometry
                 using (FileStream fs = File.Open(filename, FileMode.Open, FileAccess.Read))
                 {
                     cx = (Configuration)xs.Deserialize(fs);
+                    PropertyInfo setter = cx.GetType().GetProperty("Locked", BindingFlags.NonPublic | BindingFlags.Instance);
+                    setter.SetValue(cx, true);
                     cx.isnew = false;
                     cx.lastWrite = fi.LastWriteTimeUtc;
                 }
@@ -3249,7 +3311,10 @@ namespace Triggernometry
                 XmlSerializer xs = new XmlSerializer(typeof(Configuration));
                 using (MemoryStream ms = new MemoryStream())
                 {
+                    PropertyInfo setter = cfg.GetType().GetProperty("Locked", BindingFlags.NonPublic | BindingFlags.Instance);
+                    setter.SetValue(cfg, false);
                     xs.Serialize(ms, cfg, ns);
+                    setter.SetValue(cfg, true);
                     ms.Position = 0;
                     using (StreamReader sr = new StreamReader(ms))
                     {
@@ -3299,7 +3364,7 @@ namespace Triggernometry
             }
         }
 
-        internal void QueueAction(Context ctx, Trigger t, MutexInformation m, Action a, DateTime when)
+        public void QueueAction(Context ctx, Trigger t, MutexInformation m, Action a, DateTime when)
         {
             lock (ActionQueue) // verified
             {                                

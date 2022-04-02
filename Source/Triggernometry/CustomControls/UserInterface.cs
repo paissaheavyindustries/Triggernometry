@@ -418,7 +418,7 @@ namespace Triggernometry.CustomControls
                 tn.SelectedImageIndex = tn.ImageIndex;
                 tx.Parent = parentfolder;
                 parentnode.Nodes.Add(tn);
-                plug.AddTrigger(tx);
+                plug.AddTrigger(tx, tx.Parent.ParentsEnabled());
                 if (tx.Condition != null)
                 {
                     ConditionGroup.RebuildParentage(tx.Condition);
@@ -493,7 +493,7 @@ namespace Triggernometry.CustomControls
                     treeView1.Sort();
                     treeView1.SelectedNode = tn;
                     t.ZoneBlocked = (t.PassesZoneRestriction(plug.currentZone) == false);
-                    plug.AddTrigger(t);
+                    plug.AddTrigger(t, t.Parent.ParentsEnabled());
                     RecolorStartingFromNode(tn.Parent, tn.Parent.Checked, true);
                     if (t._EditAutofire == true)
                     {
@@ -1017,7 +1017,7 @@ namespace Triggernometry.CustomControls
                         fdjs++;
                     }
                 }
-                plug.AddTrigger(nt);
+                plug.AddTrigger(nt, nt.Parent.ParentsEnabled());
             }
             if (fdjs > 0 || tdjs > 0)
             {

@@ -14,6 +14,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Triggernometry.Variables;
 using CsvHelper;
+using System.Globalization;
 
 namespace Triggernometry
 {
@@ -196,6 +197,11 @@ namespace Triggernometry
         #endregion
 
         #region Old condition to new condition converter
+        public bool ShouldSerializeConditions()
+        {
+            return false;
+        }
+
         private EventList<Condition> _Conditions;
         public EventList<Condition> Conditions
         {
@@ -506,13 +512,17 @@ namespace Triggernometry
                     }
                     break;
                 case ActionTypeEnum.KeyPress:
-                    if (_KeypressType == KeypressTypeEnum.SendKeys)
+                    switch (_KeypressType)
                     {
-                        temp += I18n.Translate("internal/Action/desckeypresses", "send keypresses ({0}) to the active window", _KeyPressExpression);
-                    }
-                    else
-                    {
-                        temp += I18n.Translate("internal/Action/desckeypress", "send keycode ({0}) to window ({1})", _KeyPressCode, _KeyPressWindow);
+                        case KeypressTypeEnum.SendKeys:
+                            temp += I18n.Translate("internal/Action/desckeypresses", "send keypresses ({0}) to the active window", _KeyPressExpression);
+                            break;
+                        case KeypressTypeEnum.WindowMessage:
+                            temp += I18n.Translate("internal/Action/desckeypress", "send keycode ({0}) to window ({1})", _KeyPressCode, _KeyPressWindow);
+                            break;
+                        case KeypressTypeEnum.WindowMessageCombo:
+                            temp += I18n.Translate("internal/Action/desckeypresscombo", "send keycodes ({0}) to window ({1})", _KeyPressCode, _KeyPressWindow);
+                            break;
                     }
                     break;
                 case ActionTypeEnum.LaunchProcess:
@@ -553,7 +563,7 @@ namespace Triggernometry
                     temp += I18n.Translate("internal/Action/desctts", "say ({0}) at volume ({1}) %, using speed ({2})", _UseTTSTextExpression, _UseTTSVolumeExpression, _UseTTSRateExpression);
                     break;
                 case ActionTypeEnum.ExecuteScript:
-                    temp += I18n.Translate("internal/Action/descexecscript", "execute ({0}) script", _ExecScriptType.ToString());
+                    temp += I18n.Translate("internal/Action/descexecscript", "execute C# script");
                     break;
                 case ActionTypeEnum.MessageBox:
                     temp += I18n.Translate("internal/Action/descmsgbox", "show a message box saying ({0}) with icon ({1})", _MessageBoxText, _MessageBoxIconType.ToString());
@@ -925,6 +935,9 @@ namespace Triggernometry
                             }
                     }
                     break;
+                case ActionTypeEnum.Loop:
+                    temp += I18n.Translate("internal/Action/descloop", "Loop with {0} actions", LoopActions != null ? LoopActions.Count : 0);
+                    break;
                 default:
                     temp += I18n.Translate("internal/Action/descunknown", "unknown action type");
                     break;
@@ -1131,11 +1144,11 @@ namespace Triggernometry
                                         int datawidth = 0;
                                         using (StreamReader sr = new StreamReader(filename))
                                         {
-                                            using (CsvReader csv = new CsvReader(sr))
+                                            using (CsvReader csv = new CsvReader(sr, CultureInfo.InvariantCulture))
                                             {
-                                                string[] x;
-                                                while ((x = csv.Parser.Read()) != null)
+                                                while (csv.Parser.Read() == true)
                                                 {
+                                                    string[] x = csv.Parser.Record;
                                                     if (x.Length > datawidth)
                                                     {
                                                         datawidth = x.Length;
@@ -1233,92 +1246,10 @@ namespace Triggernometry
                     #endregion
                     #region Implementation - Execute script
                     case ActionTypeEnum.ExecuteScript:
-                        {
-                            CodeDomProvider pr = null;
-                            switch (_ExecScriptType)
-                            {
-                                case ScriptTypeEnum.CSharp:
-                                    pr = CodeDomProvider.CreateProvider("CSharp");
-                                    break;
-                                case ScriptTypeEnum.VBScript:
-                                    pr = CodeDomProvider.CreateProvider("VisualBasic");
-                                    break;
-                            }
-                            using (pr)
-                            {
-                                CompilerParameters cp = new CompilerParameters();
-                                cp.GenerateExecutable = true;
-                                cp.GenerateInMemory = true;
-                                cp.TreatWarningsAsErrors = false;
-                                string assy = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ExecScriptAssembliesExpression);
-                                foreach (string sass in assy.Split(",".ToArray()))
-                                {
-                                    string saf = sass.Trim();
-                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/addingassembly", "Adding assembly {0}", saf));
-                                    cp.ReferencedAssemblies.Add(saf);
-                                }
-                                List<string> temp = new List<string>();
-                                temp.Add(ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ExecScriptExpression));
-                                CompilerResults cr = pr.CompileAssemblyFromSource(cp, temp.ToArray());
-                                if (cr.Errors.Count > 0)
-                                {
-                                    if (ctx.testmode == true)
-                                    {
-                                        string erm = "";
-                                        if (cr.Errors.Count > 1)
-                                        {
-                                            erm = I18n.Translate("internal/Action/scripterrorplural", "{0} errors occurred while compiling the script.", cr.Errors.Count);
-                                        }
-                                        else
-                                        {
-                                            erm = I18n.Translate("internal/Action/scripterrorsingular", "An error occurred while compiling the script.");
-                                        }
-                                        erm += " ";
-                                        if (cr.Errors.Count > 5)
-                                        {
-                                            erm += I18n.Translate("internal/Action/fivescripterrorsare", "The first five errors are:");
-                                        }
-                                        else
-                                        {
-                                            if (cr.Errors.Count == 1)
-                                            {
-                                                erm += I18n.Translate("internal/Action/scripterroris", "The error is:");
-                                            }
-                                            else
-                                            {
-                                                erm += I18n.Translate("internal/Action/scripterrorsare", "The errors are:");
-                                            }
-                                        }
-                                        int num = 0;
-                                        foreach (CompilerError ce in cr.Errors)
-                                        {
-                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/scripterror", "Script error: {0} @ line {1}", ce.ErrorText, ce.Line));
-                                            erm += Environment.NewLine + Environment.NewLine + I18n.Translate("internal/Action/shortscripterror", "{0} @ line {1}", ce.ErrorText, ce.Line);
-                                            num++;
-                                            if (num >= 5)
-                                            {
-                                                break;
-                                            }
-                                        }
-                                        MessageBox.Show(erm, I18n.Translate("internal/Action/scriptexecerror", "Script execution error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    }
-                                    else
-                                    {
-                                        int num = 0;
-                                        foreach (CompilerError ce in cr.Errors)
-                                        {
-                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/scripterror", "Script error: {0} @ line {1}", ce.ErrorText, ce.Line));
-                                            num++;
-                                            if (num >= 5)
-                                            {
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    break;
-                                }
-                                cr.CompiledAssembly.EntryPoint.Invoke(null, null);
-                            }
+                        {                            
+                            string scp = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ExecScriptExpression);
+                            string assy = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ExecScriptAssembliesExpression);
+                            ctx.plug.scripting.Evaluate(scp, assy, ctx);
                         }
                         break;
                     #endregion
@@ -1456,20 +1387,34 @@ namespace Triggernometry
                     #region Implementation - Keypress
                     case ActionTypeEnum.KeyPress:
                         {
-                            if (_KeypressType == KeypressTypeEnum.SendKeys)
+                            switch (_KeypressType)
                             {
-                                if (ctx.testmode == true)
-                                {
-                                    Thread.Sleep(2000);
-                                }
-                                string ks = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressExpression);
-                                SendKeys.SendWait(ks);
-                            }
-                            else
-                            {
-                                string window = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressWindow);
-                                int keycode = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _KeyPressCode);
-                                RealPlugin.WindowsUtils.SendKeycode(window, (ushort)keycode);
+                                case KeypressTypeEnum.SendKeys:
+                                    {
+                                        if (ctx.testmode == true)
+                                        {
+                                            Thread.Sleep(2000);
+                                        }
+                                        string ks = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressExpression);
+                                        SendKeys.SendWait(ks);
+                                    }
+                                    break;
+                                case KeypressTypeEnum.WindowMessage:
+                                    {
+                                        string window = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressWindow);
+                                        int keycode = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _KeyPressCode);
+                                        RealPlugin.WindowsUtils.SendKeycodes(window, (ushort)keycode);
+                                    }
+                                    break;
+                                case KeypressTypeEnum.WindowMessageCombo:
+                                    {
+                                        string window = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressWindow);
+                                        string[] keycodes = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressCode).Split(",".ToCharArray());
+                                        List<int> kc = new List<int>();
+                                        kc.AddRange(from kx in keycodes select Convert.ToInt32(kx.Trim()));
+                                        RealPlugin.WindowsUtils.SendKeycodes(window, kc.ToArray());
+                                    }
+                                    break;
                             }
                         }
                         break;
@@ -1803,7 +1748,7 @@ namespace Triggernometry
                         {
                             if (_LogProcess == true)
                             {
-                                ctx.plug.LogLineQueuer(ctx.EvaluateStringExpression(ActionContextLogger, ctx, _LogMessageText), "", LogEvent.SourceEnum.Log);
+                                ctx.plug.LogLineQueuer(ctx.EvaluateStringExpression(ActionContextLogger, ctx, _LogMessageText), "", _LogMessageTarget);
                             }
                             else
                             {
@@ -2386,6 +2331,29 @@ namespace Triggernometry
                             ctx.plug.InvokeNamedCallback(cbname, cbparm);
                         }
                         break;
+                    #endregion
+                    #region Implementation - Loop
+                    case ActionTypeEnum.Loop:
+                        {
+                            int itertemp = ctx.loopIterator;
+                            ctx.loopIterator = 0;
+                            do
+                            {
+                                foreach (Action a in LoopActions)
+                                {
+                                    a.Execute(null, ctx);
+                                }
+                                int delay = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _LoopDelayExpression);
+                                if (delay > 0)
+                                {
+                                    Thread.Sleep(delay);
+                                }
+                                ctx.loopIterator++;
+                            }
+                            while (LoopCondition.Enabled == true && LoopCondition.CheckCondition(ctx, ActionContextLogger, ctx) == true);
+                            ctx.loopIterator = itertemp;
+                        }
+                        break;
                         #endregion
                 }
             }
@@ -2572,6 +2540,7 @@ namespace Triggernometry
             a._OBSSourceName = _OBSSourceName;
             a._OBSJSONPayload = _OBSJSONPayload;
             a._LogProcess = _LogProcess;
+            a._LogMessageTarget = _LogMessageTarget;
             a._JsonOperationType = _JsonOperationType;
             a._JsonCacheRequest = _JsonCacheRequest;
             a._JsonEndpointExpression = _JsonEndpointExpression;
@@ -2613,6 +2582,21 @@ namespace Triggernometry
             a._TableTargetPersist = _TableTargetPersist;
             a._DiskPersist = _DiskPersist;
             a._VariablePersist = _VariablePersist;
+            a.LoopCondition = (ConditionGroup)(LoopCondition != null ? ((ConditionGroup)LoopCondition).Duplicate() : null);
+            a.LoopActions.Clear();
+            if (LoopActions != null)
+            {
+                var ix = from tx in LoopActions
+                         orderby tx.OrderNumber ascending
+                         select tx;
+                foreach (Action ax in ix)
+                {
+                    Action b = new Action();
+                    ax.CopySettingsTo(b);
+                    a.LoopActions.Add(b);
+                }
+            }
+            a._LoopDelayExpression = _LoopDelayExpression;
         }
 
         private string SendJson(Context ctx, Action.HTTPMethodEnum method, string url, string json, IEnumerable<string> headers, bool expectNoContent)

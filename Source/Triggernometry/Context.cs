@@ -14,12 +14,12 @@ using Triggernometry.Variables;
 namespace Triggernometry
 {
 
-    internal class Context
+    public class Context
     {
 
 		internal bool testmode;
         internal RealPlugin plug;
-        internal Trigger trig;
+        public Trigger trig { get; set; }
         internal Action.TriggerForceTypeEnum force;
 
         internal RealPlugin.ActionExecutionHook soundhook;
@@ -38,6 +38,7 @@ namespace Triggernometry
         internal string contextResponse = "";
         internal dynamic contextJsonResponse;
         internal bool contextJsonParsed = false;
+        internal int loopIterator = 0;
 
         internal List<int> ActionResults = new List<int>();
         internal Dictionary<Mutex, int> heldmutices = new Dictionary<Mutex, int>();
@@ -263,12 +264,12 @@ namespace Triggernometry
                         }
                         else if (x == "_systemtime")
                         {
-                            val = ((long)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds).ToString();
+                            val = ((long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds).ToString();
                             found = true;
                         }
                         else if (x == "_systemtimems")
                         {
-                            val = ((long)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds).ToString();
+                            val = ((long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds).ToString();
                             found = true;
                         }
                         else if (x == "_ffxivplayer")
@@ -337,6 +338,11 @@ namespace Triggernometry
                         else if (x == "_triggerid")
                         {
                             val = trig != null ? trig.Id.ToString() : "(null)";
+                            found = true;
+                        }
+                        else if (x == "_loopiterator")
+                        {
+                            val = loopIterator.ToString();
                             found = true;
                         }
                         else if (x.IndexOf("_actionhistory") == 0)

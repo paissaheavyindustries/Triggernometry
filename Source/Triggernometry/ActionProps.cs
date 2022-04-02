@@ -39,7 +39,8 @@ namespace Triggernometry
             Mutex,
             Placeholder,
             NamedCallback,
-            Mouse
+            Mouse,
+            Loop
         }
 
         public enum VariableOpEnum
@@ -66,12 +67,6 @@ namespace Triggernometry
         {
             String,
             Numeric
-        }
-
-        public enum ScriptTypeEnum
-        {
-            CSharp,
-            VBScript
         }
 
         public enum DiskFileOpEnum
@@ -174,7 +169,8 @@ namespace Triggernometry
         public enum KeypressTypeEnum
         {
             SendKeys,
-            WindowMessage
+            WindowMessage,
+            WindowMessageCombo
         }
 
         public enum MutexOpEnum
@@ -428,27 +424,6 @@ namespace Triggernometry
 
         #endregion
         #region Action specific properties - Execute script
-
-        internal ScriptTypeEnum _ExecScriptType { get; set; } = ScriptTypeEnum.CSharp;
-        [XmlAttribute]
-        public string ExecScriptType
-        {
-            get
-            {
-                if (_ExecScriptType != ScriptTypeEnum.CSharp)
-                {
-                    return _ExecScriptType.ToString();
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            set
-            {
-                _ExecScriptType = (ScriptTypeEnum)Enum.Parse(typeof(ScriptTypeEnum), value);
-            }
-        }
 
         internal string _ExecScriptAssembliesExpression = "";
         [XmlAttribute]
@@ -1233,6 +1208,27 @@ namespace Triggernometry
         #endregion
         #region Action specific properties - Log message
 
+        internal LogEvent.SourceEnum _LogMessageTarget { get; set; } = LogEvent.SourceEnum.Log;
+        [XmlAttribute]
+        public string LogMessageTarget
+        {
+            get
+            {
+                if (_LogMessageTarget != LogEvent.SourceEnum.Log)
+                {
+                    return _LogMessageTarget.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _LogMessageTarget = (LogEvent.SourceEnum)Enum.Parse(typeof(LogEvent.SourceEnum), value);
+            }
+        }
+
         internal string _LogMessageText = "";
         [XmlAttribute]
         public string LogMessageText
@@ -1291,6 +1287,41 @@ namespace Triggernometry
                 {
                     _LogLevel = LogMessageEnum.Error;
                 }
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Loop
+
+        public bool ShouldSerializeLoopCondition()
+        {
+            return (LoopCondition.Children.Count > 0);
+        }
+
+        public ConditionGroup LoopCondition = new ConditionGroup();
+
+        public bool ShouldSerializeLoopActions()
+        {
+            return (LoopActions.Count > 0);
+        }
+
+        public List<Action> LoopActions = new List<Action>();
+
+        internal string _LoopDelayExpression = "";
+        [XmlAttribute]
+        public string LoopDelayExpression
+        {
+            get
+            {
+                if (_LoopDelayExpression == "")
+                {
+                    return null;
+                }
+                return _LoopDelayExpression;
+            }
+            set
+            {
+                _LoopDelayExpression = value;
             }
         }
 
