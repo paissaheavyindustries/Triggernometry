@@ -2508,6 +2508,7 @@ namespace Triggernometry
 
         internal void CheckForUpdates()
         {
+            return;
             Task tx = new Task(() =>
             {
                 string curver = Assembly.GetExecutingAssembly().GetName().Version.ToString();
