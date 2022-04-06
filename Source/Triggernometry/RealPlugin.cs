@@ -2077,7 +2077,7 @@ namespace Triggernometry
             }
             catch (Exception ex)
             {
-                pluginStatusText.Text = I18n.Translate("internal/Plugin/inierror", "Error while {0} ({1})", exwhere, ex.Message);
+                pluginStatusText.Text = I18n.Translate("internal/Plugin/inierror", "Error while {0} ({1})", exwhere, ex.ToString());
             }
         }
 

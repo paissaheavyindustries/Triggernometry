@@ -40,7 +40,7 @@
   <ItemGroup>
     <Reference Include="Advanced Combat Tracker, Version=3.5.0.273, Culture=neutral, PublicKeyToken=a946b61e93d97868, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Advanced Combat Tracker\Advanced Combat Tracker.exe</HintPath>
+      <HintPath>..\..\ThirdParty\Advanced Combat Tracker.exe</HintPath>
     </Reference>
     <Reference Include="Costura, Version=1.6.2.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
       <HintPath>..\packages\Costura.Fody.1.6.2\lib\dotnet\Costura.dll</HintPath>

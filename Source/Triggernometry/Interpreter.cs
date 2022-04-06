@@ -272,6 +272,10 @@ namespace Triggernometry
             var asms = AppDomain.CurrentDomain.GetAssemblies();
             foreach (Assembly asm in asms)
             {
+                if (asm.FullName.Contains("Cafe.Matcha"))
+                {
+                    continue;
+                }
                 try
                 {
                     _so = _so.AddReferences(asm);
