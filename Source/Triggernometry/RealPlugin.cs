@@ -2771,7 +2771,7 @@ namespace Triggernometry
                 }
                 if ((force & Action.TriggerForceTypeEnum.SkipParent) == 0)
                 {
-                    Folder.FilterFailReason reason = t.Parent.PassesFilter(le.Zone, le.Text);
+                    Folder.FilterFailReason reason = t.Parent.PassesFilter(le.Zone, le.TestModeZoneId, le.Text);
                     if (reason != Folder.FilterFailReason.Passed)
                     {
                         if (reason != Folder.FilterFailReason.NotEnabled)
@@ -2832,7 +2832,7 @@ namespace Triggernometry
             }            
         }
 
-        internal void LogLineQueuerMass(IEnumerable<string> text, string zone, LogEvent.SourceEnum src, bool testMode)
+        internal void LogLineQueuerMass(IEnumerable<string> text, string zone, LogEvent.SourceEnum src, bool testMode, bool testModeZoneId)
         {
             int max = text.Count();
             int i = 0;
@@ -2845,6 +2845,7 @@ namespace Triggernometry
                 lex[i].Source = src;
                 lex[i].Timestamp = DateTime.Now;
                 lex[i].TestMode = testMode;
+                lex[i].TestModeZoneId = testModeZoneId ? zone : null;
                 i++;
             }
             if (lex.Count() > 0)

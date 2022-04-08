@@ -288,7 +288,7 @@ namespace Triggernometry
             return ret;
         }
 		
-		public FilterFailReason PassesFilter(string zone, string evtext)
+		public FilterFailReason PassesFilter(string zoneName, string zoneId, string evtext)
 		{
 			bool ret = true;
 			Folder f = this;
@@ -300,7 +300,7 @@ namespace Triggernometry
                 }
                 if (ret == true && f._ZoneFilterEnabled == true)
 				{
-					ret = f.rexz != null ? f.rexz.IsMatch(zone) : false;
+					ret = f.rexz != null ? f.rexz.IsMatch(zoneName) : false;
 				}		
 				if (ret == true && f._EventFilterEnabled == true)
 				{
@@ -308,7 +308,8 @@ namespace Triggernometry
 				}
                 if (ret == true && f._FFXIVZoneFilterEnabled == true)
                 {
-                    ret = f.rexxivz != null ? f.rexxivz.IsMatch(PluginBridges.BridgeFFXIV.ZoneID.ToString()) : false;
+                    string zId = zoneId == null ? PluginBridges.BridgeFFXIV.ZoneID.ToString() : zoneId;
+                    ret = f.rexxivz != null ? f.rexxivz.IsMatch(zId) : false;
                 }
                 if (ret == true && f._FFXIVJobFilterEnabled == true)
                 {

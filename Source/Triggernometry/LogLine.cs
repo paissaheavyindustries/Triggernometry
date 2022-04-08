@@ -22,6 +22,7 @@ namespace Triggernometry
         public SourceEnum Source { get; set; }
         public DateTime Timestamp { get; set; }
         public bool TestMode { get; set; } = false;
+        public string TestModeZoneId { get; set; }
 
     }
 

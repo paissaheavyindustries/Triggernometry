@@ -34,6 +34,8 @@
             this.btnOk = new System.Windows.Forms.Button();
             this.grpEventDetails = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.cbxZoneType = new System.Windows.Forms.ComboBox();
+            this.lblZoneType = new System.Windows.Forms.Label();
             this.cbxEventDestination = new System.Windows.Forms.ComboBox();
             this.lblEventDestination = new System.Windows.Forms.Label();
             this.btnGetCurZone = new System.Windows.Forms.Button();
@@ -49,7 +51,7 @@
             // panel3
             // 
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(10, 306);
+            this.panel3.Location = new System.Drawing.Point(10, 335);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(514, 10);
             this.panel3.TabIndex = 17;
@@ -59,7 +61,7 @@
             this.panel4.Controls.Add(this.btnCancel);
             this.panel4.Controls.Add(this.btnOk);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel4.Location = new System.Drawing.Point(10, 316);
+            this.panel4.Location = new System.Drawing.Point(10, 345);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(514, 35);
             this.panel4.TabIndex = 18;
@@ -94,7 +96,7 @@
             this.grpEventDetails.Location = new System.Drawing.Point(10, 10);
             this.grpEventDetails.Name = "grpEventDetails";
             this.grpEventDetails.Padding = new System.Windows.Forms.Padding(10);
-            this.grpEventDetails.Size = new System.Drawing.Size(514, 296);
+            this.grpEventDetails.Size = new System.Drawing.Size(514, 325);
             this.grpEventDetails.TabIndex = 19;
             this.grpEventDetails.TabStop = false;
             this.grpEventDetails.Text = " Event details ";
@@ -105,23 +107,52 @@
             this.tableLayoutPanel3.ColumnCount = 2;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Controls.Add(this.cbxZoneType, 1, 1);
+            this.tableLayoutPanel3.Controls.Add(this.lblZoneType, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.cbxEventDestination, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.lblEventDestination, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.btnGetCurZone, 1, 2);
-            this.tableLayoutPanel3.Controls.Add(this.txtEvent, 1, 3);
-            this.tableLayoutPanel3.Controls.Add(this.lblEvent, 0, 3);
-            this.tableLayoutPanel3.Controls.Add(this.lblZoneName, 0, 1);
-            this.tableLayoutPanel3.Controls.Add(this.txtZoneName, 1, 1);
+            this.tableLayoutPanel3.Controls.Add(this.btnGetCurZone, 1, 3);
+            this.tableLayoutPanel3.Controls.Add(this.txtEvent, 1, 4);
+            this.tableLayoutPanel3.Controls.Add(this.lblEvent, 0, 4);
+            this.tableLayoutPanel3.Controls.Add(this.lblZoneName, 0, 2);
+            this.tableLayoutPanel3.Controls.Add(this.txtZoneName, 1, 2);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(10, 23);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 4;
+            this.tableLayoutPanel3.RowCount = 5;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(494, 263);
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(494, 292);
             this.tableLayoutPanel3.TabIndex = 0;
+            // 
+            // cbxZoneType
+            // 
+            this.cbxZoneType.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxZoneType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxZoneType.FormattingEnabled = true;
+            this.cbxZoneType.Items.AddRange(new object[] {
+                  "Zone Name",
+                  "Zone ID"});
+            this.cbxZoneType.Location = new System.Drawing.Point(70, 30);
+            this.cbxZoneType.Name = "cbxZoneType";
+            this.cbxZoneType.Size = new System.Drawing.Size(421, 21);
+            this.cbxZoneType.TabIndex = 20;
+            this.cbxZoneType.SelectedIndexChanged += new System.EventHandler(this.cbxZoneType_SelectedIndexChanged);
+            // 
+            // lblZoneType
+            // 
+            this.lblZoneType.AutoEllipsis = true;
+            this.lblZoneType.AutoSize = true;
+            this.lblZoneType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblZoneType.Location = new System.Drawing.Point(3, 27);
+            this.lblZoneType.Name = "lblZoneType";
+            this.lblZoneType.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.lblZoneType.Size = new System.Drawing.Size(61, 27);
+            this.lblZoneType.TabIndex = 19;
+            this.lblZoneType.Text = "Zone type";
             // 
             // cbxEventDestination
             // 
@@ -152,7 +183,7 @@
             // btnGetCurZone
             // 
             this.btnGetCurZone.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnGetCurZone.Location = new System.Drawing.Point(70, 56);
+            this.btnGetCurZone.Location = new System.Drawing.Point(70, 83);
             this.btnGetCurZone.Name = "btnGetCurZone";
             this.btnGetCurZone.Size = new System.Drawing.Size(421, 23);
             this.btnGetCurZone.TabIndex = 16;
@@ -165,11 +196,11 @@
             this.txtEvent.AcceptsReturn = true;
             this.txtEvent.AcceptsTab = true;
             this.txtEvent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtEvent.Location = new System.Drawing.Point(70, 85);
+            this.txtEvent.Location = new System.Drawing.Point(70, 112);
             this.txtEvent.Multiline = true;
             this.txtEvent.Name = "txtEvent";
             this.txtEvent.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtEvent.Size = new System.Drawing.Size(421, 175);
+            this.txtEvent.Size = new System.Drawing.Size(421, 272);
             this.txtEvent.TabIndex = 9;
             this.txtEvent.WordWrap = false;
             this.txtEvent.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtEvent_KeyDown);
@@ -179,10 +210,10 @@
             this.lblEvent.AutoEllipsis = true;
             this.lblEvent.AutoSize = true;
             this.lblEvent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblEvent.Location = new System.Drawing.Point(3, 82);
+            this.lblEvent.Location = new System.Drawing.Point(3, 109);
             this.lblEvent.Name = "lblEvent";
             this.lblEvent.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.lblEvent.Size = new System.Drawing.Size(61, 181);
+            this.lblEvent.Size = new System.Drawing.Size(61, 278);
             this.lblEvent.TabIndex = 8;
             this.lblEvent.Text = "Event text";
             // 
@@ -191,7 +222,7 @@
             this.lblZoneName.AutoEllipsis = true;
             this.lblZoneName.AutoSize = true;
             this.lblZoneName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblZoneName.Location = new System.Drawing.Point(3, 27);
+            this.lblZoneName.Location = new System.Drawing.Point(3, 54);
             this.lblZoneName.Name = "lblZoneName";
             this.lblZoneName.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.lblZoneName.Size = new System.Drawing.Size(61, 26);
@@ -201,7 +232,7 @@
             // txtZoneName
             // 
             this.txtZoneName.Dock = System.Windows.Forms.DockStyle.Top;
-            this.txtZoneName.Location = new System.Drawing.Point(70, 30);
+            this.txtZoneName.Location = new System.Drawing.Point(70, 57);
             this.txtZoneName.Name = "txtZoneName";
             this.txtZoneName.Size = new System.Drawing.Size(421, 20);
             this.txtZoneName.TabIndex = 7;
@@ -212,7 +243,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(534, 361);
+            this.ClientSize = new System.Drawing.Size(534, 390);
             this.Controls.Add(this.grpEventDetails);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel4);
@@ -248,5 +279,7 @@
         internal System.Windows.Forms.TextBox txtZoneName;
         private System.Windows.Forms.Label lblEventDestination;
         internal System.Windows.Forms.ComboBox cbxEventDestination;
+        internal System.Windows.Forms.ComboBox cbxZoneType;
+        private System.Windows.Forms.Label lblZoneType;
     }
 }
