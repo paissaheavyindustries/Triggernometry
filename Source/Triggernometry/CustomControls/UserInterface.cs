@@ -466,7 +466,16 @@ namespace Triggernometry.CustomControls
         {
             using (Forms.TriggerForm tf = new Forms.TriggerForm())
             {
-                tf.SettingsFromTrigger(null);
+                if (cfg.UseTemplateTrigger == true)
+                {
+                    Trigger t = new Trigger();
+                    cfg.TemplateTrigger.CopySettingsTo(t);
+                    tf.SettingsFromTrigger(t);
+                }
+                else
+                {
+                    tf.SettingsFromTrigger(null);
+                }
                 tf.plug = plug;
                 tf.fakectx.plug = plug;
                 tf.Text = I18n.Translate("internal/UserInterface/addtrigger", "Add new trigger");
@@ -1861,7 +1870,7 @@ namespace Triggernometry.CustomControls
                 }
                 Task tx = new Task(() =>
                 {
-                    plug.RepositoryUpdates();
+                    plug.AllRepositoryUpdates(false);
                 });
                 tx.Start();
             }
@@ -1872,7 +1881,7 @@ namespace Triggernometry.CustomControls
                 tnupdate.SelectedImageIndex = tnupdate.ImageIndex;
                 Task tx = new Task(() =>
                 {
-                    plug.RepositoryUpdate(rfo, true);
+                    plug.RepositoryUpdate(rfo, true, false);
                 });
                 tx.Start();
             }
@@ -2030,6 +2039,39 @@ namespace Triggernometry.CustomControls
         private void ctxReadme_Click(object sender, EventArgs e)
         {
             btnEdit_Click(sender, e);
+        }
+
+        private void btnUpdateCheck_Click(object sender, EventArgs e)
+        {
+            plug.CheckForUpdates();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            RepositoryFolder rfo = (RepositoryFolder)treeView1.Nodes[1].Tag;
+            List<Repository> upds = new List<Repository>();
+            foreach (Repository r in rfo.Repositories)
+            {
+                if (r.Enabled == true && r.AutoUpdate == true && r.LastUpdatedTrig.AddMinutes(r.UpdateInterval) < DateTime.Now)
+                {
+                    upds.Add(r);
+                }
+            }
+            if (upds.Count > 0)
+            {
+                Task tx = new Task(() =>
+                {
+                    plug.RepositoryUpdates(upds, false);
+                });
+                tx.Start();                
+            }
+            if (cfg.AutosaveEnabled == true && plug.lastConfigSave.AddMinutes(cfg.AutosaveInterval) < DateTime.Now)
+            {
+                if (plug.configBroken == false)
+                {
+                    plug.SaveCurrentConfig();
+                }
+            }
         }
 
     }

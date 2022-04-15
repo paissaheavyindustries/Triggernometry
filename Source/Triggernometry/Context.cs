@@ -36,6 +36,7 @@ namespace Triggernometry
 		internal List<string> numgroups;
         internal DateTime triggered;
         internal string contextResponse = "";
+        internal int contextResponseCode = 0;
         internal dynamic contextJsonResponse;
         internal bool contextJsonParsed = false;
         internal int loopIterator = 0;
@@ -328,6 +329,11 @@ namespace Triggernometry
                         else if (x == "_response")
                         {
                             val = contextResponse;
+                            found = true;
+                        }
+                        else if (x == "_responsecode")
+                        {
+                            val = contextResponseCode.ToString();
                             found = true;
                         }
                         else if (x == "_triggername")
@@ -829,204 +835,240 @@ namespace Triggernometry
                             val = "";
                             found = true;
                             string funcexpr = x.Substring(5);
-                            int splitter = funcexpr.IndexOf(":");
-                            if (splitter > 0)
+                            Match rxm = rexfunc.Match(funcexpr);
+                            if (rxm.Success == true)
                             {
-                                string funcdef = funcexpr.Substring(0, splitter);
-                                Match rxm = rexfunc.Match(funcdef);
-                                if (rxm.Success == true)
+                                string funcname = rxm.Groups["name"].Value.ToLower();
+                                string funcarg = rxm.Groups["arg"].Value;
+                                string funcval = "";
+                                int splitter = funcname.IndexOf(":");
+                                if (splitter > 0 && funcarg == "")
                                 {
-                                    string funcname = rxm.Groups["name"].Value.ToLower();
-                                    string funcarg = rxm.Groups["arg"].Value;
-                                    string[] args = SplitArguments(funcarg);
-                                    int argc = args.Count();
-                                    string funcval = funcexpr.Substring(splitter + 1);
-                                    switch (funcname)
-                                    {
-                                        case "toupper": // toupper()
-                                            val = funcval.ToUpper();
-                                            break;
-                                        case "tolower": // tolower()
-                                            val = funcval.ToLower();
-                                            break;
-                                        case "length": // length()
-                                            val = funcval.Length.ToString();
-                                            break;
-                                        case "hex2dec": // hex2dec()
-                                            val = "" + int.Parse(funcval, System.Globalization.NumberStyles.HexNumber);
-                                            break;
-                                        case "hex2float": // hex2float()
+                                    funcname = funcexpr.Substring(0, splitter);
+                                    funcval = funcexpr.Substring(splitter + 1);
+                                }
+                                else
+                                {
+                                    funcval = funcexpr.Substring(rxm.Groups["arg"].Index + rxm.Groups["arg"].Length + 2);
+                                }
+                                string[] args = SplitArguments(funcarg);
+                                int argc = args.Count();
+                                switch (funcname)
+                                {
+                                    case "toupper": // toupper()
+                                        val = funcval.ToUpper();
+                                        break;
+                                    case "tolower": // tolower()
+                                        val = funcval.ToLower();
+                                        break;
+                                    case "length": // length()
+                                        val = funcval.Length.ToString();
+                                        break;
+                                    case "hex2dec": // hex2dec()
+                                        val = "" + int.Parse(funcval, System.Globalization.NumberStyles.HexNumber);
+                                        break;
+                                    case "hex2float": // hex2float()
+                                        {
+                                            Int32 bytesArray = Int32.Parse(funcval, System.Globalization.NumberStyles.HexNumber);
+                                            val = "" + BitConverter.ToSingle(BitConverter.GetBytes(bytesArray), 0);
+                                        }
+                                        break;
+                                    case "hex2double": // hex2double()
+                                        {
+                                            Int64 bytesArray = Int64.Parse(funcval, System.Globalization.NumberStyles.HexNumber);
+                                            val = "" + BitConverter.ToDouble(BitConverter.GetBytes(bytesArray), 0);
+                                        }
+                                        break;
+                                    case "float2hex":
+                                        {
+                                            byte[] bytesArray = BitConverter.GetBytes(float.Parse(funcval));
+                                            Array.Reverse(bytesArray, 0, bytesArray.Length);
+                                            val = BitConverter.ToString(bytesArray).Replace("-", "");
+                                        }
+                                        break;
+                                    case "double2hex":
+                                        {
+                                            Int64 bytesArray = BitConverter.DoubleToInt64Bits(double.Parse(funcval));
+                                            val = bytesArray.ToString("X");
+                                        }
+                                        break;
+                                    case "dec2hex": // dec2hex()
+                                        val = int.Parse(funcval).ToString("X");
+                                        break;
+                                    case "dec2hex2": // dec2hex2()
+                                        val = int.Parse(funcval).ToString("X2");
+                                        break;
+                                    case "dec2hex4": // dec2hex4()
+                                        val = int.Parse(funcval).ToString("X4");
+                                        break;
+                                    case "dec2hex8": // dec2hex8()
+                                        val = int.Parse(funcval).ToString("X8");
+                                        break;
+                                    case "padleft": // padleft(charcode,length)
+                                        if (argc != 2)
+                                        {
+                                            throw new ArgumentException(I18n.Translate("internal/Context/padleftargerror", "Padleft function requires two arguments, {0} were given", argc));
+                                        }
+                                        else
+                                        {
+                                            val = funcval.PadLeft(Int32.Parse(args[1]), (char)Int32.Parse(args[0]));
+                                        }
+                                        break;
+                                    case "padright": // padright(charcode,length)
+                                        if (argc != 2)
+                                        {
+                                            throw new ArgumentException(I18n.Translate("internal/Context/padrightargerror", "Padright function requires two arguments, {0} were given", argc));
+                                        }
+                                        else
+                                        {
+                                            val = funcval.PadRight(Int32.Parse(args[1]), (char)Int32.Parse(args[0]));
+                                        }
+                                        break;
+                                    case "substring": // substring(startindex, length) or substring(startindex)
+                                        if (argc != 1 && argc != 2)
+                                        {
+                                            throw new ArgumentException(I18n.Translate("internal/Context/substringargerror", "Substring function requires one or two arguments, {0} were given", argc));
+                                        }
+                                        else
+                                        {
+                                            switch (argc)
                                             {
-                                                Int32 bytesArray = Int32.Parse(funcval, System.Globalization.NumberStyles.HexNumber);
-                                                val = "" + BitConverter.ToSingle(BitConverter.GetBytes(bytesArray), 0);
+                                                case 1:
+                                                    val = funcval.Substring(Int32.Parse(args[0]));
+                                                    break;
+                                                case 2:
+                                                    val = funcval.Substring(Int32.Parse(args[0]), Int32.Parse(args[1]));
+                                                    break;
                                             }
-                                            break;
-                                        case "hex2double": // hex2double()
+                                        }
+                                        break;
+                                    case "indexof": // indexof(stringtosearch)
+                                        if (argc != 1)
+                                        {                                          
+                                            throw new ArgumentException(I18n.Translate("internal/Context/indexofargerror", "Indexof function requires one argument, {0} were given", argc));
+                                        }
+                                        else
+                                        {
+                                            val = "" + funcval.IndexOf(args[0]);
+                                        }
+                                        break;
+                                    case "compare": // compare(stringtocompare) or compare(stringtocompare, ignorecase)
+                                        if (argc != 1 && argc != 2)
+                                        {
+                                            throw new ArgumentException(I18n.Translate("internal/Context/compareargerror", "Compare function requires one or two arguments, {0} were given", argc));
+                                        }
+                                        else
+                                        {
+                                            switch (argc)
                                             {
-                                                Int64 bytesArray = Int64.Parse(funcval, System.Globalization.NumberStyles.HexNumber);
-                                                val = "" + BitConverter.ToDouble(BitConverter.GetBytes(bytesArray), 0);
-                                            }
-                                            break;
-                                        case "float2hex":
+                                                case 1:
+                                                    val = "" + String.Compare(funcval, args[0], true);
+                                                    break;
+                                                case 2:
+                                                    bool ignoreCase = bool.Parse(args[1]);
+                                                    val = "" + String.Compare(funcval, args[0], ignoreCase);
+                                                    break;
+                                            }                                                                                                
+                                        }
+                                        break;
+                                    case "lastindexof": // lastindexof(stringtosearch)
+                                        if (argc != 1)
+                                        {
+                                            throw new ArgumentException(I18n.Translate("internal/Context/lastindexofargerror", "Lastindexof function requires one argument, {0} were given", argc));
+                                        }
+                                        else
+                                        {
+                                            val = "" + funcval.LastIndexOf(args[0]);
+                                        }
+                                        break;
+                                    case "trim": // trim() or trim(charcode,charcode,charcode,...)
+                                        if (argc == 0 || args[0] == "")
+                                        {
+                                            val = funcval.Trim();
+                                        }
+                                        else
+                                        {
+                                            string xx = "";
+                                            foreach (string xyz in args)
                                             {
-                                                byte[] bytesArray = BitConverter.GetBytes(float.Parse(funcval));
-                                                Array.Reverse(bytesArray, 0, bytesArray.Length);
-                                                val = BitConverter.ToString(bytesArray).Replace("-", "");
+                                                xx += (char)Int32.Parse(xyz);
                                             }
-                                            break;
-                                        case "double2hex":
+                                            val = funcval.Trim(xx.ToCharArray());
+                                        }
+                                        break;
+                                    case "trimleft": // trimleft() or trimleft(charcode,charcode,charcode,...)
+                                        if (argc == 0 || args[0] == "")
+                                        {
+                                            val = funcval.TrimStart();
+                                        }
+                                        else
+                                        {
+                                            string xx = "";
+                                            foreach (string xyz in args)
                                             {
-                                                Int64 bytesArray = BitConverter.DoubleToInt64Bits(double.Parse(funcval));
-                                                val = bytesArray.ToString("X");
+                                                xx += (char)Int32.Parse(xyz);
                                             }
-                                            break;
-                                        case "dec2hex": // dec2hex()
-                                            val = int.Parse(funcval).ToString("X");
-                                            break;
-                                        case "dec2hex2": // dec2hex2()
-                                            val = int.Parse(funcval).ToString("X2");
-                                            break;
-                                        case "dec2hex4": // dec2hex4()
-                                            val = int.Parse(funcval).ToString("X4");
-                                            break;
-                                        case "dec2hex8": // dec2hex8()
-                                            val = int.Parse(funcval).ToString("X8");
-                                            break;
-                                        case "padleft": // padleft(charcode,length)
-                                            if (argc != 2)
+                                            val = funcval.TrimStart(xx.ToCharArray());
+                                        }
+                                        break;
+                                    case "trimright": // trimright() or trimright(charcode,charcode,charcode,...)
+                                        if (argc == 0 || args[0] == "")
+                                        {
+                                            val = funcval.TrimEnd();
+                                        }
+                                        else
+                                        {
+                                            string xx = "";
+                                            foreach (string xyz in args)
                                             {
-                                                throw new ArgumentException(I18n.Translate("internal/Context/padleftargerror", "Padleft function requires two arguments, {0} were given", argc));
+                                                xx += (char)Int32.Parse(xyz);
                                             }
-                                            else
-                                            {
-                                                val = funcval.PadLeft(Int32.Parse(args[1]), (char)Int32.Parse(args[0]));
-                                            }
-                                            break;
-                                        case "padright": // padright(charcode,length)
-                                            if (argc != 2)
-                                            {
-                                                throw new ArgumentException(I18n.Translate("internal/Context/padrightargerror", "Padright function requires two arguments, {0} were given", argc));
-                                            }
-                                            else
-                                            {
-                                                val = funcval.PadRight(Int32.Parse(args[1]), (char)Int32.Parse(args[0]));
-                                            }
-                                            break;
-                                        case "substring": // substring(startindex, length) or substring(startindex)
-                                            if (argc != 1 && argc != 2)
-                                            {
-                                                throw new ArgumentException(I18n.Translate("internal/Context/substringargerror", "Substring function requires one or two arguments, {0} were given", argc));
-                                            }
-                                            else
-                                            {
-                                                switch (argc)
-                                                {
-                                                    case 1:
-                                                        val = funcval.Substring(Int32.Parse(args[0]));
-                                                        break;
-                                                    case 2:
-                                                        val = funcval.Substring(Int32.Parse(args[0]), Int32.Parse(args[1]));
-                                                        break;
-                                                }
-                                            }
-                                            break;
-                                        case "indexof": // indexof(stringtosearch)
-                                            if (argc != 1)
-                                            {
-                                                throw new ArgumentException(I18n.Translate("internal/Context/indexofargerror", "Indexof function requires one argument, {0} were given", argc));
-                                            }
-                                            else
-                                            {
-                                                val = "" + funcval.IndexOf(args[0]);
-                                            }
-                                            break;
-                                        case "compare": // compare(stringtocompare) or compare(stringtocompare, ignorecase)
-                                            if (argc != 1 && argc != 2)
-                                            {
-                                                throw new ArgumentException(I18n.Translate("internal/Context/compareargerror", "Compare function requires one or two arguments, {0} were given", argc));
-                                            }
-                                            else
-                                            {
-                                                switch (argc)
-                                                {
-                                                    case 1:
-                                                        val = "" + String.Compare(funcval, args[0], true);
-                                                        break;
-                                                    case 2:
-                                                        bool ignoreCase = bool.Parse(args[1]);
-                                                        val = "" + String.Compare(funcval, args[0], ignoreCase);
-                                                        break;
-                                                }                                                                                                
-                                            }
-                                            break;
-                                        case "lastindexof": // lastindexof(stringtosearch)
-                                            if (argc != 1)
-                                            {
-                                                throw new ArgumentException(I18n.Translate("internal/Context/lastindexofargerror", "Lastindexof function requires one argument, {0} were given", argc));
-                                            }
-                                            else
-                                            {
-                                                val = "" + funcval.LastIndexOf(args[0]);
-                                            }
-                                            break;
-                                        case "trim": // trim() or trim(charcode,charcode,charcode,...)
+                                            val = funcval.TrimEnd(xx.ToCharArray());
+                                        }
+                                        break;
+                                    case "format": // format(type,formatstring)
+                                        if (argc != 2)
+                                        {
+                                            throw new ArgumentException(I18n.Translate("internal/Context/formatargerror", "Format function requires two arguments, {0} were given", argc));
+                                        }
+                                        else
+                                        {
+                                            Type type = Type.GetType(args[0]);
+                                            object converted = Convert.ChangeType(funcval, type, CultureInfo.InvariantCulture);
+                                            val = String.Format("{0:" + args[1] + "}", converted);
+                                        }
+                                        break;
+                                    case "utctime": // utctime(formatstring)
+                                        {
+                                            Int64 ts = Int64.Parse(funcval);
+                                            DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                                            dt = dt.AddSeconds(ts);
                                             if (argc == 0 || args[0] == "")
                                             {
-                                                val = funcval.Trim();
+                                                val = dt.ToString();
                                             }
                                             else
                                             {
-                                                string xx = "";
-                                                foreach (string xyz in args)
-                                                {
-                                                    xx += (char)Int32.Parse(xyz);
-                                                }
-                                                val = funcval.Trim(xx.ToCharArray());
+                                                val = dt.ToString(args[0]);
                                             }
-                                            break;
-                                        case "trimleft": // trimleft() or trimleft(charcode,charcode,charcode,...)
+                                        }
+                                        break;
+                                    case "localtime": // localtime(formatstring)
+                                        {
+                                            Int64 ts = Int64.Parse(funcval);
+                                            DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                                            dt = dt.AddSeconds(ts);
+                                            dt = dt.ToLocalTime();
                                             if (argc == 0 || args[0] == "")
                                             {
-                                                val = funcval.TrimStart();
+                                                val = dt.ToString();
                                             }
                                             else
                                             {
-                                                string xx = "";
-                                                foreach (string xyz in args)
-                                                {
-                                                    xx += (char)Int32.Parse(xyz);
-                                                }
-                                                val = funcval.TrimStart(xx.ToCharArray());
+                                                val = dt.ToString(args[0]);
                                             }
-                                            break;
-                                        case "trimright": // trimright() or trimright(charcode,charcode,charcode,...)
-                                            if (argc == 0 || args[0] == "")
-                                            {
-                                                val = funcval.TrimEnd();
-                                            }
-                                            else
-                                            {
-                                                string xx = "";
-                                                foreach (string xyz in args)
-                                                {
-                                                    xx += (char)Int32.Parse(xyz);
-                                                }
-                                                val = funcval.TrimEnd(xx.ToCharArray());
-                                            }
-                                            break;
-                                        case "format": // format(type,formatstring)
-                                            if (argc != 2)
-                                            {
-                                                throw new ArgumentException(I18n.Translate("internal/Context/formatargerror", "Format function requires two arguments, {0} were given", argc));
-                                            }
-                                            else
-                                            {
-                                                Type type = Type.GetType(args[0]);
-                                                object converted = Convert.ChangeType(funcval, type, CultureInfo.InvariantCulture);
-                                                val = String.Format("{0:" + args[1] + "}", converted);
-                                            }
-                                            break;
-                                    }
+                                        }
+                                        break;
                                 }
                             }
                         }

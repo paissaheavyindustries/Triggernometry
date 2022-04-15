@@ -8,7 +8,6 @@ using System.Web.Script.Serialization;
 using WMPLib;
 using System.Threading;
 using System.Windows.Forms;
-using System.CodeDom.Compiler;
 using System.Net;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -370,7 +369,7 @@ namespace Triggernometry
             return str.ToUpper();
         }
 
-        internal bool ObsConnector(Context ctx)
+        internal bool ObsConnector(Context ctx, string endpoint, string password)
         {
             RealPlugin p = ctx.plug;
             lock (p._obs)
@@ -381,7 +380,7 @@ namespace Triggernometry
                 }
                 try
                 {
-                    p._obs.Connect();
+                    p._obs.Connect(endpoint, password);
                     AddToLog(ctx, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Action/obsconnectok", "OBS WebSocket connected successfully"));
                     return true;
                 }
@@ -1327,6 +1326,7 @@ namespace Triggernometry
                     case ActionTypeEnum.GenericJson:
                         {
                             string response = "";
+                            int responseCode = 0;
                             string endpoint = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _JsonEndpointExpression);
                             string payload = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _JsonPayloadExpression);
                             string headers = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _JsonHeaderExpression).Trim();
@@ -1354,28 +1354,30 @@ namespace Triggernometry
                                     DateTime dt = DateTime.Now.AddMinutes(0 - ctx.plug.cfg.CacheJsonExpiry);
                                     if (fi.LastWriteTime > dt)
                                     {
+                                        responseCode = (int)HttpStatusCode.OK;
                                         response = File.ReadAllText(fn);
                                         fromcache = true;
                                     }
                                 }
                                 if (fromcache == false)
                                 {
-                                    response = SendJson(ctx, _JsonOperationType, endpoint, payload, headerslist, false);
+                                    Tuple<int, string> resp = SendJson(ctx, _JsonOperationType, endpoint, payload, headerslist, false);
+                                    responseCode = resp.Item1;
+                                    response = resp.Item2;
                                     File.WriteAllText(fn, response);
                                 }
                             }
                             else
                             {
-                                response = SendJson(ctx, _JsonOperationType, endpoint, payload, headerslist, false);
+                                Tuple<int, string> resp = SendJson(ctx, _JsonOperationType, endpoint, payload, headerslist, false);
+                                responseCode = resp.Item1;
+                                response = resp.Item2;
                             }
+                            ctx.contextResponse = response;
+                            ctx.contextResponseCode = responseCode;
                             if (_JsonFiringExpression != null && _JsonFiringExpression.Trim().Length > 0)
                             {
-                                string firing = "";
-                                lock (ctx.contextResponse)
-                                {
-                                    ctx.contextResponse = response;
-                                    firing = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _JsonFiringExpression);
-                                }
+                                string firing = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _JsonFiringExpression);
                                 if (firing.Length > 0)
                                 {
                                     ctx.plug.LogLineQueuer(firing, "", LogEvent.SourceEnum.Log);
@@ -1798,9 +1800,11 @@ namespace Triggernometry
                     case ActionTypeEnum.ObsControl:
                         if (ctx.plug._obs != null)
                         {
+                            string endpoint = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSEndPoint);
+                            string password = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSPassword);
                             lock (ctx.plug._obs)
                             {
-                                if (ObsConnector(ctx) == true)
+                                if (ObsConnector(ctx, endpoint, password) == true)
                                 {
                                     try
                                     {
@@ -2536,6 +2540,8 @@ namespace Triggernometry
             a._ListVariableOp = _ListVariableOp;
             a._ListVariableTarget = _ListVariableTarget;
             a._OBSControlType = _OBSControlType;
+            a._OBSEndPoint = _OBSEndPoint;
+            a._OBSPassword = _OBSPassword;
             a._OBSSceneName = _OBSSceneName;
             a._OBSSourceName = _OBSSourceName;
             a._OBSJSONPayload = _OBSJSONPayload;
@@ -2599,7 +2605,7 @@ namespace Triggernometry
             a._LoopDelayExpression = _LoopDelayExpression;
         }
 
-        private string SendJson(Context ctx, Action.HTTPMethodEnum method, string url, string json, IEnumerable<string> headers, bool expectNoContent)
+        private Tuple<int, string> SendJson(Context ctx, Action.HTTPMethodEnum method, string url, string json, IEnumerable<string> headers, bool expectNoContent)
         {
             try
             {                
@@ -2634,13 +2640,13 @@ namespace Triggernometry
                 }
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
-                    return streamReader.ReadToEnd();
+                    return new Tuple<int, string>((int)httpResponse.StatusCode, streamReader.ReadToEnd());
                 }
             }
             catch (Exception ex)
             {
                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/jsonpostexception", "Couldn't send message due to exception: {0}", ex.Message));
-                return "";
+                return new Tuple<int, string>(-1, "");
             }
         }
 

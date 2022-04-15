@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using WebSocketSharp;
@@ -23,19 +25,64 @@ namespace Triggernometry
             }
         }
 
+        private class AuthChallenge
+        {
+
+            public bool authRequired { get; set; }
+            public string challenge { get; set; }
+            public string salt { get; set; }
+            
+            internal string password { get; set; }
+
+            internal string secret
+            {
+                get
+                {
+                    string secret_string = GenerateHash(password + salt);
+                    return GenerateHash(secret_string + challenge);
+                }
+            }
+
+            private string GenerateHash(string data)
+            {
+                using (SHA256 h = SHA256.Create())
+                {
+                    byte[] b = Encoding.ASCII.GetBytes(data);
+                    return Convert.ToBase64String(h.ComputeHash(b));
+                }
+            }
+
+        }
+
+        private class Response
+        {
+
+            public string error { get; set; }
+            public string status { get; set; }
+
+        }
+
         private WebSocket WSConnection;
         private object lockobj = new object();
+        private string resp;
+        private AutoResetEvent respReceived = null;
+
+        internal ObsController()
+        {
+            respReceived = new AutoResetEvent(false);
+        }
 
         public void Dispose()
         {
             Disconnect();
+            if (respReceived != null)
+            {
+                respReceived.Dispose();
+                respReceived = null;
+            }
         }
 
-        internal ObsController()
-        {            
-        }
-
-        internal void Connect()
+        internal void Connect(string endpoint, string password)
         {
             lock (lockobj)
             {
@@ -44,11 +91,43 @@ namespace Triggernometry
                     if (IsConnected == true)
                     {
                         return;
-                    }
-                    WSConnection = new WebSocket(@"ws://127.0.0.1:4444");
+                    }                    
+                    WSConnection = new WebSocket(endpoint);
                     WSConnection.WaitTime = new TimeSpan(0, 0, 2);
                     WSConnection.OnMessage += WSConnection_OnMessage;
                     WSConnection.Connect();
+                    respReceived.Reset();
+                    SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "GetAuthRequired", message_id = NewMessageID() }));
+                    if (respReceived.WaitOne(2000) == false)
+                    {
+                        throw new ArgumentException(I18n.Translate("internal/Action/obsconnecttimeout", "OBS WebSocket authentication timed out"));
+                    }
+                    AuthChallenge ac = (AuthChallenge)new JavaScriptSerializer().Deserialize(resp, typeof(AuthChallenge));
+                    if (ac.authRequired == true)
+                    {
+                        if (password != null && password.Length > 0)
+                        {
+                            if (ac.authRequired == true)
+                            {
+                                ac.password = password;
+                                respReceived.Reset();
+                                SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "Authenticate", auth = ac.secret, message_id = NewMessageID() }));
+                                if (respReceived.WaitOne(2000) == false)
+                                {
+                                    throw new ArgumentException(I18n.Translate("internal/Action/obsconnecttimeout", "OBS WebSocket authentication timed out"));
+                                }
+                                Response rp = (Response)new JavaScriptSerializer().Deserialize(resp, typeof(Response));
+                                if (rp.status.ToLower() != "ok")
+                                {
+                                    throw new ArgumentException(I18n.Translate("internal/Action/obsconnecterror", "OBS WebSocket connection failed: {0}", rp.error));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            throw new ArgumentException(I18n.Translate("internal/Action/obsauthpassword", "OBS WebSocket authentication required, you must provide a password"));
+                        }
+                    }
                 }
                 catch (Exception)
                 {
@@ -60,7 +139,8 @@ namespace Triggernometry
 
         private void WSConnection_OnMessage(object sender, MessageEventArgs e)
         {
-            //throw new NotImplementedException();
+            resp = e.Data;
+            respReceived.Set();
         }
 
         internal void SendRequest(string str)

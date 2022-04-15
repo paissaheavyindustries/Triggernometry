@@ -57,7 +57,10 @@ namespace Triggernometry.Forms
                 txtCacheFilename.Text = "";
                 txtContentSize.Text = "";
                 txtLastUpdated.Text = "";
+                txtLastChecked.Text = "";
                 txtLog.Text = "";
+                cbxUpdateAuto.Checked = false;
+                nudUpdateMinutes.Value = 5;
             }
             else
             {
@@ -72,8 +75,11 @@ namespace Triggernometry.Forms
                 cbxUpdatePolicy.SelectedIndex = (int)r.UpdatePolicy;
                 cbxAudioOverride.SelectedIndex = (int)r.AudioOutput;
                 chkKeepLocal.Checked = r.KeepLocalBackup;
+                cbxUpdateAuto.Checked = r.AutoUpdate;
+                nudUpdateMinutes.Value = r.UpdateInterval;
                 txtCacheFilename.Text = plug.GetRepositoryBackupFilename(r);
                 txtLastUpdated.Text = r.LastUpdated == DateTime.MinValue ? I18n.Translate("internal/RepositoryForm/unavailable", "Unavailable") : r.LastUpdated.ToString(CultureInfo.InvariantCulture);
+                txtLastChecked.Text = r.LastUpdatedTrig == DateTime.MinValue ? I18n.Translate("internal/RepositoryForm/unavailable", "Unavailable") : r.LastUpdatedTrig.ToString(CultureInfo.InvariantCulture);
                 txtContentSize.Text = r.ContentSize == 0 ? I18n.Translate("internal/RepositoryForm/unavailable", "Unavailable") : r.ContentSize.ToString(CultureInfo.InvariantCulture);
                 lock (r.UpdateLog)
                 {
@@ -95,6 +101,8 @@ namespace Triggernometry.Forms
             r.AudioOutput = (Repository.AudioOutputEnum)cbxAudioOverride.SelectedIndex;
             r.NewBehavior = (Repository.NewBehaviorEnum)cbxNewBehavior.SelectedIndex;
             r.UpdatePolicy = (Repository.UpdatePolicyEnum)cbxUpdatePolicy.SelectedIndex;
+            r.UpdateInterval = (int)nudUpdateMinutes.Value;
+            r.AutoUpdate = cbxUpdateAuto.Checked;
         }
 
         private void chkAllowProcess_CheckedChanged(object sender, EventArgs e)
@@ -160,6 +168,7 @@ namespace Triggernometry.Forms
         private void RepositoryForm_Shown(object sender, EventArgs e)
         {
             cancomplain = true;
+            cbxUpdateAuto_CheckedChanged(null, null);
         }
 
         private void txtCacheFilename_TextChanged(object sender, EventArgs e)
@@ -218,6 +227,12 @@ namespace Triggernometry.Forms
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
             ctxSelectionToClipboard.Enabled = (txtLog.SelectionLength > 0);
+        }
+
+        private void cbxUpdateAuto_CheckedChanged(object sender, EventArgs e)
+        {
+            nudUpdateMinutes.Enabled = cbxUpdateAuto.Checked;
+            lblUpdateInterval.Enabled = cbxUpdateAuto.Checked;
         }
 
     }

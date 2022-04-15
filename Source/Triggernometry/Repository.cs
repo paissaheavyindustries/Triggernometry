@@ -80,6 +80,13 @@ namespace Triggernometry
         [XmlAttribute]
         public DateTime LastUpdated { get; set; }
 
+        public DateTime LastUpdatedTrig { get; set; }
+
+        [XmlAttribute]
+        public bool AutoUpdate { get; set; }
+        [XmlAttribute]
+        public int UpdateInterval { get; set; }
+
         [XmlAttribute]
         public bool AllowScriptExecution { get; set; }
         [XmlAttribute]
@@ -116,6 +123,9 @@ namespace Triggernometry
             AllowWindowMessages = false;
             AllowDiskOperations = false;
             KeepLocalBackup = true;
+            AutoUpdate = false;
+            UpdateInterval = 5;
+            LastUpdatedTrig = DateTime.MinValue;
             TriggerStates = new List<RepositoryItem>();
             FolderStates = new List<RepositoryItem>();
         }

@@ -454,6 +454,7 @@ namespace Triggernometry
         internal CancellationTokenSource cts = null;
         internal object ctslock = new object();
         public Form mainform { get; set; }
+        internal DateTime lastConfigSave = DateTime.Now;
         internal int MinX = int.MaxValue, MinY = int.MaxValue, MaxX = int.MinValue, MaxY = int.MinValue;
         internal Dictionary<string, MutexInformation> mutexes = new Dictionary<string, MutexInformation>();
         internal Interpreter scripting;
@@ -474,6 +475,7 @@ namespace Triggernometry
         public SimpleVoidDelegate CornerShowHook { get; set; }
         public SimpleVoidDelegate CornerHideHook { get; set; }
         public TabPageDelegate TabLocateHook { get; set; }
+        public SimpleVoidDelegate CheckUpdateHook { get; set; }
 
         private bool _HideAllAuras = false;
         internal bool HideAllAuras
@@ -1181,7 +1183,7 @@ namespace Triggernometry
 
         internal void SourceChange(Trigger t, Trigger.TriggerSourceEnum oldSource, Trigger.TriggerSourceEnum newSource)
         {
-            if (t.Enabled == true && t.Parent.ParentsEnabled() == true)
+            if (t.Enabled == true && t.Parent != null && t.Parent.ParentsEnabled() == true)
             {
                 switch (oldSource)
                 {
@@ -2064,13 +2066,13 @@ namespace Triggernometry
                 AuraUpdateThread.Name = "AuraUpdateThread";
                 AuraUpdateThread.Start();
                 _obs = new ObsController();
-                exwhere = I18n.Translate("internal/Plugin/iniscripting", "setting up scripting");
+                exwhere = I18n.Translate("internal/Plugin/iniscripting", "setting up scripting - try changing the plugin load order in ACT");
                 scripting = new Interpreter(this);
                 pluginStatusText.Text = I18n.Translate("internal/Plugin/iniready", "Ready");
                 FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/inited", "Initialized"));
                 Task tx = new Task(() =>
                 {
-                    RepositoryUpdates();
+                    AllRepositoryUpdates(true);
                 });
                 tx.Start();
                 isInitialized = true;
@@ -2091,118 +2093,120 @@ namespace Triggernometry
             ui.ClearRepository(r);
         }
 
-        internal void RepositoryUpdate(Repository r, bool alone)
+        internal void RepositoryUpdate(Repository r, bool singleUpdate, bool isStartup)
         {
+            r.LastUpdatedTrig = DateTime.Now;
             ClearRepository(r);
             r.ClearLog();
             string trans;
             bool useBackup = false;
             try
             {
-                if (alone == true)
+                if (isStartup == true && r.UpdatePolicy != Repository.UpdatePolicyEnum.Startup)
+                {
+                    useBackup = true;
+                }
+                if (singleUpdate == true)
                 {
                     trans = I18n.Translate("internal/Plugin/repoupdate", "Updating repository {0} at {1}", r.Name, r.Address);
                     FilteredAddToLog(DebugLevelEnum.Verbose, trans);
                     r.AddToLog(trans);
                     ShowProgress(-1, trans);
                 }
-                if (r.UpdatePolicy == Repository.UpdatePolicyEnum.Startup)
+                System.Threading.Thread.Sleep(500);
+                DateTime remdate = DateTime.MinValue;
+                long remsize = 0, localsize = 0;
+                using (System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient())
                 {
-                    System.Threading.Thread.Sleep(500);
-                    DateTime remdate = DateTime.MinValue;
-                    long remsize = 0, localsize = 0;
-                    using (System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient())
+                    System.Net.Http.HttpRequestMessage request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Head, new Uri(r.Address));
+                    Task<System.Net.Http.HttpResponseMessage> tsk = httpClient.SendAsync(request);
+                    System.Net.Http.HttpResponseMessage response = tsk.Result;
+                    DateTimeOffset? lastmod = response.Content.Headers.LastModified;
+                    if (lastmod.HasValue == true)
                     {
-                        System.Net.Http.HttpRequestMessage request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Head, new Uri(r.Address));
-                        Task<System.Net.Http.HttpResponseMessage> tsk = httpClient.SendAsync(request);
-                        System.Net.Http.HttpResponseMessage response = tsk.Result;
-                        DateTimeOffset? lastmod = response.Content.Headers.LastModified;
-                        if (lastmod.HasValue == true)
+                        remdate = lastmod.Value.DateTime;
+                    }
+                    else
+                    {
+                        remdate = r.LastUpdated;
+                    }
+                    long? conlen = response.Content.Headers.ContentLength;
+                    if (conlen.HasValue == true)
+                    {
+                        if (conlen.Value > 0)
                         {
-                            remdate = lastmod.Value.DateTime;
-                        }
-                        else
-                        {
-                            remdate = r.LastUpdated;
-                        }
-                        long? conlen = response.Content.Headers.ContentLength;
-                        if (conlen.HasValue == true)
-                        {
-                            if (conlen.Value > 0)
-                            {
-                                remsize = conlen.Value;
-                            }
-                            else
-                            {
-                                remsize = 0;
-                            }
+                            remsize = conlen.Value;
                         }
                         else
                         {
                             remsize = 0;
                         }
                     }
-                    DateTime cacheExpiry = DateTime.Now.AddMinutes(0 - cfg.CacheRepoExpiry);
-                    bool cacheExpired = false;
-                    if (r.KeepLocalBackup == true)
-                    {
-                        string repofn = GetRepositoryBackupFilename(r);
-                        if (File.Exists(repofn) == true)
-                        {
-                            FileInfo fi = new FileInfo(repofn);
-                            localsize = fi.Length;
-                            cacheExpired = (fi.LastWriteTime < cacheExpiry);
-                        }
-                    }
-                    if (remdate == r.LastUpdated && remsize == localsize && localsize > 0 && r.KeepLocalBackup == true && cacheExpired == false)
-                    {
-                        trans = I18n.Translate("internal/Plugin/repousingbackup", "Repository {0} hasn't changed since {1}, and size {2} hasn't changed from {3}, using local backup", r.Name, remdate, remsize, localsize);
-                        FilteredAddToLog(DebugLevelEnum.Info, trans);
-                        r.AddToLog(trans);
-                        if (LoadLocalBackupForRepository(r) == true)
-                        {
-                            if (alone == true)
-                            {
-                                trans = I18n.Translate("internal/Plugin/repoupdatecomplete", "Repository update complete");
-                                r.AddToLog(trans);
-                                ShowProgress(100, trans);
-                                System.Threading.Thread.Sleep(2000);
-                                ShowProgress(0, "");
-                            }
-                            return;
-                        }
-                    }
                     else
                     {
-                        r.LastUpdated = remdate;
-                    }
-                    string data;
-                    using (WebClient wc = new WebClient())
-                    {
-                        wc.Headers["User-Agent"] = "Triggernometry Repository Updater";
-                        byte[] rawdata = wc.DownloadData(r.Address);
-                        data = Encoding.UTF8.GetString(rawdata);
-                    }
-                    TriggernometryExport exp = TriggernometryExport.Unserialize(data);
-                    if (exp != null)
-                    {
-                        r.ContentSize = data.Length;
-                        AddContentToRepository(exp, r);
-                        if (r.KeepLocalBackup == true)
-                        {
-                            SaveLocalBackupForRepository(r, data);
-                        }
-                    }
-                    else
-                    {
-                        trans = I18n.Translate("internal/Plugin/repoexportnull", "Data for repository {0} could not be unserialized, make sure you are running the latest version of Triggernometry", r.Name);
-                        FilteredAddToLog(DebugLevelEnum.Error, trans);
-                        r.AddToLog(trans);
+                        remsize = 0;
                     }
                 }
-                if (r.UpdatePolicy == Repository.UpdatePolicyEnum.Manual)
+                DateTime cacheExpiry = DateTime.Now.AddMinutes(0 - cfg.CacheRepoExpiry);
+                bool cacheExpired = false;
+                if (r.KeepLocalBackup == true)
                 {
-                    useBackup = true;
+                    string repofn = GetRepositoryBackupFilename(r);
+                    if (File.Exists(repofn) == true)
+                    {
+                        FileInfo fi = new FileInfo(repofn);
+                        localsize = fi.Length;
+                        cacheExpired = (fi.LastWriteTime < cacheExpiry);
+                    }
+                }
+                if (remdate == r.LastUpdated && remsize == localsize && localsize > 0 && r.KeepLocalBackup == true && cacheExpired == false)
+                {
+                    trans = I18n.Translate("internal/Plugin/repousingbackup", "Repository {0} hasn't changed since {1}, and size hasn't changed from {2}, using local backup", r.Name, remdate, localsize);
+                    FilteredAddToLog(DebugLevelEnum.Info, trans);
+                    r.AddToLog(trans);
+                    if (LoadLocalBackupForRepository(r) == true)
+                    {
+                        if (singleUpdate == true)
+                        {
+                            trans = I18n.Translate("internal/Plugin/repoupdatecomplete", "Repository update complete");
+                            r.AddToLog(trans);
+                            ShowProgress(100, trans);
+                            System.Threading.Thread.Sleep(2000);
+                            ShowProgress(0, "");
+                        }
+                        return;
+                    }
+                }
+                else
+                {
+                    trans = I18n.Translate("internal/Plugin/repofetching", "Repository {0} has changed since {1} (new timestamp {2}), or size has changed from {3} (new size {4}), fetching new version", r.Name, r.LastUpdated, remdate, localsize, remsize);
+                    FilteredAddToLog(DebugLevelEnum.Verbose, trans);
+                    r.LastUpdated = remdate;
+                }
+                string data;
+                trans = I18n.Translate("internal/Plugin/repodownloading", "Downloading repository {0} from {1}", r.Name, r.Address);
+                FilteredAddToLog(DebugLevelEnum.Info, trans);
+                using (WebClient wc = new WebClient())
+                {
+                    wc.Headers["User-Agent"] = "Triggernometry Repository Updater";
+                    byte[] rawdata = wc.DownloadData(r.Address);
+                    data = Encoding.UTF8.GetString(rawdata);
+                }
+                TriggernometryExport exp = TriggernometryExport.Unserialize(data);
+                if (exp != null)
+                {
+                    r.ContentSize = data.Length;
+                    AddContentToRepository(exp, r);
+                    if (r.KeepLocalBackup == true)
+                    {
+                        SaveLocalBackupForRepository(r, data);
+                    }
+                }
+                else
+                {
+                    trans = I18n.Translate("internal/Plugin/repoexportnull", "Data for repository {0} could not be unserialized, make sure you are running the latest version of Triggernometry", r.Name);
+                    FilteredAddToLog(DebugLevelEnum.Error, trans);
+                    r.AddToLog(trans);
                 }
             }
             catch (Exception ex)
@@ -2219,7 +2223,7 @@ namespace Triggernometry
                 r.AddToLog(trans);
                 LoadLocalBackupForRepository(r);
             }
-            if (alone == true)
+            if (singleUpdate == true)
             {
                 trans = I18n.Translate("internal/Plugin/repoupdatecomplete", "Repository update complete");
                 r.AddToLog(trans);
@@ -2229,18 +2233,23 @@ namespace Triggernometry
             }
         }
 
-        internal void RepositoryUpdates()
+        internal void AllRepositoryUpdates(bool isStartup)
         {
             List<Repository> lr = new List<Repository>();
             lr.AddRange(from ix in cfg.RepositoryRoot.Repositories where ix.Enabled == true select ix);
-            if (lr.Count == 0)
+            RepositoryUpdates(lr, isStartup);
+        }
+
+        internal void RepositoryUpdates(IEnumerable<Repository> lr, bool isStartup)
+        {
+            if (lr.Count() == 0)
             {
                 return;
             }
-            string trans = I18n.Translate("internal/Plugin/repoupdates", "Going to update {0} repositories", lr.Count);
+            string trans = I18n.Translate("internal/Plugin/repoupdates", "Going to update {0} repositories", lr.Count());
             FilteredAddToLog(DebugLevelEnum.Info, trans);
             ShowProgress(-1, trans);
-            int done = -1, doing = lr.Count;
+            int done = -1, doing = lr.Count();
             foreach (Repository r in lr)
             {
                 if (ExitEvent.WaitOne(0) == true)
@@ -2252,7 +2261,7 @@ namespace Triggernometry
                 FilteredAddToLog(DebugLevelEnum.Verbose, trans);
                 r.AddToLog(trans);
                 ShowProgress((int)Math.Floor(100.0 * (float)done / (float)doing), trans);
-                RepositoryUpdate(r, false);
+                RepositoryUpdate(r, false, isStartup);
             }
             trans = I18n.Translate("internal/Plugin/repoupdatecomplete", "Repository update complete");
             ShowProgress(100, trans);
@@ -2436,6 +2445,11 @@ namespace Triggernometry
             }
         }
 
+        public string Translate(string key, string text, params object[] args)
+        {
+            return I18n.Translate(key, text, args);
+        }
+
         internal string GetRepositoryBackupFilename(Repository r)
         {
             string fn = Path.Combine(path, "TriggernometryRepoBackups");
@@ -2507,6 +2521,24 @@ namespace Triggernometry
         }
 
         internal void CheckForUpdates()
+        {
+            switch (cfg.UpdateCheckMethod)
+            {
+                case Configuration.UpdateCheckMethodEnum.ACT:
+                    CheckForUpdatesACT();
+                    break;
+                case Configuration.UpdateCheckMethodEnum.Builtin:
+                    CheckForUpdatesBuiltin();
+                    break;
+            }
+        }
+
+        internal void CheckForUpdatesACT()
+        {
+            CheckUpdateHook();
+        }
+
+        internal void CheckForUpdatesBuiltin()
         {
             Task tx = new Task(() =>
             {
@@ -2615,6 +2647,7 @@ namespace Triggernometry
 
         public void SaveCurrentConfig()
         {
+            lastConfigSave = DateTime.Now;
             SaveConfigToFile(cfg, Path.Combine(path, pluginName + ".config.xml"), true);
         }
 

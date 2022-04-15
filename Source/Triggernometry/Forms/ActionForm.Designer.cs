@@ -238,6 +238,10 @@
             this.cbxLvarOperation = new System.Windows.Forms.ComboBox();
             this.tabObsControl = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel18 = new System.Windows.Forms.TableLayoutPanel();
+            this.expObsPassword = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.lblObsPassword = new System.Windows.Forms.Label();
+            this.expObsEndpoint = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.lblObsEndpoint = new System.Windows.Forms.Label();
             this.lblObsJSONPayload = new System.Windows.Forms.Label();
             this.expObsJSONPayload = new Triggernometry.CustomControls.ExpressionTextBox();
             this.expObsSourceName = new Triggernometry.CustomControls.ExpressionTextBox();
@@ -3364,36 +3368,89 @@
             this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel18.Controls.Add(this.lblObsJSONPayload, 0, 3);
-            this.tableLayoutPanel18.Controls.Add(this.expObsJSONPayload, 1, 3);
-            this.tableLayoutPanel18.Controls.Add(this.expObsSourceName, 1, 2);
-            this.tableLayoutPanel18.Controls.Add(this.lblObsSourceName, 0, 2);
-            this.tableLayoutPanel18.Controls.Add(this.cbxObsOpType, 1, 0);
-            this.tableLayoutPanel18.Controls.Add(this.lblObsOpType, 0, 0);
-            this.tableLayoutPanel18.Controls.Add(this.btnObsWebsocketLink, 2, 5);
-            this.tableLayoutPanel18.Controls.Add(this.lblObsSceneName, 0, 1);
-            this.tableLayoutPanel18.Controls.Add(this.expObsSceneName, 1, 1);
-            this.tableLayoutPanel18.Controls.Add(this.lblObsWebsocketInfo, 1, 4);
-            this.tableLayoutPanel18.Controls.Add(this.txtObsWebsocketLink, 1, 5);
+            this.tableLayoutPanel18.Controls.Add(this.expObsPassword, 1, 1);
+            this.tableLayoutPanel18.Controls.Add(this.lblObsPassword, 0, 1);
+            this.tableLayoutPanel18.Controls.Add(this.expObsEndpoint, 1, 0);
+            this.tableLayoutPanel18.Controls.Add(this.lblObsEndpoint, 0, 0);
+            this.tableLayoutPanel18.Controls.Add(this.lblObsJSONPayload, 0, 5);
+            this.tableLayoutPanel18.Controls.Add(this.expObsJSONPayload, 1, 5);
+            this.tableLayoutPanel18.Controls.Add(this.expObsSourceName, 1, 4);
+            this.tableLayoutPanel18.Controls.Add(this.lblObsSourceName, 0, 4);
+            this.tableLayoutPanel18.Controls.Add(this.cbxObsOpType, 1, 2);
+            this.tableLayoutPanel18.Controls.Add(this.lblObsOpType, 0, 2);
+            this.tableLayoutPanel18.Controls.Add(this.btnObsWebsocketLink, 2, 7);
+            this.tableLayoutPanel18.Controls.Add(this.lblObsSceneName, 0, 3);
+            this.tableLayoutPanel18.Controls.Add(this.expObsSceneName, 1, 3);
+            this.tableLayoutPanel18.Controls.Add(this.lblObsWebsocketInfo, 1, 6);
+            this.tableLayoutPanel18.Controls.Add(this.txtObsWebsocketLink, 1, 7);
             this.tableLayoutPanel18.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel18.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel18.Name = "tableLayoutPanel18";
-            this.tableLayoutPanel18.RowCount = 6;
+            this.tableLayoutPanel18.RowCount = 8;
+            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel18.Size = new System.Drawing.Size(642, 171);
+            this.tableLayoutPanel18.Size = new System.Drawing.Size(642, 223);
             this.tableLayoutPanel18.TabIndex = 3;
+            // 
+            // expObsPassword
+            // 
+            this.expObsPassword.AutoSize = true;
+            this.tableLayoutPanel18.SetColumnSpan(this.expObsPassword, 2);
+            this.expObsPassword.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expObsPassword.Expression = "";
+            this.expObsPassword.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            this.expObsPassword.Location = new System.Drawing.Point(85, 29);
+            this.expObsPassword.Name = "expObsPassword";
+            this.expObsPassword.ReadOnly = false;
+            this.expObsPassword.Size = new System.Drawing.Size(554, 20);
+            this.expObsPassword.TabIndex = 30;
+            // 
+            // lblObsPassword
+            // 
+            this.lblObsPassword.AutoSize = true;
+            this.lblObsPassword.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblObsPassword.Location = new System.Drawing.Point(3, 26);
+            this.lblObsPassword.Name = "lblObsPassword";
+            this.lblObsPassword.Size = new System.Drawing.Size(76, 26);
+            this.lblObsPassword.TabIndex = 29;
+            this.lblObsPassword.Text = "Password";
+            this.lblObsPassword.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // expObsEndpoint
+            // 
+            this.expObsEndpoint.AutoSize = true;
+            this.tableLayoutPanel18.SetColumnSpan(this.expObsEndpoint, 2);
+            this.expObsEndpoint.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expObsEndpoint.Expression = "";
+            this.expObsEndpoint.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            this.expObsEndpoint.Location = new System.Drawing.Point(85, 3);
+            this.expObsEndpoint.Name = "expObsEndpoint";
+            this.expObsEndpoint.ReadOnly = false;
+            this.expObsEndpoint.Size = new System.Drawing.Size(554, 20);
+            this.expObsEndpoint.TabIndex = 28;
+            // 
+            // lblObsEndpoint
+            // 
+            this.lblObsEndpoint.AutoSize = true;
+            this.lblObsEndpoint.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblObsEndpoint.Location = new System.Drawing.Point(3, 0);
+            this.lblObsEndpoint.Name = "lblObsEndpoint";
+            this.lblObsEndpoint.Size = new System.Drawing.Size(76, 26);
+            this.lblObsEndpoint.TabIndex = 27;
+            this.lblObsEndpoint.Text = "Endpoint URL";
+            this.lblObsEndpoint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblObsJSONPayload
             // 
             this.lblObsJSONPayload.AutoSize = true;
             this.lblObsJSONPayload.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblObsJSONPayload.Location = new System.Drawing.Point(3, 79);
+            this.lblObsJSONPayload.Location = new System.Drawing.Point(3, 131);
             this.lblObsJSONPayload.Name = "lblObsJSONPayload";
             this.lblObsJSONPayload.Size = new System.Drawing.Size(76, 26);
             this.lblObsJSONPayload.TabIndex = 26;
@@ -3407,7 +3464,7 @@
             this.expObsJSONPayload.Dock = System.Windows.Forms.DockStyle.Top;
             this.expObsJSONPayload.Expression = "";
             this.expObsJSONPayload.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expObsJSONPayload.Location = new System.Drawing.Point(85, 82);
+            this.expObsJSONPayload.Location = new System.Drawing.Point(85, 134);
             this.expObsJSONPayload.Name = "expObsJSONPayload";
             this.expObsJSONPayload.ReadOnly = false;
             this.expObsJSONPayload.Size = new System.Drawing.Size(554, 20);
@@ -3421,7 +3478,7 @@
             this.expObsSourceName.Dock = System.Windows.Forms.DockStyle.Top;
             this.expObsSourceName.Expression = "";
             this.expObsSourceName.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expObsSourceName.Location = new System.Drawing.Point(85, 56);
+            this.expObsSourceName.Location = new System.Drawing.Point(85, 108);
             this.expObsSourceName.Name = "expObsSourceName";
             this.expObsSourceName.ReadOnly = false;
             this.expObsSourceName.Size = new System.Drawing.Size(554, 20);
@@ -3432,7 +3489,7 @@
             // 
             this.lblObsSourceName.AutoSize = true;
             this.lblObsSourceName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblObsSourceName.Location = new System.Drawing.Point(3, 53);
+            this.lblObsSourceName.Location = new System.Drawing.Point(3, 105);
             this.lblObsSourceName.Name = "lblObsSourceName";
             this.lblObsSourceName.Size = new System.Drawing.Size(76, 26);
             this.lblObsSourceName.TabIndex = 23;
@@ -3460,7 +3517,7 @@
             "Show source",
             "Hide source",
             "Custom JSON payload"});
-            this.cbxObsOpType.Location = new System.Drawing.Point(85, 3);
+            this.cbxObsOpType.Location = new System.Drawing.Point(85, 55);
             this.cbxObsOpType.Name = "cbxObsOpType";
             this.cbxObsOpType.Size = new System.Drawing.Size(554, 21);
             this.cbxObsOpType.TabIndex = 22;
@@ -3470,7 +3527,7 @@
             // 
             this.lblObsOpType.AutoSize = true;
             this.lblObsOpType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblObsOpType.Location = new System.Drawing.Point(3, 0);
+            this.lblObsOpType.Location = new System.Drawing.Point(3, 52);
             this.lblObsOpType.Name = "lblObsOpType";
             this.lblObsOpType.Size = new System.Drawing.Size(76, 27);
             this.lblObsOpType.TabIndex = 18;
@@ -3481,7 +3538,7 @@
             // 
             this.btnObsWebsocketLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnObsWebsocketLink.Image = ((System.Drawing.Image)(resources.GetObject("btnObsWebsocketLink.Image")));
-            this.btnObsWebsocketLink.Location = new System.Drawing.Point(602, 151);
+            this.btnObsWebsocketLink.Location = new System.Drawing.Point(602, 203);
             this.btnObsWebsocketLink.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnObsWebsocketLink.Name = "btnObsWebsocketLink";
             this.btnObsWebsocketLink.Size = new System.Drawing.Size(37, 20);
@@ -3493,7 +3550,7 @@
             // 
             this.lblObsSceneName.AutoSize = true;
             this.lblObsSceneName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblObsSceneName.Location = new System.Drawing.Point(3, 27);
+            this.lblObsSceneName.Location = new System.Drawing.Point(3, 79);
             this.lblObsSceneName.Name = "lblObsSceneName";
             this.lblObsSceneName.Size = new System.Drawing.Size(76, 26);
             this.lblObsSceneName.TabIndex = 7;
@@ -3507,7 +3564,7 @@
             this.expObsSceneName.Dock = System.Windows.Forms.DockStyle.Top;
             this.expObsSceneName.Expression = "";
             this.expObsSceneName.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expObsSceneName.Location = new System.Drawing.Point(85, 30);
+            this.expObsSceneName.Location = new System.Drawing.Point(85, 82);
             this.expObsSceneName.Name = "expObsSceneName";
             this.expObsSceneName.ReadOnly = false;
             this.expObsSceneName.Size = new System.Drawing.Size(554, 20);
@@ -3518,7 +3575,7 @@
             // 
             this.lblObsWebsocketInfo.AutoSize = true;
             this.tableLayoutPanel18.SetColumnSpan(this.lblObsWebsocketInfo, 2);
-            this.lblObsWebsocketInfo.Location = new System.Drawing.Point(85, 105);
+            this.lblObsWebsocketInfo.Location = new System.Drawing.Point(85, 157);
             this.lblObsWebsocketInfo.Name = "lblObsWebsocketInfo";
             this.lblObsWebsocketInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
             this.lblObsWebsocketInfo.Size = new System.Drawing.Size(544, 46);
@@ -3529,7 +3586,7 @@
             // txtObsWebsocketLink
             // 
             this.txtObsWebsocketLink.Dock = System.Windows.Forms.DockStyle.Top;
-            this.txtObsWebsocketLink.Location = new System.Drawing.Point(85, 154);
+            this.txtObsWebsocketLink.Location = new System.Drawing.Point(85, 206);
             this.txtObsWebsocketLink.Name = "txtObsWebsocketLink";
             this.txtObsWebsocketLink.ReadOnly = true;
             this.txtObsWebsocketLink.Size = new System.Drawing.Size(514, 20);
@@ -4828,9 +4885,9 @@
             // 
             this.stsMouseHelp.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tlsMouseLocation});
-            this.stsMouseHelp.Location = new System.Drawing.Point(3, 274);
+            this.stsMouseHelp.Location = new System.Drawing.Point(3, 324);
             this.stsMouseHelp.Name = "stsMouseHelp";
-            this.stsMouseHelp.Size = new System.Drawing.Size(550, 22);
+            this.stsMouseHelp.Size = new System.Drawing.Size(650, 22);
             this.stsMouseHelp.SizingGrip = false;
             this.stsMouseHelp.TabIndex = 1;
             this.stsMouseHelp.Text = "statusStrip1";
@@ -5642,5 +5699,9 @@
         private CustomControls.ActionViewer actionViewer1;
         private System.Windows.Forms.Button btnScriptExternalEditor;
         private System.Windows.Forms.Label lblScriptExtEditor;
+        private System.Windows.Forms.Label lblObsEndpoint;
+        private CustomControls.ExpressionTextBox expObsEndpoint;
+        private CustomControls.ExpressionTextBox expObsPassword;
+        private System.Windows.Forms.Label lblObsPassword;
     }
 }

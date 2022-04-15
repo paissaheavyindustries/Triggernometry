@@ -808,6 +808,37 @@ namespace Triggernometry
             AddToLog((RealPlugin)o, RealPlugin.DebugLevelEnum.Verbose, msg);
         }
 
+        internal void CopySettingsTo(Trigger t)
+        {
+            t._Source = _Source;
+            t._Sequential = _Sequential;
+            t.Enabled = Enabled;
+            t.Actions.Clear();
+            var ix = from tx in Actions
+                     orderby tx.OrderNumber ascending
+                     select tx;
+            foreach (Action a in ix)
+            {
+                Action b = new Action();
+                a.CopySettingsTo(b);
+                t.Actions.Add(b);
+            }
+            t.Condition = (ConditionGroup)Condition.Duplicate();
+            t._IsReadme = _IsReadme;
+            t.Name = Name;
+            t.Id = Id;
+            t._RegularExpression = _RegularExpression;
+            t._DebugLevel = _DebugLevel;
+            t._PrevActions = _PrevActions;
+            t._PrevActionsRefire = _PrevActionsRefire;
+            t._Scheduling = _Scheduling;
+            t._PeriodRefire = _PeriodRefire;
+            t._RefirePeriodExpression = _RefirePeriodExpression;
+            t._MutexToCapture = _MutexToCapture;
+            t._EditAutofire = _EditAutofire;
+            t._Description = _Description;
+        }
+
     }
 
 }

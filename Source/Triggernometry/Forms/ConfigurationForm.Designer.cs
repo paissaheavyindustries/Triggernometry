@@ -69,6 +69,8 @@
             this.panel11 = new System.Windows.Forms.Panel();
             this.grpStartup = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
+            this.cbxUpdateMethod = new System.Windows.Forms.ComboBox();
+            this.lblUpdateMethod = new System.Windows.Forms.Label();
             this.chkWarnAdmin = new System.Windows.Forms.CheckBox();
             this.chkUpdates = new System.Windows.Forms.CheckBox();
             this.chkWelcome = new System.Windows.Forms.CheckBox();
@@ -189,13 +191,19 @@
             this.panel12 = new System.Windows.Forms.Panel();
             this.grpUserInterface = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+            this.chkClipboard = new System.Windows.Forms.CheckBox();
+            this.lblAutosaveInterval = new System.Windows.Forms.Label();
+            this.cbxAutosaveConfig = new System.Windows.Forms.CheckBox();
             this.cbxDevMode = new System.Windows.Forms.CheckBox();
             this.cbxTestLive = new System.Windows.Forms.CheckBox();
+            this.nudAutosaveMinutes = new System.Windows.Forms.NumericUpDown();
             this.panel6 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.grpClipboard = new System.Windows.Forms.GroupBox();
+            this.grpDefaultSettings = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel17 = new System.Windows.Forms.TableLayoutPanel();
+            this.cbxTriggerTemplate = new System.Windows.Forms.CheckBox();
+            this.btnTriggerTemplate = new System.Windows.Forms.Button();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-            this.chkClipboard = new System.Windows.Forms.CheckBox();
             this.panel4.SuspendLayout();
             this.grpVolAdjustment.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -256,8 +264,9 @@
             this.tableLayoutPanel11.SuspendLayout();
             this.grpUserInterface.SuspendLayout();
             this.tableLayoutPanel10.SuspendLayout();
-            this.grpClipboard.SuspendLayout();
-            this.tableLayoutPanel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAutosaveMinutes)).BeginInit();
+            this.grpDefaultSettings.SuspendLayout();
+            this.tableLayoutPanel17.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel3
@@ -430,8 +439,8 @@
             // 
             this.tableLayoutPanel3.AutoSize = true;
             this.tableLayoutPanel3.ColumnCount = 2;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.Controls.Add(this.chkLogVariableExpansions, 0, 3);
             this.tableLayoutPanel3.Controls.Add(this.chkLogNormalEvents, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.lblLoggingLevel, 0, 0);
@@ -480,7 +489,7 @@
             this.lblLoggingLevel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblLoggingLevel.Location = new System.Drawing.Point(3, 0);
             this.lblLoggingLevel.Name = "lblLoggingLevel";
-            this.lblLoggingLevel.Size = new System.Drawing.Size(106, 27);
+            this.lblLoggingLevel.Size = new System.Drawing.Size(255, 27);
             this.lblLoggingLevel.TabIndex = 24;
             this.lblLoggingLevel.Text = "Logging filtering level";
             this.lblLoggingLevel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -496,9 +505,9 @@
             "Errors and warnings",
             "All informational messages",
             "Verbose debug"});
-            this.cbxLoggingLevel.Location = new System.Drawing.Point(115, 3);
+            this.cbxLoggingLevel.Location = new System.Drawing.Point(264, 3);
             this.cbxLoggingLevel.Name = "cbxLoggingLevel";
-            this.cbxLoggingLevel.Size = new System.Drawing.Size(404, 21);
+            this.cbxLoggingLevel.Size = new System.Drawing.Size(255, 21);
             this.cbxLoggingLevel.TabIndex = 25;
             // 
             // trvTrigger
@@ -510,7 +519,7 @@
             this.trvTrigger.MinimumSize = new System.Drawing.Size(4, 50);
             this.trvTrigger.Name = "trvTrigger";
             this.trvTrigger.ShowNodeToolTips = true;
-            this.trvTrigger.Size = new System.Drawing.Size(522, 170);
+            this.trvTrigger.Size = new System.Drawing.Size(522, 143);
             this.trvTrigger.TabIndex = 23;
             this.trvTrigger.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvTrigger_BeforeCollapse);
             this.trvTrigger.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvTrigger_BeforeExpand);
@@ -600,7 +609,7 @@
             this.grpFutureProofing.AutoSize = true;
             this.grpFutureProofing.Controls.Add(this.tableLayoutPanel4);
             this.grpFutureProofing.Dock = System.Windows.Forms.DockStyle.Top;
-            this.grpFutureProofing.Location = new System.Drawing.Point(7, 73);
+            this.grpFutureProofing.Location = new System.Drawing.Point(7, 79);
             this.grpFutureProofing.Name = "grpFutureProofing";
             this.grpFutureProofing.Padding = new System.Windows.Forms.Padding(10);
             this.grpFutureProofing.Size = new System.Drawing.Size(542, 59);
@@ -683,10 +692,10 @@
             this.grpStartupTrigger.Controls.Add(this.trvTrigger);
             this.grpStartupTrigger.Controls.Add(this.tlsDirectPaste);
             this.grpStartupTrigger.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpStartupTrigger.Location = new System.Drawing.Point(7, 235);
+            this.grpStartupTrigger.Location = new System.Drawing.Point(7, 262);
             this.grpStartupTrigger.Name = "grpStartupTrigger";
             this.grpStartupTrigger.Padding = new System.Windows.Forms.Padding(10);
-            this.grpStartupTrigger.Size = new System.Drawing.Size(542, 228);
+            this.grpStartupTrigger.Size = new System.Drawing.Size(542, 201);
             this.grpStartupTrigger.TabIndex = 27;
             this.grpStartupTrigger.TabStop = false;
             this.grpStartupTrigger.Text = " Startup trigger/folder ";
@@ -725,7 +734,7 @@
             // panel11
             // 
             this.panel11.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel11.Location = new System.Drawing.Point(7, 225);
+            this.panel11.Location = new System.Drawing.Point(7, 252);
             this.panel11.Name = "panel11";
             this.panel11.Size = new System.Drawing.Size(542, 10);
             this.panel11.TabIndex = 28;
@@ -738,7 +747,7 @@
             this.grpStartup.Location = new System.Drawing.Point(7, 123);
             this.grpStartup.Name = "grpStartup";
             this.grpStartup.Padding = new System.Windows.Forms.Padding(10);
-            this.grpStartup.Size = new System.Drawing.Size(542, 102);
+            this.grpStartup.Size = new System.Drawing.Size(542, 129);
             this.grpStartup.TabIndex = 25;
             this.grpStartup.TabStop = false;
             this.grpStartup.Text = " Startup ";
@@ -746,27 +755,57 @@
             // tableLayoutPanel7
             // 
             this.tableLayoutPanel7.AutoSize = true;
-            this.tableLayoutPanel7.ColumnCount = 1;
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel7.Controls.Add(this.chkWarnAdmin, 0, 2);
-            this.tableLayoutPanel7.Controls.Add(this.chkUpdates, 0, 1);
+            this.tableLayoutPanel7.ColumnCount = 2;
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel7.Controls.Add(this.cbxUpdateMethod, 1, 3);
+            this.tableLayoutPanel7.Controls.Add(this.lblUpdateMethod, 0, 3);
+            this.tableLayoutPanel7.Controls.Add(this.chkWarnAdmin, 0, 1);
+            this.tableLayoutPanel7.Controls.Add(this.chkUpdates, 0, 2);
             this.tableLayoutPanel7.Controls.Add(this.chkWelcome, 0, 0);
             this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel7.Location = new System.Drawing.Point(10, 23);
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
-            this.tableLayoutPanel7.RowCount = 3;
+            this.tableLayoutPanel7.RowCount = 4;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(522, 69);
+            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(522, 96);
             this.tableLayoutPanel7.TabIndex = 1;
+            // 
+            // cbxUpdateMethod
+            // 
+            this.cbxUpdateMethod.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxUpdateMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxUpdateMethod.FormattingEnabled = true;
+            this.cbxUpdateMethod.Items.AddRange(new object[] {
+            "Built-in (legacy)",
+            "ACT"});
+            this.cbxUpdateMethod.Location = new System.Drawing.Point(264, 72);
+            this.cbxUpdateMethod.Name = "cbxUpdateMethod";
+            this.cbxUpdateMethod.Size = new System.Drawing.Size(255, 21);
+            this.cbxUpdateMethod.TabIndex = 26;
+            // 
+            // lblUpdateMethod
+            // 
+            this.lblUpdateMethod.AutoEllipsis = true;
+            this.lblUpdateMethod.AutoSize = true;
+            this.lblUpdateMethod.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblUpdateMethod.Location = new System.Drawing.Point(3, 69);
+            this.lblUpdateMethod.Name = "lblUpdateMethod";
+            this.lblUpdateMethod.Size = new System.Drawing.Size(255, 27);
+            this.lblUpdateMethod.TabIndex = 25;
+            this.lblUpdateMethod.Text = "Plugin update check method";
+            this.lblUpdateMethod.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // chkWarnAdmin
             // 
             this.chkWarnAdmin.AutoSize = true;
             this.chkWarnAdmin.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel7.SetColumnSpan(this.chkWarnAdmin, 2);
             this.chkWarnAdmin.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chkWarnAdmin.Location = new System.Drawing.Point(3, 49);
+            this.chkWarnAdmin.Location = new System.Drawing.Point(3, 26);
             this.chkWarnAdmin.Name = "chkWarnAdmin";
             this.chkWarnAdmin.Size = new System.Drawing.Size(516, 17);
             this.chkWarnAdmin.TabIndex = 8;
@@ -777,8 +816,9 @@
             // 
             this.chkUpdates.AutoSize = true;
             this.chkUpdates.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel7.SetColumnSpan(this.chkUpdates, 2);
             this.chkUpdates.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chkUpdates.Location = new System.Drawing.Point(3, 26);
+            this.chkUpdates.Location = new System.Drawing.Point(3, 49);
             this.chkUpdates.Name = "chkUpdates";
             this.chkUpdates.Size = new System.Drawing.Size(516, 17);
             this.chkUpdates.TabIndex = 7;
@@ -789,6 +829,7 @@
             // 
             this.chkWelcome.AutoSize = true;
             this.chkWelcome.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel7.SetColumnSpan(this.chkWelcome, 2);
             this.chkWelcome.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkWelcome.Location = new System.Drawing.Point(3, 3);
             this.chkWelcome.Name = "chkWelcome";
@@ -2247,7 +2288,7 @@
             this.tabMisc.Controls.Add(this.panel6);
             this.tabMisc.Controls.Add(this.grpFutureProofing);
             this.tabMisc.Controls.Add(this.panel5);
-            this.tabMisc.Controls.Add(this.grpClipboard);
+            this.tabMisc.Controls.Add(this.grpDefaultSettings);
             this.tabMisc.Location = new System.Drawing.Point(4, 22);
             this.tabMisc.Name = "tabMisc";
             this.tabMisc.Padding = new System.Windows.Forms.Padding(7);
@@ -2261,7 +2302,7 @@
             this.groupBox1.AutoSize = true;
             this.groupBox1.Controls.Add(this.tableLayoutPanel11);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox1.Location = new System.Drawing.Point(7, 231);
+            this.groupBox1.Location = new System.Drawing.Point(7, 309);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
             this.groupBox1.Size = new System.Drawing.Size(542, 82);
@@ -2323,7 +2364,7 @@
             // panel12
             // 
             this.panel12.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel12.Location = new System.Drawing.Point(7, 221);
+            this.panel12.Location = new System.Drawing.Point(7, 299);
             this.panel12.Name = "panel12";
             this.panel12.Size = new System.Drawing.Size(542, 10);
             this.panel12.TabIndex = 26;
@@ -2333,10 +2374,10 @@
             this.grpUserInterface.AutoSize = true;
             this.grpUserInterface.Controls.Add(this.tableLayoutPanel10);
             this.grpUserInterface.Dock = System.Windows.Forms.DockStyle.Top;
-            this.grpUserInterface.Location = new System.Drawing.Point(7, 142);
+            this.grpUserInterface.Location = new System.Drawing.Point(7, 148);
             this.grpUserInterface.Name = "grpUserInterface";
             this.grpUserInterface.Padding = new System.Windows.Forms.Padding(10);
-            this.grpUserInterface.Size = new System.Drawing.Size(542, 79);
+            this.grpUserInterface.Size = new System.Drawing.Size(542, 151);
             this.grpUserInterface.TabIndex = 25;
             this.grpUserInterface.TabStop = false;
             this.grpUserInterface.Text = " User interface ";
@@ -2344,25 +2385,73 @@
             // tableLayoutPanel10
             // 
             this.tableLayoutPanel10.AutoSize = true;
-            this.tableLayoutPanel10.ColumnCount = 1;
+            this.tableLayoutPanel10.ColumnCount = 2;
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel10.Controls.Add(this.cbxDevMode, 0, 1);
-            this.tableLayoutPanel10.Controls.Add(this.cbxTestLive, 0, 0);
+            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel10.Controls.Add(this.chkClipboard, 0, 0);
+            this.tableLayoutPanel10.Controls.Add(this.lblAutosaveInterval, 0, 4);
+            this.tableLayoutPanel10.Controls.Add(this.cbxAutosaveConfig, 0, 3);
+            this.tableLayoutPanel10.Controls.Add(this.cbxDevMode, 0, 2);
+            this.tableLayoutPanel10.Controls.Add(this.cbxTestLive, 0, 1);
+            this.tableLayoutPanel10.Controls.Add(this.nudAutosaveMinutes, 1, 4);
             this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel10.Location = new System.Drawing.Point(10, 23);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
-            this.tableLayoutPanel10.RowCount = 2;
+            this.tableLayoutPanel10.RowCount = 5;
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(522, 46);
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(522, 118);
             this.tableLayoutPanel10.TabIndex = 2;
+            // 
+            // chkClipboard
+            // 
+            this.chkClipboard.AutoSize = true;
+            this.chkClipboard.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel10.SetColumnSpan(this.chkClipboard, 2);
+            this.chkClipboard.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkClipboard.Location = new System.Drawing.Point(3, 3);
+            this.chkClipboard.Name = "chkClipboard";
+            this.chkClipboard.Size = new System.Drawing.Size(516, 17);
+            this.chkClipboard.TabIndex = 6;
+            this.chkClipboard.Text = "Use operating system clipboard";
+            this.chkClipboard.UseVisualStyleBackColor = true;
+            // 
+            // lblAutosaveInterval
+            // 
+            this.lblAutosaveInterval.AutoEllipsis = true;
+            this.lblAutosaveInterval.AutoSize = true;
+            this.lblAutosaveInterval.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblAutosaveInterval.Location = new System.Drawing.Point(3, 92);
+            this.lblAutosaveInterval.Name = "lblAutosaveInterval";
+            this.lblAutosaveInterval.Size = new System.Drawing.Size(416, 26);
+            this.lblAutosaveInterval.TabIndex = 9;
+            this.lblAutosaveInterval.Text = "Autosaving time interval in minutes";
+            this.lblAutosaveInterval.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbxAutosaveConfig
+            // 
+            this.cbxAutosaveConfig.AutoSize = true;
+            this.cbxAutosaveConfig.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel10.SetColumnSpan(this.cbxAutosaveConfig, 2);
+            this.cbxAutosaveConfig.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbxAutosaveConfig.Location = new System.Drawing.Point(3, 72);
+            this.cbxAutosaveConfig.Name = "cbxAutosaveConfig";
+            this.cbxAutosaveConfig.Size = new System.Drawing.Size(516, 17);
+            this.cbxAutosaveConfig.TabIndex = 8;
+            this.cbxAutosaveConfig.Text = "Enable configuration auto-save";
+            this.cbxAutosaveConfig.UseVisualStyleBackColor = true;
+            this.cbxAutosaveConfig.CheckedChanged += new System.EventHandler(this.cbxAutosaveConfig_CheckedChanged);
             // 
             // cbxDevMode
             // 
             this.cbxDevMode.AutoSize = true;
             this.cbxDevMode.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel10.SetColumnSpan(this.cbxDevMode, 2);
             this.cbxDevMode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxDevMode.Location = new System.Drawing.Point(3, 26);
+            this.cbxDevMode.Location = new System.Drawing.Point(3, 49);
             this.cbxDevMode.Name = "cbxDevMode";
             this.cbxDevMode.Size = new System.Drawing.Size(516, 17);
             this.cbxDevMode.TabIndex = 7;
@@ -2373,18 +2462,42 @@
             // 
             this.cbxTestLive.AutoSize = true;
             this.cbxTestLive.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel10.SetColumnSpan(this.cbxTestLive, 2);
             this.cbxTestLive.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxTestLive.Location = new System.Drawing.Point(3, 3);
+            this.cbxTestLive.Location = new System.Drawing.Point(3, 26);
             this.cbxTestLive.Name = "cbxTestLive";
             this.cbxTestLive.Size = new System.Drawing.Size(516, 17);
             this.cbxTestLive.TabIndex = 6;
             this.cbxTestLive.Text = "Set testing with live values as the default action test method";
             this.cbxTestLive.UseVisualStyleBackColor = true;
             // 
+            // nudAutosaveMinutes
+            // 
+            this.nudAutosaveMinutes.Location = new System.Drawing.Point(425, 95);
+            this.nudAutosaveMinutes.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.nudAutosaveMinutes.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudAutosaveMinutes.Name = "nudAutosaveMinutes";
+            this.nudAutosaveMinutes.Size = new System.Drawing.Size(94, 20);
+            this.nudAutosaveMinutes.TabIndex = 10;
+            this.nudAutosaveMinutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudAutosaveMinutes.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            // 
             // panel6
             // 
             this.panel6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel6.Location = new System.Drawing.Point(7, 132);
+            this.panel6.Location = new System.Drawing.Point(7, 138);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(542, 10);
             this.panel6.TabIndex = 24;
@@ -2392,50 +2505,78 @@
             // panel5
             // 
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel5.Location = new System.Drawing.Point(7, 63);
+            this.panel5.Location = new System.Drawing.Point(7, 69);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(542, 10);
             this.panel5.TabIndex = 22;
             // 
-            // grpClipboard
+            // grpDefaultSettings
             // 
-            this.grpClipboard.AutoSize = true;
-            this.grpClipboard.Controls.Add(this.tableLayoutPanel6);
-            this.grpClipboard.Dock = System.Windows.Forms.DockStyle.Top;
-            this.grpClipboard.Location = new System.Drawing.Point(7, 7);
-            this.grpClipboard.Name = "grpClipboard";
-            this.grpClipboard.Padding = new System.Windows.Forms.Padding(10);
-            this.grpClipboard.Size = new System.Drawing.Size(542, 56);
-            this.grpClipboard.TabIndex = 23;
-            this.grpClipboard.TabStop = false;
-            this.grpClipboard.Text = " Clipboard ";
+            this.grpDefaultSettings.AutoSize = true;
+            this.grpDefaultSettings.Controls.Add(this.tableLayoutPanel17);
+            this.grpDefaultSettings.Controls.Add(this.tableLayoutPanel6);
+            this.grpDefaultSettings.Dock = System.Windows.Forms.DockStyle.Top;
+            this.grpDefaultSettings.Location = new System.Drawing.Point(7, 7);
+            this.grpDefaultSettings.Name = "grpDefaultSettings";
+            this.grpDefaultSettings.Padding = new System.Windows.Forms.Padding(10);
+            this.grpDefaultSettings.Size = new System.Drawing.Size(542, 62);
+            this.grpDefaultSettings.TabIndex = 23;
+            this.grpDefaultSettings.TabStop = false;
+            this.grpDefaultSettings.Text = " Default settings ";
+            // 
+            // tableLayoutPanel17
+            // 
+            this.tableLayoutPanel17.AutoSize = true;
+            this.tableLayoutPanel17.ColumnCount = 2;
+            this.tableLayoutPanel17.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel17.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tableLayoutPanel17.Controls.Add(this.cbxTriggerTemplate, 0, 0);
+            this.tableLayoutPanel17.Controls.Add(this.btnTriggerTemplate, 1, 0);
+            this.tableLayoutPanel17.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel17.Location = new System.Drawing.Point(10, 23);
+            this.tableLayoutPanel17.Name = "tableLayoutPanel17";
+            this.tableLayoutPanel17.RowCount = 2;
+            this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel17.Size = new System.Drawing.Size(522, 29);
+            this.tableLayoutPanel17.TabIndex = 3;
+            // 
+            // cbxTriggerTemplate
+            // 
+            this.cbxTriggerTemplate.AutoSize = true;
+            this.cbxTriggerTemplate.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cbxTriggerTemplate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbxTriggerTemplate.Location = new System.Drawing.Point(3, 3);
+            this.cbxTriggerTemplate.Name = "cbxTriggerTemplate";
+            this.cbxTriggerTemplate.Size = new System.Drawing.Size(316, 23);
+            this.cbxTriggerTemplate.TabIndex = 6;
+            this.cbxTriggerTemplate.Text = "Use template trigger for default values";
+            this.cbxTriggerTemplate.UseVisualStyleBackColor = true;
+            // 
+            // btnTriggerTemplate
+            // 
+            this.btnTriggerTemplate.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnTriggerTemplate.Location = new System.Drawing.Point(325, 3);
+            this.btnTriggerTemplate.Name = "btnTriggerTemplate";
+            this.btnTriggerTemplate.Size = new System.Drawing.Size(194, 23);
+            this.btnTriggerTemplate.TabIndex = 7;
+            this.btnTriggerTemplate.Text = "Edit template trigger";
+            this.btnTriggerTemplate.UseVisualStyleBackColor = true;
+            this.btnTriggerTemplate.Click += new System.EventHandler(this.btnTriggerTemplate_Click);
             // 
             // tableLayoutPanel6
             // 
             this.tableLayoutPanel6.AutoSize = true;
             this.tableLayoutPanel6.ColumnCount = 1;
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Controls.Add(this.chkClipboard, 0, 0);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel6.Location = new System.Drawing.Point(10, 23);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(522, 23);
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(522, 29);
             this.tableLayoutPanel6.TabIndex = 1;
-            // 
-            // chkClipboard
-            // 
-            this.chkClipboard.AutoSize = true;
-            this.chkClipboard.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkClipboard.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chkClipboard.Location = new System.Drawing.Point(3, 3);
-            this.chkClipboard.Name = "chkClipboard";
-            this.chkClipboard.Size = new System.Drawing.Size(516, 17);
-            this.chkClipboard.TabIndex = 6;
-            this.chkClipboard.Text = "Use operating system clipboard";
-            this.chkClipboard.UseVisualStyleBackColor = true;
             // 
             // ConfigurationForm
             // 
@@ -2559,10 +2700,11 @@
             this.grpUserInterface.PerformLayout();
             this.tableLayoutPanel10.ResumeLayout(false);
             this.tableLayoutPanel10.PerformLayout();
-            this.grpClipboard.ResumeLayout(false);
-            this.grpClipboard.PerformLayout();
-            this.tableLayoutPanel6.ResumeLayout(false);
-            this.tableLayoutPanel6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAutosaveMinutes)).EndInit();
+            this.grpDefaultSettings.ResumeLayout(false);
+            this.grpDefaultSettings.PerformLayout();
+            this.tableLayoutPanel17.ResumeLayout(false);
+            this.tableLayoutPanel17.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2614,7 +2756,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton btnFfxivJobRestore;
         private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.GroupBox grpClipboard;
+        private System.Windows.Forms.GroupBox grpDefaultSettings;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private System.Windows.Forms.CheckBox chkClipboard;
         private System.Windows.Forms.GroupBox grpStartup;
@@ -2734,5 +2876,13 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn Column7;
         private System.Windows.Forms.Panel panel18;
         private System.Windows.Forms.Button btnUnlockSecurity;
+        private System.Windows.Forms.ComboBox cbxUpdateMethod;
+        private System.Windows.Forms.Label lblUpdateMethod;
+        private System.Windows.Forms.Label lblAutosaveInterval;
+        private System.Windows.Forms.CheckBox cbxAutosaveConfig;
+        private System.Windows.Forms.NumericUpDown nudAutosaveMinutes;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel17;
+        private System.Windows.Forms.CheckBox cbxTriggerTemplate;
+        private System.Windows.Forms.Button btnTriggerTemplate;
     }
 }

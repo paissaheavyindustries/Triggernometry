@@ -257,6 +257,7 @@ namespace Triggernometry.Forms
                         {
                             if (RegexMatches(rex, a._OBSSceneName) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitobsscene", "Action #{0} OBS scene name", i), Match = tn });
                             if (RegexMatches(rex, a._OBSSourceName) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitobssource", "Action #{0} OBS source name", i), Match = tn });
+                            if (RegexMatches(rex, a._OBSEndPoint) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitobsendpoint", "Action #{0} OBS endpoint", i), Match = tn });
                         }
                         if (a.ActionType == Action.ActionTypeEnum.PlaySound)
                         {

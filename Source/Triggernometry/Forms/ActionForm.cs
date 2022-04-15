@@ -33,6 +33,7 @@ namespace Triggernometry.Forms
             set
             {
                 _plug = value;
+                cndLoopCondition.plug = value;
                 cndCondition.plug = value;
                 actionViewer1.plug = value;
             }
@@ -198,12 +199,12 @@ namespace Triggernometry.Forms
         {
             int oldsel = tbcActionSettings.SelectedIndex;
             tbcActionSettings.SelectedIndex = cbxActionType.SelectedIndex;
-            if (cbxActionType.SelectedIndex == 9 || cbxActionType.SelectedIndex == 13)
+            if (cbxActionType.SelectedIndex == 9 || cbxActionType.SelectedIndex == 13 || cbxActionType.SelectedIndex == 24)
             {
                 timer2.Enabled = true;
                 stsMouseHelp.Visible = true;
             }
-            else if (oldsel == 9 || oldsel == 13)
+            else if (oldsel == 9 || oldsel == 13 || oldsel == 24)
             {
                 stsMouseHelp.Visible = false;
                 timer2.Enabled = false;
@@ -558,6 +559,8 @@ namespace Triggernometry.Forms
                 expDiscordMessage.Expression = a._DiscordWebhookMessage;
                 cbxDiscordTts.Checked = a._DiscordTts;
                 cbxObsOpType.SelectedIndex = (int)a._OBSControlType;
+                expObsEndpoint.Expression = a._OBSEndPoint;
+                expObsPassword.Expression = a._OBSPassword;
                 expObsSceneName.Expression = a._OBSSceneName;
                 expObsSourceName.Expression = a._OBSSourceName;
                 expObsJSONPayload.Expression = a._OBSJSONPayload;
@@ -826,6 +829,8 @@ namespace Triggernometry.Forms
             a._DiscordWebhookURL = expDiscordUrl.Expression;
             a._DiscordTts = cbxDiscordTts.Checked;
             a._OBSControlType = (Action.ObsControlTypeEnum)cbxObsOpType.SelectedIndex;
+            a._OBSEndPoint = expObsEndpoint.Expression;
+            a._OBSPassword = expObsPassword.Expression;
             a._OBSSceneName = expObsSceneName.Expression;
             a._OBSSourceName = expObsSourceName.Expression;
             a._OBSJSONPayload = expObsJSONPayload.Expression;

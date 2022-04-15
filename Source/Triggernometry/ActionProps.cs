@@ -1553,6 +1553,42 @@ namespace Triggernometry
             }
         }
 
+        internal string _OBSEndPoint = @"ws://127.0.0.1:4444";
+        [XmlAttribute]
+        public string OBSEndPoint
+        {
+            get
+            {
+                if (_OBSEndPoint == @"ws://127.0.0.1:4444")
+                {
+                    return null;
+                }
+                return _OBSEndPoint;
+            }
+            set
+            {
+                _OBSEndPoint = value;
+            }
+        }
+
+        internal string _OBSPassword = "";
+        [XmlAttribute]
+        public string OBSPassword
+        {
+            get
+            {
+                if (_OBSPassword == "")
+                {
+                    return null;
+                }
+                return _OBSPassword;
+            }
+            set
+            {
+                _OBSPassword = value;
+            }
+        }
+
         internal string _OBSSceneName = "";
         [XmlAttribute]
         public string OBSSceneName
