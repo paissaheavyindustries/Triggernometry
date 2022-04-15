@@ -37,6 +37,7 @@ namespace Triggernometry.CustomControls
         internal Random r = new Random();
         internal string Clipboard = "";
         internal int selEventDestination = -1;
+        internal int selZoneType = -1;
 
         internal Queue<Toast> Toasts = new Queue<Toast>();
 
@@ -1453,6 +1454,10 @@ namespace Triggernometry.CustomControls
                 {
                     ti.cbxEventDestination.SelectedIndex = selEventDestination;
                 }
+                if (selZoneType != -1)
+                {
+                    ti.cbxZoneType.SelectedIndex = selZoneType;
+                }
                 if (testInputHistoryLines != null)
                 {
                     ti.txtEvent.Lines = testInputHistoryLines;
@@ -1468,6 +1473,7 @@ namespace Triggernometry.CustomControls
                         plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeue", "Queueing {0} user log lines", lines.Count()));
                         LogEvent.SourceEnum src = LogEvent.SourceEnum.Log;
                         selEventDestination = ti.cbxEventDestination.SelectedIndex;
+                        selZoneType = ti.cbxZoneType.SelectedIndex;
                         switch (ti.cbxEventDestination.SelectedIndex)
                         {
                             case 0:
@@ -1480,7 +1486,7 @@ namespace Triggernometry.CustomControls
                                 src = LogEvent.SourceEnum.ACT;
                                 break;
                         }
-                        plug.LogLineQueuerMass(lines, ti.txtZoneName.Text, src, true);
+                        plug.LogLineQueuerMass(lines, ti.txtZoneName.Text, src, true, ti.cbxZoneType.SelectedIndex == 1);
                         plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeuedone", "Done"));
                         /*
                         foreach (string line in lines)
