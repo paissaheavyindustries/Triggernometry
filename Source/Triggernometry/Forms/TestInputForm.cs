@@ -50,18 +50,18 @@ namespace Triggernometry.Forms
             }
         }
 
-        private void cbxZoneType_SelectedIndexChanged(object sender, EventArgs e) {
+        private void cbxZoneType_SelectedIndexChanged(object sender, EventArgs e)
+        {
             if (cbxZoneType.SelectedIndex == 0) 
             {
-                lblZoneName.Text = "Zone name";
-                btnGetCurZone.Text = "Retrieve current zone name";
+                lblZoneName.Text = I18n.Translate("TestInputForm/lblZoneName", "Zone name");
             }
             else 
             {
-                lblZoneName.Text = "Zone ID";
-                btnGetCurZone.Text = "Retrieve current zone ID";
+                lblZoneName.Text = I18n.Translate("TestInputForm/ffxivzoneid", "Zone ID");
             }
         }
+
     }
 
 }
