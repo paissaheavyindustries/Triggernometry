@@ -68,6 +68,9 @@ namespace Triggernometry
             }
         }
 
+        [XmlAttribute]
+        public Guid Id { get; set; }
+
         internal RepositoryFolder Parent { get; set; }
 
         internal List<Trigger> ReadmeTriggers = new List<Trigger>();
@@ -116,6 +119,7 @@ namespace Triggernometry
 
         public Repository()
         {
+            Id = Guid.NewGuid();
             Root = new Folder();
             AllowObsControl = false;
             AllowProcessLaunch = false;

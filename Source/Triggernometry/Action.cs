@@ -937,6 +937,32 @@ namespace Triggernometry
                 case ActionTypeEnum.Loop:
                     temp += I18n.Translate("internal/Action/descloop", "Loop with {0} actions", LoopActions != null ? LoopActions.Count : 0);
                     break;
+                case ActionTypeEnum.Repository:
+                    {
+                        switch (_RepositoryOp)
+                        {
+                            case RepositoryOpEnum.UpdateSelf:
+                                temp += I18n.Translate("internal/Action/repoupdateself", "Update containing repository");
+                                break;
+                            case RepositoryOpEnum.UpdateRepo:
+                                {
+                                    Repository r = ctx.plug.GetRepositoryById(_RepositoryId);
+                                    if (r != null)
+                                    {
+                                        temp += I18n.Translate("internal/Action/repoupdatespecific", "Update repository ({0})", r.Name);
+                                    }
+                                    else
+                                    {
+                                        temp += I18n.Translate("internal/Action/descrepoinvalidref", "repository action with an invalid repository reference ({0})", _RepositoryId);
+                                    }
+                                }
+                                break;
+                            case RepositoryOpEnum.UpdateAll:
+                                temp += I18n.Translate("internal/Action/repoupdateall", "Update all repositories");
+                                break;
+                        }
+                    }
+                    break;
                 default:
                     temp += I18n.Translate("internal/Action/descunknown", "unknown action type");
                     break;
@@ -1899,6 +1925,29 @@ namespace Triggernometry
 						}
 						break;
                     #endregion
+                    #region Implementation - Repository
+                    case ActionTypeEnum.Repository:
+                        {
+                            Repository r = null;
+                            switch (_RepositoryOp)
+                            {
+                                case RepositoryOpEnum.UpdateSelf:
+                                    r = ctx.trig != null ? ctx.trig.Repo : null;
+                                    break;
+                                case RepositoryOpEnum.UpdateRepo:
+                                    r = ctx.plug.GetRepositoryById(_RepositoryId);
+                                    break;
+                                case RepositoryOpEnum.UpdateAll:
+                                    ctx.plug.AllRepositoryUpdates(false);
+                                    break;
+                            }
+                            if (r != null)
+                            {
+                                ctx.plug.RepositoryUpdate(r, true, false);
+                            }
+                        }
+                        break;
+                    #endregion
                     #region Implementation - Scalar variable
                     case ActionTypeEnum.Variable:
                         {
@@ -2603,6 +2652,8 @@ namespace Triggernometry
                 }
             }
             a._LoopDelayExpression = _LoopDelayExpression;
+            a._RepositoryId = _RepositoryId;
+            a._RepositoryOp = _RepositoryOp;
         }
 
         private Tuple<int, string> SendJson(Context ctx, Action.HTTPMethodEnum method, string url, string json, IEnumerable<string> headers, bool expectNoContent)

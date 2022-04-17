@@ -14,6 +14,18 @@ namespace Triggernometry.Variables
         [XmlArrayItem(ElementName = "VariableTable", Type = typeof(VariableTable))]
         public List<Variable> Values { get; set; } = new List<Variable>();
 
+        public VariableList()
+        {
+        }
+
+        public VariableList(IEnumerable<object> objs)
+        {
+            foreach (object obj in objs)
+            {
+                Values.Add(new VariableScalar() { Value = obj.ToString() });
+            }
+        }
+
         public override string ToString()
         {
             return String.Join(",", Values);

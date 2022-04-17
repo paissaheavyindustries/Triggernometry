@@ -843,6 +843,7 @@ namespace Triggernometry.Forms
             {
                 Trigger t = template;
                 Trigger.TriggerSourceEnum oldSource = t._Source;
+                tf.AllowAnonymousTrigger = true;
                 tf.plug = plug;
                 tf.fakectx.trig = t;
                 tf.fakectx.plug = plug;
@@ -858,10 +859,6 @@ namespace Triggernometry.Forms
                     lock (t) // verified
                     {
                         tf.SettingsToTrigger(t);
-                        if (oldSource != t._Source)
-                        {
-                            plug.SourceChange(t, oldSource, t._Source);
-                        }
                     }
                 }
             }

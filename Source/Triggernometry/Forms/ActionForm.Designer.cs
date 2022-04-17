@@ -341,6 +341,12 @@
             this.expLoopIterationDelay = new Triggernometry.CustomControls.ExpressionTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cndLoopCondition = new Triggernometry.CustomControls.ConditionViewer();
+            this.tabRepo = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel27 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblRepositoryLink = new System.Windows.Forms.Label();
+            this.lblRepositoryOp = new System.Windows.Forms.Label();
+            this.cbxRepositoryOp = new System.Windows.Forms.ComboBox();
+            this.trvRepositoryLink = new System.Windows.Forms.TreeView();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
@@ -436,6 +442,8 @@
             this.tableLayoutPanel25.SuspendLayout();
             this.tabLoop.SuspendLayout();
             this.tableLayoutPanel26.SuspendLayout();
+            this.tabRepo.SuspendLayout();
+            this.tableLayoutPanel27.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel6.SuspendLayout();
             this.tbcAction.SuspendLayout();
@@ -515,7 +523,8 @@
             "Placeholder",
             "Named callback operation",
             "Mouse operation",
-            "Loop"});
+            "Loop",
+            "Repository operation"});
             this.cbxActionType.Location = new System.Drawing.Point(69, 3);
             this.cbxActionType.Name = "cbxActionType";
             this.cbxActionType.Size = new System.Drawing.Size(572, 21);
@@ -572,6 +581,7 @@
             this.tbcActionSettings.Controls.Add(this.tabNamedCallback);
             this.tbcActionSettings.Controls.Add(this.tabMouse);
             this.tbcActionSettings.Controls.Add(this.tabLoop);
+            this.tbcActionSettings.Controls.Add(this.tabRepo);
             this.tbcActionSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbcActionSettings.Location = new System.Drawing.Point(3, 3);
             this.tbcActionSettings.Margin = new System.Windows.Forms.Padding(0);
@@ -4767,6 +4777,96 @@
             this.cndLoopCondition.Size = new System.Drawing.Size(630, 194);
             this.cndLoopCondition.TabIndex = 44;
             // 
+            // tabRepo
+            // 
+            this.tabRepo.Controls.Add(this.tableLayoutPanel27);
+            this.tabRepo.Location = new System.Drawing.Point(4, 25);
+            this.tabRepo.Name = "tabRepo";
+            this.tabRepo.Padding = new System.Windows.Forms.Padding(3);
+            this.tabRepo.Size = new System.Drawing.Size(642, 314);
+            this.tabRepo.TabIndex = 26;
+            this.tabRepo.Text = "Repo";
+            this.tabRepo.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel27
+            // 
+            this.tableLayoutPanel27.AutoSize = true;
+            this.tableLayoutPanel27.ColumnCount = 2;
+            this.tableLayoutPanel27.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel27.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel27.Controls.Add(this.lblRepositoryLink, 0, 1);
+            this.tableLayoutPanel27.Controls.Add(this.lblRepositoryOp, 0, 0);
+            this.tableLayoutPanel27.Controls.Add(this.cbxRepositoryOp, 1, 0);
+            this.tableLayoutPanel27.Controls.Add(this.trvRepositoryLink, 1, 1);
+            this.tableLayoutPanel27.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel27.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel27.Name = "tableLayoutPanel27";
+            this.tableLayoutPanel27.RowCount = 3;
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel27.Size = new System.Drawing.Size(636, 308);
+            this.tableLayoutPanel27.TabIndex = 8;
+            // 
+            // lblRepositoryLink
+            // 
+            this.lblRepositoryLink.AutoSize = true;
+            this.lblRepositoryLink.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblRepositoryLink.Location = new System.Drawing.Point(3, 30);
+            this.lblRepositoryLink.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.lblRepositoryLink.Name = "lblRepositoryLink";
+            this.lblRepositoryLink.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.lblRepositoryLink.Size = new System.Drawing.Size(57, 17);
+            this.lblRepositoryLink.TabIndex = 23;
+            this.lblRepositoryLink.Text = "Repository";
+            this.lblRepositoryLink.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblRepositoryOp
+            // 
+            this.lblRepositoryOp.AutoSize = true;
+            this.lblRepositoryOp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblRepositoryOp.Location = new System.Drawing.Point(3, 0);
+            this.lblRepositoryOp.Name = "lblRepositoryOp";
+            this.lblRepositoryOp.Size = new System.Drawing.Size(57, 27);
+            this.lblRepositoryOp.TabIndex = 7;
+            this.lblRepositoryOp.Text = "Operation";
+            this.lblRepositoryOp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbxRepositoryOp
+            // 
+            this.cbxRepositoryOp.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxRepositoryOp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxRepositoryOp.FormattingEnabled = true;
+            this.cbxRepositoryOp.Items.AddRange(new object[] {
+            "Update containing repository",
+            "Update selected repository",
+            "Update all enabled repositories"});
+            this.cbxRepositoryOp.Location = new System.Drawing.Point(66, 3);
+            this.cbxRepositoryOp.Name = "cbxRepositoryOp";
+            this.cbxRepositoryOp.Size = new System.Drawing.Size(567, 21);
+            this.cbxRepositoryOp.TabIndex = 21;
+            this.cbxRepositoryOp.SelectedIndexChanged += new System.EventHandler(this.cbxRepositoryOp_SelectedIndexChanged);
+            // 
+            // trvRepositoryLink
+            // 
+            this.trvRepositoryLink.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trvRepositoryLink.HideSelection = false;
+            this.trvRepositoryLink.Location = new System.Drawing.Point(66, 30);
+            this.trvRepositoryLink.MinimumSize = new System.Drawing.Size(4, 50);
+            this.trvRepositoryLink.Name = "trvRepositoryLink";
+            this.tableLayoutPanel27.SetRowSpan(this.trvRepositoryLink, 2);
+            this.trvRepositoryLink.ShowNodeToolTips = true;
+            this.trvRepositoryLink.Size = new System.Drawing.Size(567, 275);
+            this.trvRepositoryLink.TabIndex = 22;
+            this.trvRepositoryLink.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvRepositoryLink_BeforeCollapse);
+            this.trvRepositoryLink.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvRepositoryLink_BeforeExpand);
+            this.trvRepositoryLink.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvRepositoryLink_BeforeSelect);
+            this.trvRepositoryLink.EnabledChanged += new System.EventHandler(this.trvRepositoryLink_EnabledChanged);
+            // 
             // panel2
             // 
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -5325,6 +5425,10 @@
             this.tabLoop.PerformLayout();
             this.tableLayoutPanel26.ResumeLayout(false);
             this.tableLayoutPanel26.PerformLayout();
+            this.tabRepo.ResumeLayout(false);
+            this.tabRepo.PerformLayout();
+            this.tableLayoutPanel27.ResumeLayout(false);
+            this.tableLayoutPanel27.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
@@ -5703,5 +5807,11 @@
         private CustomControls.ExpressionTextBox expObsEndpoint;
         private CustomControls.ExpressionTextBox expObsPassword;
         private System.Windows.Forms.Label lblObsPassword;
+        private System.Windows.Forms.TabPage tabRepo;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel27;
+        private System.Windows.Forms.Label lblRepositoryLink;
+        private System.Windows.Forms.Label lblRepositoryOp;
+        private System.Windows.Forms.ComboBox cbxRepositoryOp;
+        internal System.Windows.Forms.TreeView trvRepositoryLink;
     }
 }

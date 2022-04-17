@@ -40,7 +40,8 @@ namespace Triggernometry
             Placeholder,
             NamedCallback,
             Mouse,
-            Loop
+            Loop,
+            Repository
         }
 
         public enum VariableOpEnum
@@ -228,6 +229,13 @@ namespace Triggernometry
         {
             POST,
             GET
+        }
+
+        public enum RepositoryOpEnum
+        {
+            UpdateSelf,
+            UpdateRepo,
+            UpdateAll
         }
 
         #endregion
@@ -1810,6 +1818,51 @@ namespace Triggernometry
             set
             {
                 _UseTTSExclusive = Boolean.Parse(value);
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Repository
+
+        internal RepositoryOpEnum _RepositoryOp { get; set; } = RepositoryOpEnum.UpdateSelf;
+        [XmlAttribute]
+        public string RepositoryOp
+        {
+            get
+            {
+                if (_RepositoryOp != RepositoryOpEnum.UpdateSelf)
+                {
+                    return _RepositoryOp.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _RepositoryOp = (RepositoryOpEnum)Enum.Parse(typeof(RepositoryOpEnum), value);
+            }
+        }
+
+        internal Guid _RepositoryId { get; set; } = Guid.Empty;
+        [XmlAttribute]
+        public string RepositoryId
+        {
+            get
+            {
+                if (_RepositoryId != Guid.Empty)
+                {
+                    return _RepositoryId.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _RepositoryId = Guid.Parse(value);
             }
         }
 

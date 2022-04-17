@@ -450,6 +450,7 @@ namespace Triggernometry.Forms
                 cndLoopCondition.ConditionToEdit = new ConditionGroup() { Enabled = false };
                 actionViewer1.Actions = new List<Action>();
                 expLoopIterationDelay.Expression = "";
+                cbxRepositoryOp.SelectedIndex = 0;
             }
             else
             {
@@ -709,6 +710,14 @@ namespace Triggernometry.Forms
                 }
                 actionViewer1.RefreshDgv();
                 expLoopIterationDelay.Expression = a._LoopDelayExpression;
+                tn = plug.LocateNodeHostingRepositoryId(trvRepositoryLink.Nodes[0], a._RepositoryId);
+                if (tn != null)
+                {
+                    tn.EnsureVisible();
+                    trvRepositoryLink.SelectedNode = tn;
+                    trvRepositoryLink.Update();
+                }
+                cbxRepositoryOp.SelectedIndex = (int)a._RepositoryOp;
             }
             cbxProcessLog_CheckedChanged(null, null);
         }
@@ -936,6 +945,16 @@ namespace Triggernometry.Forms
                      select tx;
             a.LoopActions.AddRange(ix);
             a.LoopDelayExpression = expLoopIterationDelay.Expression;
+            tn = trvRepositoryLink.SelectedNode;
+            if (tn != null)
+            {
+                a._RepositoryId = ((Repository)tn.Tag).Id;
+            }
+            else
+            {
+                a._RepositoryId = Guid.Empty;
+            }
+            a._RepositoryOp = (Action.RepositoryOpEnum)cbxRepositoryOp.SelectedIndex;
         }
 
         private void TestAction(bool liveValues)
@@ -2077,6 +2096,43 @@ namespace Triggernometry.Forms
             ExtEditor.Dispose();
             ExtEditor = null;
         }
+
+        private void cbxRepositoryOp_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            trvRepositoryLink.Enabled = (cbxRepositoryOp.SelectedIndex == 1);
+        }
+
+        private void trvRepositoryLink_EnabledChanged(object sender, EventArgs e)
+        {
+            lblRepositoryLink.Enabled = trvRepositoryLink.Enabled;
+        }
+
+        private void trvRepositoryLink_BeforeSelect(object sender, TreeViewCancelEventArgs e)
+        {
+            if ((e.Node.Tag is Repository) == false)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void trvRepositoryLink_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
+        {
+            if (e.Node.Tag is Folder)
+            {
+                e.Node.ImageIndex = (int)CustomControls.UserInterface.GetImageIndexForClosedFolder((Folder)e.Node.Tag);
+                e.Node.SelectedImageIndex = e.Node.ImageIndex;
+            }
+        }
+
+        private void trvRepositoryLink_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+        {
+            if (e.Node.Tag is Folder)
+            {
+                e.Node.ImageIndex = (int)CustomControls.UserInterface.GetImageIndexForOpenFolder((Folder)e.Node.Tag);
+                e.Node.SelectedImageIndex = e.Node.ImageIndex;
+            }
+        }
+
     }
 
 }

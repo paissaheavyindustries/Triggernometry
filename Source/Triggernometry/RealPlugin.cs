@@ -1365,6 +1365,11 @@ namespace Triggernometry
             }
         }
 
+        internal Repository GetRepositoryById(Guid id)
+        {            
+            return (from ix in cfg.RepositoryRoot.Repositories where ix.Id == id select ix).FirstOrDefault();
+        }
+
         internal Trigger GetTriggerById(Guid id, Repository repo)
         {
             lock (Triggers)
@@ -1422,6 +1427,18 @@ namespace Triggernometry
             return null;
         }
 
+        internal TreeNode LocateNodeHostingRepository(TreeNode tn, Repository r)
+        {
+            foreach (TreeNode tc in tn.Nodes)
+            {
+                if (tc.Tag == r)
+                {
+                    return tc;
+                }
+            }
+            return null;
+        }
+
         internal TreeNode LocateNodeHostingFolder(TreeNode tn, Folder f)
         {
             if (tn.Tag == f)
@@ -1447,6 +1464,16 @@ namespace Triggernometry
                 return null;
             }
             return LocateNodeHostingTrigger(tn, t);
+        }
+
+        internal TreeNode LocateNodeHostingRepositoryId(TreeNode tn, Guid id)
+        {
+            Repository r = GetRepositoryById(id);
+            if (r == null)
+            {
+                return null;
+            }
+            return LocateNodeHostingRepository(tn, r);
         }
 
         internal TreeNode LocateNodeHostingFolderId(TreeNode tn, Guid id, Repository repo)
