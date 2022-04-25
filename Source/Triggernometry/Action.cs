@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Net;
 using System.IO;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using Triggernometry.Variables;
 using CsvHelper;
@@ -632,6 +633,12 @@ namespace Triggernometry
                         case ListVariableOpEnum.SortAlphaDesc:
                             temp += I18n.Translate("internal/Action/desclistsortdesc", "sort list variable ({0}) in an alphabetically descending order", _ListVariableName);
                             break;
+                        case ListVariableOpEnum.SortNumericAsc:
+                            temp += I18n.Translate("internal/Action/desclistsortnumasc", "sort list variable ({0}) in an numerically ascending order", _ListVariableName);
+                            break;
+                        case ListVariableOpEnum.SortNumericDesc:
+                            temp += I18n.Translate("internal/Action/desclistsortnumdesc", "sort list variable ({0}) in an numerically descending order", _ListVariableName);
+                            break;
                         case ListVariableOpEnum.SortFfxivPartyAsc:
                             temp += I18n.Translate("internal/Action/desclistsortffxivasc", "sort list variable ({0}) in ascending order according to FFXIV party job order", _ListVariableName);
                             break;
@@ -760,6 +767,12 @@ namespace Triggernometry
                             break;
                         case VariableOpEnum.UnsetRegex:
                             temp += I18n.Translate("internal/Action/descscalarunsetregex", "unset scalar variables matching regular expression ({0})", _VariableName);
+                            break;
+                        case VariableOpEnum.QueryJsonPath:
+                            temp += I18n.Translate("internal/Action/descscalarqueryjson", "query JSON path ({0}) and store result to scalar variable ({1})", _VariableExpression, _VariableJsonTarget);
+                            break;
+                        case VariableOpEnum.QueryJsonPathList:
+                            temp += I18n.Translate("internal/Action/descscalarqueryjsonlist", "query JSON path ({0}) and store results to list variable ({1})", _VariableExpression, _VariableJsonTarget);
                             break;
                     }
                     break;
@@ -1356,6 +1369,7 @@ namespace Triggernometry
                             string endpoint = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _JsonEndpointExpression);
                             string payload = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _JsonPayloadExpression);
                             string headers = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _JsonHeaderExpression).Trim();
+                            string varname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _JsonResultVariable);
                             List<string> headerslist = new List<string>();
                             if (headers.Length > 0)
                             {
@@ -1399,6 +1413,29 @@ namespace Triggernometry
                                 responseCode = resp.Item1;
                                 response = resp.Item2;
                             }
+                            if (varname != "")
+                            {
+                                VariableStore vs = (_JsonResultVariablePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
+                                lock (vs.Scalar) // verified
+                                {
+                                    if (vs.Scalar.ContainsKey(varname) == false)
+                                    {
+                                        vs.Scalar[varname] = new VariableScalar();
+                                    }
+                                    VariableScalar x = vs.Scalar[varname];
+                                    x.Value = response;
+                                    if (ctx.trig != null)
+                                    {
+                                        x.LastChanger = I18n.Translate("internal/Action/changetagtrigaction", "Trigger '{0}' action '{1}'", ctx.trig.LogName, GetDescription(ctx));
+                                    }
+                                    else
+                                    {
+                                        x.LastChanger = I18n.Translate("internal/Action/changetagtestmode", "Action '{0}' test mode", GetDescription(ctx));
+                                    }
+                                    x.LastChanged = DateTime.Now;
+                                }
+                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarsetjson", "Scalar variable ({0}) value set to JSON response", varname));
+                            }
                             ctx.contextResponse = response;
                             ctx.contextResponseCode = responseCode;
                             if (_JsonFiringExpression != null && _JsonFiringExpression.Trim().Length > 0)
@@ -1429,18 +1466,20 @@ namespace Triggernometry
                                     break;
                                 case KeypressTypeEnum.WindowMessage:
                                     {
+                                        string procid = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressProcId);
                                         string window = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressWindow);
                                         int keycode = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _KeyPressCode);
-                                        RealPlugin.WindowsUtils.SendKeycodes(window, (ushort)keycode);
+                                        RealPlugin.WindowsUtils.SendKeycodes(procid, window, (ushort)keycode);
                                     }
                                     break;
                                 case KeypressTypeEnum.WindowMessageCombo:
                                     {
+                                        string procid = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressProcId);
                                         string window = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressWindow);
                                         string[] keycodes = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressCode).Split(",".ToCharArray());
                                         List<int> kc = new List<int>();
                                         kc.AddRange(from kx in keycodes select Convert.ToInt32(kx.Trim()));
-                                        RealPlugin.WindowsUtils.SendKeycodes(window, kc.ToArray());
+                                        RealPlugin.WindowsUtils.SendKeycodes(procid, window, kc.ToArray());
                                     }
                                     break;
                             }
@@ -1602,7 +1641,7 @@ namespace Triggernometry
                                             VariableList vl = GetListVariable(vs, sourcename, false);
                                             vl.SortAlphaAsc(changer);
                                         }
-                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortasc", "List variable ({0}) sorted in ascending order", sourcename));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortasc", "List variable ({0}) sorted in alphabetically ascending order", sourcename));
                                     }
                                     break;
                                 case ListVariableOpEnum.SortAlphaDesc:
@@ -1613,7 +1652,29 @@ namespace Triggernometry
                                             VariableList vl = GetListVariable(vs, sourcename, false);
                                             vl.SortAlphaDesc(changer);
                                         }
-                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortdesc", "List variable ({0}) sorted in descending order", sourcename));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortdesc", "List variable ({0}) sorted in alphabetically descending order", sourcename));
+                                    }
+                                    break;
+                                case ListVariableOpEnum.SortNumericAsc:
+                                    {
+                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
+                                        lock (vs.List)
+                                        {
+                                            VariableList vl = GetListVariable(vs, sourcename, false);
+                                            vl.SortNumericAsc(changer);
+                                        }
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortnumasc", "List variable ({0}) sorted in numerically ascending order", sourcename));
+                                    }
+                                    break;
+                                case ListVariableOpEnum.SortNumericDesc:
+                                    {
+                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
+                                        lock (vs.List)
+                                        {
+                                            VariableList vl = GetListVariable(vs, sourcename, false);
+                                            vl.SortNumericDesc(changer);
+                                        }
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortnumdesc", "List variable ({0}) sorted in numerically descending order", sourcename));
                                     }
                                     break;
                                 case ListVariableOpEnum.SortFfxivPartyAsc:
@@ -2030,6 +2091,121 @@ namespace Triggernometry
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarset", "Scalar variable ({0}) value set to ({1})", varname, newval));
                                         break;
                                     }
+                                case VariableOpEnum.QueryJsonPath:
+                                    {
+                                        newval = "";
+                                        lock (vs.Scalar) // verified
+                                        {
+                                            if (vs.Scalar.ContainsKey(varname) == true)
+                                            {
+                                                newval = vs.Scalar[varname].Value;
+                                            }
+                                        }
+                                        string tgtname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _VariableJsonTarget);
+                                        VariableStore vs2 = (_VariableTargetPersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
+                                        string query = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _VariableExpression);
+                                        JsonPath.JsonPathContext pc = new JsonPath.JsonPathContext();
+                                        Dictionary<string, object> p = new Parser().Parse(newval);
+                                        IEnumerable<object> result = pc.Select(p, query);
+                                        lock (vs2.Scalar) // verified
+                                        {
+                                            if (vs2.Scalar.ContainsKey(tgtname) == false)
+                                            {
+                                                vs2.Scalar[tgtname] = new VariableScalar();
+                                            }
+                                            VariableScalar x = vs2.Scalar[tgtname];
+                                            if (result.Count() == 0)
+                                            {
+                                                x.Value = "";
+                                            }
+                                            else if (result.Count() == 1)
+                                            {
+                                                x.Value = result.First().ToString();
+                                            }
+                                            else
+                                            {
+                                                x.Value = JsonSerializer.Serialize<object[]>(result.ToArray());                                                
+                                            }
+                                            if (ctx.trig != null)
+                                            {
+                                                x.LastChanger = I18n.Translate("internal/Action/changetagtrigaction", "Trigger '{0}' action '{1}'", ctx.trig.LogName, GetDescription(ctx));
+                                            }
+                                            else
+                                            {
+                                                x.LastChanger = I18n.Translate("internal/Action/changetagtestmode", "Action '{0}' test mode", GetDescription(ctx));
+                                            }
+                                            x.LastChanged = DateTime.Now;
+                                        }
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarset", "Scalar variable ({0}) value set to ({1})", tgtname, newval));
+                                    }
+                                    break;
+                                case VariableOpEnum.QueryJsonPathList:
+                                    {
+                                        newval = "";
+                                        lock (vs.Scalar) // verified
+                                        {
+                                            if (vs.Scalar.ContainsKey(varname) == true)
+                                            {
+                                                newval = vs.Scalar[varname].Value;
+                                            }
+                                        }
+                                        string tgtname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _VariableJsonTarget);
+                                        VariableStore vs2 = (_VariableTargetPersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
+                                        string query = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _VariableExpression);
+                                        JsonPath.JsonPathContext pc = new JsonPath.JsonPathContext();
+                                        Dictionary<string, object> p = new Parser().Parse(newval);
+                                        IEnumerable<object> result = pc.Select(p, query);
+                                        lock (vs2.List) // verified
+                                        {
+                                            if (vs2.List.ContainsKey(tgtname) == false)
+                                            {
+                                                vs2.List[tgtname] = new VariableList();
+                                            }
+                                            VariableList x = vs2.List[tgtname];
+                                            string changer;
+                                            if (ctx.trig != null)
+                                            {
+                                                changer = I18n.Translate("internal/Action/changetagtrigaction", "Trigger '{0}' action '{1}'", ctx.trig.LogName, GetDescription(ctx));
+                                            }
+                                            else
+                                            {
+                                                changer = I18n.Translate("internal/Action/changetagtestmode", "Action '{0}' test mode", GetDescription(ctx));
+                                            }
+                                            x.LastChanger = changer;
+                                            x.LastChanged = DateTime.Now;
+                                            if (result.Count() == 0)
+                                            {
+                                                x.RemoveAll(changer);
+                                            }
+                                            else if (result.Count() == 1)
+                                            {
+                                                x.RemoveAll(changer);
+                                                x.Push(new VariableScalar() { Value = result.First().ToString(), LastChanged = x.LastChanged, LastChanger = x.LastChanger }, changer);
+                                            }
+                                            else
+                                            {
+                                                x.RemoveAll(changer);
+                                                foreach (object o in result)
+                                                {
+                                                    Type t = o.GetType();
+                                                    if (o is object[])
+                                                    {
+                                                        x.Push(new VariableScalar() { Value = JsonSerializer.Serialize<object[]>((object[])o), LastChanged = x.LastChanged, LastChanger = x.LastChanger }, changer);
+                                                    }
+                                                    else if (o is Dictionary<string, object>)
+                                                    {
+                                                        x.Push(new VariableScalar() { Value = JsonSerializer.Serialize<Dictionary<string, object>>((Dictionary<string, object>)o), LastChanged = x.LastChanged, LastChanger = x.LastChanger }, changer);
+                                                    }
+                                                    else
+                                                    {
+                                                        x.Push(new VariableScalar() { Value = o.ToString(), LastChanged = x.LastChanged, LastChanger = x.LastChanger }, changer);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarset", "Scalar variable ({0}) value set to ({1})", tgtname, newval));
+                                    }
+                                    break;
                             }
                         }
                         break;
@@ -2244,7 +2420,11 @@ namespace Triggernometry
                                         {
                                             LogEvent le = new LogEvent();
                                             le.Text = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TriggerText);
-                                            le.Zone = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TriggerZone);
+                                            le.ZoneName = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TriggerZone);
+                                            if (_TriggerZoneType == TriggerZoneTypeEnum.ZoneIdFFXIV)
+                                            {
+                                                le.ZoneId = le.ZoneName;
+                                            }
                                             le.Timestamp = DateTime.Now;
                                             ctx.plug.TestTrigger(t, le, _TriggerForceType);
                                         }
@@ -2314,11 +2494,12 @@ namespace Triggernometry
                     #region Implementation - Window message
                     case ActionTypeEnum.WindowMessage:
                         {
+                            string procid = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _WmsgProcId);
                             string window = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _WmsgTitle);
                             int code = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _WmsgCode);
                             int wparam = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _WmsgWparam);
                             int lparam = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _WmsgLparam);
-                            RealPlugin.WindowsUtils.SendMessageToWindow(window, (ushort)code, wparam, lparam);
+                            RealPlugin.WindowsUtils.SendMessageToWindow(procid, window, (ushort)code, wparam, lparam);
                         }
                         break;
                     #endregion
@@ -2531,6 +2712,7 @@ namespace Triggernometry
             a._MessageBoxText = _MessageBoxText;
             a._VariableOp = _VariableOp;
             a._VariableName = _VariableName;
+            a._VariableJsonTarget = _VariableJsonTarget;
             a._DebugLevel = _DebugLevel;
             a._VariableExpression = _VariableExpression;
             a._TriggerId = _TriggerId;
@@ -2607,6 +2789,8 @@ namespace Triggernometry
             a._KeypressType = _KeypressType;
             a._KeyPressCode = _KeyPressCode;
             a._KeyPressWindow = _KeyPressWindow;
+            a._KeyPressProcId = _KeyPressProcId;
+            a._WmsgProcId = _WmsgProcId;
             a._WmsgCode = _WmsgCode;
             a._WmsgTitle = _WmsgTitle;
             a._WmsgLparam = _WmsgLparam;
@@ -2654,12 +2838,14 @@ namespace Triggernometry
             a._LoopDelayExpression = _LoopDelayExpression;
             a._RepositoryId = _RepositoryId;
             a._RepositoryOp = _RepositoryOp;
+            a._JsonResultVariable = _JsonResultVariable;
+            a._TriggerZoneType = _TriggerZoneType;
         }
 
         private Tuple<int, string> SendJson(Context ctx, Action.HTTPMethodEnum method, string url, string json, IEnumerable<string> headers, bool expectNoContent)
         {
             try
-            {                
+            {
                 var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
                 if (headers != null && headers.Count() > 0)
                 {

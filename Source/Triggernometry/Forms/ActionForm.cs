@@ -332,6 +332,7 @@ namespace Triggernometry.Forms
                 expMessageBoxText.Expression = "";
                 expVariableExpression.Expression = "";
                 expVariableName.Expression = "";
+                expVariableTarget.Expression = "";
                 cbxVariableOp.SelectedIndex = 0;
                 expLvarIndex.Expression = "";
                 expLvarName.Expression = "";
@@ -445,12 +446,16 @@ namespace Triggernometry.Forms
                 prsListSource.IsPersistent = false;
                 prsListTarget.IsPersistent = false;
                 prsScalarName.IsPersistent = false;
+                prsJsonVariable.IsPersistent = false;
+                prsScalarTarget.IsPersistent = false;
                 prsTableSource.IsPersistent = false;
                 prsTableTarget.IsPersistent = false;
                 cndLoopCondition.ConditionToEdit = new ConditionGroup() { Enabled = false };
                 actionViewer1.Actions = new List<Action>();
                 expLoopIterationDelay.Expression = "";
                 cbxRepositoryOp.SelectedIndex = 0;
+                cbxTriggerZoneType.SelectedIndex = 0;
+                expJsonVariable.Expression = "";
             }
             else
             {
@@ -482,6 +487,7 @@ namespace Triggernometry.Forms
                 expMessageBoxText.Expression = a._MessageBoxText;
                 expVariableExpression.Expression = a._VariableExpression;
                 expVariableName.Expression = a._VariableName;
+                expVariableTarget.Expression = a._VariableJsonTarget;
                 cbxVariableOp.SelectedIndex = (int)a._VariableOp;
                 expLvarIndex.Expression = a._ListVariableIndex;
                 expLvarName.Expression = a._ListVariableName;
@@ -572,6 +578,7 @@ namespace Triggernometry.Forms
                 expJsonPayload.Expression = a._JsonPayloadExpression;
                 expJsonHeaders.Expression = a._JsonHeaderExpression;
                 cbxJsonCache.Checked = a._JsonCacheRequest;
+                expWmsgProcid.Expression = a._WmsgProcId;
                 expWmsgTitle.Expression = a._WmsgTitle;
                 expWmsgCode.Expression = a._WmsgCode;
                 expWmsgWparam.Expression = a._WmsgWparam;
@@ -660,6 +667,7 @@ namespace Triggernometry.Forms
                 }
                 expKeypress.Expression = a._KeyPressCode;
                 expWindowTitle.Expression = a._KeyPressWindow;
+                expKeypressProcId.Expression = a._KeyPressProcId;
                 expFileOpName.Expression = a._DiskFileOpName;
                 expFileOpVariable.Expression = a._DiskFileOpVar;
                 cbxFileOpType.SelectedIndex = (int)a._DiskFileOp;
@@ -685,6 +693,8 @@ namespace Triggernometry.Forms
                 prsListSource.IsPersistent = a._ListSourcePersist;
                 prsListTarget.IsPersistent = a._ListTargetPersist;
                 prsScalarName.IsPersistent = a._VariablePersist;
+                prsScalarTarget.IsPersistent = a._VariableTargetPersist;
+                prsJsonVariable.IsPersistent = a._JsonResultVariablePersist;
                 prsTableSource.IsPersistent = a._TableSourcePersist;
                 prsTableTarget.IsPersistent = a._TableTargetPersist;
                 if (a.LoopCondition != null)
@@ -718,6 +728,8 @@ namespace Triggernometry.Forms
                     trvRepositoryLink.Update();
                 }
                 cbxRepositoryOp.SelectedIndex = (int)a._RepositoryOp;
+                cbxTriggerZoneType.SelectedIndex = (int)a._TriggerZoneType;
+                expJsonVariable.Expression = a._JsonResultVariable;
             }
             cbxProcessLog_CheckedChanged(null, null);
         }
@@ -754,6 +766,7 @@ namespace Triggernometry.Forms
             a._MessageBoxText = expMessageBoxText.Expression;
             a._VariableExpression = expVariableExpression.Expression;
             a._VariableName = expVariableName.Expression;
+            a._VariableJsonTarget = expVariableTarget.Expression;
             a._VariableOp = (Action.VariableOpEnum)cbxVariableOp.SelectedIndex;
             a._ListVariableExpression = expLvarValue.Expression;
             a._ListVariableExpressionType = (Action.ListVariableExpTypeEnum)cbxLvarExpType.SelectedIndex;
@@ -850,6 +863,7 @@ namespace Triggernometry.Forms
             a._JsonPayloadExpression = expJsonPayload.Expression;
             a._JsonCacheRequest = cbxJsonCache.Checked;
             a._TextAuraOp = (Action.AuraOpEnum)cbxTextAuraOp.SelectedIndex;
+            a._WmsgProcId = expWmsgProcid.Expression;
             a._WmsgTitle = expWmsgTitle.Expression;
             a._WmsgCode = expWmsgCode.Expression;
             a._WmsgWparam = expWmsgWparam.Expression;
@@ -910,6 +924,7 @@ namespace Triggernometry.Forms
             a.Condition = cndCondition.ConditionToEdit;
             a._KeypressType = (Action.KeypressTypeEnum)cbxKeypressMethod.SelectedIndex;
             a._KeyPressCode = expKeypress.Expression;
+            a._KeyPressProcId = expKeypressProcId.Expression;
             a._KeyPressWindow = expWindowTitle.Expression;
             a._DiskFileOp = (Action.DiskFileOpEnum)cbxFileOpType.SelectedIndex;
             a._DiskFileOpName = expFileOpName.Expression;
@@ -936,6 +951,8 @@ namespace Triggernometry.Forms
             a._ListSourcePersist = prsListSource.IsPersistent;
             a._ListTargetPersist = prsListTarget.IsPersistent;
             a._VariablePersist = prsScalarName.IsPersistent;
+            a._JsonResultVariablePersist = prsJsonVariable.IsPersistent;
+            a._VariableTargetPersist = prsScalarTarget.IsPersistent;
             a._TableSourcePersist = prsTableSource.IsPersistent;
             a._TableTargetPersist = prsTableTarget.IsPersistent;
             a.LoopCondition = cndLoopCondition.ConditionToEdit;
@@ -955,6 +972,8 @@ namespace Triggernometry.Forms
                 a._RepositoryId = Guid.Empty;
             }
             a._RepositoryOp = (Action.RepositoryOpEnum)cbxRepositoryOp.SelectedIndex;
+            a._TriggerZoneType = (Action.TriggerZoneTypeEnum)cbxTriggerZoneType.SelectedIndex;
+            a._JsonResultVariable = expJsonVariable.Expression;
         }
 
         private void TestAction(bool liveValues)
@@ -992,8 +1011,10 @@ namespace Triggernometry.Forms
             }
             expVariableName.Enabled = (cbxVariableOp.SelectedIndex != 3);
             prsScalarName.Enabled = expVariableName.Enabled;
-            expVariableExpression.Enabled = (cbxVariableOp.SelectedIndex == 1 || cbxVariableOp.SelectedIndex == 2);
+            expVariableExpression.Enabled = (cbxVariableOp.SelectedIndex == 1 || cbxVariableOp.SelectedIndex == 2 || cbxVariableOp.SelectedIndex == 5 || cbxVariableOp.SelectedIndex == 6);
             expVariableName.ExpressionType = (cbxVariableOp.SelectedIndex == 4) ? CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex : CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            expVariableTarget.Enabled = (cbxVariableOp.SelectedIndex == 5 || cbxVariableOp.SelectedIndex == 6);
+            prsScalarTarget.Enabled = expVariableTarget.Enabled;
         }
 
         private void cbxTriggerOp_SelectedIndexChanged(object sender, EventArgs e)
@@ -1692,6 +1713,22 @@ namespace Triggernometry.Forms
                     expLvarTarget.Enabled = false;
                     expLvarIndex.Enabled = false;
                     break;
+                case 17: // Sort list in an numerically ascending order
+                    expLvarName.Enabled = true;
+                    expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expLvarValue.Enabled = false;
+                    cbxLvarExpType.Enabled = false;
+                    expLvarTarget.Enabled = false;
+                    expLvarIndex.Enabled = false;
+                    break;
+                case 18: // Sort list in an numerically descending order
+                    expLvarName.Enabled = true;
+                    expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expLvarValue.Enabled = false;
+                    cbxLvarExpType.Enabled = false;
+                    expLvarTarget.Enabled = false;
+                    expLvarIndex.Enabled = false;
+                    break;
             }
             prsListSource.Enabled = expLvarName.Enabled;
             prsListTarget.Enabled = expLvarTarget.Enabled;
@@ -1883,6 +1920,9 @@ namespace Triggernometry.Forms
             lblKeypressInfo.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
             txtKeyCodesLink.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
             btnKeycodesLink.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
+            lblKeypressProcId.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
+            expKeypressProcId.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
+            lblKeypressProcInfo.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
             switch (cbxKeypressMethod.SelectedIndex)
             {
                 case 0:
@@ -2130,6 +2170,18 @@ namespace Triggernometry.Forms
             {
                 e.Node.ImageIndex = (int)CustomControls.UserInterface.GetImageIndexForOpenFolder((Folder)e.Node.Tag);
                 e.Node.SelectedImageIndex = e.Node.ImageIndex;
+            }
+        }
+
+        private void cbxZoneType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbxTriggerZoneType.SelectedIndex == 0)
+            {
+                lblTriggerZone.Text = I18n.Translate("TestInputForm/lblZoneName", "Zone name");
+            }
+            else
+            {
+                lblTriggerZone.Text = I18n.Translate("TestInputForm/ffxivzoneid", "Zone ID");
             }
         }
 

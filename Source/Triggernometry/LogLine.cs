@@ -18,11 +18,11 @@ namespace Triggernometry
         }
 
         public string Text { get; set; }
-        public string Zone { get; set; }
+        public string ZoneName { get; set; }
         public SourceEnum Source { get; set; }
         public DateTime Timestamp { get; set; }
         public bool TestMode { get; set; } = false;
-        public string TestModeZoneId { get; set; }
+        public string ZoneId { get; set; }
 
     }
 

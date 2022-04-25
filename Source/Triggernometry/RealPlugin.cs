@@ -319,14 +319,24 @@ namespace Triggernometry
             const int SM_CXSCREEN = 0x0;
             const int SM_CYSCREEN = 0x01;
 
+            private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+
+            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+            static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+            [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+            static extern int GetWindowTextLength(IntPtr hWnd);
+            [DllImport("user32.dll")]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
+            [DllImport("user32.dll", SetLastError = true)]
+            static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
             [DllImport("user32.dll")]
             static extern int GetSystemMetrics(int smIndex);
             [DllImport("user32.dll")]
             private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
             [DllImport("user32.dll")]
             private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-            [DllImport("user32.dll")]
-            private static extern IntPtr PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
             [DllImport("user32.dll", SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
             private static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
@@ -334,6 +344,47 @@ namespace Triggernometry
             private static extern IntPtr GetForegroundWindow();
             [DllImport("user32.dll")]
             static extern void mouse_event(uint dwFlags, int dx, int dy, uint dwData, int dwExtraInfo);
+
+            public static string GetWindowTextFromHandle(IntPtr hWnd)
+            {
+                int len = GetWindowTextLength(hWnd);
+                if (len > 0)
+                {
+                    var builder = new StringBuilder(len + 1);
+                    GetWindowText(hWnd, builder, len + 1);
+                    return builder.ToString();
+                }
+                return String.Empty;
+            }
+
+            public static List<IntPtr> FindWindows(string title)
+            {
+                List<IntPtr> wins = new List<IntPtr>();
+                if (title.Trim().Length == 0)
+                {
+                    return wins;
+                }
+                Regex rex = new Regex(title);
+                EnumWindows((hWnd, lParam) =>
+                    {
+                        try
+                        {
+                            string t = GetWindowTextFromHandle(hWnd);
+                            Match m = rex.Match(t);
+                            if (m.Success == true)
+                            {
+                                wins.Add(hWnd);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        return true;
+                    }
+                    , IntPtr.Zero
+                );
+                return wins;
+            }
 
             public static void SendMouse(MouseEventFlags flags, MouseEventDataXButtons buttons, int x, int y)
             {
@@ -347,25 +398,55 @@ namespace Triggernometry
                 mouse_event((uint)flags, x, y, (uint)buttons, 0);
             }
 
-            public static void SendKeycodes(string windowtitle, params int[] keycodes)
+            public static void SendKeycodes(string procid, string windowtitle, params int[] keycodes)
             {
                 for (int i = 0; i < keycodes.Length; i++)
                 {
-                    SendMessageToWindow(windowtitle, WM_KEYDOWN, keycodes[i], 0);
+                    SendMessageToWindow(procid, windowtitle, WM_KEYDOWN, keycodes[i], 0);
                 }
                 Thread.Sleep(10);
                 for (int i = keycodes.Length - 1; i >= 0; i--)
                 {
-                    SendMessageToWindow(windowtitle, WM_KEYUP, keycodes[i], 0);
+                    SendMessageToWindow(procid, windowtitle, WM_KEYUP, keycodes[i], 0);
                 }
             }
 
-            public static void SendMessageToWindow(string windowtitle, uint code, int wparam, int lparam)
-            {
-                IntPtr hwnd = FindWindow(null, windowtitle);
-                if (hwnd != IntPtr.Zero)
+            public static void SendMessageToWindow(string procid, string windowtitle, uint code, int wparam, int lparam)
+            {                
+                List<IntPtr> wins = FindWindows(windowtitle);
+                if (wins.Count > 0)
                 {
-                    IntPtr res = SendMessage(hwnd, code, (IntPtr)wparam, (IntPtr)lparam);
+                    switch (procid)
+                    {
+                        case "-1":
+                            {
+                                foreach (IntPtr win in wins)
+                                {
+                                    SendMessage(win, code, (IntPtr)wparam, (IntPtr)lparam);
+                                }
+                            }
+                            break;
+                        case "":
+                        case "0":
+                            {
+                                SendMessage(wins[0], code, (IntPtr)wparam, (IntPtr)lparam);
+                            }
+                            break;
+                        default:
+                            {
+                                uint procidnum = uint.Parse(procid);
+                                uint wpid;
+                                foreach (IntPtr win in wins)
+                                {
+                                    GetWindowThreadProcessId(win, out wpid);
+                                    if (wpid == procidnum)
+                                    {
+                                        SendMessage(win, code, (IntPtr)wparam, (IntPtr)lparam);
+                                    }
+                                }                                
+                            }
+                            break;
+                    }
                 }
             }
 
@@ -2831,7 +2912,7 @@ namespace Triggernometry
                 }
                 if ((force & Action.TriggerForceTypeEnum.SkipParent) == 0)
                 {
-                    Folder.FilterFailReason reason = t.Parent.PassesFilter(le.Zone, le.TestModeZoneId, le.Text);
+                    Folder.FilterFailReason reason = t.Parent.PassesFilter(le.ZoneName, le.ZoneId, le.Text);
                     if (reason != Folder.FilterFailReason.Passed)
                     {
                         if (reason != Folder.FilterFailReason.NotEnabled)
@@ -2868,7 +2949,7 @@ namespace Triggernometry
                         t.AddToLog(this, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/debugnamedgroup", "Trigger '{0}' named group '{1}': {2}", t.LogName, sdx, m.Groups[sdx].Value));
                     }
                 }
-                ctx.namedgroups["_zone"] = le.Zone;
+                ctx.namedgroups["_zone"] = le.ZoneName;                
                 ctx.namedgroups["_event"] = le.Text;
                 ctx.triggered = DateTime.UtcNow;
                 ctx.namedgroups["_timestamp"] = "" + (long)(ctx.triggered - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
@@ -2882,7 +2963,7 @@ namespace Triggernometry
         {
             LogEvent le = new LogEvent();
             le.Text = text;
-            le.Zone = zone;
+            le.ZoneName = zone;
             le.Source = src;
             le.Timestamp = DateTime.Now;
             lock (EventQueue)
@@ -2901,11 +2982,11 @@ namespace Triggernometry
             {
                 lex[i] = new LogEvent();
                 lex[i].Text = x;
-                lex[i].Zone = zone;
+                lex[i].ZoneName = zone;
                 lex[i].Source = src;
                 lex[i].Timestamp = DateTime.Now;
                 lex[i].TestMode = testMode;
-                lex[i].TestModeZoneId = testModeZoneId ? zone : null;
+                lex[i].ZoneId = testModeZoneId ? zone : null;
                 i++;
             }
             if (lex.Count() > 0)
@@ -3494,7 +3575,7 @@ namespace Triggernometry
                     {
                         LogEvent le = new LogEvent();
                         le.Text = "";
-                        le.Zone = "";
+                        le.ZoneName = "";
                         le.Timestamp = DateTime.Now;
                         TestTrigger(t, le, Action.TriggerForceTypeEnum.SkipAll);
                     }
@@ -3506,7 +3587,7 @@ namespace Triggernometry
                     {
                         LogEvent le = new LogEvent();
                         le.Text = "";
-                        le.Zone = "";
+                        le.ZoneName = "";
                         le.Timestamp = DateTime.Now;
                         foreach (Trigger tx in f.Triggers)
                         {
