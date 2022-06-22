@@ -2840,6 +2840,7 @@ namespace Triggernometry
             a._RepositoryId = _RepositoryId;
             a._RepositoryOp = _RepositoryOp;
             a._JsonResultVariable = _JsonResultVariable;
+            a._JsonResultVariablePersist = _JsonResultVariablePersist;
             a._TriggerZoneType = _TriggerZoneType;
         }
 
