@@ -2821,6 +2821,7 @@ namespace Triggernometry
             a._TableTargetPersist = _TableTargetPersist;
             a._DiskPersist = _DiskPersist;
             a._VariablePersist = _VariablePersist;
+            a._VariableTargetPersist = _VariableTargetPersist;
             a.LoopCondition = (ConditionGroup)(LoopCondition != null ? ((ConditionGroup)LoopCondition).Duplicate() : null);
             a.LoopActions.Clear();
             if (LoopActions != null)
@@ -2839,6 +2840,7 @@ namespace Triggernometry
             a._RepositoryId = _RepositoryId;
             a._RepositoryOp = _RepositoryOp;
             a._JsonResultVariable = _JsonResultVariable;
+            a._JsonResultVariablePersist = _JsonResultVariablePersist;
             a._TriggerZoneType = _TriggerZoneType;
         }
 
