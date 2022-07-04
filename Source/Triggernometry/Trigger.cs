@@ -315,6 +315,24 @@ namespace Triggernometry
             }
         }
 
+        internal string _TestInput;
+        [XmlAttribute]
+        public string TestInput
+        {
+            get
+            {
+                if (_TestInput == "")
+                {
+                    return null;
+                }
+                return _TestInput;
+            }
+            set
+            {
+                _TestInput = value;
+            }
+        }
+
         internal string _Description;
         [XmlAttribute]
         public string Description
@@ -837,6 +855,7 @@ namespace Triggernometry
             t._MutexToCapture = _MutexToCapture;
             t._EditAutofire = _EditAutofire;
             t._Description = _Description;
+            t._TestInput = _TestInput;
         }
 
     }

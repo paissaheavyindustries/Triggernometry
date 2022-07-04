@@ -678,6 +678,23 @@ namespace Triggernometry
                     return 0;
             }
 
+            if (tokens.Count > 1)
+            {
+                double dummy;
+                if (tokens[0] == "-" && double.TryParse(tokens[1], NumberStyles.Float, CultureInfo, out dummy) == true)
+                {
+                    if (dummy > 0.0)
+                    {
+                        tokens[1] = tokens[1].Insert(0, "-");
+                    }
+                    tokens.RemoveAt(0);
+                }
+                if (tokens[0] == "+" && double.TryParse(tokens[1], NumberStyles.Float, CultureInfo, out dummy) == true)
+                {
+                    tokens.RemoveAt(0);
+                }
+            }
+
             foreach (var op in OperatorList)
             {
                 while (tokens.IndexOf(op) != -1)
