@@ -3273,6 +3273,7 @@ namespace Triggernometry
         public void ZoneChangeDelegate(uint ZoneID, string ZoneName)
         {
             PluginBridges.BridgeFFXIV.ZoneID = ZoneID;
+            ZoneChanged(currentZone);
         }
 
         public void NetworkLogLineReceiver(uint sequence, int messagetype, string message)
