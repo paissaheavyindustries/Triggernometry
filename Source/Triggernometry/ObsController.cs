@@ -54,8 +54,6 @@ namespace Triggernometry
         private WebSocket WSConnection;
         private const int maxRpcVersion = 1;
         private object lockobj = new object();
-        private RequestResponseOp resp;
-        private RequestBatchResponseOp respBatch;
         private Dictionary<string, Action<RequestResponseOp>> respCallbacks = new Dictionary<string, Action<RequestResponseOp>>();
         private Dictionary<string, Action<RequestBatchResponseOp>> respBatchCallbacks = new Dictionary<string, Action<RequestBatchResponseOp>>();
         private Action<HelloOp> helloCallback;
@@ -143,26 +141,26 @@ namespace Triggernometry
                     authRespReceived.Set();
                     break;
                 case OpCode.RequestResponse:
+                    var resp = new JavaScriptSerializer().Deserialize<Message<RequestResponseOp>>(e.Data)?.d;
+                    Action<RequestResponseOp> respCallback;
                     lock (lockobj)
                     {
-                        resp = new JavaScriptSerializer().Deserialize<Message<RequestResponseOp>>(e.Data)?.d;
-                        if (respCallbacks.ContainsKey(resp.requestId))
-                        {
-                            respCallbacks[resp.requestId](resp);
-                            respCallbacks.Remove(resp.requestId);
-                        }
+                        respCallbacks.TryGetValue(resp.requestId, out respCallback);
+                        respCallbacks.Remove(resp.requestId);
                     }
+                    if (respCallback != null)
+                        respCallback(resp);
                     break;
                 case OpCode.RequestBatchResponse:
+                    var respBatch = new JavaScriptSerializer().Deserialize<Message<RequestBatchResponseOp>>(e.Data)?.d;
+                    Action<RequestBatchResponseOp> respBatchCallback;
                     lock (lockobj)
                     {
-                        respBatch = new JavaScriptSerializer().Deserialize<Message<RequestBatchResponseOp>>(e.Data)?.d;
-                        if (respBatchCallbacks.ContainsKey(respBatch.requestId))
-                        {
-                            respBatchCallbacks[respBatch.requestId](respBatch);
-                            respBatchCallbacks.Remove(respBatch.requestId);
-                        }
+                        respBatchCallbacks.TryGetValue(respBatch.requestId, out respBatchCallback);
+                        respBatchCallbacks.Remove(respBatch.requestId);
                     }
+                    if (respBatchCallback != null)
+                        respBatchCallback(respBatch);
                     break;
             }
         }
