@@ -623,7 +623,6 @@
     <TranslationEntry Key="internal/Action/descobssavereplay" Translation="OBSのリプレイバッファを保存" />
     <TranslationEntry Key="internal/Action/descobssetscene" Translation="OBSの現在のシーンを ({0}) にする" />
     <TranslationEntry Key="internal/Action/descobsshowsource" Translation="OBSのシーン ({1}) にソース ({0}) を表示" />
-    <TranslationEntry Key="internal/Action/descobsshowsourcecurrent" Translation="OBSの現在のシーンにソース ({0}) を表示" />
     <TranslationEntry Key="internal/Action/descobsstartrecord" Translation="OBSの録画を開始" />
     <TranslationEntry Key="internal/Action/descobsstartreplay" Translation="OBSのリプレイバッファを開始" />
     <TranslationEntry Key="internal/Action/descobsstartstream" Translation="OBSの配信を開始" />

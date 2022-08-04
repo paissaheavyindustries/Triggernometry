@@ -101,6 +101,11 @@
     <TranslationEntry Key="ActionForm/cbxObsOpType[Start replay buffer]" Translation="Start replay buffer" />
     <TranslationEntry Key="ActionForm/cbxObsOpType[Start streaming]" Translation="Start streaming" />
     <TranslationEntry Key="ActionForm/cbxObsOpType[Start/stop recording (toggle)]" Translation="Start/stop recording (toggle)" />
+    <TranslationEntry Key="ActionForm/cbxObsOpType[Stop then start recording]" Translation="Stop then start recording" />
+    <TranslationEntry Key="ActionForm/cbxObsOpType[Stop then start recording (if currently recording)]" Translation="Stop then start recording (if currently recording)" />
+    <TranslationEntry Key="ActionForm/cbxObsOpType[Resume recording]" Translation="Resume recording" />
+    <TranslationEntry Key="ActionForm/cbxObsOpType[Pause recording]" Translation="Pause recording" />
+    <TranslationEntry Key="ActionForm/cbxObsOpType[Resume/pause recording (toggle)]" Translation="Resume/pause recording (toggle)" />
     <TranslationEntry Key="ActionForm/cbxObsOpType[Start/stop replay buffer (toggle)]" Translation="Start/stop replay buffer (toggle)" />
     <TranslationEntry Key="ActionForm/cbxObsOpType[Start/stop streaming (toggle)]" Translation="Start/stop streaming (toggle)" />
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop recording]" Translation="Stop recording" />
@@ -250,7 +255,7 @@
     <TranslationEntry Key="ActionForm/lblObsOpType" Translation="Operation type" />
     <TranslationEntry Key="ActionForm/lblObsSceneName" Translation="Scene name" />
     <TranslationEntry Key="ActionForm/lblObsSourceName" Translation="Source name" />
-    <TranslationEntry Key="ActionForm/lblObsWebsocketInfo" Translation="To use OBS remote control features, you will have to install the OBS WebSocket plugin. There is a simple installer available at:" />
+    <TranslationEntry Key="ActionForm/lblObsWebsocketInfo" Translation="If you are using OBS v27 or older, you will have to install the OBS WebSocket plugin to use OBS remote control features. There is a simple installer available at:" />
     <TranslationEntry Key="ActionForm/lblProcessName" Translation="Process to launch" />
     <TranslationEntry Key="ActionForm/lblProcessParameters" Translation="Command line parameters" />
     <TranslationEntry Key="ActionForm/lblProcessWarning" Translation="Actions of this type may be potentially dangerous and cause damage if, for example, the trigger is fired with parameters that fall outside of the expected values. Please be aware of the risk." />
@@ -623,16 +628,20 @@
     <TranslationEntry Key="internal/Action/descobssavereplay" Translation="save OBS replay buffer" />
     <TranslationEntry Key="internal/Action/descobssetscene" Translation="set current OBS scene to ({0})" />
     <TranslationEntry Key="internal/Action/descobsshowsource" Translation="show source ({0}) on OBS scene ({1})" />
-    <TranslationEntry Key="internal/Action/descobsshowsourcecurrent" Translation="show source ({0}) on current OBS scene" />
     <TranslationEntry Key="internal/Action/descobsstartrecord" Translation="start recording on OBS" />
     <TranslationEntry Key="internal/Action/descobsstartreplay" Translation="start OBS replay buffer" />
     <TranslationEntry Key="internal/Action/descobsstartstream" Translation="start streaming on OBS" />
+    <TranslationEntry Key="internal/Action/descobsresumerecord" Translation="resume recording on OBS" />
     <TranslationEntry Key="internal/Action/descobsstoprecord" Translation="stop recording on OBS" />
     <TranslationEntry Key="internal/Action/descobsstopreplay" Translation="stop OBS replay buffer" />
     <TranslationEntry Key="internal/Action/descobsstopstream" Translation="stop streaming on OBS" />
+    <TranslationEntry Key="internal/Action/descobspauserecord" Translation="pause recording on OBS" />
+    <TranslationEntry Key="internal/Action/descobstrestartrecord" Translation="stop then start recording on OBS" />
+    <TranslationEntry Key="internal/Action/descobsrestartrecordifactive" Translation="stop then start recording on OBS (if currently recording)" />
     <TranslationEntry Key="internal/Action/descobstogglerecord" Translation="start/stop recording on OBS (toggle)" />
     <TranslationEntry Key="internal/Action/descobstogglereplay" Translation="start/stop OBS replay buffer (toggle)" />
     <TranslationEntry Key="internal/Action/descobstogglestream" Translation="start/stop streaming on OBS (toggle)" />
+    <TranslationEntry Key="internal/Action/descobstogglerecordpause" Translation="resume/pause recording on OBS (toggle)" />
     <TranslationEntry Key="internal/Action/descplaysound" Translation="play sound file ({0}) at volume ({1}) %" />
     <TranslationEntry Key="internal/Action/descprocessmessage" Translation="process message ({0}) as log line" />
     <TranslationEntry Key="internal/Action/descscalarnumeric" Translation="set scalar variable ({0}) value with numeric expression ({1})" />
@@ -702,6 +711,8 @@
     <TranslationEntry Key="internal/Action/obsconnectok" Translation="OBS WebSocket connected successfully" />
     <TranslationEntry Key="internal/Action/obscontrolerror" Translation="Can't execute OBS control action due to error" />
     <TranslationEntry Key="internal/Action/obscontrolexception" Translation="Can't execute OBS control action due to exception: " />
+    <TranslationEntry Key="internal/Action/obsconnectversionerror" Translation="Your version of OBS WebSocket is not currently supported." />
+    <TranslationEntry Key="internal/Action/obsauthpassword" Translation="OBS WebSocket authentication required, you must provide a password" />
     <TranslationEntry Key="internal/Action/regexlistunset" Translation="All list variables matching ({0}) unset" />
     <TranslationEntry Key="internal/Action/regexscalarunset" Translation="All scalar variables matching ({0}) unset" />
     <TranslationEntry Key="internal/Action/regextableunset" Translation="All table variables matching ({0}) unset" />

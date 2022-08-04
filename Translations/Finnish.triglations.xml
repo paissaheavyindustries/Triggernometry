@@ -993,7 +993,6 @@
 	<TranslationEntry Key="Plugin/UserInterface/btnUpdate" Translation="Päivitä" />
 	<TranslationEntry Key="ActionForm/lblObsSceneName" Translation="Lähteen nimi" />	
 	<TranslationEntry Key="internal/Action/descobsshowsource" Translation="näytä lähde ({0}) OBS-kohtauksessa ({1})" />
-	<TranslationEntry Key="internal/Action/descobsshowsourcecurrent" Translation="näytä lähde ({0}) tämänhetkisessä OBS-kohtauksessa" />
 	<TranslationEntry Key="internal/Action/descobshidesource" Translation="piilota lähde ({0}) OBS-kohtauksesta ({1})" />
 	<TranslationEntry Key="internal/Action/descobshidesourcecurrent" Translation="piilota lähde ({0}) tämänhetkisestä OBS-kohtauksesta" />	
 	<TranslationEntry Key="ActionForm/cbxObsOpType[Show source]" Translation="Näytä lähde" />

@@ -994,7 +994,6 @@
 	  <TranslationEntry Key="Plugin/UserInterface/btnUpdate" Translation="Mise a jour" />
 	  <TranslationEntry Key="ActionForm/lblObsSceneName" Translation="Nom de la scene" />
 	  <TranslationEntry Key="internal/Action/descobsshowsource" Translation="afficher la source ({0}) sur la scène OBS ({1})" />
-	  <TranslationEntry Key="internal/Action/descobsshowsourcecurrent" Translation="afficher la source ({0}) sur la scène OBS actuelle" />
 	  <TranslationEntry Key="internal/Action/descobshidesource" Translation="masquer la source ({0}) sur la scène OBS ({1})" />
 	  <TranslationEntry Key="internal/Action/descobshidesourcecurrent" Translation="masquer la source ({0}) sur la scène OBS actuelle" />
 	  <TranslationEntry Key="ActionForm/cbxObsOpType[Show source]" Translation="Afficjer la source" />

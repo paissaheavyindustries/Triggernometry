@@ -623,7 +623,6 @@
         <TranslationEntry Key="internal/Action/descobssavereplay" Translation="保存OBS重播缓冲区" />
         <TranslationEntry Key="internal/Action/descobssetscene" Translation="将当前的OBS场景设置为 ({0})" />
         <TranslationEntry Key="internal/Action/descobsshowsource" Translation="在 OBS 的场景 ({1}) 显示来源 ({0})" />
-        <TranslationEntry Key="internal/Action/descobsshowsourcecurrent" Translation="在 OBS 的当前场景显示来源 ({0})" />
         <TranslationEntry Key="internal/Action/descobsstartrecord" Translation="在OBS上开始录制" />
         <TranslationEntry Key="internal/Action/descobsstartreplay" Translation="启动OBS重播缓冲区" />
         <TranslationEntry Key="internal/Action/descobsstartstream" Translation="在OBS上开始流式传输" />
