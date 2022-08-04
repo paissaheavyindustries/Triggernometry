@@ -366,7 +366,7 @@ namespace Triggernometry
                     SendRequest("SetSceneItemEnabled", new { sceneName = scenename, sceneItemId = sceneItemId, sceneItemEnabled = sceneItemEnabled });
                 });
             }
-            SendRequest("GetRecordStatus", messageId);
+            SendRequest("GetSceneItemId", messageId, new { sceneName = scenename, sourceName = sourcename });
         }
 
         internal void JSONPayload(string jsonpayload)
