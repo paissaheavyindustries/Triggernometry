@@ -11,6 +11,7 @@ using System.Speech.Synthesis;
 using System.Xml.Serialization;
 using System.IO;
 using System.Globalization;
+using System.Diagnostics;
 
 namespace Triggernometry.Forms
 {
@@ -19,9 +20,9 @@ namespace Triggernometry.Forms
     {
 
         private bool IsReadonly { get; set; } = false;
+        private string EditorTempFn { get; set; }
+        private Process ExtEditor { get; set; } = null;
 
-        internal WMPLib.WindowsMediaPlayer wmp;
-        internal SpeechSynthesizer tts;
         private RealPlugin _plug;
         internal RealPlugin plug
         {
@@ -32,7 +33,79 @@ namespace Triggernometry.Forms
             set
             {
                 _plug = value;
+                cndLoopCondition.plug = value;
                 cndCondition.plug = value;
+                actionViewer1.plug = value;
+            }
+        }
+
+        private WMPLib.WindowsMediaPlayer _wmp;
+        internal WMPLib.WindowsMediaPlayer wmp
+        {
+            get
+            {
+                return _wmp;
+            }
+            set
+            {
+                _wmp = value;
+                actionViewer1.wmp = value;                
+            }
+        }
+
+        private SpeechSynthesizer _tts;
+        internal SpeechSynthesizer tts
+        {
+            get
+            {
+                return _tts;
+            }
+            set
+            {
+                _tts = value;
+                actionViewer1.tts = value;
+            }
+        }
+
+        private ImageList _imgs;
+        internal ImageList imgs
+        {
+            get
+            {
+                return _imgs;
+            }
+            set
+            {
+                _imgs = value;
+                actionViewer1.imgs = value;
+            }
+        }
+
+        private TreeView _trv;
+        internal TreeView trv
+        {
+            get
+            {
+                return _trv;
+            }
+            set
+            {
+                _trv = value;
+                actionViewer1.trv = value;
+            }
+        }
+
+        private Context _fakectx;
+        internal Context fakectx
+        {
+            get
+            {
+                return _fakectx;
+            }
+            set
+            {
+                _fakectx = value;
+                actionViewer1.fakectx = value;
             }
         }
 
@@ -69,6 +142,42 @@ namespace Triggernometry.Forms
             txtSendKeysLink.Tag = I18n.DoNotTranslate;
             txtObsWebsocketLink.Tag = I18n.DoNotTranslate;
             RestoredSavedDimensions();
+            actionViewer1.plug = plug;
+            actionViewer1.tts = tts;
+            actionViewer1.wmp = wmp;
+            actionViewer1.imgs = imgs;
+            actionViewer1.trv = trv;
+            actionViewer1.fakectx = fakectx;
+            Disposed += ActionForm_Disposed;
+            FormClosing += ActionForm_FormClosing;
+        }
+
+        private void ActionForm_Disposed(object sender, EventArgs e)
+        {
+            if (ExtEditor != null)
+            {
+                ExtEditor.Dispose();
+                ExtEditor = null;
+            }
+        }
+
+        private void ActionForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (ExtEditor != null)
+            {
+                switch (MessageBox.Show(
+                    this,
+                    I18n.Translate("internal/ActionForm/exteditorstillup", "External script editor is still running, and any changes made have not yet been reflected to the script code. Ignore changes and close the action editor anyway?"),
+                    I18n.Translate("internal/ConfigurationForm/warning", "Warning"),
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                ))
+                {
+                    case DialogResult.No:
+                        e.Cancel = true;
+                        break;
+                }
+            }
         }
 
         private void Tsi_Click2(object sender, EventArgs e)
@@ -90,12 +199,12 @@ namespace Triggernometry.Forms
         {
             int oldsel = tbcActionSettings.SelectedIndex;
             tbcActionSettings.SelectedIndex = cbxActionType.SelectedIndex;
-            if (cbxActionType.SelectedIndex == 9 || cbxActionType.SelectedIndex == 13)
+            if (cbxActionType.SelectedIndex == 9 || cbxActionType.SelectedIndex == 13 || cbxActionType.SelectedIndex == 24)
             {
                 timer2.Enabled = true;
                 stsMouseHelp.Visible = true;
             }
-            else if (oldsel == 9 || oldsel == 13)
+            else if (oldsel == 9 || oldsel == 13 || oldsel == 24)
             {
                 stsMouseHelp.Visible = false;
                 timer2.Enabled = false;
@@ -217,13 +326,13 @@ namespace Triggernometry.Forms
 				expProcessWorkingDir.Expression = "";
 				cbxProcessWindowStyle.SelectedIndex = 0;
                 expKeypresses.Expression = "";
-                cbxExecScriptLang.SelectedIndex = 0;
                 expExecScriptCode.Expression = "";
                 expExecScriptAssemblies.Expression = "";
                 cbxMessageBoxIcon.SelectedIndex = 0;
                 expMessageBoxText.Expression = "";
                 expVariableExpression.Expression = "";
                 expVariableName.Expression = "";
+                expVariableTarget.Expression = "";
                 cbxVariableOp.SelectedIndex = 0;
                 expLvarIndex.Expression = "";
                 expLvarName.Expression = "";
@@ -265,10 +374,12 @@ namespace Triggernometry.Forms
                 expTextAuraXIni.Expression = "";
                 expTextAuraYIni.Expression = "";
                 cbxProcessLog.Checked = false;
+                cbxLogMessageTarget.SelectedIndex = 0;
                 expTextAuraWIni.Expression = "";
                 expTextAuraHIni.Expression = "";
                 expTextAuraOIni.Expression = "";
                 expLogMessageText.Expression = "";
+                cbxLogMessageLevel.SelectedIndex = 0;
                 expTextAuraXTick.Expression = "";
                 expTextAuraYTick.Expression = "";
                 expTextAuraWTick.Expression = "";
@@ -331,6 +442,20 @@ namespace Triggernometry.Forms
                 cbxMouseCoord.SelectedIndex = 0;
                 expMouseX.Expression = "";
                 expMouseY.Expression = "";
+                prsFileVariable.IsPersistent = false;
+                prsListSource.IsPersistent = false;
+                prsListTarget.IsPersistent = false;
+                prsScalarName.IsPersistent = false;
+                prsJsonVariable.IsPersistent = false;
+                prsScalarTarget.IsPersistent = false;
+                prsTableSource.IsPersistent = false;
+                prsTableTarget.IsPersistent = false;
+                cndLoopCondition.ConditionToEdit = new ConditionGroup() { Enabled = false };
+                actionViewer1.Actions = new List<Action>();
+                expLoopIterationDelay.Expression = "";
+                cbxRepositoryOp.SelectedIndex = 0;
+                cbxTriggerZoneType.SelectedIndex = 0;
+                expJsonVariable.Expression = "";
             }
             else
             {
@@ -355,7 +480,6 @@ namespace Triggernometry.Forms
 				expProcessWorkingDir.Expression = a._LaunchProcessWorkingDirExpression;
 				cbxProcessWindowStyle.SelectedIndex = (int)a._LaunchProcessWindowStyle;
                 expKeypresses.Expression = a._KeyPressExpression;
-                cbxExecScriptLang.SelectedIndex = (int)a._ExecScriptType;
                 expExecScriptCode.Expression = a._ExecScriptExpression;
                 cbxLoggingLevel.SelectedIndex = (int)a._DebugLevel;
                 expExecScriptAssemblies.Expression = a._ExecScriptAssembliesExpression;
@@ -363,6 +487,7 @@ namespace Triggernometry.Forms
                 expMessageBoxText.Expression = a._MessageBoxText;
                 expVariableExpression.Expression = a._VariableExpression;
                 expVariableName.Expression = a._VariableName;
+                expVariableTarget.Expression = a._VariableJsonTarget;
                 cbxVariableOp.SelectedIndex = (int)a._VariableOp;
                 expLvarIndex.Expression = a._ListVariableIndex;
                 expLvarName.Expression = a._ListVariableName;
@@ -441,6 +566,8 @@ namespace Triggernometry.Forms
                 expDiscordMessage.Expression = a._DiscordWebhookMessage;
                 cbxDiscordTts.Checked = a._DiscordTts;
                 cbxObsOpType.SelectedIndex = (int)a._OBSControlType;
+                expObsEndpoint.Expression = a._OBSEndPoint;
+                expObsPassword.Expression = a._OBSPassword;
                 expObsSceneName.Expression = a._OBSSceneName;
                 expObsSourceName.Expression = a._OBSSourceName;
                 expObsJSONPayload.Expression = a._OBSJSONPayload;
@@ -449,7 +576,9 @@ namespace Triggernometry.Forms
                 expJsonEndpoint.Expression = a._JsonEndpointExpression;
                 expJsonFiring.Expression = a._JsonFiringExpression;
                 expJsonPayload.Expression = a._JsonPayloadExpression;
+                expJsonHeaders.Expression = a._JsonHeaderExpression;
                 cbxJsonCache.Checked = a._JsonCacheRequest;
+                expWmsgProcid.Expression = a._WmsgProcId;
                 expWmsgTitle.Expression = a._WmsgTitle;
                 expWmsgCode.Expression = a._WmsgCode;
                 expWmsgWparam.Expression = a._WmsgWparam;
@@ -497,6 +626,7 @@ namespace Triggernometry.Forms
                 expTextAuraHTick.Expression = a._TextAuraHTickExpression;
                 expTextAuraOTick.Expression = a._TextAuraOTickExpression;
                 cbxProcessLog.Checked = a._LogProcess;
+                cbxLogMessageTarget.SelectedIndex = (int)a._LogMessageTarget;
                 expTextAuraTTLTick.Expression = a._TextAuraTTLTickExpression;
                 expLogMessageText.Expression = a._LogMessageText;
                 cbxLogMessageLevel.SelectedIndex = (int)a._LogLevel;
@@ -531,9 +661,13 @@ namespace Triggernometry.Forms
                     case Action.KeypressTypeEnum.WindowMessage:
                         cbxKeypressMethod.SelectedIndex = 1;
                         break;
+                    case Action.KeypressTypeEnum.WindowMessageCombo:
+                        cbxKeypressMethod.SelectedIndex = 2;
+                        break;
                 }
                 expKeypress.Expression = a._KeyPressCode;
                 expWindowTitle.Expression = a._KeyPressWindow;
+                expKeypressProcId.Expression = a._KeyPressProcId;
                 expFileOpName.Expression = a._DiskFileOpName;
                 expFileOpVariable.Expression = a._DiskFileOpVar;
                 cbxFileOpType.SelectedIndex = (int)a._DiskFileOp;
@@ -555,7 +689,49 @@ namespace Triggernometry.Forms
                 cbxMouseCoord.SelectedIndex = (int)a._MouseCoordType;
                 expMouseX.Expression = a._MouseX;
                 expMouseY.Expression = a._MouseY;
+                prsFileVariable.IsPersistent = a._DiskPersist;
+                prsListSource.IsPersistent = a._ListSourcePersist;
+                prsListTarget.IsPersistent = a._ListTargetPersist;
+                prsScalarName.IsPersistent = a._VariablePersist;
+                prsScalarTarget.IsPersistent = a._VariableTargetPersist;
+                prsJsonVariable.IsPersistent = a._JsonResultVariablePersist;
+                prsTableSource.IsPersistent = a._TableSourcePersist;
+                prsTableTarget.IsPersistent = a._TableTargetPersist;
+                if (a.LoopCondition != null)
+                {
+                    cx = (ConditionGroup)a.LoopCondition.Duplicate();
+                }
+                else
+                {
+                    cx = new ConditionGroup();
+                    cx.Grouping = ConditionGroup.CndGroupingEnum.Or;
+                    cx.Enabled = false;
+                }
+                cndLoopCondition.ConditionToEdit = cx;
+                actionViewer1.Actions = new List<Action>();
+                var ix = from tx in a.LoopActions
+                         orderby tx.OrderNumber ascending
+                         select tx;
+                foreach (Action ax in ix)
+                {
+                    Action b = new Action();
+                    ax.CopySettingsTo(b);
+                    actionViewer1.Actions.Add(b);
+                }
+                actionViewer1.RefreshDgv();
+                expLoopIterationDelay.Expression = a._LoopDelayExpression;
+                tn = plug.LocateNodeHostingRepositoryId(trvRepositoryLink.Nodes[0], a._RepositoryId);
+                if (tn != null)
+                {
+                    tn.EnsureVisible();
+                    trvRepositoryLink.SelectedNode = tn;
+                    trvRepositoryLink.Update();
+                }
+                cbxRepositoryOp.SelectedIndex = (int)a._RepositoryOp;
+                cbxTriggerZoneType.SelectedIndex = (int)a._TriggerZoneType;
+                expJsonVariable.Expression = a._JsonResultVariable;
             }
+            cbxProcessLog_CheckedChanged(null, null);
         }
 
         internal void SettingsToAction(Action a)
@@ -573,6 +749,7 @@ namespace Triggernometry.Forms
             a._PlaySoundMyself = chkSoundMyOutput.Checked;
             a._UseTTSTextExpression = expTextToSay.Expression;
             a._LogProcess = cbxProcessLog.Checked;
+            a._LogMessageTarget = (LogEvent.SourceEnum)cbxLogMessageTarget.SelectedIndex;
             a._UseTTSVolumeExpression = expSpeechVolume.Expression;
             a._UseTTSRateExpression = expSpeechRate.Expression;
             a._UseTTSExclusive = chkSpeechExclusive.Checked;
@@ -583,13 +760,13 @@ namespace Triggernometry.Forms
             a._DebugLevel = (RealPlugin.DebugLevelEnum)cbxLoggingLevel.SelectedIndex;
 			a._LaunchProcessWindowStyle = (System.Diagnostics.ProcessWindowStyle)cbxProcessWindowStyle.SelectedIndex;
             a._KeyPressExpression = expKeypresses.Expression;
-            a._ExecScriptType = (Action.ScriptTypeEnum)cbxExecScriptLang.SelectedIndex;
             a._ExecScriptExpression = expExecScriptCode.Expression;
             a._ExecScriptAssembliesExpression = expExecScriptAssemblies.Expression;
             a._MessageBoxIconType = (Action.MessageBoxIconTypeEnum)(cbxMessageBoxIcon.SelectedIndex * 16);
             a._MessageBoxText = expMessageBoxText.Expression;
             a._VariableExpression = expVariableExpression.Expression;
             a._VariableName = expVariableName.Expression;
+            a._VariableJsonTarget = expVariableTarget.Expression;
             a._VariableOp = (Action.VariableOpEnum)cbxVariableOp.SelectedIndex;
             a._ListVariableExpression = expLvarValue.Expression;
             a._ListVariableExpressionType = (Action.ListVariableExpTypeEnum)cbxLvarExpType.SelectedIndex;
@@ -674,15 +851,19 @@ namespace Triggernometry.Forms
             a._DiscordWebhookURL = expDiscordUrl.Expression;
             a._DiscordTts = cbxDiscordTts.Checked;
             a._OBSControlType = (Action.ObsControlTypeEnum)cbxObsOpType.SelectedIndex;
+            a._OBSEndPoint = expObsEndpoint.Expression;
+            a._OBSPassword = expObsPassword.Expression;
             a._OBSSceneName = expObsSceneName.Expression;
             a._OBSSourceName = expObsSourceName.Expression;
             a._OBSJSONPayload = expObsJSONPayload.Expression;
             a._JsonOperationType = (Action.HTTPMethodEnum)cbxJsonType.SelectedIndex;
             a._JsonEndpointExpression = expJsonEndpoint.Expression;
             a._JsonFiringExpression = expJsonFiring.Expression;
+            a._JsonHeaderExpression = expJsonHeaders.Expression;
             a._JsonPayloadExpression = expJsonPayload.Expression;
             a._JsonCacheRequest = cbxJsonCache.Checked;
             a._TextAuraOp = (Action.AuraOpEnum)cbxTextAuraOp.SelectedIndex;
+            a._WmsgProcId = expWmsgProcid.Expression;
             a._WmsgTitle = expWmsgTitle.Expression;
             a._WmsgCode = expWmsgCode.Expression;
             a._WmsgWparam = expWmsgWparam.Expression;
@@ -743,6 +924,7 @@ namespace Triggernometry.Forms
             a.Condition = cndCondition.ConditionToEdit;
             a._KeypressType = (Action.KeypressTypeEnum)cbxKeypressMethod.SelectedIndex;
             a._KeyPressCode = expKeypress.Expression;
+            a._KeyPressProcId = expKeypressProcId.Expression;
             a._KeyPressWindow = expWindowTitle.Expression;
             a._DiskFileOp = (Action.DiskFileOpEnum)cbxFileOpType.SelectedIndex;
             a._DiskFileOpName = expFileOpName.Expression;
@@ -765,6 +947,33 @@ namespace Triggernometry.Forms
             a._MouseCoordType = (Action.MouseCoordEnum)cbxMouseCoord.SelectedIndex;
             a._MouseX = expMouseX.Expression;
             a._MouseY = expMouseY.Expression;
+            a._DiskPersist = prsFileVariable.IsPersistent;
+            a._ListSourcePersist = prsListSource.IsPersistent;
+            a._ListTargetPersist = prsListTarget.IsPersistent;
+            a._VariablePersist = prsScalarName.IsPersistent;
+            a._JsonResultVariablePersist = prsJsonVariable.IsPersistent;
+            a._VariableTargetPersist = prsScalarTarget.IsPersistent;
+            a._TableSourcePersist = prsTableSource.IsPersistent;
+            a._TableTargetPersist = prsTableTarget.IsPersistent;
+            a.LoopCondition = cndLoopCondition.ConditionToEdit;
+            a.LoopActions = new List<Action>();
+            var ix = from tx in actionViewer1.Actions
+                     orderby tx.OrderNumber ascending
+                     select tx;
+            a.LoopActions.AddRange(ix);
+            a.LoopDelayExpression = expLoopIterationDelay.Expression;
+            tn = trvRepositoryLink.SelectedNode;
+            if (tn != null)
+            {
+                a._RepositoryId = ((Repository)tn.Tag).Id;
+            }
+            else
+            {
+                a._RepositoryId = Guid.Empty;
+            }
+            a._RepositoryOp = (Action.RepositoryOpEnum)cbxRepositoryOp.SelectedIndex;
+            a._TriggerZoneType = (Action.TriggerZoneTypeEnum)cbxTriggerZoneType.SelectedIndex;
+            a._JsonResultVariable = expJsonVariable.Expression;
         }
 
         private void TestAction(bool liveValues)
@@ -801,8 +1010,11 @@ namespace Triggernometry.Forms
                     break;
             }
             expVariableName.Enabled = (cbxVariableOp.SelectedIndex != 3);
-            expVariableExpression.Enabled = (cbxVariableOp.SelectedIndex == 1 || cbxVariableOp.SelectedIndex == 2);
+            prsScalarName.Enabled = expVariableName.Enabled;
+            expVariableExpression.Enabled = (cbxVariableOp.SelectedIndex == 1 || cbxVariableOp.SelectedIndex == 2 || cbxVariableOp.SelectedIndex == 5 || cbxVariableOp.SelectedIndex == 6);
             expVariableName.ExpressionType = (cbxVariableOp.SelectedIndex == 4) ? CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex : CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            expVariableTarget.Enabled = (cbxVariableOp.SelectedIndex == 5 || cbxVariableOp.SelectedIndex == 6);
+            prsScalarTarget.Enabled = expVariableTarget.Enabled;
         }
 
         private void cbxTriggerOp_SelectedIndexChanged(object sender, EventArgs e)
@@ -1501,7 +1713,25 @@ namespace Triggernometry.Forms
                     expLvarTarget.Enabled = false;
                     expLvarIndex.Enabled = false;
                     break;
+                case 17: // Sort list in an numerically ascending order
+                    expLvarName.Enabled = true;
+                    expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expLvarValue.Enabled = false;
+                    cbxLvarExpType.Enabled = false;
+                    expLvarTarget.Enabled = false;
+                    expLvarIndex.Enabled = false;
+                    break;
+                case 18: // Sort list in an numerically descending order
+                    expLvarName.Enabled = true;
+                    expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expLvarValue.Enabled = false;
+                    cbxLvarExpType.Enabled = false;
+                    expLvarTarget.Enabled = false;
+                    expLvarIndex.Enabled = false;
+                    break;
             }
+            prsListSource.Enabled = expLvarName.Enabled;
+            prsListTarget.Enabled = expLvarTarget.Enabled;
         }
 
         private void expVariableName_EnabledChanged(object sender, EventArgs e)
@@ -1683,13 +1913,28 @@ namespace Triggernometry.Forms
             lblKeypressesInfo.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
             txtSendKeysLink.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
             btnSendKeysLink.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
-            lblKeypressWindow.Enabled = (cbxKeypressMethod.SelectedIndex == 1);
-            expWindowTitle.Enabled = (cbxKeypressMethod.SelectedIndex == 1);
-            lblKeypress.Enabled = (cbxKeypressMethod.SelectedIndex == 1);
-            expKeypress.Enabled = (cbxKeypressMethod.SelectedIndex == 1);
-            lblKeypressInfo.Enabled = (cbxKeypressMethod.SelectedIndex == 1);
-            txtKeyCodesLink.Enabled = (cbxKeypressMethod.SelectedIndex == 1);
-            btnKeycodesLink.Enabled = (cbxKeypressMethod.SelectedIndex == 1);            
+            lblKeypressWindow.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
+            expWindowTitle.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
+            lblKeypress.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
+            expKeypress.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
+            lblKeypressInfo.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
+            txtKeyCodesLink.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
+            btnKeycodesLink.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
+            lblKeypressProcId.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
+            expKeypressProcId.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
+            lblKeypressProcInfo.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
+            switch (cbxKeypressMethod.SelectedIndex)
+            {
+                case 0:
+                    expKeypress.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
+                    break;
+                case 1:
+                    expKeypress.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
+                    break;
+                case 2:
+                    expKeypress.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    break;
+            }
         }
 
         private void btnKeycodesLink_Click(object sender, EventArgs e)
@@ -1801,6 +2046,8 @@ namespace Triggernometry.Forms
                     expTvarTarget.Enabled = true;
                     break;
             }
+            prsTableSource.Enabled = expTvarName.Enabled;
+            prsTableTarget.Enabled = expTvarTarget.Enabled;
         }
 
         private void expTvarName_EnabledChanged(object sender, EventArgs e)
@@ -1836,6 +2083,106 @@ namespace Triggernometry.Forms
         private void cbxJsonType_SelectedIndexChanged(object sender, EventArgs e)
         {
             expJsonPayload.Enabled = (cbxJsonType.SelectedIndex == 0);
+        }
+
+        private void cbxProcessLog_CheckedChanged(object sender, EventArgs e)
+        {
+            cbxLogMessageTarget.Enabled = cbxProcessLog.Checked;
+            lblLogMessageTarget.Enabled = cbxLogMessageTarget.Enabled;
+            cbxLogMessageLevel.Enabled = (cbxLogMessageTarget.Enabled == false);
+            lblLogMessageLevel.Enabled = cbxLogMessageLevel.Enabled;
+        }
+
+        private void btnScriptExternalEditor_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string code = expExecScriptCode.Expression;
+                EditorTempFn = Path.GetTempFileName() + ".cs";
+                File.WriteAllText(EditorTempFn, code);
+                ExtEditor = new Process();
+                ExtEditor.StartInfo = new ProcessStartInfo()
+                {
+                    UseShellExecute = true,
+                    FileName = EditorTempFn                    
+                };
+                ExtEditor.EnableRaisingEvents = true;
+                ExtEditor.Exited += P_Exited;
+                ExtEditor.Start();
+                btnScriptExternalEditor.Enabled = false;
+                expExecScriptCode.Enabled = false;
+                lblScriptExtEditor.Visible = true;
+            }
+            catch (Exception ex)
+            {
+                plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ActionForm/exteditorfailed", "Couldn't launch external editor due to exception: {0}", ex.Message));
+            }
+        }
+
+        private void P_Exited(object sender, EventArgs e)
+        {
+            try
+            {
+                expExecScriptCode.Expression = File.ReadAllText(EditorTempFn);
+                File.Delete(EditorTempFn);
+            }
+            catch (Exception ex)
+            {
+                plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ActionForm/tempfiledeletefailed", "Couldn't process temporary file {0} due to exception: {1}", EditorTempFn, ex.Message));
+            }
+            btnScriptExternalEditor.Enabled = true;
+            expExecScriptCode.Enabled = true;
+            lblScriptExtEditor.Visible = false;
+            ExtEditor.Dispose();
+            ExtEditor = null;
+        }
+
+        private void cbxRepositoryOp_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            trvRepositoryLink.Enabled = (cbxRepositoryOp.SelectedIndex == 1);
+        }
+
+        private void trvRepositoryLink_EnabledChanged(object sender, EventArgs e)
+        {
+            lblRepositoryLink.Enabled = trvRepositoryLink.Enabled;
+        }
+
+        private void trvRepositoryLink_BeforeSelect(object sender, TreeViewCancelEventArgs e)
+        {
+            if ((e.Node.Tag is Repository) == false)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void trvRepositoryLink_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
+        {
+            if (e.Node.Tag is Folder)
+            {
+                e.Node.ImageIndex = (int)CustomControls.UserInterface.GetImageIndexForClosedFolder((Folder)e.Node.Tag);
+                e.Node.SelectedImageIndex = e.Node.ImageIndex;
+            }
+        }
+
+        private void trvRepositoryLink_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+        {
+            if (e.Node.Tag is Folder)
+            {
+                e.Node.ImageIndex = (int)CustomControls.UserInterface.GetImageIndexForOpenFolder((Folder)e.Node.Tag);
+                e.Node.SelectedImageIndex = e.Node.ImageIndex;
+            }
+        }
+
+        private void cbxZoneType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbxTriggerZoneType.SelectedIndex == 0)
+            {
+                lblTriggerZone.Text = I18n.Translate("TestInputForm/lblZoneName", "Zone name");
+            }
+            else
+            {
+                lblTriggerZone.Text = I18n.Translate("TestInputForm/ffxivzoneid", "Zone ID");
+            }
         }
 
     }

@@ -137,9 +137,22 @@ namespace TriggernometryProxy
             FailsafeRegisterHook("CornerHideHook", "HideCornerNotification");
             FailsafeRegisterHook("TabLocateHook", "LocateTab");
             FailsafeRegisterHook("InstanceHook", "GetInstance");
+            FailsafeRegisterHook("CheckUpdateHook", "CheckForUpdates");
             GetPluginNameAndPath();
             ActGlobals.oFormActMain.OnLogLineRead += OFormActMain_OnLogLineRead;
+            ActGlobals.oFormActMain.OnCombatStart += OFormActMain_OnCombatStart;
+            ActGlobals.oFormActMain.OnCombatEnd += OFormActMain_OnCombatEnd;
             Instance.InitPlugin(pluginScreenSpace, pluginStatusText);
+        }
+
+        private void OFormActMain_OnCombatStart(bool isImport, CombatToggleEventArgs encounterInfo)
+        {
+            ExtendedACTEvents(new string[] { "OnCombatStart" });
+        }
+
+        private void OFormActMain_OnCombatEnd(bool isImport, CombatToggleEventArgs encounterInfo)
+        {
+            ExtendedACTEvents(new string[] { "OnCombatEnd" });
         }
 
         public void LocateTab(TabPage tp)
@@ -227,10 +240,17 @@ namespace TriggernometryProxy
         }
 
         public void DeInitPlugin()
-        {            
+        {
+            ActGlobals.oFormActMain.OnCombatEnd -= OFormActMain_OnCombatEnd;
+            ActGlobals.oFormActMain.OnCombatStart -= OFormActMain_OnCombatStart;
             ActGlobals.oFormActMain.OnLogLineRead -= OFormActMain_OnLogLineRead;
             Instance.DeInitPlugin();
             HideCornerNotification();
+        }
+
+        private void ExtendedACTEvents(string[] data)
+        {
+            Instance.ExtendedACTEvents(data);
         }
 
         private void OFormActMain_OnLogLineRead(bool isImport, LogLineEventArgs logInfo)
@@ -371,7 +391,11 @@ namespace TriggernometryProxy
                         (String.Compare(tn, ActPluginType, true) == 0)
                     )
                     &&
-                    (String.Compare(p.lblPluginStatus.Text, "FFXIV Plugin Started.", true) == 0)
+                    (
+                        (String.Compare(p.lblPluginStatus.Text, "FFXIV Plugin Started.", true) == 0)
+                        ||
+                        (String.Compare(p.lblPluginStatus.Text, "FFXIV_ACT_Plugin Started.", true) == 0)
+                    )
                 )
                 {
                     if (ActPluginPrevious == p)
@@ -401,6 +425,73 @@ namespace TriggernometryProxy
                 }
             }
             return new Triggernometry.RealPlugin.PluginWrapper() { pluginObj = null, state = 0 };
+        }
+
+        public void CheckForUpdates()
+        {
+            int pluginId = 87;
+            FormActMain mainform = ActGlobals.oFormActMain;
+            try
+            {
+                Version localVersion = this.GetType().Assembly.GetName().Version;
+                Version remoteVersion = new Version(mainform.PluginGetRemoteVersion(pluginId).TrimStart(new char[] { 'v' }));    // Strip any leading 'v' from the string before passing to the Version constructor
+                if (remoteVersion > localVersion)
+                {
+                    System.Action updateAction = new System.Action(() =>       // Action we perform when told to update
+                    {
+                        // You could use a MessageBox for this as well
+                        TraySlider slider = new TraySlider();
+                        slider.ShowDurationMs = 60000;
+                        slider.ButtonLayout = TraySlider.ButtonLayoutEnum.TwoButton;
+                        slider.ButtonSE.Text = Instance.Translate("internal/Plugin/ignoreupdate", "Skip");
+                        slider.ButtonSW.Text = Instance.Translate("internal/Plugin/installupdate", "Install");
+                        slider.ButtonSW.Click += (s, e) =>
+                        {
+                            FileInfo updatedFile = mainform.PluginDownload(pluginId);
+                            ActPluginData pluginData = mainform.PluginGetSelfData(this);
+                            FileInfo pfInfo = new FileInfo(pluginData.pluginFile.FullName);
+                            string origname = pfInfo.FullName;
+                            string tempname = origname + ".temp";
+                            if (File.Exists(tempname) == true)
+                            {
+                                File.Delete(tempname);
+                            }
+                            pfInfo.MoveTo(tempname);
+                            try
+                            {
+                                mainform.UnZip(updatedFile.FullName, pluginData.pluginFile.DirectoryName);
+                                pfInfo.Delete();
+                            }
+                            catch (Exception)
+                            {
+                                pfInfo.MoveTo(origname);
+                                throw;
+                            }
+                            mainform.RestartACT(true, Instance.Translate("internal/Plugin/updaterestartrequired", "Triggernometry may not work properly until ACT is restarted."));
+                        };
+                        slider.ShowTraySlider(
+                            Instance.Translate(
+                                "internal/Plugin/updateavailable", "Triggernometry has an update available - would you like to download and install it now?\n\n(If there is an update to ACT, you should click {0} and update ACT first.)",
+                                Instance.Translate("internal/Plugin/ignoreupdate", "Skip")
+                            ),
+                            Instance.Translate("internal/Plugin/updateavailabletitle", "Triggernometry {0} available", remoteVersion)
+                        );
+                    });
+
+                    if (mainform.InvokeRequired)
+                    {
+                        mainform.Invoke(updateAction);
+                    }
+                    else
+                    {
+                        updateAction.Invoke();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                mainform.WriteExceptionLog(ex, Instance.Translate("internal/Plugin/updatefailed", "Triggernometry update failed"));
+            }
         }
 
     }

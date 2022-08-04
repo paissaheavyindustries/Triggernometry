@@ -85,6 +85,7 @@
             this.btnViewLog = new System.Windows.Forms.ToolStripMenuItem();
             this.btnSearch = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnUpdateCheck = new System.Windows.Forms.ToolStripMenuItem();
             this.btnAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.btnLanguages = new System.Windows.Forms.ToolStripDropDownButton();
@@ -93,12 +94,11 @@
             this.errThing2 = new System.Windows.Forms.ToolStripSeparator();
             this.errThing1 = new System.Windows.Forms.ToolStripLabel();
             this.pnlUi = new System.Windows.Forms.Panel();
+            this.treeView1 = new Triggernometry.CustomControls.TreeViewEx();
             this.btnCornerPopup = new System.Windows.Forms.Button();
             this.pnlToastSpace = new System.Windows.Forms.Panel();
             this.pnlWelcome = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnCloseWelcome = new System.Windows.Forms.Button();
-            this.chkWelcome = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.lblWelcomeResources = new System.Windows.Forms.Label();
             this.lblWelcomeResourcesHeader = new System.Windows.Forms.Label();
@@ -111,12 +111,14 @@
             this.lblWelcomeIntro = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.chkWelcome = new System.Windows.Forms.CheckBox();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.btnCloseWelcome = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.prgStatus = new System.Windows.Forms.ToolStripProgressBar();
             this.tlsStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.treeView1 = new Triggernometry.CustomControls.TreeViewEx();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.pnlUi.SuspendLayout();
@@ -125,9 +127,9 @@
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.statusStrip1.SuspendLayout();
-            this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // imageList1
@@ -474,6 +476,7 @@
             this.btnViewLog,
             this.btnSearch,
             this.toolStripSeparator6,
+            this.btnUpdateCheck,
             this.btnAbout});
             this.btnOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnOptions.Image")));
             this.btnOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -619,6 +622,14 @@
             this.toolStripSeparator6.Name = "toolStripSeparator6";
             this.toolStripSeparator6.Size = new System.Drawing.Size(245, 6);
             // 
+            // btnUpdateCheck
+            // 
+            this.btnUpdateCheck.Image = ((System.Drawing.Image)(resources.GetObject("btnUpdateCheck.Image")));
+            this.btnUpdateCheck.Name = "btnUpdateCheck";
+            this.btnUpdateCheck.Size = new System.Drawing.Size(248, 22);
+            this.btnUpdateCheck.Text = "Check for updates";
+            this.btnUpdateCheck.Click += new System.EventHandler(this.btnUpdateCheck_Click);
+            // 
             // btnAbout
             // 
             this.btnAbout.Image = ((System.Drawing.Image)(resources.GetObject("btnAbout.Image")));
@@ -688,6 +699,28 @@
             this.pnlUi.Size = new System.Drawing.Size(474, 372);
             this.pnlUi.TabIndex = 4;
             // 
+            // treeView1
+            // 
+            this.treeView1.AllowDrop = true;
+            this.treeView1.CheckBoxes = true;
+            this.treeView1.ContextMenuStrip = this.contextMenuStrip1;
+            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView1.ImageIndex = 0;
+            this.treeView1.ImageList = this.imageList1;
+            this.treeView1.Location = new System.Drawing.Point(0, 40);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.SelectedImageIndex = 0;
+            this.treeView1.ShowNodeToolTips = true;
+            this.treeView1.Size = new System.Drawing.Size(474, 332);
+            this.treeView1.TabIndex = 2;
+            this.treeView1.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterCheck);
+            this.treeView1.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeCollapse);
+            this.treeView1.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeExpand);
+            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+            this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
+            this.treeView1.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseDoubleClick);
+            this.treeView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.treeView1_KeyDown);
+            // 
             // btnCornerPopup
             // 
             this.btnCornerPopup.BackColor = System.Drawing.SystemColors.Info;
@@ -729,33 +762,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(707, 435);
             this.panel1.TabIndex = 1;
-            // 
-            // btnCloseWelcome
-            // 
-            this.btnCloseWelcome.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnCloseWelcome.Location = new System.Drawing.Point(5, 5);
-            this.btnCloseWelcome.Name = "btnCloseWelcome";
-            this.btnCloseWelcome.Size = new System.Drawing.Size(697, 50);
-            this.btnCloseWelcome.TabIndex = 16;
-            this.btnCloseWelcome.Text = "I\'m ready to start! Let\'s go!";
-            this.btnCloseWelcome.UseVisualStyleBackColor = true;
-            this.btnCloseWelcome.Click += new System.EventHandler(this.btnCloseWelcome_Click);
-            // 
-            // chkWelcome
-            // 
-            this.chkWelcome.AutoSize = true;
-            this.chkWelcome.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkWelcome.Checked = true;
-            this.chkWelcome.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkWelcome.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.chkWelcome.Location = new System.Drawing.Point(0, 0);
-            this.chkWelcome.Name = "chkWelcome";
-            this.chkWelcome.Padding = new System.Windows.Forms.Padding(0, 10, 0, 3);
-            this.chkWelcome.Size = new System.Drawing.Size(707, 30);
-            this.chkWelcome.TabIndex = 15;
-            this.chkWelcome.Text = "Show this Welcome Screen on startup";
-            this.chkWelcome.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkWelcome.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel1
             // 
@@ -926,6 +932,56 @@
             this.linkLabel1.Text = "https://discord.gg/6f9MY55";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
+            // panel4
+            // 
+            this.panel4.AutoSize = true;
+            this.panel4.Controls.Add(this.chkWelcome);
+            this.panel4.Controls.Add(this.panel3);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel4.Location = new System.Drawing.Point(30, 465);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(707, 90);
+            this.panel4.TabIndex = 2;
+            // 
+            // chkWelcome
+            // 
+            this.chkWelcome.AutoSize = true;
+            this.chkWelcome.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkWelcome.Checked = true;
+            this.chkWelcome.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkWelcome.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.chkWelcome.Location = new System.Drawing.Point(0, 0);
+            this.chkWelcome.Name = "chkWelcome";
+            this.chkWelcome.Padding = new System.Windows.Forms.Padding(0, 10, 0, 3);
+            this.chkWelcome.Size = new System.Drawing.Size(707, 30);
+            this.chkWelcome.TabIndex = 15;
+            this.chkWelcome.Text = "Show this Welcome Screen on startup";
+            this.chkWelcome.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkWelcome.UseVisualStyleBackColor = true;
+            // 
+            // panel3
+            // 
+            this.panel3.AutoSize = true;
+            this.panel3.BackColor = System.Drawing.SystemColors.Info;
+            this.panel3.Controls.Add(this.btnCloseWelcome);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel3.Location = new System.Drawing.Point(0, 30);
+            this.panel3.Name = "panel3";
+            this.panel3.Padding = new System.Windows.Forms.Padding(5);
+            this.panel3.Size = new System.Drawing.Size(707, 60);
+            this.panel3.TabIndex = 17;
+            // 
+            // btnCloseWelcome
+            // 
+            this.btnCloseWelcome.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnCloseWelcome.Location = new System.Drawing.Point(5, 5);
+            this.btnCloseWelcome.Name = "btnCloseWelcome";
+            this.btnCloseWelcome.Size = new System.Drawing.Size(697, 50);
+            this.btnCloseWelcome.TabIndex = 16;
+            this.btnCloseWelcome.Text = "I\'m ready to start! Let\'s go!";
+            this.btnCloseWelcome.UseVisualStyleBackColor = true;
+            this.btnCloseWelcome.Click += new System.EventHandler(this.btnCloseWelcome_Click);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -951,50 +1007,11 @@
             this.tlsStatus.Size = new System.Drawing.Size(39, 17);
             this.tlsStatus.Text = "Ready";
             // 
-            // panel3
+            // timer1
             // 
-            this.panel3.AutoSize = true;
-            this.panel3.BackColor = System.Drawing.SystemColors.Info;
-            this.panel3.Controls.Add(this.btnCloseWelcome);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(0, 30);
-            this.panel3.Name = "panel3";
-            this.panel3.Padding = new System.Windows.Forms.Padding(5);
-            this.panel3.Size = new System.Drawing.Size(707, 60);
-            this.panel3.TabIndex = 17;
-            // 
-            // panel4
-            // 
-            this.panel4.AutoSize = true;
-            this.panel4.Controls.Add(this.chkWelcome);
-            this.panel4.Controls.Add(this.panel3);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel4.Location = new System.Drawing.Point(30, 465);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(707, 90);
-            this.panel4.TabIndex = 2;
-            // 
-            // treeView1
-            // 
-            this.treeView1.AllowDrop = true;
-            this.treeView1.CheckBoxes = true;
-            this.treeView1.ContextMenuStrip = this.contextMenuStrip1;
-            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView1.ImageIndex = 0;
-            this.treeView1.ImageList = this.imageList1;
-            this.treeView1.Location = new System.Drawing.Point(0, 40);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.SelectedImageIndex = 0;
-            this.treeView1.ShowNodeToolTips = true;
-            this.treeView1.Size = new System.Drawing.Size(474, 332);
-            this.treeView1.TabIndex = 2;
-            this.treeView1.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterCheck);
-            this.treeView1.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeCollapse);
-            this.treeView1.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeExpand);
-            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
-            this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
-            this.treeView1.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseDoubleClick);
-            this.treeView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.treeView1_KeyDown);
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 30000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // UserInterface
             // 
@@ -1019,11 +1036,11 @@
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
-            this.panel3.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1117,5 +1134,7 @@
         private System.Windows.Forms.ToolStripMenuItem ctxReadme;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.ToolStripMenuItem btnUpdateCheck;
+        private System.Windows.Forms.Timer timer1;
     }
 }

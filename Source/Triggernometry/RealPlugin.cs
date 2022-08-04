@@ -18,19 +18,6 @@ using System.Web.Script.Serialization;
 using System.Runtime.InteropServices;
 using Triggernometry.Variables;
 
-/*
-- #29 focus now on search box when opening search window
-- #31 added mouse operation as trigger action
-- #33 network triggers now work properly in zone locked folders
-- #36 network message sequence will no longer be interpreted as date
-- #38 updated repo serialization error message to prompt users to update
-- #39 automatically loads previous configuration file if current one was broken
-- #43 welcome screen reworked to be more helpful and to not hide the start button
-- #47 added compare function for string comparison
-- #50 made hw acceleration handle zero or negative aura sizes
-- #51 added a check that a node was actually selected in tree
-*/
-
 namespace Triggernometry
 {
 
@@ -120,7 +107,7 @@ namespace Triggernometry
 
         }
 
-        internal class MutexInformation
+        public class MutexInformation
         {
 
             private string name { get; set; }
@@ -332,14 +319,24 @@ namespace Triggernometry
             const int SM_CXSCREEN = 0x0;
             const int SM_CYSCREEN = 0x01;
 
+            private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+
+            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+            static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+            [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+            static extern int GetWindowTextLength(IntPtr hWnd);
+            [DllImport("user32.dll")]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
+            [DllImport("user32.dll", SetLastError = true)]
+            static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
             [DllImport("user32.dll")]
             static extern int GetSystemMetrics(int smIndex);
             [DllImport("user32.dll")]
             private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
             [DllImport("user32.dll")]
             private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-            [DllImport("user32.dll")]
-            private static extern IntPtr PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
             [DllImport("user32.dll", SetLastError = true)]
             [return: MarshalAs(UnmanagedType.Bool)]
             private static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
@@ -347,6 +344,47 @@ namespace Triggernometry
             private static extern IntPtr GetForegroundWindow();
             [DllImport("user32.dll")]
             static extern void mouse_event(uint dwFlags, int dx, int dy, uint dwData, int dwExtraInfo);
+
+            public static string GetWindowTextFromHandle(IntPtr hWnd)
+            {
+                int len = GetWindowTextLength(hWnd);
+                if (len > 0)
+                {
+                    var builder = new StringBuilder(len + 1);
+                    GetWindowText(hWnd, builder, len + 1);
+                    return builder.ToString();
+                }
+                return String.Empty;
+            }
+
+            public static List<IntPtr> FindWindows(string title)
+            {
+                List<IntPtr> wins = new List<IntPtr>();
+                if (title.Trim().Length == 0)
+                {
+                    return wins;
+                }
+                Regex rex = new Regex(title);
+                EnumWindows((hWnd, lParam) =>
+                    {
+                        try
+                        {
+                            string t = GetWindowTextFromHandle(hWnd);
+                            Match m = rex.Match(t);
+                            if (m.Success == true)
+                            {
+                                wins.Add(hWnd);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        return true;
+                    }
+                    , IntPtr.Zero
+                );
+                return wins;
+            }
 
             public static void SendMouse(MouseEventFlags flags, MouseEventDataXButtons buttons, int x, int y)
             {
@@ -360,18 +398,55 @@ namespace Triggernometry
                 mouse_event((uint)flags, x, y, (uint)buttons, 0);
             }
 
-            public static void SendKeycode(string windowtitle, int keycode)
+            public static void SendKeycodes(string procid, string windowtitle, params int[] keycodes)
             {
-                SendMessageToWindow(windowtitle, WM_KEYDOWN, keycode, 0);
-                SendMessageToWindow(windowtitle, WM_KEYUP, keycode, 0);
+                for (int i = 0; i < keycodes.Length; i++)
+                {
+                    SendMessageToWindow(procid, windowtitle, WM_KEYDOWN, keycodes[i], 0);
+                }
+                Thread.Sleep(10);
+                for (int i = keycodes.Length - 1; i >= 0; i--)
+                {
+                    SendMessageToWindow(procid, windowtitle, WM_KEYUP, keycodes[i], 0);
+                }
             }
 
-            public static void SendMessageToWindow(string windowtitle, uint code, int wparam, int lparam)
-            {
-                IntPtr hwnd = FindWindow(null, windowtitle);
-                if (hwnd != IntPtr.Zero)
+            public static void SendMessageToWindow(string procid, string windowtitle, uint code, int wparam, int lparam)
+            {                
+                List<IntPtr> wins = FindWindows(windowtitle);
+                if (wins.Count > 0)
                 {
-                    IntPtr res = SendMessage(hwnd, code, (IntPtr)wparam, (IntPtr)lparam);
+                    switch (procid)
+                    {
+                        case "-1":
+                            {
+                                foreach (IntPtr win in wins)
+                                {
+                                    SendMessage(win, code, (IntPtr)wparam, (IntPtr)lparam);
+                                }
+                            }
+                            break;
+                        case "":
+                        case "0":
+                            {
+                                SendMessage(wins[0], code, (IntPtr)wparam, (IntPtr)lparam);
+                            }
+                            break;
+                        default:
+                            {
+                                uint procidnum = uint.Parse(procid);
+                                uint wpid;
+                                foreach (IntPtr win in wins)
+                                {
+                                    GetWindowThreadProcessId(win, out wpid);
+                                    if (wpid == procidnum)
+                                    {
+                                        SendMessage(win, code, (IntPtr)wparam, (IntPtr)lparam);
+                                    }
+                                }                                
+                            }
+                            break;
+                    }
                 }
             }
 
@@ -413,8 +488,18 @@ namespace Triggernometry
         private Queue<LogEvent> EventQueue;
         private ManualResetEvent QueueWakeupEvent;
         internal CustomControls.UserInterface ui;
-        internal Configuration cfg;
+        
+        private Configuration _cfg;
+        internal Configuration cfg
+        {
+            get
+            {
+                return _cfg;
+            }
+        }
+
         public string path { get; set; }
+        private bool isInitialized { get; set; } = false;
         internal WMPLib.WindowsMediaPlayer wmp;
         internal SpeechSynthesizer tts;
         internal Thread ActionQueueThread;
@@ -430,6 +515,7 @@ namespace Triggernometry
         public string pluginName { get; set; }
         public string pluginPath { get; set; }
         private bool firstevent = true;
+        internal bool runningAsAdmin;
         internal string currentZone = null;
         internal bool WMPUnavailable;
         internal Queue<InternalLog> log;
@@ -440,6 +526,7 @@ namespace Triggernometry
         internal List<Trigger> Triggers;
         internal List<Trigger> ActiveTextTriggers;
         internal List<Trigger> ActiveFFXIVNetworkTriggers;
+        internal List<Trigger> ActiveACTTriggers;
         internal VariableStore sessionvars;
         internal Dictionary<string, Forms.AuraContainerForm> imageauras;
         internal Dictionary<string, Forms.AuraContainerForm> textauras;
@@ -448,8 +535,12 @@ namespace Triggernometry
         internal CancellationTokenSource cts = null;
         internal object ctslock = new object();
         public Form mainform { get; set; }
+        internal DateTime lastConfigSave = DateTime.Now;
         internal int MinX = int.MaxValue, MinY = int.MaxValue, MaxX = int.MinValue, MaxY = int.MinValue;
         internal Dictionary<string, MutexInformation> mutexes = new Dictionary<string, MutexInformation>();
+        internal Interpreter scripting;
+        internal Dictionary<string, object> scriptingStorage = new Dictionary<string, object>();
+        private List<Configuration.APIUsage> DefaultAPIUsages = new List<Configuration.APIUsage>();
 
         public SimpleBoolDelegate InCombatHook { get; set; }
         public SimpleBoolDelegate CustomTriggerCheckHook { get; set; }
@@ -465,6 +556,7 @@ namespace Triggernometry
         public SimpleVoidDelegate CornerShowHook { get; set; }
         public SimpleVoidDelegate CornerHideHook { get; set; }
         public TabPageDelegate TabLocateHook { get; set; }
+        public SimpleVoidDelegate CheckUpdateHook { get; set; }
 
         private bool _HideAllAuras = false;
         internal bool HideAllAuras
@@ -1092,6 +1184,16 @@ namespace Triggernometry
 
         public RealPlugin()
         {
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "Microsoft.CodeAnalysis", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "Microsoft.Win32", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "System.CodeDom.Compiler", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "System.Diagnostics", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "System.IO", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "System.Net", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "System.Reflection", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "System.Runtime", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "System.Security", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
+            DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "System.Web", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
             ui = null;
             sc = null;
             DisableLogging = false;
@@ -1113,6 +1215,7 @@ namespace Triggernometry
             Triggers = new List<Trigger>();
             ActiveTextTriggers = new List<Trigger>();
             ActiveFFXIVNetworkTriggers = new List<Trigger>();
+            ActiveACTTriggers = new List<Trigger>();
             sessionvars = new VariableStore();
             imageauras = new Dictionary<string, Forms.AuraContainerForm>();
             textauras = new Dictionary<string, Forms.AuraContainerForm>();
@@ -1125,12 +1228,12 @@ namespace Triggernometry
             FilteredAddToLog(level, text);
         }
 
-        internal void AddTrigger(Trigger t)
+        internal void AddTrigger(Trigger t, bool parentenable)
         {
             lock (Triggers)
             {
                 Triggers.Add(t);
-                if (t.Enabled == true && t.Parent.ParentsEnabled() == true)
+                if (t.Enabled == true && parentenable == true)
                 {
                     switch (t._Source)
                     {
@@ -1146,6 +1249,12 @@ namespace Triggernometry
                                 ActiveFFXIVNetworkTriggers.Add(t);
                             }
                             break;
+                        case Trigger.TriggerSourceEnum.ACT:
+                            lock (ActiveACTTriggers)
+                            {
+                                ActiveACTTriggers.Add(t);
+                            }
+                            break;
                         case Trigger.TriggerSourceEnum.None:
                             break;
                     }
@@ -1155,7 +1264,7 @@ namespace Triggernometry
 
         internal void SourceChange(Trigger t, Trigger.TriggerSourceEnum oldSource, Trigger.TriggerSourceEnum newSource)
         {
-            if (t.Enabled == true && t.Parent.ParentsEnabled() == true)
+            if (t.Enabled == true && t.Parent != null && t.Parent.ParentsEnabled() == true)
             {
                 switch (oldSource)
                 {
@@ -1169,6 +1278,12 @@ namespace Triggernometry
                         lock (ActiveFFXIVNetworkTriggers)
                         {
                             ActiveFFXIVNetworkTriggers.Remove(t);
+                        }
+                        break;
+                    case Trigger.TriggerSourceEnum.ACT:
+                        lock (ActiveACTTriggers)
+                        {
+                            ActiveACTTriggers.Remove(t);
                         }
                         break;
                     case Trigger.TriggerSourceEnum.None:
@@ -1186,6 +1301,12 @@ namespace Triggernometry
                         lock (ActiveFFXIVNetworkTriggers)
                         {
                             ActiveFFXIVNetworkTriggers.Add(t);
+                        }
+                        break;
+                    case Trigger.TriggerSourceEnum.ACT:
+                        lock (ActiveACTTriggers)
+                        {
+                            ActiveACTTriggers.Add(t);
                         }
                         break;
                     case Trigger.TriggerSourceEnum.None:
@@ -1215,6 +1336,15 @@ namespace Triggernometry
                             if (ActiveFFXIVNetworkTriggers.Contains(t) == true)
                             {
                                 ActiveFFXIVNetworkTriggers.Remove(t);
+                            }
+                        }
+                        break;
+                    case Trigger.TriggerSourceEnum.ACT:
+                        lock (ActiveACTTriggers)
+                        {
+                            if (ActiveACTTriggers.Contains(t) == true)
+                            {
+                                ActiveACTTriggers.Remove(t);
                             }
                         }
                         break;
@@ -1251,6 +1381,17 @@ namespace Triggernometry
                         }
                     }
                     break;
+                case Trigger.TriggerSourceEnum.ACT:
+                    lock (ActiveACTTriggers)
+                    {
+                        if (ActiveACTTriggers.Contains(t) == false)
+                        {
+                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigaddbook", "Trigger '{0}' added to bookkeeping", t.LogName));
+                            ActiveACTTriggers.Add(t);
+                            return;
+                        }
+                    }
+                    break;
                 case Trigger.TriggerSourceEnum.None:
                     break;            }
         }
@@ -1281,6 +1422,17 @@ namespace Triggernometry
                         }
                     }
                     break;
+                case Trigger.TriggerSourceEnum.ACT:
+                    lock (ActiveACTTriggers)
+                    {
+                        if (ActiveACTTriggers.Contains(t) == true)
+                        {
+                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigrembook", "Trigger '{0}' removed from bookkeeping", t.LogName));
+                            ActiveACTTriggers.Remove(t);
+                            return;
+                        }
+                    }
+                    break;
                 case Trigger.TriggerSourceEnum.None:
                     break;
             }
@@ -1292,6 +1444,11 @@ namespace Triggernometry
             {
                 ActionQueue.Clear();
             }
+        }
+
+        internal Repository GetRepositoryById(Guid id)
+        {            
+            return (from ix in cfg.RepositoryRoot.Repositories where ix.Id == id select ix).FirstOrDefault();
         }
 
         internal Trigger GetTriggerById(Guid id, Repository repo)
@@ -1351,6 +1508,18 @@ namespace Triggernometry
             return null;
         }
 
+        internal TreeNode LocateNodeHostingRepository(TreeNode tn, Repository r)
+        {
+            foreach (TreeNode tc in tn.Nodes)
+            {
+                if (tc.Tag == r)
+                {
+                    return tc;
+                }
+            }
+            return null;
+        }
+
         internal TreeNode LocateNodeHostingFolder(TreeNode tn, Folder f)
         {
             if (tn.Tag == f)
@@ -1376,6 +1545,16 @@ namespace Triggernometry
                 return null;
             }
             return LocateNodeHostingTrigger(tn, t);
+        }
+
+        internal TreeNode LocateNodeHostingRepositoryId(TreeNode tn, Guid id)
+        {
+            Repository r = GetRepositoryById(id);
+            if (r == null)
+            {
+                return null;
+            }
+            return LocateNodeHostingRepository(tn, r);
         }
 
         internal TreeNode LocateNodeHostingFolderId(TreeNode tn, Guid id, Repository repo)
@@ -1817,6 +1996,45 @@ namespace Triggernometry
             complainAboutReload = true;            
         }
 
+        internal List<Configuration.APIUsage> GetDefaultAPIUsages()
+        {
+            List<Configuration.APIUsage> l = new List<Configuration.APIUsage>();
+            foreach (Configuration.APIUsage a in DefaultAPIUsages)
+            {
+                l.Add(new Configuration.APIUsage() { Name = a.Name, AllowLocal = a.AllowLocal, AllowRemote = a.AllowRemote, AllowAdmin = a.AllowAdmin });
+            }
+            return l;
+        }
+
+        private void SetupDefaultSecurity()
+        {
+            MethodInfo setter = cfg.GetType().GetMethod("AddAPIUsage", BindingFlags.NonPublic | BindingFlags.Instance);            
+            foreach (Configuration.APIUsage a in DefaultAPIUsages)
+            {
+                setter.Invoke(cfg, new object[] { a, false });                
+            }
+        }
+
+        private void AutofixConfiguration()
+        {
+            if (cfg == null)
+            {
+                return;
+            }
+            if (cfg._ShowWelcomeHasBeenSet == false && (cfg.Root.Folders.Count > 0 || cfg.Root.Triggers.Count > 0))
+            {
+                cfg.ShowWelcome = false;
+            }
+            Version v = new Version(cfg.PluginVersion);
+            if (v < new Version("1.1.6.0"))
+            {
+                if (cfg.FfxivPartyOrdering == Configuration.FfxivPartyOrderingEnum.Legacy)
+                {
+                    cfg.FfxivPartyOrdering = Configuration.FfxivPartyOrderingEnum.CustomSelfFirst;
+                }
+            }
+        }
+
         public void InitPlugin(TabPage pluginScreenSpace, Label pluginStatusText)
         {
             Language ld = new Language();
@@ -1836,11 +2054,9 @@ namespace Triggernometry
                 exwhere = I18n.Translate("internal/Plugin/inilanguages", "loading languages");
                 LoadLanguages();
                 exwhere = I18n.Translate("internal/Plugin/inicfg", "loading configuration");
-                cfg = LoadConfigFromFile(Path.Combine(path, pluginName + ".config.xml"));
-                if (cfg != null && cfg._ShowWelcomeHasBeenSet == false && (cfg.Root.Folders.Count > 0 || cfg.Root.Triggers.Count > 0))
-                {
-                    cfg.ShowWelcome = false;
-                }
+                _cfg = LoadConfigFromFile(Path.Combine(path, pluginName + ".config.xml"));
+                SetupDefaultSecurity();
+                AutofixConfiguration();
                 ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
                 BackupConfiguration();
                 FixDuplicateFolderReferences(null, cfg, null);
@@ -1912,10 +2128,7 @@ namespace Triggernometry
                 }
                 ui.SetupToasts();
                 ui.SetupLanguageMenu();
-                if (cfg.WarnAdmin == true)
-                {
-                    CheckIfAdministrator();
-                }
+                runningAsAdmin = CheckIfAdministrator(cfg.WarnAdmin);
                 exwhere = I18n.Translate("internal/Plugin/initree", "building internal data");
                 ui.BuildFullTreeFromConfiguration();
                 int PrimaryX = 0, PrimaryY = 0;
@@ -1960,14 +2173,17 @@ namespace Triggernometry
                 AuraUpdateThread = new Thread(new ThreadStart(AuraUpdateThreadProc));
                 AuraUpdateThread.Name = "AuraUpdateThread";
                 AuraUpdateThread.Start();
-                _obs = new ObsController();                
+                _obs = new ObsController();
+                exwhere = I18n.Translate("internal/Plugin/iniscripting", "setting up scripting - try changing the plugin load order in ACT");
+                scripting = new Interpreter(this);
                 pluginStatusText.Text = I18n.Translate("internal/Plugin/iniready", "Ready");
                 FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/inited", "Initialized"));
                 Task tx = new Task(() =>
                 {
-                    RepositoryUpdates();
+                    AllRepositoryUpdates(true);
                 });
                 tx.Start();
+                isInitialized = true;
             }
             catch (Exception ex)
             {
@@ -1985,118 +2201,120 @@ namespace Triggernometry
             ui.ClearRepository(r);
         }
 
-        internal void RepositoryUpdate(Repository r, bool alone)
+        internal void RepositoryUpdate(Repository r, bool singleUpdate, bool isStartup)
         {
+            r.LastUpdatedTrig = DateTime.Now;
             ClearRepository(r);
             r.ClearLog();
             string trans;
             bool useBackup = false;
             try
             {
-                if (alone == true)
+                if (isStartup == true && r.UpdatePolicy != Repository.UpdatePolicyEnum.Startup)
+                {
+                    useBackup = true;
+                }
+                if (singleUpdate == true)
                 {
                     trans = I18n.Translate("internal/Plugin/repoupdate", "Updating repository {0} at {1}", r.Name, r.Address);
                     FilteredAddToLog(DebugLevelEnum.Verbose, trans);
                     r.AddToLog(trans);
                     ShowProgress(-1, trans);
                 }
-                if (r.UpdatePolicy == Repository.UpdatePolicyEnum.Startup)
+                System.Threading.Thread.Sleep(500);
+                DateTime remdate = DateTime.MinValue;
+                long remsize = 0, localsize = 0;
+                using (System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient())
                 {
-                    System.Threading.Thread.Sleep(500);
-                    DateTime remdate = DateTime.MinValue;
-                    long remsize = 0, localsize = 0;
-                    using (System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient())
+                    System.Net.Http.HttpRequestMessage request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Head, new Uri(r.Address));
+                    Task<System.Net.Http.HttpResponseMessage> tsk = httpClient.SendAsync(request);
+                    System.Net.Http.HttpResponseMessage response = tsk.Result;
+                    DateTimeOffset? lastmod = response.Content.Headers.LastModified;
+                    if (lastmod.HasValue == true)
                     {
-                        System.Net.Http.HttpRequestMessage request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Head, new Uri(r.Address));
-                        Task<System.Net.Http.HttpResponseMessage> tsk = httpClient.SendAsync(request);
-                        System.Net.Http.HttpResponseMessage response = tsk.Result;
-                        DateTimeOffset? lastmod = response.Content.Headers.LastModified;
-                        if (lastmod.HasValue == true)
+                        remdate = lastmod.Value.DateTime;
+                    }
+                    else
+                    {
+                        remdate = r.LastUpdated;
+                    }
+                    long? conlen = response.Content.Headers.ContentLength;
+                    if (conlen.HasValue == true)
+                    {
+                        if (conlen.Value > 0)
                         {
-                            remdate = lastmod.Value.DateTime;
-                        }
-                        else
-                        {
-                            remdate = r.LastUpdated;
-                        }
-                        long? conlen = response.Content.Headers.ContentLength;
-                        if (conlen.HasValue == true)
-                        {
-                            if (conlen.Value > 0)
-                            {
-                                remsize = conlen.Value;
-                            }
-                            else
-                            {
-                                remsize = 0;
-                            }
+                            remsize = conlen.Value;
                         }
                         else
                         {
                             remsize = 0;
                         }
                     }
-                    DateTime cacheExpiry = DateTime.Now.AddMinutes(0 - cfg.CacheRepoExpiry);
-                    bool cacheExpired = false;
-                    if (r.KeepLocalBackup == true)
-                    {
-                        string repofn = GetRepositoryBackupFilename(r);
-                        if (File.Exists(repofn) == true)
-                        {
-                            FileInfo fi = new FileInfo(repofn);
-                            localsize = fi.Length;
-                            cacheExpired = (fi.LastWriteTime < cacheExpiry);
-                        }
-                    }
-                    if (remdate == r.LastUpdated && remsize == localsize && localsize > 0 && r.KeepLocalBackup == true && cacheExpired == false)
-                    {
-                        trans = I18n.Translate("internal/Plugin/repousingbackup", "Repository {0} hasn't changed since {1}, and size {2} hasn't changed from {3}, using local backup", r.Name, remdate, remsize, localsize);
-                        FilteredAddToLog(DebugLevelEnum.Info, trans);
-                        r.AddToLog(trans);
-                        if (LoadLocalBackupForRepository(r) == true)
-                        {
-                            if (alone == true)
-                            {
-                                trans = I18n.Translate("internal/Plugin/repoupdatecomplete", "Repository update complete");
-                                r.AddToLog(trans);
-                                ShowProgress(100, trans);
-                                System.Threading.Thread.Sleep(2000);
-                                ShowProgress(0, "");
-                            }
-                            return;
-                        }
-                    }
                     else
                     {
-                        r.LastUpdated = remdate;
-                    }
-                    string data;
-                    using (WebClient wc = new WebClient())
-                    {
-                        wc.Headers["User-Agent"] = "Triggernometry Repository Updater";
-                        byte[] rawdata = wc.DownloadData(r.Address);
-                        data = Encoding.UTF8.GetString(rawdata);
-                    }
-                    TriggernometryExport exp = TriggernometryExport.Unserialize(data);
-                    if (exp != null)
-                    {
-                        r.ContentSize = data.Length;
-                        AddContentToRepository(exp, r);
-                        if (r.KeepLocalBackup == true)
-                        {
-                            SaveLocalBackupForRepository(r, data);
-                        }
-                    }
-                    else
-                    {
-                        trans = I18n.Translate("internal/Plugin/repoexportnull", "Data for repository {0} could not be unserialized, make sure you are running the latest version of Triggernometry", r.Name);
-                        FilteredAddToLog(DebugLevelEnum.Error, trans);
-                        r.AddToLog(trans);
+                        remsize = 0;
                     }
                 }
-                if (r.UpdatePolicy == Repository.UpdatePolicyEnum.Manual)
+                DateTime cacheExpiry = DateTime.Now.AddMinutes(0 - cfg.CacheRepoExpiry);
+                bool cacheExpired = false;
+                if (r.KeepLocalBackup == true)
                 {
-                    useBackup = true;
+                    string repofn = GetRepositoryBackupFilename(r);
+                    if (File.Exists(repofn) == true)
+                    {
+                        FileInfo fi = new FileInfo(repofn);
+                        localsize = fi.Length;
+                        cacheExpired = (fi.LastWriteTime < cacheExpiry);
+                    }
+                }
+                if (remdate == r.LastUpdated && remsize == localsize && localsize > 0 && r.KeepLocalBackup == true && cacheExpired == false)
+                {
+                    trans = I18n.Translate("internal/Plugin/repousingbackup", "Repository {0} hasn't changed since {1}, and size hasn't changed from {2}, using local backup", r.Name, remdate, localsize);
+                    FilteredAddToLog(DebugLevelEnum.Info, trans);
+                    r.AddToLog(trans);
+                    if (LoadLocalBackupForRepository(r) == true)
+                    {
+                        if (singleUpdate == true)
+                        {
+                            trans = I18n.Translate("internal/Plugin/repoupdatecomplete", "Repository update complete");
+                            r.AddToLog(trans);
+                            ShowProgress(100, trans);
+                            System.Threading.Thread.Sleep(2000);
+                            ShowProgress(0, "");
+                        }
+                        return;
+                    }
+                }
+                else
+                {
+                    trans = I18n.Translate("internal/Plugin/repofetching", "Repository {0} has changed since {1} (new timestamp {2}), or size has changed from {3} (new size {4}), fetching new version", r.Name, r.LastUpdated, remdate, localsize, remsize);
+                    FilteredAddToLog(DebugLevelEnum.Verbose, trans);
+                    r.LastUpdated = remdate;
+                }
+                string data;
+                trans = I18n.Translate("internal/Plugin/repodownloading", "Downloading repository {0} from {1}", r.Name, r.Address);
+                FilteredAddToLog(DebugLevelEnum.Info, trans);
+                using (WebClient wc = new WebClient())
+                {
+                    wc.Headers["User-Agent"] = "Triggernometry Repository Updater";
+                    byte[] rawdata = wc.DownloadData(r.Address);
+                    data = Encoding.UTF8.GetString(rawdata);
+                }
+                TriggernometryExport exp = TriggernometryExport.Unserialize(data);
+                if (exp != null)
+                {
+                    r.ContentSize = data.Length;
+                    AddContentToRepository(exp, r);
+                    if (r.KeepLocalBackup == true)
+                    {
+                        SaveLocalBackupForRepository(r, data);
+                    }
+                }
+                else
+                {
+                    trans = I18n.Translate("internal/Plugin/repoexportnull", "Data for repository {0} could not be unserialized, make sure you are running the latest version of Triggernometry", r.Name);
+                    FilteredAddToLog(DebugLevelEnum.Error, trans);
+                    r.AddToLog(trans);
                 }
             }
             catch (Exception ex)
@@ -2113,7 +2331,7 @@ namespace Triggernometry
                 r.AddToLog(trans);
                 LoadLocalBackupForRepository(r);
             }
-            if (alone == true)
+            if (singleUpdate == true)
             {
                 trans = I18n.Translate("internal/Plugin/repoupdatecomplete", "Repository update complete");
                 r.AddToLog(trans);
@@ -2123,18 +2341,23 @@ namespace Triggernometry
             }
         }
 
-        internal void RepositoryUpdates()
+        internal void AllRepositoryUpdates(bool isStartup)
         {
             List<Repository> lr = new List<Repository>();
             lr.AddRange(from ix in cfg.RepositoryRoot.Repositories where ix.Enabled == true select ix);
-            if (lr.Count == 0)
+            RepositoryUpdates(lr, isStartup);
+        }
+
+        internal void RepositoryUpdates(IEnumerable<Repository> lr, bool isStartup)
+        {
+            if (lr.Count() == 0)
             {
                 return;
             }
-            string trans = I18n.Translate("internal/Plugin/repoupdates", "Going to update {0} repositories", lr.Count);
+            string trans = I18n.Translate("internal/Plugin/repoupdates", "Going to update {0} repositories", lr.Count());
             FilteredAddToLog(DebugLevelEnum.Info, trans);
             ShowProgress(-1, trans);
-            int done = -1, doing = lr.Count;
+            int done = -1, doing = lr.Count();
             foreach (Repository r in lr)
             {
                 if (ExitEvent.WaitOne(0) == true)
@@ -2146,7 +2369,7 @@ namespace Triggernometry
                 FilteredAddToLog(DebugLevelEnum.Verbose, trans);
                 r.AddToLog(trans);
                 ShowProgress((int)Math.Floor(100.0 * (float)done / (float)doing), trans);
-                RepositoryUpdate(r, false);
+                RepositoryUpdate(r, false, isStartup);
             }
             trans = I18n.Translate("internal/Plugin/repoupdatecomplete", "Repository update complete");
             ShowProgress(100, trans);
@@ -2285,7 +2508,7 @@ namespace Triggernometry
         {
             //if (t.Enabled == true && parentenable == true)
             //{
-                AddTrigger(t);
+                AddTrigger(t, parentenable);
             //}
             if (t._IsReadme == true && t.Enabled == true)
             {
@@ -2300,7 +2523,7 @@ namespace Triggernometry
             {
                 ApplyRepositoryRestrictions(exp.ExportedFolder, r);
                 r.Root.Folders.Add(exp.ExportedFolder);
-                RegisterRepositoryFolder(r, exp.ExportedFolder, r.Enabled);
+                RegisterRepositoryFolder(r, exp.ExportedFolder, r.Enabled && ui.treeView1.Nodes[1].Checked);
             }
             if (exp.ExportedTrigger != null)
             {
@@ -2328,6 +2551,11 @@ namespace Triggernometry
                 }
                 return sb.ToString().ToLower();
             }
+        }
+
+        public string Translate(string key, string text, params object[] args)
+        {
+            return I18n.Translate(key, text, args);
         }
 
         internal string GetRepositoryBackupFilename(Repository r)
@@ -2401,6 +2629,24 @@ namespace Triggernometry
         }
 
         internal void CheckForUpdates()
+        {
+            switch (cfg.UpdateCheckMethod)
+            {
+                case Configuration.UpdateCheckMethodEnum.ACT:
+                    CheckForUpdatesACT();
+                    break;
+                case Configuration.UpdateCheckMethodEnum.Builtin:
+                    CheckForUpdatesBuiltin();
+                    break;
+            }
+        }
+
+        internal void CheckForUpdatesACT()
+        {
+            CheckUpdateHook();
+        }
+
+        internal void CheckForUpdatesBuiltin()
         {
             Task tx = new Task(() =>
             {
@@ -2509,16 +2755,18 @@ namespace Triggernometry
 
         public void SaveCurrentConfig()
         {
+            lastConfigSave = DateTime.Now;
             SaveConfigToFile(cfg, Path.Combine(path, pluginName + ".config.xml"), true);
         }
 
-        private void CheckIfAdministrator()
+        private bool CheckIfAdministrator(bool warnIfNotAdmin)
         {
+            bool ret;
             using (var identity = WindowsIdentity.GetCurrent())
             {
                 var principal = new WindowsPrincipal(identity);                
-                bool ret = principal.IsInRole(WindowsBuiltInRole.Administrator);
-                if (ret == false)
+                ret = principal.IsInRole(WindowsBuiltInRole.Administrator);
+                if (ret == false && warnIfNotAdmin == true)
                 {
                     CustomControls.Toast t = new CustomControls.Toast();
                     t.ToastText = I18n.Translate("internal/Plugin/notadministrator", "You are not running ACT as an administrator - this might prevent some triggers from working.");
@@ -2526,6 +2774,7 @@ namespace Triggernometry
                     ui.QueueToast(t);
                 }
             }
+            return ret;
         }
 
         public void DeInitPlugin()
@@ -2663,7 +2912,7 @@ namespace Triggernometry
                 }
                 if ((force & Action.TriggerForceTypeEnum.SkipParent) == 0)
                 {
-                    Folder.FilterFailReason reason = t.Parent.PassesFilter(le.Zone, le.Text);
+                    Folder.FilterFailReason reason = t.Parent.PassesFilter(le.ZoneName, le.ZoneId, le.Text);
                     if (reason != Folder.FilterFailReason.Passed)
                     {
                         if (reason != Folder.FilterFailReason.NotEnabled)
@@ -2700,7 +2949,7 @@ namespace Triggernometry
                         t.AddToLog(this, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/debugnamedgroup", "Trigger '{0}' named group '{1}': {2}", t.LogName, sdx, m.Groups[sdx].Value));
                     }
                 }
-                ctx.namedgroups["_zone"] = le.Zone;
+                ctx.namedgroups["_zone"] = le.ZoneName;                
                 ctx.namedgroups["_event"] = le.Text;
                 ctx.triggered = DateTime.UtcNow;
                 ctx.namedgroups["_timestamp"] = "" + (long)(ctx.triggered - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
@@ -2714,7 +2963,7 @@ namespace Triggernometry
         {
             LogEvent le = new LogEvent();
             le.Text = text;
-            le.Zone = zone;
+            le.ZoneName = zone;
             le.Source = src;
             le.Timestamp = DateTime.Now;
             lock (EventQueue)
@@ -2724,7 +2973,7 @@ namespace Triggernometry
             }            
         }
 
-        internal void LogLineQueuerMass(IEnumerable<string> text, string zone, LogEvent.SourceEnum src)
+        internal void LogLineQueuerMass(IEnumerable<string> text, string zone, LogEvent.SourceEnum src, bool testMode, bool testModeZoneId)
         {
             int max = text.Count();
             int i = 0;
@@ -2733,9 +2982,11 @@ namespace Triggernometry
             {
                 lex[i] = new LogEvent();
                 lex[i].Text = x;
-                lex[i].Zone = zone;
+                lex[i].ZoneName = zone;
                 lex[i].Source = src;
                 lex[i].Timestamp = DateTime.Now;
+                lex[i].TestMode = testMode;
+                lex[i].ZoneId = testModeZoneId ? zone : null;
                 i++;
             }
             if (lex.Count() > 0)
@@ -2894,7 +3145,7 @@ namespace Triggernometry
                     {
                         foreach (Trigger t in ActiveTextTriggers)
                         {
-                            if (t.ZoneBlocked == true)
+                            if (t.ZoneBlocked == true && le.TestMode == false)
                             {
                                 continue;
                             }
@@ -2907,7 +3158,20 @@ namespace Triggernometry
                     {
                         foreach (Trigger t in ActiveFFXIVNetworkTriggers)
                         {
-                            if (t.ZoneBlocked == true)
+                            if (t.ZoneBlocked == true && le.TestMode == false)
+                            {
+                                continue;
+                            }
+                            TestTrigger(t, le, Action.TriggerForceTypeEnum.NoSkip);
+                        }
+                    }
+                    break;
+                case LogEvent.SourceEnum.ACT:
+                    lock (ActiveACTTriggers) // verified
+                    {
+                        foreach (Trigger t in ActiveACTTriggers)
+                        {
+                            if (t.ZoneBlocked == true && le.TestMode == false)
                             {
                                 continue;
                             }
@@ -2949,9 +3213,20 @@ namespace Triggernometry
             FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/zoneupdate", "Zone update to '{0}' - allowed triggers: {1}, restricted triggers: {2}", zone, numa, numb));
         }
 
+        public void ExtendedACTEvents(string[] data)
+        {
+            switch (data[0])
+            {
+                case "OnCombatStart":
+                case "OnCombatEnd":
+                    LogLineQueuer(data[0], currentZone != null ? currentZone : "", LogEvent.SourceEnum.ACT);
+                    break;
+            }
+        }
+
         public void OnLogLineRead(bool isImport, string logLine, string detectedZone)
         {
-            if (isImport == true)
+            if (isImport == true || isInitialized == false)
             {
                 return;
             }
@@ -2979,7 +3254,7 @@ namespace Triggernometry
                 }
                 else
                 {
-                    if (logLine.Substring(logLine.Length - 5) != "] FB:")
+                    if (logLine != "" && (logLine.Length < 5 || logLine.Substring(logLine.Length - 5) != "] FB:"))
                     {
                         if (cfg.LogNormalEvents == true)
                         {
@@ -3045,7 +3320,10 @@ namespace Triggernometry
                 if (fi.Exists == false)
                 {
                     FilteredAddToLog(DebugLevelEnum.Warning, I18n.Translate("internal/Plugin/cfgnew", "Configuration file '{0}' does not exist, creating a new configuration", filename));
-                    return new Configuration();
+                    Configuration c = new Configuration();
+                    PropertyInfo setter = c.GetType().GetProperty("Locked", BindingFlags.NonPublic | BindingFlags.Instance);
+                    setter.SetValue(c, true);
+                    return c;
                 }
                 bool corruptFallback = false;
                 if (fi.Length == 0)
@@ -3065,6 +3343,8 @@ namespace Triggernometry
                 using (FileStream fs = File.Open(filename, FileMode.Open, FileAccess.Read))
                 {
                     cx = (Configuration)xs.Deserialize(fs);
+                    PropertyInfo setter = cx.GetType().GetProperty("Locked", BindingFlags.NonPublic | BindingFlags.Instance);
+                    setter.SetValue(cx, true);
                     cx.isnew = false;
                     cx.lastWrite = fi.LastWriteTimeUtc;
                 }
@@ -3173,7 +3453,10 @@ namespace Triggernometry
                 XmlSerializer xs = new XmlSerializer(typeof(Configuration));
                 using (MemoryStream ms = new MemoryStream())
                 {
+                    PropertyInfo setter = cfg.GetType().GetProperty("Locked", BindingFlags.NonPublic | BindingFlags.Instance);
+                    setter.SetValue(cfg, false);
                     xs.Serialize(ms, cfg, ns);
+                    setter.SetValue(cfg, true);
                     ms.Position = 0;
                     using (StreamReader sr = new StreamReader(ms))
                     {
@@ -3223,7 +3506,7 @@ namespace Triggernometry
             }
         }
 
-        internal void QueueAction(Context ctx, Trigger t, MutexInformation m, Action a, DateTime when)
+        public void QueueAction(Context ctx, Trigger t, MutexInformation m, Action a, DateTime when)
         {
             lock (ActionQueue) // verified
             {                                
@@ -3292,7 +3575,7 @@ namespace Triggernometry
                     {
                         LogEvent le = new LogEvent();
                         le.Text = "";
-                        le.Zone = "";
+                        le.ZoneName = "";
                         le.Timestamp = DateTime.Now;
                         TestTrigger(t, le, Action.TriggerForceTypeEnum.SkipAll);
                     }
@@ -3304,7 +3587,7 @@ namespace Triggernometry
                     {
                         LogEvent le = new LogEvent();
                         le.Text = "";
-                        le.Zone = "";
+                        le.ZoneName = "";
                         le.Timestamp = DateTime.Now;
                         foreach (Trigger tx in f.Triggers)
                         {

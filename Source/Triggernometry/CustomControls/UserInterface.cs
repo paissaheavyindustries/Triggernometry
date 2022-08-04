@@ -37,12 +37,15 @@ namespace Triggernometry.CustomControls
         internal Random r = new Random();
         internal string Clipboard = "";
         internal int selEventDestination = -1;
+        internal int selZoneType = -1;
 
         internal Queue<Toast> Toasts = new Queue<Toast>();
 
         internal object formmgmt = new object();
         internal Forms.LogForm formlog { get; set; } = null;
         internal Forms.SearchForm formsearch { get; set; } = null;
+        internal string[] testInputHistoryLines = null;
+        internal string testInputHistoryZone = "";
 
         private Color disabledNodeColor;
 
@@ -416,7 +419,7 @@ namespace Triggernometry.CustomControls
                 tn.SelectedImageIndex = tn.ImageIndex;
                 tx.Parent = parentfolder;
                 parentnode.Nodes.Add(tn);
-                plug.AddTrigger(tx);
+                plug.AddTrigger(tx, tx.Parent.ParentsEnabled());
                 if (tx.Condition != null)
                 {
                     ConditionGroup.RebuildParentage(tx.Condition);
@@ -464,7 +467,16 @@ namespace Triggernometry.CustomControls
         {
             using (Forms.TriggerForm tf = new Forms.TriggerForm())
             {
-                tf.SettingsFromTrigger(null);
+                if (cfg.UseTemplateTrigger == true)
+                {
+                    Trigger t = new Trigger();
+                    cfg.TemplateTrigger.CopySettingsTo(t);
+                    tf.SettingsFromTrigger(t);
+                }
+                else
+                {
+                    tf.SettingsFromTrigger(null);
+                }
                 tf.plug = plug;
                 tf.fakectx.plug = plug;
                 tf.Text = I18n.Translate("internal/UserInterface/addtrigger", "Add new trigger");
@@ -491,7 +503,7 @@ namespace Triggernometry.CustomControls
                     treeView1.Sort();
                     treeView1.SelectedNode = tn;
                     t.ZoneBlocked = (t.PassesZoneRestriction(plug.currentZone) == false);
-                    plug.AddTrigger(t);
+                    plug.AddTrigger(t, t.Parent.ParentsEnabled());
                     RecolorStartingFromNode(tn.Parent, tn.Parent.Checked, true);
                     if (t._EditAutofire == true)
                     {
@@ -1015,7 +1027,7 @@ namespace Triggernometry.CustomControls
                         fdjs++;
                     }
                 }
-                plug.AddTrigger(nt);
+                plug.AddTrigger(nt, nt.Parent.ParentsEnabled());
             }
             if (fdjs > 0 || tdjs > 0)
             {
@@ -1442,14 +1454,26 @@ namespace Triggernometry.CustomControls
                 {
                     ti.cbxEventDestination.SelectedIndex = selEventDestination;
                 }
+                if (selZoneType != -1)
+                {
+                    ti.cbxZoneType.SelectedIndex = selZoneType;
+                }
+                if (testInputHistoryLines != null)
+                {
+                    ti.txtEvent.Lines = testInputHistoryLines;
+                }
+                ti.txtZoneName.Text = testInputHistoryZone;
                 ti.plug = plug;
                 switch (ti.ShowDialog())
                 {
                     case DialogResult.OK:
                         string[] lines = ti.txtEvent.Lines;
+                        testInputHistoryLines = lines;
+                        testInputHistoryZone = ti.txtZoneName.Text;
                         plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeue", "Queueing {0} user log lines", lines.Count()));
                         LogEvent.SourceEnum src = LogEvent.SourceEnum.Log;
                         selEventDestination = ti.cbxEventDestination.SelectedIndex;
+                        selZoneType = ti.cbxZoneType.SelectedIndex;
                         switch (ti.cbxEventDestination.SelectedIndex)
                         {
                             case 0:
@@ -1458,8 +1482,11 @@ namespace Triggernometry.CustomControls
                             case 1:
                                 src = LogEvent.SourceEnum.NetworkFFXIV;
                                 break;
+                            case 2:
+                                src = LogEvent.SourceEnum.ACT;
+                                break;
                         }
-                        plug.LogLineQueuerMass(lines, ti.txtZoneName.Text, src);                        
+                        plug.LogLineQueuerMass(lines, ti.txtZoneName.Text, src, true, ti.cbxZoneType.SelectedIndex == 1);
                         plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeuedone", "Done"));
                         /*
                         foreach (string line in lines)
@@ -1849,7 +1876,7 @@ namespace Triggernometry.CustomControls
                 }
                 Task tx = new Task(() =>
                 {
-                    plug.RepositoryUpdates();
+                    plug.AllRepositoryUpdates(false);
                 });
                 tx.Start();
             }
@@ -1860,7 +1887,7 @@ namespace Triggernometry.CustomControls
                 tnupdate.SelectedImageIndex = tnupdate.ImageIndex;
                 Task tx = new Task(() =>
                 {
-                    plug.RepositoryUpdate(rfo, true);
+                    plug.RepositoryUpdate(rfo, true, false);
                 });
                 tx.Start();
             }
@@ -1980,16 +2007,47 @@ namespace Triggernometry.CustomControls
         }
 
         private void ForceFireTrigger(Trigger t)
-        {            
-            Context ctx = new Context();
-            ctx.plug = plug;
-            ctx.testmode = false;
-            ctx.trig = t;
-            ctx.soundhook = plug.SoundPlaybackSmart;
-            ctx.ttshook = plug.TtsPlaybackSmart;
-            ctx.triggered = DateTime.UtcNow;
-            ctx.force = Action.TriggerForceTypeEnum.SkipAll;
-            t.Fire(plug, ctx, null);
+        {
+            if (t._TestInput == "")
+            {
+                Context ctx = new Context();
+                ctx.plug = plug;
+                ctx.testmode = false;
+                ctx.trig = t;
+                ctx.soundhook = plug.SoundPlaybackSmart;
+                ctx.ttshook = plug.TtsPlaybackSmart;
+                ctx.triggered = DateTime.UtcNow;
+                ctx.force = Action.TriggerForceTypeEnum.SkipAll;
+                t.Fire(plug, ctx, null);
+            }
+            else
+            {
+                string[] lines = t._TestInput.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                Action.TriggerForceTypeEnum force = Action.TriggerForceTypeEnum.SkipActive | Action.TriggerForceTypeEnum.SkipRefire | Action.TriggerForceTypeEnum.SkipParent;
+                LogEvent.SourceEnum source;
+                switch (t._Source)
+                {
+                    case Trigger.TriggerSourceEnum.ACT:
+                        source = LogEvent.SourceEnum.ACT;
+                        break;
+                    case Trigger.TriggerSourceEnum.FFXIVNetwork:
+                        source = LogEvent.SourceEnum.NetworkFFXIV;
+                        break;
+                    case Trigger.TriggerSourceEnum.Log:
+                        source = LogEvent.SourceEnum.Log;
+                        break;
+                    default:
+                    case Trigger.TriggerSourceEnum.None:
+                        force |= Action.TriggerForceTypeEnum.SkipRegexp;
+                        source = LogEvent.SourceEnum.Log;
+                        break;
+                }
+                foreach (string line in lines)
+                {
+                    LogEvent le = new LogEvent() { Text = line, Timestamp = DateTime.Now, TestMode = true, ZoneName = "", ZoneId = "", Source = source };
+                    plug.TestTrigger(t, le, force);
+                }
+            }            
         }
 
         private void btnCornerPopup_Click(object sender, EventArgs e)
@@ -2018,6 +2076,39 @@ namespace Triggernometry.CustomControls
         private void ctxReadme_Click(object sender, EventArgs e)
         {
             btnEdit_Click(sender, e);
+        }
+
+        private void btnUpdateCheck_Click(object sender, EventArgs e)
+        {
+            plug.CheckForUpdates();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            RepositoryFolder rfo = (RepositoryFolder)treeView1.Nodes[1].Tag;
+            List<Repository> upds = new List<Repository>();
+            foreach (Repository r in rfo.Repositories)
+            {
+                if (r.Enabled == true && r.AutoUpdate == true && r.LastUpdatedTrig.AddMinutes(r.UpdateInterval) < DateTime.Now)
+                {
+                    upds.Add(r);
+                }
+            }
+            if (upds.Count > 0)
+            {
+                Task tx = new Task(() =>
+                {
+                    plug.RepositoryUpdates(upds, false);
+                });
+                tx.Start();                
+            }
+            if (cfg.AutosaveEnabled == true && plug.lastConfigSave.AddMinutes(cfg.AutosaveInterval) < DateTime.Now)
+            {
+                if (plug.configBroken == false)
+                {
+                    plug.SaveCurrentConfig();
+                }
+            }
         }
 
     }

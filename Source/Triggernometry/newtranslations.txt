@@ -14,6 +14,13 @@ Data for repository {0} could not be unserialized, make sure you are running the
 
 added: ----------------------
 
+internal/Action/desctablecopy
+copy table variable ({0}) to table variable ({1})
+
+internal/Action/desctableappend
+append table variable ({0}) to table variable ({1})
+
+    <TranslationEntry Key="internal/PersistenceSwitch/string" Translation="Determines if the variable to be modified is persistent, as in, will be saved to disk on exit and loaded back in when Triggernometry starts. Persistent variables live in a different namespace from regular variables." />
     <TranslationEntry Key="StateForm/btnPeScalarAdd" Translation="Add variable" />
     <TranslationEntry Key="StateForm/btnPeScalarEdit" Translation="Edit variable" />
     <TranslationEntry Key="StateForm/btnPeScalarRefresh" Translation="Refresh" />
@@ -41,6 +48,12 @@ Zone ID
 
 FolderForm/btnGetCurFfxivZone
 Retrieve current zone ID
+
+ActionForm/lblJsonHeaders
+Headers to send
+
+internal/SearchForm/hitjsonheaders
+Action #{0} JSON header expression
 
 ActionForm/cbxObsOpType[Custom JSON payload]
 Custom JSON payload

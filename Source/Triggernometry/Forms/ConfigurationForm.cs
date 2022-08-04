@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,6 +21,7 @@ namespace Triggernometry.Forms
         internal RealPlugin plug;
         private bool firstchange = true;
         private List<Configuration.Substitution> subs = new List<Configuration.Substitution>();
+        private Trigger template = new Trigger();
 
         public ConfigurationForm()
         {
@@ -29,13 +31,27 @@ namespace Triggernometry.Forms
             label5.Tag = I18n.DoNotTranslate;
             label6.Tag = I18n.DoNotTranslate;
             RestoredSavedDimensions();
-            tbcMain.TabPages.Remove(tabEndpoint);            
+            tbcMain.TabPages.Remove(tabEndpoint);
+        }
+
+        internal void SecuritySettingsFromConfiguration(Configuration cfg)
+        {
+            IEnumerable<Configuration.APIUsage> apis = cfg.GetAPIUsages();
+            if (apis == null)
+            {
+                apis = plug.GetDefaultAPIUsages();
+            }
+            foreach (Configuration.APIUsage ap in apis)
+            {
+                dgvApiAccess.Rows.Add(new object[] { ap.Name, ap.AllowLocal, ap.AllowRemote, ap.AllowAdmin });
+            }
         }
 
         internal void SettingsFromConfiguration(Configuration a)
         {
             if (a == null)
             {
+                Configuration c = new Configuration();
                 trbSoundVolume.Value = 100;
                 trbTtsVolume.Value = 100;
                 cbxLoggingLevel.SelectedIndex = 2;
@@ -47,6 +63,7 @@ namespace Triggernometry.Forms
                 cbxFfxivJobMethod.SelectedIndex = 0;                
                 chkWelcome.Checked = true;
                 chkUpdates.Checked = false;
+                cbxUpdateMethod.SelectedIndex = 1;
                 chkWarnAdmin.Checked = true;
                 cbxTestLive.Checked = false;
                 chkLogNormalEvents.Checked = true;
@@ -60,6 +77,9 @@ namespace Triggernometry.Forms
                 nudCacheRepoExpiry.Value = 518400;
                 nudCacheFileExpiry.Value = 518400;
                 dgvSubstitutions.RowCount = 0;
+                cbxAutosaveConfig.Checked = false;
+                nudAutosaveMinutes.Value = 5;
+                SecuritySettingsFromConfiguration(null);
             }
             else
             {
@@ -76,6 +96,7 @@ namespace Triggernometry.Forms
                 chkWarnAdmin.Checked = a.WarnAdmin;
                 cbxTestLive.Checked = a.TestLiveByDefault;
                 chkUpdates.Checked = (a.UpdateNotifications == Configuration.UpdateNotificationsEnum.Yes);
+                cbxUpdateMethod.SelectedIndex = (int)a.UpdateCheckMethod;
                 chkLogNormalEvents.Checked = a.LogNormalEvents;
                 chkLogVariableExpansions.Checked = a.LogVariableExpansions;
                 chkFfxivLogNetwork.Checked = a.FfxivLogNetwork;
@@ -91,7 +112,14 @@ namespace Triggernometry.Forms
                 subs.AddRange(a.Substitutions);
                 subs.Sort();
                 dgvSubstitutions.RowCount = a.Substitutions.Count;
+                cbxAutosaveConfig.Checked = a.AutosaveEnabled;
+                dummy = (int)nudAutosaveMinutes.Value;
+                nudAutosaveMinutes.Value = a.AutosaveInterval;
+                dummy = (int)nudAutosaveMinutes.Value;
+                cbxTriggerTemplate.Checked = a.UseTemplateTrigger;
+                a.TemplateTrigger.CopySettingsTo(template);
                 SetupJobOrder(a);
+                SecuritySettingsFromConfiguration(a);
             }
             if (a.StartupTriggerType == Configuration.StartupTriggerTypeEnum.Trigger)
             {
@@ -138,6 +166,10 @@ namespace Triggernometry.Forms
             a.CacheJsonExpiry = (int)nudCacheJsonExpiry.Value;            
             a.CacheRepoExpiry = (int)nudCacheRepoExpiry.Value;
             a.CacheFileExpiry = (int)nudCacheFileExpiry.Value;
+            a.AutosaveEnabled = cbxAutosaveConfig.Checked;
+            a.AutosaveInterval = (int)nudAutosaveMinutes.Value;
+            a.UseTemplateTrigger = cbxTriggerTemplate.Checked;
+            template.CopySettingsTo(a.TemplateTrigger);
             a.FfxivPartyOrdering = (Configuration.FfxivPartyOrderingEnum)cbxFfxivJobMethod.SelectedIndex;
             if (chkUpdates.Checked == true)
             {
@@ -150,6 +182,7 @@ namespace Triggernometry.Forms
                     a.UpdateNotifications = Configuration.UpdateNotificationsEnum.No;
                 }
             }
+            a.UpdateCheckMethod = (Configuration.UpdateCheckMethodEnum)cbxUpdateMethod.SelectedIndex;
             TreeNode tn = trvTrigger.SelectedNode;
             if (tn != null)
             {
@@ -171,11 +204,23 @@ namespace Triggernometry.Forms
             List<string> temp = new List<string>();
             foreach (FfxivJobOrderItem oi in lstFfxivJobOrder.Items)
             {
-                temp.Add(oi.JobId.ToString());
+                temp.Add(oi.JobId.ToString()); 
             }
             a.FfxivCustomPartyOrder = String.Join(", ", temp);
             a.Substitutions.Clear();
             a.Substitutions.AddRange(subs);
+            MethodInfo setter = a.GetType().GetMethod("AddAPIUsage", BindingFlags.NonPublic | BindingFlags.Instance);
+            foreach (DataGridViewRow r in dgvApiAccess.Rows)
+            {
+                Configuration.APIUsage au = new Configuration.APIUsage()
+                {
+                    Name = (string)r.Cells[0].Value,
+                    AllowLocal = (bool)r.Cells[1].Value,
+                    AllowRemote = (bool)r.Cells[2].Value,
+                    AllowAdmin = (bool)r.Cells[3].Value
+                };
+                setter.Invoke(a, new object[] { au, true });
+            }
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
@@ -213,6 +258,7 @@ namespace Triggernometry.Forms
         private void ConfigurationForm_Shown(object sender, EventArgs e)
         {
             cancomplain = true;
+            cbxAutosaveConfig_CheckedChanged(null, null);
             RefreshCacheStates();
         }
 
@@ -327,6 +373,7 @@ namespace Triggernometry.Forms
             order.Add(new FfxivJobOrderItem() { Name = "Conjurer", JobId = 6 });
             order.Add(new FfxivJobOrderItem() { Name = "Scholar", JobId = 28 });
             order.Add(new FfxivJobOrderItem() { Name = "Astrologian", JobId = 33 });
+            order.Add(new FfxivJobOrderItem() { Name = "Sage", JobId = 40 });
             order.Add(new FfxivJobOrderItem() { Name = "Monk", JobId = 20 });
             order.Add(new FfxivJobOrderItem() { Name = "Pugilist", JobId = 2 });
             order.Add(new FfxivJobOrderItem() { Name = "Dragoon", JobId = 22 });
@@ -334,6 +381,7 @@ namespace Triggernometry.Forms
             order.Add(new FfxivJobOrderItem() { Name = "Ninja", JobId = 30 });
             order.Add(new FfxivJobOrderItem() { Name = "Rogue", JobId = 29 });
             order.Add(new FfxivJobOrderItem() { Name = "Samurai", JobId = 34 });
+            order.Add(new FfxivJobOrderItem() { Name = "Reaper", JobId = 39 });
             order.Add(new FfxivJobOrderItem() { Name = "Bard", JobId = 23 });
             order.Add(new FfxivJobOrderItem() { Name = "Archer", JobId = 5 });
             order.Add(new FfxivJobOrderItem() { Name = "Machinist", JobId = 31 });
@@ -750,6 +798,70 @@ namespace Triggernometry.Forms
             dgvSubstitutions.ClearSelection();
             dgvSubstitutions.Rows[e.RowIndex].Selected = true;
             btnSubEdit_Click(sender, null);
+        }
+
+        private void dgvApiAccess_SelectionChanged(object sender, EventArgs e)
+        {
+            dgvApiAccess.ClearSelection();
+        }
+
+        private void btnUnlockSecurity_Click(object sender, EventArgs e)
+        {
+            string temp = I18n.Translate("internal/ConfigurationForm/securityunlockwarning", "Altering any of the security settings below may expose your system to outsiders, and in the worst case, malicious users may be able to render your system inoperable or gain access to your personal information. Are you sure you understand the risks involved and know what you are doing, and still wish to continue altering these settings?");
+            switch (MessageBox.Show(this, temp, I18n.Translate("internal/ConfigurationForm/confirmsecurityunlock", "Confirm unlock"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+            {
+                case DialogResult.Yes:
+                    dgvApiAccess.Enabled = true;
+                    dgvApiAccess.ReadOnly = false;
+                    btnUnlockSecurity.Visible = false;
+                    panel18.Visible = false;
+                    break;
+            }
+        }
+
+        private void dgvApiAccess_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewRow r = dgvApiAccess.Rows[e.RowIndex];
+            DataGridViewCell c = r.Cells[e.ColumnIndex];
+            c.Value = ((bool)c.Value == false);
+        }
+
+        private void dgvApiAccess_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            dgvApiAccess_CellContentClick(sender, e);
+        }
+
+        private void cbxAutosaveConfig_CheckedChanged(object sender, EventArgs e)
+        {
+            lblAutosaveInterval.Enabled = cbxAutosaveConfig.Checked;
+            nudAutosaveMinutes.Enabled = cbxAutosaveConfig.Checked;
+        }
+
+        private void btnTriggerTemplate_Click(object sender, EventArgs e)
+        {
+            using (Forms.TriggerForm tf = new Forms.TriggerForm())
+            {
+                Trigger t = template;
+                Trigger.TriggerSourceEnum oldSource = t._Source;
+                tf.AllowAnonymousTrigger = true;
+                tf.plug = plug;
+                tf.fakectx.trig = t;
+                tf.fakectx.plug = plug;
+                tf.SettingsFromTrigger(t);
+                tf.imgs = plug.ui.imageList1;
+                tf.trv = plug.ui.treeView1;
+                tf.Text = I18n.Translate("internal/UserInterface/edittemplatetrigger", "Edit template trigger");
+                tf.btnOk.Text = I18n.Translate("internal/UserInterface/savechanges", "Save changes");
+                tf.wmp = plug.wmp;
+                tf.tts = plug.tts;
+                if (tf.ShowDialog() == DialogResult.OK)
+                {
+                    lock (t) // verified
+                    {
+                        tf.SettingsToTrigger(t);
+                    }
+                }
+            }
         }
 
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -10,6 +11,23 @@ namespace Triggernometry
 
     public class Configuration
     {
+
+        public class APIUsage
+        {
+
+            [XmlAttribute]
+            public string Name { get; set; }
+
+            [XmlAttribute]
+            public bool AllowLocal { get; set; }
+
+            [XmlAttribute]
+            public bool AllowRemote { get; set; }
+
+            [XmlAttribute]
+            public bool AllowAdmin { get; set; }
+
+        }
 
         public class Substitution : IComparable
         {
@@ -70,14 +88,18 @@ namespace Triggernometry
             return input;
         }
 
-        public Folder Root;
-        public RepositoryFolder RepositoryRoot;
+        public Folder Root = new Folder();
+        public RepositoryFolder RepositoryRoot = new RepositoryFolder();
+        public Trigger TemplateTrigger = new Trigger() { Enabled = true, Conditions = null, Condition = new ConditionGroup() { Grouping = ConditionGroup.CndGroupingEnum.Or, Enabled = false } };
 
         [XmlAttribute]
-        public int Version { get; set; }
+        public bool UseTemplateTrigger { get; set; } = false;
 
         [XmlAttribute]
-        public string PluginVersion { get; set; }
+        public int Version { get; set; } = 1;
+
+        [XmlAttribute]
+        public string PluginVersion { get; set; } = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
         public enum UpdateNotificationsEnum
         {
@@ -86,20 +108,52 @@ namespace Triggernometry
             No
         }
 
-        [XmlAttribute]
-        public UpdateNotificationsEnum UpdateNotifications { get; set; }
+        public enum UpdateCheckMethodEnum
+        {
+            Builtin,
+            ACT
+        }
 
         [XmlAttribute]
-        public UpdateNotificationsEnum DefaultRepository { get; set; }
+        public UpdateNotificationsEnum UpdateNotifications { get; set; } = UpdateNotificationsEnum.Undefined;
+
+        [XmlAttribute]
+        public UpdateCheckMethodEnum UpdateCheckMethod { get; set; } = UpdateCheckMethodEnum.ACT;
+
+        [XmlAttribute]
+        public UpdateNotificationsEnum DefaultRepository { get; set; } = UpdateNotificationsEnum.Undefined;
+
+        [XmlAttribute]
+        public bool AutosaveEnabled { get; set; } = false;
+
+        [XmlAttribute]
+        public int AutosaveInterval { get; set; } = 5;
 
         [XmlAttribute]
         public string Language { get; set; }
 
+        public List<Substitution> Substitutions { get; set; } = new List<Substitution>();
+
+        private bool Locked { get; set; } = false;
+
+        private List<APIUsage> _APIUsages { get; set; } = new List<APIUsage>();
+        public List<APIUsage> APIUsages
+        {
+            get
+            {
+                return Locked == false ? _APIUsages : null;
+            }
+            set
+            {
+                if (Locked == false)
+                {
+                    _APIUsages = value;
+                }
+            }
+        }
+
         internal bool _ShowWelcomeHasBeenSet = false;
-
-        public List<Substitution> Substitutions { get; set; }
-
-        private bool _ShowWelcome { get; set; }
+        private bool _ShowWelcome { get; set; } = true;
         [XmlAttribute]
         public bool ShowWelcome
         {
@@ -116,16 +170,16 @@ namespace Triggernometry
         }
 
         [XmlAttribute]
-        public int SfxVolumeAdjustment { get; set; }
+        public int SfxVolumeAdjustment { get; set; } = 100;
 
         [XmlAttribute]
-        public bool UseOsClipboard { get; set; }
+        public bool UseOsClipboard { get; set; } = true;
 
         [XmlAttribute]
-        public int TtsVolumeAdjustment { get; set; }
+        public int TtsVolumeAdjustment { get; set; } = 100;
 
         [XmlAttribute]
-        public RealPlugin.DebugLevelEnum DebugLevel { get; set; }
+        public RealPlugin.DebugLevelEnum DebugLevel { get; set; } = RealPlugin.DebugLevelEnum.Info;
 
         public enum FfxivPartyOrderingEnum
         {
@@ -208,22 +262,22 @@ namespace Triggernometry
         }
 
         [XmlAttribute]
-        public bool UseACTForTTS { get; set; }
+        public bool UseACTForTTS { get; set; } = false;
 
         [XmlAttribute]
-        public bool UseACTForSound { get; set; }
+        public bool UseACTForSound { get; set; } = false;
 
         [XmlAttribute]
-        public bool WarnAdmin { get; set; }
+        public bool WarnAdmin { get; set; } = true;
 
         [XmlAttribute]
-        public string EventSeparator { get; set; }
+        public string EventSeparator { get; set; } = "";
 
         [XmlAttribute]
-        public Guid StartupTriggerId { get; set; }
+        public Guid StartupTriggerId { get; set; } = Guid.Empty;
 
         [XmlAttribute]
-        public bool UseScarborough { get; set; }
+        public bool UseScarborough { get; set; } = true;
 
         public enum StartupTriggerTypeEnum
         {
@@ -232,42 +286,42 @@ namespace Triggernometry
         }
 
         [XmlAttribute]
-        public StartupTriggerTypeEnum StartupTriggerType { get; set; }
+        public StartupTriggerTypeEnum StartupTriggerType { get; set; } = StartupTriggerTypeEnum.Trigger;
 
         [XmlAttribute]
-        public bool LogNormalEvents { get; set; }
+        public bool LogNormalEvents { get; set; } = true;
 
         [XmlAttribute]
-        public bool FfxivLogNetwork { get; set; }
+        public bool FfxivLogNetwork { get; set; } = false;
 
         [XmlAttribute]
-        public bool TestLiveByDefault { get; set; }
+        public bool TestLiveByDefault { get; set; } = false;
 
         [XmlAttribute]
-        public string WindowToMonitor { get; set; }
+        public string WindowToMonitor { get; set; } = "FINAL FANTASY XIV";
 
         [XmlAttribute]
-        public bool DeveloperMode { get; set; }
+        public bool DeveloperMode { get; set; } = false;
 
         [XmlAttribute]
-        public int CacheImageExpiry { get; set; }
+        public int CacheImageExpiry { get; set; } = 518400;
 
         [XmlAttribute]
-        public int CacheSoundExpiry { get; set; }
+        public int CacheSoundExpiry { get; set; } = 518400;
 
         [XmlAttribute]
-        public int CacheJsonExpiry { get; set; }
+        public int CacheJsonExpiry { get; set; } = 10080;
 
         [XmlAttribute]
-        public int CacheRepoExpiry { get; set; }
+        public int CacheRepoExpiry { get; set; } = 518400;
 
         [XmlAttribute]
-        public int CacheFileExpiry { get; set; }
+        public int CacheFileExpiry { get; set; } = 518400;
 
         [XmlAttribute]
-        public bool LogVariableExpansions { get; set; }
+        public bool LogVariableExpansions { get; set; } = false;
 
-        public Variables.VariableStore PersistentVariables { get; set; }
+        public Variables.VariableStore PersistentVariables { get; set; } = new Variables.VariableStore();
 
         internal bool isnew;
         internal DateTime lastWrite;
@@ -275,44 +329,39 @@ namespace Triggernometry
 
         public Configuration()
         {
-            Version = 1;
             corruptRecoveryError = "";
-            PersistentVariables = new Variables.VariableStore();
-            UpdateNotifications = UpdateNotificationsEnum.Undefined;
-            DefaultRepository = UpdateNotificationsEnum.Undefined;
-            Root = new Folder();
             Root.Name = I18n.Translate("internal/Configuration/local", "Local triggers");
-            RepositoryRoot = new RepositoryFolder();
             RepositoryRoot.Name = I18n.Translate("internal/Configuration/remote", "Remote triggers");
-            SfxVolumeAdjustment = 100;
-            TtsVolumeAdjustment = 100;
-            DebugLevel = RealPlugin.DebugLevelEnum.Info;
-            UseACTForTTS = false;
-            UseACTForSound = false;
-            UseOsClipboard = true;
-            LogNormalEvents = true;
-            FfxivLogNetwork = false;
-            TestLiveByDefault = false;
-            UseScarborough = true;
-            WarnAdmin = true;
-            DeveloperMode = false;
-            LogVariableExpansions = false;
-            StartupTriggerType = StartupTriggerTypeEnum.Trigger;
-            EventSeparator = "";
-            StartupTriggerId = Guid.Empty;
             isnew = true;
             lastWrite = DateTime.Now;
-            FfxivPartyOrdering = FfxivPartyOrderingEnum.Legacy;
-            FfxivCustomPartyOrder = "19, 1, 21, 3, 32, 37, 24, 6, 28, 33, 20, 2, 22, 4, 30, 29, 34, 23, 5, 31, 38, 25, 7, 27, 26, 35, 36";
-            ShowWelcome = true;
-            WindowToMonitor = "FINAL FANTASY XIV";
-            CacheImageExpiry = 518400;
-            CacheSoundExpiry = 518400;
-            CacheJsonExpiry = 10080;
-            CacheRepoExpiry = 518400;
-            CacheFileExpiry = 518400;
-            Substitutions = new List<Substitution>();
+            FfxivCustomPartyOrder = "19, 1, 21, 3, 32, 37, 24, 6, 28, 33, 40, 20, 2, 22, 4, 30, 29, 34, 39, 23, 5, 31, 38, 25, 7, 27, 26, 35, 36";
         }
+
+        internal List<Configuration.APIUsage> GetAPIUsages()
+        {
+            List<Configuration.APIUsage> l = new List<Configuration.APIUsage>();
+            foreach (Configuration.APIUsage a in _APIUsages)
+            {
+                l.Add(new Configuration.APIUsage() { Name = a.Name, AllowLocal = a.AllowLocal, AllowRemote = a.AllowRemote, AllowAdmin = a.AllowAdmin });
+            }
+            return l;
+        }
+
+        private void AddAPIUsage(APIUsage au, bool overwrite)
+        {
+            var ax = (from aus in _APIUsages where aus.Name.CompareTo(au.Name) == 0 select aus).FirstOrDefault();
+            if (ax == null)
+            {
+                _APIUsages.Add(au);
+            }
+            else if (overwrite == true)
+            {
+                ax.AllowLocal = au.AllowLocal;
+                ax.AllowRemote = au.AllowRemote;
+                ax.AllowAdmin = au.AllowAdmin;
+            }
+        }
+
         /*
         Paladin		19
         Gladiator	1
@@ -324,6 +373,7 @@ namespace Triggernometry
         Conjurer	6
         Scholar		28
         Astrologian	33
+        Sage        40
         Monk		20
         Pugilist	2
         Dragoon		22
@@ -331,6 +381,7 @@ namespace Triggernometry
         Ninja		30
         Rogue		29
         Samurai		34
+        Reaper      39
         Bard		23
         Archer		5
         Machinist	31
