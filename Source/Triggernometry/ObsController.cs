@@ -52,26 +52,27 @@ namespace Triggernometry
         }
 
         private WebSocket WSConnection;
+        private const int maxRpcVersion = 1;
         private object lockobj = new object();
         private RequestResponseOp resp;
         private RequestBatchResponseOp respBatch;
-        private List<string> lockedMsgIds = new List<string>();
-        private const int maxRpcVersion = 1;
-        private string password;
-        private AutoResetEvent respReceived = null;
+        private Dictionary<string, Action<RequestResponseOp>> respCallbacks = new Dictionary<string, Action<RequestResponseOp>>();
+        private Dictionary<string, Action<RequestBatchResponseOp>> respBatchCallbacks = new Dictionary<string, Action<RequestBatchResponseOp>>();
+        private Action<HelloOp> helloCallback;
+        private AutoResetEvent authRespReceived = null;
 
         internal ObsController()
         {
-            respReceived = new AutoResetEvent(false);
+            authRespReceived = new AutoResetEvent(false);
         }
 
         public void Dispose()
         {
             Disconnect();
-            if (respReceived != null)
+            if (authRespReceived != null)
             {
-                respReceived.Dispose();
-                respReceived = null;
+                authRespReceived.Dispose();
+                authRespReceived = null;
             }
         }
 
@@ -88,10 +89,10 @@ namespace Triggernometry
                     WSConnection = new WebSocket(endpoint);
                     WSConnection.WaitTime = new TimeSpan(0, 0, 2);
                     WSConnection.OnMessage += WSConnection_OnMessage;
-                    this.password = password;
+                    helloCallback = resp => { HandleHelloOp(resp, password); };
+                    authRespReceived.Reset();
                     WSConnection.Connect();
-                    respReceived.Reset();
-                    if (respReceived.WaitOne(2000) == false)
+                    if (authRespReceived.WaitOne(2000) == false)
                     {
                         throw new ArgumentException(I18n.Translate("internal/Action/obsconnecttimeout", "OBS WebSocket authentication timed out"));
                     }
@@ -104,6 +105,26 @@ namespace Triggernometry
             }
         }
 
+        private void HandleHelloOp(HelloOp helloData, string password)
+        {
+            var identify = new IdentifyOp();
+            identify.rpcVersion = maxRpcVersion;
+            if (helloData?.authentication?.challenge != null)
+            {
+                if (password != null && password.Length > 0)
+                {
+                    helloData.authentication.password = password;
+                    identify.authentication = helloData.authentication.secret;
+                }
+                else
+                {
+                    throw new ArgumentException(I18n.Translate("internal/Action/obsauthpassword", "OBS WebSocket authentication required, you must provide a password"));
+                }
+            }
+            identify.eventSubscriptions = 0;
+            SendRequestJson(new JavaScriptSerializer().Serialize(new Message { op = (int) OpCode.Identify, d = identify }));
+        }
+
         private void WSConnection_OnMessage(object sender, MessageEventArgs e)
         {
             var message = new JavaScriptSerializer().Deserialize<Message>(e.Data);
@@ -111,24 +132,7 @@ namespace Triggernometry
             {
                 case OpCode.Hello:
                     var helloData = new JavaScriptSerializer().Deserialize<Message<HelloOp>>(e.Data)?.d;
-                    respReceived.Reset();
-                    var identify = new IdentifyOp();
-                    identify.rpcVersion = maxRpcVersion;
-                    if (helloData?.authentication?.challenge != null)
-                    {
-                        if (this.password != null && this.password.Length > 0) 
-                        {
-                            helloData.authentication.password = this.password;
-                            identify.authentication = helloData.authentication.secret;
-                            this.password = null;
-                        }
-                        else
-                        {
-                            throw new ArgumentException(I18n.Translate("internal/Action/obsauthpassword", "OBS WebSocket authentication required, you must provide a password"));
-                        }
-                    }
-                    identify.eventSubscriptions = 0;
-                    SendRequestJson(new JavaScriptSerializer().Serialize(new Message { op = (int) OpCode.Identify, d = identify }));
+                    helloCallback(helloData);
                     break;
                 case OpCode.Identified:
                     var identifiedData = new JavaScriptSerializer().Deserialize<Message<IdentifiedOp>>(e.Data)?.d;
@@ -136,19 +140,16 @@ namespace Triggernometry
                     {
                         throw new ArgumentException(I18n.Translate("internal/Action/obsconnectversionerror", "Your version of OBS WebSocket is not currently supported."));
                     }
-                    respReceived.Set();
+                    authRespReceived.Set();
                     break;
                 case OpCode.RequestResponse:
                     lock (lockobj)
                     {
                         resp = new JavaScriptSerializer().Deserialize<Message<RequestResponseOp>>(e.Data)?.d;
-                        if (lockedMsgIds.Contains(resp.requestId))
+                        if (respCallbacks.ContainsKey(resp.requestId))
                         {
-                            respReceived.Set();
-                        }
-                        else
-                        {
-                            respReceived.Reset();
+                            respCallbacks[resp.requestId](resp);
+                            respCallbacks.Remove(resp.requestId);
                         }
                     }
                     break;
@@ -156,13 +157,10 @@ namespace Triggernometry
                     lock (lockobj)
                     {
                         respBatch = new JavaScriptSerializer().Deserialize<Message<RequestBatchResponseOp>>(e.Data)?.d;
-                        if (lockedMsgIds.Contains(respBatch.requestId))
+                        if (respBatchCallbacks.ContainsKey(respBatch.requestId))
                         {
-                            respReceived.Set();
-                        }
-                        else
-                        {
-                            respReceived.Reset();
+                            respBatchCallbacks[respBatch.requestId](respBatch);
+                            respBatchCallbacks.Remove(respBatch.requestId);
                         }
                     }
                     break;
@@ -195,7 +193,6 @@ namespace Triggernometry
                     WSConnection.Close();
                 }                
                 WSConnection = null;
-                password = null;
             }
         }
 
@@ -282,49 +279,25 @@ namespace Triggernometry
 
         internal void RestartRecording()
         {
-            var isRecording = true;
-            var sleepMillis = 150;
-            while (isRecording)
+            var messageId = NewMessageID();
+            lock (lockobj)
             {
-                respReceived.Reset();
-                var messageId = NewMessageID();
-                lock (lockobj)
+                respBatchCallbacks.Add(messageId, resp =>
                 {
-                    lockedMsgIds.Add(messageId);
-                }
-                var stopRequest = new RequestOp[3];
-                stopRequest[0] = new RequestOp { requestType = "StopRecord" };
-                stopRequest[1] = new RequestOp { requestType = "Sleep", requestData = new { sleepMillis = sleepMillis } };
-                stopRequest[2] = new RequestOp { requestType = "GetRecordStatus" };
-                SendRequestBatch(stopRequest, messageId, false, (int) RequestBatchExecutionType.SerialRealtime);
-
-                if (respReceived.WaitOne(sleepMillis + 1500) == false)
-                {
-                    respReceived.Reset();
-                    throw new ArgumentException(I18n.Translate("internal/Action/obsconnecttimeout", "OBS WebSocket timed out"));
-                }
-                lock (lockobj)
-                {
-                    lockedMsgIds.Remove(messageId);
-                }
-                sleepMillis *= 2;
-
-                try
-                {
-                    var responseData = (Dictionary<string, object>)respBatch.results[2]["responseData"];
-                    isRecording = (bool) responseData["outputActive"];
-                }
-                catch (Exception)
-                {
-                    respReceived.Reset();
-                    StartRecording();
-                    Disconnect();
-                    throw;
-                }
+                    var responseData = (Dictionary<string, object>) resp.results[2]["responseData"];
+                    var isRecording = (bool)responseData["outputActive"];
+                    if (isRecording)
+                        RestartRecording();
+                    else
+                        StartRecording();
+                });
             }
 
-            respReceived.Reset();
-            StartRecording();
+            var stopRequest = new RequestOp[3];
+            stopRequest[0] = new RequestOp { requestType = "StopRecord" };
+            stopRequest[1] = new RequestOp { requestType = "Sleep", requestData = new { sleepMillis = 200 } };
+            stopRequest[2] = new RequestOp { requestType = "GetRecordStatus" };
+            SendRequestBatch(stopRequest, messageId, false, (int)RequestBatchExecutionType.SerialRealtime);
         }
 
         internal void RestartRecordingIfActive()
@@ -332,35 +305,14 @@ namespace Triggernometry
             var messageId = NewMessageID();
             lock (lockobj)
             { 
-                lockedMsgIds.Add(messageId);
-            }
-            SendRequest("GetRecordStatus", messageId);
-            if (respReceived.WaitOne(2000) == false)
-            {
-                respReceived.Reset();
-                throw new ArgumentException(I18n.Translate("internal/Action/obsconnecttimeout", "OBS WebSocket timed out"));
-            }
-            lock (lockobj)
-            {
-                lockedMsgIds.Remove(messageId);
-            }
-
-            try
-            {
-                if (resp.requestId.Equals(messageId))
+                respCallbacks.Add(messageId, resp =>
                 {
-                    var isRecording = (bool) resp.responseData["outputActive"];
+                    var isRecording = (bool)resp.responseData["outputActive"];
                     if (isRecording)
                         RestartRecording();
-                }
-                respReceived.Reset();
+                });
             }
-            catch (Exception)
-            {
-                respReceived.Reset();
-                Disconnect();
-                throw;
-            }
+            SendRequest("GetRecordStatus", messageId);
         }
 
         internal void PauseRecording()
@@ -408,30 +360,13 @@ namespace Triggernometry
             var messageId = NewMessageID();
             lock (lockobj)
             {
-                lockedMsgIds.Add(messageId);
-            }
-            SendRequest("GetSceneItemId", messageId, new { sceneName = scenename, sourceName = sourcename });
-            if (respReceived.WaitOne(2000) == false)
-            {
-                respReceived.Reset();
-                throw new ArgumentException(I18n.Translate("internal/Action/obsconnecttimeout", "OBS WebSocket timed out"));
-            }
-
-            try
-            {
-                if (resp.requestId.Equals(messageId))
+                respCallbacks.Add(messageId, resp =>
                 {
                     var sceneItemId = (int) resp.responseData["sceneItemId"];
                     SendRequest("SetSceneItemEnabled", new { sceneName = scenename, sceneItemId = sceneItemId, sceneItemEnabled = sceneItemEnabled });
-                }
-                respReceived.Reset();
+                });
             }
-            catch (Exception)
-            {
-                respReceived.Reset();
-                Disconnect();
-                throw;
-            }
+            SendRequest("GetRecordStatus", messageId);
         }
 
         internal void JSONPayload(string jsonpayload)
@@ -445,7 +380,7 @@ namespace Triggernometry
         protected string NewMessageID()
         {
             Guid g = Guid.NewGuid();
-            return g.ToString().Replace('-', '0');
+            return g.ToString();
         }
 
         private class Message
