@@ -27,8 +27,6 @@ namespace Triggernometry
 
         private class AuthChallenge
         {
-
-            public bool authRequired { get; set; }
             public string challenge { get; set; }
             public string salt { get; set; }
             
@@ -51,20 +49,15 @@ namespace Triggernometry
                     return Convert.ToBase64String(h.ComputeHash(b));
                 }
             }
-
-        }
-
-        private class Response
-        {
-
-            public string error { get; set; }
-            public string status { get; set; }
-
         }
 
         private WebSocket WSConnection;
         private object lockobj = new object();
-        private string resp;
+        private RequestResponseOpCode resp;
+        private RequestBatchResponseOpCode respBatch;
+        private List<string> lockedMsgIds = new List<string>();
+        private const int maxRpcVersion = 1;
+        private string password;
         private AutoResetEvent respReceived = null;
 
         internal ObsController()
@@ -95,38 +88,12 @@ namespace Triggernometry
                     WSConnection = new WebSocket(endpoint);
                     WSConnection.WaitTime = new TimeSpan(0, 0, 2);
                     WSConnection.OnMessage += WSConnection_OnMessage;
+                    this.password = password;
                     WSConnection.Connect();
                     respReceived.Reset();
-                    SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "GetAuthRequired", message_id = NewMessageID() }));
                     if (respReceived.WaitOne(2000) == false)
                     {
                         throw new ArgumentException(I18n.Translate("internal/Action/obsconnecttimeout", "OBS WebSocket authentication timed out"));
-                    }
-                    AuthChallenge ac = (AuthChallenge)new JavaScriptSerializer().Deserialize(resp, typeof(AuthChallenge));
-                    if (ac.authRequired == true)
-                    {
-                        if (password != null && password.Length > 0)
-                        {
-                            if (ac.authRequired == true)
-                            {
-                                ac.password = password;
-                                respReceived.Reset();
-                                SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "Authenticate", auth = ac.secret, message_id = NewMessageID() }));
-                                if (respReceived.WaitOne(2000) == false)
-                                {
-                                    throw new ArgumentException(I18n.Translate("internal/Action/obsconnecttimeout", "OBS WebSocket authentication timed out"));
-                                }
-                                Response rp = (Response)new JavaScriptSerializer().Deserialize(resp, typeof(Response));
-                                if (rp.status.ToLower() != "ok")
-                                {
-                                    throw new ArgumentException(I18n.Translate("internal/Action/obsconnecterror", "OBS WebSocket connection failed: {0}", rp.error));
-                                }
-                            }
-                        }
-                        else
-                        {
-                            throw new ArgumentException(I18n.Translate("internal/Action/obsauthpassword", "OBS WebSocket authentication required, you must provide a password"));
-                        }
                     }
                 }
                 catch (Exception)
@@ -139,26 +106,79 @@ namespace Triggernometry
 
         private void WSConnection_OnMessage(object sender, MessageEventArgs e)
         {
-            resp = e.Data;
-            respReceived.Set();
+            var message = new JavaScriptSerializer().Deserialize<Message>(e.Data);
+            switch (message.op)
+            {
+                case HelloOpCode.OPCODE:
+                    var helloData = new JavaScriptSerializer().Deserialize<Message<HelloOpCode>>(e.Data)?.d;
+                    respReceived.Reset();
+                    var identify = new IdentifyOpCode();
+                    identify.rpcVersion = maxRpcVersion;
+                    if (helloData?.authentication?.challenge != null)
+                    {
+                        if (this.password != null && this.password.Length > 0) 
+                        {
+                            helloData.authentication.password = this.password;
+                            identify.authentication = helloData.authentication.secret;
+                            this.password = null;
+                        }
+                        else
+                        {
+                            throw new ArgumentException(I18n.Translate("internal/Action/obsauthpassword", "OBS WebSocket authentication required, you must provide a password"));
+                        }
+                    }
+                    identify.eventSubscriptions = 0;
+                    SendRequestJson(new JavaScriptSerializer().Serialize(new Message { op = IdentifyOpCode.OPCODE, d = identify }));
+                    break;
+                case IdentifiedOpCode.OPCODE:
+                    var identifiedData = new JavaScriptSerializer().Deserialize<Message<IdentifiedOpCode>>(e.Data)?.d;
+                    if (identifiedData.negotiatedRpcVersion > maxRpcVersion)
+                    {
+                        throw new ArgumentException(I18n.Translate("internal/Action/obsconnectversionerror", "Your version of OBS WebSocket is not currently supported."));
+                    }
+                    respReceived.Set();
+                    break;
+                case RequestResponseOpCode.OPCODE:
+                    lock (lockobj)
+                    {
+                        resp = new JavaScriptSerializer().Deserialize<Message<RequestResponseOpCode>>(e.Data)?.d;
+                        if (lockedMsgIds.Contains(resp.requestId))
+                        {
+                            respReceived.Set();
+                        }
+                        else
+                        {
+                            respReceived.Reset();
+                        }
+                    }
+                    break;
+                case RequestBatchResponseOpCode.OPCODE:
+                    lock (lockobj)
+                    {
+                        respBatch = new JavaScriptSerializer().Deserialize<Message<RequestBatchResponseOpCode>>(e.Data)?.d;
+                        if (lockedMsgIds.Contains(respBatch.requestId))
+                        {
+                            respReceived.Set();
+                        }
+                        else
+                        {
+                            respReceived.Reset();
+                        }
+                    }
+                    break;
+            }
         }
 
-        internal void SendRequest(string str)
+        internal void SendRequestJson(string str)
         {
-            lock (lockobj)
+            try
             {
-                try
-                {                    
-                    str = str.Replace("request_type", "request-type");
-                    str = str.Replace("message_id", "message-id");
-                    str = str.Replace("scene_name", "scene-name");
-                    WSConnection.Send(str);
-                }
-                catch (Exception)
-                {
-                    Disconnect();
-                    throw;
-                }
+                WSConnection.Send(str);
+            }
+            catch (Exception)
+            {
+                Disconnect();
+                throw;
             }
         }
 
@@ -175,85 +195,247 @@ namespace Triggernometry
                     WSConnection.Close();
                 }                
                 WSConnection = null;
+                password = null;
             }
         }
 
+        internal string SendRequest(string requestType)
+        {
+            return SendRequest(requestType, NewMessageID(), null);
+        }
+
+        internal string SendRequest(string requestType, string requestId)
+        {
+            return SendRequest(requestType, requestId, null);
+        }
+
+        internal string SendRequest(string requestType, object requestData)
+        {
+            return SendRequest(requestType, NewMessageID(), requestData);
+        }
+
+        internal string SendRequest(string requestType, string requestId, object requestData)
+        {
+            Message req = new Message { 
+                op = RequestOpCode.OPCODE, 
+                d = new RequestOpCode { 
+                    requestType = requestType, 
+                    requestId = requestId, 
+                    requestData = requestData 
+                } 
+            };
+            SendRequestJson(new JavaScriptSerializer().Serialize(req));
+            return requestId;
+        }
+
+        internal string SendRequestBatch(object[] requests)
+        {
+            return SendRequestBatch(requests, NewMessageID(), false, 0);
+        }
+
+        internal string SendRequestBatch(object[] requests, string requestId)
+        {
+            return SendRequestBatch(requests, requestId, false, 0);
+        }
+
+        internal string SendRequestBatch(object[] requests, string requestId, bool haltOnFailure, int executionType)
+        {
+            Message req = new Message
+            {
+                op = RequestBatchOpCode.OPCODE,
+                d = new RequestBatchOpCode
+                {
+                    requestId = requestId,
+                    executionType = executionType,
+                    haltOnFailure = haltOnFailure,
+                    requests = requests
+                }
+            };
+            SendRequestJson(new JavaScriptSerializer().Serialize(req));
+            return requestId;
+        }
+
         internal void StartStreaming()
-        {            
-            SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "StartStreaming", message_id = NewMessageID() }));
+        {
+            SendRequest("StartStream");
         }
 
         internal void StopStreaming()
         {
-            SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "StopStreaming", message_id = NewMessageID() }));            
+            SendRequest("StopStream");
         }
 
         internal void ToggleStreaming()
         {
-            SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "StartStopStreaming", message_id = NewMessageID() }));            
+            SendRequest("ToggleStream");
         }
 
         internal void StartRecording()
         {
-            SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "StartRecording", message_id = NewMessageID() }));            
+            SendRequest("StartRecord");
         }
 
         internal void StopRecording()
         {
-            SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "StopRecording", message_id = NewMessageID() }));
+            SendRequest("StopRecord");
         }
 
         internal void ToggleRecording()
         {
-            SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "StartStopRecording", message_id = NewMessageID() }));
+            SendRequest("ToggleRecord");
+        }
+
+        internal void RestartRecording()
+        {
+            var isRecording = true;
+            var sleepMillis = 150;
+            while (isRecording)
+            {
+                respReceived.Reset();
+                var messageId = NewMessageID();
+                lock (lockobj)
+                {
+                    lockedMsgIds.Add(messageId);
+                }
+                var stopRequest = new RequestOpCode[3];
+                stopRequest[0] = new RequestOpCode { requestType = "StopRecord" };
+                stopRequest[1] = new RequestOpCode { requestType = "Sleep", requestData = new { sleepMillis = sleepMillis } };
+                stopRequest[2] = new RequestOpCode { requestType = "GetRecordStatus" };
+                SendRequestBatch(stopRequest, messageId);
+
+                if (respReceived.WaitOne(sleepMillis + 1500) == false)
+                {
+                    respReceived.Reset();
+                    throw new ArgumentException(I18n.Translate("internal/Action/obsconnecttimeout", "OBS WebSocket timed out"));
+                }
+                lock (lockobj)
+                {
+                    lockedMsgIds.Remove(messageId);
+                }
+                sleepMillis *= 2;
+
+                try
+                {
+                    var responseData = (Dictionary<string, object>)respBatch.results[2]["responseData"];
+                    isRecording = (bool) responseData["outputActive"];
+                }
+                catch (Exception)
+                {
+                    respReceived.Reset();
+                    StartRecording();
+                    Disconnect();
+                    throw;
+                }
+            }
+
+            respReceived.Reset();
+            StartRecording();
+        }
+
+        internal void RestartRecordingIfActive()
+        {
+            var messageId = NewMessageID();
+            lock (lockobj)
+            { 
+                lockedMsgIds.Add(messageId);
+            }
+            SendRequest("GetRecordStatus", messageId);
+            if (respReceived.WaitOne(2000) == false)
+            {
+                respReceived.Reset();
+                throw new ArgumentException(I18n.Translate("internal/Action/obsconnecttimeout", "OBS WebSocket timed out"));
+            }
+            lock (lockobj)
+            {
+                lockedMsgIds.Remove(messageId);
+            }
+
+            try
+            {
+                if (resp.requestId.Equals(messageId))
+                {
+                    var isRecording = (bool)resp.responseData["outputActive"];
+                    if (isRecording)
+                        RestartRecording();
+                }
+                respReceived.Reset();
+            }
+            catch (Exception)
+            {
+                respReceived.Reset();
+                Disconnect();
+                throw;
+            }
+        }
+
+        internal void PauseRecording()
+        {
+            SendRequest("PauseRecord");
+        }
+
+        internal void ResumeRecording()
+        {
+            SendRequest("ResumeRecord");
+        }
+
+        internal void ToggleRecordPause()
+        {
+            SendRequest("ToggleRecordPause");
         }
 
         internal void StartReplayBuffer()
         {
-            SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "StartReplayBuffer", message_id = NewMessageID() }));
+            SendRequest("StartReplayBuffer");
         }
 
         internal void StopReplayBuffer()
         {
-            SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "StopReplayBuffer", message_id = NewMessageID() }));
+            SendRequest("StopReplayBuffer");
         }
 
         internal void ToggleReplayBuffer()
         {
-            SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "StartStopReplayBuffer", message_id = NewMessageID() }));
+            SendRequest("ToggleReplayBuffer");
         }
 
         internal void SaveReplayBuffer()
         {
-            SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "SaveReplayBuffer", message_id = NewMessageID() }));
+            SendRequest("SaveReplayBuffer");
         }
 
         internal void SetCurrentScene(string sceneName)
         {
-            SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "SetCurrentScene", message_id = NewMessageID(), scene_name = sceneName }));
+            SendRequest("SetCurrentProgramScene", new { sceneName = sceneName });
         }
 
-        internal void ShowSource(string scenename, string sourcename)
+        internal void ShowHideSource(string scenename, string sourcename, bool sceneItemEnabled)
         {
-            if (scenename != null && scenename != "")
+            var messageId = NewMessageID();
+            lock (lockobj)
             {
-                SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "SetSceneItemProperties", message_id = NewMessageID(), scene_name = scenename, item = sourcename, visible = true }));
+                lockedMsgIds.Add(messageId);
             }
-            else
+            SendRequest("GetSceneItemId", messageId, new { sceneName = scenename, sourceName = sourcename });
+            if (respReceived.WaitOne(2000) == false)
             {
-                SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "SetSceneItemProperties", message_id = NewMessageID(), item = sourcename, visible = true }));
+                respReceived.Reset();
+                throw new ArgumentException(I18n.Translate("internal/Action/obsconnecttimeout", "OBS WebSocket timed out"));
             }
-        }
 
-        internal void HideSource(string scenename, string sourcename)
-        {
-            if (scenename != null && scenename != "")
+            try
             {
-                SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "SetSceneItemProperties", message_id = NewMessageID(), scene_name = scenename, item = sourcename, visible = false }));
+                if (resp.requestId.Equals(messageId))
+                {
+                    var sceneItemId = (int) resp.responseData["sceneItemId"];
+                    SendRequest("SetSceneItemEnabled", new { sceneName = scenename, sceneItemId = sceneItemId, sceneItemEnabled = sceneItemEnabled });
+                }
+                respReceived.Reset();
             }
-            else
+            catch (Exception)
             {
-                SendRequest(new JavaScriptSerializer().Serialize(new { request_type = "SetSceneItemProperties", message_id = NewMessageID(), item = sourcename, visible = false }));
+                respReceived.Reset();
+                Disconnect();
+                throw;
             }
         }
 
@@ -261,7 +443,7 @@ namespace Triggernometry
         {
             if(jsonpayload != null && jsonpayload != "")
             {
-                SendRequest(jsonpayload);
+                SendRequestJson(jsonpayload);
             }
         }
 
@@ -271,6 +453,71 @@ namespace Triggernometry
             return g.ToString().Replace('-', '0');
         }
 
-    }
+        private class Message
+        {
+            public int op { get; set; }
+            public object d { get; set; }
+        }
 
+        private class Message<T>
+        {
+            public int op { get; set; }
+            public T d { get; set; }
+        }
+
+        private class HelloOpCode
+        {
+            public const int OPCODE = 0;
+            public string obsWebSocketVersion { get; set; }
+            public int rpcVersion { get; set; }
+            public AuthChallenge authentication { get; set; }
+        }
+
+        private class IdentifyOpCode
+        {
+            public const int OPCODE = 1;
+            public int rpcVersion { get; set; }
+            public string authentication { get; set; }
+            public int eventSubscriptions { get; set; }
+        }
+
+        private class IdentifiedOpCode
+        {
+            public const int OPCODE = 2;
+            public int negotiatedRpcVersion { get; set; }
+        }
+
+        private class RequestOpCode
+        {
+            public const int OPCODE = 6;
+            public string requestType { get; set; }
+            public string requestId { get; set; }
+            public object requestData { get; set; }
+        }
+
+        private class RequestResponseOpCode
+        {
+            public const int OPCODE = 7;
+            public string requestType { get; set; }
+            public string requestId { get; set; }
+            public Dictionary<string, object> requestStatus { get; set; }
+            public Dictionary<string, object> responseData { get; set; }
+        }
+
+        private class RequestBatchOpCode
+        {
+            public const int OPCODE = 8;
+            public string requestId { get; set; }
+            public bool haltOnFailure { get; set; }
+            public int executionType { get; set; }
+            public object[] requests { get; set; }
+        }
+
+        private class RequestBatchResponseOpCode
+        {
+            public const int OPCODE = 9;
+            public string requestId { get; set; }
+            public Dictionary<string, object>[] results { get; set; }
+        }
+    }
 }
