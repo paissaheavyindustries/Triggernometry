@@ -53,8 +53,8 @@ namespace Triggernometry
 
         private WebSocket WSConnection;
         private object lockobj = new object();
-        private RequestResponseOpCode resp;
-        private RequestBatchResponseOpCode respBatch;
+        private RequestResponseOp resp;
+        private RequestBatchResponseOp respBatch;
         private List<string> lockedMsgIds = new List<string>();
         private const int maxRpcVersion = 1;
         private string password;
@@ -107,12 +107,12 @@ namespace Triggernometry
         private void WSConnection_OnMessage(object sender, MessageEventArgs e)
         {
             var message = new JavaScriptSerializer().Deserialize<Message>(e.Data);
-            switch (message.op)
+            switch ((OpCode) message.op)
             {
-                case HelloOpCode.OPCODE:
-                    var helloData = new JavaScriptSerializer().Deserialize<Message<HelloOpCode>>(e.Data)?.d;
+                case OpCode.Hello:
+                    var helloData = new JavaScriptSerializer().Deserialize<Message<HelloOp>>(e.Data)?.d;
                     respReceived.Reset();
-                    var identify = new IdentifyOpCode();
+                    var identify = new IdentifyOp();
                     identify.rpcVersion = maxRpcVersion;
                     if (helloData?.authentication?.challenge != null)
                     {
@@ -128,20 +128,20 @@ namespace Triggernometry
                         }
                     }
                     identify.eventSubscriptions = 0;
-                    SendRequestJson(new JavaScriptSerializer().Serialize(new Message { op = IdentifyOpCode.OPCODE, d = identify }));
+                    SendRequestJson(new JavaScriptSerializer().Serialize(new Message { op = (int) OpCode.Identify, d = identify }));
                     break;
-                case IdentifiedOpCode.OPCODE:
-                    var identifiedData = new JavaScriptSerializer().Deserialize<Message<IdentifiedOpCode>>(e.Data)?.d;
+                case OpCode.Identified:
+                    var identifiedData = new JavaScriptSerializer().Deserialize<Message<IdentifiedOp>>(e.Data)?.d;
                     if (identifiedData.negotiatedRpcVersion > maxRpcVersion)
                     {
                         throw new ArgumentException(I18n.Translate("internal/Action/obsconnectversionerror", "Your version of OBS WebSocket is not currently supported."));
                     }
                     respReceived.Set();
                     break;
-                case RequestResponseOpCode.OPCODE:
+                case OpCode.RequestResponse:
                     lock (lockobj)
                     {
-                        resp = new JavaScriptSerializer().Deserialize<Message<RequestResponseOpCode>>(e.Data)?.d;
+                        resp = new JavaScriptSerializer().Deserialize<Message<RequestResponseOp>>(e.Data)?.d;
                         if (lockedMsgIds.Contains(resp.requestId))
                         {
                             respReceived.Set();
@@ -152,10 +152,10 @@ namespace Triggernometry
                         }
                     }
                     break;
-                case RequestBatchResponseOpCode.OPCODE:
+                case OpCode.RequestBatchResponse:
                     lock (lockobj)
                     {
-                        respBatch = new JavaScriptSerializer().Deserialize<Message<RequestBatchResponseOpCode>>(e.Data)?.d;
+                        respBatch = new JavaScriptSerializer().Deserialize<Message<RequestBatchResponseOp>>(e.Data)?.d;
                         if (lockedMsgIds.Contains(respBatch.requestId))
                         {
                             respReceived.Set();
@@ -217,8 +217,8 @@ namespace Triggernometry
         internal string SendRequest(string requestType, string requestId, object requestData)
         {
             Message req = new Message { 
-                op = RequestOpCode.OPCODE, 
-                d = new RequestOpCode { 
+                op = (int) OpCode.Request, 
+                d = new RequestOp { 
                     requestType = requestType, 
                     requestId = requestId, 
                     requestData = requestData 
@@ -230,20 +230,15 @@ namespace Triggernometry
 
         internal string SendRequestBatch(object[] requests)
         {
-            return SendRequestBatch(requests, NewMessageID(), false, 0);
-        }
-
-        internal string SendRequestBatch(object[] requests, string requestId)
-        {
-            return SendRequestBatch(requests, requestId, false, 0);
+            return SendRequestBatch(requests, NewMessageID(), false, (int) RequestBatchExecutionType.SerialRealtime);
         }
 
         internal string SendRequestBatch(object[] requests, string requestId, bool haltOnFailure, int executionType)
         {
             Message req = new Message
             {
-                op = RequestBatchOpCode.OPCODE,
-                d = new RequestBatchOpCode
+                op = (int) OpCode.RequestBatch,
+                d = new RequestBatchOp
                 {
                     requestId = requestId,
                     executionType = executionType,
@@ -297,11 +292,11 @@ namespace Triggernometry
                 {
                     lockedMsgIds.Add(messageId);
                 }
-                var stopRequest = new RequestOpCode[3];
-                stopRequest[0] = new RequestOpCode { requestType = "StopRecord" };
-                stopRequest[1] = new RequestOpCode { requestType = "Sleep", requestData = new { sleepMillis = sleepMillis } };
-                stopRequest[2] = new RequestOpCode { requestType = "GetRecordStatus" };
-                SendRequestBatch(stopRequest, messageId);
+                var stopRequest = new RequestOp[3];
+                stopRequest[0] = new RequestOp { requestType = "StopRecord" };
+                stopRequest[1] = new RequestOp { requestType = "Sleep", requestData = new { sleepMillis = sleepMillis } };
+                stopRequest[2] = new RequestOp { requestType = "GetRecordStatus" };
+                SendRequestBatch(stopRequest, messageId, false, (int) RequestBatchExecutionType.SerialRealtime);
 
                 if (respReceived.WaitOne(sleepMillis + 1500) == false)
                 {
@@ -354,7 +349,7 @@ namespace Triggernometry
             {
                 if (resp.requestId.Equals(messageId))
                 {
-                    var isRecording = (bool)resp.responseData["outputActive"];
+                    var isRecording = (bool) resp.responseData["outputActive"];
                     if (isRecording)
                         RestartRecording();
                 }
@@ -465,59 +460,71 @@ namespace Triggernometry
             public T d { get; set; }
         }
 
-        private class HelloOpCode
+        private class HelloOp
         {
-            public const int OPCODE = 0;
             public string obsWebSocketVersion { get; set; }
             public int rpcVersion { get; set; }
             public AuthChallenge authentication { get; set; }
         }
 
-        private class IdentifyOpCode
+        private class IdentifyOp
         {
-            public const int OPCODE = 1;
             public int rpcVersion { get; set; }
             public string authentication { get; set; }
             public int eventSubscriptions { get; set; }
         }
 
-        private class IdentifiedOpCode
+        private class IdentifiedOp
         {
-            public const int OPCODE = 2;
             public int negotiatedRpcVersion { get; set; }
         }
 
-        private class RequestOpCode
+        private class RequestOp
         {
-            public const int OPCODE = 6;
             public string requestType { get; set; }
             public string requestId { get; set; }
             public object requestData { get; set; }
         }
 
-        private class RequestResponseOpCode
+        private class RequestResponseOp
         {
-            public const int OPCODE = 7;
             public string requestType { get; set; }
             public string requestId { get; set; }
             public Dictionary<string, object> requestStatus { get; set; }
             public Dictionary<string, object> responseData { get; set; }
         }
 
-        private class RequestBatchOpCode
+        private class RequestBatchOp
         {
-            public const int OPCODE = 8;
             public string requestId { get; set; }
             public bool haltOnFailure { get; set; }
             public int executionType { get; set; }
             public object[] requests { get; set; }
         }
 
-        private class RequestBatchResponseOpCode
+        private class RequestBatchResponseOp
         {
-            public const int OPCODE = 9;
             public string requestId { get; set; }
             public Dictionary<string, object>[] results { get; set; }
+        }
+
+        private enum OpCode
+        {
+            Hello = 0,
+            Identify = 1,
+            Identified = 2,
+            Request = 6,
+            RequestResponse = 7,
+            RequestBatch = 8,
+            RequestBatchResponse = 9,
+        }
+
+        private enum RequestBatchExecutionType
+        {
+            None = -1,
+            SerialRealtime = 0,
+            SerialFrame = 1,
+            Parallel = 2,
         }
     }
 }
