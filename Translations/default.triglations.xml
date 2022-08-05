@@ -624,7 +624,6 @@
     <TranslationEntry Key="internal/Action/desclogmessage" Translation="log message ({0})" />
     <TranslationEntry Key="internal/Action/descmsgbox" Translation="show a message box saying ({0}) with icon ({1})" />
     <TranslationEntry Key="internal/Action/descobshidesource" Translation="hide source ({0}) on OBS scene ({1})" />
-    <TranslationEntry Key="internal/Action/descobshidesourcecurrent" Translation="hide source ({0}) on current OBS scene" />
     <TranslationEntry Key="internal/Action/descobssavereplay" Translation="save OBS replay buffer" />
     <TranslationEntry Key="internal/Action/descobssetscene" Translation="set current OBS scene to ({0})" />
     <TranslationEntry Key="internal/Action/descobsshowsource" Translation="show source ({0}) on OBS scene ({1})" />

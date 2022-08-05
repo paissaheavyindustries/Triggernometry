@@ -210,7 +210,7 @@
     <TranslationEntry Key="ActionForm/lblMessageBoxText" Translation="Näytettävä teksti" />
     <TranslationEntry Key="ActionForm/lblObsOpType" Translation="Suoritettava operaatio" />
     <TranslationEntry Key="ActionForm/lblObsSceneName" Translation="Kohtauksen nimi" />
-    <TranslationEntry Key="ActionForm/lblObsWebsocketInfo" Translation="Kauko-ohjauksen käyttämiseksi sinun on asennettava OBS WebSocket-liitännäinen. Asennusohjelma löytyy osoitteesta:" />
+    <TranslationEntry Key="ActionForm/lblObsWebsocketInfo" Translation="Jos käytät OBS v27:ää tai vanhempaa versiota, sinun on asennettava OBS WebSocket -laajennus, jotta voit käyttää OBS:n etäohjausominaisuuksia. Asennusohjelma löytyy osoitteesta:" />
     <TranslationEntry Key="ActionForm/lblProcessName" Translation="Ajettava ohjelma" />
     <TranslationEntry Key="ActionForm/lblProcessParameters" Translation="Komentoriviparametrit" />
     <TranslationEntry Key="ActionForm/lblProcessWarning" Translation="Tämänkaltaiset toiminnot voivat olla vaarallisia ja aiheuttaa vahinkoa jos herätin laukeaa esimerkiksi vääränlaisilla tai odottamattomilla arvoilla. Olethan varovainen!" />
@@ -994,7 +994,6 @@
 	<TranslationEntry Key="ActionForm/lblObsSceneName" Translation="Lähteen nimi" />	
 	<TranslationEntry Key="internal/Action/descobsshowsource" Translation="näytä lähde ({0}) OBS-kohtauksessa ({1})" />
 	<TranslationEntry Key="internal/Action/descobshidesource" Translation="piilota lähde ({0}) OBS-kohtauksesta ({1})" />
-	<TranslationEntry Key="internal/Action/descobshidesourcecurrent" Translation="piilota lähde ({0}) tämänhetkisestä OBS-kohtauksesta" />	
 	<TranslationEntry Key="ActionForm/cbxObsOpType[Show source]" Translation="Näytä lähde" />
 	<TranslationEntry Key="ActionForm/cbxObsOpType[Hide source]" Translation="Piilota lähde" />	
 	<TranslationEntry Key="LogForm/lblStatus" Translation="Näytetään {0}/{1} tapahtumaa" />	

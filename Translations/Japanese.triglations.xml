@@ -250,7 +250,7 @@
     <TranslationEntry Key="ActionForm/lblObsOpType" Translation="操作タイプ" />
     <TranslationEntry Key="ActionForm/lblObsSceneName" Translation="シーン名" />
     <TranslationEntry Key="ActionForm/lblObsSourceName" Translation="ソース名" />
-    <TranslationEntry Key="ActionForm/lblObsWebsocketInfo" Translation="OBSのリモートコントロールを使用するには、OBS WebSocketプラグインをインストールする必要があります。以下URLからインストーラを入手することができます" />
+    <TranslationEntry Key="ActionForm/lblObsWebsocketInfo" Translation="OBS v27またはそれ以前のバージョンをお使いの場合、OBSのリモートコントロール機能を使用するには、OBS WebSocketプラグインをインストールする必要があります。以下URLからインストーラを入手することができます" />
     <TranslationEntry Key="ActionForm/lblProcessName" Translation="起動するプロセス" />
     <TranslationEntry Key="ActionForm/lblProcessParameters" Translation="コマンドライン引数" />
     <TranslationEntry Key="ActionForm/lblProcessWarning" Translation="このタイプのアクションには潜在的な危険性があります。トリガーが期待値の範囲外のパラメーターで起動された場合などに意図しない損害を引き起こす可能性があります。十分に注意を払い自己責任で使用してください。" />
@@ -619,7 +619,6 @@
     <TranslationEntry Key="internal/Action/desclogmessage" Translation="ログに ({0}) を記録" />
     <TranslationEntry Key="internal/Action/descmsgbox" Translation="メッセージボックスに ({0}) と表示、アイコンは ({1})" />
     <TranslationEntry Key="internal/Action/descobshidesource" Translation="OBSのシーン ({1}) からソース ({0}) を非表示にする" />
-    <TranslationEntry Key="internal/Action/descobshidesourcecurrent" Translation="OBSの現在のシーンからソース ({0}) を非表示にする" />
     <TranslationEntry Key="internal/Action/descobssavereplay" Translation="OBSのリプレイバッファを保存" />
     <TranslationEntry Key="internal/Action/descobssetscene" Translation="OBSの現在のシーンを ({0}) にする" />
     <TranslationEntry Key="internal/Action/descobsshowsource" Translation="OBSのシーン ({1}) にソース ({0}) を表示" />
