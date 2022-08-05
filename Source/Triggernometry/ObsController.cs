@@ -81,9 +81,7 @@ namespace Triggernometry
                 try
                 {
                     if (IsConnected == true)
-                    {
                         return;
-                    }                    
                     WSConnection = new WebSocket(endpoint);
                     WSConnection.WaitTime = new TimeSpan(0, 0, 2);
                     WSConnection.OnMessage += WSConnection_OnMessage;
@@ -91,9 +89,7 @@ namespace Triggernometry
                     authRespReceived.Reset();
                     WSConnection.Connect();
                     if (authRespReceived.WaitOne(2000) == false)
-                    {
                         throw new ArgumentException(I18n.Translate("internal/Action/obsconnecttimeout", "OBS WebSocket authentication timed out"));
-                    }
                 }
                 catch (Exception)
                 {
@@ -135,9 +131,7 @@ namespace Triggernometry
                 case OpCode.Identified:
                     var identifiedData = new JavaScriptSerializer().Deserialize<Message<IdentifiedOp>>(e.Data)?.d;
                     if (identifiedData.negotiatedRpcVersion > maxRpcVersion)
-                    {
                         throw new ArgumentException(I18n.Translate("internal/Action/obsconnectversionerror", "Your version of OBS WebSocket is not currently supported."));
-                    }
                     authRespReceived.Set();
                     break;
                 case OpCode.RequestResponse:
@@ -165,7 +159,7 @@ namespace Triggernometry
             }
         }
 
-        internal void SendRequestJson(string str)
+        private void SendRequestJson(string str)
         {
             try
             {
@@ -183,33 +177,29 @@ namespace Triggernometry
             lock (lockobj)
             {
                 if (IsConnected == false)
-                {
                     return;
-                }
                 if (WSConnection != null)
-                {
                     WSConnection.Close();
-                }                
                 WSConnection = null;
             }
         }
 
-        internal string SendRequest(string requestType)
+        private string SendRequest(string requestType)
         {
             return SendRequest(requestType, NewMessageID(), null);
         }
 
-        internal string SendRequest(string requestType, string requestId)
+        private string SendRequest(string requestType, string requestId)
         {
             return SendRequest(requestType, requestId, null);
         }
 
-        internal string SendRequest(string requestType, object requestData)
+        private string SendRequest(string requestType, object requestData)
         {
             return SendRequest(requestType, NewMessageID(), requestData);
         }
 
-        internal string SendRequest(string requestType, string requestId, object requestData)
+        private string SendRequest(string requestType, string requestId, object requestData)
         {
             Message req = new Message { 
                 op = (int) OpCode.Request, 
@@ -223,12 +213,12 @@ namespace Triggernometry
             return requestId;
         }
 
-        internal string SendRequestBatch(object[] requests)
+        private string SendRequestBatch(object[] requests)
         {
             return SendRequestBatch(requests, NewMessageID(), false, (int) RequestBatchExecutionType.SerialRealtime);
         }
 
-        internal string SendRequestBatch(object[] requests, string requestId, bool haltOnFailure, int executionType)
+        private string SendRequestBatch(object[] requests, string requestId, bool haltOnFailure, int executionType)
         {
             Message req = new Message
             {
@@ -370,12 +360,10 @@ namespace Triggernometry
         internal void JSONPayload(string jsonpayload)
         {
             if(jsonpayload != null && jsonpayload != "")
-            {
                 SendRequestJson(jsonpayload);
-            }
         }
 
-        protected string NewMessageID()
+        private string NewMessageID()
         {
             Guid g = Guid.NewGuid();
             return g.ToString();
