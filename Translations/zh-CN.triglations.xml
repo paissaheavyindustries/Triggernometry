@@ -163,22 +163,22 @@
         <TranslationEntry Key="ActionForm/cndCondition/cbxExpLType[String]" Translation="字串符" />
         <TranslationEntry Key="ActionForm/cndCondition/cbxExpRType[Numeric]" Translation="数字" />
         <TranslationEntry Key="ActionForm/cndCondition/cbxExpRType[String]" Translation="字串符" />
-        <TranslationEntry Key="ActionForm/cndCondition/cbxGroupingType[All conditions must be true (AND)]" Translation="所有条件必须为真(并且)" />
-        <TranslationEntry Key="ActionForm/cndCondition/cbxGroupingType[At least one condition must be true (OR)]" Translation="至少有一个条件必须为真(或者)" />
-        <TranslationEntry Key="ActionForm/cndCondition/cbxGroupingType[None of the conditions may be true (NOT)]" Translation="没有条件可能是真的(不需)" />
-        <TranslationEntry Key="ActionForm/cndCondition/cbxGroupingType[Only one condition must be true (XOR)]" Translation="只有一个条件必须为真(X或者)" />
-        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Expressions must be numerically equal (X = Y)]" Translation="表达式必须在数值上相等(X = Y)" />
-        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Expressions must not be numerically equal (X ≠ Y)]" Translation="表达式不能在数值上相等(X≠Y)" />
-        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must be numerically greater or equal to (X ≥ Y)]" Translation="左侧必须在数值上大于或等于(X≥Y)" />
-        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must be numerically greater than (X &gt; Y)]" Translation="左侧必须在数值上大于 (X &gt; Y)" />
-        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must be numerically less or equal to (X ≤ Y)]" Translation="左侧必须在数值上小于或等于(X≤Y)" />
-        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must be numerically less than (X &lt; Y)]" Translation="左侧必须在数值上小于 (X &lt; Y)" />
+        <TranslationEntry Key="ActionForm/cndCondition/cbxGroupingType[All conditions must be true (AND)]" Translation="所有条件必须为真（与）" />
+        <TranslationEntry Key="ActionForm/cndCondition/cbxGroupingType[At least one condition must be true (OR)]" Translation="至少有一个条件必须为真（或）" />
+        <TranslationEntry Key="ActionForm/cndCondition/cbxGroupingType[None of the conditions may be true (NOT)]" Translation="没有条件可能是真的（非）" />
+        <TranslationEntry Key="ActionForm/cndCondition/cbxGroupingType[Only one condition must be true (XOR)]" Translation="只有一个条件必须为真（异或）" />
+        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Expressions must be numerically equal (X = Y)]" Translation="两侧表达式必须在数值上相等（X = Y）" />
+        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Expressions must not be numerically equal (X ≠ Y)]" Translation="两侧表达式不得在数值上相等（X ≠ Y）" />
+        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must be numerically greater or equal to (X ≥ Y)]" Translation="左侧必须在数值上大于或等于（X ≥ Y）" />
+        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must be numerically greater than (X &gt; Y)]" Translation="左侧必须在数值上大于（X &gt; Y）" />
+        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must be numerically less or equal to (X ≤ Y)]" Translation="左侧必须在数值上小于或等于（X ≤ Y）" />
+        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must be numerically less than (X &lt; Y)]" Translation="左侧必须在数值上小于（X &lt; Y）" />
         <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must match the regular expression on the right side]" Translation="左侧必须与右侧的正则表达式匹配" />
-        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must not match the regular expression on the right side]" Translation="左侧必须与右侧的正则表达式不匹配" />
-        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must not pass case-insensitive string comparison with the right side]" Translation="左侧不得与右侧传递不区分大小写的字符串比较" />
-        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must not pass case-sensitive string comparison with the right side]" Translation="左侧不得与右侧传递区分大小写的字符串比较" />
-        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must pass case-insensitive string comparison with the right side]" Translation="左侧必须通过不区分大小写的字符串与右侧比较" />
-        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must pass case-sensitive string comparison with the right side]" Translation="左侧必须通过区分大小写的字符串与右侧比较" />
+        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must not match the regular expression on the right side]" Translation="左侧不得与右侧的正则表达式匹配" />
+        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must not pass case-insensitive string comparison with the right side]" Translation="左侧与右侧的字符串不得相同（不区分大小写）" />
+        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must not pass case-sensitive string comparison with the right side]" Translation="左侧与右侧的字符串不得相同（区分大小写）" />
+        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must pass case-insensitive string comparison with the right side]" Translation="左侧与右侧的字符串必须相同（不区分大小写）" />
+        <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[Left side must pass case-sensitive string comparison with the right side]" Translation="左侧与右侧的字符串必须相同（区分大小写）" />
         <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[List variable specified on the left side must contain the value on the right side]" Translation="左侧指定的列表变量必须包含右侧的值" />
         <TranslationEntry Key="ActionForm/cndCondition/cbxOpType[List variable specified on the left side must not contain the value on the right side]" Translation="左侧指定的列表变量不得包含右侧的值" />
         <TranslationEntry Key="ActionForm/cndCondition/ctxAdd" Translation="添加" />
@@ -190,7 +190,7 @@
         <TranslationEntry Key="ActionForm/cndCondition/ctxRemove" Translation="移除" />
         <TranslationEntry Key="ActionForm/cndCondition/lblGroupingType" Translation="分组类型" />
         <TranslationEntry Key="ActionForm/cndCondition/lblLeftExpression" Translation="左侧表达式" />
-        <TranslationEntry Key="ActionForm/cndCondition/lblOperator" Translation="操作者" />
+        <TranslationEntry Key="ActionForm/cndCondition/lblOperator" Translation="操作符" />
         <TranslationEntry Key="ActionForm/cndCondition/lblRightExpression" Translation="右侧表达式" />
         <TranslationEntry Key="ActionForm/colorSelector1/ctxSetBackground" Translation="设置背景颜色" />
         <TranslationEntry Key="ActionForm/colorSelector1/ctxSetBackgroundTransparent" Translation="将背景设置为透明" />
@@ -946,7 +946,7 @@
         <TranslationEntry Key="internal/Plugin/trigfiring" Translation="触发的触发器 '{0}'" />
         <TranslationEntry Key="internal/Plugin/trigmatches" Translation="触发器 '{0}' 匹配日志 '{1}'" />
         <TranslationEntry Key="internal/Plugin/trignotactive" Translation="触发器 '{0}' 未设为触发" />
-        <TranslationEntry Key="internal/Plugin/trigparentfail" Translation="触发器 '{0}' 不传递父分组 '{1}' 过滤: {2}" />
+        <TranslationEntry Key="internal/Plugin/trigparentfail" Translation="触发器 '{0}' 没有通过父分组 '{1}' 的过滤器: {2}" />
         <TranslationEntry Key="internal/Plugin/trigrefirefail" Translation="触发器 '{0}' 再次触发延迟 {1}" />
         <TranslationEntry Key="internal/Plugin/trigrembook" Translation="触发器 '{0}' 已从记录中移除" />
         <TranslationEntry Key="internal/Plugin/vercheckfail" Translation="版本更新检查失败: {0}" />
@@ -1356,24 +1356,24 @@
         <TranslationEntry Key="TriggerForm/cndCondition/cbxExpLType[String]" Translation="字串符" />
         <TranslationEntry Key="TriggerForm/cndCondition/cbxExpRType[Numeric]" Translation="数字" />
         <TranslationEntry Key="TriggerForm/cndCondition/cbxExpRType[String]" Translation="字串符" />
-        <TranslationEntry Key="TriggerForm/cndCondition/cbxGroupingType[All conditions must be true (AND)]" Translation="所有条件必须为真 (并且)" />
-        <TranslationEntry Key="TriggerForm/cndCondition/cbxGroupingType[At least one condition must be true (OR)]" Translation="至少有一个条件必须为真 (或)" />
-        <TranslationEntry Key="TriggerForm/cndCondition/cbxGroupingType[None of the conditions may be true (NOT)]" Translation="所有的条件都不可能是真的 (无需)" />
-        <TranslationEntry Key="TriggerForm/cndCondition/cbxGroupingType[Only one condition must be true (XOR)]" Translation="只有一个条件必须为真 (X或)" />
-        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Expressions must be numerically equal (X = Y)]" Translation="表达式必须在数字上相等 (X = Y)" />
-        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Expressions must not be numerically equal (X ≠ Y)]" Translation="表达式在数字上不能相等 (X ≠ Y)" />
-        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must be numerically greater or equal to (X ≥ Y)]" Translation="左侧必须在数字上大于或等于 (X ≥ Y)" />
-        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must be numerically greater than (X &gt; Y)]" Translation="左侧的数字必须大于 (X &gt; Y)" />
-        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must be numerically less or equal to (X ≤ Y)]" Translation="左侧的数字必须小于或等于 (X ≤ Y)" />
-        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must be numerically less than (X &lt; Y)]" Translation="左侧的数字必须小于 (X &lt; Y)" />
+        <TranslationEntry Key="TriggerForm/cndCondition/cbxGroupingType[All conditions must be true (AND)]" Translation="所有条件必须为真（与）" />
+        <TranslationEntry Key="TriggerForm/cndCondition/cbxGroupingType[At least one condition must be true (OR)]" Translation="至少有一个条件必须为真（或）" />
+        <TranslationEntry Key="TriggerForm/cndCondition/cbxGroupingType[None of the conditions may be true (NOT)]" Translation="所有的条件都不可能是真的（非）" />
+        <TranslationEntry Key="TriggerForm/cndCondition/cbxGroupingType[Only one condition must be true (XOR)]" Translation="只有一个条件必须为真（异或）" />
+        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Expressions must be numerically equal (X = Y)]" Translation="两侧表达式必须在数值上相等（X = Y）" />
+        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Expressions must not be numerically equal (X ≠ Y)]" Translation="两侧表达式不得在数值上相等（X ≠ Y）" />
+        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must be numerically greater or equal to (X ≥ Y)]" Translation="左侧必须在数值上大于或等于（X ≥ Y）" />
+        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must be numerically greater than (X &gt; Y)]" Translation="左侧必须在数值上大于（X &gt; Y）" />
+        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must be numerically less or equal to (X ≤ Y)]" Translation="左侧必须在数值上小于或等于（X ≤ Y）" />
+        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must be numerically less than (X &lt; Y)]" Translation="左侧必须在数值上小于或等于（X ≤ Y）" />
         <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must match the regular expression on the right side]" Translation="左侧必须与右侧的正则表达式匹配" />
-        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must not match the regular expression on the right side]" Translation="左侧不能与右侧的正则表达式匹配" />
-        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must not pass case-insensitive string comparison with the right side]" Translation="左侧不能通过与右侧不区分大小写的字符串比较" />
-        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must not pass case-sensitive string comparison with the right side]" Translation="左侧不能与右侧传递区分大小写的字符串比较" />
-        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must pass case-insensitive string comparison with the right side]" Translation="左侧必须通过与右侧不区分大小写的字符串比较" />
-        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must pass case-sensitive string comparison with the right side]" Translation="左侧必须通过与右侧的区分大小写字符串比较" />
+        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must not match the regular expression on the right side]" Translation="左侧不得与右侧的正则表达式匹配" />
+        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must not pass case-insensitive string comparison with the right side]" Translation="左侧与右侧的字符串不得相同（不区分大小写）" />
+        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must not pass case-sensitive string comparison with the right side]" Translation="左侧与右侧的字符串不得相同（区分大小写）" />
+        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must pass case-insensitive string comparison with the right side]" Translation="左侧与右侧的字符串必须相同（不区分大小写）" />
+        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[Left side must pass case-sensitive string comparison with the right side]" Translation="左侧与右侧的字符串必须相同（区分大小写）" />
         <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[List variable specified on the left side must contain the value on the right side]" Translation="左侧指定的列表变量必须包含右侧的值" />
-        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[List variable specified on the left side must not contain the value on the right side]" Translation="左侧指定的列表变量不能包含右侧的值" />
+        <TranslationEntry Key="TriggerForm/cndCondition/cbxOpType[List variable specified on the left side must not contain the value on the right side]" Translation="左侧指定的列表变量不得包含右侧的值" />
         <TranslationEntry Key="TriggerForm/cndCondition/ctxAdd" Translation="添加" />
         <TranslationEntry Key="TriggerForm/cndCondition/ctxAddCondition" Translation="条件" />
         <TranslationEntry Key="TriggerForm/cndCondition/ctxAddGroup" Translation="条件组" />
@@ -1381,7 +1381,7 @@
         <TranslationEntry Key="TriggerForm/cndCondition/ctxPaste" Translation="粘贴" />
         <TranslationEntry Key="TriggerForm/cndCondition/ctxPasteOver" Translation="粘贴" />
         <TranslationEntry Key="TriggerForm/cndCondition/ctxRemove" Translation="移除" />
-        <TranslationEntry Key="TriggerForm/cndCondition/lblGroupingType" Translation="组类型" />
+        <TranslationEntry Key="TriggerForm/cndCondition/lblGroupingType" Translation="分组类型" />
         <TranslationEntry Key="TriggerForm/cndCondition/lblLeftExpression" Translation="左侧表达式" />
         <TranslationEntry Key="TriggerForm/cndCondition/lblOperator" Translation="运算符" />
         <TranslationEntry Key="TriggerForm/cndCondition/lblRightExpression" Translation="右侧表达式" />
