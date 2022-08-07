@@ -250,7 +250,7 @@
         <TranslationEntry Key="ActionForm/lblObsOpType" Translation="操作类型" />
         <TranslationEntry Key="ActionForm/lblObsSceneName" Translation="场景名称" />
         <TranslationEntry Key="ActionForm/lblObsSourceName" Translation="来源名称" />
-        <TranslationEntry Key="ActionForm/lblObsWebsocketInfo" Translation="要使用OBS远程控制功能，您必须安装OBS WebSocket插件。 有一个简单的安装程序可用于：" />
+        <TranslationEntry Key="ActionForm/lblObsWebsocketInfo" Translation="如果你使用的是OBS v27或更早的版本，你必须安装OBS WebSocket插件才能使用OBS远程控制功能。 有一个简单的安装程序可用于：" />
         <TranslationEntry Key="ActionForm/lblProcessName" Translation="程序进程路径" />
         <TranslationEntry Key="ActionForm/lblProcessParameters" Translation="命令行参数" />
         <TranslationEntry Key="ActionForm/lblProcessWarning" Translation="这种操作存在高风险，请考虑好后使用，造成的结果自行承担。" />
@@ -619,11 +619,9 @@
         <TranslationEntry Key="internal/Action/desclogmessage" Translation="日志消息 ({0})" />
         <TranslationEntry Key="internal/Action/descmsgbox" Translation="显示消息框提示 ({0}) 使用图标 ({1})" />
         <TranslationEntry Key="internal/Action/descobshidesource" Translation="在 OBS 的场景 ({1}) 隐藏来源 ({0})" />
-        <TranslationEntry Key="internal/Action/descobshidesourcecurrent" Translation="在 OBS 的当前场景隐藏来源 ({0})" />
         <TranslationEntry Key="internal/Action/descobssavereplay" Translation="保存OBS重播缓冲区" />
         <TranslationEntry Key="internal/Action/descobssetscene" Translation="将当前的OBS场景设置为 ({0})" />
         <TranslationEntry Key="internal/Action/descobsshowsource" Translation="在 OBS 的场景 ({1}) 显示来源 ({0})" />
-        <TranslationEntry Key="internal/Action/descobsshowsourcecurrent" Translation="在 OBS 的当前场景显示来源 ({0})" />
         <TranslationEntry Key="internal/Action/descobsstartrecord" Translation="在OBS上开始录制" />
         <TranslationEntry Key="internal/Action/descobsstartreplay" Translation="启动OBS重播缓冲区" />
         <TranslationEntry Key="internal/Action/descobsstartstream" Translation="在OBS上开始流式传输" />

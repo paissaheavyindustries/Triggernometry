@@ -3705,6 +3705,11 @@
             "Start recording",
             "Stop recording",
             "Start/stop recording (toggle)",
+            "Stop then start recording",
+            "Stop then start recording (if currently recording)",
+            "Resume recording",
+            "Pause recording",
+            "Resume/pause recording (toggle)",
             "Start replay buffer",
             "Stop replay buffer",
             "Start/stop replay buffer (toggle)",
@@ -3777,8 +3782,8 @@
             this.lblObsWebsocketInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
             this.lblObsWebsocketInfo.Size = new System.Drawing.Size(544, 46);
             this.lblObsWebsocketInfo.TabIndex = 15;
-            this.lblObsWebsocketInfo.Text = "To use OBS remote control features, you will have to install the OBS WebSocket pl" +
-    "ugin. There is a simple installer available at:";
+            this.lblObsWebsocketInfo.Text = "If you are using OBS v27 or older, you will have to install the OBS WebSocket pl" +
+    "ugin to use OBS remote control features. There is a simple installer available at:";
             // 
             // txtObsWebsocketLink
             // 

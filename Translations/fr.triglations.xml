@@ -210,7 +210,7 @@
     <TranslationEntry Key="ActionForm/lblMessageBoxText" Translation="Texte a afficher" />
     <TranslationEntry Key="ActionForm/lblObsOpType" Translation="Type d'operation" />
     <TranslationEntry Key="ActionForm/lblObsSceneName" Translation="Nom de la scène" />
-    <TranslationEntry Key="ActionForm/lblObsWebsocketInfo" Translation="Pour utiliser les fonctions de contrôle à distance OBS, vous devrez installer le plugin OBS WebSocket. Un programme d'installation simple est disponible sur:" />
+    <TranslationEntry Key="ActionForm/lblObsWebsocketInfo" Translation="Si vous utilisez OBS v27 ou une version antérieure, vous devrez installer le plugin OBS WebSocket pour utiliser les fonctions de contrôle à distance d'OBS. Un programme d'installation simple est disponible sur:" />
     <TranslationEntry Key="ActionForm/lblProcessName" Translation="Processus a lancer" />
     <TranslationEntry Key="ActionForm/lblProcessParameters" Translation="Paramètres de ligne de commande" />
     <TranslationEntry Key="ActionForm/lblProcessWarning" Translation="Des actions de ce type peuvent être potentiellement dangereuses et causer des dommages si, par exemple, la Trigger est déclenché avec des paramètres qui ne correspondent pas aux valeurs attendues. Veuillez être conscient du risque." />
@@ -994,9 +994,7 @@
 	  <TranslationEntry Key="Plugin/UserInterface/btnUpdate" Translation="Mise a jour" />
 	  <TranslationEntry Key="ActionForm/lblObsSceneName" Translation="Nom de la scene" />
 	  <TranslationEntry Key="internal/Action/descobsshowsource" Translation="afficher la source ({0}) sur la scène OBS ({1})" />
-	  <TranslationEntry Key="internal/Action/descobsshowsourcecurrent" Translation="afficher la source ({0}) sur la scène OBS actuelle" />
 	  <TranslationEntry Key="internal/Action/descobshidesource" Translation="masquer la source ({0}) sur la scène OBS ({1})" />
-	  <TranslationEntry Key="internal/Action/descobshidesourcecurrent" Translation="masquer la source ({0}) sur la scène OBS actuelle" />
 	  <TranslationEntry Key="ActionForm/cbxObsOpType[Show source]" Translation="Afficjer la source" />
 	  <TranslationEntry Key="ActionForm/cbxObsOpType[Hide source]" Translation="Masquer la source" />
 	  <TranslationEntry Key="LogForm/lblStatus" Translation="Affichage de {0} sur {1}" />

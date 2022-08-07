@@ -1901,9 +1901,9 @@ namespace Triggernometry.Forms
 
         private void cbxObsOpType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            expObsSceneName.Enabled = (cbxObsOpType.SelectedIndex >= 10 && cbxObsOpType.SelectedIndex <= 12);
-            expObsSourceName.Enabled = (cbxObsOpType.SelectedIndex >= 11 && cbxObsOpType.SelectedIndex <= 12);
-            expObsJSONPayload.Enabled = (cbxObsOpType.SelectedIndex >= 13);
+            expObsSceneName.Enabled = (cbxObsOpType.SelectedIndex >= 15 && cbxObsOpType.SelectedIndex <= 17);
+            expObsSourceName.Enabled = (cbxObsOpType.SelectedIndex >= 16 && cbxObsOpType.SelectedIndex <= 17);
+            expObsJSONPayload.Enabled = (cbxObsOpType.SelectedIndex >= 18);
         }
 
         private void cbxKeypressMethod_SelectedIndexChanged(object sender, EventArgs e)
