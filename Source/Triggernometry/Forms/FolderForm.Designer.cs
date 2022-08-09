@@ -426,7 +426,7 @@
             this.tableLayoutPanel3.SetColumnSpan(this.grpFfxivClassFilter, 2);
             this.grpFfxivClassFilter.Controls.Add(this.panel2);
             this.grpFfxivClassFilter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpFfxivClassFilter.Enabled = false;
+            this.grpFfxivClassFilter.Enabled = true;
             this.grpFfxivClassFilter.Location = new System.Drawing.Point(3, 112);
             this.grpFfxivClassFilter.Name = "grpFfxivClassFilter";
             this.grpFfxivClassFilter.Padding = new System.Windows.Forms.Padding(10);
@@ -456,6 +456,7 @@
             this.chkFfxivClassFilter.ScrollAlwaysVisible = true;
             this.chkFfxivClassFilter.Size = new System.Drawing.Size(504, 163);
             this.chkFfxivClassFilter.TabIndex = 15;
+            this.chkFfxivClassFilter.SelectionMode = System.Windows.Forms.SelectionMode.None;
             this.chkFfxivClassFilter.SelectedIndexChanged += new System.EventHandler(this.chkFfxivClassFilter_SelectedIndexChanged);
             // 
             // panel5
