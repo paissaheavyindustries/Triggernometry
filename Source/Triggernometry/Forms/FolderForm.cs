@@ -98,7 +98,7 @@ namespace Triggernometry.Forms
             chkZoneFilter.Enabled = false;
             btnGetCurZone.Enabled = false;
             chkEventFilter.Enabled = false;
-            chkFfxivClassFilter.Enabled = false;
+            chkFfxivClassFilter.SelectionMode = SelectionMode.None;
             chkFfxivClassFilterEnabled.Enabled = false;
             txtZoneFilterRegex.ReadOnly = true;
             txtEventFilterRegex.ReadOnly = true;
@@ -208,7 +208,7 @@ namespace Triggernometry.Forms
 
         private void chkFfxivClassFilterEnabled_CheckedChanged(object sender, EventArgs e)
         {
-            grpFfxivClassFilter.Enabled = chkFfxivClassFilterEnabled.Checked;
+            chkFfxivClassFilter.SelectionMode = chkFfxivClassFilterEnabled.Checked ? SelectionMode.One : SelectionMode.None;
         }
 
         private void btnGetCurZone_Click(object sender, EventArgs e)
