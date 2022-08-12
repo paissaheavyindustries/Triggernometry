@@ -2008,7 +2008,7 @@ namespace Triggernometry.CustomControls
 
         private void ForceFireTrigger(Trigger t)
         {
-            if (t._TestInput == "")
+            if (!(t._TestInput?.Length > 0))
             {
                 Context ctx = new Context();
                 ctx.plug = plug;
