@@ -40,7 +40,8 @@ namespace Triggernometry
             Placeholder,
             NamedCallback,
             Mouse,
-            Loop
+            Loop,
+            Repository
         }
 
         public enum VariableOpEnum
@@ -49,7 +50,9 @@ namespace Triggernometry
             SetString,
             SetNumeric,
             UnsetAll,
-            UnsetRegex
+            UnsetRegex,
+            QueryJsonPath,
+            QueryJsonPathList
         }
 
         public enum TableVariableOpEnum
@@ -139,7 +142,9 @@ namespace Triggernometry
             Join,
             Split,
             UnsetAll,
-            UnsetRegex
+            UnsetRegex,
+            SortNumericAsc,
+            SortNumericDesc
         }
 
         public enum ListVariableExpTypeEnum
@@ -228,6 +233,19 @@ namespace Triggernometry
         {
             POST,
             GET
+        }
+
+        public enum RepositoryOpEnum
+        {
+            UpdateSelf,
+            UpdateRepo,
+            UpdateAll
+        }
+
+        public enum TriggerZoneTypeEnum
+        {
+            ZoneName,
+            ZoneIdFFXIV
         }
 
         #endregion
@@ -824,6 +842,24 @@ namespace Triggernometry
             }
         }
 
+        internal string _JsonResultVariable = "";
+        [XmlAttribute]
+        public string JsonResultVariable
+        {
+            get
+            {
+                if (_JsonResultVariable == "")
+                {
+                    return null;
+                }
+                return _JsonResultVariable;
+            }
+            set
+            {
+                _JsonResultVariable = value;
+            }
+        }
+
         internal string _JsonEndpointExpression = "";
         [XmlAttribute]
         public string JsonEndpointExpression
@@ -893,6 +929,24 @@ namespace Triggernometry
             set
             {
                 _JsonFiringExpression = value;
+            }
+        }
+
+        internal bool _JsonResultVariablePersist { get; set; } = false;
+        [XmlAttribute]
+        public string JsonResultVariablePersist
+        {
+            get
+            {
+                if (_JsonResultVariablePersist == false)
+                {
+                    return null;
+                }
+                return _JsonResultVariablePersist.ToString();
+            }
+            set
+            {
+                _JsonResultVariablePersist = Boolean.Parse(value);
             }
         }
 
@@ -971,6 +1025,24 @@ namespace Triggernometry
             set
             {
                 _KeyPressWindow = value;
+            }
+        }
+
+        internal string _KeyPressProcId = "";
+        [XmlAttribute]
+        public string KeyPressProcId
+        {
+            get
+            {
+                if (_KeyPressProcId == "")
+                {
+                    return null;
+                }
+                return _KeyPressProcId;
+            }
+            set
+            {
+                _KeyPressProcId = value;
             }
         }
 
@@ -1553,6 +1625,42 @@ namespace Triggernometry
             }
         }
 
+        internal string _OBSEndPoint = @"ws://127.0.0.1:4444";
+        [XmlAttribute]
+        public string OBSEndPoint
+        {
+            get
+            {
+                if (_OBSEndPoint == @"ws://127.0.0.1:4444")
+                {
+                    return null;
+                }
+                return _OBSEndPoint;
+            }
+            set
+            {
+                _OBSEndPoint = value;
+            }
+        }
+
+        internal string _OBSPassword = "";
+        [XmlAttribute]
+        public string OBSPassword
+        {
+            get
+            {
+                if (_OBSPassword == "")
+                {
+                    return null;
+                }
+                return _OBSPassword;
+            }
+            set
+            {
+                _OBSPassword = value;
+            }
+        }
+
         internal string _OBSSceneName = "";
         [XmlAttribute]
         public string OBSSceneName
@@ -1778,6 +1886,51 @@ namespace Triggernometry
         }
 
         #endregion
+        #region Action specific properties - Repository
+
+        internal RepositoryOpEnum _RepositoryOp { get; set; } = RepositoryOpEnum.UpdateSelf;
+        [XmlAttribute]
+        public string RepositoryOp
+        {
+            get
+            {
+                if (_RepositoryOp != RepositoryOpEnum.UpdateSelf)
+                {
+                    return _RepositoryOp.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _RepositoryOp = (RepositoryOpEnum)Enum.Parse(typeof(RepositoryOpEnum), value);
+            }
+        }
+
+        internal Guid _RepositoryId { get; set; } = Guid.Empty;
+        [XmlAttribute]
+        public string RepositoryId
+        {
+            get
+            {
+                if (_RepositoryId != Guid.Empty)
+                {
+                    return _RepositoryId.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _RepositoryId = Guid.Parse(value);
+            }
+        }
+
+        #endregion
         #region Action specific properties - Scalar variable
 
         internal VariableOpEnum _VariableOp { get; set; } = VariableOpEnum.Unset;
@@ -1819,6 +1972,24 @@ namespace Triggernometry
             }
         }
 
+        internal string _VariableJsonTarget = "";
+        [XmlAttribute]
+        public string VariableJsonTarget
+        {
+            get
+            {
+                if (_VariableJsonTarget == "")
+                {
+                    return null;
+                }
+                return _VariableJsonTarget;
+            }
+            set
+            {
+                _VariableJsonTarget = value;
+            }
+        }
+
         internal string _VariableExpression = "";
         [XmlAttribute]
         public string VariableExpression
@@ -1834,6 +2005,24 @@ namespace Triggernometry
             set
             {
                 _VariableExpression = value;
+            }
+        }
+
+        internal bool _VariableTargetPersist { get; set; } = false;
+        [XmlAttribute]
+        public string VariableTargetPersist
+        {
+            get
+            {
+                if (_VariableTargetPersist == false)
+                {
+                    return null;
+                }
+                return _VariableTargetPersist.ToString();
+            }
+            set
+            {
+                _VariableTargetPersist = Boolean.Parse(value);
             }
         }
 
@@ -2455,6 +2644,27 @@ namespace Triggernometry
         #endregion
         #region Action specific properties - Trigger operation
 
+        internal TriggerZoneTypeEnum _TriggerZoneType { get; set; } = TriggerZoneTypeEnum.ZoneName;
+        [XmlAttribute]
+        public string TriggerZoneType
+        {
+            get
+            {
+                if (_TriggerZoneType != TriggerZoneTypeEnum.ZoneName)
+                {
+                    return _TriggerZoneType.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _TriggerZoneType = (TriggerZoneTypeEnum)Enum.Parse(typeof(TriggerZoneTypeEnum), value);
+            }
+        }
+
         internal TriggerOpEnum _TriggerOp { get; set; } = TriggerOpEnum.FireTrigger;
         [XmlAttribute]
         public string TriggerOp
@@ -2618,6 +2828,24 @@ namespace Triggernometry
 
         #endregion
         #region Action specific properties - Window message
+
+        internal string _WmsgProcId = "";
+        [XmlAttribute]
+        public string WmsgProcId
+        {
+            get
+            {
+                if (_WmsgProcId == "")
+                {
+                    return null;
+                }
+                return _WmsgProcId;
+            }
+            set
+            {
+                _WmsgProcId = value;
+            }
+        }
 
         internal string _WmsgTitle = "";
         [XmlAttribute]

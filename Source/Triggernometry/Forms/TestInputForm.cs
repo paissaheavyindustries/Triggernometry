@@ -21,6 +21,7 @@ namespace Triggernometry.Forms
             InitializeComponent();
             Shown += TestInputForm_Shown;
             cbxEventDestination.SelectedIndex = 0;
+            cbxZoneType.SelectedIndex = 0;
             RestoredSavedDimensions();
         }
 
@@ -31,7 +32,14 @@ namespace Triggernometry.Forms
 
         private void btnGetCurZone_Click(object sender, EventArgs e)
         {
-            txtZoneName.Text = plug.CurrentZoneHook();
+            if (cbxZoneType.SelectedIndex == 0) 
+            {
+                txtZoneName.Text = plug.CurrentZoneHook();
+            }
+            else 
+            {
+                txtZoneName.Text = PluginBridges.BridgeFFXIV.ZoneID.ToString();
+            }
         }
 
         private void txtEvent_KeyDown(object sender, KeyEventArgs e)
@@ -39,6 +47,18 @@ namespace Triggernometry.Forms
             if (e.Control && e.KeyCode == Keys.A)
             {
                 txtEvent.SelectAll();
+            }
+        }
+
+        private void cbxZoneType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbxZoneType.SelectedIndex == 0) 
+            {
+                lblZoneName.Text = I18n.Translate("TestInputForm/lblZoneName", "Zone name");
+            }
+            else 
+            {
+                lblZoneName.Text = I18n.Translate("TestInputForm/ffxivzoneid", "Zone ID");
             }
         }
 

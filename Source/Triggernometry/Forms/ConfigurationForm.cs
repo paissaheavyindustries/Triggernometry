@@ -21,6 +21,7 @@ namespace Triggernometry.Forms
         internal RealPlugin plug;
         private bool firstchange = true;
         private List<Configuration.Substitution> subs = new List<Configuration.Substitution>();
+        private Trigger template = new Trigger();
 
         public ConfigurationForm()
         {
@@ -62,6 +63,7 @@ namespace Triggernometry.Forms
                 cbxFfxivJobMethod.SelectedIndex = 0;                
                 chkWelcome.Checked = true;
                 chkUpdates.Checked = false;
+                cbxUpdateMethod.SelectedIndex = 1;
                 chkWarnAdmin.Checked = true;
                 cbxTestLive.Checked = false;
                 chkLogNormalEvents.Checked = true;
@@ -75,6 +77,8 @@ namespace Triggernometry.Forms
                 nudCacheRepoExpiry.Value = 518400;
                 nudCacheFileExpiry.Value = 518400;
                 dgvSubstitutions.RowCount = 0;
+                cbxAutosaveConfig.Checked = false;
+                nudAutosaveMinutes.Value = 5;
                 SecuritySettingsFromConfiguration(null);
             }
             else
@@ -92,6 +96,7 @@ namespace Triggernometry.Forms
                 chkWarnAdmin.Checked = a.WarnAdmin;
                 cbxTestLive.Checked = a.TestLiveByDefault;
                 chkUpdates.Checked = (a.UpdateNotifications == Configuration.UpdateNotificationsEnum.Yes);
+                cbxUpdateMethod.SelectedIndex = (int)a.UpdateCheckMethod;
                 chkLogNormalEvents.Checked = a.LogNormalEvents;
                 chkLogVariableExpansions.Checked = a.LogVariableExpansions;
                 chkFfxivLogNetwork.Checked = a.FfxivLogNetwork;
@@ -107,6 +112,12 @@ namespace Triggernometry.Forms
                 subs.AddRange(a.Substitutions);
                 subs.Sort();
                 dgvSubstitutions.RowCount = a.Substitutions.Count;
+                cbxAutosaveConfig.Checked = a.AutosaveEnabled;
+                dummy = (int)nudAutosaveMinutes.Value;
+                nudAutosaveMinutes.Value = a.AutosaveInterval;
+                dummy = (int)nudAutosaveMinutes.Value;
+                cbxTriggerTemplate.Checked = a.UseTemplateTrigger;
+                a.TemplateTrigger.CopySettingsTo(template);
                 SetupJobOrder(a);
                 SecuritySettingsFromConfiguration(a);
             }
@@ -155,6 +166,10 @@ namespace Triggernometry.Forms
             a.CacheJsonExpiry = (int)nudCacheJsonExpiry.Value;            
             a.CacheRepoExpiry = (int)nudCacheRepoExpiry.Value;
             a.CacheFileExpiry = (int)nudCacheFileExpiry.Value;
+            a.AutosaveEnabled = cbxAutosaveConfig.Checked;
+            a.AutosaveInterval = (int)nudAutosaveMinutes.Value;
+            a.UseTemplateTrigger = cbxTriggerTemplate.Checked;
+            template.CopySettingsTo(a.TemplateTrigger);
             a.FfxivPartyOrdering = (Configuration.FfxivPartyOrderingEnum)cbxFfxivJobMethod.SelectedIndex;
             if (chkUpdates.Checked == true)
             {
@@ -167,6 +182,7 @@ namespace Triggernometry.Forms
                     a.UpdateNotifications = Configuration.UpdateNotificationsEnum.No;
                 }
             }
+            a.UpdateCheckMethod = (Configuration.UpdateCheckMethodEnum)cbxUpdateMethod.SelectedIndex;
             TreeNode tn = trvTrigger.SelectedNode;
             if (tn != null)
             {
@@ -242,6 +258,7 @@ namespace Triggernometry.Forms
         private void ConfigurationForm_Shown(object sender, EventArgs e)
         {
             cancomplain = true;
+            cbxAutosaveConfig_CheckedChanged(null, null);
             RefreshCacheStates();
         }
 
@@ -812,6 +829,39 @@ namespace Triggernometry.Forms
         private void dgvApiAccess_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             dgvApiAccess_CellContentClick(sender, e);
+        }
+
+        private void cbxAutosaveConfig_CheckedChanged(object sender, EventArgs e)
+        {
+            lblAutosaveInterval.Enabled = cbxAutosaveConfig.Checked;
+            nudAutosaveMinutes.Enabled = cbxAutosaveConfig.Checked;
+        }
+
+        private void btnTriggerTemplate_Click(object sender, EventArgs e)
+        {
+            using (Forms.TriggerForm tf = new Forms.TriggerForm())
+            {
+                Trigger t = template;
+                Trigger.TriggerSourceEnum oldSource = t._Source;
+                tf.AllowAnonymousTrigger = true;
+                tf.plug = plug;
+                tf.fakectx.trig = t;
+                tf.fakectx.plug = plug;
+                tf.SettingsFromTrigger(t);
+                tf.imgs = plug.ui.imageList1;
+                tf.trv = plug.ui.treeView1;
+                tf.Text = I18n.Translate("internal/UserInterface/edittemplatetrigger", "Edit template trigger");
+                tf.btnOk.Text = I18n.Translate("internal/UserInterface/savechanges", "Save changes");
+                tf.wmp = plug.wmp;
+                tf.tts = plug.tts;
+                if (tf.ShowDialog() == DialogResult.OK)
+                {
+                    lock (t) // verified
+                    {
+                        tf.SettingsToTrigger(t);
+                    }
+                }
+            }
         }
 
     }

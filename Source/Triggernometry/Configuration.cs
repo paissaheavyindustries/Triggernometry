@@ -90,6 +90,10 @@ namespace Triggernometry
 
         public Folder Root = new Folder();
         public RepositoryFolder RepositoryRoot = new RepositoryFolder();
+        public Trigger TemplateTrigger = new Trigger() { Enabled = true, Conditions = null, Condition = new ConditionGroup() { Grouping = ConditionGroup.CndGroupingEnum.Or, Enabled = false } };
+
+        [XmlAttribute]
+        public bool UseTemplateTrigger { get; set; } = false;
 
         [XmlAttribute]
         public int Version { get; set; } = 1;
@@ -104,11 +108,26 @@ namespace Triggernometry
             No
         }
 
+        public enum UpdateCheckMethodEnum
+        {
+            Builtin,
+            ACT
+        }
+
         [XmlAttribute]
         public UpdateNotificationsEnum UpdateNotifications { get; set; } = UpdateNotificationsEnum.Undefined;
 
         [XmlAttribute]
+        public UpdateCheckMethodEnum UpdateCheckMethod { get; set; } = UpdateCheckMethodEnum.ACT;
+
+        [XmlAttribute]
         public UpdateNotificationsEnum DefaultRepository { get; set; } = UpdateNotificationsEnum.Undefined;
+
+        [XmlAttribute]
+        public bool AutosaveEnabled { get; set; } = false;
+
+        [XmlAttribute]
+        public int AutosaveInterval { get; set; } = 5;
 
         [XmlAttribute]
         public string Language { get; set; }

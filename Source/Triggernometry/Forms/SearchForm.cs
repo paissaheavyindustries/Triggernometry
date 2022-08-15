@@ -225,6 +225,7 @@ namespace Triggernometry.Forms
                             if (RegexMatches(rex, a._JsonFiringExpression) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitjsonfiring", "Action #{0} JSON firing expression", i), Match = tn });
                             if (RegexMatches(rex, a._JsonPayloadExpression) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitjsonpayload", "Action #{0} JSON payload expression", i), Match = tn });
                             if (RegexMatches(rex, a._JsonHeaderExpression) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitjsonheaders", "Action #{0} JSON header expression", i), Match = tn });
+                            if (RegexMatches(rex, a._JsonResultVariable) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitjsonvariable", "Action #{0} JSON result variable", i), Match = tn });
                         }
                         if (a.ActionType == Action.ActionTypeEnum.KeyPress)
                         {
@@ -257,6 +258,7 @@ namespace Triggernometry.Forms
                         {
                             if (RegexMatches(rex, a._OBSSceneName) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitobsscene", "Action #{0} OBS scene name", i), Match = tn });
                             if (RegexMatches(rex, a._OBSSourceName) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitobssource", "Action #{0} OBS source name", i), Match = tn });
+                            if (RegexMatches(rex, a._OBSEndPoint) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitobsendpoint", "Action #{0} OBS endpoint", i), Match = tn });
                         }
                         if (a.ActionType == Action.ActionTypeEnum.PlaySound)
                         {
@@ -290,6 +292,7 @@ namespace Triggernometry.Forms
                         {
                             if (RegexMatches(rex, a._VariableExpression) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitvarexpr", "Action #{0} variable expression", i), Match = tn });
                             if (RegexMatches(rex, a._VariableName) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitvarname", "Action #{0} variable name", i), Match = tn });
+                            if (RegexMatches(rex, a._VariableJsonTarget) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitvarjsontarget", "Action #{0} variable JSON query target", i), Match = tn });
                         }
                         if (a.ActionType == Action.ActionTypeEnum.WindowMessage)
                         {

@@ -68,6 +68,9 @@ namespace Triggernometry
             }
         }
 
+        [XmlAttribute]
+        public Guid Id { get; set; }
+
         internal RepositoryFolder Parent { get; set; }
 
         internal List<Trigger> ReadmeTriggers = new List<Trigger>();
@@ -79,6 +82,13 @@ namespace Triggernometry
 
         [XmlAttribute]
         public DateTime LastUpdated { get; set; }
+
+        public DateTime LastUpdatedTrig { get; set; }
+
+        [XmlAttribute]
+        public bool AutoUpdate { get; set; }
+        [XmlAttribute]
+        public int UpdateInterval { get; set; }
 
         [XmlAttribute]
         public bool AllowScriptExecution { get; set; }
@@ -109,6 +119,7 @@ namespace Triggernometry
 
         public Repository()
         {
+            Id = Guid.NewGuid();
             Root = new Folder();
             AllowObsControl = false;
             AllowProcessLaunch = false;
@@ -116,6 +127,9 @@ namespace Triggernometry
             AllowWindowMessages = false;
             AllowDiskOperations = false;
             KeepLocalBackup = true;
+            AutoUpdate = false;
+            UpdateInterval = 5;
+            LastUpdatedTrig = DateTime.MinValue;
             TriggerStates = new List<RepositoryItem>();
             FolderStates = new List<RepositoryItem>();
         }

@@ -49,13 +49,18 @@
             this.lblAudioOverride = new System.Windows.Forms.Label();
             this.chkAllowObs = new System.Windows.Forms.CheckBox();
             this.chkAllowWmsg = new System.Windows.Forms.CheckBox();
-            this.cbxUpdatePolicy = new System.Windows.Forms.ComboBox();
-            this.lblUpdatePolicy = new System.Windows.Forms.Label();
             this.chkKeepLocal = new System.Windows.Forms.CheckBox();
             this.chkAllowScript = new System.Windows.Forms.CheckBox();
             this.chkAllowProcess = new System.Windows.Forms.CheckBox();
-            this.cbxNewBehavior = new System.Windows.Forms.ComboBox();
+            this.tabUpdates = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.nudUpdateMinutes = new System.Windows.Forms.NumericUpDown();
+            this.lblUpdateInterval = new System.Windows.Forms.Label();
+            this.cbxUpdateAuto = new System.Windows.Forms.CheckBox();
             this.lblDefaultBehavior = new System.Windows.Forms.Label();
+            this.cbxNewBehavior = new System.Windows.Forms.ComboBox();
+            this.cbxUpdatePolicy = new System.Windows.Forms.ComboBox();
+            this.lblUpdatePolicy = new System.Windows.Forms.Label();
             this.tabUpdateLog = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -79,6 +84,9 @@
             this.txtLastUpdated = new System.Windows.Forms.TextBox();
             this.capDetails = new Triggernometry.CustomControls.PrettyCaption();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblLastChecked = new System.Windows.Forms.Label();
+            this.txtLastChecked = new System.Windows.Forms.TextBox();
             this.panel4.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -86,6 +94,9 @@
             this.tbcGeneral.SuspendLayout();
             this.tabGeneral.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.tabUpdates.SuspendLayout();
+            this.tableLayoutPanel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudUpdateMinutes)).BeginInit();
             this.tabUpdateLog.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -97,6 +108,7 @@
             this.tableLayoutPanel5.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
+            this.tableLayoutPanel7.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel3
@@ -231,6 +243,7 @@
             // tbcGeneral
             // 
             this.tbcGeneral.Controls.Add(this.tabGeneral);
+            this.tbcGeneral.Controls.Add(this.tabUpdates);
             this.tbcGeneral.Controls.Add(this.tabUpdateLog);
             this.tbcGeneral.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbcGeneral.Location = new System.Drawing.Point(10, 23);
@@ -254,20 +267,16 @@
             // 
             this.tableLayoutPanel2.AutoSize = true;
             this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Controls.Add(this.chkAllowDisk, 0, 7);
-            this.tableLayoutPanel2.Controls.Add(this.cbxAudioOverride, 1, 2);
-            this.tableLayoutPanel2.Controls.Add(this.lblAudioOverride, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.chkAllowObs, 0, 6);
-            this.tableLayoutPanel2.Controls.Add(this.chkAllowWmsg, 0, 5);
-            this.tableLayoutPanel2.Controls.Add(this.cbxUpdatePolicy, 2, 1);
-            this.tableLayoutPanel2.Controls.Add(this.lblUpdatePolicy, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.chkKeepLocal, 0, 8);
-            this.tableLayoutPanel2.Controls.Add(this.chkAllowScript, 0, 4);
-            this.tableLayoutPanel2.Controls.Add(this.chkAllowProcess, 0, 3);
-            this.tableLayoutPanel2.Controls.Add(this.cbxNewBehavior, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.lblDefaultBehavior, 0, 0);
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.chkAllowDisk, 0, 5);
+            this.tableLayoutPanel2.Controls.Add(this.cbxAudioOverride, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.lblAudioOverride, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.chkAllowObs, 0, 4);
+            this.tableLayoutPanel2.Controls.Add(this.chkAllowWmsg, 0, 3);
+            this.tableLayoutPanel2.Controls.Add(this.chkKeepLocal, 0, 6);
+            this.tableLayoutPanel2.Controls.Add(this.chkAllowScript, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.chkAllowProcess, 0, 1);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -290,7 +299,7 @@
             this.chkAllowDisk.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tableLayoutPanel2.SetColumnSpan(this.chkAllowDisk, 2);
             this.chkAllowDisk.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkAllowDisk.Location = new System.Drawing.Point(3, 194);
+            this.chkAllowDisk.Location = new System.Drawing.Point(3, 140);
             this.chkAllowDisk.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.chkAllowDisk.Name = "chkAllowDisk";
             this.chkAllowDisk.Size = new System.Drawing.Size(525, 17);
@@ -308,9 +317,9 @@
             "As defined in repository",
             "Audio override setting always on",
             "Audio override setting always off"});
-            this.cbxAudioOverride.Location = new System.Drawing.Point(215, 57);
+            this.cbxAudioOverride.Location = new System.Drawing.Point(268, 3);
             this.cbxAudioOverride.Name = "cbxAudioOverride";
-            this.cbxAudioOverride.Size = new System.Drawing.Size(312, 21);
+            this.cbxAudioOverride.Size = new System.Drawing.Size(259, 21);
             this.cbxAudioOverride.TabIndex = 35;
             // 
             // lblAudioOverride
@@ -318,9 +327,9 @@
             this.lblAudioOverride.AutoEllipsis = true;
             this.lblAudioOverride.AutoSize = true;
             this.lblAudioOverride.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAudioOverride.Location = new System.Drawing.Point(3, 54);
+            this.lblAudioOverride.Location = new System.Drawing.Point(3, 0);
             this.lblAudioOverride.Name = "lblAudioOverride";
-            this.lblAudioOverride.Size = new System.Drawing.Size(206, 27);
+            this.lblAudioOverride.Size = new System.Drawing.Size(259, 27);
             this.lblAudioOverride.TabIndex = 34;
             this.lblAudioOverride.Text = "Audio output setting override";
             this.lblAudioOverride.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -331,7 +340,7 @@
             this.chkAllowObs.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tableLayoutPanel2.SetColumnSpan(this.chkAllowObs, 2);
             this.chkAllowObs.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkAllowObs.Location = new System.Drawing.Point(3, 167);
+            this.chkAllowObs.Location = new System.Drawing.Point(3, 113);
             this.chkAllowObs.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.chkAllowObs.Name = "chkAllowObs";
             this.chkAllowObs.Size = new System.Drawing.Size(525, 17);
@@ -346,7 +355,7 @@
             this.chkAllowWmsg.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tableLayoutPanel2.SetColumnSpan(this.chkAllowWmsg, 2);
             this.chkAllowWmsg.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkAllowWmsg.Location = new System.Drawing.Point(3, 140);
+            this.chkAllowWmsg.Location = new System.Drawing.Point(3, 86);
             this.chkAllowWmsg.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.chkAllowWmsg.Name = "chkAllowWmsg";
             this.chkAllowWmsg.Size = new System.Drawing.Size(525, 17);
@@ -355,38 +364,13 @@
             this.chkAllowWmsg.UseVisualStyleBackColor = true;
             this.chkAllowWmsg.CheckedChanged += new System.EventHandler(this.chkAllowWmsg_CheckedChanged);
             // 
-            // cbxUpdatePolicy
-            // 
-            this.cbxUpdatePolicy.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cbxUpdatePolicy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxUpdatePolicy.FormattingEnabled = true;
-            this.cbxUpdatePolicy.Items.AddRange(new object[] {
-            "Update automatically on startup",
-            "Update only manually"});
-            this.cbxUpdatePolicy.Location = new System.Drawing.Point(215, 30);
-            this.cbxUpdatePolicy.Name = "cbxUpdatePolicy";
-            this.cbxUpdatePolicy.Size = new System.Drawing.Size(312, 21);
-            this.cbxUpdatePolicy.TabIndex = 31;
-            // 
-            // lblUpdatePolicy
-            // 
-            this.lblUpdatePolicy.AutoEllipsis = true;
-            this.lblUpdatePolicy.AutoSize = true;
-            this.lblUpdatePolicy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblUpdatePolicy.Location = new System.Drawing.Point(3, 27);
-            this.lblUpdatePolicy.Name = "lblUpdatePolicy";
-            this.lblUpdatePolicy.Size = new System.Drawing.Size(206, 27);
-            this.lblUpdatePolicy.TabIndex = 30;
-            this.lblUpdatePolicy.Text = "Update policy";
-            this.lblUpdatePolicy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // chkKeepLocal
             // 
             this.chkKeepLocal.AutoSize = true;
             this.chkKeepLocal.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tableLayoutPanel2.SetColumnSpan(this.chkKeepLocal, 2);
             this.chkKeepLocal.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkKeepLocal.Location = new System.Drawing.Point(3, 221);
+            this.chkKeepLocal.Location = new System.Drawing.Point(3, 167);
             this.chkKeepLocal.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.chkKeepLocal.Name = "chkKeepLocal";
             this.chkKeepLocal.Size = new System.Drawing.Size(525, 17);
@@ -400,7 +384,7 @@
             this.chkAllowScript.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tableLayoutPanel2.SetColumnSpan(this.chkAllowScript, 2);
             this.chkAllowScript.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkAllowScript.Location = new System.Drawing.Point(3, 113);
+            this.chkAllowScript.Location = new System.Drawing.Point(3, 59);
             this.chkAllowScript.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.chkAllowScript.Name = "chkAllowScript";
             this.chkAllowScript.Size = new System.Drawing.Size(525, 17);
@@ -415,7 +399,7 @@
             this.chkAllowProcess.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tableLayoutPanel2.SetColumnSpan(this.chkAllowProcess, 2);
             this.chkAllowProcess.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkAllowProcess.Location = new System.Drawing.Point(3, 86);
+            this.chkAllowProcess.Location = new System.Drawing.Point(3, 32);
             this.chkAllowProcess.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.chkAllowProcess.Name = "chkAllowProcess";
             this.chkAllowProcess.Size = new System.Drawing.Size(525, 17);
@@ -424,19 +408,91 @@
             this.chkAllowProcess.UseVisualStyleBackColor = true;
             this.chkAllowProcess.CheckedChanged += new System.EventHandler(this.chkAllowProcess_CheckedChanged);
             // 
-            // cbxNewBehavior
+            // tabUpdates
             // 
-            this.cbxNewBehavior.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cbxNewBehavior.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxNewBehavior.FormattingEnabled = true;
-            this.cbxNewBehavior.Items.AddRange(new object[] {
-            "Enabled or disabled as specified in repository",
-            "Enable everything new by default",
-            "Disable everything new by default"});
-            this.cbxNewBehavior.Location = new System.Drawing.Point(215, 3);
-            this.cbxNewBehavior.Name = "cbxNewBehavior";
-            this.cbxNewBehavior.Size = new System.Drawing.Size(312, 21);
-            this.cbxNewBehavior.TabIndex = 26;
+            this.tabUpdates.Controls.Add(this.tableLayoutPanel6);
+            this.tabUpdates.Location = new System.Drawing.Point(4, 22);
+            this.tabUpdates.Name = "tabUpdates";
+            this.tabUpdates.Padding = new System.Windows.Forms.Padding(3);
+            this.tabUpdates.Size = new System.Drawing.Size(536, 292);
+            this.tabUpdates.TabIndex = 2;
+            this.tabUpdates.Text = "Updates";
+            this.tabUpdates.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel6
+            // 
+            this.tableLayoutPanel6.ColumnCount = 2;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.Controls.Add(this.nudUpdateMinutes, 1, 3);
+            this.tableLayoutPanel6.Controls.Add(this.lblUpdateInterval, 0, 3);
+            this.tableLayoutPanel6.Controls.Add(this.cbxUpdateAuto, 0, 2);
+            this.tableLayoutPanel6.Controls.Add(this.lblDefaultBehavior, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.cbxNewBehavior, 1, 0);
+            this.tableLayoutPanel6.Controls.Add(this.cbxUpdatePolicy, 1, 1);
+            this.tableLayoutPanel6.Controls.Add(this.lblUpdatePolicy, 0, 1);
+            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.RowCount = 5;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(530, 286);
+            this.tableLayoutPanel6.TabIndex = 0;
+            // 
+            // nudUpdateMinutes
+            // 
+            this.nudUpdateMinutes.Dock = System.Windows.Forms.DockStyle.Top;
+            this.nudUpdateMinutes.Location = new System.Drawing.Point(268, 84);
+            this.nudUpdateMinutes.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.nudUpdateMinutes.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudUpdateMinutes.Name = "nudUpdateMinutes";
+            this.nudUpdateMinutes.Size = new System.Drawing.Size(259, 20);
+            this.nudUpdateMinutes.TabIndex = 34;
+            this.nudUpdateMinutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudUpdateMinutes.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            // 
+            // lblUpdateInterval
+            // 
+            this.lblUpdateInterval.AutoEllipsis = true;
+            this.lblUpdateInterval.AutoSize = true;
+            this.lblUpdateInterval.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblUpdateInterval.Location = new System.Drawing.Point(3, 81);
+            this.lblUpdateInterval.Name = "lblUpdateInterval";
+            this.lblUpdateInterval.Size = new System.Drawing.Size(259, 26);
+            this.lblUpdateInterval.TabIndex = 33;
+            this.lblUpdateInterval.Text = "Update interval in minutes";
+            this.lblUpdateInterval.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbxUpdateAuto
+            // 
+            this.cbxUpdateAuto.AutoSize = true;
+            this.cbxUpdateAuto.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel6.SetColumnSpan(this.cbxUpdateAuto, 2);
+            this.cbxUpdateAuto.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxUpdateAuto.Location = new System.Drawing.Point(3, 59);
+            this.cbxUpdateAuto.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
+            this.cbxUpdateAuto.Name = "cbxUpdateAuto";
+            this.cbxUpdateAuto.Size = new System.Drawing.Size(525, 17);
+            this.cbxUpdateAuto.TabIndex = 32;
+            this.cbxUpdateAuto.Text = "Enable repository auto-update";
+            this.cbxUpdateAuto.UseVisualStyleBackColor = true;
+            this.cbxUpdateAuto.CheckedChanged += new System.EventHandler(this.cbxUpdateAuto_CheckedChanged);
             // 
             // lblDefaultBehavior
             // 
@@ -445,10 +501,47 @@
             this.lblDefaultBehavior.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDefaultBehavior.Location = new System.Drawing.Point(3, 0);
             this.lblDefaultBehavior.Name = "lblDefaultBehavior";
-            this.lblDefaultBehavior.Size = new System.Drawing.Size(206, 27);
+            this.lblDefaultBehavior.Size = new System.Drawing.Size(259, 27);
             this.lblDefaultBehavior.TabIndex = 0;
             this.lblDefaultBehavior.Text = "Default behaviour for newly added triggers";
             this.lblDefaultBehavior.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbxNewBehavior
+            // 
+            this.cbxNewBehavior.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxNewBehavior.FormattingEnabled = true;
+            this.cbxNewBehavior.Items.AddRange(new object[] {
+            "Enabled or disabled as specified in repository",
+            "Enable everything new by default",
+            "Disable everything new by default"});
+            this.cbxNewBehavior.Location = new System.Drawing.Point(268, 3);
+            this.cbxNewBehavior.Name = "cbxNewBehavior";
+            this.cbxNewBehavior.Size = new System.Drawing.Size(259, 21);
+            this.cbxNewBehavior.TabIndex = 26;
+            // 
+            // cbxUpdatePolicy
+            // 
+            this.cbxUpdatePolicy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxUpdatePolicy.FormattingEnabled = true;
+            this.cbxUpdatePolicy.Items.AddRange(new object[] {
+            "Update automatically on startup",
+            "Update only manually"});
+            this.cbxUpdatePolicy.Location = new System.Drawing.Point(268, 30);
+            this.cbxUpdatePolicy.Name = "cbxUpdatePolicy";
+            this.cbxUpdatePolicy.Size = new System.Drawing.Size(259, 21);
+            this.cbxUpdatePolicy.TabIndex = 31;
+            // 
+            // lblUpdatePolicy
+            // 
+            this.lblUpdatePolicy.AutoEllipsis = true;
+            this.lblUpdatePolicy.AutoSize = true;
+            this.lblUpdatePolicy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblUpdatePolicy.Location = new System.Drawing.Point(3, 27);
+            this.lblUpdatePolicy.Name = "lblUpdatePolicy";
+            this.lblUpdatePolicy.Size = new System.Drawing.Size(259, 27);
+            this.lblUpdatePolicy.TabIndex = 30;
+            this.lblUpdatePolicy.Text = "Update policy";
+            this.lblUpdatePolicy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tabUpdateLog
             // 
@@ -477,6 +570,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel5);
             this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel4);
             this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel3);
+            this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel7);
             this.splitContainer1.Panel2.Controls.Add(this.capDetails);
             this.splitContainer1.Size = new System.Drawing.Size(524, 280);
             this.splitContainer1.SplitterDistance = 327;
@@ -581,7 +675,7 @@
             this.tableLayoutPanel5.Controls.Add(this.lblCacheFilename, 0, 0);
             this.tableLayoutPanel5.Controls.Add(this.txtCacheFilename, 0, 1);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 140);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 195);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 2;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -632,7 +726,7 @@
             this.tableLayoutPanel4.Controls.Add(this.label2, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.txtContentSize, 0, 1);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 85);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 140);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 2;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -668,11 +762,12 @@
             this.tableLayoutPanel3.Controls.Add(this.lblLastUpdated, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.txtLastUpdated, 0, 1);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 30);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 85);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(193, 55);
             this.tableLayoutPanel3.TabIndex = 7;
             // 
@@ -715,6 +810,42 @@
             this.panel1.Size = new System.Drawing.Size(564, 10);
             this.panel1.TabIndex = 20;
             // 
+            // tableLayoutPanel7
+            // 
+            this.tableLayoutPanel7.AutoSize = true;
+            this.tableLayoutPanel7.ColumnCount = 1;
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel7.Controls.Add(this.lblLastChecked, 0, 0);
+            this.tableLayoutPanel7.Controls.Add(this.txtLastChecked, 0, 1);
+            this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel7.Location = new System.Drawing.Point(0, 30);
+            this.tableLayoutPanel7.Name = "tableLayoutPanel7";
+            this.tableLayoutPanel7.RowCount = 2;
+            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(193, 55);
+            this.tableLayoutPanel7.TabIndex = 10;
+            // 
+            // lblLastChecked
+            // 
+            this.lblLastChecked.AutoSize = true;
+            this.lblLastChecked.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblLastChecked.Location = new System.Drawing.Point(3, 0);
+            this.lblLastChecked.Name = "lblLastChecked";
+            this.lblLastChecked.Padding = new System.Windows.Forms.Padding(0, 15, 0, 1);
+            this.lblLastChecked.Size = new System.Drawing.Size(187, 29);
+            this.lblLastChecked.TabIndex = 1;
+            this.lblLastChecked.Text = "Last checked";
+            // 
+            // txtLastChecked
+            // 
+            this.txtLastChecked.Dock = System.Windows.Forms.DockStyle.Top;
+            this.txtLastChecked.Location = new System.Drawing.Point(3, 32);
+            this.txtLastChecked.Name = "txtLastChecked";
+            this.txtLastChecked.ReadOnly = true;
+            this.txtLastChecked.Size = new System.Drawing.Size(187, 20);
+            this.txtLastChecked.TabIndex = 2;
+            // 
             // RepositoryForm
             // 
             this.AcceptButton = this.btnOk;
@@ -745,6 +876,10 @@
             this.tabGeneral.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
+            this.tabUpdates.ResumeLayout(false);
+            this.tableLayoutPanel6.ResumeLayout(false);
+            this.tableLayoutPanel6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudUpdateMinutes)).EndInit();
             this.tabUpdateLog.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -762,6 +897,8 @@
             this.tableLayoutPanel4.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
+            this.tableLayoutPanel7.ResumeLayout(false);
+            this.tableLayoutPanel7.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -818,5 +955,13 @@
         private System.Windows.Forms.Label lblAudioOverride;
         private System.Windows.Forms.ComboBox cbxAudioOverride;
         private System.Windows.Forms.CheckBox chkAllowDisk;
+        private System.Windows.Forms.TabPage tabUpdates;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+        private System.Windows.Forms.CheckBox cbxUpdateAuto;
+        private System.Windows.Forms.Label lblUpdateInterval;
+        private System.Windows.Forms.NumericUpDown nudUpdateMinutes;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
+        private System.Windows.Forms.Label lblLastChecked;
+        private System.Windows.Forms.TextBox txtLastChecked;
     }
 }

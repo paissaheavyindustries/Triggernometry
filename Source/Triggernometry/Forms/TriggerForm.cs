@@ -106,6 +106,8 @@ namespace Triggernometry.Forms
 
         internal List<Action> Actions;
 
+        internal bool AllowAnonymousTrigger { get; set; } = false;
+
         public TriggerForm() : base()
         {
             InitializeComponent();
@@ -351,12 +353,13 @@ namespace Triggernometry.Forms
 
         private void txtName_TextChanged(object sender, EventArgs e)
         {
-            btnOk.Enabled = (txtName.TextLength > 0);
+            btnOk.Enabled = (AllowAnonymousTrigger == true) || (txtName.TextLength > 0);
         }
 
         private void TriggerForm_Shown(object sender, EventArgs e)
         {
             actionViewer1.RefreshDgv();
+            txtName_TextChanged(null, null);
         }
 
         internal void EnterReadmeMode()

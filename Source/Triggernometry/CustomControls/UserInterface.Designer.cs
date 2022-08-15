@@ -85,6 +85,7 @@
             this.btnViewLog = new System.Windows.Forms.ToolStripMenuItem();
             this.btnSearch = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnUpdateCheck = new System.Windows.Forms.ToolStripMenuItem();
             this.btnAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.btnLanguages = new System.Windows.Forms.ToolStripDropDownButton();
@@ -117,6 +118,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.prgStatus = new System.Windows.Forms.ToolStripProgressBar();
             this.tlsStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.pnlUi.SuspendLayout();
@@ -474,6 +476,7 @@
             this.btnViewLog,
             this.btnSearch,
             this.toolStripSeparator6,
+            this.btnUpdateCheck,
             this.btnAbout});
             this.btnOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnOptions.Image")));
             this.btnOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -618,6 +621,14 @@
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
             this.toolStripSeparator6.Size = new System.Drawing.Size(245, 6);
+            // 
+            // btnUpdateCheck
+            // 
+            this.btnUpdateCheck.Image = ((System.Drawing.Image)(resources.GetObject("btnUpdateCheck.Image")));
+            this.btnUpdateCheck.Name = "btnUpdateCheck";
+            this.btnUpdateCheck.Size = new System.Drawing.Size(248, 22);
+            this.btnUpdateCheck.Text = "Check for updates";
+            this.btnUpdateCheck.Click += new System.EventHandler(this.btnUpdateCheck_Click);
             // 
             // btnAbout
             // 
@@ -996,6 +1007,12 @@
             this.tlsStatus.Size = new System.Drawing.Size(39, 17);
             this.tlsStatus.Text = "Ready";
             // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 30000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // UserInterface
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1117,5 +1134,7 @@
         private System.Windows.Forms.ToolStripMenuItem ctxReadme;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.ToolStripMenuItem btnUpdateCheck;
+        private System.Windows.Forms.Timer timer1;
     }
 }

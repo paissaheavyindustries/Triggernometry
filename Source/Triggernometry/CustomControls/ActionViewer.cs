@@ -88,6 +88,31 @@ namespace Triggernometry.CustomControls
             return false;
         }
 
+        private bool RemoveNonRepositoryNodesFromTree(TreeNode tn)
+        {
+            if (tn == null)
+            {
+                return true;
+            }
+            if ((tn.Tag is Repository) == false && tn.Parent != null)
+            {
+                return true;
+            }
+            List<TreeNode> rems = new List<TreeNode>();
+            foreach (TreeNode tnx in tn.Nodes)
+            {
+                if (RemoveNonRepositoryNodesFromTree(tnx) == true)
+                {
+                    rems.Add(tnx);
+                }
+            }
+            foreach (TreeNode tnr in rems)
+            {
+                tnr.Remove();
+            }
+            return false;
+        }
+
         private void dgvActions_SelectionChanged(object sender, EventArgs e)
         {
             btnEditAction.Enabled = (dgvActions.SelectedRows.Count == 1);
@@ -133,6 +158,10 @@ namespace Triggernometry.CustomControls
                 af.trvTrigger.ImageList = imgs;
                 af.trvTrigger.Nodes.Add((TreeNode)trv.Nodes[0].Clone());
                 CloseTree(af.trvTrigger.Nodes[0]);
+                af.trvRepositoryLink.ImageList = imgs;
+                af.trvRepositoryLink.Nodes.Add((TreeNode)trv.Nodes[1].Clone());
+                RemoveNonRepositoryNodesFromTree(af.trvRepositoryLink.Nodes[0]);
+                CloseTree(af.trvRepositoryLink.Nodes[0]);
                 af.trvFolder.ImageList = imgs;
                 af.trvFolder.Nodes.Add((TreeNode)trv.Nodes[0].Clone());
                 RemoveTriggerNodesFromTree(af.trvFolder.Nodes[0]);
@@ -174,6 +203,10 @@ namespace Triggernometry.CustomControls
                 af.trvTrigger.ImageList = imgs;
                 af.trvTrigger.Nodes.Add((TreeNode)trv.Nodes[0].Clone());
                 CloseTree(af.trvTrigger.Nodes[0]);
+                af.trvRepositoryLink.ImageList = imgs;
+                af.trvRepositoryLink.Nodes.Add((TreeNode)trv.Nodes[1].Clone());
+                RemoveNonRepositoryNodesFromTree(af.trvRepositoryLink.Nodes[0]);
+                CloseTree(af.trvRepositoryLink.Nodes[0]);
                 af.trvFolder.ImageList = imgs;
                 af.trvFolder.Nodes.Add((TreeNode)trv.Nodes[0].Clone());
                 RemoveTriggerNodesFromTree(af.trvFolder.Nodes[0]);

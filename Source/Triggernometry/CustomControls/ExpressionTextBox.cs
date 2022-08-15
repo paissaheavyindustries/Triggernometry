@@ -13,34 +13,6 @@ using System.Runtime.InteropServices;
 namespace Triggernometry.CustomControls
 {
 
-    /*
-     * - ACT event source for implementing triggers for internal events such as combat start and combat end
-- New functions:
-
-dec2hex2 = converts the given base 10 value to its base 16 representation (padded to 2 digits)
-dec2hex4 = converts the given base 10 value to its base 16 representation (padded to 4 digits)
-dec2hex8 = converts the given base 10 value to its base 16 representation (padded to 8 digits)
-hex2float = converts a base16 (hex) number to single precision floating point value (float), X8float also works as synonym
-hex2double = converts a base16 (hex) number to double precision floating point value (double)
-max(x1, x2, x3, ...) = the largest of any number of variables
-min(x1, x2, x3, ...) = the smallest of any number of variables
-float2hex = converts the given single precision floating point value (float) to its base 16 representation
-double2hex = converts the given double precision floating point value (double) to its base 16 representation
-
-
-
-
-triggernometry alpha II+ championship edition
-
-
-3FF3AE147AE147AE
-
-
-Normal log line
-FFXIV network event
-ACT event
-     */
-
     public partial class ExpressionTextBox : UserControl
     {
 
@@ -55,7 +27,7 @@ ACT event
             "numeric", "string", "var", "evar", "lvar", "elvar", "tvar", "tvarcl", "tvarrl", "etvar", "func", "pvar", "epvar", "plvar", "eplvar", "ptvar", "ptvarcl", "ptvarrl", "eptvar",
             // special variables
             "_duration", "_event", "_incombat", "_since", "_sincems", "_triggerid", "_triggername", "_timestamp", "_timestampms", "_systemtime", "_systemtimems", "_zone", "_response",
-            "_jsonresponse[x]", "_screenwidth", "_screenheight", "_lastencounter", "_activeencounter", "_env[x]", "_x", "_y", "_w", "_width", "_h", "_height", "_opacity",
+            "_responsecode", "_jsonresponse[x]", "_screenwidth", "_screenheight", "_lastencounter", "_activeencounter", "_env[x]", "_x", "_y", "_w", "_width", "_h", "_height", "_opacity",
             "_textaura[x]", "_imageaura[x]", "_ffxivparty[x]", "_ffxiventity[x]", "_ffxivplayer", "_ffxivtime", "_ffxivpartyorder", "_ffxivprocid", "_ffxivprocname", "_ffxivzoneid",
         };
 
@@ -63,7 +35,8 @@ ACT event
         {
             // functions
             "toupper", "tolower", "length", "dec2hex", "dec2hex2", "dec2hex4", "dec2hex8", "hex2float", "hex2double", "float2hex", "double2hex", "padleft(x, y)", "padright(x, y)",
-            "substring(x)", "substring(x, y)", "indexof(x)", "lastindexof(x)", "trim", "trim(x, ...)", "trimleft", "trimleft(x, ...)", "trimright", "trimright(x, ...)", "format(x, y)", "compare(x)", "compare(x, y)"
+            "substring(x)", "substring(x, y)", "indexof(x)", "lastindexof(x)", "trim", "trim(x, ...)", "trimleft", "trimleft(x, ...)", "trimright", "trimright(x, ...)", "format(x, y)", "compare(x)", "compare(x, y)",
+            "utctime(format)", "localtime(format)"
         };
 
         public static List<string> propstextaura = new List<string>()
@@ -125,6 +98,8 @@ ACT event
                 Expression = value;
             }
         }
+
+        public bool AutocompleteAvailable { get; set; } = true;
 
         private SupportedExpressionTypeEnum _ExpressionType;
         public SupportedExpressionTypeEnum ExpressionType
@@ -219,6 +194,10 @@ ACT event
 
         private void ShowAutocomplete(IEnumerable<string> strs)
         {
+            if (AutocompleteAvailable == false)
+            {
+                return;
+            }
             lock (this)
             {
                 if (acf != null)

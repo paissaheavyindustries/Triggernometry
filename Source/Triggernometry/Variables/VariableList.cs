@@ -14,6 +14,18 @@ namespace Triggernometry.Variables
         [XmlArrayItem(ElementName = "VariableTable", Type = typeof(VariableTable))]
         public List<Variable> Values { get; set; } = new List<Variable>();
 
+        public VariableList()
+        {
+        }
+
+        public VariableList(IEnumerable<object> objs)
+        {
+            foreach (object obj in objs)
+            {
+                Values.Add(new VariableScalar() { Value = obj.ToString() });
+            }
+        }
+
         public override string ToString()
         {
             return String.Join(",", Values);
@@ -233,6 +245,20 @@ namespace Triggernometry.Variables
         public void SortAlphaDesc(string changer)
         {
             Values.Sort((a, b) => a.CompareTo(b) * -1);
+            LastChanged = DateTime.Now;
+            LastChanger = changer;
+        }
+
+        public void SortNumericAsc(string changer)
+        {
+            Values.Sort((a, b) => decimal.Parse(a.ToString()).CompareTo(decimal.Parse(b.ToString())));
+            LastChanged = DateTime.Now;
+            LastChanger = changer;
+        }
+
+        public void SortNumericDesc(string changer)
+        {
+            Values.Sort((a, b) => decimal.Parse(a.ToString()).CompareTo(decimal.Parse(b.ToString())) * -1);
             LastChanged = DateTime.Now;
             LastChanger = changer;
         }

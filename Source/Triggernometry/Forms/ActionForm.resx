@@ -152,6 +152,9 @@
         IHf+omT08N8eV63SsHtaKVz4BYlNulYdU+xqAAAAAElFTkSuQmCC
 </value>
   </data>
+  <data name="lblKeypressProcInfo.Text" xml:space="preserve">
+    <value>If the process ID is left empty or is zero, the message will be sent to the first window with the given title. If it's set to -1, the message is sent to all found windows. For all other values, the message will be sent to the window with the matching process ID.</value>
+  </data>
   <data name="btnKeycodesLink.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
@@ -191,6 +194,34 @@
         3nAc2WwW03MrqO/V4UH3Cqo/LID1Vgmr1QrlkhGdY1o6XN4DWnfqOm/fb5Kg56cBxjUSjz4qcK9dhYo3
         M7jVIkfFawWmFizoGNXQ65ykAOfX+SbnHauuVZLjfpZDKCWg0HqhNocg1XjRO2mk2paCxe13Xhg+0+Ur
         Vy9VPu6SsBuFSWrni2yeGNRrzDOfClyVDcLa07L/KQbjLyuiV7kq7sMxAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="prsScalarTarget.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
+        6QAACukB/XXO0wAAAAd0SU1FB+UDERMSHSDKa5gAAAG6SURBVDhPlZPHakJBFIazyatlk4XgIpDAVddX
+        /RVsiL2ioKDYK4oFC3ZRxIrowpfwSQRzzwTvhUQwDnwwjW/OnDnzolKp3jmOw5NoCaVS+fZCncPhgFqt
+        hmq1ikqlgnK5jFKphGKxiHw+j1wuh0wmg3Q6jWQyiUQigdlsxmRMsN/vIZfLIZPJ/s10OhUF2G63mM/n
+        TzEcDiXBarXC9Xp9il6vJwkWiwUulwvO5/O/IEG73ZYElJDfJzyi0WhIgslkwibvnXYPipZeTBQMBoM/
+        JzyCnlkUdLtd+P1+mM1maLXau9ya0WiE3W5ntSEKWq0WXC4X29jpdDAajVhelssldrsdqE6oT09He6xW
+        K1KplCSo1+twOBzQ6/XYbDbQaDSM4/GI9XrNZP1+H81mkwksFgvi8bgkoITYbDYmOJ1OomA8HrPrUZkX
+        CgVWxjRvMpkQiUQkAdW80+lkAqqym4D+RTabRSwWQzgchsfjYfMGgwGhUOhHoFAoPgQjTyHpdDp2nWAw
+        CK/Xi2g0ikAgwOSUYGpqtRputxs+n0+M4FWQfAnfWlhTszveIqAxwfO8CI2Fb8wL+3mO4z6/AUc7QNXT
+        f7n6AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="prsScalarTarget.Tag" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
+        6QAACukB/XXO0wAAAAd0SU1FB+UDERMSHSDKa5gAAAG6SURBVDhPlZPHakJBFIazyatlk4XgIpDAVddX
+        /RVsiL2ioKDYK4oFC3ZRxIrowpfwSQRzzwTvhUQwDnwwjW/OnDnzolKp3jmOw5NoCaVS+fZCncPhgFqt
+        hmq1ikqlgnK5jFKphGKxiHw+j1wuh0wmg3Q6jWQyiUQigdlsxmRMsN/vIZfLIZPJ/s10OhUF2G63mM/n
+        TzEcDiXBarXC9Xp9il6vJwkWiwUulwvO5/O/IEG73ZYElJDfJzyi0WhIgslkwibvnXYPipZeTBQMBoM/
+        JzyCnlkUdLtd+P1+mM1maLXau9ya0WiE3W5ntSEKWq0WXC4X29jpdDAajVhelssldrsdqE6oT09He6xW
+        K1KplCSo1+twOBzQ6/XYbDbQaDSM4/GI9XrNZP1+H81mkwksFgvi8bgkoITYbDYmOJ1OomA8HrPrUZkX
+        CgVWxjRvMpkQiUQkAdW80+lkAqqym4D+RTabRSwWQzgchsfjYfMGgwGhUOhHoFAoPgQjTyHpdDp2nWAw
+        CK/Xi2g0ikAgwOSUYGpqtRputxs+n0+M4FWQfAnfWlhTszveIqAxwfO8CI2Fb8wL+3mO4z6/AUc7QNXT
+        f7n6AAAAAElFTkSuQmCC
 </value>
   </data>
   <data name="prsScalarName.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -313,11 +344,41 @@
         Vy9VPu6SsBuFSWrni2yeGNRrzDOfClyVDcLa07L/KQbjLyuiV7kq7sMxAAAAAElFTkSuQmCC
 </value>
   </data>
+  <data name="prsJsonVariable.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
+        6QAACukB/XXO0wAAAAd0SU1FB+UDERMSHSDKa5gAAAG6SURBVDhPlZPHakJBFIazyatlk4XgIpDAVddX
+        /RVsiL2ioKDYK4oFC3ZRxIrowpfwSQRzzwTvhUQwDnwwjW/OnDnzolKp3jmOw5NoCaVS+fZCncPhgFqt
+        hmq1ikqlgnK5jFKphGKxiHw+j1wuh0wmg3Q6jWQyiUQigdlsxmRMsN/vIZfLIZPJ/s10OhUF2G63mM/n
+        TzEcDiXBarXC9Xp9il6vJwkWiwUulwvO5/O/IEG73ZYElJDfJzyi0WhIgslkwibvnXYPipZeTBQMBoM/
+        JzyCnlkUdLtd+P1+mM1maLXau9ya0WiE3W5ntSEKWq0WXC4X29jpdDAajVhelssldrsdqE6oT09He6xW
+        K1KplCSo1+twOBzQ6/XYbDbQaDSM4/GI9XrNZP1+H81mkwksFgvi8bgkoITYbDYmOJ1OomA8HrPrUZkX
+        CgVWxjRvMpkQiUQkAdW80+lkAqqym4D+RTabRSwWQzgchsfjYfMGgwGhUOhHoFAoPgQjTyHpdDp2nWAw
+        CK/Xi2g0ikAgwOSUYGpqtRputxs+n0+M4FWQfAnfWlhTszveIqAxwfO8CI2Fb8wL+3mO4z6/AUc7QNXT
+        f7n6AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="prsJsonVariable.Tag" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
+        6QAACukB/XXO0wAAAAd0SU1FB+UDERMSHSDKa5gAAAG6SURBVDhPlZPHakJBFIazyatlk4XgIpDAVddX
+        /RVsiL2ioKDYK4oFC3ZRxIrowpfwSQRzzwTvhUQwDnwwjW/OnDnzolKp3jmOw5NoCaVS+fZCncPhgFqt
+        hmq1ikqlgnK5jFKphGKxiHw+j1wuh0wmg3Q6jWQyiUQigdlsxmRMsN/vIZfLIZPJ/s10OhUF2G63mM/n
+        TzEcDiXBarXC9Xp9il6vJwkWiwUulwvO5/O/IEG73ZYElJDfJzyi0WhIgslkwibvnXYPipZeTBQMBoM/
+        JzyCnlkUdLtd+P1+mM1maLXau9ya0WiE3W5ntSEKWq0WXC4X29jpdDAajVhelssldrsdqE6oT09He6xW
+        K1KplCSo1+twOBzQ6/XYbDbQaDSM4/GI9XrNZP1+H81mkwksFgvi8bgkoITYbDYmOJ1OomA8HrPrUZkX
+        CgVWxjRvMpkQiUQkAdW80+lkAqqym4D+RTabRSwWQzgchsfjYfMGgwGhUOhHoFAoPgQjTyHpdDp2nWAw
+        CK/Xi2g0ikAgwOSUYGpqtRputxs+n0+M4FWQfAnfWlhTszveIqAxwfO8CI2Fb8wL+3mO4z6/AUc7QNXT
+        f7n6AAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="lblJsonInstructions.Text" xml:space="preserve">
     <value>If the response firing expression has been defined, an log line will be generated from the result of the evaluted string expression. The log line will be processed like any other, as if it came from ACT itself.
 
-To add the response from the endpoint to this expression, special variable "_response" is available. The special variable will only be valid in the context of this action's execution.
-</value>
+To add the response from the endpoint to this expression, special variable "_response" is available, as well as the variable you may have defined. The special variable will only be valid in the context of this action's execution. Special variable _responsecode is also available for retrieving the HTTP status code of the request.</value>
+  </data>
+  <data name="lblWmsgProcInfo.Text" xml:space="preserve">
+    <value>If the process ID is left empty or is zero, the message will be sent to the first window with the given title. If it's set to -1, the message is sent to all found windows. For all other values, the message will be sent to the window with the matching process ID.</value>
   </data>
   <data name="prsFileVariable.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

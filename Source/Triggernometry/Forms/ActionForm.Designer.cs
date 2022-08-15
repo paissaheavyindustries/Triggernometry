@@ -76,6 +76,8 @@
             this.lblProcessWarning = new System.Windows.Forms.Label();
             this.tabTriggerOperation = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblTriggerZoneType = new System.Windows.Forms.Label();
+            this.cbxTriggerZoneType = new System.Windows.Forms.ComboBox();
             this.lblFiringOptions = new System.Windows.Forms.Label();
             this.expTriggerZone = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblTriggerZone = new System.Windows.Forms.Label();
@@ -88,6 +90,9 @@
             this.cbxFiringOptions = new System.Windows.Forms.CheckedListBox();
             this.tabKeypress = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblKeypressProcInfo = new System.Windows.Forms.Label();
+            this.expKeypressProcId = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.lblKeypressProcId = new System.Windows.Forms.Label();
             this.btnKeycodesLink = new System.Windows.Forms.Button();
             this.txtKeyCodesLink = new System.Windows.Forms.TextBox();
             this.lblKeypressInfo = new System.Windows.Forms.Label();
@@ -120,6 +125,9 @@
             this.cbxMessageBoxIcon = new System.Windows.Forms.ComboBox();
             this.tabVariable = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+            this.prsScalarTarget = new Triggernometry.CustomControls.PersistenceSwitch();
+            this.expVariableTarget = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.expVariableExpression = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblVariableExpression = new System.Windows.Forms.Label();
             this.expVariableName = new Triggernometry.CustomControls.ExpressionTextBox();
@@ -238,6 +246,10 @@
             this.cbxLvarOperation = new System.Windows.Forms.ComboBox();
             this.tabObsControl = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel18 = new System.Windows.Forms.TableLayoutPanel();
+            this.expObsPassword = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.lblObsPassword = new System.Windows.Forms.Label();
+            this.expObsEndpoint = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.lblObsEndpoint = new System.Windows.Forms.Label();
             this.lblObsJSONPayload = new System.Windows.Forms.Label();
             this.expObsJSONPayload = new Triggernometry.CustomControls.ExpressionTextBox();
             this.expObsSourceName = new Triggernometry.CustomControls.ExpressionTextBox();
@@ -251,6 +263,9 @@
             this.txtObsWebsocketLink = new System.Windows.Forms.TextBox();
             this.tabGenericJson = new System.Windows.Forms.TabPage();
             this.jsonTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.prsJsonVariable = new Triggernometry.CustomControls.PersistenceSwitch();
+            this.expJsonVariable = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.lblJsonVariable = new System.Windows.Forms.Label();
             this.expJsonHeaders = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblJsonHeaders = new System.Windows.Forms.Label();
             this.cbxJsonType = new System.Windows.Forms.ComboBox();
@@ -265,6 +280,9 @@
             this.expJsonEndpoint = new Triggernometry.CustomControls.ExpressionTextBox();
             this.tabWindowMessage = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel19 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblWmsgProcInfo = new System.Windows.Forms.Label();
+            this.expWmsgProcid = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.lblWmsgProcid = new System.Windows.Forms.Label();
             this.expWmsgLparam = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblWmsgLparam = new System.Windows.Forms.Label();
             this.expWmsgWparam = new Triggernometry.CustomControls.ExpressionTextBox();
@@ -337,6 +355,12 @@
             this.expLoopIterationDelay = new Triggernometry.CustomControls.ExpressionTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cndLoopCondition = new Triggernometry.CustomControls.ConditionViewer();
+            this.tabRepo = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel27 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblRepositoryLink = new System.Windows.Forms.Label();
+            this.lblRepositoryOp = new System.Windows.Forms.Label();
+            this.cbxRepositoryOp = new System.Windows.Forms.ComboBox();
+            this.trvRepositoryLink = new System.Windows.Forms.TreeView();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
@@ -432,6 +456,8 @@
             this.tableLayoutPanel25.SuspendLayout();
             this.tabLoop.SuspendLayout();
             this.tableLayoutPanel26.SuspendLayout();
+            this.tabRepo.SuspendLayout();
+            this.tableLayoutPanel27.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel6.SuspendLayout();
             this.tbcAction.SuspendLayout();
@@ -511,7 +537,8 @@
             "Placeholder",
             "Named callback operation",
             "Mouse operation",
-            "Loop"});
+            "Loop",
+            "Repository operation"});
             this.cbxActionType.Location = new System.Drawing.Point(69, 3);
             this.cbxActionType.Name = "cbxActionType";
             this.cbxActionType.Size = new System.Drawing.Size(572, 21);
@@ -568,6 +595,7 @@
             this.tbcActionSettings.Controls.Add(this.tabNamedCallback);
             this.tbcActionSettings.Controls.Add(this.tabMouse);
             this.tbcActionSettings.Controls.Add(this.tabLoop);
+            this.tbcActionSettings.Controls.Add(this.tabRepo);
             this.tbcActionSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbcActionSettings.Location = new System.Drawing.Point(3, 3);
             this.tbcActionSettings.Margin = new System.Windows.Forms.Padding(0);
@@ -609,6 +637,7 @@
             // 
             // expBeepLength
             // 
+            this.expBeepLength.AutocompleteAvailable = true;
             this.expBeepLength.AutoSize = true;
             this.expBeepLength.Dock = System.Windows.Forms.DockStyle.Top;
             this.expBeepLength.Expression = "";
@@ -621,6 +650,7 @@
             // 
             // expBeepFrequency
             // 
+            this.expBeepFrequency.AutocompleteAvailable = true;
             this.expBeepFrequency.AutoSize = true;
             this.expBeepFrequency.Dock = System.Windows.Forms.DockStyle.Top;
             this.expBeepFrequency.Expression = "";
@@ -720,6 +750,7 @@
             // 
             // expSoundVolume
             // 
+            this.expSoundVolume.AutocompleteAvailable = true;
             this.expSoundVolume.AutoSize = true;
             this.tableLayoutPanel3.SetColumnSpan(this.expSoundVolume, 2);
             this.expSoundVolume.Dock = System.Windows.Forms.DockStyle.Top;
@@ -767,6 +798,7 @@
             // 
             // expSoundFile
             // 
+            this.expSoundFile.AutocompleteAvailable = true;
             this.expSoundFile.AutoSize = true;
             this.expSoundFile.Dock = System.Windows.Forms.DockStyle.Top;
             this.expSoundFile.Expression = "";
@@ -844,6 +876,7 @@
             // 
             // expSpeechRate
             // 
+            this.expSpeechRate.AutocompleteAvailable = true;
             this.expSpeechRate.AutoSize = true;
             this.expSpeechRate.Dock = System.Windows.Forms.DockStyle.Top;
             this.expSpeechRate.Expression = "";
@@ -867,6 +900,7 @@
             // 
             // expSpeechVolume
             // 
+            this.expSpeechVolume.AutocompleteAvailable = true;
             this.expSpeechVolume.AutoSize = true;
             this.expSpeechVolume.Dock = System.Windows.Forms.DockStyle.Top;
             this.expSpeechVolume.Expression = "";
@@ -901,6 +935,7 @@
             // 
             // expTextToSay
             // 
+            this.expTextToSay.AutocompleteAvailable = true;
             this.expTextToSay.AutoSize = true;
             this.expTextToSay.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTextToSay.Expression = "";
@@ -980,6 +1015,7 @@
             // 
             // expProcessWorkingDir
             // 
+            this.expProcessWorkingDir.AutocompleteAvailable = true;
             this.expProcessWorkingDir.AutoSize = true;
             this.tableLayoutPanel5.SetColumnSpan(this.expProcessWorkingDir, 2);
             this.expProcessWorkingDir.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1004,6 +1040,7 @@
             // 
             // expProcessParameters
             // 
+            this.expProcessParameters.AutocompleteAvailable = true;
             this.expProcessParameters.AutoSize = true;
             this.tableLayoutPanel5.SetColumnSpan(this.expProcessParameters, 2);
             this.expProcessParameters.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1051,6 +1088,7 @@
             // 
             // expProcessName
             // 
+            this.expProcessName.AutocompleteAvailable = true;
             this.expProcessName.AutoSize = true;
             this.expProcessName.Dock = System.Windows.Forms.DockStyle.Top;
             this.expProcessName.Expression = "";
@@ -1104,20 +1142,23 @@
             this.tableLayoutPanel10.ColumnCount = 2;
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel10.Controls.Add(this.lblFiringOptions, 0, 3);
-            this.tableLayoutPanel10.Controls.Add(this.expTriggerZone, 1, 2);
-            this.tableLayoutPanel10.Controls.Add(this.lblTriggerZone, 0, 2);
-            this.tableLayoutPanel10.Controls.Add(this.lblTrigger, 0, 5);
+            this.tableLayoutPanel10.Controls.Add(this.lblTriggerZoneType, 0, 2);
+            this.tableLayoutPanel10.Controls.Add(this.cbxTriggerZoneType, 1, 2);
+            this.tableLayoutPanel10.Controls.Add(this.lblFiringOptions, 0, 4);
+            this.tableLayoutPanel10.Controls.Add(this.expTriggerZone, 1, 3);
+            this.tableLayoutPanel10.Controls.Add(this.lblTriggerZone, 0, 3);
+            this.tableLayoutPanel10.Controls.Add(this.lblTrigger, 0, 6);
             this.tableLayoutPanel10.Controls.Add(this.expTriggerText, 1, 1);
             this.tableLayoutPanel10.Controls.Add(this.lblTriggerText, 0, 1);
             this.tableLayoutPanel10.Controls.Add(this.lblTriggerOp, 0, 0);
             this.tableLayoutPanel10.Controls.Add(this.cbxTriggerOp, 1, 0);
-            this.tableLayoutPanel10.Controls.Add(this.trvTrigger, 1, 5);
-            this.tableLayoutPanel10.Controls.Add(this.cbxFiringOptions, 1, 3);
+            this.tableLayoutPanel10.Controls.Add(this.trvTrigger, 1, 6);
+            this.tableLayoutPanel10.Controls.Add(this.cbxFiringOptions, 1, 4);
             this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel10.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
-            this.tableLayoutPanel10.RowCount = 7;
+            this.tableLayoutPanel10.RowCount = 8;
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -1128,29 +1169,55 @@
             this.tableLayoutPanel10.Size = new System.Drawing.Size(642, 314);
             this.tableLayoutPanel10.TabIndex = 7;
             // 
+            // lblTriggerZoneType
+            // 
+            this.lblTriggerZoneType.AutoSize = true;
+            this.lblTriggerZoneType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTriggerZoneType.Location = new System.Drawing.Point(3, 53);
+            this.lblTriggerZoneType.Name = "lblTriggerZoneType";
+            this.lblTriggerZoneType.Size = new System.Drawing.Size(95, 27);
+            this.lblTriggerZoneType.TabIndex = 29;
+            this.lblTriggerZoneType.Text = "Zone type";
+            this.lblTriggerZoneType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbxTriggerZoneType
+            // 
+            this.cbxTriggerZoneType.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxTriggerZoneType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxTriggerZoneType.FormattingEnabled = true;
+            this.cbxTriggerZoneType.Items.AddRange(new object[] {
+            "Zone name",
+            "FFXIV zone ID"});
+            this.cbxTriggerZoneType.Location = new System.Drawing.Point(104, 56);
+            this.cbxTriggerZoneType.Name = "cbxTriggerZoneType";
+            this.cbxTriggerZoneType.Size = new System.Drawing.Size(535, 21);
+            this.cbxTriggerZoneType.TabIndex = 28;
+            this.cbxTriggerZoneType.SelectedIndexChanged += new System.EventHandler(this.cbxZoneType_SelectedIndexChanged);
+            // 
             // lblFiringOptions
             // 
             this.lblFiringOptions.AutoSize = true;
             this.lblFiringOptions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFiringOptions.Location = new System.Drawing.Point(3, 82);
+            this.lblFiringOptions.Location = new System.Drawing.Point(3, 109);
             this.lblFiringOptions.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.lblFiringOptions.Name = "lblFiringOptions";
             this.lblFiringOptions.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.lblFiringOptions.Size = new System.Drawing.Size(101, 17);
+            this.lblFiringOptions.Size = new System.Drawing.Size(95, 17);
             this.lblFiringOptions.TabIndex = 26;
             this.lblFiringOptions.Text = "Firing options";
             this.lblFiringOptions.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // expTriggerZone
             // 
+            this.expTriggerZone.AutocompleteAvailable = true;
             this.expTriggerZone.AutoSize = true;
             this.expTriggerZone.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTriggerZone.Expression = "";
             this.expTriggerZone.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expTriggerZone.Location = new System.Drawing.Point(110, 56);
+            this.expTriggerZone.Location = new System.Drawing.Point(104, 83);
             this.expTriggerZone.Name = "expTriggerZone";
             this.expTriggerZone.ReadOnly = false;
-            this.expTriggerZone.Size = new System.Drawing.Size(529, 20);
+            this.expTriggerZone.Size = new System.Drawing.Size(535, 20);
             this.expTriggerZone.TabIndex = 25;
             this.expTriggerZone.EnabledChanged += new System.EventHandler(this.expTriggerZone_EnabledChanged);
             // 
@@ -1158,36 +1225,37 @@
             // 
             this.lblTriggerZone.AutoSize = true;
             this.lblTriggerZone.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTriggerZone.Location = new System.Drawing.Point(3, 53);
+            this.lblTriggerZone.Location = new System.Drawing.Point(3, 80);
             this.lblTriggerZone.Name = "lblTriggerZone";
-            this.lblTriggerZone.Size = new System.Drawing.Size(101, 26);
+            this.lblTriggerZone.Size = new System.Drawing.Size(95, 26);
             this.lblTriggerZone.TabIndex = 24;
-            this.lblTriggerZone.Text = "Zone name for firing";
+            this.lblTriggerZone.Text = "Zone name";
             this.lblTriggerZone.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblTrigger
             // 
             this.lblTrigger.AutoSize = true;
             this.lblTrigger.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTrigger.Location = new System.Drawing.Point(3, 137);
+            this.lblTrigger.Location = new System.Drawing.Point(3, 164);
             this.lblTrigger.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.lblTrigger.Name = "lblTrigger";
             this.lblTrigger.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.lblTrigger.Size = new System.Drawing.Size(101, 17);
+            this.lblTrigger.Size = new System.Drawing.Size(95, 17);
             this.lblTrigger.TabIndex = 23;
             this.lblTrigger.Text = "Trigger";
             this.lblTrigger.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // expTriggerText
             // 
+            this.expTriggerText.AutocompleteAvailable = true;
             this.expTriggerText.AutoSize = true;
             this.expTriggerText.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTriggerText.Expression = "";
             this.expTriggerText.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expTriggerText.Location = new System.Drawing.Point(110, 30);
+            this.expTriggerText.Location = new System.Drawing.Point(104, 30);
             this.expTriggerText.Name = "expTriggerText";
             this.expTriggerText.ReadOnly = false;
-            this.expTriggerText.Size = new System.Drawing.Size(529, 20);
+            this.expTriggerText.Size = new System.Drawing.Size(535, 20);
             this.expTriggerText.TabIndex = 16;
             this.expTriggerText.EnabledChanged += new System.EventHandler(this.expTriggerText_EnabledChanged);
             // 
@@ -1197,7 +1265,7 @@
             this.lblTriggerText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblTriggerText.Location = new System.Drawing.Point(3, 27);
             this.lblTriggerText.Name = "lblTriggerText";
-            this.lblTriggerText.Size = new System.Drawing.Size(101, 26);
+            this.lblTriggerText.Size = new System.Drawing.Size(95, 26);
             this.lblTriggerText.TabIndex = 15;
             this.lblTriggerText.Text = "Event text for firing";
             this.lblTriggerText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1208,7 +1276,7 @@
             this.lblTriggerOp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblTriggerOp.Location = new System.Drawing.Point(3, 0);
             this.lblTriggerOp.Name = "lblTriggerOp";
-            this.lblTriggerOp.Size = new System.Drawing.Size(101, 27);
+            this.lblTriggerOp.Size = new System.Drawing.Size(95, 27);
             this.lblTriggerOp.TabIndex = 7;
             this.lblTriggerOp.Text = "Operation";
             this.lblTriggerOp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1224,9 +1292,9 @@
             "Enable the specified trigger",
             "Disable the specified trigger",
             "Cancel all actions from all triggers"});
-            this.cbxTriggerOp.Location = new System.Drawing.Point(110, 3);
+            this.cbxTriggerOp.Location = new System.Drawing.Point(104, 3);
             this.cbxTriggerOp.Name = "cbxTriggerOp";
-            this.cbxTriggerOp.Size = new System.Drawing.Size(529, 21);
+            this.cbxTriggerOp.Size = new System.Drawing.Size(535, 21);
             this.cbxTriggerOp.TabIndex = 21;
             this.cbxTriggerOp.SelectedIndexChanged += new System.EventHandler(this.cbxTriggerOp_SelectedIndexChanged);
             // 
@@ -1234,12 +1302,12 @@
             // 
             this.trvTrigger.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trvTrigger.HideSelection = false;
-            this.trvTrigger.Location = new System.Drawing.Point(110, 137);
+            this.trvTrigger.Location = new System.Drawing.Point(104, 164);
             this.trvTrigger.MinimumSize = new System.Drawing.Size(4, 50);
             this.trvTrigger.Name = "trvTrigger";
             this.tableLayoutPanel10.SetRowSpan(this.trvTrigger, 2);
             this.trvTrigger.ShowNodeToolTips = true;
-            this.trvTrigger.Size = new System.Drawing.Size(529, 174);
+            this.trvTrigger.Size = new System.Drawing.Size(535, 147);
             this.trvTrigger.TabIndex = 22;
             this.trvTrigger.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvTrigger_BeforeCollapse);
             this.trvTrigger.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvTrigger_BeforeExpand);
@@ -1257,10 +1325,10 @@
             "Ignore refire delay",
             "Ignore parent folder restrictions",
             "Ignore enabled/disabled status"});
-            this.cbxFiringOptions.Location = new System.Drawing.Point(110, 82);
+            this.cbxFiringOptions.Location = new System.Drawing.Point(104, 109);
             this.cbxFiringOptions.Name = "cbxFiringOptions";
             this.tableLayoutPanel10.SetRowSpan(this.cbxFiringOptions, 2);
-            this.cbxFiringOptions.Size = new System.Drawing.Size(529, 49);
+            this.cbxFiringOptions.Size = new System.Drawing.Size(535, 49);
             this.cbxFiringOptions.TabIndex = 27;
             this.cbxFiringOptions.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.cbxFiringOptions_ItemCheck);
             this.cbxFiringOptions.EnabledChanged += new System.EventHandler(this.cbxFiringOptions_EnabledChanged);
@@ -1283,24 +1351,27 @@
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel6.Controls.Add(this.btnKeycodesLink, 3, 7);
-            this.tableLayoutPanel6.Controls.Add(this.txtKeyCodesLink, 1, 7);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypressInfo, 1, 6);
-            this.tableLayoutPanel6.Controls.Add(this.expKeypress, 1, 5);
-            this.tableLayoutPanel6.Controls.Add(this.expWindowTitle, 1, 4);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypress, 0, 5);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypressWindow, 0, 4);
+            this.tableLayoutPanel6.Controls.Add(this.lblKeypressProcInfo, 1, 2);
+            this.tableLayoutPanel6.Controls.Add(this.expKeypressProcId, 1, 1);
+            this.tableLayoutPanel6.Controls.Add(this.lblKeypressProcId, 0, 1);
+            this.tableLayoutPanel6.Controls.Add(this.btnKeycodesLink, 3, 9);
+            this.tableLayoutPanel6.Controls.Add(this.txtKeyCodesLink, 1, 9);
+            this.tableLayoutPanel6.Controls.Add(this.lblKeypressInfo, 1, 8);
+            this.tableLayoutPanel6.Controls.Add(this.expKeypress, 1, 7);
+            this.tableLayoutPanel6.Controls.Add(this.expWindowTitle, 1, 6);
+            this.tableLayoutPanel6.Controls.Add(this.lblKeypress, 0, 7);
+            this.tableLayoutPanel6.Controls.Add(this.lblKeypressWindow, 0, 6);
             this.tableLayoutPanel6.Controls.Add(this.cbxKeypressMethod, 1, 0);
             this.tableLayoutPanel6.Controls.Add(this.lblKeypressMethod, 0, 0);
-            this.tableLayoutPanel6.Controls.Add(this.btnSendKeysLink, 2, 3);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypresses, 0, 1);
-            this.tableLayoutPanel6.Controls.Add(this.expKeypresses, 1, 1);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypressesInfo, 1, 2);
-            this.tableLayoutPanel6.Controls.Add(this.txtSendKeysLink, 1, 3);
+            this.tableLayoutPanel6.Controls.Add(this.btnSendKeysLink, 2, 5);
+            this.tableLayoutPanel6.Controls.Add(this.lblKeypresses, 0, 3);
+            this.tableLayoutPanel6.Controls.Add(this.expKeypresses, 1, 3);
+            this.tableLayoutPanel6.Controls.Add(this.lblKeypressesInfo, 1, 4);
+            this.tableLayoutPanel6.Controls.Add(this.txtSendKeysLink, 1, 5);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-            this.tableLayoutPanel6.RowCount = 8;
+            this.tableLayoutPanel6.RowCount = 10;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -1309,14 +1380,53 @@
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(642, 275);
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(625, 360);
             this.tableLayoutPanel6.TabIndex = 2;
+            // 
+            // lblKeypressProcInfo
+            // 
+            this.lblKeypressProcInfo.AutoSize = true;
+            this.tableLayoutPanel6.SetColumnSpan(this.lblKeypressProcInfo, 2);
+            this.lblKeypressProcInfo.Location = new System.Drawing.Point(123, 53);
+            this.lblKeypressProcInfo.Name = "lblKeypressProcInfo";
+            this.lblKeypressProcInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
+            this.lblKeypressProcInfo.Size = new System.Drawing.Size(497, 59);
+            this.lblKeypressProcInfo.TabIndex = 34;
+            this.lblKeypressProcInfo.Text = resources.GetString("lblKeypressProcInfo.Text");
+            // 
+            // expKeypressProcId
+            // 
+            this.expKeypressProcId.AutocompleteAvailable = true;
+            this.expKeypressProcId.AutoSize = true;
+            this.tableLayoutPanel6.SetColumnSpan(this.expKeypressProcId, 2);
+            this.expKeypressProcId.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expKeypressProcId.Expression = "";
+            this.expKeypressProcId.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
+            this.expKeypressProcId.Location = new System.Drawing.Point(123, 30);
+            this.expKeypressProcId.Name = "expKeypressProcId";
+            this.expKeypressProcId.ReadOnly = false;
+            this.expKeypressProcId.Size = new System.Drawing.Size(499, 20);
+            this.expKeypressProcId.TabIndex = 31;
+            // 
+            // lblKeypressProcId
+            // 
+            this.lblKeypressProcId.AutoSize = true;
+            this.lblKeypressProcId.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblKeypressProcId.Location = new System.Drawing.Point(3, 27);
+            this.lblKeypressProcId.Name = "lblKeypressProcId";
+            this.lblKeypressProcId.Size = new System.Drawing.Size(114, 26);
+            this.lblKeypressProcId.TabIndex = 30;
+            this.lblKeypressProcId.Text = "Process ID";
+            this.lblKeypressProcId.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btnKeycodesLink
             // 
             this.btnKeycodesLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnKeycodesLink.Image = ((System.Drawing.Image)(resources.GetObject("btnKeycodesLink.Image")));
-            this.btnKeycodesLink.Location = new System.Drawing.Point(602, 249);
+            this.btnKeycodesLink.Location = new System.Drawing.Point(585, 334);
             this.btnKeycodesLink.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnKeycodesLink.Name = "btnKeycodesLink";
             this.btnKeycodesLink.Size = new System.Drawing.Size(37, 26);
@@ -1327,10 +1437,10 @@
             // txtKeyCodesLink
             // 
             this.txtKeyCodesLink.Dock = System.Windows.Forms.DockStyle.Top;
-            this.txtKeyCodesLink.Location = new System.Drawing.Point(123, 252);
+            this.txtKeyCodesLink.Location = new System.Drawing.Point(123, 337);
             this.txtKeyCodesLink.Name = "txtKeyCodesLink";
             this.txtKeyCodesLink.ReadOnly = true;
-            this.txtKeyCodesLink.Size = new System.Drawing.Size(476, 20);
+            this.txtKeyCodesLink.Size = new System.Drawing.Size(459, 20);
             this.txtKeyCodesLink.TabIndex = 28;
             this.txtKeyCodesLink.Text = "https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.keys";
             // 
@@ -1338,44 +1448,46 @@
             // 
             this.lblKeypressInfo.AutoSize = true;
             this.tableLayoutPanel6.SetColumnSpan(this.lblKeypressInfo, 2);
-            this.lblKeypressInfo.Location = new System.Drawing.Point(123, 177);
+            this.lblKeypressInfo.Location = new System.Drawing.Point(123, 262);
             this.lblKeypressInfo.Name = "lblKeypressInfo";
             this.lblKeypressInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
-            this.lblKeypressInfo.Size = new System.Drawing.Size(503, 72);
+            this.lblKeypressInfo.Size = new System.Drawing.Size(496, 72);
             this.lblKeypressInfo.TabIndex = 27;
             this.lblKeypressInfo.Text = resources.GetString("lblKeypressInfo.Text");
             // 
             // expKeypress
             // 
+            this.expKeypress.AutocompleteAvailable = true;
             this.expKeypress.AutoSize = true;
             this.tableLayoutPanel6.SetColumnSpan(this.expKeypress, 2);
             this.expKeypress.Dock = System.Windows.Forms.DockStyle.Top;
             this.expKeypress.Expression = "";
             this.expKeypress.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
-            this.expKeypress.Location = new System.Drawing.Point(123, 154);
+            this.expKeypress.Location = new System.Drawing.Point(123, 239);
             this.expKeypress.Name = "expKeypress";
             this.expKeypress.ReadOnly = false;
-            this.expKeypress.Size = new System.Drawing.Size(516, 20);
+            this.expKeypress.Size = new System.Drawing.Size(499, 20);
             this.expKeypress.TabIndex = 26;
             // 
             // expWindowTitle
             // 
+            this.expWindowTitle.AutocompleteAvailable = true;
             this.expWindowTitle.AutoSize = true;
             this.tableLayoutPanel6.SetColumnSpan(this.expWindowTitle, 2);
             this.expWindowTitle.Dock = System.Windows.Forms.DockStyle.Top;
             this.expWindowTitle.Expression = "";
-            this.expWindowTitle.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expWindowTitle.Location = new System.Drawing.Point(123, 128);
+            this.expWindowTitle.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
+            this.expWindowTitle.Location = new System.Drawing.Point(123, 213);
             this.expWindowTitle.Name = "expWindowTitle";
             this.expWindowTitle.ReadOnly = false;
-            this.expWindowTitle.Size = new System.Drawing.Size(516, 20);
+            this.expWindowTitle.Size = new System.Drawing.Size(499, 20);
             this.expWindowTitle.TabIndex = 25;
             // 
             // lblKeypress
             // 
             this.lblKeypress.AutoSize = true;
             this.lblKeypress.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblKeypress.Location = new System.Drawing.Point(3, 151);
+            this.lblKeypress.Location = new System.Drawing.Point(3, 236);
             this.lblKeypress.Name = "lblKeypress";
             this.lblKeypress.Size = new System.Drawing.Size(114, 26);
             this.lblKeypress.TabIndex = 24;
@@ -1386,7 +1498,7 @@
             // 
             this.lblKeypressWindow.AutoSize = true;
             this.lblKeypressWindow.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblKeypressWindow.Location = new System.Drawing.Point(3, 125);
+            this.lblKeypressWindow.Location = new System.Drawing.Point(3, 210);
             this.lblKeypressWindow.Name = "lblKeypressWindow";
             this.lblKeypressWindow.Size = new System.Drawing.Size(114, 26);
             this.lblKeypressWindow.TabIndex = 23;
@@ -1405,7 +1517,7 @@
             "Multiple window messages"});
             this.cbxKeypressMethod.Location = new System.Drawing.Point(123, 3);
             this.cbxKeypressMethod.Name = "cbxKeypressMethod";
-            this.cbxKeypressMethod.Size = new System.Drawing.Size(516, 21);
+            this.cbxKeypressMethod.Size = new System.Drawing.Size(499, 21);
             this.cbxKeypressMethod.TabIndex = 22;
             this.cbxKeypressMethod.SelectedIndexChanged += new System.EventHandler(this.cbxKeypressMethod_SelectedIndexChanged);
             // 
@@ -1424,7 +1536,7 @@
             // 
             this.btnSendKeysLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSendKeysLink.Image = ((System.Drawing.Image)(resources.GetObject("btnSendKeysLink.Image")));
-            this.btnSendKeysLink.Location = new System.Drawing.Point(602, 99);
+            this.btnSendKeysLink.Location = new System.Drawing.Point(585, 184);
             this.btnSendKeysLink.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnSendKeysLink.Name = "btnSendKeysLink";
             this.btnSendKeysLink.Size = new System.Drawing.Size(37, 26);
@@ -1436,7 +1548,7 @@
             // 
             this.lblKeypresses.AutoSize = true;
             this.lblKeypresses.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblKeypresses.Location = new System.Drawing.Point(3, 27);
+            this.lblKeypresses.Location = new System.Drawing.Point(3, 112);
             this.lblKeypresses.Name = "lblKeypresses";
             this.lblKeypresses.Size = new System.Drawing.Size(114, 26);
             this.lblKeypresses.TabIndex = 7;
@@ -1445,25 +1557,26 @@
             // 
             // expKeypresses
             // 
+            this.expKeypresses.AutocompleteAvailable = true;
             this.expKeypresses.AutoSize = true;
             this.tableLayoutPanel6.SetColumnSpan(this.expKeypresses, 2);
             this.expKeypresses.Dock = System.Windows.Forms.DockStyle.Top;
             this.expKeypresses.Expression = "";
             this.expKeypresses.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expKeypresses.Location = new System.Drawing.Point(123, 30);
+            this.expKeypresses.Location = new System.Drawing.Point(123, 115);
             this.expKeypresses.Name = "expKeypresses";
             this.expKeypresses.ReadOnly = false;
-            this.expKeypresses.Size = new System.Drawing.Size(516, 20);
+            this.expKeypresses.Size = new System.Drawing.Size(499, 20);
             this.expKeypresses.TabIndex = 14;
             // 
             // lblKeypressesInfo
             // 
             this.lblKeypressesInfo.AutoSize = true;
             this.tableLayoutPanel6.SetColumnSpan(this.lblKeypressesInfo, 2);
-            this.lblKeypressesInfo.Location = new System.Drawing.Point(123, 53);
+            this.lblKeypressesInfo.Location = new System.Drawing.Point(123, 138);
             this.lblKeypressesInfo.Name = "lblKeypressesInfo";
             this.lblKeypressesInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
-            this.lblKeypressesInfo.Size = new System.Drawing.Size(511, 46);
+            this.lblKeypressesInfo.Size = new System.Drawing.Size(492, 46);
             this.lblKeypressesInfo.TabIndex = 15;
             this.lblKeypressesInfo.Text = "The SendKeys keypress format, including how to represent modifier keys such as Sh" +
     "ift, is described on this webpage:";
@@ -1471,10 +1584,10 @@
             // txtSendKeysLink
             // 
             this.txtSendKeysLink.Dock = System.Windows.Forms.DockStyle.Top;
-            this.txtSendKeysLink.Location = new System.Drawing.Point(123, 102);
+            this.txtSendKeysLink.Location = new System.Drawing.Point(123, 187);
             this.txtSendKeysLink.Name = "txtSendKeysLink";
             this.txtSendKeysLink.ReadOnly = true;
-            this.txtSendKeysLink.Size = new System.Drawing.Size(476, 20);
+            this.txtSendKeysLink.Size = new System.Drawing.Size(459, 20);
             this.txtSendKeysLink.TabIndex = 16;
             this.txtSendKeysLink.Text = "https://msdn.microsoft.com/en-us/library/system.windows.forms.sendkeys.send.aspx";
             // 
@@ -1530,6 +1643,7 @@
             // 
             // expExecScriptAssemblies
             // 
+            this.expExecScriptAssemblies.AutocompleteAvailable = true;
             this.expExecScriptAssemblies.AutoSize = true;
             this.expExecScriptAssemblies.Dock = System.Windows.Forms.DockStyle.Top;
             this.expExecScriptAssemblies.Expression = "";
@@ -1553,6 +1667,7 @@
             // 
             // expExecScriptCode
             // 
+            this.expExecScriptCode.AutocompleteAvailable = false;
             this.expExecScriptCode.AutoSize = true;
             this.expExecScriptCode.Dock = System.Windows.Forms.DockStyle.Top;
             this.expExecScriptCode.Expression = "";
@@ -1644,6 +1759,7 @@
             // 
             // expMessageBoxText
             // 
+            this.expMessageBoxText.AutocompleteAvailable = true;
             this.expMessageBoxText.AutoSize = true;
             this.expMessageBoxText.Dock = System.Windows.Forms.DockStyle.Top;
             this.expMessageBoxText.Expression = "";
@@ -1709,6 +1825,9 @@
             this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel9.Controls.Add(this.prsScalarTarget, 2, 3);
+            this.tableLayoutPanel9.Controls.Add(this.expVariableTarget, 1, 3);
+            this.tableLayoutPanel9.Controls.Add(this.label6, 0, 3);
             this.tableLayoutPanel9.Controls.Add(this.expVariableExpression, 1, 2);
             this.tableLayoutPanel9.Controls.Add(this.lblVariableExpression, 0, 2);
             this.tableLayoutPanel9.Controls.Add(this.expVariableName, 1, 1);
@@ -1719,24 +1838,63 @@
             this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel9.Name = "tableLayoutPanel9";
-            this.tableLayoutPanel9.RowCount = 3;
+            this.tableLayoutPanel9.RowCount = 4;
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(642, 79);
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(642, 105);
             this.tableLayoutPanel9.TabIndex = 6;
+            // 
+            // prsScalarTarget
+            // 
+            this.prsScalarTarget.AutoSize = true;
+            this.prsScalarTarget.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("prsScalarTarget.BackgroundImage")));
+            this.prsScalarTarget.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.prsScalarTarget.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.prsScalarTarget.IsPersistent = false;
+            this.prsScalarTarget.Location = new System.Drawing.Point(615, 82);
+            this.prsScalarTarget.Name = "prsScalarTarget";
+            this.prsScalarTarget.Size = new System.Drawing.Size(24, 20);
+            this.prsScalarTarget.TabIndex = 27;
+            this.prsScalarTarget.Tag = ((object)(resources.GetObject("prsScalarTarget.Tag")));
+            // 
+            // expVariableTarget
+            // 
+            this.expVariableTarget.AutocompleteAvailable = true;
+            this.expVariableTarget.AutoSize = true;
+            this.expVariableTarget.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expVariableTarget.Expression = "";
+            this.expVariableTarget.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            this.expVariableTarget.Location = new System.Drawing.Point(116, 82);
+            this.expVariableTarget.Name = "expVariableTarget";
+            this.expVariableTarget.ReadOnly = false;
+            this.expVariableTarget.Size = new System.Drawing.Size(493, 20);
+            this.expVariableTarget.TabIndex = 26;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label6.Location = new System.Drawing.Point(3, 79);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(107, 26);
+            this.label6.TabIndex = 25;
+            this.label6.Text = "Target variable name";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // expVariableExpression
             // 
+            this.expVariableExpression.AutocompleteAvailable = true;
             this.expVariableExpression.AutoSize = true;
             this.tableLayoutPanel9.SetColumnSpan(this.expVariableExpression, 2);
             this.expVariableExpression.Dock = System.Windows.Forms.DockStyle.Top;
             this.expVariableExpression.Expression = "";
             this.expVariableExpression.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expVariableExpression.Location = new System.Drawing.Point(115, 56);
+            this.expVariableExpression.Location = new System.Drawing.Point(116, 56);
             this.expVariableExpression.Name = "expVariableExpression";
             this.expVariableExpression.ReadOnly = false;
-            this.expVariableExpression.Size = new System.Drawing.Size(524, 20);
+            this.expVariableExpression.Size = new System.Drawing.Size(523, 20);
             this.expVariableExpression.TabIndex = 23;
             this.expVariableExpression.EnabledChanged += new System.EventHandler(this.expVariableExpression_EnabledChanged);
             // 
@@ -1746,21 +1904,22 @@
             this.lblVariableExpression.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblVariableExpression.Location = new System.Drawing.Point(3, 53);
             this.lblVariableExpression.Name = "lblVariableExpression";
-            this.lblVariableExpression.Size = new System.Drawing.Size(106, 26);
+            this.lblVariableExpression.Size = new System.Drawing.Size(107, 26);
             this.lblVariableExpression.TabIndex = 22;
             this.lblVariableExpression.Text = "Expression";
             this.lblVariableExpression.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // expVariableName
             // 
+            this.expVariableName.AutocompleteAvailable = true;
             this.expVariableName.AutoSize = true;
             this.expVariableName.Dock = System.Windows.Forms.DockStyle.Top;
             this.expVariableName.Expression = "";
             this.expVariableName.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expVariableName.Location = new System.Drawing.Point(115, 30);
+            this.expVariableName.Location = new System.Drawing.Point(116, 30);
             this.expVariableName.Name = "expVariableName";
             this.expVariableName.ReadOnly = false;
-            this.expVariableName.Size = new System.Drawing.Size(494, 20);
+            this.expVariableName.Size = new System.Drawing.Size(493, 20);
             this.expVariableName.TabIndex = 16;
             this.expVariableName.EnabledChanged += new System.EventHandler(this.expVariableName_EnabledChanged);
             // 
@@ -1770,7 +1929,7 @@
             this.lblVariableName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblVariableName.Location = new System.Drawing.Point(3, 27);
             this.lblVariableName.Name = "lblVariableName";
-            this.lblVariableName.Size = new System.Drawing.Size(106, 26);
+            this.lblVariableName.Size = new System.Drawing.Size(107, 26);
             this.lblVariableName.TabIndex = 15;
             this.lblVariableName.Text = "Scalar variable name";
             this.lblVariableName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1781,7 +1940,7 @@
             this.lblVariableOp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblVariableOp.Location = new System.Drawing.Point(3, 0);
             this.lblVariableOp.Name = "lblVariableOp";
-            this.lblVariableOp.Size = new System.Drawing.Size(106, 27);
+            this.lblVariableOp.Size = new System.Drawing.Size(107, 27);
             this.lblVariableOp.TabIndex = 7;
             this.lblVariableOp.Text = "Operation type";
             this.lblVariableOp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1797,10 +1956,12 @@
             "Set scalar variable value with string expression",
             "Set scalar variable value with numeric expression",
             "Unset all scalar variables",
-            "Unset scalar variables matching regular expression"});
-            this.cbxVariableOp.Location = new System.Drawing.Point(115, 3);
+            "Unset scalar variables matching regular expression",
+            "Query variable with JSONPath and store scalar value",
+            "Query variable with JSONPath and store list value"});
+            this.cbxVariableOp.Location = new System.Drawing.Point(116, 3);
             this.cbxVariableOp.Name = "cbxVariableOp";
-            this.cbxVariableOp.Size = new System.Drawing.Size(524, 21);
+            this.cbxVariableOp.Size = new System.Drawing.Size(523, 21);
             this.cbxVariableOp.TabIndex = 21;
             this.cbxVariableOp.SelectedIndexChanged += new System.EventHandler(this.cbxVariableOp_SelectedIndexChanged);
             // 
@@ -1928,6 +2089,7 @@
             // 
             // expAuraTTLTick
             // 
+            this.expAuraTTLTick.AutocompleteAvailable = true;
             this.expAuraTTLTick.AutoSize = true;
             this.tableLayoutPanel11.SetColumnSpan(this.expAuraTTLTick, 2);
             this.expAuraTTLTick.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1942,6 +2104,7 @@
             // 
             // expAuraOTick
             // 
+            this.expAuraOTick.AutocompleteAvailable = true;
             this.expAuraOTick.AutoSize = true;
             this.tableLayoutPanel11.SetColumnSpan(this.expAuraOTick, 2);
             this.expAuraOTick.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1956,6 +2119,7 @@
             // 
             // expAuraHTick
             // 
+            this.expAuraHTick.AutocompleteAvailable = true;
             this.expAuraHTick.AutoSize = true;
             this.tableLayoutPanel11.SetColumnSpan(this.expAuraHTick, 2);
             this.expAuraHTick.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1970,6 +2134,7 @@
             // 
             // expAuraWTick
             // 
+            this.expAuraWTick.AutocompleteAvailable = true;
             this.expAuraWTick.AutoSize = true;
             this.tableLayoutPanel11.SetColumnSpan(this.expAuraWTick, 2);
             this.expAuraWTick.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1984,6 +2149,7 @@
             // 
             // expAuraYTick
             // 
+            this.expAuraYTick.AutocompleteAvailable = true;
             this.expAuraYTick.AutoSize = true;
             this.tableLayoutPanel11.SetColumnSpan(this.expAuraYTick, 2);
             this.expAuraYTick.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1998,6 +2164,7 @@
             // 
             // expAuraXTick
             // 
+            this.expAuraXTick.AutocompleteAvailable = true;
             this.expAuraXTick.AutoSize = true;
             this.tableLayoutPanel11.SetColumnSpan(this.expAuraXTick, 2);
             this.expAuraXTick.Dock = System.Windows.Forms.DockStyle.Top;
@@ -2026,6 +2193,7 @@
             // 
             // expAuraOIni
             // 
+            this.expAuraOIni.AutocompleteAvailable = true;
             this.expAuraOIni.AutoSize = true;
             this.expAuraOIni.Dock = System.Windows.Forms.DockStyle.Top;
             this.expAuraOIni.Expression = "";
@@ -2038,6 +2206,7 @@
             // 
             // expAuraHIni
             // 
+            this.expAuraHIni.AutocompleteAvailable = true;
             this.expAuraHIni.AutoSize = true;
             this.expAuraHIni.Dock = System.Windows.Forms.DockStyle.Top;
             this.expAuraHIni.Expression = "";
@@ -2050,6 +2219,7 @@
             // 
             // expAuraWIni
             // 
+            this.expAuraWIni.AutocompleteAvailable = true;
             this.expAuraWIni.AutoSize = true;
             this.expAuraWIni.Dock = System.Windows.Forms.DockStyle.Top;
             this.expAuraWIni.Expression = "";
@@ -2118,6 +2288,7 @@
             // 
             // expAuraImage
             // 
+            this.expAuraImage.AutocompleteAvailable = true;
             this.expAuraImage.AutoSize = true;
             this.tableLayoutPanel11.SetColumnSpan(this.expAuraImage, 2);
             this.expAuraImage.Dock = System.Windows.Forms.DockStyle.Top;
@@ -2143,6 +2314,7 @@
             // 
             // expAuraYIni
             // 
+            this.expAuraYIni.AutocompleteAvailable = true;
             this.expAuraYIni.AutoSize = true;
             this.expAuraYIni.Dock = System.Windows.Forms.DockStyle.Top;
             this.expAuraYIni.Expression = "";
@@ -2166,6 +2338,7 @@
             // 
             // expAuraXIni
             // 
+            this.expAuraXIni.AutocompleteAvailable = true;
             this.expAuraXIni.AutoSize = true;
             this.expAuraXIni.Dock = System.Windows.Forms.DockStyle.Top;
             this.expAuraXIni.Expression = "";
@@ -2189,6 +2362,7 @@
             // 
             // expAuraName
             // 
+            this.expAuraName.AutocompleteAvailable = true;
             this.expAuraName.AutoSize = true;
             this.tableLayoutPanel11.SetColumnSpan(this.expAuraName, 2);
             this.expAuraName.Dock = System.Windows.Forms.DockStyle.Top;
@@ -2420,6 +2594,7 @@
             // 
             // expDiscordMessage
             // 
+            this.expDiscordMessage.AutocompleteAvailable = true;
             this.expDiscordMessage.AutoSize = true;
             this.expDiscordMessage.Dock = System.Windows.Forms.DockStyle.Top;
             this.expDiscordMessage.Expression = "";
@@ -2454,6 +2629,7 @@
             // 
             // expDiscordUrl
             // 
+            this.expDiscordUrl.AutocompleteAvailable = true;
             this.expDiscordUrl.AutoSize = true;
             this.expDiscordUrl.Dock = System.Windows.Forms.DockStyle.Top;
             this.expDiscordUrl.Expression = "";
@@ -2620,6 +2796,7 @@
             // 
             // expTextAuraTTLTick
             // 
+            this.expTextAuraTTLTick.AutocompleteAvailable = true;
             this.expTextAuraTTLTick.AutoSize = true;
             this.tableLayoutPanel13.SetColumnSpan(this.expTextAuraTTLTick, 2);
             this.expTextAuraTTLTick.Dock = System.Windows.Forms.DockStyle.Top;
@@ -2634,6 +2811,7 @@
             // 
             // expTextAuraOTick
             // 
+            this.expTextAuraOTick.AutocompleteAvailable = true;
             this.expTextAuraOTick.AutoSize = true;
             this.tableLayoutPanel13.SetColumnSpan(this.expTextAuraOTick, 2);
             this.expTextAuraOTick.Dock = System.Windows.Forms.DockStyle.Top;
@@ -2648,6 +2826,7 @@
             // 
             // expTextAuraHTick
             // 
+            this.expTextAuraHTick.AutocompleteAvailable = true;
             this.expTextAuraHTick.AutoSize = true;
             this.tableLayoutPanel13.SetColumnSpan(this.expTextAuraHTick, 2);
             this.expTextAuraHTick.Dock = System.Windows.Forms.DockStyle.Top;
@@ -2662,6 +2841,7 @@
             // 
             // expTextAuraWTick
             // 
+            this.expTextAuraWTick.AutocompleteAvailable = true;
             this.expTextAuraWTick.AutoSize = true;
             this.tableLayoutPanel13.SetColumnSpan(this.expTextAuraWTick, 2);
             this.expTextAuraWTick.Dock = System.Windows.Forms.DockStyle.Top;
@@ -2676,6 +2856,7 @@
             // 
             // expTextAuraYTick
             // 
+            this.expTextAuraYTick.AutocompleteAvailable = true;
             this.expTextAuraYTick.AutoSize = true;
             this.tableLayoutPanel13.SetColumnSpan(this.expTextAuraYTick, 2);
             this.expTextAuraYTick.Dock = System.Windows.Forms.DockStyle.Top;
@@ -2690,6 +2871,7 @@
             // 
             // expTextAuraXTick
             // 
+            this.expTextAuraXTick.AutocompleteAvailable = true;
             this.expTextAuraXTick.AutoSize = true;
             this.tableLayoutPanel13.SetColumnSpan(this.expTextAuraXTick, 2);
             this.expTextAuraXTick.Dock = System.Windows.Forms.DockStyle.Top;
@@ -2718,6 +2900,7 @@
             // 
             // expTextAuraOIni
             // 
+            this.expTextAuraOIni.AutocompleteAvailable = true;
             this.expTextAuraOIni.AutoSize = true;
             this.expTextAuraOIni.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTextAuraOIni.Expression = "";
@@ -2730,6 +2913,7 @@
             // 
             // expTextAuraHIni
             // 
+            this.expTextAuraHIni.AutocompleteAvailable = true;
             this.expTextAuraHIni.AutoSize = true;
             this.expTextAuraHIni.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTextAuraHIni.Expression = "";
@@ -2742,6 +2926,7 @@
             // 
             // expTextAuraWIni
             // 
+            this.expTextAuraWIni.AutocompleteAvailable = true;
             this.expTextAuraWIni.AutoSize = true;
             this.expTextAuraWIni.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTextAuraWIni.Expression = "";
@@ -2798,6 +2983,7 @@
             // 
             // expTextAuraText
             // 
+            this.expTextAuraText.AutocompleteAvailable = true;
             this.expTextAuraText.AutoSize = true;
             this.tableLayoutPanel13.SetColumnSpan(this.expTextAuraText, 3);
             this.expTextAuraText.Dock = System.Windows.Forms.DockStyle.Top;
@@ -2823,6 +3009,7 @@
             // 
             // expTextAuraYIni
             // 
+            this.expTextAuraYIni.AutocompleteAvailable = true;
             this.expTextAuraYIni.AutoSize = true;
             this.expTextAuraYIni.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTextAuraYIni.Expression = "";
@@ -2846,6 +3033,7 @@
             // 
             // expTextAuraXIni
             // 
+            this.expTextAuraXIni.AutocompleteAvailable = true;
             this.expTextAuraXIni.AutoSize = true;
             this.expTextAuraXIni.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTextAuraXIni.Expression = "";
@@ -2869,6 +3057,7 @@
             // 
             // expTextAuraName
             // 
+            this.expTextAuraName.AutocompleteAvailable = true;
             this.expTextAuraName.AutoSize = true;
             this.tableLayoutPanel13.SetColumnSpan(this.expTextAuraName, 2);
             this.expTextAuraName.Dock = System.Windows.Forms.DockStyle.Top;
@@ -3100,6 +3289,7 @@
             // 
             // expLogMessageText
             // 
+            this.expLogMessageText.AutocompleteAvailable = true;
             this.expLogMessageText.AutoSize = true;
             this.expLogMessageText.Dock = System.Windows.Forms.DockStyle.Top;
             this.expLogMessageText.Expression = "";
@@ -3209,6 +3399,7 @@
             // 
             // expLvarTarget
             // 
+            this.expLvarTarget.AutocompleteAvailable = true;
             this.expLvarTarget.AutoSize = true;
             this.expLvarTarget.Dock = System.Windows.Forms.DockStyle.Top;
             this.expLvarTarget.Expression = "";
@@ -3233,6 +3424,7 @@
             // 
             // expLvarIndex
             // 
+            this.expLvarIndex.AutocompleteAvailable = true;
             this.expLvarIndex.AutoSize = true;
             this.tableLayoutPanel17.SetColumnSpan(this.expLvarIndex, 2);
             this.expLvarIndex.Dock = System.Windows.Forms.DockStyle.Top;
@@ -3258,6 +3450,7 @@
             // 
             // expLvarValue
             // 
+            this.expLvarValue.AutocompleteAvailable = true;
             this.expLvarValue.AutoSize = true;
             this.tableLayoutPanel17.SetColumnSpan(this.expLvarValue, 2);
             this.expLvarValue.Dock = System.Windows.Forms.DockStyle.Top;
@@ -3283,6 +3476,7 @@
             // 
             // expLvarName
             // 
+            this.expLvarName.AutocompleteAvailable = true;
             this.expLvarName.AutoSize = true;
             this.expLvarName.Dock = System.Windows.Forms.DockStyle.Top;
             this.expLvarName.Expression = "";
@@ -3340,7 +3534,9 @@
                 "ion)",
             "Split a scalar variable into a list variable (separator in expression)",
             "Unset all list variables",
-            "Unset list variables matching regular expression"});
+            "Unset list variables matching regular expression",
+            "Sort list in an numerically ascending order",
+            "Sort list in an numerically descending order"});
             this.cbxLvarOperation.Location = new System.Drawing.Point(119, 3);
             this.cbxLvarOperation.Name = "cbxLvarOperation";
             this.cbxLvarOperation.Size = new System.Drawing.Size(520, 21);
@@ -3364,36 +3560,91 @@
             this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel18.Controls.Add(this.lblObsJSONPayload, 0, 3);
-            this.tableLayoutPanel18.Controls.Add(this.expObsJSONPayload, 1, 3);
-            this.tableLayoutPanel18.Controls.Add(this.expObsSourceName, 1, 2);
-            this.tableLayoutPanel18.Controls.Add(this.lblObsSourceName, 0, 2);
-            this.tableLayoutPanel18.Controls.Add(this.cbxObsOpType, 1, 0);
-            this.tableLayoutPanel18.Controls.Add(this.lblObsOpType, 0, 0);
-            this.tableLayoutPanel18.Controls.Add(this.btnObsWebsocketLink, 2, 5);
-            this.tableLayoutPanel18.Controls.Add(this.lblObsSceneName, 0, 1);
-            this.tableLayoutPanel18.Controls.Add(this.expObsSceneName, 1, 1);
-            this.tableLayoutPanel18.Controls.Add(this.lblObsWebsocketInfo, 1, 4);
-            this.tableLayoutPanel18.Controls.Add(this.txtObsWebsocketLink, 1, 5);
+            this.tableLayoutPanel18.Controls.Add(this.expObsPassword, 1, 1);
+            this.tableLayoutPanel18.Controls.Add(this.lblObsPassword, 0, 1);
+            this.tableLayoutPanel18.Controls.Add(this.expObsEndpoint, 1, 0);
+            this.tableLayoutPanel18.Controls.Add(this.lblObsEndpoint, 0, 0);
+            this.tableLayoutPanel18.Controls.Add(this.lblObsJSONPayload, 0, 5);
+            this.tableLayoutPanel18.Controls.Add(this.expObsJSONPayload, 1, 5);
+            this.tableLayoutPanel18.Controls.Add(this.expObsSourceName, 1, 4);
+            this.tableLayoutPanel18.Controls.Add(this.lblObsSourceName, 0, 4);
+            this.tableLayoutPanel18.Controls.Add(this.cbxObsOpType, 1, 2);
+            this.tableLayoutPanel18.Controls.Add(this.lblObsOpType, 0, 2);
+            this.tableLayoutPanel18.Controls.Add(this.btnObsWebsocketLink, 2, 7);
+            this.tableLayoutPanel18.Controls.Add(this.lblObsSceneName, 0, 3);
+            this.tableLayoutPanel18.Controls.Add(this.expObsSceneName, 1, 3);
+            this.tableLayoutPanel18.Controls.Add(this.lblObsWebsocketInfo, 1, 6);
+            this.tableLayoutPanel18.Controls.Add(this.txtObsWebsocketLink, 1, 7);
             this.tableLayoutPanel18.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel18.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel18.Name = "tableLayoutPanel18";
-            this.tableLayoutPanel18.RowCount = 6;
+            this.tableLayoutPanel18.RowCount = 8;
+            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel18.Size = new System.Drawing.Size(642, 171);
+            this.tableLayoutPanel18.Size = new System.Drawing.Size(642, 223);
             this.tableLayoutPanel18.TabIndex = 3;
+            // 
+            // expObsPassword
+            // 
+            this.expObsPassword.AutocompleteAvailable = true;
+            this.expObsPassword.AutoSize = true;
+            this.tableLayoutPanel18.SetColumnSpan(this.expObsPassword, 2);
+            this.expObsPassword.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expObsPassword.Expression = "";
+            this.expObsPassword.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            this.expObsPassword.Location = new System.Drawing.Point(85, 29);
+            this.expObsPassword.Name = "expObsPassword";
+            this.expObsPassword.ReadOnly = false;
+            this.expObsPassword.Size = new System.Drawing.Size(554, 20);
+            this.expObsPassword.TabIndex = 30;
+            // 
+            // lblObsPassword
+            // 
+            this.lblObsPassword.AutoSize = true;
+            this.lblObsPassword.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblObsPassword.Location = new System.Drawing.Point(3, 26);
+            this.lblObsPassword.Name = "lblObsPassword";
+            this.lblObsPassword.Size = new System.Drawing.Size(76, 26);
+            this.lblObsPassword.TabIndex = 29;
+            this.lblObsPassword.Text = "Password";
+            this.lblObsPassword.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // expObsEndpoint
+            // 
+            this.expObsEndpoint.AutocompleteAvailable = true;
+            this.expObsEndpoint.AutoSize = true;
+            this.tableLayoutPanel18.SetColumnSpan(this.expObsEndpoint, 2);
+            this.expObsEndpoint.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expObsEndpoint.Expression = "";
+            this.expObsEndpoint.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            this.expObsEndpoint.Location = new System.Drawing.Point(85, 3);
+            this.expObsEndpoint.Name = "expObsEndpoint";
+            this.expObsEndpoint.ReadOnly = false;
+            this.expObsEndpoint.Size = new System.Drawing.Size(554, 20);
+            this.expObsEndpoint.TabIndex = 28;
+            // 
+            // lblObsEndpoint
+            // 
+            this.lblObsEndpoint.AutoSize = true;
+            this.lblObsEndpoint.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblObsEndpoint.Location = new System.Drawing.Point(3, 0);
+            this.lblObsEndpoint.Name = "lblObsEndpoint";
+            this.lblObsEndpoint.Size = new System.Drawing.Size(76, 26);
+            this.lblObsEndpoint.TabIndex = 27;
+            this.lblObsEndpoint.Text = "Endpoint URL";
+            this.lblObsEndpoint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblObsJSONPayload
             // 
             this.lblObsJSONPayload.AutoSize = true;
             this.lblObsJSONPayload.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblObsJSONPayload.Location = new System.Drawing.Point(3, 79);
+            this.lblObsJSONPayload.Location = new System.Drawing.Point(3, 131);
             this.lblObsJSONPayload.Name = "lblObsJSONPayload";
             this.lblObsJSONPayload.Size = new System.Drawing.Size(76, 26);
             this.lblObsJSONPayload.TabIndex = 26;
@@ -3402,12 +3653,13 @@
             // 
             // expObsJSONPayload
             // 
+            this.expObsJSONPayload.AutocompleteAvailable = true;
             this.expObsJSONPayload.AutoSize = true;
             this.tableLayoutPanel18.SetColumnSpan(this.expObsJSONPayload, 2);
             this.expObsJSONPayload.Dock = System.Windows.Forms.DockStyle.Top;
             this.expObsJSONPayload.Expression = "";
             this.expObsJSONPayload.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expObsJSONPayload.Location = new System.Drawing.Point(85, 82);
+            this.expObsJSONPayload.Location = new System.Drawing.Point(85, 134);
             this.expObsJSONPayload.Name = "expObsJSONPayload";
             this.expObsJSONPayload.ReadOnly = false;
             this.expObsJSONPayload.Size = new System.Drawing.Size(554, 20);
@@ -3416,12 +3668,13 @@
             // 
             // expObsSourceName
             // 
+            this.expObsSourceName.AutocompleteAvailable = true;
             this.expObsSourceName.AutoSize = true;
             this.tableLayoutPanel18.SetColumnSpan(this.expObsSourceName, 2);
             this.expObsSourceName.Dock = System.Windows.Forms.DockStyle.Top;
             this.expObsSourceName.Expression = "";
             this.expObsSourceName.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expObsSourceName.Location = new System.Drawing.Point(85, 56);
+            this.expObsSourceName.Location = new System.Drawing.Point(85, 108);
             this.expObsSourceName.Name = "expObsSourceName";
             this.expObsSourceName.ReadOnly = false;
             this.expObsSourceName.Size = new System.Drawing.Size(554, 20);
@@ -3432,7 +3685,7 @@
             // 
             this.lblObsSourceName.AutoSize = true;
             this.lblObsSourceName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblObsSourceName.Location = new System.Drawing.Point(3, 53);
+            this.lblObsSourceName.Location = new System.Drawing.Point(3, 105);
             this.lblObsSourceName.Name = "lblObsSourceName";
             this.lblObsSourceName.Size = new System.Drawing.Size(76, 26);
             this.lblObsSourceName.TabIndex = 23;
@@ -3460,7 +3713,7 @@
             "Show source",
             "Hide source",
             "Custom JSON payload"});
-            this.cbxObsOpType.Location = new System.Drawing.Point(85, 3);
+            this.cbxObsOpType.Location = new System.Drawing.Point(85, 55);
             this.cbxObsOpType.Name = "cbxObsOpType";
             this.cbxObsOpType.Size = new System.Drawing.Size(554, 21);
             this.cbxObsOpType.TabIndex = 22;
@@ -3470,7 +3723,7 @@
             // 
             this.lblObsOpType.AutoSize = true;
             this.lblObsOpType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblObsOpType.Location = new System.Drawing.Point(3, 0);
+            this.lblObsOpType.Location = new System.Drawing.Point(3, 52);
             this.lblObsOpType.Name = "lblObsOpType";
             this.lblObsOpType.Size = new System.Drawing.Size(76, 27);
             this.lblObsOpType.TabIndex = 18;
@@ -3481,7 +3734,7 @@
             // 
             this.btnObsWebsocketLink.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnObsWebsocketLink.Image = ((System.Drawing.Image)(resources.GetObject("btnObsWebsocketLink.Image")));
-            this.btnObsWebsocketLink.Location = new System.Drawing.Point(602, 151);
+            this.btnObsWebsocketLink.Location = new System.Drawing.Point(602, 203);
             this.btnObsWebsocketLink.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnObsWebsocketLink.Name = "btnObsWebsocketLink";
             this.btnObsWebsocketLink.Size = new System.Drawing.Size(37, 20);
@@ -3493,7 +3746,7 @@
             // 
             this.lblObsSceneName.AutoSize = true;
             this.lblObsSceneName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblObsSceneName.Location = new System.Drawing.Point(3, 27);
+            this.lblObsSceneName.Location = new System.Drawing.Point(3, 79);
             this.lblObsSceneName.Name = "lblObsSceneName";
             this.lblObsSceneName.Size = new System.Drawing.Size(76, 26);
             this.lblObsSceneName.TabIndex = 7;
@@ -3502,12 +3755,13 @@
             // 
             // expObsSceneName
             // 
+            this.expObsSceneName.AutocompleteAvailable = true;
             this.expObsSceneName.AutoSize = true;
             this.tableLayoutPanel18.SetColumnSpan(this.expObsSceneName, 2);
             this.expObsSceneName.Dock = System.Windows.Forms.DockStyle.Top;
             this.expObsSceneName.Expression = "";
             this.expObsSceneName.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expObsSceneName.Location = new System.Drawing.Point(85, 30);
+            this.expObsSceneName.Location = new System.Drawing.Point(85, 82);
             this.expObsSceneName.Name = "expObsSceneName";
             this.expObsSceneName.ReadOnly = false;
             this.expObsSceneName.Size = new System.Drawing.Size(554, 20);
@@ -3518,7 +3772,7 @@
             // 
             this.lblObsWebsocketInfo.AutoSize = true;
             this.tableLayoutPanel18.SetColumnSpan(this.lblObsWebsocketInfo, 2);
-            this.lblObsWebsocketInfo.Location = new System.Drawing.Point(85, 105);
+            this.lblObsWebsocketInfo.Location = new System.Drawing.Point(85, 157);
             this.lblObsWebsocketInfo.Name = "lblObsWebsocketInfo";
             this.lblObsWebsocketInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
             this.lblObsWebsocketInfo.Size = new System.Drawing.Size(544, 46);
@@ -3529,7 +3783,7 @@
             // txtObsWebsocketLink
             // 
             this.txtObsWebsocketLink.Dock = System.Windows.Forms.DockStyle.Top;
-            this.txtObsWebsocketLink.Location = new System.Drawing.Point(85, 154);
+            this.txtObsWebsocketLink.Location = new System.Drawing.Point(85, 206);
             this.txtObsWebsocketLink.Name = "txtObsWebsocketLink";
             this.txtObsWebsocketLink.ReadOnly = true;
             this.txtObsWebsocketLink.Size = new System.Drawing.Size(514, 20);
@@ -3550,17 +3804,21 @@
             // jsonTableLayout
             // 
             this.jsonTableLayout.AutoSize = true;
-            this.jsonTableLayout.ColumnCount = 2;
+            this.jsonTableLayout.ColumnCount = 3;
             this.jsonTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.jsonTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.jsonTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.jsonTableLayout.Controls.Add(this.prsJsonVariable, 2, 4);
+            this.jsonTableLayout.Controls.Add(this.expJsonVariable, 1, 4);
+            this.jsonTableLayout.Controls.Add(this.lblJsonVariable, 0, 4);
             this.jsonTableLayout.Controls.Add(this.expJsonHeaders, 1, 3);
             this.jsonTableLayout.Controls.Add(this.lblJsonHeaders, 0, 3);
             this.jsonTableLayout.Controls.Add(this.cbxJsonType, 1, 1);
             this.jsonTableLayout.Controls.Add(this.lblJsonType, 0, 1);
-            this.jsonTableLayout.Controls.Add(this.cbxJsonCache, 0, 5);
-            this.jsonTableLayout.Controls.Add(this.lblJsonInstructions, 1, 6);
-            this.jsonTableLayout.Controls.Add(this.expJsonFiring, 1, 4);
-            this.jsonTableLayout.Controls.Add(this.lblJsonFiring, 0, 4);
+            this.jsonTableLayout.Controls.Add(this.cbxJsonCache, 0, 6);
+            this.jsonTableLayout.Controls.Add(this.lblJsonInstructions, 1, 7);
+            this.jsonTableLayout.Controls.Add(this.expJsonFiring, 1, 5);
+            this.jsonTableLayout.Controls.Add(this.lblJsonFiring, 0, 5);
             this.jsonTableLayout.Controls.Add(this.expJsonPayload, 1, 2);
             this.jsonTableLayout.Controls.Add(this.lblJsonPayload, 0, 2);
             this.jsonTableLayout.Controls.Add(this.lblJsonEndpoint, 0, 0);
@@ -3576,20 +3834,60 @@
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.jsonTableLayout.Size = new System.Drawing.Size(642, 263);
+            this.jsonTableLayout.Size = new System.Drawing.Size(642, 295);
             this.jsonTableLayout.TabIndex = 3;
+            // 
+            // prsJsonVariable
+            // 
+            this.prsJsonVariable.AutoSize = true;
+            this.prsJsonVariable.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("prsJsonVariable.BackgroundImage")));
+            this.prsJsonVariable.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.prsJsonVariable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.prsJsonVariable.IsPersistent = false;
+            this.prsJsonVariable.Location = new System.Drawing.Point(615, 108);
+            this.prsJsonVariable.Name = "prsJsonVariable";
+            this.prsJsonVariable.Size = new System.Drawing.Size(24, 20);
+            this.prsJsonVariable.TabIndex = 29;
+            this.prsJsonVariable.Tag = ((object)(resources.GetObject("prsJsonVariable.Tag")));
+            // 
+            // expJsonVariable
+            // 
+            this.expJsonVariable.AutocompleteAvailable = true;
+            this.expJsonVariable.AutoSize = true;
+            this.expJsonVariable.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expJsonVariable.Expression = "";
+            this.expJsonVariable.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            this.expJsonVariable.Location = new System.Drawing.Point(150, 108);
+            this.expJsonVariable.Name = "expJsonVariable";
+            this.expJsonVariable.ReadOnly = false;
+            this.expJsonVariable.Size = new System.Drawing.Size(459, 20);
+            this.expJsonVariable.TabIndex = 28;
+            // 
+            // lblJsonVariable
+            // 
+            this.lblJsonVariable.AutoSize = true;
+            this.lblJsonVariable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblJsonVariable.Location = new System.Drawing.Point(3, 105);
+            this.lblJsonVariable.Name = "lblJsonVariable";
+            this.lblJsonVariable.Size = new System.Drawing.Size(141, 26);
+            this.lblJsonVariable.TabIndex = 27;
+            this.lblJsonVariable.Text = "Variable to store response to";
+            this.lblJsonVariable.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // expJsonHeaders
             // 
+            this.expJsonHeaders.AutocompleteAvailable = true;
             this.expJsonHeaders.AutoSize = true;
+            this.jsonTableLayout.SetColumnSpan(this.expJsonHeaders, 2);
             this.expJsonHeaders.Dock = System.Windows.Forms.DockStyle.Top;
             this.expJsonHeaders.Expression = "";
             this.expJsonHeaders.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expJsonHeaders.Location = new System.Drawing.Point(142, 82);
+            this.expJsonHeaders.Location = new System.Drawing.Point(150, 82);
             this.expJsonHeaders.Name = "expJsonHeaders";
             this.expJsonHeaders.ReadOnly = false;
-            this.expJsonHeaders.Size = new System.Drawing.Size(497, 20);
+            this.expJsonHeaders.Size = new System.Drawing.Size(489, 20);
             this.expJsonHeaders.TabIndex = 26;
             // 
             // lblJsonHeaders
@@ -3598,22 +3896,23 @@
             this.lblJsonHeaders.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblJsonHeaders.Location = new System.Drawing.Point(3, 79);
             this.lblJsonHeaders.Name = "lblJsonHeaders";
-            this.lblJsonHeaders.Size = new System.Drawing.Size(133, 26);
+            this.lblJsonHeaders.Size = new System.Drawing.Size(141, 26);
             this.lblJsonHeaders.TabIndex = 25;
             this.lblJsonHeaders.Text = "Headers to send";
             this.lblJsonHeaders.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // cbxJsonType
             // 
+            this.jsonTableLayout.SetColumnSpan(this.cbxJsonType, 2);
             this.cbxJsonType.Dock = System.Windows.Forms.DockStyle.Top;
             this.cbxJsonType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxJsonType.FormattingEnabled = true;
             this.cbxJsonType.Items.AddRange(new object[] {
             "POST",
             "GET"});
-            this.cbxJsonType.Location = new System.Drawing.Point(142, 29);
+            this.cbxJsonType.Location = new System.Drawing.Point(150, 29);
             this.cbxJsonType.Name = "cbxJsonType";
-            this.cbxJsonType.Size = new System.Drawing.Size(497, 21);
+            this.cbxJsonType.Size = new System.Drawing.Size(489, 21);
             this.cbxJsonType.TabIndex = 24;
             this.cbxJsonType.SelectedIndexChanged += new System.EventHandler(this.cbxJsonType_SelectedIndexChanged);
             // 
@@ -3623,7 +3922,7 @@
             this.lblJsonType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblJsonType.Location = new System.Drawing.Point(3, 26);
             this.lblJsonType.Name = "lblJsonType";
-            this.lblJsonType.Size = new System.Drawing.Size(133, 27);
+            this.lblJsonType.Size = new System.Drawing.Size(141, 27);
             this.lblJsonType.TabIndex = 23;
             this.lblJsonType.Text = "HTTP method";
             this.lblJsonType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3634,7 +3933,7 @@
             this.cbxJsonCache.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.jsonTableLayout.SetColumnSpan(this.cbxJsonCache, 3);
             this.cbxJsonCache.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cbxJsonCache.Location = new System.Drawing.Point(3, 136);
+            this.cbxJsonCache.Location = new System.Drawing.Point(3, 162);
             this.cbxJsonCache.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.cbxJsonCache.Name = "cbxJsonCache";
             this.cbxJsonCache.Size = new System.Drawing.Size(637, 17);
@@ -3645,46 +3944,51 @@
             // lblJsonInstructions
             // 
             this.lblJsonInstructions.AutoSize = true;
-            this.lblJsonInstructions.Location = new System.Drawing.Point(142, 158);
+            this.jsonTableLayout.SetColumnSpan(this.lblJsonInstructions, 2);
+            this.lblJsonInstructions.Location = new System.Drawing.Point(150, 184);
             this.lblJsonInstructions.Name = "lblJsonInstructions";
             this.lblJsonInstructions.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
-            this.lblJsonInstructions.Size = new System.Drawing.Size(495, 85);
+            this.lblJsonInstructions.Size = new System.Drawing.Size(487, 111);
             this.lblJsonInstructions.TabIndex = 21;
             this.lblJsonInstructions.Text = resources.GetString("lblJsonInstructions.Text");
             // 
             // expJsonFiring
             // 
+            this.expJsonFiring.AutocompleteAvailable = true;
             this.expJsonFiring.AutoSize = true;
+            this.jsonTableLayout.SetColumnSpan(this.expJsonFiring, 2);
             this.expJsonFiring.Dock = System.Windows.Forms.DockStyle.Top;
             this.expJsonFiring.Expression = "";
             this.expJsonFiring.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expJsonFiring.Location = new System.Drawing.Point(142, 108);
+            this.expJsonFiring.Location = new System.Drawing.Point(150, 134);
             this.expJsonFiring.Name = "expJsonFiring";
             this.expJsonFiring.ReadOnly = false;
-            this.expJsonFiring.Size = new System.Drawing.Size(497, 20);
+            this.expJsonFiring.Size = new System.Drawing.Size(489, 20);
             this.expJsonFiring.TabIndex = 20;
             // 
             // lblJsonFiring
             // 
             this.lblJsonFiring.AutoSize = true;
             this.lblJsonFiring.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblJsonFiring.Location = new System.Drawing.Point(3, 105);
+            this.lblJsonFiring.Location = new System.Drawing.Point(3, 131);
             this.lblJsonFiring.Name = "lblJsonFiring";
-            this.lblJsonFiring.Size = new System.Drawing.Size(133, 26);
+            this.lblJsonFiring.Size = new System.Drawing.Size(141, 26);
             this.lblJsonFiring.TabIndex = 19;
             this.lblJsonFiring.Text = "Response firing expression";
             this.lblJsonFiring.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // expJsonPayload
             // 
+            this.expJsonPayload.AutocompleteAvailable = true;
             this.expJsonPayload.AutoSize = true;
+            this.jsonTableLayout.SetColumnSpan(this.expJsonPayload, 2);
             this.expJsonPayload.Dock = System.Windows.Forms.DockStyle.Top;
             this.expJsonPayload.Expression = "";
             this.expJsonPayload.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expJsonPayload.Location = new System.Drawing.Point(142, 56);
+            this.expJsonPayload.Location = new System.Drawing.Point(150, 56);
             this.expJsonPayload.Name = "expJsonPayload";
             this.expJsonPayload.ReadOnly = false;
-            this.expJsonPayload.Size = new System.Drawing.Size(497, 20);
+            this.expJsonPayload.Size = new System.Drawing.Size(489, 20);
             this.expJsonPayload.TabIndex = 16;
             // 
             // lblJsonPayload
@@ -3693,7 +3997,7 @@
             this.lblJsonPayload.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblJsonPayload.Location = new System.Drawing.Point(3, 53);
             this.lblJsonPayload.Name = "lblJsonPayload";
-            this.lblJsonPayload.Size = new System.Drawing.Size(133, 26);
+            this.lblJsonPayload.Size = new System.Drawing.Size(141, 26);
             this.lblJsonPayload.TabIndex = 15;
             this.lblJsonPayload.Text = "Payload to send";
             this.lblJsonPayload.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -3704,21 +4008,23 @@
             this.lblJsonEndpoint.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblJsonEndpoint.Location = new System.Drawing.Point(3, 0);
             this.lblJsonEndpoint.Name = "lblJsonEndpoint";
-            this.lblJsonEndpoint.Size = new System.Drawing.Size(133, 26);
+            this.lblJsonEndpoint.Size = new System.Drawing.Size(141, 26);
             this.lblJsonEndpoint.TabIndex = 7;
             this.lblJsonEndpoint.Text = "Endpoint URL";
             this.lblJsonEndpoint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // expJsonEndpoint
             // 
+            this.expJsonEndpoint.AutocompleteAvailable = true;
             this.expJsonEndpoint.AutoSize = true;
+            this.jsonTableLayout.SetColumnSpan(this.expJsonEndpoint, 2);
             this.expJsonEndpoint.Dock = System.Windows.Forms.DockStyle.Top;
             this.expJsonEndpoint.Expression = "";
             this.expJsonEndpoint.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expJsonEndpoint.Location = new System.Drawing.Point(142, 3);
+            this.expJsonEndpoint.Location = new System.Drawing.Point(150, 3);
             this.expJsonEndpoint.Name = "expJsonEndpoint";
             this.expJsonEndpoint.ReadOnly = false;
-            this.expJsonEndpoint.Size = new System.Drawing.Size(497, 20);
+            this.expJsonEndpoint.Size = new System.Drawing.Size(489, 20);
             this.expJsonEndpoint.TabIndex = 14;
             // 
             // tabWindowMessage
@@ -3739,33 +4045,76 @@
             this.tableLayoutPanel19.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel19.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel19.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel19.Controls.Add(this.expWmsgLparam, 1, 3);
-            this.tableLayoutPanel19.Controls.Add(this.lblWmsgLparam, 0, 3);
-            this.tableLayoutPanel19.Controls.Add(this.expWmsgWparam, 1, 2);
-            this.tableLayoutPanel19.Controls.Add(this.lblWmsgWparam, 0, 2);
-            this.tableLayoutPanel19.Controls.Add(this.expWmsgCode, 1, 1);
-            this.tableLayoutPanel19.Controls.Add(this.expWmsgTitle, 1, 0);
-            this.tableLayoutPanel19.Controls.Add(this.lblWmsgCode, 0, 1);
-            this.tableLayoutPanel19.Controls.Add(this.lblWmsgTitle, 0, 0);
+            this.tableLayoutPanel19.Controls.Add(this.lblWmsgProcInfo, 1, 1);
+            this.tableLayoutPanel19.Controls.Add(this.expWmsgProcid, 1, 0);
+            this.tableLayoutPanel19.Controls.Add(this.lblWmsgProcid, 0, 0);
+            this.tableLayoutPanel19.Controls.Add(this.expWmsgLparam, 1, 5);
+            this.tableLayoutPanel19.Controls.Add(this.lblWmsgLparam, 0, 5);
+            this.tableLayoutPanel19.Controls.Add(this.expWmsgWparam, 1, 4);
+            this.tableLayoutPanel19.Controls.Add(this.lblWmsgWparam, 0, 4);
+            this.tableLayoutPanel19.Controls.Add(this.expWmsgCode, 1, 3);
+            this.tableLayoutPanel19.Controls.Add(this.expWmsgTitle, 1, 2);
+            this.tableLayoutPanel19.Controls.Add(this.lblWmsgCode, 0, 3);
+            this.tableLayoutPanel19.Controls.Add(this.lblWmsgTitle, 0, 2);
             this.tableLayoutPanel19.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel19.Location = new System.Drawing.Point(0, 51);
             this.tableLayoutPanel19.Name = "tableLayoutPanel19";
-            this.tableLayoutPanel19.RowCount = 4;
+            this.tableLayoutPanel19.RowCount = 6;
             this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel19.Size = new System.Drawing.Size(642, 104);
+            this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel19.Size = new System.Drawing.Size(642, 189);
             this.tableLayoutPanel19.TabIndex = 3;
+            // 
+            // lblWmsgProcInfo
+            // 
+            this.lblWmsgProcInfo.AutoSize = true;
+            this.tableLayoutPanel19.SetColumnSpan(this.lblWmsgProcInfo, 2);
+            this.lblWmsgProcInfo.Location = new System.Drawing.Point(86, 26);
+            this.lblWmsgProcInfo.Name = "lblWmsgProcInfo";
+            this.lblWmsgProcInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
+            this.lblWmsgProcInfo.Size = new System.Drawing.Size(544, 59);
+            this.lblWmsgProcInfo.TabIndex = 33;
+            this.lblWmsgProcInfo.Text = resources.GetString("lblWmsgProcInfo.Text");
+            // 
+            // expWmsgProcid
+            // 
+            this.expWmsgProcid.AutocompleteAvailable = true;
+            this.expWmsgProcid.AutoSize = true;
+            this.tableLayoutPanel19.SetColumnSpan(this.expWmsgProcid, 2);
+            this.expWmsgProcid.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expWmsgProcid.Expression = "";
+            this.expWmsgProcid.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
+            this.expWmsgProcid.Location = new System.Drawing.Point(86, 3);
+            this.expWmsgProcid.Name = "expWmsgProcid";
+            this.expWmsgProcid.ReadOnly = false;
+            this.expWmsgProcid.Size = new System.Drawing.Size(553, 20);
+            this.expWmsgProcid.TabIndex = 32;
+            // 
+            // lblWmsgProcid
+            // 
+            this.lblWmsgProcid.AutoSize = true;
+            this.lblWmsgProcid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblWmsgProcid.Location = new System.Drawing.Point(3, 0);
+            this.lblWmsgProcid.Name = "lblWmsgProcid";
+            this.lblWmsgProcid.Size = new System.Drawing.Size(77, 26);
+            this.lblWmsgProcid.TabIndex = 31;
+            this.lblWmsgProcid.Text = "Process ID";
+            this.lblWmsgProcid.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // expWmsgLparam
             // 
+            this.expWmsgLparam.AutocompleteAvailable = true;
             this.expWmsgLparam.AutoSize = true;
             this.tableLayoutPanel19.SetColumnSpan(this.expWmsgLparam, 2);
             this.expWmsgLparam.Dock = System.Windows.Forms.DockStyle.Top;
             this.expWmsgLparam.Expression = "";
             this.expWmsgLparam.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
-            this.expWmsgLparam.Location = new System.Drawing.Point(86, 81);
+            this.expWmsgLparam.Location = new System.Drawing.Point(86, 166);
             this.expWmsgLparam.Name = "expWmsgLparam";
             this.expWmsgLparam.ReadOnly = false;
             this.expWmsgLparam.Size = new System.Drawing.Size(553, 20);
@@ -3775,7 +4124,7 @@
             // 
             this.lblWmsgLparam.AutoSize = true;
             this.lblWmsgLparam.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblWmsgLparam.Location = new System.Drawing.Point(3, 78);
+            this.lblWmsgLparam.Location = new System.Drawing.Point(3, 163);
             this.lblWmsgLparam.Name = "lblWmsgLparam";
             this.lblWmsgLparam.Size = new System.Drawing.Size(77, 26);
             this.lblWmsgLparam.TabIndex = 29;
@@ -3784,12 +4133,13 @@
             // 
             // expWmsgWparam
             // 
+            this.expWmsgWparam.AutocompleteAvailable = true;
             this.expWmsgWparam.AutoSize = true;
             this.tableLayoutPanel19.SetColumnSpan(this.expWmsgWparam, 2);
             this.expWmsgWparam.Dock = System.Windows.Forms.DockStyle.Top;
             this.expWmsgWparam.Expression = "";
             this.expWmsgWparam.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
-            this.expWmsgWparam.Location = new System.Drawing.Point(86, 55);
+            this.expWmsgWparam.Location = new System.Drawing.Point(86, 140);
             this.expWmsgWparam.Name = "expWmsgWparam";
             this.expWmsgWparam.ReadOnly = false;
             this.expWmsgWparam.Size = new System.Drawing.Size(553, 20);
@@ -3799,7 +4149,7 @@
             // 
             this.lblWmsgWparam.AutoSize = true;
             this.lblWmsgWparam.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblWmsgWparam.Location = new System.Drawing.Point(3, 52);
+            this.lblWmsgWparam.Location = new System.Drawing.Point(3, 137);
             this.lblWmsgWparam.Name = "lblWmsgWparam";
             this.lblWmsgWparam.Size = new System.Drawing.Size(77, 26);
             this.lblWmsgWparam.TabIndex = 27;
@@ -3808,12 +4158,13 @@
             // 
             // expWmsgCode
             // 
+            this.expWmsgCode.AutocompleteAvailable = true;
             this.expWmsgCode.AutoSize = true;
             this.tableLayoutPanel19.SetColumnSpan(this.expWmsgCode, 2);
             this.expWmsgCode.Dock = System.Windows.Forms.DockStyle.Top;
             this.expWmsgCode.Expression = "";
             this.expWmsgCode.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
-            this.expWmsgCode.Location = new System.Drawing.Point(86, 29);
+            this.expWmsgCode.Location = new System.Drawing.Point(86, 114);
             this.expWmsgCode.Name = "expWmsgCode";
             this.expWmsgCode.ReadOnly = false;
             this.expWmsgCode.Size = new System.Drawing.Size(553, 20);
@@ -3821,12 +4172,13 @@
             // 
             // expWmsgTitle
             // 
+            this.expWmsgTitle.AutocompleteAvailable = true;
             this.expWmsgTitle.AutoSize = true;
             this.tableLayoutPanel19.SetColumnSpan(this.expWmsgTitle, 2);
             this.expWmsgTitle.Dock = System.Windows.Forms.DockStyle.Top;
             this.expWmsgTitle.Expression = "";
-            this.expWmsgTitle.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            this.expWmsgTitle.Location = new System.Drawing.Point(86, 3);
+            this.expWmsgTitle.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
+            this.expWmsgTitle.Location = new System.Drawing.Point(86, 88);
             this.expWmsgTitle.Name = "expWmsgTitle";
             this.expWmsgTitle.ReadOnly = false;
             this.expWmsgTitle.Size = new System.Drawing.Size(553, 20);
@@ -3836,7 +4188,7 @@
             // 
             this.lblWmsgCode.AutoSize = true;
             this.lblWmsgCode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblWmsgCode.Location = new System.Drawing.Point(3, 26);
+            this.lblWmsgCode.Location = new System.Drawing.Point(3, 111);
             this.lblWmsgCode.Name = "lblWmsgCode";
             this.lblWmsgCode.Size = new System.Drawing.Size(77, 26);
             this.lblWmsgCode.TabIndex = 24;
@@ -3847,7 +4199,7 @@
             // 
             this.lblWmsgTitle.AutoSize = true;
             this.lblWmsgTitle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblWmsgTitle.Location = new System.Drawing.Point(3, 0);
+            this.lblWmsgTitle.Location = new System.Drawing.Point(3, 85);
             this.lblWmsgTitle.Name = "lblWmsgTitle";
             this.lblWmsgTitle.Size = new System.Drawing.Size(77, 26);
             this.lblWmsgTitle.TabIndex = 23;
@@ -3946,6 +4298,7 @@
             // 
             // expFileOpVariable
             // 
+            this.expFileOpVariable.AutocompleteAvailable = true;
             this.expFileOpVariable.AutoSize = true;
             this.expFileOpVariable.Dock = System.Windows.Forms.DockStyle.Top;
             this.expFileOpVariable.Expression = "";
@@ -4006,6 +4359,7 @@
             // 
             // expFileOpName
             // 
+            this.expFileOpName.AutocompleteAvailable = true;
             this.expFileOpName.AutoSize = true;
             this.tableLayoutPanel20.SetColumnSpan(this.expFileOpName, 2);
             this.expFileOpName.Dock = System.Windows.Forms.DockStyle.Top;
@@ -4118,6 +4472,7 @@
             // 
             // expTvarRow
             // 
+            this.expTvarRow.AutocompleteAvailable = true;
             this.expTvarRow.AutoSize = true;
             this.tableLayoutPanel21.SetColumnSpan(this.expTvarRow, 2);
             this.expTvarRow.Dock = System.Windows.Forms.DockStyle.Top;
@@ -4170,6 +4525,7 @@
             // 
             // expTvarTarget
             // 
+            this.expTvarTarget.AutocompleteAvailable = true;
             this.expTvarTarget.AutoSize = true;
             this.expTvarTarget.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTvarTarget.Expression = "";
@@ -4194,6 +4550,7 @@
             // 
             // expTvarColumn
             // 
+            this.expTvarColumn.AutocompleteAvailable = true;
             this.expTvarColumn.AutoSize = true;
             this.tableLayoutPanel21.SetColumnSpan(this.expTvarColumn, 2);
             this.expTvarColumn.Dock = System.Windows.Forms.DockStyle.Top;
@@ -4219,6 +4576,7 @@
             // 
             // expTvarValue
             // 
+            this.expTvarValue.AutocompleteAvailable = true;
             this.expTvarValue.AutoSize = true;
             this.tableLayoutPanel21.SetColumnSpan(this.expTvarValue, 2);
             this.expTvarValue.Dock = System.Windows.Forms.DockStyle.Top;
@@ -4244,6 +4602,7 @@
             // 
             // expTvarName
             // 
+            this.expTvarName.AutocompleteAvailable = true;
             this.expTvarName.AutoSize = true;
             this.expTvarName.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTvarName.Expression = "";
@@ -4329,6 +4688,7 @@
             // 
             // expMutexName
             // 
+            this.expMutexName.AutocompleteAvailable = true;
             this.expMutexName.AutoSize = true;
             this.expMutexName.Dock = System.Windows.Forms.DockStyle.Top;
             this.expMutexName.Expression = "";
@@ -4426,6 +4786,7 @@
             // 
             // expCallbackParam
             // 
+            this.expCallbackParam.AutocompleteAvailable = true;
             this.expCallbackParam.AutoSize = true;
             this.expCallbackParam.Dock = System.Windows.Forms.DockStyle.Top;
             this.expCallbackParam.Expression = "";
@@ -4460,6 +4821,7 @@
             // 
             // expCallbackName
             // 
+            this.expCallbackName.AutocompleteAvailable = true;
             this.expCallbackName.AutoSize = true;
             this.expCallbackName.Dock = System.Windows.Forms.DockStyle.Top;
             this.expCallbackName.Expression = "";
@@ -4520,6 +4882,7 @@
             // 
             // expMouseY
             // 
+            this.expMouseY.AutocompleteAvailable = true;
             this.expMouseY.AutoSize = true;
             this.expMouseY.Dock = System.Windows.Forms.DockStyle.Top;
             this.expMouseY.Expression = "";
@@ -4554,6 +4917,7 @@
             // 
             // expMouseX
             // 
+            this.expMouseX.AutocompleteAvailable = true;
             this.expMouseX.AutoSize = true;
             this.expMouseX.Dock = System.Windows.Forms.DockStyle.Top;
             this.expMouseX.Expression = "";
@@ -4679,6 +5043,7 @@
             // 
             // expLoopIterationDelay
             // 
+            this.expLoopIterationDelay.AutocompleteAvailable = true;
             this.expLoopIterationDelay.AutoSize = true;
             this.expLoopIterationDelay.Dock = System.Windows.Forms.DockStyle.Top;
             this.expLoopIterationDelay.Expression = "";
@@ -4709,6 +5074,96 @@
             this.cndLoopCondition.Name = "cndLoopCondition";
             this.cndLoopCondition.Size = new System.Drawing.Size(630, 194);
             this.cndLoopCondition.TabIndex = 44;
+            // 
+            // tabRepo
+            // 
+            this.tabRepo.Controls.Add(this.tableLayoutPanel27);
+            this.tabRepo.Location = new System.Drawing.Point(4, 25);
+            this.tabRepo.Name = "tabRepo";
+            this.tabRepo.Padding = new System.Windows.Forms.Padding(3);
+            this.tabRepo.Size = new System.Drawing.Size(642, 314);
+            this.tabRepo.TabIndex = 26;
+            this.tabRepo.Text = "Repo";
+            this.tabRepo.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel27
+            // 
+            this.tableLayoutPanel27.AutoSize = true;
+            this.tableLayoutPanel27.ColumnCount = 2;
+            this.tableLayoutPanel27.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel27.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel27.Controls.Add(this.lblRepositoryLink, 0, 1);
+            this.tableLayoutPanel27.Controls.Add(this.lblRepositoryOp, 0, 0);
+            this.tableLayoutPanel27.Controls.Add(this.cbxRepositoryOp, 1, 0);
+            this.tableLayoutPanel27.Controls.Add(this.trvRepositoryLink, 1, 1);
+            this.tableLayoutPanel27.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel27.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel27.Name = "tableLayoutPanel27";
+            this.tableLayoutPanel27.RowCount = 3;
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel27.Size = new System.Drawing.Size(636, 308);
+            this.tableLayoutPanel27.TabIndex = 8;
+            // 
+            // lblRepositoryLink
+            // 
+            this.lblRepositoryLink.AutoSize = true;
+            this.lblRepositoryLink.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblRepositoryLink.Location = new System.Drawing.Point(3, 30);
+            this.lblRepositoryLink.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.lblRepositoryLink.Name = "lblRepositoryLink";
+            this.lblRepositoryLink.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.lblRepositoryLink.Size = new System.Drawing.Size(57, 17);
+            this.lblRepositoryLink.TabIndex = 23;
+            this.lblRepositoryLink.Text = "Repository";
+            this.lblRepositoryLink.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblRepositoryOp
+            // 
+            this.lblRepositoryOp.AutoSize = true;
+            this.lblRepositoryOp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblRepositoryOp.Location = new System.Drawing.Point(3, 0);
+            this.lblRepositoryOp.Name = "lblRepositoryOp";
+            this.lblRepositoryOp.Size = new System.Drawing.Size(57, 27);
+            this.lblRepositoryOp.TabIndex = 7;
+            this.lblRepositoryOp.Text = "Operation";
+            this.lblRepositoryOp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbxRepositoryOp
+            // 
+            this.cbxRepositoryOp.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxRepositoryOp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxRepositoryOp.FormattingEnabled = true;
+            this.cbxRepositoryOp.Items.AddRange(new object[] {
+            "Update containing repository",
+            "Update selected repository",
+            "Update all enabled repositories"});
+            this.cbxRepositoryOp.Location = new System.Drawing.Point(66, 3);
+            this.cbxRepositoryOp.Name = "cbxRepositoryOp";
+            this.cbxRepositoryOp.Size = new System.Drawing.Size(567, 21);
+            this.cbxRepositoryOp.TabIndex = 21;
+            this.cbxRepositoryOp.SelectedIndexChanged += new System.EventHandler(this.cbxRepositoryOp_SelectedIndexChanged);
+            // 
+            // trvRepositoryLink
+            // 
+            this.trvRepositoryLink.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trvRepositoryLink.HideSelection = false;
+            this.trvRepositoryLink.Location = new System.Drawing.Point(66, 30);
+            this.trvRepositoryLink.MinimumSize = new System.Drawing.Size(4, 50);
+            this.trvRepositoryLink.Name = "trvRepositoryLink";
+            this.tableLayoutPanel27.SetRowSpan(this.trvRepositoryLink, 2);
+            this.trvRepositoryLink.ShowNodeToolTips = true;
+            this.trvRepositoryLink.Size = new System.Drawing.Size(567, 275);
+            this.trvRepositoryLink.TabIndex = 22;
+            this.trvRepositoryLink.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvRepositoryLink_BeforeCollapse);
+            this.trvRepositoryLink.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvRepositoryLink_BeforeExpand);
+            this.trvRepositoryLink.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvRepositoryLink_BeforeSelect);
+            this.trvRepositoryLink.EnabledChanged += new System.EventHandler(this.trvRepositoryLink_EnabledChanged);
             // 
             // panel2
             // 
@@ -4828,9 +5283,9 @@
             // 
             this.stsMouseHelp.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tlsMouseLocation});
-            this.stsMouseHelp.Location = new System.Drawing.Point(3, 274);
+            this.stsMouseHelp.Location = new System.Drawing.Point(3, 324);
             this.stsMouseHelp.Name = "stsMouseHelp";
-            this.stsMouseHelp.Size = new System.Drawing.Size(550, 22);
+            this.stsMouseHelp.Size = new System.Drawing.Size(650, 22);
             this.stsMouseHelp.SizingGrip = false;
             this.stsMouseHelp.TabIndex = 1;
             this.stsMouseHelp.Text = "statusStrip1";
@@ -4962,6 +5417,7 @@
             // 
             // expExecutionDelay
             // 
+            this.expExecutionDelay.AutocompleteAvailable = true;
             this.expExecutionDelay.AutoSize = true;
             this.expExecutionDelay.Dock = System.Windows.Forms.DockStyle.Top;
             this.expExecutionDelay.Expression = "";
@@ -5120,6 +5576,7 @@
             // 
             // expressionTextBox1
             // 
+            this.expressionTextBox1.AutocompleteAvailable = true;
             this.expressionTextBox1.AutoSize = true;
             this.expressionTextBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.expressionTextBox1.Expression = "";
@@ -5132,6 +5589,7 @@
             // 
             // expressionTextBox2
             // 
+            this.expressionTextBox2.AutocompleteAvailable = true;
             this.expressionTextBox2.AutoSize = true;
             this.expressionTextBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.expressionTextBox2.Expression = "";
@@ -5268,6 +5726,10 @@
             this.tabLoop.PerformLayout();
             this.tableLayoutPanel26.ResumeLayout(false);
             this.tableLayoutPanel26.PerformLayout();
+            this.tabRepo.ResumeLayout(false);
+            this.tabRepo.PerformLayout();
+            this.tableLayoutPanel27.ResumeLayout(false);
+            this.tableLayoutPanel27.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
@@ -5642,5 +6104,29 @@
         private CustomControls.ActionViewer actionViewer1;
         private System.Windows.Forms.Button btnScriptExternalEditor;
         private System.Windows.Forms.Label lblScriptExtEditor;
+        private System.Windows.Forms.Label lblObsEndpoint;
+        private CustomControls.ExpressionTextBox expObsEndpoint;
+        private CustomControls.ExpressionTextBox expObsPassword;
+        private System.Windows.Forms.Label lblObsPassword;
+        private System.Windows.Forms.TabPage tabRepo;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel27;
+        private System.Windows.Forms.Label lblRepositoryLink;
+        private System.Windows.Forms.Label lblRepositoryOp;
+        private System.Windows.Forms.ComboBox cbxRepositoryOp;
+        internal System.Windows.Forms.TreeView trvRepositoryLink;
+        private CustomControls.ExpressionTextBox expJsonVariable;
+        private System.Windows.Forms.Label lblJsonVariable;
+        private System.Windows.Forms.Label lblTriggerZoneType;
+        internal System.Windows.Forms.ComboBox cbxTriggerZoneType;
+        private CustomControls.PersistenceSwitch prsScalarTarget;
+        private CustomControls.ExpressionTextBox expVariableTarget;
+        private System.Windows.Forms.Label label6;
+        private CustomControls.PersistenceSwitch prsJsonVariable;
+        private System.Windows.Forms.Label lblWmsgProcInfo;
+        private CustomControls.ExpressionTextBox expWmsgProcid;
+        private System.Windows.Forms.Label lblWmsgProcid;
+        private System.Windows.Forms.Label lblKeypressProcInfo;
+        private CustomControls.ExpressionTextBox expKeypressProcId;
+        private System.Windows.Forms.Label lblKeypressProcId;
     }
 }

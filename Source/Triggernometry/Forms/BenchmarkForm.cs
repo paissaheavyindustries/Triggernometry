@@ -159,7 +159,7 @@ namespace Triggernometry.Forms
                 t.CheckMatch(temp);
                 bi.TimeOnMatch += st.ElapsedTicks - stTime;
                 stTime = st.ElapsedTicks;
-                t.Parent.PassesFilter(temp, temp);
+                t.Parent.PassesFilter(temp, temp, temp);
                 bi.TimeOnParent += st.ElapsedTicks - stTime;
                 stTime = st.ElapsedTicks;
                 if (t.Condition != null && t.Condition.Enabled == true)
