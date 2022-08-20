@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Triggernometry.Variables;
 
 namespace Triggernometry
 {
@@ -321,7 +322,8 @@ namespace Triggernometry
         [XmlAttribute]
         public bool LogVariableExpansions { get; set; } = false;
 
-        public Variables.VariableStore PersistentVariables { get; set; } = new Variables.VariableStore();
+        public VariableStore PersistentVariables { get; set; } = new VariableStore();        
+        public SerializableDictionary<string, VariableScalar> Constants { get; set; } = new SerializableDictionary<string, VariableScalar>();
 
         internal bool isnew;
         internal DateTime lastWrite;
@@ -337,12 +339,12 @@ namespace Triggernometry
             FfxivCustomPartyOrder = "19, 1, 21, 3, 32, 37, 24, 6, 28, 33, 40, 20, 2, 22, 4, 30, 29, 34, 39, 23, 5, 31, 38, 25, 7, 27, 26, 35, 36";
         }
 
-        internal List<Configuration.APIUsage> GetAPIUsages()
+        internal List<APIUsage> GetAPIUsages()
         {
-            List<Configuration.APIUsage> l = new List<Configuration.APIUsage>();
-            foreach (Configuration.APIUsage a in _APIUsages)
+            List<APIUsage> l = new List<APIUsage>();
+            foreach (APIUsage a in _APIUsages)
             {
-                l.Add(new Configuration.APIUsage() { Name = a.Name, AllowLocal = a.AllowLocal, AllowRemote = a.AllowRemote, AllowAdmin = a.AllowAdmin });
+                l.Add(new APIUsage() { Name = a.Name, AllowLocal = a.AllowLocal, AllowRemote = a.AllowRemote, AllowAdmin = a.AllowAdmin });
             }
             return l;
         }
