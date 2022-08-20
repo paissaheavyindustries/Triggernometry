@@ -2033,12 +2033,13 @@ namespace Triggernometry
                     cfg.FfxivPartyOrdering = Configuration.FfxivPartyOrderingEnum.CustomSelfFirst;
                 }
             }
-            if (v < new Version("1.1.6.6"))
+            if (v < new Version("1.1.6.8"))
             {
                 cfg.Constants["TelestoEndpoint"] = new VariableScalar() { Value = "localhost" };
                 cfg.Constants["TelestoPort"] = new VariableScalar() { Value = "51323" };
                 cfg.Constants["OBSWebsocketEndpoint"] = new VariableScalar() { Value = "localhost" };
                 cfg.Constants["OBSWebsocketPort"] = new VariableScalar() { Value = "4455" };
+                cfg.Constants["OBSWebsocketPassword"] = new VariableScalar() { Value = "" };
             }
             cfg.Constants["TriggernometryVersionMajor"] = new VariableScalar() { Value = v.Major.ToString() };
             cfg.Constants["TriggernometryVersionMinor"] = new VariableScalar() { Value = v.Minor.ToString() };

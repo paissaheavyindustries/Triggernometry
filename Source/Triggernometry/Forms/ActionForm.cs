@@ -364,6 +364,8 @@ namespace Triggernometry.Forms
                 expDiscordUrl.Expression = "";
                 cbxDiscordTts.Checked = false;
                 cbxObsOpType.SelectedIndex = 0;
+                expObsEndpoint.Expression = "ws://${_const[OBSWebsocketEndpoint]}:${_const[OBSWebsocketPort]}";
+                expObsPassword.Expression = "${_const[OBSWebsocketPassword]}";
                 expObsSceneName.Expression = "";
                 expObsSourceName.Expression = "";
                 expObsJSONPayload.Expression = "";

@@ -82,6 +82,7 @@ namespace Triggernometry.Forms
                 cbxAutosaveConfig.Checked = false;
                 nudAutosaveMinutes.Value = 5;
                 SecuritySettingsFromConfiguration(null);
+                SetupDefaultConsts();
             }
             else
             {
@@ -891,6 +892,16 @@ namespace Triggernometry.Forms
                 }
             }
             return null;
+        }
+
+        private void SetupDefaultConsts()
+        {
+            consts["TelestoEndpoint"] = new VariableScalar() { Value = "localhost" };
+            consts["TelestoPort"] = new VariableScalar() { Value = "51323" };
+            consts["OBSWebsocketEndpoint"] = new VariableScalar() { Value = "localhost" };
+            consts["OBSWebsocketPort"] = new VariableScalar() { Value = "4455" };
+            consts["OBSWebsocketPassword"] = new VariableScalar() { Value = "" };
+            RefreshConsts();
         }
 
         private void RefreshConsts()
