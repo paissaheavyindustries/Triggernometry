@@ -82,7 +82,7 @@ namespace Triggernometry.Forms
                 cbxAutosaveConfig.Checked = false;
                 nudAutosaveMinutes.Value = 5;
                 SecuritySettingsFromConfiguration(null);
-                SetupDefaultConsts();
+                SetupConsts(null);
             }
             else
             {
@@ -119,11 +119,7 @@ namespace Triggernometry.Forms
                 a.TemplateTrigger.CopySettingsTo(template);
                 SetupJobOrder(a);
                 SecuritySettingsFromConfiguration(a);
-                foreach (KeyValuePair<string, VariableScalar> kp in plug.cfg.Constants)
-                {
-                    consts[kp.Key] = new VariableScalar() { Value = kp.Value.Value, LastChanged = kp.Value.LastChanged, LastChanger = kp.Value.LastChanger };
-                }
-                RefreshConsts();
+                SetupConsts(plug.cfg.Constants);
             }
             if (a.StartupTriggerType == Configuration.StartupTriggerTypeEnum.Trigger)
             {
@@ -894,13 +890,20 @@ namespace Triggernometry.Forms
             return null;
         }
 
-        private void SetupDefaultConsts()
+        private void SetupConsts(SerializableDictionary<string, VariableScalar> constants)
         {
             consts["TelestoEndpoint"] = new VariableScalar() { Value = "localhost" };
             consts["TelestoPort"] = new VariableScalar() { Value = "51323" };
             consts["OBSWebsocketEndpoint"] = new VariableScalar() { Value = "localhost" };
             consts["OBSWebsocketPort"] = new VariableScalar() { Value = "4455" };
             consts["OBSWebsocketPassword"] = new VariableScalar() { Value = "" };
+            if (constants != null)
+            {
+                foreach (KeyValuePair<string, VariableScalar> kp in plug.cfg.Constants)
+                {
+                    consts[kp.Key] = new VariableScalar() { Value = kp.Value.Value, LastChanged = kp.Value.LastChanged, LastChanger = kp.Value.LastChanger };
+                }
+            }
             RefreshConsts();
         }
 
