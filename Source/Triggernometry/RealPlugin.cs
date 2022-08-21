@@ -2033,6 +2033,14 @@ namespace Triggernometry
                     cfg.FfxivPartyOrdering = Configuration.FfxivPartyOrderingEnum.CustomSelfFirst;
                 }
             }
+            Configuration dummy = new Configuration();
+            foreach (KeyValuePair<string, VariableScalar> kp in dummy.Constants)
+            {
+                if (cfg.Constants.ContainsKey(kp.Key) == false)
+                {
+                    cfg.Constants[kp.Key] = new VariableScalar() { Value = kp.Value.Value, LastChanged = kp.Value.LastChanged, LastChanger = kp.Value.LastChanger };
+                }
+            }
             cfg.Constants["TriggernometryVersionMajor"] = new VariableScalar() { Value = v.Major.ToString() };
             cfg.Constants["TriggernometryVersionMinor"] = new VariableScalar() { Value = v.Minor.ToString() };
             cfg.Constants["TriggernometryVersionBuild"] = new VariableScalar() { Value = v.Build.ToString() };

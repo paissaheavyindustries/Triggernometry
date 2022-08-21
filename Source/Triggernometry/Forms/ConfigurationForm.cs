@@ -892,11 +892,11 @@ namespace Triggernometry.Forms
 
         private void SetupConsts(SerializableDictionary<string, VariableScalar> constants)
         {
-            consts["TelestoEndpoint"] = new VariableScalar() { Value = "localhost" };
-            consts["TelestoPort"] = new VariableScalar() { Value = "51323" };
-            consts["OBSWebsocketEndpoint"] = new VariableScalar() { Value = "localhost" };
-            consts["OBSWebsocketPort"] = new VariableScalar() { Value = "4455" };
-            consts["OBSWebsocketPassword"] = new VariableScalar() { Value = "" };
+            Configuration dummy = new Configuration();
+            foreach (KeyValuePair<string, VariableScalar> kp in dummy.Constants)
+            {
+                consts[kp.Key] = new VariableScalar() { Value = kp.Value.Value, LastChanged = kp.Value.LastChanged, LastChanger = kp.Value.LastChanger };
+            }
             if (constants != null)
             {
                 foreach (KeyValuePair<string, VariableScalar> kp in constants)

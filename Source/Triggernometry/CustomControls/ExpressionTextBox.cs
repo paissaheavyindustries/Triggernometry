@@ -29,6 +29,7 @@ namespace Triggernometry.CustomControls
             "_duration", "_event", "_incombat", "_since", "_sincems", "_triggerid", "_triggername", "_timestamp", "_timestampms", "_systemtime", "_systemtimems", "_zone", "_response",
             "_responsecode", "_jsonresponse[x]", "_screenwidth", "_screenheight", "_lastencounter", "_activeencounter", "_env[x]", "_x", "_y", "_w", "_width", "_h", "_height", "_opacity",
             "_textaura[x]", "_imageaura[x]", "_ffxivparty[x]", "_ffxiventity[x]", "_ffxivplayer", "_ffxivtime", "_ffxivpartyorder", "_ffxivprocid", "_ffxivprocname", "_ffxivzoneid",
+            "_const[x]",
         };
 
         public static List<string> funcs = new List<string>()
@@ -36,7 +37,7 @@ namespace Triggernometry.CustomControls
             // functions
             "toupper", "tolower", "length", "dec2hex", "dec2hex2", "dec2hex4", "dec2hex8", "hex2float", "hex2double", "float2hex", "double2hex", "padleft(x, y)", "padright(x, y)",
             "substring(x)", "substring(x, y)", "indexof(x)", "lastindexof(x)", "trim", "trim(x, ...)", "trimleft", "trimleft(x, ...)", "trimright", "trimright(x, ...)", "format(x, y)", "compare(x)", "compare(x, y)",
-            "utctime(format)", "localtime(format)"
+            "utctime(format)", "localtime(format)",
         };
 
         public static List<string> propstextaura = new List<string>()
