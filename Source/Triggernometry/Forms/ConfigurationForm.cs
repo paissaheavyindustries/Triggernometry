@@ -899,7 +899,7 @@ namespace Triggernometry.Forms
             consts["OBSWebsocketPassword"] = new VariableScalar() { Value = "" };
             if (constants != null)
             {
-                foreach (KeyValuePair<string, VariableScalar> kp in plug.cfg.Constants)
+                foreach (KeyValuePair<string, VariableScalar> kp in constants)
                 {
                     consts[kp.Key] = new VariableScalar() { Value = kp.Value.Value, LastChanged = kp.Value.LastChanged, LastChanger = kp.Value.LastChanger };
                 }
