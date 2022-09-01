@@ -577,7 +577,7 @@
         <TranslationEntry Key="internal/Action/descdiscordttsmsg" Translation="发送TTS消息 ({0}) 到Discord 聊天室 ({1})" />
         <TranslationEntry Key="internal/Action/descenablefolder" Translation="启用分组 ({0})" />
         <TranslationEntry Key="internal/Action/descendencounter" Translation="结束战斗" />
-        <TranslationEntry Key="internal/Action/descexecscript" Translation="执行 ({0}) 脚本" />
+        <TranslationEntry Key="internal/Action/descexecscript" Translation="执行 C# 脚本" />
         <TranslationEntry Key="internal/Action/descfilereadcsvtable" Translation="将 CSV 文件 ({0}) 读入表格变量 ({1})" />
         <TranslationEntry Key="internal/Action/descfilereadcsvtablecache" Translation="将 CSV 文件 ({0}) 读入表格变量 ({1})，并缓存至硬盘" />
         <TranslationEntry Key="internal/Action/descfilereadlistvar" Translation="将文件 ({0}) 内容读入列表变量 ({1})" />
