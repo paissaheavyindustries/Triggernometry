@@ -710,6 +710,21 @@ namespace Triggernometry
                         case ObsControlTypeEnum.ToggleRecording:
                             temp += I18n.Translate("internal/Action/descobstogglerecord", "start/stop recording on OBS (toggle)");
                             break;
+                        case ObsControlTypeEnum.RestartRecording:
+                            temp += I18n.Translate("internal/Action/descobstrestartrecord", "stop then start recording on OBS");
+                            break;
+                        case ObsControlTypeEnum.RestartRecordingIfActive:
+                            temp += I18n.Translate("internal/Action/descobsrestartrecordifactive", "stop then start recording on OBS (if currently recording)");
+                            break;
+                        case ObsControlTypeEnum.ResumeRecording:
+                            temp += I18n.Translate("internal/Action/descobsresumerecord", "resume recording on OBS");
+                            break;
+                        case ObsControlTypeEnum.PauseRecording:
+                            temp += I18n.Translate("internal/Action/descobspauserecord", "pause recording on OBS");
+                            break;
+                        case ObsControlTypeEnum.ToggleRecordPause:
+                            temp += I18n.Translate("internal/Action/descobstogglerecordpause", "resume/pause recording on OBS (toggle)");
+                            break;
                         case ObsControlTypeEnum.StartReplayBuffer:
                             temp += I18n.Translate("internal/Action/descobsstartreplay", "start OBS replay buffer");
                             break;
@@ -726,24 +741,10 @@ namespace Triggernometry
                             temp += I18n.Translate("internal/Action/descobssetscene", "set current OBS scene to ({0})", _OBSSceneName);
                             break;
                         case ObsControlTypeEnum.ShowSource:
-                            if (_OBSSceneName != null && _OBSSceneName != "")
-                            {
-                                temp += I18n.Translate("internal/Action/descobsshowsource", "show source ({0}) on OBS scene ({1})", _OBSSourceName, _OBSSceneName);
-                            }
-                            else
-                            {
-                                temp += I18n.Translate("internal/Action/descobsshowsourcecurrent", "show source ({0}) on current OBS scene", _OBSSourceName);
-                            }
+                            temp += I18n.Translate("internal/Action/descobsshowsource", "show source ({0}) on OBS scene ({1})", _OBSSourceName, _OBSSceneName);
                             break;
                         case ObsControlTypeEnum.HideSource:
-                            if (_OBSSceneName != null && _OBSSceneName != "")
-                            {
-                                temp += I18n.Translate("internal/Action/descobshidesource", "hide source ({0}) on OBS scene ({1})", _OBSSourceName, _OBSSceneName);
-                            }
-                            else
-                            {
-                                temp += I18n.Translate("internal/Action/descobshidesourcecurrent", "hide source ({0}) on current OBS scene", _OBSSourceName);
-                            }
+                            temp += I18n.Translate("internal/Action/descobshidesource", "hide source ({0}) on OBS scene ({1})", _OBSSourceName, _OBSSceneName);
                             break;
                         case ObsControlTypeEnum.JSONPayload:
                             temp += I18n.Translate("internal/Action/descobsjsonpayload", "Send custom JSON payload to OBS");
@@ -1915,6 +1916,21 @@ namespace Triggernometry
                                             case ObsControlTypeEnum.ToggleRecording:
                                                 ctx.plug._obs.ToggleRecording();
                                                 break;
+                                            case ObsControlTypeEnum.RestartRecording:
+                                                ctx.plug._obs.RestartRecording();
+                                                break;
+                                            case ObsControlTypeEnum.RestartRecordingIfActive:
+                                                ctx.plug._obs.RestartRecordingIfActive();
+                                                break;
+                                            case ObsControlTypeEnum.ResumeRecording:
+                                                ctx.plug._obs.ResumeRecording();
+                                                break;
+                                            case ObsControlTypeEnum.PauseRecording:
+                                                ctx.plug._obs.PauseRecording();
+                                                break;
+                                            case ObsControlTypeEnum.ToggleRecordPause:
+                                                ctx.plug._obs.ToggleRecordPause();
+                                                break;
                                             case ObsControlTypeEnum.StartReplayBuffer:
                                                 ctx.plug._obs.StartReplayBuffer();
                                                 break;
@@ -1937,14 +1953,14 @@ namespace Triggernometry
                                                 {
                                                     string scn = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSceneName);
                                                     string src = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSourceName);
-                                                    ctx.plug._obs.ShowSource(scn, src);
+                                                    ctx.plug._obs.ShowHideSource(scn, src, true);
                                                 }
                                                 break;
                                             case ObsControlTypeEnum.HideSource:
                                                 {
                                                     string scn = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSceneName);
                                                     string src = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSourceName);
-                                                    ctx.plug._obs.HideSource(scn, src);
+                                                    ctx.plug._obs.ShowHideSource(scn, src, false);
                                                 }
                                                 break;
                                             case ObsControlTypeEnum.JSONPayload:
@@ -2570,7 +2586,7 @@ namespace Triggernometry
                     case ActionTypeEnum.Loop:
                         {
                             int itertemp = ctx.loopIterator;
-                            ctx.loopIterator = 0;
+                            ctx.loopIterator = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _LoopInitExpression);
                             do
                             {
                                 foreach (Action a in LoopActions)
@@ -2582,7 +2598,7 @@ namespace Triggernometry
                                 {
                                     Thread.Sleep(delay);
                                 }
-                                ctx.loopIterator++;
+                                ctx.loopIterator += (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _LoopIncrExpression);
                             }
                             while (LoopCondition.Enabled == true && LoopCondition.CheckCondition(ctx, ActionContextLogger, ctx) == true);
                             ctx.loopIterator = itertemp;
@@ -2821,6 +2837,7 @@ namespace Triggernometry
             a._TableTargetPersist = _TableTargetPersist;
             a._DiskPersist = _DiskPersist;
             a._VariablePersist = _VariablePersist;
+            a._VariableTargetPersist = _VariableTargetPersist;
             a.LoopCondition = (ConditionGroup)(LoopCondition != null ? ((ConditionGroup)LoopCondition).Duplicate() : null);
             a.LoopActions.Clear();
             if (LoopActions != null)
@@ -2836,9 +2853,12 @@ namespace Triggernometry
                 }
             }
             a._LoopDelayExpression = _LoopDelayExpression;
+            a._LoopIncrExpression = _LoopIncrExpression;
+            a._LoopInitExpression = _LoopInitExpression;
             a._RepositoryId = _RepositoryId;
             a._RepositoryOp = _RepositoryOp;
             a._JsonResultVariable = _JsonResultVariable;
+            a._JsonResultVariablePersist = _JsonResultVariablePersist;
             a._TriggerZoneType = _TriggerZoneType;
         }
 

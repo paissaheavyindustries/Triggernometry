@@ -2007,7 +2007,7 @@ namespace Triggernometry.CustomControls
         }
 
         private void ForceFireTrigger(Trigger t)
-        {            
+        {
             Context ctx = new Context();
             ctx.plug = plug;
             ctx.testmode = false;
@@ -2016,7 +2016,38 @@ namespace Triggernometry.CustomControls
             ctx.ttshook = plug.TtsPlaybackSmart;
             ctx.triggered = DateTime.UtcNow;
             ctx.force = Action.TriggerForceTypeEnum.SkipAll;
-            t.Fire(plug, ctx, null);
+            if (!(t._TestInput?.Length > 0))
+            {
+                t.Fire(plug, ctx, null);
+            }
+            else
+            {
+                string[] lines = ctx.EvaluateStringExpression(t.TriggerContextLogger, plug, t._TestInput).Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                Action.TriggerForceTypeEnum force = Action.TriggerForceTypeEnum.SkipActive | Action.TriggerForceTypeEnum.SkipRefire | Action.TriggerForceTypeEnum.SkipParent;
+                LogEvent.SourceEnum source;
+                switch (t._Source)
+                {
+                    case Trigger.TriggerSourceEnum.ACT:
+                        source = LogEvent.SourceEnum.ACT;
+                        break;
+                    case Trigger.TriggerSourceEnum.FFXIVNetwork:
+                        source = LogEvent.SourceEnum.NetworkFFXIV;
+                        break;
+                    case Trigger.TriggerSourceEnum.Log:
+                        source = LogEvent.SourceEnum.Log;
+                        break;
+                    default:
+                    case Trigger.TriggerSourceEnum.None:
+                        force |= Action.TriggerForceTypeEnum.SkipRegexp;
+                        source = LogEvent.SourceEnum.Log;
+                        break;
+                }
+                foreach (string line in lines)
+                {
+                    LogEvent le = new LogEvent() { Text = line, Timestamp = DateTime.Now, TestMode = true, ZoneName = "", ZoneId = "", Source = source };
+                    plug.TestTrigger(t, le, force);
+                }
+            }            
         }
 
         private void btnCornerPopup_Click(object sender, EventArgs e)

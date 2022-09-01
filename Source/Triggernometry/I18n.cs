@@ -160,6 +160,10 @@ namespace Triggernometry
                 }
                 return;
             }
+            if (c is NumericUpDown)
+            {
+                return;
+            }
             if (c.ContextMenuStrip != null)
             {
                 ContextMenuStrip ctx = c.ContextMenuStrip;

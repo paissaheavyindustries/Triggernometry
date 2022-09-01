@@ -52,6 +52,9 @@
             this.btnRowAdd = new System.Windows.Forms.ToolStripButton();
             this.btnRowInsert = new System.Windows.Forms.ToolStripButton();
             this.btnRowRemove = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnSaveAsCsv = new System.Windows.Forms.ToolStripButton();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.panel4.SuspendLayout();
             this.tlsOptionsList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvVariableData)).BeginInit();
@@ -65,7 +68,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel3.Location = new System.Drawing.Point(10, 406);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(664, 10);
+            this.panel3.Size = new System.Drawing.Size(669, 10);
             this.panel3.TabIndex = 16;
             // 
             // panel4
@@ -75,14 +78,14 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel4.Location = new System.Drawing.Point(10, 416);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(664, 35);
+            this.panel4.Size = new System.Drawing.Size(669, 35);
             this.panel4.TabIndex = 17;
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnCancel.Location = new System.Drawing.Point(514, 0);
+            this.btnCancel.Location = new System.Drawing.Point(519, 0);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(150, 35);
             this.btnCancel.TabIndex = 1;
@@ -109,7 +112,7 @@
             this.btnItemRemove});
             this.tlsOptionsList.Location = new System.Drawing.Point(10, 104);
             this.tlsOptionsList.Name = "tlsOptionsList";
-            this.tlsOptionsList.Size = new System.Drawing.Size(664, 25);
+            this.tlsOptionsList.Size = new System.Drawing.Size(669, 25);
             this.tlsOptionsList.TabIndex = 18;
             // 
             // btnItemAdd
@@ -156,7 +159,7 @@
             this.dgvVariableData.ShowCellErrors = false;
             this.dgvVariableData.ShowEditingIcon = false;
             this.dgvVariableData.ShowRowErrors = false;
-            this.dgvVariableData.Size = new System.Drawing.Size(664, 277);
+            this.dgvVariableData.Size = new System.Drawing.Size(669, 277);
             this.dgvVariableData.TabIndex = 19;
             this.dgvVariableData.VirtualMode = true;
             this.dgvVariableData.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvVariableData_CellValueNeeded);
@@ -171,7 +174,7 @@
             this.grpGeneral.Location = new System.Drawing.Point(10, 10);
             this.grpGeneral.Name = "grpGeneral";
             this.grpGeneral.Padding = new System.Windows.Forms.Padding(10);
-            this.grpGeneral.Size = new System.Drawing.Size(664, 59);
+            this.grpGeneral.Size = new System.Drawing.Size(669, 59);
             this.grpGeneral.TabIndex = 20;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = " General settings ";
@@ -193,7 +196,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(644, 26);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(649, 26);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // lblVariableName
@@ -213,7 +216,7 @@
             this.txtVariableName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtVariableName.Location = new System.Drawing.Point(83, 3);
             this.txtVariableName.Name = "txtVariableName";
-            this.txtVariableName.Size = new System.Drawing.Size(558, 20);
+            this.txtVariableName.Size = new System.Drawing.Size(563, 20);
             this.txtVariableName.TabIndex = 1;
             // 
             // panel10
@@ -221,7 +224,7 @@
             this.panel10.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel10.Location = new System.Drawing.Point(10, 69);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(664, 10);
+            this.panel10.Size = new System.Drawing.Size(669, 10);
             this.panel10.TabIndex = 27;
             // 
             // tlsOptionsTable
@@ -234,10 +237,12 @@
             this.toolStripSeparator1,
             this.btnRowAdd,
             this.btnRowInsert,
-            this.btnRowRemove});
+            this.btnRowRemove,
+            this.toolStripSeparator2,
+            this.btnSaveAsCsv});
             this.tlsOptionsTable.Location = new System.Drawing.Point(10, 79);
             this.tlsOptionsTable.Name = "tlsOptionsTable";
-            this.tlsOptionsTable.Size = new System.Drawing.Size(664, 25);
+            this.tlsOptionsTable.Size = new System.Drawing.Size(669, 25);
             this.tlsOptionsTable.TabIndex = 28;
             // 
             // btnColumnAdd
@@ -299,13 +304,33 @@
             this.btnRowRemove.Text = "Remove row";
             this.btnRowRemove.Click += new System.EventHandler(this.btnRowRemove_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnSaveAsCsv
+            // 
+            this.btnSaveAsCsv.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveAsCsv.Image")));
+            this.btnSaveAsCsv.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSaveAsCsv.Name = "btnSaveAsCsv";
+            this.btnSaveAsCsv.Size = new System.Drawing.Size(89, 22);
+            this.btnSaveAsCsv.Text = "Save as CSV";
+            this.btnSaveAsCsv.Click += new System.EventHandler(this.btnSaveAsCsv_Click);
+            // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+            this.saveFileDialog1.RestoreDirectory = true;
+            this.saveFileDialog1.Title = "Save table variable";
+            // 
             // VariableEditorForm
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(684, 461);
+            this.ClientSize = new System.Drawing.Size(689, 461);
             this.Controls.Add(this.dgvVariableData);
             this.Controls.Add(this.tlsOptionsList);
             this.Controls.Add(this.panel3);
@@ -359,5 +384,8 @@
         private System.Windows.Forms.ToolStripButton btnRowAdd;
         private System.Windows.Forms.ToolStripButton btnRowInsert;
         private System.Windows.Forms.ToolStripButton btnRowRemove;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton btnSaveAsCsv;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }

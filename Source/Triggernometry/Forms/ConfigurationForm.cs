@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Triggernometry.Variables;
 
 namespace Triggernometry.Forms
 {
@@ -22,6 +23,7 @@ namespace Triggernometry.Forms
         private bool firstchange = true;
         private List<Configuration.Substitution> subs = new List<Configuration.Substitution>();
         private Trigger template = new Trigger();
+        private Dictionary<string, VariableScalar> consts = new Dictionary<string, VariableScalar>();
 
         public ConfigurationForm()
         {
@@ -80,6 +82,7 @@ namespace Triggernometry.Forms
                 cbxAutosaveConfig.Checked = false;
                 nudAutosaveMinutes.Value = 5;
                 SecuritySettingsFromConfiguration(null);
+                SetupConsts(null);
             }
             else
             {
@@ -104,22 +107,19 @@ namespace Triggernometry.Forms
                 txtMonitorWindow.Text = a.WindowToMonitor;
                 nudCacheImageExpiry.Value = a.CacheImageExpiry;
                 nudCacheSoundExpiry.Value = a.CacheSoundExpiry;
-                int dummy = (int)nudCacheJsonExpiry.Value;                
                 nudCacheJsonExpiry.Value = a.CacheJsonExpiry;
-                dummy = (int)nudCacheJsonExpiry.Value;
                 nudCacheRepoExpiry.Value = a.CacheRepoExpiry;
                 nudCacheFileExpiry.Value = a.CacheFileExpiry;
                 subs.AddRange(a.Substitutions);
                 subs.Sort();
                 dgvSubstitutions.RowCount = a.Substitutions.Count;
                 cbxAutosaveConfig.Checked = a.AutosaveEnabled;
-                dummy = (int)nudAutosaveMinutes.Value;
                 nudAutosaveMinutes.Value = a.AutosaveInterval;
-                dummy = (int)nudAutosaveMinutes.Value;
                 cbxTriggerTemplate.Checked = a.UseTemplateTrigger;
                 a.TemplateTrigger.CopySettingsTo(template);
                 SetupJobOrder(a);
                 SecuritySettingsFromConfiguration(a);
+                SetupConsts(plug.cfg.Constants);
             }
             if (a.StartupTriggerType == Configuration.StartupTriggerTypeEnum.Trigger)
             {
@@ -220,6 +220,14 @@ namespace Triggernometry.Forms
                     AllowAdmin = (bool)r.Cells[3].Value
                 };
                 setter.Invoke(a, new object[] { au, true });
+            }
+            lock (plug.cfg.Constants)
+            {
+                plug.cfg.Constants.Clear();
+                foreach (KeyValuePair<string, VariableScalar> kp in consts)
+                {
+                    plug.cfg.Constants[kp.Key] = kp.Value;
+                }
             }
         }
 
@@ -861,6 +869,170 @@ namespace Triggernometry.Forms
                         tf.SettingsToTrigger(t);
                     }
                 }
+            }
+        }
+
+        private Variable OpenVariableEditor(Variable v, ref string name, bool isNew)
+        {
+            using (VariableEditorForm vef = new VariableEditorForm())
+            {
+                vef.VariableName = name;
+                vef.VariableToEdit = v.Duplicate();
+                vef.IsNew = isNew;
+                if (vef.ShowDialog() == DialogResult.OK)
+                {
+                    name = vef.VariableName;
+                    vef.VariableToEdit.LastChanged = DateTime.Now;
+                    vef.VariableToEdit.LastChanger = I18n.Translate("internal/VariableForm/variableeditortag", "Variable editor");
+                    return vef.VariableToEdit;
+                }
+            }
+            return null;
+        }
+
+        private void SetupConsts(SerializableDictionary<string, VariableScalar> constants)
+        {
+            Configuration dummy = new Configuration();
+            foreach (KeyValuePair<string, VariableScalar> kp in dummy.Constants)
+            {
+                consts[kp.Key] = new VariableScalar() { Value = kp.Value.Value, LastChanged = kp.Value.LastChanged, LastChanger = kp.Value.LastChanger };
+            }
+            if (constants != null)
+            {
+                foreach (KeyValuePair<string, VariableScalar> kp in constants)
+                {
+                    consts[kp.Key] = new VariableScalar() { Value = kp.Value.Value, LastChanged = kp.Value.LastChanged, LastChanger = kp.Value.LastChanger };
+                }
+            }
+            RefreshConsts();
+        }
+
+        private void RefreshConsts()
+        {
+            dgvConstVariables.RowCount = consts.Count;
+            Refresh();
+        }
+
+        private void btnConstAdd_Click(object sender, EventArgs e)
+        {
+            VariableScalar v = new VariableScalar();
+            string varname = "";
+            v = (VariableScalar)OpenVariableEditor(v, ref varname, true);
+            if (v != null)
+            {
+                consts[varname] = v;
+                RefreshConsts();
+            }
+        }
+
+        private void btnConstEdit_Click(object sender, EventArgs e)
+        {
+            string varname = "";
+            foreach (DataGridViewRow r in dgvConstVariables.SelectedRows)
+            {
+                varname = r.Cells[0].Value.ToString();
+            }
+            VariableScalar v = null;
+            if (consts.ContainsKey(varname) == true)
+            {
+                v = consts[varname];
+            }
+            if (v == null)
+            {
+                v = new VariableScalar();
+            }
+            string varname2 = varname;
+            v = (VariableScalar)OpenVariableEditor(v, ref varname2, false);
+            if (v != null)
+            {
+                if (varname != varname2)
+                {
+                    if (consts.ContainsKey(varname) == true)
+                    {
+                        consts.Remove(varname);
+                    }
+                }
+                consts[varname2] = v;
+                RefreshConsts();
+            }
+        }
+
+        private void btnConstRemove_Click(object sender, EventArgs e)
+        {
+            string temp;
+            if (dgvConstVariables.SelectedRows.Count > 1)
+            {
+                temp = I18n.Translate("internal/ConfigurationForm/areyousureplural", "Are you sure you want to remove the selected constants?");
+            }
+            else
+            {
+                temp = I18n.Translate("internal/ConfigurationForm/areyousuresingular", "Are you sure you want to remove the selected constant?");
+            }
+            switch (MessageBox.Show(this, temp, I18n.Translate("internal/ConfigurationForm/confirmremoval", "Confirm removal"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+            {
+                case DialogResult.Yes:
+                    List<string> varnames = new List<string>();
+                    foreach (DataGridViewRow r in dgvConstVariables.SelectedRows)
+                    {
+                        varnames.Add(r.Cells[0].Value.ToString());
+                    }
+                    foreach (string varname in varnames)
+                    {
+                        if (consts.ContainsKey(varname) == true)
+                        {
+                            consts.Remove(varname);
+                        }
+                    }
+                    dgvConstVariables.RowCount = consts.Count;
+                    dgvConstVariables.ClearSelection();
+                    dgvConstVariables.Refresh();
+                    break;
+            }
+        }
+
+        private void dgvConstVariables_SelectionChanged(object sender, EventArgs e)
+        {
+            btnConstEdit.Enabled = (dgvConstVariables.SelectedRows.Count == 1);
+            btnConstRemove.Enabled = (dgvConstVariables.SelectedRows.Count > 0);
+        }
+
+        private void dgvConstVariables_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0)
+            {
+                return;
+            }
+            dgvConstVariables.ClearSelection();
+            dgvConstVariables.Rows[e.RowIndex].Selected = true;
+            btnConstEdit_Click(sender, null);
+        }
+
+        private void dgvConstVariables_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                if (btnConstRemove.Enabled == true)
+                {
+                    btnConstRemove_Click(this, null);
+                }
+            }
+        }
+
+        private void dgvConstVariables_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
+        {
+            if (e.RowIndex >= consts.Count)
+            {
+                return;
+            }
+            KeyValuePair<string, VariableScalar> kp = consts.ElementAt(e.RowIndex);
+            switch (e.ColumnIndex)
+            {
+                case 0:
+                    e.Value = kp.Key;
+                    break;
+                case 1:
+                    e.Value = kp.Value.Value;
+                    break;
             }
         }
 

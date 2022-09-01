@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigurationForm));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -173,6 +174,16 @@
             this.btnSubAdd = new System.Windows.Forms.ToolStripButton();
             this.btnSubEdit = new System.Windows.Forms.ToolStripButton();
             this.btnSubRemove = new System.Windows.Forms.ToolStripButton();
+            this.tabConsts = new System.Windows.Forms.TabPage();
+            this.panel19 = new System.Windows.Forms.Panel();
+            this.dgvConstVariables = new Triggernometry.CustomControls.DataGridViewEx();
+            this.colScalarName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colScalarValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tlsScalar = new System.Windows.Forms.ToolStrip();
+            this.btnConstAdd = new System.Windows.Forms.ToolStripButton();
+            this.btnConstEdit = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnConstRemove = new System.Windows.Forms.ToolStripButton();
             this.tabSecurity = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dgvApiAccess = new Triggernometry.CustomControls.DataGridViewEx();
@@ -204,6 +215,7 @@
             this.cbxTriggerTemplate = new System.Windows.Forms.CheckBox();
             this.btnTriggerTemplate = new System.Windows.Forms.Button();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.fontDialog1 = new System.Windows.Forms.FontDialog();
             this.panel4.SuspendLayout();
             this.grpVolAdjustment.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -256,6 +268,10 @@
             this.tabSubstitutions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSubstitutions)).BeginInit();
             this.tlsSubstitutions.SuspendLayout();
+            this.tabConsts.SuspendLayout();
+            this.panel19.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvConstVariables)).BeginInit();
+            this.tlsScalar.SuspendLayout();
             this.tabSecurity.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvApiAccess)).BeginInit();
@@ -272,9 +288,9 @@
             // panel3
             // 
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(10, 506);
+            this.panel3.Location = new System.Drawing.Point(10, 606);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(564, 10);
+            this.panel3.Size = new System.Drawing.Size(764, 10);
             this.panel3.TabIndex = 13;
             // 
             // panel4
@@ -282,16 +298,16 @@
             this.panel4.Controls.Add(this.btnCancel);
             this.panel4.Controls.Add(this.btnOk);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel4.Location = new System.Drawing.Point(10, 516);
+            this.panel4.Location = new System.Drawing.Point(10, 616);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(564, 35);
+            this.panel4.Size = new System.Drawing.Size(764, 35);
             this.panel4.TabIndex = 14;
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnCancel.Location = new System.Drawing.Point(414, 0);
+            this.btnCancel.Location = new System.Drawing.Point(614, 0);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(150, 35);
             this.btnCancel.TabIndex = 1;
@@ -317,7 +333,7 @@
             this.grpVolAdjustment.Location = new System.Drawing.Point(7, 7);
             this.grpVolAdjustment.Name = "grpVolAdjustment";
             this.grpVolAdjustment.Padding = new System.Windows.Forms.Padding(10);
-            this.grpVolAdjustment.Size = new System.Drawing.Size(542, 89);
+            this.grpVolAdjustment.Size = new System.Drawing.Size(742, 89);
             this.grpVolAdjustment.TabIndex = 15;
             this.grpVolAdjustment.TabStop = false;
             this.grpVolAdjustment.Text = " Global volume adjustment ";
@@ -343,7 +359,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(522, 56);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(722, 56);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // label6
@@ -351,7 +367,7 @@
             this.label6.AutoEllipsis = true;
             this.label6.AutoSize = true;
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.Location = new System.Drawing.Point(475, 28);
+            this.label6.Location = new System.Drawing.Point(675, 28);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(44, 28);
             this.label6.TabIndex = 9;
@@ -363,7 +379,7 @@
             this.label5.AutoEllipsis = true;
             this.label5.AutoSize = true;
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Location = new System.Drawing.Point(475, 0);
+            this.label5.Location = new System.Drawing.Point(675, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(44, 28);
             this.label5.TabIndex = 8;
@@ -377,7 +393,7 @@
             this.trbTtsVolume.Location = new System.Drawing.Point(109, 31);
             this.trbTtsVolume.Maximum = 100;
             this.trbTtsVolume.Name = "trbTtsVolume";
-            this.trbTtsVolume.Size = new System.Drawing.Size(360, 22);
+            this.trbTtsVolume.Size = new System.Drawing.Size(560, 22);
             this.trbTtsVolume.TabIndex = 7;
             this.trbTtsVolume.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trbTtsVolume.Value = 100;
@@ -391,7 +407,7 @@
             this.trbSoundVolume.Location = new System.Drawing.Point(109, 3);
             this.trbSoundVolume.Maximum = 100;
             this.trbSoundVolume.Name = "trbSoundVolume";
-            this.trbSoundVolume.Size = new System.Drawing.Size(360, 22);
+            this.trbSoundVolume.Size = new System.Drawing.Size(560, 22);
             this.trbSoundVolume.TabIndex = 6;
             this.trbSoundVolume.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trbSoundVolume.Value = 100;
@@ -430,7 +446,7 @@
             this.grpGeneral.Location = new System.Drawing.Point(7, 7);
             this.grpGeneral.Name = "grpGeneral";
             this.grpGeneral.Padding = new System.Windows.Forms.Padding(10);
-            this.grpGeneral.Size = new System.Drawing.Size(542, 106);
+            this.grpGeneral.Size = new System.Drawing.Size(742, 106);
             this.grpGeneral.TabIndex = 16;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = " Logging ";
@@ -453,7 +469,7 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(522, 73);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(722, 73);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
             // chkLogVariableExpansions
@@ -464,7 +480,7 @@
             this.chkLogVariableExpansions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkLogVariableExpansions.Location = new System.Drawing.Point(3, 53);
             this.chkLogVariableExpansions.Name = "chkLogVariableExpansions";
-            this.chkLogVariableExpansions.Size = new System.Drawing.Size(516, 17);
+            this.chkLogVariableExpansions.Size = new System.Drawing.Size(716, 17);
             this.chkLogVariableExpansions.TabIndex = 27;
             this.chkLogVariableExpansions.Text = "Log variable expansions";
             this.chkLogVariableExpansions.UseVisualStyleBackColor = true;
@@ -477,7 +493,7 @@
             this.chkLogNormalEvents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkLogNormalEvents.Location = new System.Drawing.Point(3, 30);
             this.chkLogNormalEvents.Name = "chkLogNormalEvents";
-            this.chkLogNormalEvents.Size = new System.Drawing.Size(516, 17);
+            this.chkLogNormalEvents.Size = new System.Drawing.Size(716, 17);
             this.chkLogNormalEvents.TabIndex = 26;
             this.chkLogNormalEvents.Text = "Log normal log lines";
             this.chkLogNormalEvents.UseVisualStyleBackColor = true;
@@ -489,7 +505,7 @@
             this.lblLoggingLevel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblLoggingLevel.Location = new System.Drawing.Point(3, 0);
             this.lblLoggingLevel.Name = "lblLoggingLevel";
-            this.lblLoggingLevel.Size = new System.Drawing.Size(255, 27);
+            this.lblLoggingLevel.Size = new System.Drawing.Size(355, 27);
             this.lblLoggingLevel.TabIndex = 24;
             this.lblLoggingLevel.Text = "Logging filtering level";
             this.lblLoggingLevel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -505,9 +521,9 @@
             "Errors and warnings",
             "All informational messages",
             "Verbose debug"});
-            this.cbxLoggingLevel.Location = new System.Drawing.Point(264, 3);
+            this.cbxLoggingLevel.Location = new System.Drawing.Point(364, 3);
             this.cbxLoggingLevel.Name = "cbxLoggingLevel";
-            this.cbxLoggingLevel.Size = new System.Drawing.Size(255, 21);
+            this.cbxLoggingLevel.Size = new System.Drawing.Size(355, 21);
             this.cbxLoggingLevel.TabIndex = 25;
             // 
             // trvTrigger
@@ -519,7 +535,7 @@
             this.trvTrigger.MinimumSize = new System.Drawing.Size(4, 50);
             this.trvTrigger.Name = "trvTrigger";
             this.trvTrigger.ShowNodeToolTips = true;
-            this.trvTrigger.Size = new System.Drawing.Size(522, 143);
+            this.trvTrigger.Size = new System.Drawing.Size(722, 243);
             this.trvTrigger.TabIndex = 23;
             this.trvTrigger.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvTrigger_BeforeCollapse);
             this.trvTrigger.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvTrigger_BeforeExpand);
@@ -550,7 +566,7 @@
             this.grpActHooks.Location = new System.Drawing.Point(7, 106);
             this.grpActHooks.Name = "grpActHooks";
             this.grpActHooks.Padding = new System.Windows.Forms.Padding(10);
-            this.grpActHooks.Size = new System.Drawing.Size(542, 79);
+            this.grpActHooks.Size = new System.Drawing.Size(742, 79);
             this.grpActHooks.TabIndex = 18;
             this.grpActHooks.TabStop = false;
             this.grpActHooks.Text = " ACT hooks ";
@@ -568,7 +584,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(522, 46);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(722, 46);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // chkActSoundFiles
@@ -578,7 +594,7 @@
             this.chkActSoundFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkActSoundFiles.Location = new System.Drawing.Point(3, 3);
             this.chkActSoundFiles.Name = "chkActSoundFiles";
-            this.chkActSoundFiles.Size = new System.Drawing.Size(516, 17);
+            this.chkActSoundFiles.Size = new System.Drawing.Size(716, 17);
             this.chkActSoundFiles.TabIndex = 6;
             this.chkActSoundFiles.Text = "Use ACT for playing sound files";
             this.chkActSoundFiles.UseVisualStyleBackColor = true;
@@ -590,7 +606,7 @@
             this.chkActTts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkActTts.Location = new System.Drawing.Point(3, 26);
             this.chkActTts.Name = "chkActTts";
-            this.chkActTts.Size = new System.Drawing.Size(516, 17);
+            this.chkActTts.Size = new System.Drawing.Size(716, 17);
             this.chkActTts.TabIndex = 5;
             this.chkActTts.Text = "Use ACT for text-to-speech";
             this.chkActTts.UseVisualStyleBackColor = true;
@@ -601,7 +617,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(7, 96);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(542, 10);
+            this.panel2.Size = new System.Drawing.Size(742, 10);
             this.panel2.TabIndex = 19;
             // 
             // grpFutureProofing
@@ -612,7 +628,7 @@
             this.grpFutureProofing.Location = new System.Drawing.Point(7, 79);
             this.grpFutureProofing.Name = "grpFutureProofing";
             this.grpFutureProofing.Padding = new System.Windows.Forms.Padding(10);
-            this.grpFutureProofing.Size = new System.Drawing.Size(542, 59);
+            this.grpFutureProofing.Size = new System.Drawing.Size(742, 59);
             this.grpFutureProofing.TabIndex = 21;
             this.grpFutureProofing.TabStop = false;
             this.grpFutureProofing.Text = " Future proofing ";
@@ -631,7 +647,7 @@
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(522, 26);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(722, 26);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
             // txtSeparator
@@ -639,7 +655,7 @@
             this.txtSeparator.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSeparator.Location = new System.Drawing.Point(111, 3);
             this.txtSeparator.Name = "txtSeparator";
-            this.txtSeparator.Size = new System.Drawing.Size(408, 20);
+            this.txtSeparator.Size = new System.Drawing.Size(608, 20);
             this.txtSeparator.TabIndex = 7;
             // 
             // lblSeparator
@@ -662,13 +678,14 @@
             this.tbcMain.Controls.Add(this.tabEndpoint);
             this.tbcMain.Controls.Add(this.tabFFXIV);
             this.tbcMain.Controls.Add(this.tabSubstitutions);
+            this.tbcMain.Controls.Add(this.tabConsts);
             this.tbcMain.Controls.Add(this.tabSecurity);
             this.tbcMain.Controls.Add(this.tabMisc);
             this.tbcMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbcMain.Location = new System.Drawing.Point(10, 10);
             this.tbcMain.Name = "tbcMain";
             this.tbcMain.SelectedIndex = 0;
-            this.tbcMain.Size = new System.Drawing.Size(564, 496);
+            this.tbcMain.Size = new System.Drawing.Size(764, 596);
             this.tbcMain.TabIndex = 23;
             // 
             // tabGeneral
@@ -681,7 +698,7 @@
             this.tabGeneral.Location = new System.Drawing.Point(4, 22);
             this.tabGeneral.Name = "tabGeneral";
             this.tabGeneral.Padding = new System.Windows.Forms.Padding(7);
-            this.tabGeneral.Size = new System.Drawing.Size(556, 470);
+            this.tabGeneral.Size = new System.Drawing.Size(756, 570);
             this.tabGeneral.TabIndex = 0;
             this.tabGeneral.Text = "General";
             this.tabGeneral.UseVisualStyleBackColor = true;
@@ -695,7 +712,7 @@
             this.grpStartupTrigger.Location = new System.Drawing.Point(7, 262);
             this.grpStartupTrigger.Name = "grpStartupTrigger";
             this.grpStartupTrigger.Padding = new System.Windows.Forms.Padding(10);
-            this.grpStartupTrigger.Size = new System.Drawing.Size(542, 201);
+            this.grpStartupTrigger.Size = new System.Drawing.Size(742, 301);
             this.grpStartupTrigger.TabIndex = 27;
             this.grpStartupTrigger.TabStop = false;
             this.grpStartupTrigger.Text = " Startup trigger/folder ";
@@ -708,7 +725,7 @@
             this.lblFolderReminder});
             this.tlsDirectPaste.Location = new System.Drawing.Point(10, 23);
             this.tlsDirectPaste.Name = "tlsDirectPaste";
-            this.tlsDirectPaste.Size = new System.Drawing.Size(522, 25);
+            this.tlsDirectPaste.Size = new System.Drawing.Size(722, 25);
             this.tlsDirectPaste.TabIndex = 24;
             // 
             // btnClearSelection
@@ -736,7 +753,7 @@
             this.panel11.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel11.Location = new System.Drawing.Point(7, 252);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(542, 10);
+            this.panel11.Size = new System.Drawing.Size(742, 10);
             this.panel11.TabIndex = 28;
             // 
             // grpStartup
@@ -747,7 +764,7 @@
             this.grpStartup.Location = new System.Drawing.Point(7, 123);
             this.grpStartup.Name = "grpStartup";
             this.grpStartup.Padding = new System.Windows.Forms.Padding(10);
-            this.grpStartup.Size = new System.Drawing.Size(542, 129);
+            this.grpStartup.Size = new System.Drawing.Size(742, 129);
             this.grpStartup.TabIndex = 25;
             this.grpStartup.TabStop = false;
             this.grpStartup.Text = " Startup ";
@@ -771,7 +788,7 @@
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(522, 96);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(722, 96);
             this.tableLayoutPanel7.TabIndex = 1;
             // 
             // cbxUpdateMethod
@@ -782,9 +799,9 @@
             this.cbxUpdateMethod.Items.AddRange(new object[] {
             "Built-in (legacy)",
             "ACT"});
-            this.cbxUpdateMethod.Location = new System.Drawing.Point(264, 72);
+            this.cbxUpdateMethod.Location = new System.Drawing.Point(364, 72);
             this.cbxUpdateMethod.Name = "cbxUpdateMethod";
-            this.cbxUpdateMethod.Size = new System.Drawing.Size(255, 21);
+            this.cbxUpdateMethod.Size = new System.Drawing.Size(355, 21);
             this.cbxUpdateMethod.TabIndex = 26;
             // 
             // lblUpdateMethod
@@ -794,7 +811,7 @@
             this.lblUpdateMethod.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblUpdateMethod.Location = new System.Drawing.Point(3, 69);
             this.lblUpdateMethod.Name = "lblUpdateMethod";
-            this.lblUpdateMethod.Size = new System.Drawing.Size(255, 27);
+            this.lblUpdateMethod.Size = new System.Drawing.Size(355, 27);
             this.lblUpdateMethod.TabIndex = 25;
             this.lblUpdateMethod.Text = "Plugin update check method";
             this.lblUpdateMethod.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -807,7 +824,7 @@
             this.chkWarnAdmin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkWarnAdmin.Location = new System.Drawing.Point(3, 26);
             this.chkWarnAdmin.Name = "chkWarnAdmin";
-            this.chkWarnAdmin.Size = new System.Drawing.Size(516, 17);
+            this.chkWarnAdmin.Size = new System.Drawing.Size(716, 17);
             this.chkWarnAdmin.TabIndex = 8;
             this.chkWarnAdmin.Text = "Warn if not running as Administrator";
             this.chkWarnAdmin.UseVisualStyleBackColor = true;
@@ -820,7 +837,7 @@
             this.chkUpdates.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkUpdates.Location = new System.Drawing.Point(3, 49);
             this.chkUpdates.Name = "chkUpdates";
-            this.chkUpdates.Size = new System.Drawing.Size(516, 17);
+            this.chkUpdates.Size = new System.Drawing.Size(716, 17);
             this.chkUpdates.TabIndex = 7;
             this.chkUpdates.Text = "Check for updates on startup";
             this.chkUpdates.UseVisualStyleBackColor = true;
@@ -833,7 +850,7 @@
             this.chkWelcome.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkWelcome.Location = new System.Drawing.Point(3, 3);
             this.chkWelcome.Name = "chkWelcome";
-            this.chkWelcome.Size = new System.Drawing.Size(516, 17);
+            this.chkWelcome.Size = new System.Drawing.Size(716, 17);
             this.chkWelcome.TabIndex = 6;
             this.chkWelcome.Text = "Show Welcome Screen on startup";
             this.chkWelcome.UseVisualStyleBackColor = true;
@@ -843,7 +860,7 @@
             this.panel10.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel10.Location = new System.Drawing.Point(7, 113);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(542, 10);
+            this.panel10.Size = new System.Drawing.Size(742, 10);
             this.panel10.TabIndex = 26;
             // 
             // tabAudio
@@ -854,7 +871,7 @@
             this.tabAudio.Location = new System.Drawing.Point(4, 22);
             this.tabAudio.Name = "tabAudio";
             this.tabAudio.Padding = new System.Windows.Forms.Padding(7);
-            this.tabAudio.Size = new System.Drawing.Size(556, 470);
+            this.tabAudio.Size = new System.Drawing.Size(756, 570);
             this.tabAudio.TabIndex = 1;
             this.tabAudio.Text = "Audio";
             this.tabAudio.UseVisualStyleBackColor = true;
@@ -865,7 +882,7 @@
             this.tabCaching.Location = new System.Drawing.Point(4, 22);
             this.tabCaching.Name = "tabCaching";
             this.tabCaching.Padding = new System.Windows.Forms.Padding(7);
-            this.tabCaching.Size = new System.Drawing.Size(556, 470);
+            this.tabCaching.Size = new System.Drawing.Size(756, 570);
             this.tabCaching.TabIndex = 5;
             this.tabCaching.Text = "Caching";
             this.tabCaching.UseVisualStyleBackColor = true;
@@ -885,7 +902,7 @@
             this.panel16.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel16.Location = new System.Drawing.Point(7, 7);
             this.panel16.Name = "panel16";
-            this.panel16.Size = new System.Drawing.Size(542, 456);
+            this.panel16.Size = new System.Drawing.Size(742, 556);
             this.panel16.TabIndex = 30;
             // 
             // grpCacheFile
@@ -896,7 +913,7 @@
             this.grpCacheFile.Location = new System.Drawing.Point(0, 600);
             this.grpCacheFile.Name = "grpCacheFile";
             this.grpCacheFile.Padding = new System.Windows.Forms.Padding(10);
-            this.grpCacheFile.Size = new System.Drawing.Size(525, 140);
+            this.grpCacheFile.Size = new System.Drawing.Size(725, 140);
             this.grpCacheFile.TabIndex = 34;
             this.grpCacheFile.TabStop = false;
             this.grpCacheFile.Text = " File downloads ";
@@ -924,16 +941,16 @@
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel16.Size = new System.Drawing.Size(505, 107);
+            this.tableLayoutPanel16.Size = new System.Drawing.Size(705, 107);
             this.tableLayoutPanel16.TabIndex = 0;
             // 
             // btnCacheFileBrowse
             // 
             this.btnCacheFileBrowse.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCacheFileBrowse.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheFileBrowse.Image")));
-            this.btnCacheFileBrowse.Location = new System.Drawing.Point(320, 81);
+            this.btnCacheFileBrowse.Location = new System.Drawing.Point(420, 81);
             this.btnCacheFileBrowse.Name = "btnCacheFileBrowse";
-            this.btnCacheFileBrowse.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheFileBrowse.Size = new System.Drawing.Size(282, 23);
             this.btnCacheFileBrowse.TabIndex = 18;
             this.btnCacheFileBrowse.Text = "Browse";
             this.btnCacheFileBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -948,7 +965,7 @@
             this.btnCacheFileClear.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheFileClear.Image")));
             this.btnCacheFileClear.Location = new System.Drawing.Point(132, 81);
             this.btnCacheFileClear.Name = "btnCacheFileClear";
-            this.btnCacheFileClear.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheFileClear.Size = new System.Drawing.Size(282, 23);
             this.btnCacheFileClear.TabIndex = 17;
             this.btnCacheFileClear.Text = "Clear cache";
             this.btnCacheFileClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -964,7 +981,7 @@
             this.txtCacheFileSize.Location = new System.Drawing.Point(132, 55);
             this.txtCacheFileSize.Name = "txtCacheFileSize";
             this.txtCacheFileSize.ReadOnly = true;
-            this.txtCacheFileSize.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheFileSize.Size = new System.Drawing.Size(570, 20);
             this.txtCacheFileSize.TabIndex = 13;
             this.txtCacheFileSize.Text = "0";
             this.txtCacheFileSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -1016,7 +1033,7 @@
             0,
             0});
             this.nudCacheFileExpiry.Name = "nudCacheFileExpiry";
-            this.nudCacheFileExpiry.Size = new System.Drawing.Size(370, 20);
+            this.nudCacheFileExpiry.Size = new System.Drawing.Size(570, 20);
             this.nudCacheFileExpiry.TabIndex = 9;
             this.nudCacheFileExpiry.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudCacheFileExpiry.Value = new decimal(new int[] {
@@ -1032,7 +1049,7 @@
             this.txtCacheFileCount.Location = new System.Drawing.Point(132, 29);
             this.txtCacheFileCount.Name = "txtCacheFileCount";
             this.txtCacheFileCount.ReadOnly = true;
-            this.txtCacheFileCount.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheFileCount.Size = new System.Drawing.Size(570, 20);
             this.txtCacheFileCount.TabIndex = 11;
             this.txtCacheFileCount.Text = "0";
             this.txtCacheFileCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -1042,7 +1059,7 @@
             this.panel17.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel17.Location = new System.Drawing.Point(0, 590);
             this.panel17.Name = "panel17";
-            this.panel17.Size = new System.Drawing.Size(525, 10);
+            this.panel17.Size = new System.Drawing.Size(725, 10);
             this.panel17.TabIndex = 33;
             // 
             // grpCacheRepo
@@ -1053,7 +1070,7 @@
             this.grpCacheRepo.Location = new System.Drawing.Point(0, 450);
             this.grpCacheRepo.Name = "grpCacheRepo";
             this.grpCacheRepo.Padding = new System.Windows.Forms.Padding(10);
-            this.grpCacheRepo.Size = new System.Drawing.Size(525, 140);
+            this.grpCacheRepo.Size = new System.Drawing.Size(725, 140);
             this.grpCacheRepo.TabIndex = 32;
             this.grpCacheRepo.TabStop = false;
             this.grpCacheRepo.Text = " Repository backups ";
@@ -1081,16 +1098,16 @@
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel15.Size = new System.Drawing.Size(505, 107);
+            this.tableLayoutPanel15.Size = new System.Drawing.Size(705, 107);
             this.tableLayoutPanel15.TabIndex = 0;
             // 
             // btnCacheRepoBrowse
             // 
             this.btnCacheRepoBrowse.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCacheRepoBrowse.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheRepoBrowse.Image")));
-            this.btnCacheRepoBrowse.Location = new System.Drawing.Point(320, 81);
+            this.btnCacheRepoBrowse.Location = new System.Drawing.Point(420, 81);
             this.btnCacheRepoBrowse.Name = "btnCacheRepoBrowse";
-            this.btnCacheRepoBrowse.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheRepoBrowse.Size = new System.Drawing.Size(282, 23);
             this.btnCacheRepoBrowse.TabIndex = 18;
             this.btnCacheRepoBrowse.Text = "Browse";
             this.btnCacheRepoBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1105,7 +1122,7 @@
             this.btnCacheRepoClear.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheRepoClear.Image")));
             this.btnCacheRepoClear.Location = new System.Drawing.Point(132, 81);
             this.btnCacheRepoClear.Name = "btnCacheRepoClear";
-            this.btnCacheRepoClear.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheRepoClear.Size = new System.Drawing.Size(282, 23);
             this.btnCacheRepoClear.TabIndex = 17;
             this.btnCacheRepoClear.Text = "Clear cache";
             this.btnCacheRepoClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1121,7 +1138,7 @@
             this.txtCacheRepoSize.Location = new System.Drawing.Point(132, 55);
             this.txtCacheRepoSize.Name = "txtCacheRepoSize";
             this.txtCacheRepoSize.ReadOnly = true;
-            this.txtCacheRepoSize.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheRepoSize.Size = new System.Drawing.Size(570, 20);
             this.txtCacheRepoSize.TabIndex = 13;
             this.txtCacheRepoSize.Text = "0";
             this.txtCacheRepoSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -1173,7 +1190,7 @@
             0,
             0});
             this.nudCacheRepoExpiry.Name = "nudCacheRepoExpiry";
-            this.nudCacheRepoExpiry.Size = new System.Drawing.Size(370, 20);
+            this.nudCacheRepoExpiry.Size = new System.Drawing.Size(570, 20);
             this.nudCacheRepoExpiry.TabIndex = 9;
             this.nudCacheRepoExpiry.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudCacheRepoExpiry.Value = new decimal(new int[] {
@@ -1189,7 +1206,7 @@
             this.txtCacheRepoCount.Location = new System.Drawing.Point(132, 29);
             this.txtCacheRepoCount.Name = "txtCacheRepoCount";
             this.txtCacheRepoCount.ReadOnly = true;
-            this.txtCacheRepoCount.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheRepoCount.Size = new System.Drawing.Size(570, 20);
             this.txtCacheRepoCount.TabIndex = 11;
             this.txtCacheRepoCount.Text = "0";
             this.txtCacheRepoCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -1199,7 +1216,7 @@
             this.panel15.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel15.Location = new System.Drawing.Point(0, 440);
             this.panel15.Name = "panel15";
-            this.panel15.Size = new System.Drawing.Size(525, 10);
+            this.panel15.Size = new System.Drawing.Size(725, 10);
             this.panel15.TabIndex = 31;
             // 
             // grpCacheJSON
@@ -1210,7 +1227,7 @@
             this.grpCacheJSON.Location = new System.Drawing.Point(0, 300);
             this.grpCacheJSON.Name = "grpCacheJSON";
             this.grpCacheJSON.Padding = new System.Windows.Forms.Padding(10);
-            this.grpCacheJSON.Size = new System.Drawing.Size(525, 140);
+            this.grpCacheJSON.Size = new System.Drawing.Size(725, 140);
             this.grpCacheJSON.TabIndex = 30;
             this.grpCacheJSON.TabStop = false;
             this.grpCacheJSON.Text = " JSON responses ";
@@ -1239,7 +1256,7 @@
             this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel13.Size = new System.Drawing.Size(505, 107);
+            this.tableLayoutPanel13.Size = new System.Drawing.Size(705, 107);
             this.tableLayoutPanel13.TabIndex = 0;
             // 
             // nudCacheJsonExpiry
@@ -1253,7 +1270,7 @@
             0,
             0});
             this.nudCacheJsonExpiry.Name = "nudCacheJsonExpiry";
-            this.nudCacheJsonExpiry.Size = new System.Drawing.Size(370, 20);
+            this.nudCacheJsonExpiry.Size = new System.Drawing.Size(570, 20);
             this.nudCacheJsonExpiry.TabIndex = 18;
             this.nudCacheJsonExpiry.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudCacheJsonExpiry.Value = new decimal(new int[] {
@@ -1266,9 +1283,9 @@
             // 
             this.btnCacheJsonBrowse.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCacheJsonBrowse.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheJsonBrowse.Image")));
-            this.btnCacheJsonBrowse.Location = new System.Drawing.Point(320, 81);
+            this.btnCacheJsonBrowse.Location = new System.Drawing.Point(420, 81);
             this.btnCacheJsonBrowse.Name = "btnCacheJsonBrowse";
-            this.btnCacheJsonBrowse.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheJsonBrowse.Size = new System.Drawing.Size(282, 23);
             this.btnCacheJsonBrowse.TabIndex = 17;
             this.btnCacheJsonBrowse.Text = "Browse";
             this.btnCacheJsonBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1283,7 +1300,7 @@
             this.btnCacheJsonClear.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheJsonClear.Image")));
             this.btnCacheJsonClear.Location = new System.Drawing.Point(132, 81);
             this.btnCacheJsonClear.Name = "btnCacheJsonClear";
-            this.btnCacheJsonClear.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheJsonClear.Size = new System.Drawing.Size(282, 23);
             this.btnCacheJsonClear.TabIndex = 16;
             this.btnCacheJsonClear.Text = "Clear cache";
             this.btnCacheJsonClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1299,7 +1316,7 @@
             this.txtCacheJsonSize.Location = new System.Drawing.Point(132, 55);
             this.txtCacheJsonSize.Name = "txtCacheJsonSize";
             this.txtCacheJsonSize.ReadOnly = true;
-            this.txtCacheJsonSize.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheJsonSize.Size = new System.Drawing.Size(570, 20);
             this.txtCacheJsonSize.TabIndex = 13;
             this.txtCacheJsonSize.Text = "0";
             this.txtCacheJsonSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -1347,7 +1364,7 @@
             this.txtCacheJsonCount.Location = new System.Drawing.Point(132, 29);
             this.txtCacheJsonCount.Name = "txtCacheJsonCount";
             this.txtCacheJsonCount.ReadOnly = true;
-            this.txtCacheJsonCount.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheJsonCount.Size = new System.Drawing.Size(570, 20);
             this.txtCacheJsonCount.TabIndex = 11;
             this.txtCacheJsonCount.Text = "0";
             this.txtCacheJsonCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -1357,7 +1374,7 @@
             this.panel14.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel14.Location = new System.Drawing.Point(0, 290);
             this.panel14.Name = "panel14";
-            this.panel14.Size = new System.Drawing.Size(525, 10);
+            this.panel14.Size = new System.Drawing.Size(725, 10);
             this.panel14.TabIndex = 29;
             // 
             // grpCacheSound
@@ -1368,7 +1385,7 @@
             this.grpCacheSound.Location = new System.Drawing.Point(0, 150);
             this.grpCacheSound.Name = "grpCacheSound";
             this.grpCacheSound.Padding = new System.Windows.Forms.Padding(10);
-            this.grpCacheSound.Size = new System.Drawing.Size(525, 140);
+            this.grpCacheSound.Size = new System.Drawing.Size(725, 140);
             this.grpCacheSound.TabIndex = 28;
             this.grpCacheSound.TabStop = false;
             this.grpCacheSound.Text = " Sound files ";
@@ -1396,16 +1413,16 @@
             this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel14.Size = new System.Drawing.Size(505, 107);
+            this.tableLayoutPanel14.Size = new System.Drawing.Size(705, 107);
             this.tableLayoutPanel14.TabIndex = 0;
             // 
             // btnCacheSoundBrowse
             // 
             this.btnCacheSoundBrowse.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCacheSoundBrowse.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheSoundBrowse.Image")));
-            this.btnCacheSoundBrowse.Location = new System.Drawing.Point(320, 81);
+            this.btnCacheSoundBrowse.Location = new System.Drawing.Point(420, 81);
             this.btnCacheSoundBrowse.Name = "btnCacheSoundBrowse";
-            this.btnCacheSoundBrowse.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheSoundBrowse.Size = new System.Drawing.Size(282, 23);
             this.btnCacheSoundBrowse.TabIndex = 16;
             this.btnCacheSoundBrowse.Text = "Browse";
             this.btnCacheSoundBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1420,7 +1437,7 @@
             this.btnCacheSoundClear.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheSoundClear.Image")));
             this.btnCacheSoundClear.Location = new System.Drawing.Point(132, 81);
             this.btnCacheSoundClear.Name = "btnCacheSoundClear";
-            this.btnCacheSoundClear.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheSoundClear.Size = new System.Drawing.Size(282, 23);
             this.btnCacheSoundClear.TabIndex = 15;
             this.btnCacheSoundClear.Text = "Clear cache";
             this.btnCacheSoundClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1436,7 +1453,7 @@
             this.txtCacheSoundSize.Location = new System.Drawing.Point(132, 55);
             this.txtCacheSoundSize.Name = "txtCacheSoundSize";
             this.txtCacheSoundSize.ReadOnly = true;
-            this.txtCacheSoundSize.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheSoundSize.Size = new System.Drawing.Size(570, 20);
             this.txtCacheSoundSize.TabIndex = 13;
             this.txtCacheSoundSize.Text = "0";
             this.txtCacheSoundSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -1488,7 +1505,7 @@
             0,
             0});
             this.nudCacheSoundExpiry.Name = "nudCacheSoundExpiry";
-            this.nudCacheSoundExpiry.Size = new System.Drawing.Size(370, 20);
+            this.nudCacheSoundExpiry.Size = new System.Drawing.Size(570, 20);
             this.nudCacheSoundExpiry.TabIndex = 9;
             this.nudCacheSoundExpiry.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudCacheSoundExpiry.Value = new decimal(new int[] {
@@ -1504,7 +1521,7 @@
             this.txtCacheSoundCount.Location = new System.Drawing.Point(132, 29);
             this.txtCacheSoundCount.Name = "txtCacheSoundCount";
             this.txtCacheSoundCount.ReadOnly = true;
-            this.txtCacheSoundCount.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheSoundCount.Size = new System.Drawing.Size(570, 20);
             this.txtCacheSoundCount.TabIndex = 11;
             this.txtCacheSoundCount.Text = "0";
             this.txtCacheSoundCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -1514,7 +1531,7 @@
             this.panel13.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel13.Location = new System.Drawing.Point(0, 140);
             this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(525, 10);
+            this.panel13.Size = new System.Drawing.Size(725, 10);
             this.panel13.TabIndex = 25;
             // 
             // grpCacheImage
@@ -1525,7 +1542,7 @@
             this.grpCacheImage.Location = new System.Drawing.Point(0, 0);
             this.grpCacheImage.Name = "grpCacheImage";
             this.grpCacheImage.Padding = new System.Windows.Forms.Padding(10);
-            this.grpCacheImage.Size = new System.Drawing.Size(525, 140);
+            this.grpCacheImage.Size = new System.Drawing.Size(725, 140);
             this.grpCacheImage.TabIndex = 24;
             this.grpCacheImage.TabStop = false;
             this.grpCacheImage.Text = " Image files ";
@@ -1553,16 +1570,16 @@
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel12.Size = new System.Drawing.Size(505, 107);
+            this.tableLayoutPanel12.Size = new System.Drawing.Size(705, 107);
             this.tableLayoutPanel12.TabIndex = 0;
             // 
             // btnCacheImageBrowse
             // 
             this.btnCacheImageBrowse.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCacheImageBrowse.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheImageBrowse.Image")));
-            this.btnCacheImageBrowse.Location = new System.Drawing.Point(320, 81);
+            this.btnCacheImageBrowse.Location = new System.Drawing.Point(420, 81);
             this.btnCacheImageBrowse.Name = "btnCacheImageBrowse";
-            this.btnCacheImageBrowse.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheImageBrowse.Size = new System.Drawing.Size(282, 23);
             this.btnCacheImageBrowse.TabIndex = 15;
             this.btnCacheImageBrowse.Text = "Browse";
             this.btnCacheImageBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1578,7 +1595,7 @@
             this.txtCacheImageSize.Location = new System.Drawing.Point(132, 55);
             this.txtCacheImageSize.Name = "txtCacheImageSize";
             this.txtCacheImageSize.ReadOnly = true;
-            this.txtCacheImageSize.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheImageSize.Size = new System.Drawing.Size(570, 20);
             this.txtCacheImageSize.TabIndex = 13;
             this.txtCacheImageSize.Text = "0";
             this.txtCacheImageSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -1630,7 +1647,7 @@
             0,
             0});
             this.nudCacheImageExpiry.Name = "nudCacheImageExpiry";
-            this.nudCacheImageExpiry.Size = new System.Drawing.Size(370, 20);
+            this.nudCacheImageExpiry.Size = new System.Drawing.Size(570, 20);
             this.nudCacheImageExpiry.TabIndex = 9;
             this.nudCacheImageExpiry.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudCacheImageExpiry.Value = new decimal(new int[] {
@@ -1646,7 +1663,7 @@
             this.txtCacheImageCount.Location = new System.Drawing.Point(132, 29);
             this.txtCacheImageCount.Name = "txtCacheImageCount";
             this.txtCacheImageCount.ReadOnly = true;
-            this.txtCacheImageCount.Size = new System.Drawing.Size(370, 20);
+            this.txtCacheImageCount.Size = new System.Drawing.Size(570, 20);
             this.txtCacheImageCount.TabIndex = 11;
             this.txtCacheImageCount.Text = "0";
             this.txtCacheImageCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -1657,7 +1674,7 @@
             this.btnCacheImageClear.Image = ((System.Drawing.Image)(resources.GetObject("btnCacheImageClear.Image")));
             this.btnCacheImageClear.Location = new System.Drawing.Point(132, 81);
             this.btnCacheImageClear.Name = "btnCacheImageClear";
-            this.btnCacheImageClear.Size = new System.Drawing.Size(182, 23);
+            this.btnCacheImageClear.Size = new System.Drawing.Size(282, 23);
             this.btnCacheImageClear.TabIndex = 14;
             this.btnCacheImageClear.Text = "Clear cache";
             this.btnCacheImageClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1674,7 +1691,7 @@
             this.tabEndpoint.Location = new System.Drawing.Point(4, 22);
             this.tabEndpoint.Name = "tabEndpoint";
             this.tabEndpoint.Padding = new System.Windows.Forms.Padding(7);
-            this.tabEndpoint.Size = new System.Drawing.Size(556, 470);
+            this.tabEndpoint.Size = new System.Drawing.Size(756, 570);
             this.tabEndpoint.TabIndex = 4;
             this.tabEndpoint.Text = "Endpoint";
             this.tabEndpoint.UseVisualStyleBackColor = true;
@@ -1688,7 +1705,7 @@
             this.grpEndpointSettings.Location = new System.Drawing.Point(7, 80);
             this.grpEndpointSettings.Name = "grpEndpointSettings";
             this.grpEndpointSettings.Padding = new System.Windows.Forms.Padding(10);
-            this.grpEndpointSettings.Size = new System.Drawing.Size(542, 108);
+            this.grpEndpointSettings.Size = new System.Drawing.Size(742, 108);
             this.grpEndpointSettings.TabIndex = 22;
             this.grpEndpointSettings.TabStop = false;
             this.grpEndpointSettings.Text = " Endpoint settings ";
@@ -1712,7 +1729,7 @@
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(522, 75);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(722, 75);
             this.tableLayoutPanel8.TabIndex = 0;
             // 
             // lblEndpointStartup
@@ -1734,7 +1751,7 @@
             this.chkEndpointStartup.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkEndpointStartup.Location = new System.Drawing.Point(132, 55);
             this.chkEndpointStartup.Name = "chkEndpointStartup";
-            this.chkEndpointStartup.Size = new System.Drawing.Size(387, 17);
+            this.chkEndpointStartup.Size = new System.Drawing.Size(587, 17);
             this.chkEndpointStartup.TabIndex = 10;
             this.chkEndpointStartup.Text = "  ";
             this.chkEndpointStartup.UseVisualStyleBackColor = true;
@@ -1756,7 +1773,7 @@
             this.txtEndpointPassword.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtEndpointPassword.Location = new System.Drawing.Point(132, 3);
             this.txtEndpointPassword.Name = "txtEndpointPassword";
-            this.txtEndpointPassword.Size = new System.Drawing.Size(387, 20);
+            this.txtEndpointPassword.Size = new System.Drawing.Size(587, 20);
             this.txtEndpointPassword.TabIndex = 7;
             // 
             // lblEndpointPassword
@@ -1774,7 +1791,7 @@
             // nudEndpointPort
             // 
             this.nudEndpointPort.Dock = System.Windows.Forms.DockStyle.Right;
-            this.nudEndpointPort.Location = new System.Drawing.Point(399, 29);
+            this.nudEndpointPort.Location = new System.Drawing.Point(599, 29);
             this.nudEndpointPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -1800,7 +1817,7 @@
             this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel7.Location = new System.Drawing.Point(7, 70);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(542, 10);
+            this.panel7.Size = new System.Drawing.Size(742, 10);
             this.panel7.TabIndex = 24;
             // 
             // grpEndpointState
@@ -1812,7 +1829,7 @@
             this.grpEndpointState.Location = new System.Drawing.Point(7, 7);
             this.grpEndpointState.Name = "grpEndpointState";
             this.grpEndpointState.Padding = new System.Windows.Forms.Padding(10);
-            this.grpEndpointState.Size = new System.Drawing.Size(542, 63);
+            this.grpEndpointState.Size = new System.Drawing.Size(742, 63);
             this.grpEndpointState.TabIndex = 23;
             this.grpEndpointState.TabStop = false;
             this.grpEndpointState.Text = " Status ";
@@ -1827,7 +1844,7 @@
             this.panel8.Location = new System.Drawing.Point(10, 23);
             this.panel8.MinimumSize = new System.Drawing.Size(0, 30);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(522, 30);
+            this.panel8.Size = new System.Drawing.Size(722, 30);
             this.panel8.TabIndex = 1;
             // 
             // lblEndpointState
@@ -1836,7 +1853,7 @@
             this.lblEndpointState.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblEndpointState.Location = new System.Drawing.Point(0, 0);
             this.lblEndpointState.Name = "lblEndpointState";
-            this.lblEndpointState.Size = new System.Drawing.Size(362, 30);
+            this.lblEndpointState.Size = new System.Drawing.Size(562, 30);
             this.lblEndpointState.TabIndex = 2;
             this.lblEndpointState.Text = "Endpoint is not running.";
             this.lblEndpointState.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1846,7 +1863,7 @@
             this.btnEndpointStart.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnEndpointStart.Image = ((System.Drawing.Image)(resources.GetObject("btnEndpointStart.Image")));
             this.btnEndpointStart.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnEndpointStart.Location = new System.Drawing.Point(362, 0);
+            this.btnEndpointStart.Location = new System.Drawing.Point(562, 0);
             this.btnEndpointStart.Name = "btnEndpointStart";
             this.btnEndpointStart.Size = new System.Drawing.Size(80, 30);
             this.btnEndpointStart.TabIndex = 0;
@@ -1859,7 +1876,7 @@
             this.btnEndpointStop.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnEndpointStop.Image = ((System.Drawing.Image)(resources.GetObject("btnEndpointStop.Image")));
             this.btnEndpointStop.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnEndpointStop.Location = new System.Drawing.Point(442, 0);
+            this.btnEndpointStop.Location = new System.Drawing.Point(642, 0);
             this.btnEndpointStop.Name = "btnEndpointStop";
             this.btnEndpointStop.Size = new System.Drawing.Size(80, 30);
             this.btnEndpointStop.TabIndex = 1;
@@ -1875,7 +1892,7 @@
             this.tabFFXIV.Location = new System.Drawing.Point(4, 22);
             this.tabFFXIV.Name = "tabFFXIV";
             this.tabFFXIV.Padding = new System.Windows.Forms.Padding(7);
-            this.tabFFXIV.Size = new System.Drawing.Size(556, 470);
+            this.tabFFXIV.Size = new System.Drawing.Size(756, 570);
             this.tabFFXIV.TabIndex = 2;
             this.tabFFXIV.Text = "Final Fantasy XIV";
             this.tabFFXIV.UseVisualStyleBackColor = true;
@@ -1888,7 +1905,7 @@
             this.grpPartyListOrder.Location = new System.Drawing.Point(7, 73);
             this.grpPartyListOrder.Name = "grpPartyListOrder";
             this.grpPartyListOrder.Padding = new System.Windows.Forms.Padding(10);
-            this.grpPartyListOrder.Size = new System.Drawing.Size(542, 390);
+            this.grpPartyListOrder.Size = new System.Drawing.Size(742, 490);
             this.grpPartyListOrder.TabIndex = 16;
             this.grpPartyListOrder.TabStop = false;
             this.grpPartyListOrder.Text = " Party list ordering ";
@@ -1910,7 +1927,7 @@
             this.tableLayoutPanel5.RowCount = 2;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(522, 357);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(722, 457);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
             // lblFfxivJobOrder
@@ -1921,7 +1938,7 @@
             this.lblFfxivJobOrder.Location = new System.Drawing.Point(3, 27);
             this.lblFfxivJobOrder.Name = "lblFfxivJobOrder";
             this.lblFfxivJobOrder.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.lblFfxivJobOrder.Size = new System.Drawing.Size(85, 330);
+            this.lblFfxivJobOrder.Size = new System.Drawing.Size(85, 571);
             this.lblFfxivJobOrder.TabIndex = 7;
             this.lblFfxivJobOrder.Text = "Job order";
             // 
@@ -1948,7 +1965,7 @@
             "Sort everyone by custom party order"});
             this.cbxFfxivJobMethod.Location = new System.Drawing.Point(94, 3);
             this.cbxFfxivJobMethod.Name = "cbxFfxivJobMethod";
-            this.cbxFfxivJobMethod.Size = new System.Drawing.Size(425, 21);
+            this.cbxFfxivJobMethod.Size = new System.Drawing.Size(625, 21);
             this.cbxFfxivJobMethod.TabIndex = 5;
             this.cbxFfxivJobMethod.SelectedIndexChanged += new System.EventHandler(this.cbxFfxivJobMethod_SelectedIndexChanged);
             // 
@@ -1959,7 +1976,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(94, 30);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(425, 324);
+            this.panel1.Size = new System.Drawing.Size(625, 565);
             this.panel1.TabIndex = 8;
             // 
             // lstFfxivJobOrder
@@ -1969,7 +1986,7 @@
             this.lstFfxivJobOrder.IntegralHeight = false;
             this.lstFfxivJobOrder.Location = new System.Drawing.Point(0, 25);
             this.lstFfxivJobOrder.Name = "lstFfxivJobOrder";
-            this.lstFfxivJobOrder.Size = new System.Drawing.Size(425, 299);
+            this.lstFfxivJobOrder.Size = new System.Drawing.Size(625, 540);
             this.lstFfxivJobOrder.TabIndex = 18;
             this.lstFfxivJobOrder.SelectedIndexChanged += new System.EventHandler(this.lstFfxivJobOrder_SelectedIndexChanged);
             this.lstFfxivJobOrder.EnabledChanged += new System.EventHandler(this.lstFfxivJobOrder_EnabledChanged);
@@ -1984,7 +2001,7 @@
             this.btnFfxivJobRestore});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(425, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(625, 25);
             this.toolStrip1.TabIndex = 0;
             // 
             // btnFfxivJobUp
@@ -2026,7 +2043,7 @@
             this.panel9.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel9.Location = new System.Drawing.Point(7, 63);
             this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(542, 10);
+            this.panel9.Size = new System.Drawing.Size(742, 10);
             this.panel9.TabIndex = 20;
             // 
             // grpFfxivEventLogging
@@ -2037,7 +2054,7 @@
             this.grpFfxivEventLogging.Location = new System.Drawing.Point(7, 7);
             this.grpFfxivEventLogging.Name = "grpFfxivEventLogging";
             this.grpFfxivEventLogging.Padding = new System.Windows.Forms.Padding(10);
-            this.grpFfxivEventLogging.Size = new System.Drawing.Size(542, 56);
+            this.grpFfxivEventLogging.Size = new System.Drawing.Size(742, 56);
             this.grpFfxivEventLogging.TabIndex = 19;
             this.grpFfxivEventLogging.TabStop = false;
             this.grpFfxivEventLogging.Text = " Event logging ";
@@ -2054,7 +2071,7 @@
             this.tableLayoutPanel9.RowCount = 2;
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(522, 23);
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(722, 23);
             this.tableLayoutPanel9.TabIndex = 1;
             // 
             // chkFfxivLogNetwork
@@ -2064,7 +2081,7 @@
             this.chkFfxivLogNetwork.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkFfxivLogNetwork.Location = new System.Drawing.Point(3, 3);
             this.chkFfxivLogNetwork.Name = "chkFfxivLogNetwork";
-            this.chkFfxivLogNetwork.Size = new System.Drawing.Size(516, 17);
+            this.chkFfxivLogNetwork.Size = new System.Drawing.Size(716, 17);
             this.chkFfxivLogNetwork.TabIndex = 5;
             this.chkFfxivLogNetwork.Text = "Log network events";
             this.chkFfxivLogNetwork.UseVisualStyleBackColor = true;
@@ -2076,7 +2093,7 @@
             this.tabSubstitutions.Location = new System.Drawing.Point(4, 22);
             this.tabSubstitutions.Name = "tabSubstitutions";
             this.tabSubstitutions.Padding = new System.Windows.Forms.Padding(7);
-            this.tabSubstitutions.Size = new System.Drawing.Size(556, 470);
+            this.tabSubstitutions.Size = new System.Drawing.Size(756, 570);
             this.tabSubstitutions.TabIndex = 6;
             this.tabSubstitutions.Text = "Substitutions";
             this.tabSubstitutions.UseVisualStyleBackColor = true;
@@ -2100,7 +2117,7 @@
             this.dgvSubstitutions.ShowCellErrors = false;
             this.dgvSubstitutions.ShowEditingIcon = false;
             this.dgvSubstitutions.ShowRowErrors = false;
-            this.dgvSubstitutions.Size = new System.Drawing.Size(542, 431);
+            this.dgvSubstitutions.Size = new System.Drawing.Size(742, 531);
             this.dgvSubstitutions.TabIndex = 20;
             this.dgvSubstitutions.VirtualMode = true;
             this.dgvSubstitutions.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSubstitutions_CellDoubleClick);
@@ -2141,7 +2158,7 @@
             this.btnSubRemove});
             this.tlsSubstitutions.Location = new System.Drawing.Point(7, 7);
             this.tlsSubstitutions.Name = "tlsSubstitutions";
-            this.tlsSubstitutions.Size = new System.Drawing.Size(542, 25);
+            this.tlsSubstitutions.Size = new System.Drawing.Size(742, 25);
             this.tlsSubstitutions.TabIndex = 19;
             // 
             // btnSubAdd
@@ -2173,13 +2190,126 @@
             this.btnSubRemove.Text = "Remove substitution";
             this.btnSubRemove.Click += new System.EventHandler(this.btnSubRemove_Click);
             // 
+            // tabConsts
+            // 
+            this.tabConsts.Controls.Add(this.panel19);
+            this.tabConsts.Location = new System.Drawing.Point(4, 22);
+            this.tabConsts.Name = "tabConsts";
+            this.tabConsts.Padding = new System.Windows.Forms.Padding(7);
+            this.tabConsts.Size = new System.Drawing.Size(756, 570);
+            this.tabConsts.TabIndex = 8;
+            this.tabConsts.Text = "Constants";
+            this.tabConsts.UseVisualStyleBackColor = true;
+            // 
+            // panel19
+            // 
+            this.panel19.Controls.Add(this.dgvConstVariables);
+            this.panel19.Controls.Add(this.tlsScalar);
+            this.panel19.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel19.Location = new System.Drawing.Point(7, 7);
+            this.panel19.Name = "panel19";
+            this.panel19.Size = new System.Drawing.Size(742, 556);
+            this.panel19.TabIndex = 23;
+            // 
+            // dgvConstVariables
+            // 
+            this.dgvConstVariables.AllowUserToAddRows = false;
+            this.dgvConstVariables.AllowUserToDeleteRows = false;
+            this.dgvConstVariables.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.dgvConstVariables.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvConstVariables.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvConstVariables.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colScalarName,
+            this.colScalarValue});
+            this.dgvConstVariables.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvConstVariables.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dgvConstVariables.Location = new System.Drawing.Point(0, 25);
+            this.dgvConstVariables.Name = "dgvConstVariables";
+            this.dgvConstVariables.RowHeadersVisible = false;
+            this.dgvConstVariables.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvConstVariables.ShowCellErrors = false;
+            this.dgvConstVariables.ShowEditingIcon = false;
+            this.dgvConstVariables.ShowRowErrors = false;
+            this.dgvConstVariables.Size = new System.Drawing.Size(742, 531);
+            this.dgvConstVariables.TabIndex = 21;
+            this.dgvConstVariables.VirtualMode = true;
+            this.dgvConstVariables.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvConstVariables_CellDoubleClick);
+            this.dgvConstVariables.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvConstVariables_CellValueNeeded);
+            this.dgvConstVariables.SelectionChanged += new System.EventHandler(this.dgvConstVariables_SelectionChanged);
+            this.dgvConstVariables.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvConstVariables_KeyDown);
+            // 
+            // colScalarName
+            // 
+            this.colScalarName.Frozen = true;
+            this.colScalarName.HeaderText = "Name";
+            this.colScalarName.Name = "colScalarName";
+            this.colScalarName.ReadOnly = true;
+            this.colScalarName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colScalarName.Width = 200;
+            // 
+            // colScalarValue
+            // 
+            this.colScalarValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colScalarValue.HeaderText = "Value";
+            this.colScalarValue.Name = "colScalarValue";
+            this.colScalarValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // tlsScalar
+            // 
+            this.tlsScalar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.tlsScalar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnConstAdd,
+            this.btnConstEdit,
+            this.toolStripSeparator2,
+            this.btnConstRemove});
+            this.tlsScalar.Location = new System.Drawing.Point(0, 0);
+            this.tlsScalar.Name = "tlsScalar";
+            this.tlsScalar.Size = new System.Drawing.Size(742, 25);
+            this.tlsScalar.TabIndex = 20;
+            // 
+            // btnConstAdd
+            // 
+            this.btnConstAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnConstAdd.Image")));
+            this.btnConstAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnConstAdd.Name = "btnConstAdd";
+            this.btnConstAdd.Size = new System.Drawing.Size(98, 22);
+            this.btnConstAdd.Text = "Add constant";
+            this.btnConstAdd.Click += new System.EventHandler(this.btnConstAdd_Click);
+            // 
+            // btnConstEdit
+            // 
+            this.btnConstEdit.Enabled = false;
+            this.btnConstEdit.Image = ((System.Drawing.Image)(resources.GetObject("btnConstEdit.Image")));
+            this.btnConstEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnConstEdit.Name = "btnConstEdit";
+            this.btnConstEdit.Size = new System.Drawing.Size(96, 22);
+            this.btnConstEdit.Text = "Edit constant";
+            this.btnConstEdit.Click += new System.EventHandler(this.btnConstEdit_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnConstRemove
+            // 
+            this.btnConstRemove.Enabled = false;
+            this.btnConstRemove.Image = ((System.Drawing.Image)(resources.GetObject("btnConstRemove.Image")));
+            this.btnConstRemove.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnConstRemove.Name = "btnConstRemove";
+            this.btnConstRemove.Size = new System.Drawing.Size(119, 22);
+            this.btnConstRemove.Text = "Remove constant";
+            this.btnConstRemove.ToolTipText = "Remove value";
+            this.btnConstRemove.Click += new System.EventHandler(this.btnConstRemove_Click);
+            // 
             // tabSecurity
             // 
             this.tabSecurity.Controls.Add(this.groupBox2);
             this.tabSecurity.Location = new System.Drawing.Point(4, 22);
             this.tabSecurity.Name = "tabSecurity";
             this.tabSecurity.Padding = new System.Windows.Forms.Padding(7);
-            this.tabSecurity.Size = new System.Drawing.Size(556, 470);
+            this.tabSecurity.Size = new System.Drawing.Size(756, 570);
             this.tabSecurity.TabIndex = 7;
             this.tabSecurity.Text = "Security";
             this.tabSecurity.UseVisualStyleBackColor = true;
@@ -2194,7 +2324,7 @@
             this.groupBox2.Location = new System.Drawing.Point(7, 7);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(10);
-            this.groupBox2.Size = new System.Drawing.Size(542, 456);
+            this.groupBox2.Size = new System.Drawing.Size(742, 556);
             this.groupBox2.TabIndex = 20;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = " Scripting API access ";
@@ -2222,7 +2352,7 @@
             this.dgvApiAccess.ShowCellErrors = false;
             this.dgvApiAccess.ShowEditingIcon = false;
             this.dgvApiAccess.ShowRowErrors = false;
-            this.dgvApiAccess.Size = new System.Drawing.Size(522, 383);
+            this.dgvApiAccess.Size = new System.Drawing.Size(722, 483);
             this.dgvApiAccess.TabIndex = 0;
             this.dgvApiAccess.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApiAccess_CellContentClick);
             this.dgvApiAccess.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApiAccess_CellContentDoubleClick);
@@ -2263,7 +2393,7 @@
             this.panel18.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel18.Location = new System.Drawing.Point(10, 53);
             this.panel18.Name = "panel18";
-            this.panel18.Size = new System.Drawing.Size(522, 10);
+            this.panel18.Size = new System.Drawing.Size(722, 10);
             this.panel18.TabIndex = 25;
             // 
             // btnUnlockSecurity
@@ -2272,7 +2402,7 @@
             this.btnUnlockSecurity.Image = ((System.Drawing.Image)(resources.GetObject("btnUnlockSecurity.Image")));
             this.btnUnlockSecurity.Location = new System.Drawing.Point(10, 23);
             this.btnUnlockSecurity.Name = "btnUnlockSecurity";
-            this.btnUnlockSecurity.Size = new System.Drawing.Size(522, 30);
+            this.btnUnlockSecurity.Size = new System.Drawing.Size(722, 30);
             this.btnUnlockSecurity.TabIndex = 26;
             this.btnUnlockSecurity.Text = "Unlock security settings for editing";
             this.btnUnlockSecurity.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -2292,7 +2422,7 @@
             this.tabMisc.Location = new System.Drawing.Point(4, 22);
             this.tabMisc.Name = "tabMisc";
             this.tabMisc.Padding = new System.Windows.Forms.Padding(7);
-            this.tabMisc.Size = new System.Drawing.Size(556, 470);
+            this.tabMisc.Size = new System.Drawing.Size(756, 570);
             this.tabMisc.TabIndex = 3;
             this.tabMisc.Text = "Miscellaneous";
             this.tabMisc.UseVisualStyleBackColor = true;
@@ -2305,7 +2435,7 @@
             this.groupBox1.Location = new System.Drawing.Point(7, 309);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
-            this.groupBox1.Size = new System.Drawing.Size(542, 82);
+            this.groupBox1.Size = new System.Drawing.Size(742, 82);
             this.groupBox1.TabIndex = 27;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = " Aura control ";
@@ -2325,7 +2455,7 @@
             this.tableLayoutPanel11.RowCount = 2;
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel11.Size = new System.Drawing.Size(522, 49);
+            this.tableLayoutPanel11.Size = new System.Drawing.Size(722, 49);
             this.tableLayoutPanel11.TabIndex = 2;
             // 
             // txtMonitorWindow
@@ -2333,7 +2463,7 @@
             this.txtMonitorWindow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtMonitorWindow.Location = new System.Drawing.Point(204, 3);
             this.txtMonitorWindow.Name = "txtMonitorWindow";
-            this.txtMonitorWindow.Size = new System.Drawing.Size(315, 20);
+            this.txtMonitorWindow.Size = new System.Drawing.Size(515, 20);
             this.txtMonitorWindow.TabIndex = 8;
             // 
             // lblMonitorWindow
@@ -2356,7 +2486,7 @@
             this.cbxEnableHwAccel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbxEnableHwAccel.Location = new System.Drawing.Point(3, 29);
             this.cbxEnableHwAccel.Name = "cbxEnableHwAccel";
-            this.cbxEnableHwAccel.Size = new System.Drawing.Size(516, 17);
+            this.cbxEnableHwAccel.Size = new System.Drawing.Size(716, 17);
             this.cbxEnableHwAccel.TabIndex = 6;
             this.cbxEnableHwAccel.Text = "Enable aura hardware acceleration";
             this.cbxEnableHwAccel.UseVisualStyleBackColor = true;
@@ -2366,7 +2496,7 @@
             this.panel12.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel12.Location = new System.Drawing.Point(7, 299);
             this.panel12.Name = "panel12";
-            this.panel12.Size = new System.Drawing.Size(542, 10);
+            this.panel12.Size = new System.Drawing.Size(742, 10);
             this.panel12.TabIndex = 26;
             // 
             // grpUserInterface
@@ -2377,7 +2507,7 @@
             this.grpUserInterface.Location = new System.Drawing.Point(7, 148);
             this.grpUserInterface.Name = "grpUserInterface";
             this.grpUserInterface.Padding = new System.Windows.Forms.Padding(10);
-            this.grpUserInterface.Size = new System.Drawing.Size(542, 151);
+            this.grpUserInterface.Size = new System.Drawing.Size(742, 151);
             this.grpUserInterface.TabIndex = 25;
             this.grpUserInterface.TabStop = false;
             this.grpUserInterface.Text = " User interface ";
@@ -2403,7 +2533,7 @@
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(522, 118);
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(722, 118);
             this.tableLayoutPanel10.TabIndex = 2;
             // 
             // chkClipboard
@@ -2414,7 +2544,7 @@
             this.chkClipboard.Dock = System.Windows.Forms.DockStyle.Top;
             this.chkClipboard.Location = new System.Drawing.Point(3, 3);
             this.chkClipboard.Name = "chkClipboard";
-            this.chkClipboard.Size = new System.Drawing.Size(516, 17);
+            this.chkClipboard.Size = new System.Drawing.Size(716, 17);
             this.chkClipboard.TabIndex = 6;
             this.chkClipboard.Text = "Use operating system clipboard";
             this.chkClipboard.UseVisualStyleBackColor = true;
@@ -2426,7 +2556,7 @@
             this.lblAutosaveInterval.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblAutosaveInterval.Location = new System.Drawing.Point(3, 92);
             this.lblAutosaveInterval.Name = "lblAutosaveInterval";
-            this.lblAutosaveInterval.Size = new System.Drawing.Size(416, 26);
+            this.lblAutosaveInterval.Size = new System.Drawing.Size(616, 26);
             this.lblAutosaveInterval.TabIndex = 9;
             this.lblAutosaveInterval.Text = "Autosaving time interval in minutes";
             this.lblAutosaveInterval.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2439,7 +2569,7 @@
             this.cbxAutosaveConfig.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbxAutosaveConfig.Location = new System.Drawing.Point(3, 72);
             this.cbxAutosaveConfig.Name = "cbxAutosaveConfig";
-            this.cbxAutosaveConfig.Size = new System.Drawing.Size(516, 17);
+            this.cbxAutosaveConfig.Size = new System.Drawing.Size(716, 17);
             this.cbxAutosaveConfig.TabIndex = 8;
             this.cbxAutosaveConfig.Text = "Enable configuration auto-save";
             this.cbxAutosaveConfig.UseVisualStyleBackColor = true;
@@ -2453,7 +2583,7 @@
             this.cbxDevMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbxDevMode.Location = new System.Drawing.Point(3, 49);
             this.cbxDevMode.Name = "cbxDevMode";
-            this.cbxDevMode.Size = new System.Drawing.Size(516, 17);
+            this.cbxDevMode.Size = new System.Drawing.Size(716, 17);
             this.cbxDevMode.TabIndex = 7;
             this.cbxDevMode.Text = "Developer mode";
             this.cbxDevMode.UseVisualStyleBackColor = true;
@@ -2466,14 +2596,14 @@
             this.cbxTestLive.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbxTestLive.Location = new System.Drawing.Point(3, 26);
             this.cbxTestLive.Name = "cbxTestLive";
-            this.cbxTestLive.Size = new System.Drawing.Size(516, 17);
+            this.cbxTestLive.Size = new System.Drawing.Size(716, 17);
             this.cbxTestLive.TabIndex = 6;
             this.cbxTestLive.Text = "Set testing with live values as the default action test method";
             this.cbxTestLive.UseVisualStyleBackColor = true;
             // 
             // nudAutosaveMinutes
             // 
-            this.nudAutosaveMinutes.Location = new System.Drawing.Point(425, 95);
+            this.nudAutosaveMinutes.Location = new System.Drawing.Point(625, 95);
             this.nudAutosaveMinutes.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -2499,7 +2629,7 @@
             this.panel6.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel6.Location = new System.Drawing.Point(7, 138);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(542, 10);
+            this.panel6.Size = new System.Drawing.Size(742, 10);
             this.panel6.TabIndex = 24;
             // 
             // panel5
@@ -2507,7 +2637,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(7, 69);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(542, 10);
+            this.panel5.Size = new System.Drawing.Size(742, 10);
             this.panel5.TabIndex = 22;
             // 
             // grpDefaultSettings
@@ -2519,7 +2649,7 @@
             this.grpDefaultSettings.Location = new System.Drawing.Point(7, 7);
             this.grpDefaultSettings.Name = "grpDefaultSettings";
             this.grpDefaultSettings.Padding = new System.Windows.Forms.Padding(10);
-            this.grpDefaultSettings.Size = new System.Drawing.Size(542, 62);
+            this.grpDefaultSettings.Size = new System.Drawing.Size(742, 62);
             this.grpDefaultSettings.TabIndex = 23;
             this.grpDefaultSettings.TabStop = false;
             this.grpDefaultSettings.Text = " Default settings ";
@@ -2538,7 +2668,7 @@
             this.tableLayoutPanel17.RowCount = 2;
             this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel17.Size = new System.Drawing.Size(522, 29);
+            this.tableLayoutPanel17.Size = new System.Drawing.Size(722, 29);
             this.tableLayoutPanel17.TabIndex = 3;
             // 
             // cbxTriggerTemplate
@@ -2548,7 +2678,7 @@
             this.cbxTriggerTemplate.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbxTriggerTemplate.Location = new System.Drawing.Point(3, 3);
             this.cbxTriggerTemplate.Name = "cbxTriggerTemplate";
-            this.cbxTriggerTemplate.Size = new System.Drawing.Size(316, 23);
+            this.cbxTriggerTemplate.Size = new System.Drawing.Size(516, 23);
             this.cbxTriggerTemplate.TabIndex = 6;
             this.cbxTriggerTemplate.Text = "Use template trigger for default values";
             this.cbxTriggerTemplate.UseVisualStyleBackColor = true;
@@ -2556,7 +2686,7 @@
             // btnTriggerTemplate
             // 
             this.btnTriggerTemplate.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnTriggerTemplate.Location = new System.Drawing.Point(325, 3);
+            this.btnTriggerTemplate.Location = new System.Drawing.Point(525, 3);
             this.btnTriggerTemplate.Name = "btnTriggerTemplate";
             this.btnTriggerTemplate.Size = new System.Drawing.Size(194, 23);
             this.btnTriggerTemplate.TabIndex = 7;
@@ -2575,8 +2705,12 @@
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(522, 29);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(722, 29);
             this.tableLayoutPanel6.TabIndex = 1;
+            // 
+            // fontDialog1
+            // 
+            this.fontDialog1.AllowScriptChange = false;
             // 
             // ConfigurationForm
             // 
@@ -2584,7 +2718,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(584, 561);
+            this.ClientSize = new System.Drawing.Size(784, 661);
             this.Controls.Add(this.tbcMain);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel4);
@@ -2686,6 +2820,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvSubstitutions)).EndInit();
             this.tlsSubstitutions.ResumeLayout(false);
             this.tlsSubstitutions.PerformLayout();
+            this.tabConsts.ResumeLayout(false);
+            this.panel19.ResumeLayout(false);
+            this.panel19.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvConstVariables)).EndInit();
+            this.tlsScalar.ResumeLayout(false);
+            this.tlsScalar.PerformLayout();
             this.tabSecurity.ResumeLayout(false);
             this.tabSecurity.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -2884,5 +3024,16 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel17;
         private System.Windows.Forms.CheckBox cbxTriggerTemplate;
         private System.Windows.Forms.Button btnTriggerTemplate;
+        private System.Windows.Forms.TabPage tabConsts;
+        private System.Windows.Forms.Panel panel19;
+        private CustomControls.DataGridViewEx dgvConstVariables;
+        private System.Windows.Forms.ToolStrip tlsScalar;
+        private System.Windows.Forms.ToolStripButton btnConstAdd;
+        private System.Windows.Forms.ToolStripButton btnConstEdit;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton btnConstRemove;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colScalarName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colScalarValue;
+        private System.Windows.Forms.FontDialog fontDialog1;
     }
 }

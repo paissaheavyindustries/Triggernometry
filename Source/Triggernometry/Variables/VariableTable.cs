@@ -43,12 +43,12 @@ namespace Triggernometry.Variables
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            for (int y = 0; y < Height; y++)
+            for (int y = 1; y <= Height; y++)
             {
                 List<string> temp = new List<string>();
-                for (int x = 0; x < Width; x++)
+                for (int x = 1; x <= Width; x++)
                 {
-                    Peek(x, y).ToString();
+                    temp.Add(Peek(x, y).ToString());
                 }
                 sb.AppendLine(String.Join(",", temp));
             }
@@ -153,7 +153,7 @@ namespace Triggernometry.Variables
             else if (Height > newHeight)
             {
                 int num = Height - newHeight;
-                Rows.RemoveRange(Height - (1 + num), num);
+                Rows.RemoveRange(Height - num, num);
             }
             if (newWidth != oldWidth)
             {
@@ -162,7 +162,7 @@ namespace Triggernometry.Variables
                     if (Rows[i].Values.Count > newWidth)
                     {
                         int num = Rows[i].Values.Count - newWidth;
-                        Rows[i].Values.RemoveRange(Rows[i].Values.Count - (1 + num), num);
+                        Rows[i].Values.RemoveRange(Rows[i].Values.Count - num, num);
                     }
                     else if (Rows[i].Values.Count < newWidth)
                     {

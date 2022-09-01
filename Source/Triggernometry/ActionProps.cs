@@ -161,6 +161,11 @@ namespace Triggernometry
             StartRecording,
             StopRecording,
             ToggleRecording,
+            RestartRecording,
+            RestartRecordingIfActive,
+            ResumeRecording,
+            PauseRecording,
+            ToggleRecordPause,
             StartReplayBuffer,
             StopReplayBuffer,
             ToggleReplayBuffer,
@@ -1394,6 +1399,42 @@ namespace Triggernometry
             set
             {
                 _LoopDelayExpression = value;
+            }
+        }
+
+        internal string _LoopInitExpression = "0";
+        [XmlAttribute]
+        public string LoopInitExpression
+        {
+            get
+            {
+                if (_LoopInitExpression == "0")
+                {
+                    return null;
+                }
+                return _LoopInitExpression;
+            }
+            set
+            {
+                _LoopInitExpression = value;
+            }
+        }
+
+        internal string _LoopIncrExpression = "1";
+        [XmlAttribute]
+        public string LoopIncrExpression
+        {
+            get
+            {
+                if (_LoopIncrExpression == "1")
+                {
+                    return null;
+                }
+                return _LoopIncrExpression;
+            }
+            set
+            {
+                _LoopIncrExpression = value;
             }
         }
 

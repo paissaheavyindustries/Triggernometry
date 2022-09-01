@@ -141,6 +141,7 @@ namespace Triggernometry.Forms
             btnCancel.Dock = DockStyle.Fill;
             cbxLoggingLevel.Enabled = false;
             txtDescription.ReadOnly = true;
+            txtEvent.ReadOnly = true;
             cbxTriggerSource.Enabled = false;
             cbxRefireOption1.Enabled = false;
             cbxRefireOption2.Enabled = false;
@@ -185,6 +186,7 @@ namespace Triggernometry.Forms
                 cbxSequential.Checked = false;
                 cbxLoggingLevel.SelectedIndex = 5;
                 txtDescription.Text = "";
+                txtEvent.Text = "";
                 cndCondition.ConditionToEdit = new ConditionGroup() { Enabled = false };
                 expMutexName.Expression = "";
                 chkReadmeTrigger.Checked = false;
@@ -193,7 +195,8 @@ namespace Triggernometry.Forms
             {
                 txtName.Text = t.Name;
                 txtRegexp.Text = t.RegularExpression;
-                txtDescription.Text = t._Description;            
+                txtDescription.Text = t._Description;
+                txtEvent.Text = t._TestInput;
                 switch (t._PrevActions)
                 {
                     case Trigger.PrevActionsEnum.Interrupt:
@@ -283,6 +286,7 @@ namespace Triggernometry.Forms
             t.Name = txtName.Text;
             t.RegularExpression = txtRegexp.Text;
             t._Description = txtDescription.Text;
+            t._TestInput = txtEvent.Text;
             t._EditAutofire = cbxEditAutofire.Checked;
             t._Sequential = cbxSequential.Checked;
             switch (cbxRefireOption1.SelectedIndex)
