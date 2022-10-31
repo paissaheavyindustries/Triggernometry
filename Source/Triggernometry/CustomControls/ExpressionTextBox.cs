@@ -21,7 +21,7 @@ namespace Triggernometry.CustomControls
             // numeric
             "pi", "pi2", "pi05", "pi025", "pi0125", "pitorad", "piofrad", "phi", "major", "minor",
             "abs(x)", "cos(x)", "cosh(x)", "arccos(x)", "cosec(x)", "sin(x)", "sinh(x)", "arcsin(x)", "sec(x)", "tan(x)", "tanh(x)", "arctan(x)", "arctan2(x, y)",
-            "cotan(x)", "distance(x1, y1, x2, y2)", "radtodeg(x)", "degtorad(x)", "max(...)", "min(...)", "random(x, y)", "sqrt(x)", "root(x, y)", "rem(x, y)",
+            "cotan(x)", "distance(x1, y1, x2, y2)", "radtodeg(x)", "degtorad(x)", "max(...)", "min(...)", "random(x, y)", "sqrt(x)", "root(x, y)", "rem(x, y)", "mod(x, y)",
             "pow(x, y)", "exp(x)", "log(x)", "log(x, y)", "round(x)", "round(x, y)", "floor(x)", "ceiling(x)", "sign(x)", "hex2dec(x)", "or(...)", "and(...)", "if(x,y,z)",
             // expressions
             "numeric", "string", "var", "evar", "lvar", "elvar", "tvar", "tvarcl", "tvarrl", "etvar", "func", "pvar", "epvar", "plvar", "eplvar", "ptvar", "ptvarcl", "ptvarrl", "eptvar",

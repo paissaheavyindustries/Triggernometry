@@ -98,7 +98,7 @@ namespace Triggernometry
         /// to the parser. Please note that you are able to change that using
         /// boolean flags
         /// </summary>
-        /// <param name="loadPreDefinedFunctions">This will load "abs", "cos", "cosh", "arccos", "sin", "sinh", "arcsin", "tan", "tanh", "arctan", "sqrt", "rem", "round"</param>
+        /// <param name="loadPreDefinedFunctions">This will load "abs", "cos", "cosh", "arccos", "sin", "sinh", "arcsin", "tan", "tanh", "arctan", "sqrt", "rem", "mod", "round"</param>
         /// <param name="loadPreDefinedOperators">This will load "%", "*", ":", "/", "+", "-", ">", "&lt;", "="</param>
         /// <param name="loadPreDefinedVariables">This will load "pi", "pi2", "pi05", "pi025", "pi0125", "pitograd", "piofgrad", "e", "phi", "major", "minor"</param>
         public MathParser(bool loadPreDefinedFunctions = true, bool loadPreDefinedOperators = true, bool loadPreDefinedVariables = true)
@@ -182,6 +182,7 @@ namespace Triggernometry
 
                 LocalFunctions.Add("sqrt", x => Math.Sqrt(x[0]));
                 LocalFunctions.Add("rem", x => Math.IEEERemainder(x[0], x[1]));
+                LocalFunctions.Add("mod", x => (x[0] % x[1] + x[1]) % x[1]);
                 LocalFunctions.Add("root", x => Math.Pow(x[0], 1.0 / x[1]));
 
                 LocalFunctions.Add("pow", x => Math.Pow(x[0], x[1]));
