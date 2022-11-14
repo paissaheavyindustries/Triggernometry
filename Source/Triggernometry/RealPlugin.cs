@@ -1618,6 +1618,11 @@ namespace Triggernometry
 
         internal void TtsPlaybackSelf(Context ctx, Action a)
         {
+            string text = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._UseTTSTextExpression);
+            if (ctx.plug != null)
+            {
+                text = ctx.plug.cfg.PerformSubstitution(text, Configuration.Substitution.SubstitutionScopeEnum.TextToSpeech);
+            }
             SpeechSynthesizer mytts;
             if (a._UseTTSExclusive == true)
             {
@@ -1648,11 +1653,6 @@ namespace Triggernometry
             }
             mytts.Volume = (int)Math.Ceiling(vol);
             mytts.Rate = (int)Math.Ceiling(rate);
-            string text = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._UseTTSTextExpression);
-            if (ctx.plug != null)
-            {
-                text = ctx.plug.cfg.PerformSubstitution(text, Configuration.Substitution.SubstitutionScopeEnum.TextToSpeech);
-            }
             mytts.Speak(text);
         }
 
@@ -2033,6 +2033,18 @@ namespace Triggernometry
                     cfg.FfxivPartyOrdering = Configuration.FfxivPartyOrderingEnum.CustomSelfFirst;
                 }
             }
+            Configuration dummy = new Configuration();
+            foreach (KeyValuePair<string, VariableScalar> kp in dummy.Constants)
+            {
+                if (cfg.Constants.ContainsKey(kp.Key) == false)
+                {
+                    cfg.Constants[kp.Key] = new VariableScalar() { Value = kp.Value.Value, LastChanged = kp.Value.LastChanged, LastChanger = kp.Value.LastChanger };
+                }
+            }
+            cfg.Constants["TriggernometryVersionMajor"] = new VariableScalar() { Value = v.Major.ToString() };
+            cfg.Constants["TriggernometryVersionMinor"] = new VariableScalar() { Value = v.Minor.ToString() };
+            cfg.Constants["TriggernometryVersionBuild"] = new VariableScalar() { Value = v.Build.ToString() };
+            cfg.Constants["TriggernometryVersionRevision"] = new VariableScalar() { Value = v.Revision.ToString() };
         }
 
         public void InitPlugin(TabPage pluginScreenSpace, Label pluginStatusText)

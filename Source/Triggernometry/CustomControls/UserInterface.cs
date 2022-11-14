@@ -2008,21 +2008,21 @@ namespace Triggernometry.CustomControls
 
         private void ForceFireTrigger(Trigger t)
         {
-            if (t._TestInput == "")
+            Context ctx = new Context();
+            ctx.plug = plug;
+            ctx.testmode = false;
+            ctx.trig = t;
+            ctx.soundhook = plug.SoundPlaybackSmart;
+            ctx.ttshook = plug.TtsPlaybackSmart;
+            ctx.triggered = DateTime.UtcNow;
+            ctx.force = Action.TriggerForceTypeEnum.SkipAll;
+            if (!(t._TestInput?.Length > 0))
             {
-                Context ctx = new Context();
-                ctx.plug = plug;
-                ctx.testmode = false;
-                ctx.trig = t;
-                ctx.soundhook = plug.SoundPlaybackSmart;
-                ctx.ttshook = plug.TtsPlaybackSmart;
-                ctx.triggered = DateTime.UtcNow;
-                ctx.force = Action.TriggerForceTypeEnum.SkipAll;
                 t.Fire(plug, ctx, null);
             }
             else
             {
-                string[] lines = t._TestInput.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                string[] lines = ctx.EvaluateStringExpression(t.TriggerContextLogger, plug, t._TestInput).Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
                 Action.TriggerForceTypeEnum force = Action.TriggerForceTypeEnum.SkipActive | Action.TriggerForceTypeEnum.SkipRefire | Action.TriggerForceTypeEnum.SkipParent;
                 LogEvent.SourceEnum source;
                 switch (t._Source)

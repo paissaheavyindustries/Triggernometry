@@ -364,6 +364,8 @@ namespace Triggernometry.Forms
                 expDiscordUrl.Expression = "";
                 cbxDiscordTts.Checked = false;
                 cbxObsOpType.SelectedIndex = 0;
+                expObsEndpoint.Expression = "ws://${_const[OBSWebsocketEndpoint]}:${_const[OBSWebsocketPort]}";
+                expObsPassword.Expression = "${_const[OBSWebsocketPassword]}";
                 expObsSceneName.Expression = "";
                 expObsSourceName.Expression = "";
                 expObsJSONPayload.Expression = "";
@@ -453,6 +455,8 @@ namespace Triggernometry.Forms
                 cndLoopCondition.ConditionToEdit = new ConditionGroup() { Enabled = false };
                 actionViewer1.Actions = new List<Action>();
                 expLoopIterationDelay.Expression = "";
+                expLoopInit.Expression = "0";
+                expLoopIncr.Expression = "1";
                 cbxRepositoryOp.SelectedIndex = 0;
                 cbxTriggerZoneType.SelectedIndex = 0;
                 expJsonVariable.Expression = "";
@@ -720,6 +724,8 @@ namespace Triggernometry.Forms
                 }
                 actionViewer1.RefreshDgv();
                 expLoopIterationDelay.Expression = a._LoopDelayExpression;
+                expLoopIncr.Expression = a._LoopIncrExpression;
+                expLoopInit.Expression = a._LoopInitExpression;
                 tn = plug.LocateNodeHostingRepositoryId(trvRepositoryLink.Nodes[0], a._RepositoryId);
                 if (tn != null)
                 {
@@ -962,6 +968,8 @@ namespace Triggernometry.Forms
                      select tx;
             a.LoopActions.AddRange(ix);
             a.LoopDelayExpression = expLoopIterationDelay.Expression;
+            a.LoopIncrExpression = expLoopIncr.Expression;
+            a.LoopInitExpression = expLoopInit.Expression;
             tn = trvRepositoryLink.SelectedNode;
             if (tn != null)
             {
@@ -1169,7 +1177,7 @@ namespace Triggernometry.Forms
                 return;
             }
             using (AuraDesignForm adf = new AuraDesignForm(AuraContainerForm.AuraTypeEnum.Image))
-            {
+            {                
                 I18n.TranslateForm(adf);
                 adf.SetImage(ix);
                 switch (cbxAuraDisplay.SelectedIndex)

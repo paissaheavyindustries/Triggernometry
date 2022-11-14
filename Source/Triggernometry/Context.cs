@@ -378,6 +378,26 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
+                        else if (x.IndexOf("_const") == 0)
+                        {
+                            mx = rexlidx.Match(x);
+                            if (mx.Success == true)
+                            {
+                                string idx = mx.Groups["index"].Value;
+                                lock (plug.cfg.Constants)
+                                {
+                                    if (plug.cfg.Constants.ContainsKey(idx) == true)
+                                    {
+                                        val = plug.cfg.Constants[idx].Value;
+                                    }
+                                    else
+                                    {
+                                        val = "";
+                                    }
+                                }
+                                found = true;
+                            }
+                        }
                         else if (x.IndexOf("_jsonresponse") == 0)
                         {
                             mx = rexlidx.Match(x);

@@ -2586,7 +2586,7 @@ namespace Triggernometry
                     case ActionTypeEnum.Loop:
                         {
                             int itertemp = ctx.loopIterator;
-                            ctx.loopIterator = 0;
+                            ctx.loopIterator = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _LoopInitExpression);
                             do
                             {
                                 foreach (Action a in LoopActions)
@@ -2598,7 +2598,7 @@ namespace Triggernometry
                                 {
                                     Thread.Sleep(delay);
                                 }
-                                ctx.loopIterator++;
+                                ctx.loopIterator += (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _LoopIncrExpression);
                             }
                             while (LoopCondition.Enabled == true && LoopCondition.CheckCondition(ctx, ActionContextLogger, ctx) == true);
                             ctx.loopIterator = itertemp;
@@ -2853,6 +2853,8 @@ namespace Triggernometry
                 }
             }
             a._LoopDelayExpression = _LoopDelayExpression;
+            a._LoopIncrExpression = _LoopIncrExpression;
+            a._LoopInitExpression = _LoopInitExpression;
             a._RepositoryId = _RepositoryId;
             a._RepositoryOp = _RepositoryOp;
             a._JsonResultVariable = _JsonResultVariable;
