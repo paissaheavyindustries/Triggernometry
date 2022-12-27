@@ -393,6 +393,29 @@ namespace Triggernometry
             return false;
         }
 
+        internal bool LiveSplitConnector(Context ctx)
+        {
+            RealPlugin p = ctx.plug;
+            lock (p._livesplit)
+            {
+                if (p._livesplit.IsConnected == true)
+                {
+                    return true;
+                }
+                try
+                {
+                    p._livesplit.Connect();
+                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Action/lsconnectok", "LiveSplit connected successfully"));
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/lsconnecterror", "Error connecting to LiveSplit: {0}", ex.Message));
+                }
+            }
+            return false;
+        }
+
         internal string GetDescription(Context ctx)
         {
             string temp = "";
@@ -750,7 +773,39 @@ namespace Triggernometry
                             temp += I18n.Translate("internal/Action/descobsjsonpayload", "Send custom JSON payload to OBS");
                             break;
                     }
-                    break; 
+                    break;
+                case ActionTypeEnum.LiveSplitControl:
+                    switch (_LSControlType)
+                    {
+                        case LiveSplitControlTypeEnum.StartOrSplit:
+                            temp += I18n.Translate("internal/Action/desclsstartorsplit", "Start run or split on LiveSplit");
+                            break;
+                        case LiveSplitControlTypeEnum.Start:
+                            temp += I18n.Translate("internal/Action/desclsstart", "Start run on LiveSplit");
+                            break;
+                        case LiveSplitControlTypeEnum.Split:
+                            temp += I18n.Translate("internal/Action/desclssplit", "Split on LiveSplit");
+                            break;
+                        case LiveSplitControlTypeEnum.UndoSplit:
+                            temp += I18n.Translate("internal/Action/desclsundosplit", "Undo split on LiveSplit");
+                            break;
+                        case LiveSplitControlTypeEnum.SkipSplit:
+                            temp += I18n.Translate("internal/Action/desclsskipsplit", "Skip split on LiveSplit");
+                            break;
+                        case LiveSplitControlTypeEnum.Reset:
+                            temp += I18n.Translate("internal/Action/desclsreset", "Reset run on LiveSplit");
+                            break;
+                        case LiveSplitControlTypeEnum.Pause:
+                            temp += I18n.Translate("internal/Action/desclspause", "Pause run on LiveSplit");
+                            break;
+                        case LiveSplitControlTypeEnum.Resume:
+                            temp += I18n.Translate("internal/Action/desclsresume", "Resume run on LiveSplit");
+                            break;
+                        case LiveSplitControlTypeEnum.CustomPayload:
+                            temp += I18n.Translate("internal/Action/desclscustompayload", "Send custom payload to LiveSplit");
+                            break;
+                    }
+                    break;
                 case ActionTypeEnum.Variable:
                     switch (_VariableOp)
                     {
@@ -1984,6 +2039,61 @@ namespace Triggernometry
                         }
                         break;
                     #endregion
+                    #region Implementation - LiveSplit
+                    case ActionTypeEnum.LiveSplitControl:
+                        if (ctx.plug._obs != null)
+                        {
+                            lock (ctx.plug._livesplit)
+                            {
+                                if (LiveSplitConnector(ctx) == true)
+                                {
+                                    try
+                                    {
+                                        switch (_LSControlType)
+                                        {
+                                            case LiveSplitControlTypeEnum.StartOrSplit:
+                                                ctx.plug._livesplit.StartOrSplit();
+                                                break;
+                                            case LiveSplitControlTypeEnum.Start:
+                                                ctx.plug._livesplit.Start();
+                                                break;
+                                            case LiveSplitControlTypeEnum.Split:
+                                                ctx.plug._livesplit.Split();
+                                                break;
+                                            case LiveSplitControlTypeEnum.UndoSplit:
+                                                ctx.plug._livesplit.UndoSplit();
+                                                break;
+                                            case LiveSplitControlTypeEnum.SkipSplit:
+                                                ctx.plug._livesplit.SkipSplit();
+                                                break;
+                                            case LiveSplitControlTypeEnum.Reset:
+                                                ctx.plug._livesplit.Reset();
+                                                break;
+                                            case LiveSplitControlTypeEnum.Pause:
+                                                ctx.plug._livesplit.Pause();
+                                                break;
+                                            case LiveSplitControlTypeEnum.Resume:
+                                                ctx.plug._livesplit.Resume();
+                                                break;
+                                            case LiveSplitControlTypeEnum.CustomPayload:
+                                                string lscommand = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _LSCustomPayload);
+                                                ctx.plug._livesplit.SendCommand(lscommand);
+                                                break;
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/lscontrolexception", "Can't execute LiveSplit control action due to exception: " + ex.Message));
+                                    }
+                                }
+                                else
+                                {
+                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/lscontrolerror", "Can't execute LiveSplit control action due to error"));
+                                }
+                            }
+                        }
+                        break;
+                    #endregion
                     #region Implementation - Play sound
                     case ActionTypeEnum.PlaySound:
 						{
@@ -2792,6 +2902,8 @@ namespace Triggernometry
             a._OBSSceneName = _OBSSceneName;
             a._OBSSourceName = _OBSSourceName;
             a._OBSJSONPayload = _OBSJSONPayload;
+            a._LSControlType = _LSControlType;
+            a._LSCustomPayload = _LSCustomPayload;
             a._LogProcess = _LogProcess;
             a._LogMessageTarget = _LogMessageTarget;
             a._JsonOperationType = _JsonOperationType;

@@ -26,6 +26,7 @@
     <TranslationEntry Key="ActionForm/cbxActionType[Log message]" Translation="Log message" />
     <TranslationEntry Key="ActionForm/cbxActionType[Mutex operation]" Translation="Mutex operation" />
     <TranslationEntry Key="ActionForm/cbxActionType[OBS remote control operation]" Translation="OBS remote control operation" />
+    <TranslationEntry Key="ActionForm/cbxActionType[LiveSplit remote control operation]" Translation="LiveSplit remote control operation" />
     <TranslationEntry Key="ActionForm/cbxActionType[Play sound file]" Translation="Play sound file" />
     <TranslationEntry Key="ActionForm/cbxActionType[Scalar variable operation]" Translation="Scalar variable operation" />
     <TranslationEntry Key="ActionForm/cbxActionType[Send keypresses to active window]" Translation="Send keypresses to active window" />
@@ -111,6 +112,15 @@
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop recording]" Translation="Stop recording" />
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop replay buffer]" Translation="Stop replay buffer" />
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop streaming]" Translation="Stop streaming" />
+    <TranslationEntry Key="ActionForm/cbxLsOpType[Start or Split]" Translation="Start run or split" />
+    <TranslationEntry Key="ActionForm/cbxLsOpType[Start]" Translation="Start run" />
+    <TranslationEntry Key="ActionForm/cbxLsOpType[Split]" Translation="Split" />
+    <TranslationEntry Key="ActionForm/cbxLsOpType[Undo Split]" Translation="Undo split" />
+    <TranslationEntry Key="ActionForm/cbxLsOpType[Skip Split]" Translation="Skip split" />
+    <TranslationEntry Key="ActionForm/cbxLsOpType[Reset]" Translation="Reset run" />
+    <TranslationEntry Key="ActionForm/cbxLsOpType[Pause]" Translation="Pause run" />
+    <TranslationEntry Key="ActionForm/cbxLsOpType[Resume]" Translation="Resume run" />
+    <TranslationEntry Key="ActionForm/cbxLsOpType[Custom payload]" Translation="Custom payload" />
     <TranslationEntry Key="ActionForm/cbxProcessLog" Translation="Process message as log line" />
     <TranslationEntry Key="ActionForm/cbxProcessWindowStyle[Hidden from view]" Translation="Hidden from view" />
     <TranslationEntry Key="ActionForm/cbxProcessWindowStyle[Maximized to fullscreen]" Translation="Maximized to fullscreen" />
@@ -256,6 +266,8 @@
     <TranslationEntry Key="ActionForm/lblObsSceneName" Translation="Scene name" />
     <TranslationEntry Key="ActionForm/lblObsSourceName" Translation="Source name" />
     <TranslationEntry Key="ActionForm/lblObsWebsocketInfo" Translation="If you are using OBS v27 or older, you will have to install the OBS WebSocket plugin to use OBS remote control features. There is a simple installer available at:" />
+    <TranslationEntry Key="ActionForm/lblLsOpType" Translation="Operation type" />
+    <TranslationEntry Key="ActionForm/lblLsCustPayload" Translation="Custom payload" />
     <TranslationEntry Key="ActionForm/lblProcessName" Translation="Process to launch" />
     <TranslationEntry Key="ActionForm/lblProcessParameters" Translation="Command line parameters" />
     <TranslationEntry Key="ActionForm/lblProcessWarning" Translation="Actions of this type may be potentially dangerous and cause damage if, for example, the trigger is fired with parameters that fall outside of the expected values. Please be aware of the risk." />
@@ -641,6 +653,15 @@
     <TranslationEntry Key="internal/Action/descobstogglereplay" Translation="start/stop OBS replay buffer (toggle)" />
     <TranslationEntry Key="internal/Action/descobstogglestream" Translation="start/stop streaming on OBS (toggle)" />
     <TranslationEntry Key="internal/Action/descobstogglerecordpause" Translation="resume/pause recording on OBS (toggle)" />
+    <TranslationEntry Key="internal/Action/desclsstartorsplit" Translation="Start run or split on LiveSplit" />
+    <TranslationEntry Key="internal/Action/desclsstart" Translation="Start run on LiveSplit" />
+    <TranslationEntry Key="internal/Action/desclssplit" Translation="Split on LiveSplit" />
+    <TranslationEntry Key="internal/Action/desclsundosplit" Translation="Undo split on LiveSplit" />
+    <TranslationEntry Key="internal/Action/desclsskipsplit" Translation="Skip split on LiveSplit" />
+    <TranslationEntry Key="internal/Action/desclsreset" Translation="Reset run on LiveSplit" />
+    <TranslationEntry Key="internal/Action/desclspause" Translation="Pause run on LiveSplit" />
+    <TranslationEntry Key="internal/Action/desclsresume" Translation="Resume run on LiveSplit" />
+    <TranslationEntry Key="internal/Action/desclscustompayload" Translation="Send custom payload to LiveSplit" />
     <TranslationEntry Key="internal/Action/descplaysound" Translation="play sound file ({0}) at volume ({1}) %" />
     <TranslationEntry Key="internal/Action/descprocessmessage" Translation="process message ({0}) as log line" />
     <TranslationEntry Key="internal/Action/descscalarnumeric" Translation="set scalar variable ({0}) value with numeric expression ({1})" />
@@ -713,6 +734,10 @@
     <TranslationEntry Key="internal/Action/obsconnectversionerror" Translation="Your version of OBS WebSocket is not currently supported." />
     <TranslationEntry Key="internal/Action/obsauthpassword" Translation="OBS WebSocket authentication required, you must provide a password" />
     <TranslationEntry Key="internal/Action/regexlistunset" Translation="All list variables matching ({0}) unset" />
+    <TranslationEntry Key="internal/Action/lsconnecterror" Translation="Error connecting to LiveSplit: {0}" />
+    <TranslationEntry Key="internal/Action/lsconnectok" Translation="LiveSplit connected successfully" />
+    <TranslationEntry Key="internal/Action/lscontrolerror" Translation="Can't execute LiveSplit control action due to error" />
+    <TranslationEntry Key="internal/Action/lscontrolexception" Translation="Can't execute LiveSplit control action due to exception: " />
     <TranslationEntry Key="internal/Action/regexscalarunset" Translation="All scalar variables matching ({0}) unset" />
     <TranslationEntry Key="internal/Action/regextableunset" Translation="All table variables matching ({0}) unset" />
     <TranslationEntry Key="internal/Action/scalarlistsplit" Translation="Scalar variable ({0}) split into list variable ({1}) with separator ({2})" />

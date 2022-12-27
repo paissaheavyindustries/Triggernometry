@@ -32,6 +32,7 @@ namespace Triggernometry
             LogMessage,
             ListVariable,
             ObsControl,
+            LiveSplitControl,
             GenericJson,
             WindowMessage,
             DiskFile,
@@ -174,6 +175,19 @@ namespace Triggernometry
             ShowSource,
             HideSource,
             JSONPayload
+        }
+
+        public enum LiveSplitControlTypeEnum
+        {
+            StartOrSplit,
+            Start,
+            Split,
+            UndoSplit,
+            SkipSplit,
+            Reset,
+            Pause,
+            Resume,
+            CustomPayload
         }
 
         public enum KeypressTypeEnum
@@ -1756,6 +1770,45 @@ namespace Triggernometry
             }
         }
 
+        #endregion
+        #region Action specific properties - LiveSplit
+        internal LiveSplitControlTypeEnum _LSControlType { get; set; } = LiveSplitControlTypeEnum.StartOrSplit;
+        [XmlAttribute]
+        public string LiveSplitControlType
+        {
+            get
+            {
+                if (_LSControlType != LiveSplitControlTypeEnum.StartOrSplit)
+                {
+                    return _LSControlType.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _LSControlType = (LiveSplitControlTypeEnum)Enum.Parse(typeof(LiveSplitControlTypeEnum), value);
+            }
+        }
+        internal string _LSCustomPayload = "";
+        [XmlAttribute]
+        public string LiveSplitCustomPayload
+        {
+            get
+            {
+                if (_LSControlType != LiveSplitControlTypeEnum.CustomPayload)
+                {
+                    return null;
+                }
+                return _LSCustomPayload;
+            }
+            set
+            {
+                _LSCustomPayload = value;
+            }
+        }
         #endregion
         #region Action specific properties - Placeholder
         #endregion

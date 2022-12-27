@@ -261,6 +261,12 @@
             this.expObsSceneName = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblObsWebsocketInfo = new System.Windows.Forms.Label();
             this.txtObsWebsocketLink = new System.Windows.Forms.TextBox();
+            this.tabLiveSplitControl = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanelLs = new System.Windows.Forms.TableLayoutPanel();
+            this.lblLsCustPayload = new System.Windows.Forms.Label();
+            this.expLSCustPayload = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.cbxLsOpType = new System.Windows.Forms.ComboBox();
+            this.lblLsOpType = new System.Windows.Forms.Label();
             this.tabGenericJson = new System.Windows.Forms.TabPage();
             this.jsonTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.prsJsonVariable = new Triggernometry.CustomControls.PersistenceSwitch();
@@ -441,6 +447,8 @@
             this.tableLayoutPanel17.SuspendLayout();
             this.tabObsControl.SuspendLayout();
             this.tableLayoutPanel18.SuspendLayout();
+            this.tabLiveSplitControl.SuspendLayout();
+            this.tableLayoutPanelLs.SuspendLayout();
             this.tabGenericJson.SuspendLayout();
             this.jsonTableLayout.SuspendLayout();
             this.tabWindowMessage.SuspendLayout();
@@ -533,6 +541,7 @@
             "Log message",
             "List variable operation",
             "OBS remote control operation",
+            "LiveSplit remote control operation",
             "Generic JSON operation",
             "Send window message",
             "File operation",
@@ -590,6 +599,7 @@
             this.tbcActionSettings.Controls.Add(this.tabLogMessage);
             this.tbcActionSettings.Controls.Add(this.tabListVariable);
             this.tbcActionSettings.Controls.Add(this.tabObsControl);
+            this.tbcActionSettings.Controls.Add(this.tabLiveSplitControl);
             this.tbcActionSettings.Controls.Add(this.tabGenericJson);
             this.tbcActionSettings.Controls.Add(this.tabWindowMessage);
             this.tbcActionSettings.Controls.Add(this.tabFile);
@@ -3801,6 +3811,97 @@
             this.txtObsWebsocketLink.Text = "https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio" +
     "-made-easy.466/";
             // 
+            // tabLiveSplitControl
+            // 
+            this.tabLiveSplitControl.Controls.Add(this.tableLayoutPanelLs);
+            this.tabLiveSplitControl.Location = new System.Drawing.Point(4, 25);
+            this.tabLiveSplitControl.Name = "tabLiveSplitControl";
+            this.tabLiveSplitControl.Size = new System.Drawing.Size(742, 414);
+            this.tabLiveSplitControl.TabIndex = 27;
+            this.tabLiveSplitControl.Text = "LiveSplit";
+            this.tabLiveSplitControl.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanelLs
+            // 
+            this.tableLayoutPanelLs.AutoSize = true;
+            this.tableLayoutPanelLs.ColumnCount = 3;
+            this.tableLayoutPanelLs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanelLs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelLs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanelLs.Controls.Add(this.lblLsCustPayload, 0, 3);
+            this.tableLayoutPanelLs.Controls.Add(this.expLSCustPayload, 1, 3);
+            this.tableLayoutPanelLs.Controls.Add(this.cbxLsOpType, 1, 0);
+            this.tableLayoutPanelLs.Controls.Add(this.lblLsOpType, 0, 0);
+            this.tableLayoutPanelLs.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanelLs.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanelLs.Name = "tableLayoutPanelLs";
+            this.tableLayoutPanelLs.RowCount = 4;
+            this.tableLayoutPanelLs.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelLs.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelLs.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelLs.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelLs.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelLs.Size = new System.Drawing.Size(742, 53);
+            this.tableLayoutPanelLs.TabIndex = 4;
+            // 
+            // lblLsCustPayload
+            // 
+            this.lblLsCustPayload.AutoSize = true;
+            this.lblLsCustPayload.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblLsCustPayload.Location = new System.Drawing.Point(3, 27);
+            this.lblLsCustPayload.Name = "lblLsCustPayload";
+            this.lblLsCustPayload.Size = new System.Drawing.Size(82, 26);
+            this.lblLsCustPayload.TabIndex = 26;
+            this.lblLsCustPayload.Text = "Custom payload";
+            this.lblLsCustPayload.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // expLSCustPayload
+            // 
+            this.expLSCustPayload.AutocompleteAvailable = true;
+            this.expLSCustPayload.AutoSize = true;
+            this.tableLayoutPanelLs.SetColumnSpan(this.expLSCustPayload, 2);
+            this.expLSCustPayload.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expLSCustPayload.Expression = "";
+            this.expLSCustPayload.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            this.expLSCustPayload.Location = new System.Drawing.Point(91, 30);
+            this.expLSCustPayload.Name = "expLSCustPayload";
+            this.expLSCustPayload.ReadOnly = false;
+            this.expLSCustPayload.Size = new System.Drawing.Size(648, 20);
+            this.expLSCustPayload.TabIndex = 25;
+            // 
+            // cbxLsOpType
+            // 
+            this.tableLayoutPanelLs.SetColumnSpan(this.cbxLsOpType, 2);
+            this.cbxLsOpType.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxLsOpType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxLsOpType.FormattingEnabled = true;
+            this.cbxLsOpType.Items.AddRange(new object[] {
+            "Start run or split",
+            "Start run",
+            "Split",
+            "Undo split",
+            "Skip split",
+            "Reset run",
+            "Pause run",
+            "Resume run",
+            "Custom payload"});
+            this.cbxLsOpType.Location = new System.Drawing.Point(91, 3);
+            this.cbxLsOpType.Name = "cbxLsOpType";
+            this.cbxLsOpType.Size = new System.Drawing.Size(648, 21);
+            this.cbxLsOpType.TabIndex = 22;
+            this.cbxLsOpType.SelectedIndexChanged += new System.EventHandler(this.cbxLsOpType_SelectedIndexChanged);
+            // 
+            // lblLsOpType
+            // 
+            this.lblLsOpType.AutoSize = true;
+            this.lblLsOpType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblLsOpType.Location = new System.Drawing.Point(3, 0);
+            this.lblLsOpType.Name = "lblLsOpType";
+            this.lblLsOpType.Size = new System.Drawing.Size(82, 27);
+            this.lblLsOpType.TabIndex = 18;
+            this.lblLsOpType.Text = "Operation type";
+            this.lblLsOpType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // tabGenericJson
             // 
             this.tabGenericJson.Controls.Add(this.jsonTableLayout);
@@ -5756,6 +5857,10 @@
             this.tabObsControl.PerformLayout();
             this.tableLayoutPanel18.ResumeLayout(false);
             this.tableLayoutPanel18.PerformLayout();
+            this.tabLiveSplitControl.ResumeLayout(false);
+            this.tabLiveSplitControl.PerformLayout();
+            this.tableLayoutPanelLs.ResumeLayout(false);
+            this.tableLayoutPanelLs.PerformLayout();
             this.tabGenericJson.ResumeLayout(false);
             this.tabGenericJson.PerformLayout();
             this.jsonTableLayout.ResumeLayout(false);
@@ -6197,5 +6302,11 @@
         private CustomControls.ExpressionTextBox expLoopIncr;
         private CustomControls.ExpressionTextBox expLoopInit;
         private System.Windows.Forms.Label lblLoopIncr;
+        private System.Windows.Forms.TabPage tabLiveSplitControl;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelLs;
+        private System.Windows.Forms.Label lblLsCustPayload;
+        private CustomControls.ExpressionTextBox expLSCustPayload;
+        private System.Windows.Forms.ComboBox cbxLsOpType;
+        private System.Windows.Forms.Label lblLsOpType;
     }
 }
