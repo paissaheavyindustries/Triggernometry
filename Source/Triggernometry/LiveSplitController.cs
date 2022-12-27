@@ -43,6 +43,7 @@ namespace Triggernometry
                 {
                     if (IsConnected == true)
                         return;
+                    Dispose();
                     client = new NamedPipeClientStream(".", "LiveSplit", PipeDirection.Out, PipeOptions.Asynchronous);
                     client.Connect(3000);
                     clientWriter = new StreamWriter(client);
