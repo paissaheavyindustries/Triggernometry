@@ -112,14 +112,14 @@
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop recording]" Translation="Stop recording" />
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop replay buffer]" Translation="Stop replay buffer" />
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop streaming]" Translation="Stop streaming" />
-    <TranslationEntry Key="ActionForm/cbxLsOpType[Start or Split]" Translation="Start run or split" />
-    <TranslationEntry Key="ActionForm/cbxLsOpType[Start]" Translation="Start run" />
+    <TranslationEntry Key="ActionForm/cbxLsOpType[Start run or split]" Translation="Start run or split" />
+    <TranslationEntry Key="ActionForm/cbxLsOpType[Start run]" Translation="Start run" />
     <TranslationEntry Key="ActionForm/cbxLsOpType[Split]" Translation="Split" />
-    <TranslationEntry Key="ActionForm/cbxLsOpType[Undo Split]" Translation="Undo split" />
-    <TranslationEntry Key="ActionForm/cbxLsOpType[Skip Split]" Translation="Skip split" />
-    <TranslationEntry Key="ActionForm/cbxLsOpType[Reset]" Translation="Reset run" />
-    <TranslationEntry Key="ActionForm/cbxLsOpType[Pause]" Translation="Pause run" />
-    <TranslationEntry Key="ActionForm/cbxLsOpType[Resume]" Translation="Resume run" />
+    <TranslationEntry Key="ActionForm/cbxLsOpType[Undo split]" Translation="Undo split" />
+    <TranslationEntry Key="ActionForm/cbxLsOpType[Skip split]" Translation="Skip split" />
+    <TranslationEntry Key="ActionForm/cbxLsOpType[Reset run]" Translation="Reset run" />
+    <TranslationEntry Key="ActionForm/cbxLsOpType[Pause run]" Translation="Pause run" />
+    <TranslationEntry Key="ActionForm/cbxLsOpType[Resume run]" Translation="Resume run" />
     <TranslationEntry Key="ActionForm/cbxLsOpType[Custom payload]" Translation="Custom payload" />
     <TranslationEntry Key="ActionForm/cbxProcessLog" Translation="Process message as log line" />
     <TranslationEntry Key="ActionForm/cbxProcessWindowStyle[Hidden from view]" Translation="Hidden from view" />
