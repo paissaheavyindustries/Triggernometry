@@ -1838,7 +1838,7 @@ namespace Triggernometry
                         {
                             if (_LogProcess == true)
                             {
-                                ctx.plug.LogLineQueuer(ctx.EvaluateStringExpression(ActionContextLogger, ctx, _LogMessageText), "", _LogMessageTarget);
+                                ctx.plug.LogLineQueuer(ctx.EvaluateStringExpression(ActionContextLogger, ctx, _LogMessageText), ctx.EvaluateStringExpression(ActionContextLogger, ctx, ctx.plug.currentZone), _LogMessageTarget);
                             }
                             else
                             {
