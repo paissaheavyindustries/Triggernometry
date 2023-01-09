@@ -1680,13 +1680,13 @@ namespace Triggernometry
             }
         }
 
-        internal string _OBSEndPoint = @"ws://127.0.0.1:4444";
+        internal string _OBSEndPoint = @"ws://${_const[OBSWebsocketEndpoint]}:${_const[OBSWebsocketPort]}";
         [XmlAttribute]
         public string OBSEndPoint
         {
             get
             {
-                if (_OBSEndPoint == @"ws://127.0.0.1:4444")
+                if (_OBSEndPoint == @"ws://${_const[OBSWebsocketEndpoint]}:${_const[OBSWebsocketPort]}")
                 {
                     return null;
                 }
@@ -1698,13 +1698,13 @@ namespace Triggernometry
             }
         }
 
-        internal string _OBSPassword = "";
+        internal string _OBSPassword = @"${_const[OBSWebsocketPassword]}";
         [XmlAttribute]
         public string OBSPassword
         {
             get
             {
-                if (_OBSPassword == "")
+                if (_OBSPassword == @"${_const[OBSWebsocketPassword]}")
                 {
                     return null;
                 }
@@ -2387,13 +2387,13 @@ namespace Triggernometry
         {
             get
             {
-                if (_TextAuraFontSize != 10.0f)
+                if (ActionType != ActionTypeEnum.TextAura)
                 {
-                    return I18n.ThingToString(_TextAuraFontSize);
+                    return null;
                 }
                 else
                 {
-                    return null;
+                    return I18n.ThingToString(_TextAuraFontSize);
                 }
             }
             set
@@ -2723,7 +2723,7 @@ namespace Triggernometry
         {
             get
             {
-                if (_TextAuraFontName == "")
+                if (_TextAuraFontName == "" || ActionType != ActionTypeEnum.TextAura)
                 {
                     return null;
                 }
