@@ -311,6 +311,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ObsController.cs" />
+    <Compile Include="LiveSplitController.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Scarborough\OverrideHelper.cs" />
     <Compile Include="PluginBridges\BridgeFFXIV.cs" />

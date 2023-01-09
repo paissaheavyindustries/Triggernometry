@@ -369,6 +369,8 @@ namespace Triggernometry.Forms
                 expObsSceneName.Expression = "";
                 expObsSourceName.Expression = "";
                 expObsJSONPayload.Expression = "";
+                cbxLsOpType.SelectedIndex = 0;
+                expLSCustPayload.Expression = "";
                 cbxTextAuraOp.SelectedIndex = 0;
                 cbxTextAuraAlignment.SelectedIndex = 4;
                 expTextAuraName.Expression = "";
@@ -575,6 +577,8 @@ namespace Triggernometry.Forms
                 expObsSceneName.Expression = a._OBSSceneName;
                 expObsSourceName.Expression = a._OBSSourceName;
                 expObsJSONPayload.Expression = a._OBSJSONPayload;
+                cbxLsOpType.SelectedIndex = (int)a._LSControlType;
+                expLSCustPayload.Expression = a._LSCustomPayload;
                 cbxTextAuraOp.SelectedIndex = (int)a._TextAuraOp;
                 cbxJsonType.SelectedIndex = (int)a._JsonOperationType;
                 expJsonEndpoint.Expression = a._JsonEndpointExpression;
@@ -862,6 +866,8 @@ namespace Triggernometry.Forms
             a._OBSSceneName = expObsSceneName.Expression;
             a._OBSSourceName = expObsSourceName.Expression;
             a._OBSJSONPayload = expObsJSONPayload.Expression;
+            a._LSControlType = (Action.LiveSplitControlTypeEnum)cbxLsOpType.SelectedIndex;
+            a._LSCustomPayload = expLSCustPayload.Expression;
             a._JsonOperationType = (Action.HTTPMethodEnum)cbxJsonType.SelectedIndex;
             a._JsonEndpointExpression = expJsonEndpoint.Expression;
             a._JsonFiringExpression = expJsonFiring.Expression;
@@ -1912,6 +1918,12 @@ namespace Triggernometry.Forms
             expObsSceneName.Enabled = (cbxObsOpType.SelectedIndex >= 15 && cbxObsOpType.SelectedIndex <= 17);
             expObsSourceName.Enabled = (cbxObsOpType.SelectedIndex >= 16 && cbxObsOpType.SelectedIndex <= 17);
             expObsJSONPayload.Enabled = (cbxObsOpType.SelectedIndex >= 18);
+        }
+
+        private void cbxLsOpType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            expLSCustPayload.Enabled = (cbxLsOpType.SelectedIndex == cbxLsOpType.Items.Count - 1);
+            lblLsCustPayload.Enabled = expLSCustPayload.Enabled;
         }
 
         private void cbxKeypressMethod_SelectedIndexChanged(object sender, EventArgs e)
