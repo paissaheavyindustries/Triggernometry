@@ -3154,7 +3154,7 @@ namespace Triggernometry
         {
             if (firstevent == true)
             {
-                PluginBridges.BridgeFFXIV.SubscribeToNetworkEvents(this);
+                PluginBridges.BridgeFFXIV.SubscribeToZoneChanged(this);
                 firstevent = false;
             }
             switch (le.Source)
@@ -3243,6 +3243,46 @@ namespace Triggernometry
             }
         }
 
+        public void BeforeLogLineRead(bool isImport, string logLine, string detectedZone)
+        {
+            if (isImport == true || isInitialized == false)
+            {
+                return;
+            }
+            if (currentZone == null || detectedZone != currentZone)
+            {
+                currentZone = detectedZone;
+                ZoneChanged(currentZone);
+            }
+            try
+            {
+                if (cfg.EventSeparator.Length > 0)
+                {
+                    string[] lines = logLine.Split(new string[] { cfg.EventSeparator }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string line in lines)
+                    {
+                        if (cfg.FfxivLogNetwork == true)
+                        {
+                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/ffxivnetworksplitlogline", "Split network log line: ({0})", line));
+                        }
+                        LogLineQueuer(line, detectedZone, LogEvent.SourceEnum.NetworkFFXIV);
+                    }
+                }
+                else
+                {
+                    if (cfg.FfxivLogNetwork == true)
+                    {
+                        FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/ffxivnetworklogline", "Network log line: ({0})", logLine));
+                    }
+                    LogLineQueuer(logLine, detectedZone, LogEvent.SourceEnum.NetworkFFXIV);
+                }
+            }
+            catch (Exception ex)
+            {
+                FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/Plugin/ffxivnetworkprocex", "Exception ({0}) when processing network log line ({1}) in zone ({2})", ex.Message, logLine, detectedZone));
+            }
+        }
+
         public void OnLogLineRead(bool isImport, string logLine, string detectedZone)
         {
             if (isImport == true || isInitialized == false)
@@ -3293,40 +3333,6 @@ namespace Triggernometry
         {
             PluginBridges.BridgeFFXIV.ZoneID = ZoneID;
             ZoneChanged(currentZone);
-        }
-
-        public void NetworkLogLineReceiver(uint sequence, int messagetype, string message)
-        {
-            try
-            {
-                string preamble = String.Format("{0:00}|{1}|", messagetype, sequence.ToString());
-                if (cfg.EventSeparator.Length > 0)
-                {
-                    string[] lines = message.Split(new string[] { cfg.EventSeparator }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (string line in lines)
-                    {
-                        string linex = preamble + line;
-                        if (cfg.FfxivLogNetwork == true)
-                        {
-                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/ffxivnetworksplitlogline", "Split network log line: ({0})", linex));
-                        }
-                        LogLineQueuer(linex, currentZone != null ? currentZone : "", LogEvent.SourceEnum.NetworkFFXIV);
-                    }
-                }
-                else
-                {
-                    string linex = preamble + message;
-                    if (cfg.FfxivLogNetwork == true)
-                    {
-                        FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/ffxivnetworklogline", "Network log line: ({0})", linex));
-                    }
-                    LogLineQueuer(linex, currentZone != null ? currentZone : "", LogEvent.SourceEnum.NetworkFFXIV);
-                }
-            }
-            catch (Exception ex)
-            {
-                FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/Plugin/ffxivnetworkprocex", "Exception ({0}) when processing network log line ({1})", ex.Message, message));
-            }
         }
 
         private Configuration LoadConfigFromFile(string filename)

@@ -139,6 +139,7 @@ namespace TriggernometryProxy
             FailsafeRegisterHook("InstanceHook", "GetInstance");
             FailsafeRegisterHook("CheckUpdateHook", "CheckForUpdates");
             GetPluginNameAndPath();
+            ActGlobals.oFormActMain.BeforeLogLineRead += OFormActMain_BeforeLogLineRead;
             ActGlobals.oFormActMain.OnLogLineRead += OFormActMain_OnLogLineRead;
             ActGlobals.oFormActMain.OnCombatStart += OFormActMain_OnCombatStart;
             ActGlobals.oFormActMain.OnCombatEnd += OFormActMain_OnCombatEnd;
@@ -244,6 +245,7 @@ namespace TriggernometryProxy
             ActGlobals.oFormActMain.OnCombatEnd -= OFormActMain_OnCombatEnd;
             ActGlobals.oFormActMain.OnCombatStart -= OFormActMain_OnCombatStart;
             ActGlobals.oFormActMain.OnLogLineRead -= OFormActMain_OnLogLineRead;
+            ActGlobals.oFormActMain.BeforeLogLineRead -= OFormActMain_BeforeLogLineRead;
             Instance.DeInitPlugin();
             HideCornerNotification();
         }
@@ -251,6 +253,11 @@ namespace TriggernometryProxy
         private void ExtendedACTEvents(string[] data)
         {
             Instance.ExtendedACTEvents(data);
+        }
+
+        private void OFormActMain_BeforeLogLineRead(bool isImport, LogLineEventArgs logInfo)
+        {
+            Instance.BeforeLogLineRead(isImport, logInfo.originalLogLine, logInfo.detectedZone);
         }
 
         private void OFormActMain_OnLogLineRead(bool isImport, LogLineEventArgs logInfo)

@@ -80,7 +80,7 @@ namespace Triggernometry.PluginBridges
             ClearCombatant(NullCombatant);
         }
 
-        public static void SubscribeToNetworkEvents(RealPlugin p)
+        public static void SubscribeToZoneChanged(RealPlugin p)
         {
             try
             {
@@ -99,32 +99,22 @@ namespace Triggernometry.PluginBridges
                 {
                     throw new ArgumentException("DataSubscription not initialized");
                 }
-                EventInfo ei = subs.GetType().GetEvent("ParsedLogLine", BindingFlags.GetField | BindingFlags.Public | BindingFlags.Instance);
-                if (ei == null)
-                {
-                    throw new ArgumentException("No ParsedLogLine found");
-                }
-                MethodInfo mix = p.GetType().GetMethod("NetworkLogLineReceiver");
-                Type deltype = ei.EventHandlerType;
-                Delegate handler = Delegate.CreateDelegate(deltype, p, mix);
-                ei.AddEventHandler(subs, handler);
-                LogMessage(RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/ffxiv/networksubok", "Subscribed to FFXIV network events"));
-                ei = subs.GetType().GetEvent("ZoneChanged", BindingFlags.GetField | BindingFlags.Public | BindingFlags.Instance);
+                EventInfo ei = subs.GetType().GetEvent("ZoneChanged", BindingFlags.GetField | BindingFlags.Public | BindingFlags.Instance);
                 if (ei != null)
                 {
-                    mix = p.GetType().GetMethod("ZoneChangeDelegate");
-                    deltype = ei.EventHandlerType;
-                    handler = Delegate.CreateDelegate(deltype, p, mix);
-                    ei.AddEventHandler(subs, handler);                    
+                    MethodInfo mix = p.GetType().GetMethod("ZoneChangeDelegate");
+                    Type deltype = ei.EventHandlerType;
+                    Delegate handler = Delegate.CreateDelegate(deltype, p, mix);
+                    ei.AddEventHandler(subs, handler);
                 }
                 else
                 {
-                    LogMessage(RealPlugin.DebugLevelEnum.Error, "No ZoneChanged found");
+                    LogMessage(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/ffxivnozonechanged", "No ZoneChanged found"));
                 }
             }
             catch (Exception ex)
             {
-                LogMessage(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/networksubexception", "Could not subscribe to FFXIV network events due to an exception: {0}", ex.Message));
+                LogMessage(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/ffxivzonechangedexception", "Could not subscribe to FFXIV zone change due to an exception: {0}", ex.Message));
             }
         }
 
