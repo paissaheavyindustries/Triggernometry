@@ -299,6 +299,9 @@ namespace Triggernometry
         public bool TestLiveByDefault { get; set; } = false;
 
         [XmlAttribute]
+        public bool ActionAsyncByDefault { get; set; } = true;
+
+        [XmlAttribute]
         public string WindowToMonitor { get; set; } = "FINAL FANTASY XIV";
 
         [XmlAttribute]
@@ -321,6 +324,12 @@ namespace Triggernometry
 
         [XmlAttribute]
         public bool LogVariableExpansions { get; set; } = false;
+
+        [XmlAttribute]
+        public int TestInputDestination { get; set; } = -1;
+
+        [XmlAttribute]
+        public int TestInputZoneType { get; set; } = -1;
 
         public VariableStore PersistentVariables { get; set; } = new VariableStore();        
         public SerializableDictionary<string, VariableScalar> Constants { get; set; } = new SerializableDictionary<string, VariableScalar>();

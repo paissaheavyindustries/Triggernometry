@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Triggernometry;
 
 namespace Scarborough
 {
@@ -25,7 +26,8 @@ namespace Scarborough
                 DeactivateAll,
                 RenderingOn,
                 RenderingOff,
-                DeactivateRegex
+                DeactivateRegex,
+                DeactivateTrigger
             }
 
             public enum ItemTypeEnum
@@ -167,6 +169,44 @@ namespace Scarborough
                         }
                     }
                     break;
+                case ItemAction.ActionTypeEnum.DeactivateTrigger:
+                    {
+                        List<string> toRem = new List<string>();
+                        switch (ia.ItemType)
+                        {
+                            case ItemAction.ItemTypeEnum.Image:
+                                {
+                                    toRem.AddRange(from sx in imageitems where sx.Value.ctx.trig.Id.ToString() == ia.Id select sx.Key);
+                                    foreach (string rem in toRem)
+                                    {
+                                        ScarboroughImage si = null;
+                                        si = imageitems[rem];
+                                        imageitems.Remove(rem);
+                                        if (si != null)
+                                        {
+                                            si.Dispose();
+                                        }
+                                    }
+                                }
+                                break;
+                            case ItemAction.ItemTypeEnum.Text:
+                                {
+                                    toRem.AddRange(from sx in textitems where sx.Value.ctx.trig.Id.ToString() == ia.Id select sx.Key);
+                                    foreach (string rem in toRem)
+                                    {
+                                        ScarboroughText si = null;
+                                        si = textitems[rem];
+                                        textitems.Remove(rem);
+                                        if (si != null)
+                                        {
+                                            si.Dispose();
+                                        }
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                    break;
                 case ItemAction.ActionTypeEnum.Deactivate:
                     {
                         switch (ia.ItemType)
@@ -262,6 +302,14 @@ namespace Scarborough
             lock (ItemActions)
             {
                 ItemActions.Enqueue(new ItemAction() { Action = ItemAction.ActionTypeEnum.DeactivateRegex, Id = rex, ItemType = it });
+            }
+        }
+
+        public void DeactivateTrigger(Trigger t, ItemAction.ItemTypeEnum it)
+        {
+            lock (ItemActions)
+            {
+                ItemActions.Enqueue(new ItemAction() { Action = ItemAction.ActionTypeEnum.DeactivateTrigger, Id = t.Id.ToString(), ItemType = it });
             }
         }
 

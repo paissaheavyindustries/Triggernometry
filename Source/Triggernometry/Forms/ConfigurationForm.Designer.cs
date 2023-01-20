@@ -216,6 +216,7 @@
             this.btnTriggerTemplate = new System.Windows.Forms.Button();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
+            this.cbxActionAsync = new System.Windows.Forms.CheckBox();
             this.panel4.SuspendLayout();
             this.grpVolAdjustment.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -2432,7 +2433,7 @@
             this.groupBox1.AutoSize = true;
             this.groupBox1.Controls.Add(this.tableLayoutPanel11);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox1.Location = new System.Drawing.Point(7, 309);
+            this.groupBox1.Location = new System.Drawing.Point(7, 332);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
             this.groupBox1.Size = new System.Drawing.Size(742, 82);
@@ -2494,7 +2495,7 @@
             // panel12
             // 
             this.panel12.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel12.Location = new System.Drawing.Point(7, 299);
+            this.panel12.Location = new System.Drawing.Point(7, 322);
             this.panel12.Name = "panel12";
             this.panel12.Size = new System.Drawing.Size(742, 10);
             this.panel12.TabIndex = 26;
@@ -2507,7 +2508,7 @@
             this.grpUserInterface.Location = new System.Drawing.Point(7, 148);
             this.grpUserInterface.Name = "grpUserInterface";
             this.grpUserInterface.Padding = new System.Windows.Forms.Padding(10);
-            this.grpUserInterface.Size = new System.Drawing.Size(742, 151);
+            this.grpUserInterface.Size = new System.Drawing.Size(742, 174);
             this.grpUserInterface.TabIndex = 25;
             this.grpUserInterface.TabStop = false;
             this.grpUserInterface.Text = " User interface ";
@@ -2518,22 +2519,24 @@
             this.tableLayoutPanel10.ColumnCount = 2;
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel10.Controls.Add(this.cbxActionAsync, 0, 2);
             this.tableLayoutPanel10.Controls.Add(this.chkClipboard, 0, 0);
-            this.tableLayoutPanel10.Controls.Add(this.lblAutosaveInterval, 0, 4);
-            this.tableLayoutPanel10.Controls.Add(this.cbxAutosaveConfig, 0, 3);
-            this.tableLayoutPanel10.Controls.Add(this.cbxDevMode, 0, 2);
+            this.tableLayoutPanel10.Controls.Add(this.lblAutosaveInterval, 0, 5);
+            this.tableLayoutPanel10.Controls.Add(this.cbxAutosaveConfig, 0, 4);
+            this.tableLayoutPanel10.Controls.Add(this.cbxDevMode, 0, 3);
             this.tableLayoutPanel10.Controls.Add(this.cbxTestLive, 0, 1);
-            this.tableLayoutPanel10.Controls.Add(this.nudAutosaveMinutes, 1, 4);
+            this.tableLayoutPanel10.Controls.Add(this.nudAutosaveMinutes, 1, 5);
             this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel10.Location = new System.Drawing.Point(10, 23);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
-            this.tableLayoutPanel10.RowCount = 5;
+            this.tableLayoutPanel10.RowCount = 6;
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(722, 118);
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(722, 141);
             this.tableLayoutPanel10.TabIndex = 2;
             // 
             // chkClipboard
@@ -2554,7 +2557,7 @@
             this.lblAutosaveInterval.AutoEllipsis = true;
             this.lblAutosaveInterval.AutoSize = true;
             this.lblAutosaveInterval.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAutosaveInterval.Location = new System.Drawing.Point(3, 92);
+            this.lblAutosaveInterval.Location = new System.Drawing.Point(3, 115);
             this.lblAutosaveInterval.Name = "lblAutosaveInterval";
             this.lblAutosaveInterval.Size = new System.Drawing.Size(616, 26);
             this.lblAutosaveInterval.TabIndex = 9;
@@ -2567,7 +2570,7 @@
             this.cbxAutosaveConfig.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tableLayoutPanel10.SetColumnSpan(this.cbxAutosaveConfig, 2);
             this.cbxAutosaveConfig.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxAutosaveConfig.Location = new System.Drawing.Point(3, 72);
+            this.cbxAutosaveConfig.Location = new System.Drawing.Point(3, 95);
             this.cbxAutosaveConfig.Name = "cbxAutosaveConfig";
             this.cbxAutosaveConfig.Size = new System.Drawing.Size(716, 17);
             this.cbxAutosaveConfig.TabIndex = 8;
@@ -2581,7 +2584,7 @@
             this.cbxDevMode.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tableLayoutPanel10.SetColumnSpan(this.cbxDevMode, 2);
             this.cbxDevMode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxDevMode.Location = new System.Drawing.Point(3, 49);
+            this.cbxDevMode.Location = new System.Drawing.Point(3, 72);
             this.cbxDevMode.Name = "cbxDevMode";
             this.cbxDevMode.Size = new System.Drawing.Size(716, 17);
             this.cbxDevMode.TabIndex = 7;
@@ -2603,7 +2606,7 @@
             // 
             // nudAutosaveMinutes
             // 
-            this.nudAutosaveMinutes.Location = new System.Drawing.Point(625, 95);
+            this.nudAutosaveMinutes.Location = new System.Drawing.Point(625, 118);
             this.nudAutosaveMinutes.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -2711,6 +2714,19 @@
             // fontDialog1
             // 
             this.fontDialog1.AllowScriptChange = false;
+            // 
+            // cbxActionAsync
+            // 
+            this.cbxActionAsync.AutoSize = true;
+            this.cbxActionAsync.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel10.SetColumnSpan(this.cbxActionAsync, 2);
+            this.cbxActionAsync.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbxActionAsync.Location = new System.Drawing.Point(3, 49);
+            this.cbxActionAsync.Name = "cbxActionAsync";
+            this.cbxActionAsync.Size = new System.Drawing.Size(716, 17);
+            this.cbxActionAsync.TabIndex = 11;
+            this.cbxActionAsync.Text = "New actions asynchronous by default";
+            this.cbxActionAsync.UseVisualStyleBackColor = true;
             // 
             // ConfigurationForm
             // 
@@ -3035,5 +3051,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colScalarName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colScalarValue;
         private System.Windows.Forms.FontDialog fontDialog1;
+        private System.Windows.Forms.CheckBox cbxActionAsync;
     }
 }

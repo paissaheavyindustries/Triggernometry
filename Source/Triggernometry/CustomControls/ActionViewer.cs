@@ -7,8 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Speech.Synthesis;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Triggernometry.CustomControls
@@ -172,7 +172,7 @@ namespace Triggernometry.CustomControls
                     af.SetReadOnly();
                 }
                 af.Text = I18n.Translate("internal/TriggerForm/addnewaction", "Add new action");
-                af.btnOk.Text = I18n.Translate("internal/TriggerForm/add", "Add");
+                af.btnOk.Text = I18n.Translate("internal/TriggerForm/add", "Add");                
                 if (af.ShowDialog() == DialogResult.OK)
                 {
                     Action a = new Action();
@@ -352,15 +352,31 @@ namespace Triggernometry.CustomControls
 
         private string ExportActionSelection()
         {
-            int idx = dgvActions.SelectedRows[0].Index;
-            Action ao = Actions[idx];
-            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
-            ns.Add("", "");
-            XmlSerializer xs = new XmlSerializer(typeof(Action));
             string data = "";
+            object toSerialize = null;
+            XmlSerializer xs;
+            if (dgvActions.SelectedRows.Count > 1)
+            {
+                Action.ActionBundle ab = new Action.ActionBundle();
+                foreach (DataGridViewRow r in dgvActions.SelectedRows)
+                {
+                    ab.Actions.Add(Actions[r.Index]);
+                }
+                ab.Actions.Sort((a, b) => a.OrderNumber.CompareTo(b.OrderNumber));
+                toSerialize = ab;
+                xs = new XmlSerializer(typeof(Action.ActionBundle));
+            }
+            else
+            {
+                int idx = dgvActions.SelectedRows[0].Index;
+                toSerialize = Actions[idx];
+                xs = new XmlSerializer(typeof(Action));
+            }
+            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+            ns.Add("", "");            
             using (MemoryStream ms = new MemoryStream())
             {
-                xs.Serialize(ms, ao, ns);
+                xs.Serialize(ms, toSerialize, ns);
                 ms.Position = 0;
                 using (StreamReader sr = new StreamReader(ms))
                 {
@@ -374,7 +390,7 @@ namespace Triggernometry.CustomControls
         {
             try
             {
-                if (btnEditAction.Enabled == true)
+                if (btnRemoveAction.Enabled == true)
                 {
                     if (plug.cfg.UseOsClipboard == true)
                     {
@@ -409,31 +425,78 @@ namespace Triggernometry.CustomControls
             }
             try
             {
-                XmlSerializer xs = new XmlSerializer(typeof(Action));
-                using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(data)))
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(data);
+                if (doc.DocumentElement.Name == "ActionBundle")
                 {
-                    Action cx = (Action)xs.Deserialize(ms);
-                    int idx = 0;
-                    if (dgvActions.SelectedRows.Count > 0)
+                    XmlSerializer xs = new XmlSerializer(typeof(Action.ActionBundle));
+                    using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(data)))
                     {
-                        idx = dgvActions.SelectedRows[dgvActions.SelectedRows.Count - 1].Index;
-                        Action origo = Actions[idx];
-                        cx.OrderNumber = origo.OrderNumber + 1;
-                        foreach (Action c in Actions)
+                        Action.ActionBundle ab = (Action.ActionBundle)xs.Deserialize(ms);
+                        int idx = 0;
+                        if (dgvActions.SelectedRows.Count > 0)
                         {
-                            if (c.OrderNumber >= cx.OrderNumber)
+                            idx = dgvActions.SelectedRows[dgvActions.SelectedRows.Count - 1].Index;
+                            Action origo = Actions[idx];
+                            int i = 1;
+                            foreach (Action a in ab.Actions)
                             {
-                                c.OrderNumber++;
+                                a.OrderNumber = origo.OrderNumber + i++;
+                            }
+                            foreach (Action c in Actions)
+                            {
+                                if (c.OrderNumber > origo.OrderNumber)
+                                {
+                                    int newidx = origo.OrderNumber + i++;
+                                    c.OrderNumber = newidx;
+                                }
+                            }
+                            Actions.AddRange(ab.Actions);
+                            Actions.Sort((a, b) => a.OrderNumber.CompareTo(b.OrderNumber));
+                        }
+                        else
+                        {
+                            var actions = from ix in ab.Actions orderby ix.OrderNumber ascending select ix;
+                            int i = 1;
+                            foreach (Action a in actions)
+                            {
+                                a.OrderNumber = i++;
+                                Actions.Add(a);
                             }
                         }
+                        dgvActions.RowCount = Actions.Count;
+                        dgvActions.Invalidate();
                     }
-                    else
+
+                }
+                else
+                { 
+                    XmlSerializer xs = new XmlSerializer(typeof(Action));
+                    using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(data)))
                     {
-                        cx.OrderNumber = 1;
+                        Action cx = (Action)xs.Deserialize(ms);
+                        int idx = 0;
+                        if (dgvActions.SelectedRows.Count > 0)
+                        {
+                            idx = dgvActions.SelectedRows[dgvActions.SelectedRows.Count - 1].Index;
+                            Action origo = Actions[idx];
+                            cx.OrderNumber = origo.OrderNumber + 1;
+                            foreach (Action c in Actions)
+                            {
+                                if (c.OrderNumber >= cx.OrderNumber)
+                                {
+                                    c.OrderNumber++;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            cx.OrderNumber = 1;
+                        }
+                        Actions.Insert(cx.OrderNumber - 1, cx);
+                        dgvActions.RowCount = Actions.Count;
+                        dgvActions.Invalidate();
                     }
-                    Actions.Insert(cx.OrderNumber - 1, cx);
-                    dgvActions.RowCount = Actions.Count;
-                    dgvActions.Invalidate();
                 }
             }
             catch (Exception ex)

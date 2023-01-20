@@ -309,7 +309,7 @@ namespace Triggernometry.Forms
                 cbxRefireOption1.SelectedIndex = 1;
                 cbxRefireOption2.SelectedIndex = 1;
                 expExecutionDelay.Expression = "0";
-                chkExecuteAsync.Checked = true;
+                chkExecuteAsync.Checked = plug.cfg.ActionAsyncByDefault;
                 expBeepFrequency.Expression = "1000";
                 expBeepLength.Expression = "100";
                 expSoundFile.Expression = "";
@@ -1149,7 +1149,7 @@ namespace Triggernometry.Forms
             }
         }
 
-        private Bitmap LoadImage(string fn)
+        private System.Drawing.Bitmap LoadImage(string fn)
         {
             byte[] buf = File.ReadAllBytes(fn);
             Bitmap bm = (Bitmap)ic.ConvertFrom(buf);
@@ -1933,6 +1933,7 @@ namespace Triggernometry.Forms
             lblKeypressesInfo.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
             txtSendKeysLink.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
             btnSendKeysLink.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
+            btnSendKeysListen.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
             lblKeypressWindow.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
             expWindowTitle.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
             lblKeypress.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
@@ -1940,6 +1941,7 @@ namespace Triggernometry.Forms
             lblKeypressInfo.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
             txtKeyCodesLink.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
             btnKeycodesLink.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
+            btnKeycodesListen.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
             lblKeypressProcId.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
             expKeypressProcId.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
             lblKeypressProcInfo.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
@@ -2205,6 +2207,103 @@ namespace Triggernometry.Forms
             }
         }
 
+        private void btnSendKeysListen_Click(object sender, EventArgs e)
+        {
+            ListenToKeypresses(true);
+        }
+
+        private void btnKeycodesListen_Click(object sender, EventArgs e)
+        {
+            ListenToKeypresses(false);
+        }
+
+        private void ListenToKeypresses(bool isSendKeys)
+        {
+            Keys keyData = Keys.None;
+            string keyRep = "";
+            using (KeyListenForm klf = new KeyListenForm())
+            {
+                if (klf.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+                keyData = klf.CurrentKey;
+            }
+            if (keyData != Keys.None)
+            {
+                if (isSendKeys == false)
+                {
+                    keyRep = ((int)keyData).ToString();
+                }
+                else
+                {
+                    if ((keyData & Keys.Control) != Keys.None)
+                    {
+                        keyRep += "^";
+                    }
+                    if ((keyData & Keys.Shift) != Keys.None)
+                    {
+                        keyRep += "+";
+                    }
+                    if ((keyData & Keys.Alt) != Keys.None)
+                    {
+                        keyRep += "%";
+                    }
+                    Keys keyCode = keyData & Keys.KeyCode;
+                    switch (keyCode)
+                    {
+                        case Keys.Back: keyRep += "{BS}"; break;
+                        case Keys.CapsLock: keyRep += "{CAPSLOCK}"; break;
+                        case Keys.Delete: keyRep += "{DEL}"; break;
+                        case Keys.Down: keyRep += "{DOWN}"; break;
+                        case Keys.End: keyRep += "{END}"; break;
+                        case Keys.Enter: keyRep += "{ENTER}"; break;
+                        case Keys.Escape: keyRep += "{ESC}"; break;
+                        case Keys.Help: keyRep += "{HELP}"; break;
+                        case Keys.Home: keyRep += "{HOME}"; break;
+                        case Keys.Insert: keyRep += "{INS}"; break;
+                        case Keys.Left: keyRep += "{LEFT}"; break;
+                        case Keys.NumLock: keyRep += "{NUMLOCK}"; break;
+                        case Keys.PageDown: keyRep += "{PGDN}"; break;
+                        case Keys.PageUp: keyRep += "{PGUP}"; break;
+                        case Keys.PrintScreen: keyRep += "{PRTSC}"; break;
+                        case Keys.Right: keyRep += "{RIGHT}"; break;
+                        case Keys.Scroll: keyRep += "{SCROLLLOCK}"; break;
+                        case Keys.Tab: keyRep += "{TAB}"; break;
+                        case Keys.Up: keyRep += "{UP}"; break;
+                        case Keys.F1: keyRep += "{F1}"; break;
+                        case Keys.F2: keyRep += "{F2}"; break;
+                        case Keys.F3: keyRep += "{F3}"; break;
+                        case Keys.F4: keyRep += "{F4}"; break;
+                        case Keys.F5: keyRep += "{F5}"; break;
+                        case Keys.F6: keyRep += "{F6}"; break;
+                        case Keys.F7: keyRep += "{F7}"; break;
+                        case Keys.F8: keyRep += "{F8}"; break;
+                        case Keys.F9: keyRep += "{F9}"; break;
+                        case Keys.F10: keyRep += "{F10}"; break;
+                        case Keys.F11: keyRep += "{F11}"; break;
+                        case Keys.F12: keyRep += "{F12}"; break;
+                        case Keys.F13: keyRep += "{F13}"; break;
+                        case Keys.F14: keyRep += "{F14}"; break;
+                        case Keys.F15: keyRep += "{F15}"; break;
+                        case Keys.F16: keyRep += "{F16}"; break;
+                        case Keys.Add: keyRep += "{ADD}"; break;
+                        case Keys.Subtract: keyRep += "{SUBTRACT}"; break;
+                        case Keys.Multiply: keyRep += "{MULTIPLY}"; break;
+                        case Keys.Divide: keyRep += "{DIVIDE}"; break;
+                        default: keyRep += keyCode != Keys.None ? keyCode.ToString() : ""; break;
+                    }
+                }
+            }
+            if (isSendKeys == true)
+            {
+                expKeypresses.Expression = keyRep;
+            }
+            else
+            {
+                expKeypress.Expression = keyRep;
+            }
+        }
     }
 
 }

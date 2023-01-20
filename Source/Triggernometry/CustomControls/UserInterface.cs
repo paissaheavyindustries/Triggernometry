@@ -36,8 +36,6 @@ namespace Triggernometry.CustomControls
         internal int numLoadedFolders;
         internal Random r = new Random();
         internal string Clipboard = "";
-        internal int selEventDestination = -1;
-        internal int selZoneType = -1;
 
         internal Queue<Toast> Toasts = new Queue<Toast>();
 
@@ -1450,13 +1448,13 @@ namespace Triggernometry.CustomControls
         {
             using (Forms.TestInputForm ti = new Forms.TestInputForm())
             {
-                if (selEventDestination != -1)
+                if (cfg.TestInputDestination != -1)
                 {
-                    ti.cbxEventDestination.SelectedIndex = selEventDestination;
+                    ti.cbxEventDestination.SelectedIndex = cfg.TestInputDestination;
                 }
-                if (selZoneType != -1)
+                if (cfg.TestInputZoneType != -1)
                 {
-                    ti.cbxZoneType.SelectedIndex = selZoneType;
+                    ti.cbxZoneType.SelectedIndex = cfg.TestInputZoneType;
                 }
                 if (testInputHistoryLines != null)
                 {
@@ -1472,8 +1470,8 @@ namespace Triggernometry.CustomControls
                         testInputHistoryZone = ti.txtZoneName.Text;
                         plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeue", "Queueing {0} user log lines", lines.Count()));
                         LogEvent.SourceEnum src = LogEvent.SourceEnum.Log;
-                        selEventDestination = ti.cbxEventDestination.SelectedIndex;
-                        selZoneType = ti.cbxZoneType.SelectedIndex;
+                        cfg.TestInputDestination = ti.cbxEventDestination.SelectedIndex;
+                        cfg.TestInputZoneType = ti.cbxZoneType.SelectedIndex;
                         switch (ti.cbxEventDestination.SelectedIndex)
                         {
                             case 0:
@@ -1583,7 +1581,7 @@ namespace Triggernometry.CustomControls
             }
             else if (e.KeyCode == Keys.V && e.Modifiers == Keys.Control)
             {
-                if (btnAddTrigger.Enabled == true)
+                if (btnAdd.Enabled == true && btnAddTrigger.Enabled == true)
                 {
                     PasteSelected();
                 }
@@ -1604,7 +1602,7 @@ namespace Triggernometry.CustomControls
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (btnAddTrigger.Enabled == true)
+            if (btnAdd.Enabled == true && btnAddTrigger.Enabled == true)
             {
                 PasteSelected();
             }
@@ -2110,7 +2108,6 @@ namespace Triggernometry.CustomControls
                 }
             }
         }
-
     }
 
 }

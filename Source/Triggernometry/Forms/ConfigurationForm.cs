@@ -68,6 +68,7 @@ namespace Triggernometry.Forms
                 cbxUpdateMethod.SelectedIndex = 1;
                 chkWarnAdmin.Checked = true;
                 cbxTestLive.Checked = false;
+                cbxActionAsync.Checked = true;
                 chkLogNormalEvents.Checked = true;
                 chkLogVariableExpansions.Checked = false;
                 chkFfxivLogNetwork.Checked = false;
@@ -98,6 +99,7 @@ namespace Triggernometry.Forms
                 chkWelcome.Checked = a.ShowWelcome;
                 chkWarnAdmin.Checked = a.WarnAdmin;
                 cbxTestLive.Checked = a.TestLiveByDefault;
+                cbxActionAsync.Checked = a.ActionAsyncByDefault;
                 chkUpdates.Checked = (a.UpdateNotifications == Configuration.UpdateNotificationsEnum.Yes);
                 cbxUpdateMethod.SelectedIndex = (int)a.UpdateCheckMethod;
                 chkLogNormalEvents.Checked = a.LogNormalEvents;
@@ -155,6 +157,7 @@ namespace Triggernometry.Forms
             a.ShowWelcome = chkWelcome.Checked;
             a.WarnAdmin = chkWarnAdmin.Checked;
             a.TestLiveByDefault = cbxTestLive.Checked;
+            a.ActionAsyncByDefault = cbxActionAsync.Checked;
             a.LogNormalEvents = chkLogNormalEvents.Checked;
             a.LogVariableExpansions = chkLogVariableExpansions.Checked;
             a.FfxivLogNetwork = chkFfxivLogNetwork.Checked;

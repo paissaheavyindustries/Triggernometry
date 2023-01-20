@@ -90,6 +90,8 @@
             this.cbxFiringOptions = new System.Windows.Forms.CheckedListBox();
             this.tabKeypress = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnKeycodesListen = new System.Windows.Forms.Button();
+            this.btnSendKeysListen = new System.Windows.Forms.Button();
             this.lblKeypressProcInfo = new System.Windows.Forms.Label();
             this.expKeypressProcId = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblKeypressProcId = new System.Windows.Forms.Label();
@@ -1365,6 +1367,8 @@
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel6.Controls.Add(this.btnKeycodesListen, 2, 7);
+            this.tableLayoutPanel6.Controls.Add(this.btnSendKeysListen, 2, 3);
             this.tableLayoutPanel6.Controls.Add(this.lblKeypressProcInfo, 1, 2);
             this.tableLayoutPanel6.Controls.Add(this.expKeypressProcId, 1, 1);
             this.tableLayoutPanel6.Controls.Add(this.lblKeypressProcId, 0, 1);
@@ -1399,6 +1403,30 @@
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel6.Size = new System.Drawing.Size(742, 321);
             this.tableLayoutPanel6.TabIndex = 2;
+            // 
+            // btnKeycodesListen
+            // 
+            this.btnKeycodesListen.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnKeycodesListen.Image = ((System.Drawing.Image)(resources.GetObject("btnKeycodesListen.Image")));
+            this.btnKeycodesListen.Location = new System.Drawing.Point(702, 210);
+            this.btnKeycodesListen.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.btnKeycodesListen.Name = "btnKeycodesListen";
+            this.btnKeycodesListen.Size = new System.Drawing.Size(37, 26);
+            this.btnKeycodesListen.TabIndex = 36;
+            this.btnKeycodesListen.UseVisualStyleBackColor = true;
+            this.btnKeycodesListen.Click += new System.EventHandler(this.btnKeycodesListen_Click);
+            // 
+            // btnSendKeysListen
+            // 
+            this.btnSendKeysListen.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnSendKeysListen.Image = ((System.Drawing.Image)(resources.GetObject("btnSendKeysListen.Image")));
+            this.btnSendKeysListen.Location = new System.Drawing.Point(702, 99);
+            this.btnSendKeysListen.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.btnSendKeysListen.Name = "btnSendKeysListen";
+            this.btnSendKeysListen.Size = new System.Drawing.Size(37, 26);
+            this.btnSendKeysListen.TabIndex = 35;
+            this.btnSendKeysListen.UseVisualStyleBackColor = true;
+            this.btnSendKeysListen.Click += new System.EventHandler(this.btnSendKeysListen_Click);
             // 
             // lblKeypressProcInfo
             // 
@@ -1473,14 +1501,13 @@
             // 
             this.expKeypress.AutocompleteAvailable = true;
             this.expKeypress.AutoSize = true;
-            this.tableLayoutPanel6.SetColumnSpan(this.expKeypress, 2);
             this.expKeypress.Dock = System.Windows.Forms.DockStyle.Top;
             this.expKeypress.Expression = "";
             this.expKeypress.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
             this.expKeypress.Location = new System.Drawing.Point(123, 213);
             this.expKeypress.Name = "expKeypress";
             this.expKeypress.ReadOnly = false;
-            this.expKeypress.Size = new System.Drawing.Size(616, 20);
+            this.expKeypress.Size = new System.Drawing.Size(576, 20);
             this.expKeypress.TabIndex = 26;
             // 
             // expWindowTitle
@@ -1573,14 +1600,13 @@
             // 
             this.expKeypresses.AutocompleteAvailable = true;
             this.expKeypresses.AutoSize = true;
-            this.tableLayoutPanel6.SetColumnSpan(this.expKeypresses, 2);
             this.expKeypresses.Dock = System.Windows.Forms.DockStyle.Top;
             this.expKeypresses.Expression = "";
             this.expKeypresses.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
             this.expKeypresses.Location = new System.Drawing.Point(123, 102);
             this.expKeypresses.Name = "expKeypresses";
             this.expKeypresses.ReadOnly = false;
-            this.expKeypresses.Size = new System.Drawing.Size(616, 20);
+            this.expKeypresses.Size = new System.Drawing.Size(576, 20);
             this.expKeypresses.TabIndex = 14;
             // 
             // lblKeypressesInfo
@@ -2672,7 +2698,7 @@
             this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 78F));
+            this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
             this.tableLayoutPanel13.Controls.Add(this.lblTextAuraOutline, 0, 5);
             this.tableLayoutPanel13.Controls.Add(this.btnTextAuraFont, 3, 3);
             this.tableLayoutPanel13.Controls.Add(this.lblTextAuraFont, 0, 3);
@@ -2743,10 +2769,10 @@
             // btnTextAuraFont
             // 
             this.btnTextAuraFont.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnTextAuraFont.Location = new System.Drawing.Point(663, 79);
+            this.btnTextAuraFont.Location = new System.Drawing.Point(660, 79);
             this.btnTextAuraFont.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnTextAuraFont.Name = "btnTextAuraFont";
-            this.btnTextAuraFont.Size = new System.Drawing.Size(76, 26);
+            this.btnTextAuraFont.Size = new System.Drawing.Size(79, 26);
             this.btnTextAuraFont.TabIndex = 52;
             this.btnTextAuraFont.Text = "...";
             this.btnTextAuraFont.UseVisualStyleBackColor = true;
@@ -2766,10 +2792,10 @@
             // btnTextAuraHide
             // 
             this.btnTextAuraHide.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnTextAuraHide.Location = new System.Drawing.Point(663, 27);
+            this.btnTextAuraHide.Location = new System.Drawing.Point(660, 27);
             this.btnTextAuraHide.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnTextAuraHide.Name = "btnTextAuraHide";
-            this.btnTextAuraHide.Size = new System.Drawing.Size(76, 26);
+            this.btnTextAuraHide.Size = new System.Drawing.Size(79, 26);
             this.btnTextAuraHide.TabIndex = 50;
             this.btnTextAuraHide.Text = "Hide";
             this.btnTextAuraHide.UseVisualStyleBackColor = true;
@@ -2816,10 +2842,10 @@
             this.expTextAuraTTLTick.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTextAuraTTLTick.Expression = "";
             this.expTextAuraTTLTick.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
-            this.expTextAuraTTLTick.Location = new System.Drawing.Point(286, 312);
+            this.expTextAuraTTLTick.Location = new System.Drawing.Point(285, 312);
             this.expTextAuraTTLTick.Name = "expTextAuraTTLTick";
             this.expTextAuraTTLTick.ReadOnly = false;
-            this.expTextAuraTTLTick.Size = new System.Drawing.Size(453, 20);
+            this.expTextAuraTTLTick.Size = new System.Drawing.Size(454, 20);
             this.expTextAuraTTLTick.TabIndex = 24;
             this.expTextAuraTTLTick.EnabledChanged += new System.EventHandler(this.expTextAuraTTLTick_EnabledChanged);
             // 
@@ -2831,10 +2857,10 @@
             this.expTextAuraOTick.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTextAuraOTick.Expression = "";
             this.expTextAuraOTick.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
-            this.expTextAuraOTick.Location = new System.Drawing.Point(286, 286);
+            this.expTextAuraOTick.Location = new System.Drawing.Point(285, 286);
             this.expTextAuraOTick.Name = "expTextAuraOTick";
             this.expTextAuraOTick.ReadOnly = false;
-            this.expTextAuraOTick.Size = new System.Drawing.Size(453, 20);
+            this.expTextAuraOTick.Size = new System.Drawing.Size(454, 20);
             this.expTextAuraOTick.TabIndex = 23;
             this.expTextAuraOTick.EnabledChanged += new System.EventHandler(this.expTextAuraOTick_EnabledChanged);
             // 
@@ -2846,10 +2872,10 @@
             this.expTextAuraHTick.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTextAuraHTick.Expression = "";
             this.expTextAuraHTick.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
-            this.expTextAuraHTick.Location = new System.Drawing.Point(286, 260);
+            this.expTextAuraHTick.Location = new System.Drawing.Point(285, 260);
             this.expTextAuraHTick.Name = "expTextAuraHTick";
             this.expTextAuraHTick.ReadOnly = false;
-            this.expTextAuraHTick.Size = new System.Drawing.Size(453, 20);
+            this.expTextAuraHTick.Size = new System.Drawing.Size(454, 20);
             this.expTextAuraHTick.TabIndex = 21;
             this.expTextAuraHTick.EnabledChanged += new System.EventHandler(this.expTextAuraHTick_EnabledChanged);
             // 
@@ -2861,10 +2887,10 @@
             this.expTextAuraWTick.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTextAuraWTick.Expression = "";
             this.expTextAuraWTick.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
-            this.expTextAuraWTick.Location = new System.Drawing.Point(286, 234);
+            this.expTextAuraWTick.Location = new System.Drawing.Point(285, 234);
             this.expTextAuraWTick.Name = "expTextAuraWTick";
             this.expTextAuraWTick.ReadOnly = false;
-            this.expTextAuraWTick.Size = new System.Drawing.Size(453, 20);
+            this.expTextAuraWTick.Size = new System.Drawing.Size(454, 20);
             this.expTextAuraWTick.TabIndex = 19;
             this.expTextAuraWTick.EnabledChanged += new System.EventHandler(this.expTextAuraWTick_EnabledChanged);
             // 
@@ -2876,10 +2902,10 @@
             this.expTextAuraYTick.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTextAuraYTick.Expression = "";
             this.expTextAuraYTick.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
-            this.expTextAuraYTick.Location = new System.Drawing.Point(286, 208);
+            this.expTextAuraYTick.Location = new System.Drawing.Point(285, 208);
             this.expTextAuraYTick.Name = "expTextAuraYTick";
             this.expTextAuraYTick.ReadOnly = false;
-            this.expTextAuraYTick.Size = new System.Drawing.Size(453, 20);
+            this.expTextAuraYTick.Size = new System.Drawing.Size(454, 20);
             this.expTextAuraYTick.TabIndex = 17;
             this.expTextAuraYTick.EnabledChanged += new System.EventHandler(this.expTextAuraYTick_EnabledChanged);
             // 
@@ -2891,10 +2917,10 @@
             this.expTextAuraXTick.Dock = System.Windows.Forms.DockStyle.Top;
             this.expTextAuraXTick.Expression = "";
             this.expTextAuraXTick.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
-            this.expTextAuraXTick.Location = new System.Drawing.Point(286, 182);
+            this.expTextAuraXTick.Location = new System.Drawing.Point(285, 182);
             this.expTextAuraXTick.Name = "expTextAuraXTick";
             this.expTextAuraXTick.ReadOnly = false;
-            this.expTextAuraXTick.Size = new System.Drawing.Size(453, 20);
+            this.expTextAuraXTick.Size = new System.Drawing.Size(454, 20);
             this.expTextAuraXTick.TabIndex = 15;
             this.expTextAuraXTick.EnabledChanged += new System.EventHandler(this.expTextAuraXTick_EnabledChanged);
             // 
@@ -2905,9 +2931,9 @@
             this.tableLayoutPanel13.SetColumnSpan(this.lblTextAuraUpdValues, 2);
             this.lblTextAuraUpdValues.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblTextAuraUpdValues.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblTextAuraUpdValues.Location = new System.Drawing.Point(286, 159);
+            this.lblTextAuraUpdValues.Location = new System.Drawing.Point(285, 159);
             this.lblTextAuraUpdValues.Name = "lblTextAuraUpdValues";
-            this.lblTextAuraUpdValues.Size = new System.Drawing.Size(453, 20);
+            this.lblTextAuraUpdValues.Size = new System.Drawing.Size(454, 20);
             this.lblTextAuraUpdValues.TabIndex = 41;
             this.lblTextAuraUpdValues.Text = "Update tick (20 ms) expressions";
             this.lblTextAuraUpdValues.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2922,7 +2948,7 @@
             this.expTextAuraOIni.Location = new System.Drawing.Point(123, 286);
             this.expTextAuraOIni.Name = "expTextAuraOIni";
             this.expTextAuraOIni.ReadOnly = false;
-            this.expTextAuraOIni.Size = new System.Drawing.Size(157, 20);
+            this.expTextAuraOIni.Size = new System.Drawing.Size(156, 20);
             this.expTextAuraOIni.TabIndex = 22;
             // 
             // expTextAuraHIni
@@ -2935,7 +2961,7 @@
             this.expTextAuraHIni.Location = new System.Drawing.Point(123, 260);
             this.expTextAuraHIni.Name = "expTextAuraHIni";
             this.expTextAuraHIni.ReadOnly = false;
-            this.expTextAuraHIni.Size = new System.Drawing.Size(157, 20);
+            this.expTextAuraHIni.Size = new System.Drawing.Size(156, 20);
             this.expTextAuraHIni.TabIndex = 20;
             // 
             // expTextAuraWIni
@@ -2948,7 +2974,7 @@
             this.expTextAuraWIni.Location = new System.Drawing.Point(123, 234);
             this.expTextAuraWIni.Name = "expTextAuraWIni";
             this.expTextAuraWIni.ReadOnly = false;
-            this.expTextAuraWIni.Size = new System.Drawing.Size(157, 20);
+            this.expTextAuraWIni.Size = new System.Drawing.Size(156, 20);
             this.expTextAuraWIni.TabIndex = 18;
             // 
             // lblTextAuraTtlExp
@@ -3031,7 +3057,7 @@
             this.expTextAuraYIni.Location = new System.Drawing.Point(123, 208);
             this.expTextAuraYIni.Name = "expTextAuraYIni";
             this.expTextAuraYIni.ReadOnly = false;
-            this.expTextAuraYIni.Size = new System.Drawing.Size(157, 20);
+            this.expTextAuraYIni.Size = new System.Drawing.Size(156, 20);
             this.expTextAuraYIni.TabIndex = 16;
             // 
             // lblTextAuraY
@@ -3055,7 +3081,7 @@
             this.expTextAuraXIni.Location = new System.Drawing.Point(123, 182);
             this.expTextAuraXIni.Name = "expTextAuraXIni";
             this.expTextAuraXIni.ReadOnly = false;
-            this.expTextAuraXIni.Size = new System.Drawing.Size(157, 20);
+            this.expTextAuraXIni.Size = new System.Drawing.Size(156, 20);
             this.expTextAuraXIni.TabIndex = 14;
             // 
             // lblTextAuraX
@@ -3080,7 +3106,7 @@
             this.expTextAuraName.Location = new System.Drawing.Point(123, 30);
             this.expTextAuraName.Name = "expTextAuraName";
             this.expTextAuraName.ReadOnly = false;
-            this.expTextAuraName.Size = new System.Drawing.Size(537, 20);
+            this.expTextAuraName.Size = new System.Drawing.Size(534, 20);
             this.expTextAuraName.TabIndex = 10;
             this.expTextAuraName.EnabledChanged += new System.EventHandler(this.expTextAuraName_EnabledChanged);
             // 
@@ -3131,7 +3157,7 @@
             this.lblTextAuraIniValues.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.lblTextAuraIniValues.Location = new System.Drawing.Point(123, 159);
             this.lblTextAuraIniValues.Name = "lblTextAuraIniValues";
-            this.lblTextAuraIniValues.Size = new System.Drawing.Size(157, 20);
+            this.lblTextAuraIniValues.Size = new System.Drawing.Size(156, 20);
             this.lblTextAuraIniValues.TabIndex = 40;
             this.lblTextAuraIniValues.Text = "Initial values";
             this.lblTextAuraIniValues.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -3152,10 +3178,10 @@
             // txtTextAuraFont
             // 
             this.txtTextAuraFont.Dock = System.Windows.Forms.DockStyle.Top;
-            this.txtTextAuraFont.Location = new System.Drawing.Point(286, 82);
+            this.txtTextAuraFont.Location = new System.Drawing.Point(285, 82);
             this.txtTextAuraFont.Name = "txtTextAuraFont";
             this.txtTextAuraFont.ReadOnly = true;
-            this.txtTextAuraFont.Size = new System.Drawing.Size(374, 20);
+            this.txtTextAuraFont.Size = new System.Drawing.Size(372, 20);
             this.txtTextAuraFont.TabIndex = 53;
             // 
             // colorSelector1
@@ -3169,7 +3195,7 @@
             this.colorSelector1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.colorSelector1.Location = new System.Drawing.Point(123, 82);
             this.colorSelector1.Name = "colorSelector1";
-            this.colorSelector1.Size = new System.Drawing.Size(157, 20);
+            this.colorSelector1.Size = new System.Drawing.Size(156, 20);
             this.colorSelector1.TabIndex = 54;
             this.colorSelector1.TextColor = System.Drawing.Color.Empty;
             this.colorSelector1.TextOutlineColor = System.Drawing.Color.Empty;
@@ -6308,5 +6334,7 @@
         private CustomControls.ExpressionTextBox expLSCustPayload;
         private System.Windows.Forms.ComboBox cbxLsOpType;
         private System.Windows.Forms.Label lblLsOpType;
+        private System.Windows.Forms.Button btnKeycodesListen;
+        private System.Windows.Forms.Button btnSendKeysListen;
     }
 }

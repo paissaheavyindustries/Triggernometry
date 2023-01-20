@@ -32,6 +32,13 @@ namespace Triggernometry
 
         #region General properties
 
+        public class ActionBundle
+        {
+
+            public List<Action> Actions { get; set; } = new List<Action>();
+
+        }
+
         internal Action NextAction { get; set; } = null;
 
         internal Guid Id { get; set; }

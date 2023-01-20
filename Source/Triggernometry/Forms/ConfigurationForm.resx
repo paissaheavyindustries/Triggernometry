@@ -144,18 +144,18 @@
   <data name="btnClearSelection.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         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
-        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
+        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
 </value>
   </data>
   <data name="lblFolderReminder.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -420,15 +420,15 @@
   <data name="btnFfxivJobRestore.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAG1SURBVDhPY8AFjixg+A9lkgb2z2QQAWkmy4CKCgZBkMbf
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAG0SURBVDhPY8AFjixg+A9lkgb2z2QQAWkmy4CKCgZBkMbf
         n9eSbgCy5t9PVMEGgPDOhfzPd88ROr9rodSS4mIGbqhyVICs+dtDw/+/Hiv8//Wm+P+v1/n/v7/I+//m
-        RfSPXQtFruxfIHK1voxTBqoNAurrGbjgmh/o///+yOj/x9ua/78C2SD68Vmx/29umv3/9jzz/+w2x38H
+        RfSPXQtFruxfIHK1voxTBqoNAurrGbjgmh/o///+yOj/x9ua/78C2SD68Vmx/29umv3/9jzz/6xWx38H
         Fws/qa9iNYJqh4Q2TPMPoGaQASAMM+DFJVk4Bhn08KzD/70LRU+BLAYbAHf+20qwAV/u6/y/doAFjpEN
         uH+C+//np1n/jy4W+rFnvuhpsAEggDCk7P+twyxg+uerTBT8/S4r0ACu/zcOsf9/fSf///7F0l+g2iEA
         2RAQBrFR8ErG/+8e5v2/f5L//6cnmf8PAF0B1YoAyIaAaKgww5H5DAY7ZjIEHJ7HcPLrs9z/7x+V/T+4
-        WBJ3OoHZCuXCwZE5DFIn1jD9XzW//t+hRYL4Exo2A0CguZ7v38JJsf8OLFN+DxUiHhyey6B05YjWnwn1
-        zkADlOqhwsSDQ/MZYl/eTt10cKngOqgQaeDQUonMI8ulMvfPZ5CAiDAwAAC9EEuM/BRungAAAABJRU5E
-        rkJggg==
+        WBJ3OoHZCuXCwZE5DFIn1jD9Xzmv/t+hRYL4Exo2A0CgqZ7v34KJsf8OLFN+DxUiHhyey6B05YjWn/56
+        Z6ABSvVQYeLBofkMsS9vp246uFRwHVSINHBoqUTmkeVSmfvnM0hARBgYALK4S4ReF85+AAAAAElFTkSu
+        QmCC
 </value>
   </data>
   <metadata name="Column1.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">

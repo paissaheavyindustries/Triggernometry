@@ -100,7 +100,8 @@ namespace Triggernometry
             ActivateAura,
             DeactivateAura,
             DeactivateAllAura,
-            DeactivateAuraRegex
+            DeactivateAuraRegex,
+            DeactivateAuraTrigger
         }
 
         public enum MessageBoxIconTypeEnum
