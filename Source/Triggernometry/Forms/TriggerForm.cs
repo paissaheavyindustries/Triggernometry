@@ -250,6 +250,9 @@ namespace Triggernometry.Forms
                     case Trigger.TriggerSourceEnum.ACT:
                         cbxTriggerSource.SelectedIndex = 3;
                         break;
+                    case Trigger.TriggerSourceEnum.Endpoint:
+                        cbxTriggerSource.SelectedIndex = 4;
+                        break;
                 }
                 expRefirePeriod.Expression = t._RefirePeriodExpression;
                 cbxEditAutofire.Checked = t._EditAutofire;
@@ -341,6 +344,9 @@ namespace Triggernometry.Forms
                     break;
                 case 3:
                     t._Source = Trigger.TriggerSourceEnum.ACT;
+                    break;
+                case 4:
+                    t._Source = Trigger.TriggerSourceEnum.Endpoint;
                     break;
             }
             t._RefirePeriodExpression = expRefirePeriod.Expression;

@@ -1483,6 +1483,9 @@ namespace Triggernometry.CustomControls
                             case 2:
                                 src = LogEvent.SourceEnum.ACT;
                                 break;
+                            case 3:
+                                src = LogEvent.SourceEnum.Endpoint;
+                                break;
                         }
                         plug.LogLineQueuerMass(lines, ti.txtZoneName.Text, src, true, ti.cbxZoneType.SelectedIndex == 1);
                         plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeuedone", "Done"));
@@ -2027,6 +2030,9 @@ namespace Triggernometry.CustomControls
                 {
                     case Trigger.TriggerSourceEnum.ACT:
                         source = LogEvent.SourceEnum.ACT;
+                        break;
+                    case Trigger.TriggerSourceEnum.Endpoint:
+                        source = LogEvent.SourceEnum.Endpoint;
                         break;
                     case Trigger.TriggerSourceEnum.FFXIVNetwork:
                         source = LogEvent.SourceEnum.NetworkFFXIV;

@@ -24,6 +24,7 @@ namespace Triggernometry.Forms
         private List<Configuration.Substitution> subs = new List<Configuration.Substitution>();
         private Trigger template = new Trigger();
         private Dictionary<string, VariableScalar> consts = new Dictionary<string, VariableScalar>();
+        private List<Tuple<DateTime, string>> teleHistory = new List<Tuple<DateTime, string>>();
 
         public ConfigurationForm()
         {
@@ -33,7 +34,44 @@ namespace Triggernometry.Forms
             label5.Tag = I18n.DoNotTranslate;
             label6.Tag = I18n.DoNotTranslate;
             RestoredSavedDimensions();
-            tbcMain.TabPages.Remove(tabEndpoint);
+            FormClosing += ConfigurationForm_FormClosing;
+        }
+
+        private void ConfigurationForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            plug._ep.OnStatusChange -= _ep_OnStatusChange;
+        }
+
+        private void _ep_OnStatusChange(Endpoint.StatusEnum newStatus, string statusDesc)
+        {
+            if (txtEndpointStatus.InvokeRequired == true)
+            {
+                txtEndpointStatus.Invoke(new Endpoint.StatusChangeDelegate(_ep_OnStatusChange), newStatus, statusDesc);
+                return;
+            }
+            txtEndpointStatus.Text = "(" + newStatus + ") " + statusDesc;
+            switch (newStatus)
+            {
+                case Endpoint.StatusEnum.Stopping:
+                case Endpoint.StatusEnum.Starting:
+                    btnEndpointStart.Enabled = false;
+                    btnEndpointStop.Enabled = false;
+                    lblEndpoint.Enabled = false;
+                    txtEndpoint.Enabled = false;
+                    break;
+                case Endpoint.StatusEnum.Stopped:
+                    btnEndpointStart.Enabled = true;
+                    btnEndpointStop.Enabled = false;
+                    lblEndpoint.Enabled = true;
+                    txtEndpoint.Enabled = true;
+                    break;
+                case Endpoint.StatusEnum.Started:
+                    btnEndpointStart.Enabled = false;
+                    btnEndpointStop.Enabled = true;
+                    lblEndpoint.Enabled = false;
+                    txtEndpoint.Enabled = false;
+                    break;
+            }
         }
 
         internal void SecuritySettingsFromConfiguration(Configuration cfg)
@@ -82,6 +120,9 @@ namespace Triggernometry.Forms
                 dgvSubstitutions.RowCount = 0;
                 cbxAutosaveConfig.Checked = false;
                 nudAutosaveMinutes.Value = 5;
+                txtEndpoint.Text = "http://localhost:51423/";
+                chkEndpointStartup.Checked = true;
+                chkEndpointLog.Checked = true;
                 SecuritySettingsFromConfiguration(null);
                 SetupConsts(null);
             }
@@ -104,7 +145,7 @@ namespace Triggernometry.Forms
                 cbxUpdateMethod.SelectedIndex = (int)a.UpdateCheckMethod;
                 chkLogNormalEvents.Checked = a.LogNormalEvents;
                 chkLogVariableExpansions.Checked = a.LogVariableExpansions;
-                chkFfxivLogNetwork.Checked = a.FfxivLogNetwork;
+                chkFfxivLogNetwork.Checked = a.FfxivLogNetwork;                
                 cbxEnableHwAccel.Checked = a.UseScarborough;
                 txtMonitorWindow.Text = a.WindowToMonitor;
                 nudCacheImageExpiry.Value = a.CacheImageExpiry;
@@ -117,6 +158,9 @@ namespace Triggernometry.Forms
                 dgvSubstitutions.RowCount = a.Substitutions.Count;
                 cbxAutosaveConfig.Checked = a.AutosaveEnabled;
                 nudAutosaveMinutes.Value = a.AutosaveInterval;
+                txtEndpoint.Text = a.HttpEndpoint;
+                chkEndpointStartup.Checked = a.StartEndpointOnLaunch;
+                chkEndpointLog.Checked = a.LogEndpoint;
                 cbxTriggerTemplate.Checked = a.UseTemplateTrigger;
                 a.TemplateTrigger.CopySettingsTo(template);
                 SetupJobOrder(a);
@@ -171,6 +215,9 @@ namespace Triggernometry.Forms
             a.CacheFileExpiry = (int)nudCacheFileExpiry.Value;
             a.AutosaveEnabled = cbxAutosaveConfig.Checked;
             a.AutosaveInterval = (int)nudAutosaveMinutes.Value;
+            a.HttpEndpoint = txtEndpoint.Text;
+            a.StartEndpointOnLaunch = chkEndpointStartup.Checked;
+            a.LogEndpoint = chkEndpointLog.Checked;
             a.UseTemplateTrigger = cbxTriggerTemplate.Checked;
             template.CopySettingsTo(a.TemplateTrigger);
             a.FfxivPartyOrdering = (Configuration.FfxivPartyOrderingEnum)cbxFfxivJobMethod.SelectedIndex;
@@ -271,6 +318,9 @@ namespace Triggernometry.Forms
             cancomplain = true;
             cbxAutosaveConfig_CheckedChanged(null, null);
             RefreshCacheStates();
+            plug._ep.OnStatusChange += _ep_OnStatusChange;
+            _ep_OnStatusChange(plug._ep.Status, plug._ep.StatusDescription);
+            btnEndpointHistUpdate_Click(null, null);
         }
 
         private void trvTrigger_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
@@ -1035,6 +1085,54 @@ namespace Triggernometry.Forms
                     break;
                 case 1:
                     e.Value = kp.Value.Value;
+                    break;
+            }
+        }
+
+        private void btnEndpointStart_Click(object sender, EventArgs e)
+        {
+            plug._ep.Start();
+        }
+
+        private void btnEndpointStop_Click(object sender, EventArgs e)
+        {
+            plug._ep.Stop();
+        }
+
+        private void btnEndpointHistUpdate_Click(object sender, EventArgs e)
+        {
+            tslEndpointHistoryCount.Text = plug._ep.ReceivedTelegrams.ToString();
+            lock (teleHistory)
+            {
+                teleHistory.Clear();
+                lock (plug._ep.teleHistory)
+                {
+                    teleHistory.AddRange(plug._ep.teleHistory);
+                }
+                dgvEndpointHistory.RowCount = teleHistory.Count;
+            }
+            dgvEndpointHistory.Invalidate();
+        }
+
+        private void dgvEndpointHistory_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
+        {
+            Tuple<DateTime, string> t;
+            lock (teleHistory)
+            {
+                if (e.RowIndex >= teleHistory.Count)
+                {
+                    e.Value = "";
+                    return;
+                }
+                t = teleHistory[teleHistory.Count - 1 - e.RowIndex];
+            }
+            switch (e.ColumnIndex)
+            {
+                case 0:             
+                    e.Value = t.Item1;
+                    break;
+                case 1:
+                    e.Value = t.Item2;
                     break;
             }
         }

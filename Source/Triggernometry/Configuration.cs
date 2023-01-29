@@ -296,6 +296,9 @@ namespace Triggernometry
         public bool FfxivLogNetwork { get; set; } = false;
 
         [XmlAttribute]
+        public bool LogEndpoint { get; set; } = true;
+
+        [XmlAttribute]
         public bool TestLiveByDefault { get; set; } = false;
 
         [XmlAttribute]
@@ -331,6 +334,12 @@ namespace Triggernometry
         [XmlAttribute]
         public int TestInputZoneType { get; set; } = -1;
 
+        [XmlAttribute]
+        public string HttpEndpoint { get; set; } = "http://localhost:51423/";
+
+        [XmlAttribute]
+        public bool StartEndpointOnLaunch { get; set; } = true;
+
         public VariableStore PersistentVariables { get; set; } = new VariableStore();        
         public SerializableDictionary<string, VariableScalar> Constants { get; set; } = new SerializableDictionary<string, VariableScalar>();
 
@@ -351,6 +360,7 @@ namespace Triggernometry
             Constants["OBSWebsocketEndpoint"] = new VariableScalar() { Value = "localhost" };
             Constants["OBSWebsocketPort"] = new VariableScalar() { Value = "4455" };
             Constants["OBSWebsocketPassword"] = new VariableScalar() { Value = "" };
+            Constants["TriggernometryEndpoint"] = new VariableScalar() { Value = "http://localhost:51423/" };           
         }
 
         internal List<APIUsage> GetAPIUsages()

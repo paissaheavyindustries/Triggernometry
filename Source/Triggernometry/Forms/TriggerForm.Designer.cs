@@ -62,18 +62,18 @@
             this.lblRefireOption1 = new System.Windows.Forms.Label();
             this.expRefirePeriod = new Triggernometry.CustomControls.ExpressionTextBox();
             this.tabDebugging = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel16 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.cbxLoggingLevel = new System.Windows.Forms.ComboBox();
             this.lblLoggingLevel = new System.Windows.Forms.Label();
+            this.txtEvent = new System.Windows.Forms.TextBox();
+            this.lblEvent = new System.Windows.Forms.Label();
+            this.tableLayoutPanel16 = new System.Windows.Forms.TableLayoutPanel();
             this.tabDescription = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel23 = new System.Windows.Forms.TableLayoutPanel();
             this.chkReadmeTrigger = new System.Windows.Forms.CheckBox();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.panel5 = new System.Windows.Forms.Panel();
             this.lblReadOnly = new System.Windows.Forms.Label();
-            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.txtEvent = new System.Windows.Forms.TextBox();
-            this.lblEvent = new System.Windows.Forms.Label();
             this.grpGeneral.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -83,10 +83,10 @@
             this.tabScheduling.SuspendLayout();
             this.tableLayoutPanel15.SuspendLayout();
             this.tabDebugging.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.tabDescription.SuspendLayout();
             this.tableLayoutPanel23.SuspendLayout();
             this.panel5.SuspendLayout();
-            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -380,7 +380,8 @@
             "Normal log lines",
             "FFXIV network events",
             "None",
-            "ACT events"});
+            "ACT events",
+            "Endpoint"});
             this.cbxTriggerSource.Location = new System.Drawing.Point(282, 3);
             this.cbxTriggerSource.Name = "cbxTriggerSource";
             this.cbxTriggerSource.Size = new System.Drawing.Size(357, 21);
@@ -524,22 +525,28 @@
             this.tabDebugging.Text = "Debugging";
             this.tabDebugging.UseVisualStyleBackColor = true;
             // 
-            // tableLayoutPanel16
+            // tableLayoutPanel3
             // 
-            this.tableLayoutPanel16.AutoSize = true;
-            this.tableLayoutPanel16.ColumnCount = 2;
-            this.tableLayoutPanel16.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel16.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel16.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel16.Location = new System.Drawing.Point(7, 7);
-            this.tableLayoutPanel16.Name = "tableLayoutPanel16";
-            this.tableLayoutPanel16.RowCount = 1;
-            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
-            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
-            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
-            this.tableLayoutPanel16.Size = new System.Drawing.Size(642, 0);
-            this.tableLayoutPanel16.TabIndex = 3;
+            this.tableLayoutPanel3.AutoSize = true;
+            this.tableLayoutPanel3.ColumnCount = 3;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tableLayoutPanel3.Controls.Add(this.cbxLoggingLevel, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this.lblLoggingLevel, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.txtEvent, 1, 1);
+            this.tableLayoutPanel3.Controls.Add(this.lblEvent, 0, 1);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(7, 7);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 2;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(642, 310);
+            this.tableLayoutPanel3.TabIndex = 4;
             // 
             // cbxLoggingLevel
             // 
@@ -568,6 +575,49 @@
             this.lblLoggingLevel.TabIndex = 2;
             this.lblLoggingLevel.Text = "Logging filtering level";
             this.lblLoggingLevel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // txtEvent
+            // 
+            this.txtEvent.AcceptsReturn = true;
+            this.txtEvent.AcceptsTab = true;
+            this.tableLayoutPanel3.SetColumnSpan(this.txtEvent, 2);
+            this.txtEvent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtEvent.Location = new System.Drawing.Point(115, 30);
+            this.txtEvent.Multiline = true;
+            this.txtEvent.Name = "txtEvent";
+            this.txtEvent.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtEvent.Size = new System.Drawing.Size(524, 277);
+            this.txtEvent.TabIndex = 9;
+            this.txtEvent.WordWrap = false;
+            // 
+            // lblEvent
+            // 
+            this.lblEvent.AutoEllipsis = true;
+            this.lblEvent.AutoSize = true;
+            this.lblEvent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblEvent.Location = new System.Drawing.Point(3, 27);
+            this.lblEvent.Name = "lblEvent";
+            this.lblEvent.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
+            this.lblEvent.Size = new System.Drawing.Size(106, 283);
+            this.lblEvent.TabIndex = 8;
+            this.lblEvent.Text = "Test input lines";
+            // 
+            // tableLayoutPanel16
+            // 
+            this.tableLayoutPanel16.AutoSize = true;
+            this.tableLayoutPanel16.ColumnCount = 2;
+            this.tableLayoutPanel16.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel16.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel16.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel16.Location = new System.Drawing.Point(7, 7);
+            this.tableLayoutPanel16.Name = "tableLayoutPanel16";
+            this.tableLayoutPanel16.RowCount = 1;
+            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tableLayoutPanel16.Size = new System.Drawing.Size(642, 0);
+            this.tableLayoutPanel16.TabIndex = 3;
             // 
             // tabDescription
             // 
@@ -649,55 +699,6 @@
     "f it.";
             this.lblReadOnly.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // tableLayoutPanel3
-            // 
-            this.tableLayoutPanel3.AutoSize = true;
-            this.tableLayoutPanel3.ColumnCount = 3;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
-            this.tableLayoutPanel3.Controls.Add(this.cbxLoggingLevel, 1, 0);
-            this.tableLayoutPanel3.Controls.Add(this.lblLoggingLevel, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.txtEvent, 1, 1);
-            this.tableLayoutPanel3.Controls.Add(this.lblEvent, 0, 1);
-            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(7, 7);
-            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 2;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(642, 310);
-            this.tableLayoutPanel3.TabIndex = 4;
-            // 
-            // txtEvent
-            // 
-            this.txtEvent.AcceptsReturn = true;
-            this.txtEvent.AcceptsTab = true;
-            this.tableLayoutPanel3.SetColumnSpan(this.txtEvent, 2);
-            this.txtEvent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtEvent.Location = new System.Drawing.Point(115, 30);
-            this.txtEvent.Multiline = true;
-            this.txtEvent.Name = "txtEvent";
-            this.txtEvent.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtEvent.Size = new System.Drawing.Size(524, 277);
-            this.txtEvent.TabIndex = 9;
-            this.txtEvent.WordWrap = false;
-            // 
-            // lblEvent
-            // 
-            this.lblEvent.AutoEllipsis = true;
-            this.lblEvent.AutoSize = true;
-            this.lblEvent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblEvent.Location = new System.Drawing.Point(3, 27);
-            this.lblEvent.Name = "lblEvent";
-            this.lblEvent.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.lblEvent.Size = new System.Drawing.Size(106, 283);
-            this.lblEvent.TabIndex = 8;
-            this.lblEvent.Text = "Test input lines";
-            // 
             // TriggerForm
             // 
             this.AcceptButton = this.btnOk;
@@ -732,13 +733,13 @@
             this.tableLayoutPanel15.PerformLayout();
             this.tabDebugging.ResumeLayout(false);
             this.tabDebugging.PerformLayout();
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
             this.tabDescription.ResumeLayout(false);
             this.tabDescription.PerformLayout();
             this.tableLayoutPanel23.ResumeLayout(false);
             this.tableLayoutPanel23.PerformLayout();
             this.panel5.ResumeLayout(false);
-            this.tableLayoutPanel3.ResumeLayout(false);
-            this.tableLayoutPanel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

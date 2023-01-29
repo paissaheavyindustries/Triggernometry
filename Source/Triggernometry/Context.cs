@@ -26,6 +26,7 @@ namespace Triggernometry
         internal RealPlugin.ActionExecutionHook ttshook;
 
         internal static Regex rex = new Regex(@"\$\{(?<id>[^\}\{\$]*)\}");
+        internal static Regex rox = new Regex(@"¤\{[^\}\{\$]*\}");
         internal static Regex rexnum = new Regex(@"\$(?<id>[0-9]+)");
         internal static Regex rexnump = new Regex(@"\[(?<index>.+?)\]\.(?<prop>[a-zA-Z]+)");
         internal static Regex rexlidx = new Regex(@"(?<name>[^\[]+)\[(?<index>.+?)\]");
@@ -1361,6 +1362,18 @@ namespace Triggernometry
                 }*/
                 i++;
             };
+            while (true)
+            {
+                m = rox.Match(newexpr);
+                if (m.Success == true)
+                {
+                    newexpr = newexpr.Substring(0, m.Index) + "$" + newexpr.Substring(m.Index + 1);
+                }
+                else
+                {
+                    break;
+                }
+            }
             if (trig != null)
             {
                 if (trig._DebugLevel == RealPlugin.DebugLevelEnum.Inherit)
