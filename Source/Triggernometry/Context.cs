@@ -17,7 +17,8 @@ namespace Triggernometry
     public class Context
     {
 
-		internal bool testmode;
+        internal Guid id = Guid.NewGuid();
+        internal bool testmode;
         internal RealPlugin plug;
         public Trigger trig { get; set; }
         internal Action.TriggerForceTypeEnum force;
@@ -36,14 +37,16 @@ namespace Triggernometry
         internal Dictionary<string, string> namedgroups;
 		internal List<string> numgroups;
         internal DateTime triggered;
+        internal string zoneIdOverride = null;
         internal string contextResponse = "";
         internal int contextResponseCode = 0;
         internal dynamic contextJsonResponse;
         internal bool contextJsonParsed = false;
-        internal int loopIterator = 0;
 
         internal List<int> ActionResults = new List<int>();
         internal Dictionary<Mutex, int> heldmutices = new Dictionary<Mutex, int>();
+        internal int loopiterator { get; set; } = 0;
+        internal Guid loopcontext { get; set; } = Guid.Empty;
 
         internal const double EORZEA_MULTIPLIER = 3600D / 175D;
 
@@ -57,7 +60,13 @@ namespace Triggernometry
 
         public override string ToString()
         {
-            return (trig != null ? trig.LogName : "(no trigger)") + " at " + triggered.ToString();
+            return id.ToString() + " for " + (trig != null ? trig.LogName : "(no trigger)") + " at " + triggered.ToString();
+        }
+
+        internal Context Duplicate()
+        {
+            Context ctx = (Context)MemberwiseClone();
+            return ctx;
         }
 
         internal void PushActionResult(int i)
@@ -285,7 +294,14 @@ namespace Triggernometry
                         }
                         else if (x == "_ffxivzoneid")
                         {
-                            val = PluginBridges.BridgeFFXIV.ZoneID.ToString();
+                            if (zoneIdOverride != null)
+                            {
+                                val = zoneIdOverride;
+                            }
+                            else
+                            {
+                                val = PluginBridges.BridgeFFXIV.ZoneID.ToString();
+                            }
                             found = true;
                         }
                         else if (x == "_ffxivpartyorder")
@@ -349,7 +365,7 @@ namespace Triggernometry
                         }
                         else if (x == "_loopiterator")
                         {
-                            val = loopIterator.ToString();
+                            val = loopiterator.ToString();
                             found = true;
                         }
                         else if (x.IndexOf("_actionhistory") == 0)

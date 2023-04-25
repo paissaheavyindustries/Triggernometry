@@ -40,6 +40,8 @@ namespace Triggernometry
         }
 
         internal Action NextAction { get; set; } = null;
+        internal Action LoopAction { get; set; } = null;
+        internal Guid LoopContext { get; set; } = Guid.Empty;
 
         internal Guid Id { get; set; }
 
@@ -2554,11 +2556,16 @@ namespace Triggernometry
                                             LogEvent le = new LogEvent();
                                             le.Text = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TriggerText);
                                             le.ZoneName = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TriggerZone);
-                                            if (_TriggerZoneType == TriggerZoneTypeEnum.ZoneIdFFXIV)
+                                            if (_TriggerZoneType == TriggerZoneTypeEnum.ZoneIdFFXIV && le.ZoneName.Trim().Length > 0)
                                             {
                                                 le.ZoneId = le.ZoneName;
                                             }
                                             le.Timestamp = DateTime.Now;
+                                            if (ctx.zoneIdOverride != null)
+                                            {
+                                                le.TestMode = true;
+                                                le.ZoneId = ctx.zoneIdOverride;
+                                            }
                                             ctx.plug.TestTrigger(t, le, _TriggerForceType);
                                         }
                                         break;
@@ -2702,23 +2709,36 @@ namespace Triggernometry
                     #region Implementation - Loop
                     case ActionTypeEnum.Loop:
                         {
-                            int itertemp = ctx.loopIterator;
-                            ctx.loopIterator = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _LoopInitExpression);
-                            do
+                            if (ctx.loopcontext == Id)
                             {
-                                foreach (Action a in LoopActions)
-                                {
-                                    a.Execute(null, ctx);
-                                }
-                                int delay = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _LoopDelayExpression);
-                                if (delay > 0)
-                                {
-                                    Thread.Sleep(delay);
-                                }
-                                ctx.loopIterator += (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _LoopIncrExpression);
+                                ctx.loopiterator += (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _LoopIncrExpression);
                             }
-                            while (LoopCondition.Enabled == true && LoopCondition.CheckCondition(ctx, ActionContextLogger, ctx) == true);
-                            ctx.loopIterator = itertemp;
+                            if (LoopCondition.Enabled == true && LoopCondition.CheckCondition(ctx, ActionContextLogger, ctx) == true)
+                            {
+                                bool continuing = false;
+                                if (ctx.loopcontext != Id)
+                                {
+                                    continuing = (ctx.loopcontext == Guid.Empty);
+                                    ctx = ctx.Duplicate();
+                                    if (ctx.loopcontext != Guid.Empty && ctx.loopcontext != Id)
+                                    {
+                                        ctx.id = Guid.NewGuid();
+                                    }
+                                    ctx.loopcontext = Id;
+                                    ctx.loopiterator = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _LoopInitExpression);
+                                }
+                                else
+                                {
+                                    continuing = true;
+                                }
+                                DateTime curTime = DateTime.Now;
+                                Action lastAction = ctx.plug.QueueActions(ctx, curTime, LoopActions, ctx.trig._Sequential, qa != null ? qa.mutex : null, ActionContextLogger);
+                                lastAction.LoopAction = this;
+                                if (continuing == true)
+                                {
+                                    return;
+                                }
+                            }
                         }
                         break;
                         #endregion
@@ -2729,12 +2749,22 @@ namespace Triggernometry
                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/exception", "Exception: {0}", ex.Message));
             }
             ContinueChain:
-            if (NextAction != null)
+            if (LoopAction != null)
+            {
+                DateTime dt = DateTime.Now.AddMilliseconds(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, LoopAction._LoopDelayExpression));
+                ctx.plug.QueueAction(ctx, ctx.trig, qa != null ? qa.mutex : null, LoopAction, dt, false);
+            }
+            else if (NextAction != null)
             {
                 DateTime dt = DateTime.Now.AddMilliseconds(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, NextAction._ExecutionDelayExpression));
-                ctx.plug.QueueAction(ctx, ctx.trig, qa != null ? qa.mutex : null, NextAction, dt);
+                ctx.plug.QueueAction(ctx, ctx.trig, qa != null ? qa.mutex : null, NextAction, dt, false);
             }
-		}
+            else if (qa != null && qa.mutex != null)
+            {
+                qa.mutex.Release(ctx);
+                qa.mutex = null;
+            }
+        }
 
         internal void Mywmp_PlayStateChange(int NewState)
         {
