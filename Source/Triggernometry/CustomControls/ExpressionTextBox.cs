@@ -29,7 +29,7 @@ namespace Triggernometry.CustomControls
             "_duration", "_event", "_incombat", "_since", "_sincems", "_triggerid", "_triggername", "_timestamp", "_timestampms", "_systemtime", "_systemtimems", "_zone", "_response",
             "_responsecode", "_jsonresponse[x]", "_screenwidth", "_screenheight", "_lastencounter", "_activeencounter", "_env[x]", "_x", "_y", "_w", "_width", "_h", "_height", "_opacity",
             "_textaura[x]", "_imageaura[x]", "_ffxivparty[x]", "_ffxiventity[x]", "_ffxivplayer", "_ffxivtime", "_ffxivpartyorder", "_ffxivprocid", "_ffxivprocname", "_ffxivzoneid",
-            "_const[x]",
+            "_const[x]", "_loopiterator",
         };
 
         public static List<string> funcs = new List<string>()

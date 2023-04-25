@@ -288,11 +288,11 @@ namespace Triggernometry
             return ret;
         }
 		
-		public FilterFailReason PassesFilter(string zoneName, string zoneId, string evtext)
+		internal FilterFailReason PassesFilter(LogEvent le)
 		{
 			bool ret = true;
 			Folder f = this;
-			while (f != null && ret == true)
+            while (f != null && ret == true)
 			{
                 if (f.Enabled == false)
                 {
@@ -300,15 +300,15 @@ namespace Triggernometry
                 }
                 if (ret == true && f._ZoneFilterEnabled == true)
 				{
-					ret = f.rexz != null ? f.rexz.IsMatch(zoneName) : false;
+					ret = f.rexz != null ? f.rexz.IsMatch(le.ZoneName) : false;
 				}		
 				if (ret == true && f._EventFilterEnabled == true)
 				{
-					ret = f.rexe != null ? f.rexe.IsMatch(evtext) : false;
+					ret = f.rexe != null ? f.rexe.IsMatch(le.Text) : false;
 				}
                 if (ret == true && f._FFXIVZoneFilterEnabled == true)
                 {
-                    string zId = zoneId == null ? PluginBridges.BridgeFFXIV.ZoneID.ToString() : zoneId;
+                    string zId = le.ZoneId == null ? PluginBridges.BridgeFFXIV.ZoneID.ToString() : le.ZoneId;
                     ret = f.rexxivz != null ? f.rexxivz.IsMatch(zId) : false;
                 }
                 if (ret == true && f._FFXIVJobFilterEnabled == true)

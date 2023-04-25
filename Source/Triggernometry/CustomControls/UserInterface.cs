@@ -2048,7 +2048,7 @@ namespace Triggernometry.CustomControls
                 }
                 foreach (string line in lines)
                 {
-                    LogEvent le = new LogEvent() { Text = line, Timestamp = DateTime.Now, TestMode = true, ZoneName = "", ZoneId = "", Source = source };
+                    LogEvent le = new LogEvent() { Text = line, Timestamp = DateTime.Now, TestMode = true, ZoneName = "", ZoneId = null, Source = source };
                     plug.TestTrigger(t, le, force);
                 }
             }            

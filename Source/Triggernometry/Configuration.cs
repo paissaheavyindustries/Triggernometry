@@ -356,7 +356,7 @@ namespace Triggernometry
             lastWrite = DateTime.Now;
             FfxivCustomPartyOrder = "19, 1, 21, 3, 32, 37, 24, 6, 28, 33, 40, 20, 2, 22, 4, 30, 29, 34, 39, 23, 5, 31, 38, 25, 7, 27, 26, 35, 36";
             Constants["TelestoEndpoint"] = new VariableScalar() { Value = "localhost" };
-            Constants["TelestoPort"] = new VariableScalar() { Value = "51323" };
+            Constants["TelestoPort"] = new VariableScalar() { Value = "45678" };
             Constants["OBSWebsocketEndpoint"] = new VariableScalar() { Value = "localhost" };
             Constants["OBSWebsocketPort"] = new VariableScalar() { Value = "4455" };
             Constants["OBSWebsocketPassword"] = new VariableScalar() { Value = "" };

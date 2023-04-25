@@ -653,50 +653,8 @@ namespace Triggernometry
         internal void QueueActions(Context ctx, DateTime curtime, RealPlugin.MutexInformation mtx)
         {
             RealPlugin p = ctx.plug;
-            System.Diagnostics.Debug.WriteLine("### queuing actions for " + ctx.ToString());
-            if (_Sequential == false)
-            {
-                var ix = from tx in Actions
-                         orderby tx.OrderNumber ascending
-                         select tx;
-                foreach (Action a in ix)
-                {
-                    if (a._Enabled == true)
-                    {
-                        curtime = curtime.AddMilliseconds(ctx.EvaluateNumericExpression(TriggerContextLogger, p, a._ExecutionDelayExpression));
-                        p.QueueAction(ctx, this, mtx, a, curtime);
-                    }
-                }
-            }
-            else
-            {
-                Action prev = null;
-                Action first = null;
-                var ix = from tx in Actions
-                         orderby tx.OrderNumber ascending
-                         select tx;
-                foreach (Action a in ix)
-                {
-                    if (a._Enabled == false)
-                    {
-                        continue;
-                    }
-                    if (prev != null)
-                    {
-                        prev.NextAction = a;
-                    }
-                    else
-                    {
-                        first = a;
-                        curtime = curtime.AddMilliseconds(ctx.EvaluateNumericExpression(TriggerContextLogger, p, a._ExecutionDelayExpression));
-                    }
-                    prev = a;
-                }
-                if (first != null)
-                {
-                    p.QueueAction(ctx, this, mtx, first, curtime);
-                }
-            }
+            //System.Diagnostics.Debug.WriteLine("### queuing actions for " + ctx.ToString());
+            p.QueueActions(ctx, curtime, Actions, _Sequential, mtx, TriggerContextLogger);
         }
 
         internal bool Fire(RealPlugin p, Context ctx, RealPlugin.MutexInformation mtx)
@@ -814,6 +772,7 @@ namespace Triggernometry
                     }
                 }
                 QueueActions(ctx, curtime, mtx);
+                return true;
             }
             catch (Exception ex)
             {
