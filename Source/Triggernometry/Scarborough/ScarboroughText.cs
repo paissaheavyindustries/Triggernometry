@@ -135,9 +135,9 @@ namespace Scarborough
                     _BackgroundColor = value;
                     if (_BackgroundColor != System.Drawing.Color.Transparent)
                     {
-                        _bgColor.R = _BackgroundColor.R;
-                        _bgColor.G = _BackgroundColor.G;
-                        _bgColor.B = _BackgroundColor.B;
+                        _bgColor.R = _BackgroundColor.R / 255.0f;
+                        _bgColor.G = _BackgroundColor.G / 255.0f;
+                        _bgColor.B = _BackgroundColor.B / 255.0f;
                     }
                     else
                     {
