@@ -282,8 +282,8 @@ namespace Triggernometry
 
                     // 'segments' can be positive / negative. 
                     // Positive means north is a segment point, while negative means north is the midpoint of two segment points.
-                    // e.g. roundir(radius, 4): corresponds to cardinal directions (N = 0, W = 1, S = 2, E = 3);
-                    // roundir(radius, -4): corresponds to intercardinal directions (NW = 0, SW = 1, SE = 2, NE = 3)
+                    // e.g. roundir(rad, 4): corresponds to cardinal directions (N = 0, W = 1, S = 2, E = 3);
+                    // roundir(rad, -4): corresponds to intercardinal directions (NW = 0, SW = 1, SE = 2, NE = 3)
                     if (segments > 0)
                     {
                         return Math.Round((rad + Math.PI) / (2 * Math.PI) * segments) % segments;
