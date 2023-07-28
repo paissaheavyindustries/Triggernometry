@@ -1,4 +1,4 @@
-﻿/* 
+/* 
  * Copyright (C) 2012-2016 Mathos Project,
  * All rights reserved.
  * 
@@ -242,7 +242,6 @@ namespace Triggernometry
                     return min;
                 });
 
-                //LocalFunctions.Add("round", x => Math.Round(x[0]));
                 LocalFunctions.Add("truncate", x => x[0] < 0 ? -Math.Floor(-x[0]) : Math.Floor(x[0]));
                 LocalFunctions.Add("floor", x => Math.Floor(x[0]));
                 LocalFunctions.Add("ceiling", x => Math.Ceiling(x[0]));
@@ -255,8 +254,51 @@ namespace Triggernometry
                 LocalStringFunctions.Add("hex2dec", x => Hex2DecFunction(x));
                 LocalStringFunctions.Add("hex2float", x => Hex2FloatFunction(x));
                 LocalStringFunctions.Add("hex2double", x => Hex2DoubleFunction(x));
-
                 LocalStringFunctions.Add("X8float", x => Hex2FloatFunction(x));
+
+                LocalFunctions.Add("roundir", delegate (double[] input)
+                {
+                    // Matches the given direction (in radian or as dx/dy offsets) 
+                    // to the direction in a circle divided into 'n' segments, 
+                    // and returns the index of the direction.
+                    // indexes: 0, 1, 2, ..., n-1, from north CCW.
+                    double rad;
+                    double segments;
+                    switch (input.Length)
+                    {
+                        // roundir(rad, segments) or roundir(dx, dy, segments)
+                        case 2:
+                            // normalize radian to [-π, π)
+                            rad = ((input[0] + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
+                            segments = input[1];
+                            break;
+                        case 3:
+                            rad = Math.Atan2(input[0], input[1]);
+                            segments = input[2];
+                            break;
+                        default:
+                            return 0;
+                    }
+
+                    // 'segments' can be positive / negative. 
+                    // Positive means north is a segment point, while negative means north is the midpoint of two segment points.
+                    // e.g. roundir(rad, 4): corresponds to cardinal directions (N = 0, W = 1, S = 2, E = 3);
+                    // roundir(rad, -4): corresponds to intercardinal directions (NW = 0, SW = 1, SE = 2, NE = 3)
+                    if (segments > 0)
+                    {
+                        return Math.Round((rad + Math.PI) / (2 * Math.PI) * segments) % segments;
+                    }
+                    else if (segments < 0)
+                    {
+                        return Math.Round((rad + Math.PI) / (2 * Math.PI) * segments - 0.5) % segments;
+                    }
+                    else
+                    {
+                        return 0; // false
+                    }
+                });
+
+
             }
 
             if (loadPreDefinedVariables)
