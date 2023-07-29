@@ -837,6 +837,8 @@
     <TranslationEntry Key="internal/Context/padleftargerror" Translation="Padleft function requires two arguments, {0} were given" />
     <TranslationEntry Key="internal/Context/padrightargerror" Translation="Padright function requires two arguments, {0} were given" />
     <TranslationEntry Key="internal/Context/substringargerror" Translation="Substring function requires one or two arguments, {0} were given" />
+    <TranslationEntry Key="internal/Context/switchargerror" Translation="Switch function requires one or two arguments, {0} were given" />
+    <TranslationEntry Key="internal/Context/switchindexerror" Translation="Switch function index {0} out of range 0-{1}" />
     <TranslationEntry Key="internal/ExportForm/exception" Translation="Exception" />
     <TranslationEntry Key="internal/ExpressionTextBox/numeric1" Translation="This field supports numeric expressions; references to named regular expression groups will be expanded, after which the result will be evaluated as a mathematic expression." />
     <TranslationEntry Key="internal/ExpressionTextBox/numeric2" Translation="The color of the field will also change depending on whether the numeric expression appears to be valid (green) or not (red)." />

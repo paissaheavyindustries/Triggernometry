@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
@@ -976,6 +976,26 @@ namespace Triggernometry
                                                 case 2:
                                                     val = funcval.Substring(Int32.Parse(args[0]), Int32.Parse(args[1]));
                                                     break;
+                                            }
+                                        }
+                                        break;
+                                    case "switch": // switch(index, [charcode])
+                                        if (argc != 1 && argc != 2)
+                                        {
+                                            throw new ArgumentException(I18n.Translate("internal/Context/switchargerror", "Switch function requires one or two arguments, {0} were given", argc));
+                                        }
+                                        else
+                                        {
+                                            char separator = argc == 2 ? (char)Int32.Parse(args[1]) : ',';
+                                            string[] strArray = funcval.Split(separator);
+                                            int index = Int32.Parse(args[0]);
+                                            if (index < 0 || index >= strArray.Length)
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/switchindexerror", "Switch function index {0} out of range 0-{1}", index, strArray.Length - 1));
+                                            }
+                                            else
+                                            {
+                                                val = strArray[index];
                                             }
                                         }
                                         break;

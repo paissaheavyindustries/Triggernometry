@@ -290,6 +290,7 @@ namespace Triggernometry
                     }
                     else if (segments < 0)
                     {
+                        segments = -segments;
                         return Math.Round((rad + Math.PI) / (2 * Math.PI) * segments - 0.5) % segments;
                     }
                     else

@@ -800,6 +800,8 @@
         <TranslationEntry Key="internal/Context/padleftargerror" Translation="Padleft 函数要求 2 个参数，但却传入了 {0} 个" />
         <TranslationEntry Key="internal/Context/padrightargerror" Translation="Padright 函数要求 2 个参数，但却传入了 {0} 个" />
         <TranslationEntry Key="internal/Context/substringargerror" Translation="Substring 函数要求 1 或 2 个参数，但却传入了 {0} 个" />
+        <TranslationEntry Key="internal/Context/switchargerror" Translation="Switch 函数要求 1 或 2 个参数，但却传入了 {0} 个" />
+        <TranslationEntry Key="internal/Context/switchindexerror" Translation="Switch 函数索引 {0} 超出字符串序列长度范围 0-{1}" />
         <TranslationEntry Key="internal/ExportForm/exception" Translation="异常" />
         <TranslationEntry Key="internal/ExpressionTextBox/numeric1" Translation="该字段支持数值表达式; 将扩展对命名正则表达式组的引用，之后将结果作为数学表达式进行求值。" />
         <TranslationEntry Key="internal/ExpressionTextBox/numeric2" Translation="字段的颜色也将根据数字表达式是否有效(绿色)或无效(红色)而改变。" />
