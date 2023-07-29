@@ -35,9 +35,9 @@ namespace Triggernometry.CustomControls
         public static List<string> funcs = new List<string>()
         {
             // functions
-            "toupper", "tolower", "length", "dec2hex", "dec2hex2", "dec2hex4", "dec2hex8", "hex2float", "hex2double", "float2hex", "double2hex", "padleft(x, y)", "padright(x, y)",
-            "substring(x)", "substring(x, y)", "switch(x)", "switch(x, charcode)", "indexof(x)", "lastindexof(x)", "trim", "trim(x, ...)", "trimleft", "trimleft(x, ...)", "trimright", "trimright(x, ...)", 
-            "format(x, y)", "compare(x)", "compare(x, y)", "utctime(format)", "localtime(format)",
+            "toupper", "tolower", "length", "dec2hex", "dec2hex2", "dec2hex4", "dec2hex8", "hex2float", "hex2double", "float2hex", "double2hex", "padleft(x,y)", "padright(x,y)",
+            "substring(x)", "substring(x,y)", "switch(x)", "switch(x,charcode)", "indexof(x)", "lastindexof(x)", "trim", "trim(x,...)", "trimleft", "trimleft(x,...)", "trimright", "trimright(x,...)", 
+            "format(x,y)", "compare(x)", "compare(x,y)", "utctime(format)", "localtime(format)",
         };
 
         public static List<string> propstextaura = new List<string>()
