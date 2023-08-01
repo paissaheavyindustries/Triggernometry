@@ -104,16 +104,16 @@ Several frequently-used words could now be replaced with their abbrevations:
 `${func:indexof(...):str}`, `${func:laseindexof(...):str}` could be short as `${func:i(...):str}`, `${func:li(...):str}`;  
 
 ## To-do List
-· I18n (added part)
-· Previous translations
+· I18n (added part)  
+· Previous translations  
 · rewrite list.sum() / list.join() with the new SplitArgs function  
 · deal with out-of-range indices in str.slice()  
 · add slice supports for table.h/vjoin()  
 · ${_me}  
-· table.join(colJoiner, rowJoiner, colstart, colend, colstep, rowstart, rowend, rowstep)
-· func:pick() respects negative arguments  
-· func:repeat(times, joiner = ""):str  for len(str) > 1.
-· Table action: generate from string (expr = colJoiner + rowJoiner + str)
-· Table action: seperate the expr with its first character then insert after the given row / col index
-· Sort the current list actions order
-· check the definition for "" as an arg
+· table.join(colJoiner, rowJoiner, colstart, colend, colstep, rowstart, rowend, rowstep)  
+· func:pick() respects negative arguments   
+· func:repeat(times, joiner = ""):str  for len(str) > 1.  
+· Table action: generate from string (expr = colJoiner + rowJoiner + str)  
+· Table action: seperate the expr with its first character then insert after the given row / col index  
+· Sort the current list actions order  
+· check the definition for "" as an arg  
