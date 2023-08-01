@@ -111,7 +111,8 @@ Several frequently-used words could now be replaced with their abbrevations:
 · add slice supports for table.h/vjoin()  
 · ${_me}  
 · table.join(colJoiner, rowJoiner, colstart, colend, colstep, rowstart, rowend, rowstep)  
-· distance=>d(x1, y1, x2, y2), angle/θ(x1, y1, x2, y2)  
+· distance=>d(x1, y1, ..., x2, y2, ...) accepts 2n args and returns the n-th dimensional distance
+· angle/θ(x1, y1, x2, y2)
 · projecth(x1, y1, θ1, x2, y2), projectd(x1, y1, θ1, x2, y2) (could be negative), relangle/relθ(x1, y1, θ1, x2, y2)  
 · func:pick() respects negative arguments   
 · func:repeat(times, joiner = ""):str  for len(str) > 1.  
