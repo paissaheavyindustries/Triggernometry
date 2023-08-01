@@ -34,7 +34,7 @@ however the positive indices counts from 1 instead of 0 to be consistent with th
 e.g. `lvar:list.joinslice` = `1,2,3,4,5,6`, `lvar:list.joinslice(" ",2,5)` = `2 3 4`, `lvar:list.joinslice(,-1,1,-1)` = `6,5,4,3,2`.  
 ### · `sumslice(start, end, step)`, also as `sum(...)`
 Similar to the previous method. Adding all the values which could be parsed as `double` in the given slice and returns the sum.  
-e.g. `lvar:list.sumslice` = `21`, `lvar:list.sumslice(,4)` = 6`, `lvar:list.joinslice(,,2)` = `15`.  
+e.g. `lvar:list.sumslice` = `21`, `lvar:list.sumslice(,4)` = `6`, `lvar:list.joinslice(,,2)` = `15`.  
 
 ## Added new methods for table variables:  
 The following part uses this `table` as an example:
@@ -104,10 +104,16 @@ Several frequently-used words could now be replaced with their abbrevations:
 `${func:indexof(...):str}`, `${func:laseindexof(...):str}` could be short as `${func:i(...):str}`, `${func:li(...):str}`;  
 
 ## To-do List
-· I18n  
+· I18n (added part)
+· Previous translations
 · rewrite list.sum() / list.join() with the new SplitArgs function  
 · deal with out-of-range indices in str.slice()  
 · add slice supports for table.h/vjoin()  
 · ${_me}  
-· table.join() takes row joiner argument  
+· table.join(colJoiner, rowJoiner, colstart, colend, colstep, rowstart, rowend, rowstep)
 · func:pick() respects negative arguments  
+· func:repeat(times, joiner = ""):str  for len(str) > 1.
+· Table action: generate from string (expr = colJoiner + rowJoiner + str)
+· Table action: seperate the expr with its first character then insert after the given row / col index
+· Sort the current list actions order
+· check the definition for "" as an arg
