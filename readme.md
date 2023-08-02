@@ -8,6 +8,14 @@ https://github.com/paissaheavyindustries/Triggernometry
 ### Fixed https://github.com/paissaheavyindustries/Triggernometry/issues/92)https://github.com/paissaheavyindustries/Triggernometry/issues/92:  
 The original regex for string function could not parse `func:length:3*(1+2)` correctly, which considers `length:3*` as the function name and `1+2` as the argument.  
 The regex was editted to solve this issue; it could now also match the whole expression in one step instead of parsing the `funcval` by searching the index of `:` later.  
+### Fixed the MathParser bugs about parsing minus signs: 
+The original code only examines the previous character to determine if a +/- is a positive/negative sign or a plus/minus sign.  
+Expressions like `func(arg, -arg)` or `1 - -1` were wrongly parsed.  
+Also, `${numeric:-(-1)}` was parsed into `-1`.
+Changed the parser logic about plus/minus signs.  
+**...**
+· Fixed a condition check typo when parsing parenthesis.  
+"char.IsDigit(...) || char.IsLetter(...)" was typed as "char.IsDigit(...) || char.IsDigit(...)", which ignored the letter check when adding "*" before "(".
 ### Fixed a bug in the method `VariableList.Insert`:
 The original code inserted `null` as placeholders when the given index is longer than the length of the list (should use new `Variable` instead).  
 The parser could not get these null values in expressions; it also caused the list could not be double-clicked in the variable viewer.   
@@ -111,12 +119,13 @@ Several frequently-used words could now be replaced with their abbrevations:
 · add slice supports for table.h/vjoin()  
 · ${_me}  
 · table.join(colJoiner, rowJoiner, colstart, colend, colstep, rowstart, rowend, rowstep)  
-· distance=>d(x1, y1, ..., x2, y2, ...) accepts 2n args and returns the n-th dimensional distance  
-· projecth(x1, y1, θ1, x2, y2), projectd(x1, y1, θ1, x2, y2) (could be negative)  
-· angle/θ(x1, y1, x2, y2)  relangle/relθ(x1, y1, θ1, x2, y2)  
+· ✓ distance=>d(x1, y1, ..., x2, y2, ...) accepts 2n args and returns the n-th dimensional distance  
+· ✓ projh(x1, y1, θ1, x2, y2), projd(x1, y1, θ1, x2, y2)
+· ✓ angle/θ(x1, y1, x2, y2)  relangle/relθ(x1, y1, θ1, x2, y2)  
 · func:pick() respects negative arguments   
 · func:repeat(times, joiner = ""):str  for len(str) > 1.  
 · Table action: generate from string (expr = colJoiner + rowJoiner + str)  
 · Table action: seperate the expr with its first character then insert after the given row / col index  
 · Sort the current list actions order  
 · check the definition for "" as an arg  
+· `${_ffxiventity[name].jobcn1}` `${_ffxiventity[name].jobcn2}` `${_ffxiventity[name].jobjp}`
