@@ -13,8 +13,8 @@ The original code only examines the previous character to determine if a +/- is 
 Expressions like `func(arg, -arg)` or `1 - -1` were wrongly parsed.  
 Also, `${numeric:-(-1)}` was parsed into `-1`.
 Changed the parser logic about plus/minus signs.  
-**...**
-· Fixed a condition check typo when parsing parenthesis.  
+**...**  
+### Fixed a condition check typo when parsing parenthesis.  
 "char.IsDigit(...) || char.IsLetter(...)" was typed as "char.IsDigit(...) || char.IsDigit(...)", which ignored the letter check when adding "*" before "(".
 ### Fixed a bug in the method `VariableList.Insert`:
 The original code inserted `null` as placeholders when the given index is longer than the length of the list (should use new `Variable` instead).  
@@ -128,4 +128,4 @@ Several frequently-used words could now be replaced with their abbrevations:
 · Table action: seperate the expr with its first character then insert after the given row / col index  
 · Sort the current list actions order  
 · check the definition for "" as an arg  
-· `${_ffxiventity[name].jobcn1}` `${_ffxiventity[name].jobcn2}` `${_ffxiventity[name].jobjp}`
+· `${_ffxiventity[name].jobcn1}` `${_ffxiventity[name].jobcn2}` `${_ffxiventity[name].jobjp}`  
