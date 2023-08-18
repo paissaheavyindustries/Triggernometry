@@ -1,4 +1,4 @@
-﻿/* 
+/* 
  * Copyright (C) 2012-2016 Mathos Project,
  * All rights reserved.
  * 
@@ -14,10 +14,11 @@ using System.Linq;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 
 namespace Triggernometry
 {
-    
+
     /// <summary>
     /// This is a mathematical expression parser that allows you to parser a string value,
     /// perform the required calculations, and return a value in form of a decimal.
@@ -46,6 +47,57 @@ namespace Triggernometry
             Int64 bytesArray = Int64.Parse(x[0], System.Globalization.NumberStyles.HexNumber);
             double d = BitConverter.ToDouble(BitConverter.GetBytes(bytesArray), 0);
             return d;
+        }
+
+        public double ParseDmgFunction(string[] x)
+        {
+            string hexStr = x[0].PadLeft(8, '0');
+            string hexDmg = hexStr.Substring(6, 2) + hexStr.Substring(0, 4);
+            Int32 decDmg = Int32.Parse(hexDmg, System.Globalization.NumberStyles.HexNumber);
+            return (double)decDmg;
+        }
+
+        private static readonly Regex rexFreq = new Regex(@"(?<note>[A-G])(?<signs>[#bx]*)(?<octaves>\d+)");
+        public double FreqFunction(string[] x)
+        {
+            Match mx = rexFreq.Match(x[0]);
+            if (mx.Success)
+            {
+                double semitones = (x.Length > 1) ? Parse(x[1]) : 0;
+                string noteName = mx.Groups["note"].Value;
+                switch (noteName)
+                {
+                    case "C": semitones += 0; break;
+                    case "D": semitones += 2; break;
+                    case "E": semitones += 4; break;
+                    case "F": semitones += 5; break;
+                    case "G": semitones += 7; break;
+                    case "A": semitones += 9; break;
+                    case "B": semitones += 11; break;
+                }
+
+                string signs = mx.Groups["signs"].Value;
+                foreach (char c in signs)
+                {
+                    switch (c)
+                    {
+                        case '#': semitones += 1; break;
+                        case 'x': semitones += 2; break;
+                        case 'b': semitones -= 1; break;
+                    }
+                }
+
+                int octaves = int.Parse(mx.Groups["octaves"].Value);
+                semitones += 12 * octaves;
+                
+
+                // A4 = 57 semitones relative to C0
+                return 440 * Math.Pow(2, (semitones - 57.0) / 12);
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public double IfFunction(double a, double b, double c)
@@ -85,6 +137,100 @@ namespace Triggernometry
             return 1;
         }
 
+        public double DistanceFunction(double[] x)
+        {   // accepts 2n arguments: distance(*coord1, *coord2)
+            // e.g. distance(x1, y1, x2, y2)  distance(x1, y1, z1, x2, y2, z2)
+            if (x.Length == 0 || x.Length % 2 != 0)
+                return 0;
+
+            int dimension = x.Length / 2;
+            double squaresum = 0;
+            for (int i = 0; i < dimension; i++)
+            {
+                squaresum += Math.Pow((x[i] - x[i + dimension]), 2.0);
+            }
+            return Math.Sqrt(squaresum);
+        }
+
+        public double ProjectDistanceFunction(double[] x)
+        {   // projectdistance(x1, y1, θ1, x2, y2)
+
+            if (x.Length != 5)
+                return 0;
+
+            double dx = x[3] - x[0];
+            double dy = x[4] - x[1];
+            double θ = x[2];
+            return dx * Math.Sin(θ) + dy * Math.Cos(θ);
+        }
+
+        public double ProjectHeightFunction(double[] x)
+        {   // projectheight(x1, y1, θ1, x2, y2)
+
+            if (x.Length != 5)
+                return 0;
+
+            double dx = x[3] - x[0];
+            double dy = x[4] - x[1];
+            double θ = x[2];
+            return Math.Abs(dx * Math.Cos(θ) - dy * Math.Sin(θ));
+        }
+
+        private double ProcessRoundir(double rad, double segments, int digits = 0)
+        {
+            // 'segments' can be positive / negative. 
+            // Positive means north is a segment point, while negative means north is the midpoint of two segment points.
+            // e.g. 4: corresponds to cardinal directions (N = 0, W = 1, S = 2, E = 3);
+            // -4: corresponds to intercardinal directions (NW = 0, SW = 1, SE = 2, NE = 3)
+
+            // normalize radian to [-π, π)
+            rad = ((rad + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
+            double dir = 0;
+            if (segments > 0)
+            {   
+                dir = (rad + Math.PI) / (2 * Math.PI) * segments;
+                // convert value range: [0, segments] => [0, segments)
+                dir = (dir == segments) ? 0 : dir;  
+            }
+            else if (segments < 0)
+            {   
+                segments = -segments;
+                dir = (rad + Math.PI) / (2 * Math.PI) * segments - 0.5;
+                // convert value range: [-0.5, segments - 0.5] => [-0.5, segments - 0.5)
+                dir = (dir == segments - 0.5) ? -0.5 : dir;  
+            }
+
+            if (digits >= 0)
+                return Math.Round(dir, digits);
+            else
+                return dir;
+        }
+
+        public double RoundirFunction(double[] input)
+        {   
+            switch (input.Length)
+            {   
+                case 2: // roundir(θ, segments)
+                    return ProcessRoundir(input[0], input[1]);
+                case 3: // roundir(θ, segments, digits)
+                    return ProcessRoundir(input[0], input[1], (int)input[2]);
+                default:
+                    return 0;
+            }
+        }
+        public double RoundvecFunction(double[] input)
+        {
+            switch (input.Length)
+            {
+                case 3: // roundir(dx, dy, segments)
+                    return ProcessRoundir(Math.Atan2(input[0], input[1]), input[2]);
+                case 4: // roundir(dx, dy, segments, digits)
+                    return ProcessRoundir(Math.Atan2(input[0], input[1]), input[2], (int)input[3]);
+                default:
+                    return 0;
+            }
+        }
+
         public int RandomNumber(double from, double to)
         {
             lock (rng)
@@ -106,8 +252,9 @@ namespace Triggernometry
             if (loadPreDefinedOperators)
             {
                 // by default, we will load basic arithmetic operators.
-                // please note, its possible to do it either inside the constructor,
-                // or outside the class. the lowest value will be executed first!
+                // please note, its possible to do it either inside the constructor, or outside the class.
+                
+                // THE LIST IS IN ORDER AND THE LOWEST OPERATOR WILL BE EXECUTED FIRST!
                 OperatorList.Add("^"); // to the power of
                 OperatorList.Add("%"); // modulo
                 OperatorList.Add(":"); // division 1
@@ -162,7 +309,9 @@ namespace Triggernometry
 
                 LocalFunctions.Add("sec", x => 1.0 / Math.Cos(x[0]));
                 LocalFunctions.Add("cosec", x => 1.0 / Math.Sin(x[0]));
+                LocalFunctions.Add("csc", x => 1.0 / Math.Sin(x[0]));
                 LocalFunctions.Add("cotan", x => 1.0 / Math.Tan(x[0]));
+                LocalFunctions.Add("cot", x => 1.0 / Math.Tan(x[0]));
 
                 LocalFunctions.Add("sin", x => Math.Sin(x[0]));
                 LocalFunctions.Add("sinh", x => Math.Sinh(x[0]));
@@ -176,7 +325,42 @@ namespace Triggernometry
                 LocalFunctions.Add("degtorad", x => x[0] / 180.0 * Math.PI);
 
                 LocalFunctions.Add("arctan2", x => Math.Atan2(x[0], x[1]));
-                LocalFunctions.Add("distance", x => Math.Sqrt(Math.Pow((x[2]-x[0]), 2.0) + Math.Pow((x[3] - x[1]), 2.0)));
+                LocalFunctions.Add("atan2", x => Math.Atan2(x[0], x[1]));
+
+                /* distance, projectdistance, projectheight
+                 * 
+                 * Using in-game coordination and direction defination:
+                 * Given point A (x1, y1), point B (x2, y2) and a ray with direction θ1 starting from A.
+                 * The project point of B on the ray direction is H.
+                 * 
+                 * distance = |AB|
+                 * projectdistance = AH (directed distance, negative if H is on the other side)
+                 * projectheight = |BH|
+                 * AH² + BH² = AB²
+                 * 
+                 * Useful when doing calculations about line AoE.
+                 */
+                LocalFunctions.Add("distance", DistanceFunction);
+                LocalFunctions.Add("d", DistanceFunction);
+                LocalFunctions.Add("projectdistance", ProjectDistanceFunction);
+                LocalFunctions.Add("projd", ProjectDistanceFunction);
+                LocalFunctions.Add("projectheight", ProjectHeightFunction);
+                LocalFunctions.Add("projh", ProjectHeightFunction);
+
+                LocalFunctions.Add("angle", x => Math.Atan2(x[2] - x[0], x[3] - x[1]));
+                LocalFunctions.Add("θ", x => Math.Atan2(x[2] - x[0], x[3] - x[1]));
+                LocalFunctions.Add("relangle", x => ((x[1] - x[0]) % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI) - Math.PI);
+                LocalFunctions.Add("relθ", x => ((x[1] - x[0]) % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI) - Math.PI);
+
+                /* roundir, roundvec
+                 * 
+                 * Matches the given direction in radian (roundir) or as a vector dx, dy (roundvec)
+                 * to the direction in a circle divided into 'n' segments, 
+                 * and returns the index of the direction (rounded to the nth decimal digit).
+                 * indexes: 0, 1, 2, ..., n-1, from north CCW.
+                 */
+                LocalFunctions.Add("roundir", RoundirFunction);
+                LocalFunctions.Add("roundvec", RoundvecFunction);
 
                 LocalFunctions.Add("random", x => RandomNumber(x[0], x[1]));
 
@@ -242,7 +426,6 @@ namespace Triggernometry
                     return min;
                 });
 
-                //LocalFunctions.Add("round", x => Math.Round(x[0]));
                 LocalFunctions.Add("truncate", x => x[0] < 0 ? -Math.Floor(-x[0]) : Math.Floor(x[0]));
                 LocalFunctions.Add("floor", x => Math.Floor(x[0]));
                 LocalFunctions.Add("ceiling", x => Math.Ceiling(x[0]));
@@ -252,17 +435,23 @@ namespace Triggernometry
                 LocalFunctions.Add("and", x => AndFunction(x));
                 LocalFunctions.Add("if", x => IfFunction(x[0], x[1], x[2]));
 
+                // Mathparser string function parameters only contain numbers, Unicode letters, #, _.
+                // Otherwise, should use ${func:...} instead.
+
                 LocalStringFunctions.Add("hex2dec", x => Hex2DecFunction(x));
                 LocalStringFunctions.Add("hex2float", x => Hex2FloatFunction(x));
                 LocalStringFunctions.Add("hex2double", x => Hex2DoubleFunction(x));
-
                 LocalStringFunctions.Add("X8float", x => Hex2FloatFunction(x));
+                LocalStringFunctions.Add("parsedmg", x => ParseDmgFunction(x));
+                LocalStringFunctions.Add("len", x => x[0].Length);
+                LocalStringFunctions.Add("freq", x => FreqFunction(x));
             }
 
             if (loadPreDefinedVariables)
             {
                 // local variables such as pi can also be added into the parser.
                 LocalVariables.Add("pi", 3.14159265358979323846264338327950288); // the simplest variable!
+                LocalVariables.Add("π", 3.14159265358979323846264338327950288);
                 LocalVariables.Add("pi2", 6.28318530717958647692528676655900576);
                 LocalVariables.Add("pi05", 1.57079632679489661923132169163975144);
                 LocalVariables.Add("pi025", 0.78539816339744830961566084581987572);
@@ -276,6 +465,9 @@ namespace Triggernometry
                 LocalVariables.Add("phi", 1.61803398874989484820458683436563811);
                 LocalVariables.Add("major", 0.61803398874989484820458683436563811);
                 LocalVariables.Add("minor", 0.38196601125010515179541316563436189);
+                LocalVariables.Add("ETmin2sec", 70.0 / 24.0);
+                LocalVariables.Add("semitone", Math.Pow(2, 1.0 / 12));
+                LocalVariables.Add("cent", Math.Pow(2, 1.0 / 1200));
             }
         }
 
@@ -348,6 +540,10 @@ namespace Triggernometry
         /// <param name="correctExpression"></param>
         /// <param name="identifyComments"></param>
         /// <returns></returns>
+
+
+        /* This part is currently not used in Triggernometry.
+         
         public double ProgrammaticallyParse(string mathExpression, bool correctExpression = true, bool identifyComments = true)
         {
             if (identifyComments)
@@ -415,6 +611,7 @@ namespace Triggernometry
 
             return varValue;
         }
+        */
 
         /// <summary>
         /// This will convert a string expression into a list of tokens that can be later executed by Parse or ProgrammaticallyParse methods.
@@ -433,6 +630,9 @@ namespace Triggernometry
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+
+        /* This part is currently not used in Triggernometry.
+        
         private string Correction(string input)
         {
             // Word corrections
@@ -445,29 +645,35 @@ namespace Triggernometry
 
             return input;
         }
+        */
 
         /// <summary>
         /// Tokenizes <paramref name="expr"/>.
         /// </summary>
         /// <param name="expr">The expression.</param>
         /// <returns>Tokens found <paramref name="expr"/>.</returns>
+
+        bool IsValidAlphaNum(char c)
+        {
+            return char.IsLetterOrDigit(c) || c == '.' || c == '_' || c == '#';
+        }
+
         private List<string> Lexer(string expr)
         {
             var token = "";
             var tokens = new List<string>();
 
-            expr = expr.Replace("+-", "-");
-            expr = expr.Replace("-+", "-");
-            expr = expr.Replace("--", "+");
+            // delete all spaces to avoid the splitting error of +/- when parsing strings like "1 + -1".
+            expr = expr.Replace(" ", "");
+
+            // replace continuous +/- to a single +/- base on the count of "-"
+            expr = Regex.Replace(expr, @"[-+]{2,}", match => match.Value.Replace("+", "").Length % 2 == 0 ? "+" : "-");
 
             for (var i = 0; i < expr.Length; i++)
             {
                 var ch = expr[i];
 
-                if (char.IsWhiteSpace(ch))
-                    continue;
-
-                if (char.IsLetter(ch))
+                if (char.IsLetter(ch) && ch != '_')
                 {
                     if (i != 0 && (char.IsDigit(expr[i - 1]) || expr[i - 1] == ')'))
                     {
@@ -476,7 +682,7 @@ namespace Triggernometry
 
                     token += ch;
 
-                    while (i + 1 < expr.Length && char.IsLetterOrDigit(expr[i + 1]))
+                    while (i + 1 < expr.Length && IsValidAlphaNum(expr[i + 1]))
                         token += expr[++i];
 
                     tokens.Add(token);
@@ -486,45 +692,25 @@ namespace Triggernometry
                 {
                     token += ch;
 
-                    while (i + 1 < expr.Length && (char.IsDigit(expr[i + 1]) || (expr[i + 1] >= 'a' && expr[i + 1] <= 'f') || (expr[i + 1] >= 'A' && expr[i + 1] <= 'F') || expr[i + 1] == '.'))
+                    while (i + 1 < expr.Length && IsValidAlphaNum(expr[i + 1]))
                         token += expr[++i];
 
                     tokens.Add(token);
                     token = "";
                 }
-                else if (i + 1 < expr.Length && (ch == '-' || ch == '+') && char.IsDigit(expr[i + 1]) &&
-                            (i == 0 || OperatorList.IndexOf(expr[i - 1].ToString(CultureInfo.InvariantCulture)) != -1 ||
-                            (i - 1 > 0 && (expr[i - 1] == '(' || expr[i - 1] == ','))))
-                {
-                    // if the above is true, then the token for that negative number will be "-1", not "-","1".
-                    // to sum up, the above will be true if the minus sign is in front of the number, but
-                    // at the beginning, for example, -1+2, or, when it is inside the brakets (-1).
-                    // NOTE: this works for + as well!
 
-                    token += ch;
-
-                    while (i + 1 < expr.Length && (char.IsDigit(expr[i + 1]) || expr[i + 1] == '.'))
-                        token += expr[++i];
-
-                    tokens.Add(token);
-                    token = "";
-                }
                 else if (ch == '(')
                 {
-                    if (i != 0 && (char.IsDigit(expr[i - 1]) || char.IsDigit(expr[i - 1]) || expr[i - 1] == ')'))
-                    {
-                        if (tokens.Count > 0 && LocalFunctions.ContainsKey(tokens[tokens.Count - 1]) == true)
-                        {
-                            tokens.Add("(");
-                        }
-                        else
-                        {
-                            tokens.Add("*");
-                            tokens.Add("(");
-                        }
-                    }
-                    else
-                        tokens.Add("(");
+                    // add a "*" if the previous char is letter / digit / ")" and the previous token is not a function.
+                    if (i != 0 
+                        && (char.IsLetterOrDigit(expr[i - 1]) || expr[i - 1] == ')')
+                        && tokens.Count > 0
+                        && !LocalFunctions.ContainsKey(tokens[tokens.Count - 1])
+                        && !LocalStringFunctions.ContainsKey(tokens[tokens.Count - 1])
+                        )
+                        tokens.Add("*");
+                    
+                    tokens.Add("(");
                 }
                 else
                     tokens.Add(ch.ToString());
@@ -605,8 +791,8 @@ namespace Triggernometry
 
                             while (i < firstCommaOrEndOfExpression)
                                 defaultExpr.Add(roughExpr[i++]);
-
-                            sargs.Add(defaultExpr.Count == 0 ? "0" : defaultExpr[0]);
+                            string argExpr = string.Join("", defaultExpr);
+                            sargs.Add(defaultExpr.Count == 0 ? "0" : argExpr);
                         }
 
                         // finally, passing the arguments to the given function
@@ -654,7 +840,7 @@ namespace Triggernometry
             // any more!
             return BasicArithmeticalExpression(tokens);
         }
-
+        
         private double BasicArithmeticalExpression(List<string> tokens)
         {
             // PERFORMING A BASIC ARITHMETICAL EXPRESSION CALCULATION
@@ -663,37 +849,13 @@ namespace Triggernometry
 
             switch (tokens.Count)
             {
+                case 0:
+                    return 0;
                 case 1:
                     return double.Parse(tokens[0], CultureInfo);
                 case 2:
                     var op = tokens[0];
-
-                    if (op == "-" || op == "+")
-                    {
-                        return
-                            double.Parse((op == "+" ? "" : (tokens[1].Substring(0, 1) == "-" ? "" : "-")) + tokens[1], CultureInfo);
-                    }
-
                     return OperatorAction[op](0, double.Parse(tokens[1], CultureInfo));
-                case 0:
-                    return 0;
-            }
-
-            if (tokens.Count > 1)
-            {
-                double dummy;
-                if (tokens[0] == "-" && double.TryParse(tokens[1], NumberStyles.Float, CultureInfo, out dummy) == true)
-                {
-                    if (dummy > 0.0)
-                    {
-                        tokens[1] = tokens[1].Insert(0, "-");
-                    }
-                    tokens.RemoveAt(0);
-                }
-                if (tokens[0] == "+" && double.TryParse(tokens[1], NumberStyles.Float, CultureInfo, out dummy) == true)
-                {
-                    tokens.RemoveAt(0);
-                }
             }
 
             foreach (var op in OperatorList)
@@ -701,6 +863,20 @@ namespace Triggernometry
                 while (tokens.IndexOf(op) != -1)
                 {
                     var opPlace = tokens.IndexOf(op);
+
+                    if ((op == "+" || op == "-") && (opPlace == 0 || OperatorList.Contains(tokens[opPlace - 1])))
+                    {   // e.g. '0 = -sin(0)' => '0' '=', '-', '0',
+                        // need to insert a "0" when parsing "+" "-"
+                        tokens.Insert(opPlace, "0");
+                        opPlace++;
+                    }
+                    if ((tokens[opPlace + 1] == "+" || tokens[opPlace + 1] == "-"))
+                    {   // e.g. '1 * -sin(0)' => '1' '*', '-', '0',
+                        // need to combine "-" and the next digit when parsing "*", "^", ...
+                        double combined = double.Parse(tokens[opPlace + 1] + "1") * double.Parse(tokens[opPlace + 2]);
+                        tokens[opPlace + 2] = combined.ToString(CultureInfo);
+                        tokens.RemoveAt(opPlace + 1);
+                    }
 
                     var numberA = double.Parse(tokens[opPlace - 1], CultureInfo);
                     var numberB = double.Parse(tokens[opPlace + 1], CultureInfo);

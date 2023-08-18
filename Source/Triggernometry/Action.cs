@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -379,6 +379,19 @@ namespace Triggernometry
             return str.ToUpper();
         }
 
+        private void CancelAllTriggersInFolder(Folder folder, Context ctx)
+        {
+            foreach (var trigger in folder.Triggers)
+            {
+                ctx.plug.CancelAllQueuedActionsFromTrigger(trigger);
+            }
+
+            foreach (var subFolder in folder.Folders)
+            {
+                CancelAllTriggersInFolder(subFolder, ctx);
+            }
+        }
+
         internal bool ObsConnector(Context ctx, string endpoint, string password)
         {
             RealPlugin p = ctx.plug;
@@ -535,6 +548,9 @@ namespace Triggernometry
                                 case FolderOpEnum.EnableFolder:
                                     temp += I18n.Translate("internal/Action/descenablefolder", "enable folder ({0})", f.Name);
                                     break;
+                                case FolderOpEnum.CancelFolder:
+                                    temp += I18n.Translate("internal/Action/desccancelfolder", "cancel all actions from folder ({0})", f.Name);
+                                    break;
                             }
                         }
                         else
@@ -650,6 +666,39 @@ namespace Triggernometry
                                     break;
                             }
                             break;
+                        case ListVariableOpEnum.SetAll:
+                            switch (_ListVariableExpressionType)
+                            {
+                                case ListVariableExpTypeEnum.Numeric:
+                                    if (string.IsNullOrWhiteSpace(_ListVariableIndex))
+                                    {
+                                        temp += I18n.Translate("internal/Action/desclistsetallnumeric",
+                                            "set all values on list ({0}) to numeric expr ({1})", 
+                                            _ListVariableName, _ListVariableExpression);
+                                    }
+                                    else
+                                    {
+                                        temp += I18n.Translate("internal/Action/desclistsetallnumericexpand",
+                                            "set all values on list ({0}) to numeric expr ({1}) (expanded to length ({2}))", 
+                                            _ListVariableName, _ListVariableExpression, _ListVariableIndex);
+                                    }
+                                    break;
+                                case ListVariableExpTypeEnum.String:
+                                    if (string.IsNullOrWhiteSpace(_ListVariableIndex))
+                                    {
+                                        temp += I18n.Translate("internal/Action/desclistsetallstring",
+                                            "Set all values on list ({0}) to string expr ({1})",
+                                            _ListVariableName, _ListVariableExpression);
+                                    }
+                                    else
+                                    {
+                                        temp += I18n.Translate("internal/Action/desclistsetallstringexpand",
+                                            "set all values on list ({0}) to string expr ({1}) (expanded to length ({2}))",
+                                            _ListVariableName, _ListVariableExpression, _ListVariableIndex);
+                                    }
+                                    break;
+                            }
+                            break;
                         case ListVariableOpEnum.Remove:
                             temp += I18n.Translate("internal/Action/desclistremoveindex", "remove the value at index ({0}) on list variable ({1})", _ListVariableIndex, _ListVariableName);
                             break;
@@ -677,6 +726,9 @@ namespace Triggernometry
                         case ListVariableOpEnum.SortFfxivPartyDesc:
                             temp += I18n.Translate("internal/Action/desclistsortffxivdesc", "sort list variable ({0}) in descending order according to FFXIV party job order", _ListVariableName);
                             break;
+                        case ListVariableOpEnum.SortByKeys:
+                            temp += I18n.Translate("internal/Action/desclistsortbykeys", "sort list variable ({0}) by keys ({1})", _ListVariableName, _ListVariableExpression);
+                            break;
                         case ListVariableOpEnum.Copy:
                             temp += I18n.Translate("internal/Action/desclistcopy", "copy list variable ({0}) to list variable ({1})", _ListVariableName, _ListVariableTarget);
                             break;
@@ -688,6 +740,12 @@ namespace Triggernometry
                             break;
                         case ListVariableOpEnum.Split:
                             temp += I18n.Translate("internal/Action/desclistsplit", "split scalar variable ({0}) into list variable ({1}) using ({2}) as separator", _ListVariableName, _ListVariableTarget, _ListVariableExpression);
+                            break;
+                        case ListVariableOpEnum.Build:
+                            temp += I18n.Translate("internal/Action/desclistbuild", 
+                                "build list variable ({0}) from string ({1}) separated by ({2})", _ListVariableTarget, 
+                                (_ListVariableExpression.Length < 1) ? "" : _ListVariableExpression.Substring(1),
+                                (_ListVariableExpression.Length < 1) ? "" : _ListVariableExpression.Substring(0,1));
                             break;
                         case ListVariableOpEnum.UnsetAll:
                             temp += I18n.Translate("internal/Action/desclistunsetall", "unset all list variables");
@@ -854,6 +912,38 @@ namespace Triggernometry
                                 temp += I18n.Translate("internal/Action/desctablestring", "set table variable ({0}) value at ({1},{2}) with string expression ({3})", _TableVariableName, _TableVariableX, _TableVariableY, _TableVariableExpression);
                             }
                             break;
+                        case TableVariableOpEnum.SetAll:
+                            if (_TableVariableExpressionType == TableVariableExpTypeEnum.Numeric)
+                            {
+                                if (string.IsNullOrWhiteSpace(_TableVariableX + _TableVariableY))
+                                {
+                                    temp += I18n.Translate("internal/Action/desctablesetallnum",
+                                        "set all values in table ({0}) to numeric expr ({1})",
+                                        _TableVariableName, _TableVariableExpression);
+                                }
+                                else
+                                {
+                                    temp += I18n.Translate("internal/Action/desctablesetallnumexpand",
+                                        "set all values in table ({0}) to numeric expr ({1}) (expanded to width ({2}) height ({3}))",
+                                        _TableVariableName, _TableVariableExpression, _TableVariableX, _TableVariableY);
+                                }
+                            }
+                            else
+                            {
+                                if (string.IsNullOrWhiteSpace(_TableVariableX + _TableVariableY))
+                                {
+                                    temp += I18n.Translate("internal/Action/desctablesetallstr",
+                                        "set all values in table ({0}) to string expr ({1})",
+                                        _TableVariableName, _TableVariableExpression);
+                                }
+                                else
+                                {
+                                    temp += I18n.Translate("internal/Action/desctablesetallstrexpand",
+                                        "set all values in table ({0}) to string expr ({1}) (expanded to width ({2}) height ({3}))",
+                                        _TableVariableName, _TableVariableExpression, _TableVariableX, _TableVariableY);
+                                }
+                            }
+                            break;
                         case TableVariableOpEnum.Resize:
                             temp += I18n.Translate("internal/Action/desctableresize", "resize table variable ({0}) to ({1},{2})", _TableVariableName, _TableVariableX, _TableVariableY);
                             break;
@@ -871,6 +961,70 @@ namespace Triggernometry
                             break;
                         case TableVariableOpEnum.Append:
                             temp += I18n.Translate("internal/Action/desctableappend", "append table variable ({0}) to table variable ({1})", _TableVariableName, _TableVariableTarget);
+                            break;
+                        case TableVariableOpEnum.Build:
+                            temp += I18n.Translate("internal/Action/desctablebuild", 
+                                "build table variable ({0}) from string ({1}) separated by ({2}) ({3})", 
+                                _TableVariableTarget,
+                                (_TableVariableExpression.Length < 2) ? "" : _TableVariableExpression.Substring(2),
+                                (_TableVariableExpression.Length < 1) ? "" : _TableVariableExpression.Substring(0, 1),
+                                (_TableVariableExpression.Length < 2) ? "" : _TableVariableExpression.Substring(1, 1));
+                            break;
+                        case TableVariableOpEnum.SetLine:
+                            if (!string.IsNullOrWhiteSpace(_TableVariableX))
+                            {
+                                temp += I18n.Translate("internal/Action/desctablesetcolumn",
+                                    "set table ({0}) column #({1}) values from string ({2}) separated by ({3})", 
+                                    _TableVariableName, _TableVariableX,
+                                    (_TableVariableExpression.Length < 1) ? "" : _TableVariableExpression.Substring(1), 
+                                    (_TableVariableExpression.Length < 1) ? "" : _TableVariableExpression.Substring(0,1));
+                            }
+                            else
+                            {
+                                temp += I18n.Translate("internal/Action/desctablesetrow",
+                                    "set table ({0}) row #({1}) values from string ({2}) separated by ({3})",
+                                    _TableVariableName, _TableVariableY,
+                                    (_TableVariableExpression.Length < 1) ? "" : _TableVariableExpression.Substring(1),
+                                    (_TableVariableExpression.Length < 1) ? "" : _TableVariableExpression.Substring(0, 1));
+                            }
+                            break;
+                        case TableVariableOpEnum.InsertLine:
+                            if (!string.IsNullOrWhiteSpace(_TableVariableX))
+                            {
+                                temp += I18n.Translate("internal/Action/desctableinsertcolumn",
+                                    "at table ({0}) column #({1}), insert values from string ({2}) separated by ({3})",
+                                    _TableVariableName, _TableVariableX,
+                                    (_TableVariableExpression.Length < 1) ? "" : _TableVariableExpression.Substring(1),
+                                    (_TableVariableExpression.Length < 1) ? "" : _TableVariableExpression.Substring(0, 1));
+                            }
+                            else
+                            {
+                                temp += I18n.Translate("internal/Action/desctableinsertrow",
+                                    "at table ({0}) row #({1}), insert values from string ({2}) separated by ({3})",
+                                    _TableVariableName, _TableVariableY,
+                                    (_TableVariableExpression.Length < 1) ? "" : _TableVariableExpression.Substring(1),
+                                    (_TableVariableExpression.Length < 1) ? "" : _TableVariableExpression.Substring(0, 1));
+                            }
+                            break;
+                        case TableVariableOpEnum.RemoveLine:
+                            if (!string.IsNullOrWhiteSpace(_TableVariableX))
+                            {
+                                temp += I18n.Translate("internal/Action/desctableinsertcolumn",
+                                    "removed column #({1}) from table ({0})", _TableVariableName, _TableVariableX);
+                            }
+                            else
+                            {
+                                temp += I18n.Translate("internal/Action/desctableinsertrow",
+                                    "removed row #({1}) from table ({0})", _TableVariableName, _TableVariableY);
+                            }
+                            break;
+                        case TableVariableOpEnum.SortRows:
+                            temp += I18n.Translate("internal/Action/desctablesortrows",
+                                "sort the rows of table variable ({0}) by keys ({1})", _TableVariableName, _TableVariableExpression);
+                            break;
+                        case TableVariableOpEnum.SortColumns:
+                            temp += I18n.Translate("internal/Action/desctablesortcols", 
+                                "sort the columns of table variable ({0}) by keys ({1})", _TableVariableName, _TableVariableExpression);
                             break;
                     }
                     break;
@@ -1126,6 +1280,82 @@ namespace Triggernometry
             return "";
         }
 
+        private void ParseSortKeysExpr(string rawExpr, 
+            out List<bool> isNumeric, out List<bool> isAscending, 
+            out List<string> keysExpr, out List<List<string>> values)
+        {   // parsing expressions like "n+:key1, s-:key2, s+:key3, ..."
+            string[] rawKeys = Context.SplitArguments(rawExpr, allowEmpty: true);
+
+            isNumeric = new List<bool>();       // numeric / string options
+            isAscending = new List<bool>();     // ascending / descending options
+            keysExpr = new List<string>();      // expression of the keys
+            values = new List<List<string>>();  // each sublist contains the evaluated results of one key
+
+            Regex regexSortKeyExpr = new Regex("^ *(?<type>[NnSs]) *(?<order>[-+]?) *:(?<key>.+)$");
+            foreach (string rawKey in rawKeys)
+            {
+                Match keyMatch = regexSortKeyExpr.Match(rawKey);
+                if (keyMatch.Success)
+                {
+                    isNumeric.Add(keyMatch.Groups["type"].Value.ToLower() == "n");
+                    isAscending.Add(keyMatch.Groups["order"].Value != "-");
+                    keysExpr.Add(keyMatch.Groups["key"].Value);
+                    values.Add(new List<string>());
+                }
+                else
+                {
+                    throw new ArgumentException(I18n.Translate("internal/Action/sortkeyexprerror",
+                        "The sorting key expression ({0}) could not be parsed.", rawKey));
+                }
+            }
+        }
+
+        private IOrderedEnumerable<int> ApplySorting(int elementCount, 
+            List<bool> isNumeric, List<bool> isAscending, List<List<string>> values)
+        {
+            // Create an enumeration of indices representing the initial order
+            IEnumerable<int> indices = Enumerable.Range(0, elementCount);
+            IOrderedEnumerable<int> sortedIndices = null;
+
+            // Iterate through the sorting keys
+            for (int keyIndex = 0; keyIndex < values.Count; keyIndex++)
+            {
+                int k = keyIndex; // local variable for lambda expression
+                // 4 sorting rules: numeric/string ¡Á ascending/descending
+                if (keyIndex == 0)
+                {
+                    if (isNumeric[k])
+                    {
+                        sortedIndices = isAscending[k]
+                            ? indices.OrderBy(i => Convert.ToDouble(values[k][i]))
+                            : indices.OrderByDescending(i => Convert.ToDouble(values[k][i]));
+                    }
+                    else
+                    {
+                        sortedIndices = isAscending[k]
+                            ? indices.OrderBy(i => values[k][i])
+                            : indices.OrderByDescending(i => values[k][i]);
+                    }
+                }
+                else
+                {
+                    if (isNumeric[k])
+                    {
+                        sortedIndices = isAscending[k]
+                            ? sortedIndices.ThenBy(i => Convert.ToDouble(values[k][i]))
+                            : sortedIndices.ThenByDescending(i => Convert.ToDouble(values[k][i]));
+                    }
+                    else
+                    {
+                        sortedIndices = isAscending[k]
+                            ? sortedIndices.ThenBy(i => values[k][i])
+                            : sortedIndices.ThenByDescending(i => values[k][i]);
+                    }
+                }
+            }
+            return sortedIndices;
+        }
+
         private void ExecutionImplementation(RealPlugin.QueuedAction qa, Context ctx)
 		{
 			try
@@ -1144,7 +1374,8 @@ namespace Triggernometry
                 }
                 ctx.PushActionResult(1);
                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/executingaction", "Executing action '{0}' in thread {1}", GetDescription(ctx), System.Threading.Thread.CurrentThread.ManagedThreadId));
-				switch (ActionType)
+                
+                switch (ActionType)
 				{
                     #region Implementation - Beep
                     case ActionTypeEnum.SystemBeep:
@@ -1410,6 +1641,12 @@ namespace Triggernometry
                                             AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/enabledfolderwithid", "Enabled folder ({0}) with id ({1})", f.Name, f.Id));
                                         }
                                         break;
+                                    case FolderOpEnum.CancelFolder:
+                                        {
+                                            CancelAllTriggersInFolder(f, ctx);
+                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/cancelfolder", "Cancelled all triggers in folder ({0})", f.Name));
+                                        }
+                                        break;
                                 }
                             }
                             else
@@ -1574,6 +1811,7 @@ namespace Triggernometry
                     case ActionTypeEnum.ListVariable:
                         {
                             string sourcename = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ListVariableName);
+                            VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                             string changer;
                             if (ctx.trig != null)
                             {
@@ -1587,7 +1825,6 @@ namespace Triggernometry
                             {
                                 case ListVariableOpEnum.Unset:
                                     {
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List) // verified
                                         {
                                             if (vs.List.ContainsKey(sourcename) == true)
@@ -1601,7 +1838,6 @@ namespace Triggernometry
                                 case ListVariableOpEnum.Push:
                                     {
                                         string value = GetListExpressionValue(ctx, _ListVariableExpressionType, _ListVariableExpression);
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List)
                                         {
                                             VariableList vl = GetListVariable(vs, sourcename, true);
@@ -1614,7 +1850,6 @@ namespace Triggernometry
                                     {
                                         string value = GetListExpressionValue(ctx, _ListVariableExpressionType, _ListVariableExpression);
                                         int index = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _ListVariableIndex);
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List)
                                         {
                                             VariableList vl = GetListVariable(vs, sourcename, true);
@@ -1627,7 +1862,6 @@ namespace Triggernometry
                                     {
                                         string value = GetListExpressionValue(ctx, _ListVariableExpressionType, _ListVariableExpression);
                                         int index = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _ListVariableIndex);
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List)
                                         {
                                             VariableList vl = GetListVariable(vs, sourcename, true);
@@ -1636,10 +1870,34 @@ namespace Triggernometry
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listindexset", "Value ({0}) set to index ({1}) of list variable ({2})", value, index, sourcename));
                                     }
                                     break;
+                                case ListVariableOpEnum.SetAll:
+                                    {
+                                        int index = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _ListVariableIndex);
+                                        lock (vs.List)
+                                        {
+                                            VariableList vl = GetListVariable(vs, sourcename, true);
+                                            // create a new list to avoid setting values base on previously edited ones
+                                            List<Variable> newList = new List<Variable>(); 
+                                            // x/y index starts from 1
+                                            ctx.varName = (_ListSourcePersist ? "plvar:" : "lvar:") + _ListVariableName;
+                                            int length = Math.Max(index, vl.Size());
+                                            for (int i = 1; i <= length; i++)
+                                            {   // expr could contain ${_index}, ${_this}.
+                                                ctx.listIndex = i;
+                                                string expr = GetListExpressionValue(ctx, _ListVariableExpressionType, _ListVariableExpression);
+                                                newList.Add(new VariableScalar() { Value = expr });
+                                            }
+                                            vl.Values = newList;
+                                            vl.LastChanger = changer;
+                                            vl.LastChanged = DateTime.Now;
+                                        }
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsetall",
+                                            "All values in list variable ({0}) set to ({1})", sourcename, _ListVariableExpression));
+                                    }
+                                    break;
                                 case ListVariableOpEnum.Remove:
                                     {
                                         int index = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _ListVariableIndex);
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List)
                                         {
                                             VariableList vl = GetListVariable(vs, sourcename, false);
@@ -1652,7 +1910,6 @@ namespace Triggernometry
                                     {
                                         string targetname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ListVariableTarget);
                                         string newval = "";
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List)
                                         {
                                             VariableList vl = GetListVariable(vs, sourcename, false);
@@ -1677,7 +1934,6 @@ namespace Triggernometry
                                     {
                                         string targetname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ListVariableTarget);
                                         string newval = "";
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List)
                                         {
                                             VariableList vl = GetListVariable(vs, sourcename, false);
@@ -1700,7 +1956,6 @@ namespace Triggernometry
                                     break;
                                 case ListVariableOpEnum.SortAlphaAsc:
                                     {
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List)
                                         {
                                             VariableList vl = GetListVariable(vs, sourcename, false);
@@ -1711,7 +1966,6 @@ namespace Triggernometry
                                     break;
                                 case ListVariableOpEnum.SortAlphaDesc:
                                     {
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List)
                                         {
                                             VariableList vl = GetListVariable(vs, sourcename, false);
@@ -1722,7 +1976,6 @@ namespace Triggernometry
                                     break;
                                 case ListVariableOpEnum.SortNumericAsc:
                                     {
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List)
                                         {
                                             VariableList vl = GetListVariable(vs, sourcename, false);
@@ -1733,7 +1986,6 @@ namespace Triggernometry
                                     break;
                                 case ListVariableOpEnum.SortNumericDesc:
                                     {
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List)
                                         {
                                             VariableList vl = GetListVariable(vs, sourcename, false);
@@ -1744,7 +1996,6 @@ namespace Triggernometry
                                     break;
                                 case ListVariableOpEnum.SortFfxivPartyAsc:
                                     {
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List)
                                         {
                                             VariableList vl = GetListVariable(vs, sourcename, false);
@@ -1755,7 +2006,6 @@ namespace Triggernometry
                                     break;
                                 case ListVariableOpEnum.SortFfxivPartyDesc:
                                     {
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List)
                                         {
                                             VariableList vl = GetListVariable(vs, sourcename, false);
@@ -1764,11 +2014,59 @@ namespace Triggernometry
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortffxivdesc", "List variable ({0}) sorted in FFXIV party descending order", sourcename));
                                     }
                                     break;
+                                case ListVariableOpEnum.SortByKeys:
+                                    {
+                                        string[] invalidExprs = new[] { "${_row}", "${_col}" };
+                                        foreach (string word in invalidExprs)
+                                        {
+                                            if (_TableVariableExpression.Contains(word))
+                                                throw new ArgumentException(I18n.Translate("internal/Action/sortkeyexprerror",
+                                                        "The sorting key expression ({0}) could not be parsed.", word));
+                                        }
+
+                                        // parsing expressions like "n+:key1, s-:key2, s+:key3, ..."
+                                        ParseSortKeysExpr(_ListVariableExpression, 
+                                            out List<bool> isNumeric, out List<bool> isAscending, 
+                                            out List<string> keysExpr, out List<List<string>> values);
+                                        int keysCount = keysExpr.Count;
+
+                                        lock (vs.List)
+                                        {
+                                            VariableList vl = GetListVariable(vs, sourcename, false);
+                                            ctx.varName = (_ListSourcePersist ? "plvar:" : "lvar:") + _ListVariableName;    // for ${_this}
+                                            // Iterate through the list and evaluate the key expression in the current context
+                                            for (int listIndex = 0; listIndex < vl.Size(); listIndex++)
+                                            {
+                                                ctx.listIndex = listIndex + 1;  // for ${_index}
+                                                for (int keyIndex = 0; keyIndex < keysCount; keyIndex++)
+                                                {
+                                                    string keyValue = isNumeric[keyIndex]
+                                                        ? I18n.ThingToString(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, keysExpr[keyIndex]))
+                                                        : ctx.EvaluateStringExpression(ActionContextLogger, ctx, keysExpr[keyIndex]);
+                                                    values[keyIndex].Add(keyValue);
+                                                }
+                                            }
+                                            IOrderedEnumerable<int> sortedIndices = ApplySorting(vl.Size(), isNumeric, isAscending, values);
+                                            var sortedList = sortedIndices.Select(i => vl.Values[i]).ToList();
+                                            vl.Values = sortedList;
+                                            vl.LastChanger = changer;
+                                            vl.LastChanged = DateTime.Now;
+                                        }
+
+                                        for (int i = 0; i < keysCount; i++)
+                                        {   // logging each sorting keys
+                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortbykeys",
+                                                "Sorting list ({0}): key ({1}/{2}, {4}) = ({3}). All values: ({5})",
+                                                sourcename, i + 1, keysCount, keysExpr[i],
+                                                (isNumeric[i] ? "n" : "s") + (isAscending[i] ? "+" : "-"),
+                                                String.Join(", ", values[i])));
+                                        }
+                                    }
+                                    break;
                                 case ListVariableOpEnum.Copy:
                                     {
                                         string targetname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ListVariableTarget);
                                         VariableList vl = null;
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List)
                                         {
                                             vl = GetListVariable(vs, sourcename, false);
@@ -1792,7 +2090,6 @@ namespace Triggernometry
                                         int index = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _ListVariableIndex);
                                         int rindex = index;
                                         VariableList vl = null;
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List)
                                         {
                                             vl = GetListVariable(vs, sourcename, false);
@@ -1815,7 +2112,6 @@ namespace Triggernometry
                                         string separator = GetListExpressionValue(ctx, _ListVariableExpressionType, _ListVariableExpression);
                                         string targetname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ListVariableTarget);
                                         string newval = "";
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List)
                                         {
                                             VariableList vl = GetListVariable(vs, sourcename, false);
@@ -1836,34 +2132,61 @@ namespace Triggernometry
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listscalarjoin", "List variable ({0}) joined to scalar variable ({1}) with separator ({2})", sourcename, targetname, separator));
                                     }
                                     break;
-                                case ListVariableOpEnum.Split: // todo
+                                case ListVariableOpEnum.Split:
                                     {
                                         string separator = GetListExpressionValue(ctx, _ListVariableExpressionType, _ListVariableExpression);
-                                        string newname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ListVariableTarget);
+                                        string targetname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ListVariableTarget);
                                         string splitval = "";
-                                        lock (ctx.plug.sessionvars.Scalar) // verified
+                                        lock (vs.Scalar) // verified
                                         {
-                                            if (ctx.plug.sessionvars.Scalar.ContainsKey(sourcename) == true)
+                                            if (vs.Scalar.ContainsKey(sourcename))
                                             {
-                                                splitval = ctx.plug.sessionvars.Scalar[sourcename].Value;
+                                                splitval = vs.Scalar[sourcename].Value;
                                             }
                                         }
                                         string[] vals = splitval.Split(new string[] { separator }, StringSplitOptions.None);
-                                        lock (ctx.plug.sessionvars.List)
+                                        vs = (_ListTargetPersist) ? ctx.plug.cfg.PersistentVariables : ctx.plug.sessionvars;
+                                        lock (vs.List)
                                         {
-                                            VariableList newvl = new VariableList();
+                                            VariableList vl = new VariableList();
                                             foreach (string x in vals)
                                             {
-                                                newvl.Push(new VariableScalar() { Value = x }, changer);
+                                                vl.Push(new VariableScalar() { Value = x }, changer);
                                             }
-                                            ctx.plug.sessionvars.List[newname] = newvl;
+                                            vs.List[targetname] = vl;
                                         }
-                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarlistsplit", "Scalar variable ({0}) split into list variable ({1}) with separator ({2})", sourcename, newname, separator));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarlistsplit", "Scalar variable ({0}) split into list variable ({1}) with separator ({2})", sourcename, targetname, separator));
+                                    }
+                                    break;
+                                case ListVariableOpEnum.Build:
+                                    {   // Using the first character in the expression to split the remaining part into a new list
+                                        // e.g. expr = ",1,2,3,4,5,6,7,8"
+                                        string expr = GetListExpressionValue(ctx, _ListVariableExpressionType, _ListVariableExpression);
+                                        string targetname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ListVariableTarget);
+                                        string separator = (expr.Length > 0) ? expr.Substring(0, 1) : "";
+                                        string splitval = (expr.Length > 0) ? expr.Substring(1) : "";
+
+                                        lock (vs.List)
+                                        {
+                                            VariableList vl = new VariableList();
+                                            if (separator.Length == 0)
+                                            {
+                                                vs.List[sourcename] = new VariableList();
+                                                break;
+                                            }
+                                            string[] vals = splitval.Split(separator[0]);
+                                            foreach (string x in vals)
+                                            {
+                                                vl.Push(new VariableScalar() { Value = x }, changer);
+                                            }
+                                            vs.List[targetname] = vl;
+                                        }
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarlistbuild", 
+                                            "List variable ({0}) built from expression ({1}) splitted by ({2})", targetname, splitval, separator));
                                     }
                                     break;
                                 case ListVariableOpEnum.UnsetAll:
                                     {
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         lock (vs.List) // verified
                                         {
                                             vs.List.Clear();
@@ -1873,7 +2196,6 @@ namespace Triggernometry
                                     break;
                                 case ListVariableOpEnum.UnsetRegex:
                                     {
-                                        VariableStore vs = (_ListSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         Regex rx = new Regex(_ListVariableName);
                                         List<string> toRem = new List<string>();
                                         lock (vs.List) // verified
@@ -1922,7 +2244,15 @@ namespace Triggernometry
                     #region Implementation - Message box
                     case ActionTypeEnum.MessageBox:
                         {
-                            MessageBox.Show(ctx.EvaluateStringExpression(ActionContextLogger, ctx, _MessageBoxText), "", MessageBoxButtons.OK, (System.Windows.Forms.MessageBoxIcon)_MessageBoxIconType);
+                            Form activeForm = Form.ActiveForm;
+                            if (activeForm != null)
+                            {
+                                MessageBox.Show(activeForm, ctx.EvaluateStringExpression(ActionContextLogger, ctx, _MessageBoxText), "", MessageBoxButtons.OK, (System.Windows.Forms.MessageBoxIcon)_MessageBoxIconType);
+                            }
+                            else
+                            {
+                                MessageBox.Show(ctx.EvaluateStringExpression(ActionContextLogger, ctx, _MessageBoxText), "", MessageBoxButtons.OK, (System.Windows.Forms.MessageBoxIcon)_MessageBoxIconType);
+                            }
                         }
                         break;
                     #endregion
@@ -2349,15 +2679,37 @@ namespace Triggernometry
                     case ActionTypeEnum.TableVariable:
                         {
                             string sourcename = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TableVariableName);
-                            string newval;
+                            string targetname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TableVariableTarget);
+                            VariableStore svs = (_TableSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
+                            VariableStore tvs = (_TableTargetPersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
+
+                            string expr;
+                            if (_TableVariableExpressionType == TableVariableExpTypeEnum.String)
+                            {
+                                expr = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TableVariableExpression);
+                            }
+                            else
+                            {
+                                expr = I18n.ThingToString(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableExpression));
+                            }
+
+                            string vtchanger;
+                            if (ctx.trig != null)
+                            {
+                                vtchanger = I18n.Translate("internal/Action/changetagtrigaction", "Trigger '{0}' action '{1}'", ctx.trig.LogName, GetDescription(ctx));
+                            }
+                            else
+                            {
+                                vtchanger = I18n.Translate("internal/Action/changetagtestmode", "Action '{0}' test mode", GetDescription(ctx));
+                            }
+
                             switch (_TableVariableOp)
                             {
                                 case TableVariableOpEnum.UnsetAll:
                                     {
-                                        VariableStore vs = (_TableSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
-                                        lock (vs.Table) // verified
+                                        lock (svs.Table) // verified
                                         {
-                                            vs.Table.Clear();
+                                            svs.Table.Clear();
                                         }
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/alltableunset", "All table variables unset"));
                                         break;
@@ -2366,10 +2718,9 @@ namespace Triggernometry
                                     {
                                         Regex rx = new Regex(_TableVariableName);
                                         List<string> toRem = new List<string>();
-                                        VariableStore vs = (_TableSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
-                                        lock (vs.Table) // verified
+                                        lock (svs.Table) // verified
                                         {
-                                            foreach (KeyValuePair<string, VariableTable> kp in vs.Table)
+                                            foreach (KeyValuePair<string, VariableTable> kp in svs.Table)
                                             {
                                                 if (rx.IsMatch(kp.Key) == true)
                                                 {
@@ -2378,7 +2729,7 @@ namespace Triggernometry
                                             }
                                             foreach (string vn in toRem)
                                             {
-                                                vs.Table.Remove(vn);
+                                                svs.Table.Remove(vn);
                                             }
                                         }
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/regextableunset", "All table variables matching ({0}) unset", _TableVariableName));
@@ -2388,13 +2739,12 @@ namespace Triggernometry
                                     {
                                         int w = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableX);
                                         int h = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableY);
-                                        VariableStore vs = (_TableSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
-                                        lock (vs.Table) // verified
+                                        lock (svs.Table) // verified
                                         {
                                             VariableTable vt = null;
-                                            if (vs.Table.ContainsKey(sourcename) == true)
+                                            if (svs.Table.ContainsKey(sourcename) == true)
                                             {
-                                                vt = vs.Table[sourcename];
+                                                vt = svs.Table[sourcename];
                                             }
                                             else
                                             {
@@ -2407,12 +2757,11 @@ namespace Triggernometry
                                     }
                                 case TableVariableOpEnum.Unset:
                                     {
-                                        VariableStore vs = (_TableSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
-                                        lock (vs.Table) // verified
+                                        lock (svs.Table) // verified
                                         {
-                                            if (vs.Table.ContainsKey(sourcename) == true)
+                                            if (svs.Table.ContainsKey(sourcename) == true)
                                             {
-                                                vs.Table.Remove(sourcename);
+                                                svs.Table.Remove(sourcename);
                                             }
                                         }
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tableunset", "Table variable ({0}) unset", sourcename));
@@ -2420,9 +2769,6 @@ namespace Triggernometry
                                     }
                                 case TableVariableOpEnum.Copy:
                                     {
-                                        string targetname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TableVariableTarget);
-                                        VariableStore svs = (_TableSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
-                                        VariableStore tvs = (_TableTargetPersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         VariableTable vt = null;
                                         lock (svs.Table) // verified
                                         {
@@ -2447,9 +2793,6 @@ namespace Triggernometry
                                     }
                                 case TableVariableOpEnum.Append:
                                     {
-                                        string targetname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TableVariableTarget);
-                                        VariableStore svs = (_TableSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
-                                        VariableStore tvs = (_TableTargetPersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
                                         VariableTable vt = null;
                                         lock (svs.Table) // verified
                                         {
@@ -2466,15 +2809,6 @@ namespace Triggernometry
                                                 if (tvs.Table.ContainsKey(targetname) == true)
                                                 {
                                                     tgt = tvs.Table[targetname];
-                                                    string vtchanger;
-                                                    if (ctx.trig != null)
-                                                    {
-                                                        vtchanger = I18n.Translate("internal/Action/changetagtrigaction", "Trigger '{0}' action '{1}'", ctx.trig.LogName, GetDescription(ctx));
-                                                    }
-                                                    else
-                                                    {
-                                                        vtchanger = I18n.Translate("internal/Action/changetagtestmode", "Action '{0}' test mode", GetDescription(ctx));
-                                                    }
                                                     tgt.Append(vt, vtchanger);
                                                 }
                                                 else
@@ -2482,11 +2816,13 @@ namespace Triggernometry
                                                     tvs.Table[targetname] = vt;
                                                 }
                                             }
-                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tableappended", "Table variable ({0}) appended to ({1})", sourcename, targetname));
+                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tableappended", 
+                                                "Table variable ({0}) appended to ({1})", sourcename, targetname));
                                         }
                                         else
                                         {
-                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/tableappendnotexist", "Table variable ({0}) couldn't be appended to ({1}) since it doesn't exist", sourcename, targetname));
+                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/tableappendnotexist", 
+                                                "Table variable ({0}) couldn't be appended to ({1}) since it doesn't exist", sourcename, targetname));
                                         }
                                         break;
                                     }
@@ -2494,38 +2830,267 @@ namespace Triggernometry
                                     {
                                         int x = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableX);
                                         int y = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableY);
-                                        if (_TableVariableExpressionType == TableVariableExpTypeEnum.String)
+
+                                        lock (svs.Table) // verified
                                         {
-                                            newval = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TableVariableExpression);
-                                        }
-                                        else
-                                        {
-                                            newval = I18n.ThingToString(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableExpression));
-                                        }
-                                        VariableStore vs = (_TableSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
-                                        lock (vs.Table) // verified
-                                        {
-                                            VariableTable vt = GetTableVariable(vs, sourcename, true);
+                                            VariableTable vt = GetTableVariable(svs, sourcename, true);
                                             int mx = Math.Max(x, vt.Width);
                                             int my = Math.Max(y, vt.Height);                                            
                                             if (mx != vt.Width || my != vt.Height)
                                             {
                                                 vt.Resize(mx, my);
                                             }
-                                            string vtchanger;
-                                            if (ctx.trig != null)
-                                            {
-                                                vtchanger = I18n.Translate("internal/Action/changetagtrigaction", "Trigger '{0}' action '{1}'", ctx.trig.LogName, GetDescription(ctx));
-                                            }
-                                            else
-                                            {
-                                                vtchanger = I18n.Translate("internal/Action/changetagtestmode", "Action '{0}' test mode", GetDescription(ctx));
-                                            }
-                                            vt.Set(x, y, newval, vtchanger);
+                                            vt.Set(x, y, expr, vtchanger);
                                         }
-                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarset", "Scalar variable ({0}) value set to ({1})", sourcename, newval));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tableset", 
+                                            "Table variable ({0}) column ({1}) row ({2}) set to ({3})", sourcename, _TableVariableX, _TableVariableY, expr));
                                         break;
                                     }
+                                case TableVariableOpEnum.SetAll:
+                                    {
+                                        int xIndex = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableX);
+                                        int yIndex = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableY);
+                                        lock (svs.Table)
+                                        {
+                                            VariableTable vt = GetTableVariable(svs, sourcename, true);
+                                            VariableTable vtNew = new VariableTable();
+                                            vtNew.Resize(Math.Max(vt.Width, xIndex), Math.Max(vt.Height, yIndex));
+                                            ctx.varName = (_TableSourcePersist ? "ptvar:" : "tvar:") + _TableVariableName;
+                                            for (int x = 1; x <= vtNew.Width; x++)
+                                            {   // x/y index starts from 1
+                                                ctx.tableColIndex = x;
+                                                for (int y = 1; y <= vtNew.Height; y++)
+                                                {
+                                                    ctx.tableRowIndex = y;
+                                                    // evaluate the expression for every grid
+                                                    if (_TableVariableExpressionType == TableVariableExpTypeEnum.String)
+                                                    {
+                                                        expr = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TableVariableExpression);
+                                                    }
+                                                    else
+                                                    {
+                                                        expr = I18n.ThingToString(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableExpression));
+                                                    }
+                                                    vtNew.Set(x, y, new VariableScalar() { Value = expr }, vtchanger);
+                                                }
+                                            }
+                                            vt.Rows = vtNew.Rows;
+                                            vt.LastChanger = vtchanger;
+                                            vt.LastChanged = DateTime.Now;
+                                        }
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tablesetall",
+                                            "All values in table variable ({0}) set to ({1})", sourcename, _TableVariableExpression));
+                                    }
+                                    break;
+                                case TableVariableOpEnum.Build:
+                                    {   // Using the first 2 characters in the expression as the separator to split the remaining part into a new list
+                                        // e.g. expr = ",|1,2,3|4,5,6|7,8,9"
+
+                                        string colSeparator = (expr.Length > 0) ? expr.Substring(0, 1) : "";
+                                        string rowSeparator = (expr.Length > 1) ? expr.Substring(1, 1) : "";
+                                        string splitval = (expr.Length > 1) ? expr.Substring(2) : "";
+
+                                        lock (tvs.Table)
+                                        {
+                                            if (rowSeparator.Length == 0)
+                                            {
+                                                tvs.Table[targetname] = new VariableTable();
+                                                break;
+                                            }
+                                            VariableTable vt = GetTableVariable(tvs, targetname, true);
+                                            vt.Build(splitval, colSeparator, rowSeparator, vtchanger);
+                                        }
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tablebuild", 
+                                            "Table variable ({0}) built from expression ({1}) splitted by ({2}) ({3})",
+                                            targetname, splitval, colSeparator, rowSeparator));
+                                    }
+                                    break;
+                                case TableVariableOpEnum.SetLine:
+                                case TableVariableOpEnum.InsertLine:
+                                    {
+                                        string separator = (expr.Length > 0) ? expr.Substring(0, 1) : "";
+                                        string splitval = (expr.Length > 0) ? expr.Substring(1): "";
+                                        string[] newValues = (separator.Length > 0) ? splitval.Split(separator[0]) : new string[0];
+                                        bool isRow = string.IsNullOrWhiteSpace(_TableVariableX);
+
+                                        lock (svs.Table) // verified
+                                        {
+                                            VariableTable vt = GetTableVariable(svs, sourcename, true);
+                                            int tableLength = (isRow) ? vt.Height : vt.Width;
+                                            int rawIndex = (isRow) ? (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableY)
+                                                                   : (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableX);
+                                            // index start from 0
+                                            int index = (rawIndex < 0) ? (rawIndex + tableLength) : (rawIndex - 1);
+                                            if (index < 0)
+                                                break;
+
+                                            if (_TableVariableOp == TableVariableOpEnum.SetLine)
+                                            {
+                                                if (isRow)
+                                                {
+                                                    vt.SetRow(index, newValues, vtchanger);
+                                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tablesetrow",
+                                                        "Table ({0}) row #({1}) set to ({2})", sourcename, index, splitval));
+                                                }
+                                                else // isCol
+                                                {
+                                                    vt.SetColumn(index, newValues, vtchanger);
+                                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tablesetcol",
+                                                        "Table ({0}) column #({1}) set to ({2})", sourcename, index, splitval));
+                                                }
+                                            }
+                                            else // InsertLine
+                                            {
+                                                if (isRow)
+                                                {
+                                                    vt.InsertRow(index, newValues, vtchanger);
+                                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tableinsertrow",
+                                                        "Inserted ({2}) to table ({0}) row #({1})", sourcename, index, splitval));
+                                                }
+                                                else // isCol
+                                                {
+                                                    vt.InsertColumn(index, newValues, vtchanger);
+                                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tableinsertcol",
+                                                        "Inserted ({2}) to table ({0}) row #({1})", sourcename, index, splitval));
+                                                }
+                                            }
+                                        }
+                                    }
+                                    break;
+                                case TableVariableOpEnum.RemoveLine:
+                                    {
+                                        bool isRow = string.IsNullOrWhiteSpace(_TableVariableX);
+
+                                        lock (svs.Table) // verified
+                                        {
+                                            VariableTable vt = GetTableVariable(svs, sourcename, true);
+                                            int tableLength = (isRow) ? vt.Height : vt.Width;
+                                            int rawIndex = (isRow) ? (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableY)
+                                                                   : (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableX);
+                                            // index start from 0
+                                            int index = (rawIndex < 0) ? (rawIndex + tableLength) : (rawIndex - 1);
+                                            if (index < 0)
+                                                break;
+
+                                            if (isRow)
+                                            {
+                                                vt.RemoveRow(index, vtchanger);
+                                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tableremoverow",
+                                                    "Removed row #({1}) from table ({0}) ", sourcename, index));
+                                            }
+                                            else // isCol
+                                            {
+                                                vt.RemoveColumn(index, vtchanger);
+                                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tableremovecol",
+                                                    "Removed column #({1}) from table ({0}) ", sourcename, index));
+                                            }
+                                        }
+                                    }
+                                    break;
+                                case TableVariableOpEnum.SortRows:
+                                    {
+                                        string[] invalidExprs = new[] { "${_this}", "${_col}", "${_index}" };
+                                        foreach (string word in invalidExprs)
+                                        {
+                                            if (_TableVariableExpression.Contains(word))
+                                                throw new ArgumentException(I18n.Translate("internal/Action/sortkeyexprerror",
+                                                        "The sorting key expression ({0}) could not be parsed.", word));
+                                        }
+
+                                        // parsing expressions like "n+:key1, s-:key2, s+:key3, ..."
+                                        ParseSortKeysExpr(_TableVariableExpression,
+                                            out List<bool> isNumeric, out List<bool> isAscending,
+                                            out List<string> keysExpr, out List<List<string>> values);
+                                        int keysCount = keysExpr.Count;
+
+                                        lock (svs.Table)
+                                        {
+                                            VariableTable vt = GetTableVariable(svs, sourcename, false);
+
+                                            // Iterate through the rows and evaluate the key expression in the current context
+                                            for (int rowIndex = 0; rowIndex < vt.Height; rowIndex++)
+                                            {
+                                                ctx.tableRowIndex = rowIndex + 1;  // for ${_row}
+                                                for (int keyIndex = 0; keyIndex < keysCount; keyIndex++)
+                                                {
+                                                    string keyValue = isNumeric[keyIndex]
+                                                        ? I18n.ThingToString(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, keysExpr[keyIndex]))
+                                                        : ctx.EvaluateStringExpression(ActionContextLogger, ctx, keysExpr[keyIndex]);
+                                                    values[keyIndex].Add(keyValue);
+                                                }
+                                            }
+
+                                            IOrderedEnumerable<int> sortedIndices = ApplySorting(vt.Height, isNumeric, isAscending, values);
+                                            var sortedRows = sortedIndices.Select(i => vt.Rows[i]).ToList();
+                                            vt.Rows = sortedRows;
+                                            vt.LastChanger = vtchanger;
+                                            vt.LastChanged = DateTime.Now;
+                                        }
+
+                                        for (int i = 0; i < keysCount; i++)
+                                        {   // logging each sorting keys
+                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tablesortrows",
+                                                "Sorting rows of table ({0}): key ({1}/{2}, {4}) = ({3}). All values: ({5})",
+                                                sourcename, i + 1, keysCount, keysExpr[i],
+                                                (isNumeric[i] ? "n" : "s") + (isAscending[i] ? "+" : "-"),
+                                                String.Join(", ", values[i])));
+                                        }
+                                    }
+                                    break;
+                                case TableVariableOpEnum.SortColumns:
+                                    {
+                                        string[] invalidExprs = new[] { "${_this}", "${_row}", "${_index}" };
+                                        foreach (string word in invalidExprs)
+                                        {
+                                            if (_TableVariableExpression.Contains(word))
+                                                throw new ArgumentException(I18n.Translate("internal/Action/sortkeyexprerror",
+                                                        "The sorting key expression ({0}) could not be parsed.", word));
+                                        }
+
+                                        // parsing expressions like "n+:key1, s-:key2, s+:key3, ..."
+                                        ParseSortKeysExpr(_TableVariableExpression,
+                                            out List<bool> isNumeric, out List<bool> isAscending,
+                                            out List<string> keysExpr, out List<List<string>> values);
+                                        int keysCount = keysExpr.Count;
+
+                                        lock (svs.Table)
+                                        {
+                                            VariableTable vt = GetTableVariable(svs, sourcename, false);
+
+                                            // Iterate through the columns and evaluate the key expression in the current context
+                                            for (int colIndex = 0; colIndex < vt.Width; colIndex++)
+                                            {
+                                                ctx.tableColIndex = colIndex + 1;  // for ${_col}
+                                                for (int keyIndex = 0; keyIndex < keysCount; keyIndex++)
+                                                {
+                                                    string keyValue = isNumeric[keyIndex]
+                                                        ? I18n.ThingToString(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, keysExpr[keyIndex]))
+                                                        : ctx.EvaluateStringExpression(ActionContextLogger, ctx, keysExpr[keyIndex]);
+                                                    values[keyIndex].Add(keyValue);
+                                                }
+                                            }
+
+                                            IOrderedEnumerable<int> sortedIndices = ApplySorting(vt.Width, isNumeric, isAscending, values);
+                                            
+                                            foreach (var row in vt.Rows)
+                                            {
+                                                var sortedValue = sortedIndices.Select(i => row.Values[i]).ToList();
+                                                row.Values = sortedValue;
+                                            }
+                                            vt.LastChanger = vtchanger;
+                                            vt.LastChanged = DateTime.Now;
+                                        }
+
+                                        for (int i = 0; i < keysCount; i++)
+                                        {   // logging each sorting keys
+                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tablesortcols",
+                                                "Sorting columns of table ({0}): key ({1}/{2}, {4}) = ({3}). All values: ({5})",
+                                                sourcename, i + 1, keysCount, keysExpr[i],
+                                                (isNumeric[i] ? "n" : "s") + (isAscending[i] ? "+" : "-"),
+                                                String.Join(", ", values[i])));
+                                        }
+                                    }
+                                    break;
                             }
                         }
                         break;

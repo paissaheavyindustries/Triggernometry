@@ -1,59 +1,125 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using System.Runtime.InteropServices;
+using Triggernometry.Variables;
 
 namespace Triggernometry.CustomControls
 {
-
     public partial class ExpressionTextBox : UserControl
     {
 
         public static List<string> terms = new List<string>()
         {
-            // numeric
-            "pi", "pi2", "pi05", "pi025", "pi0125", "pitorad", "piofrad", "phi", "major", "minor",
-            "abs(x)", "cos(x)", "cosh(x)", "arccos(x)", "cosec(x)", "sin(x)", "sinh(x)", "arcsin(x)", "sec(x)", "tan(x)", "tanh(x)", "arctan(x)", "arctan2(x, y)",
-            "cotan(x)", "distance(x1, y1, x2, y2)", "radtodeg(x)", "degtorad(x)", "max(...)", "min(...)", "random(x, y)", "sqrt(x)", "root(x, y)", "rem(x, y)", "mod(x, y)",
-            "pow(x, y)", "exp(x)", "log(x)", "log(x, y)", "round(x)", "round(x, y)", "floor(x)", "ceiling(x)", "sign(x)", "hex2dec(x)", "or(...)", "and(...)", "if(x,y,z)",
-            // expressions
-            "numeric", "string", "var", "evar", "lvar", "elvar", "tvar", "tvarcl", "tvarrl", "etvar", "func", "pvar", "epvar", "plvar", "eplvar", "ptvar", "ptvarcl", "ptvarrl", "eptvar",
+            // numeric const
+            "pi", "π", "pi2", "pi05", "pi025", "pi0125", "pitorad", "piofrad", 
+            "phi", "major", "minor", "ETmin2sec", "semitone", "cent",
+
+            // numeric func: basic
+            "sqrt(x)", "pow(x, y)", "root(x, y)", "exp(x)", "log(x)", "log(x, base)",
+            "abs(x)", "sign(x)", "rem(x, y)", "mod(x, y)", "random(x, y)",
+            "truncate(x)", "floor(x)", "ceiling(x)", "round(x)", "round(x, digits)",
+            "max(...)", "min(...)", "or(...)", "and(...)", "if(cond, x, y)",
+
+            // numeric func: trigonometric 
+            "sin(x)", "cos(x)", "tan(x)", "cot(x)", "cotan(x)", "sec(x)", "csc(x)", "cosec(x)",
+            "arcsin(x)", "arccos(x)", "arctan(x)", "atan2(x, y)", "arctan2(x, y)", 
+            "sinh(x)", "cosh(x)", "tanh(x)",
+
+            // numeric func: distance
+            "distance(x1, y1, x2, y2)", "d(x1, y1, ..., x2, y2, ...)",
+            "projd(x1, y1, θ, x2, y2)", "projh(x1, y1, θ, x2, y2)",
+            "projectdistance(x1, y1, θ, x2, y2)", "projectheight(x1, y1, θ, x2, y2)",
+
+            // numeric func: angle
+            "radtodeg(rad)", "degtorad(deg)",
+            "angle(x1, y1, x2, y2)", "θ(x1, y1, x2, y2)", "relangle(θ1, θ2)", "relθ(θ1, θ2)",
+            "roundir(θ, ±n)", "roundir(θ, ±n, digits)", "roundvec(x, y, ±n)", "roundvec(x, y, ±n, digits)",
+
+            // numeric string func
+            "hex2dec(hex)", "hex2float(hex)", "hex2double(hex)", "X8float(hex)", "parsedmg(hex)", "len(alphanumstr)",
+            "freq(note)", "freq(note, semitones)",
+
             // special variables
-            "_duration", "_event", "_incombat", "_since", "_sincems", "_triggerid", "_triggername", "_timestamp", "_timestampms", "_systemtime", "_systemtimems", "_zone", "_response",
-            "_responsecode", "_jsonresponse[x]", "_screenwidth", "_screenheight", "_lastencounter", "_activeencounter", "_env[x]", "_x", "_y", "_w", "_width", "_h", "_height", "_opacity",
-            "_textaura[x]", "_imageaura[x]", "_ffxivparty[x]", "_ffxiventity[x]", "_ffxivplayer", "_ffxivtime", "_ffxivpartyorder", "_ffxivprocid", "_ffxivprocname", "_ffxivzoneid",
-            "_const[x]", "_loopiterator",
+            "_incombat", "_lastencounter", "_activeencounter",
+            "_duration", "_event", "_since", "_sincems", "_triggerid", "_triggername", "_zone",
+            "_response", "_responsecode", "_jsonresponse[x]",
+            "_timestamp", "_timestampms", "_systemtime", "_systemtimems",  
+            "_screenwidth", "_screenheight", "_textaura[x]", "_imageaura[x]",
+            "_x", "_y", "_w", "_width", "_h", "_height", "_opacity",
+            "_ffxivparty[x]", "_party[x]", "_ffxiventity[x]", "_entity[x]", "_ffxivplayer", "_me", "_job[jobid]", "_job[XXX]",
+            "_ffxivtime", "_ET", "_ETprecise", "_ffxivpartyorder", "_ffxivprocid", "_ffxivprocname", "_ffxivzoneid",
+            "_env[x]", "_const[x]", "_loopiterator", "_this", "_index", "_col", "_row",
+        };
+
+        public static List<string> prefixes = new List<string>()
+        {
+            "numeric:", "n:", "string:", "s:", "func:", "f:",
+            "var:", "pvar:", "evar:", "epvar:",
+            "lvar:", "plvar:", "elvar:", "eplvar:",
+            "tvar:", "ptvar:", "etvar:", "eptvar:",
+            "tvarcl:", "ptvarcl:", "tvarrl:", "ptvarrl:", "tvardl:", "ptvardl:",
         };
 
         public static List<string> funcs = new List<string>()
         {
-            // functions
-            "toupper", "tolower", "length", "dec2hex", "dec2hex2", "dec2hex4", "dec2hex8", "hex2float", "hex2double", "float2hex", "double2hex", "padleft(x, y)", "padright(x, y)",
-            "substring(x)", "substring(x, y)", "indexof(x)", "lastindexof(x)", "trim", "trim(x, ...)", "trimleft", "trimleft(x, ...)", "trimright", "trimright(x, ...)", "format(x, y)", "compare(x)", "compare(x, y)",
-            "utctime(format)", "localtime(format)",
+            "toupper", "tolower", "length",
+            "dec2hex", "dec2hex2", "dec2hex4", "dec2hex8", "float2hex", "double2hex",
+            "hex2dec", "hex2float", "hex2double", "parsedmg",
+            "substring(index)", "substring(index, len)", "slice(slices)", "pick(index)", "pick(index, splitter)", 
+            "indexof(x)", "lastindexof(x)", "i(x)", "li(x)",
+            "padleft(char, len)", "padright(char, len)",
+            "trim", "trim(chars ...)", "trimleft", "trimleft(chars ...)", "trimright", "trimright(chars ...)", 
+            "repeat(times)", "repeat(times, joiner)", 
+            "replace(oldStr)", "replace(oldStr, newStr)", "replace(oldStr, newStr, isLooped)",
+            "format(x, y)", "compare(str)", "compare(str, ignorecase)", 
+            "utctime(format)", "localtime(format)", "nextETms:XX:XX.xx", "nextETms:minutes"
         };
 
-        public static List<string> propstextaura = new List<string>()
+        public static List<string> lvarProps = new List<string>()
+        {
+            "size", "length", "indexof(str)", "i(str)", "lastindexof(str)", "li(str)",
+            "sum", "sum(slices)", "count(str)", "count(str, slices)", 
+            "join", "join(joiner)", "join(joiner, slices)", 
+            "randjoin", "randjoin(joiner)", "randjoin(joiner, slices)",
+        };
+
+        public static List<string> tvarProps = new List<string>()
+        {
+            "w", "width", "h", "height",
+            "hjoin", "hjoin(joiner1, joiner2, colSlices, rowSlices)",
+            "vjoin", "vjoin(joiner1, joiner2, colSlices, rowSlices)",
+            "hlookup(str, rowIndex)", "hlookup(str, rowIndex, colSlices)",
+            "vlookup(str, rowIndex)", "vlookup(str, rowIndex, colSlices)",
+            "hl(str, rowIndex)", "hl(str, rowIndex, colSlices)",
+            "vl(str, rowIndex)", "vl(str, rowIndex, colSlices)",
+        };
+
+        public static List<string> textAuraProps = new List<string>()
         {
             "x", "y", "w", "h", "opacity", "text",
         };
 
-        public static List<string> propsimageaura = new List<string>()
+        public static List<string> imageAuraProps = new List<string>()
         {
             "x", "y", "w", "h", "opacity"
         };
 
-        public static List<string> propsffxiv = new List<string>()
+        public static List<string> ffxivProps = new List<string>()
         {
             "name", "job", "jobid", "currenthp", "currentmp", "currentcp", "currentgp", "maxhp", "maxmp", "maxcp", "maxgp", "level", "x", "y", "z",
-            "inparty", "id", "order", "worldid", "worldname", "currentworldid", "heading", "targetid", "casttargetid", "distance", "role",
+            "inparty", "id", "order", "worldid", "worldname", "currentworldid", "heading", "targetid", "casttargetid", "distance", "role", 
+            "isT", "isH", "isD", "isM", "isR", "isC", "isG", "isTH", "isCG", 
+            "jobCN", "jobDE", "jobEN", "jobFR", "jobJP", "jobKR", "jobCN1", "jobCN2", "jobEN3", "jobJP1"
+        };
+
+        public static List<string> jobProps = new List<string>()
+        {
+            "role", "isT", "isH", "isD", "isM", "isR", "isC", "isG", "isTH", "isCG",
+            "jobCN", "jobDE", "jobEN", "jobFR", "jobJP", "jobKR", "jobCN1", "jobCN2", "jobEN3", "jobJP1"
         };
 
         public enum SupportedExpressionTypeEnum
@@ -145,9 +211,19 @@ namespace Triggernometry.CustomControls
         public event EnterDelegate OnEnterKeyHit;
         public IButtonControl AcceptButton;
         public IButtonControl CancelButton;
-        public Regex WordCapture = new Regex(@"[_a-zA-Z0-9]+$");
-        public Regex FuncCapture = new Regex(@"func:(?<funcid>[_a-zA-Z0-9]{0,})$");
-        public Regex PropsCapture = new Regex(@"_(?<structid>[a-zA-Z0-9]+)\[.*\]\.(?<propid>.{0,})$");
+
+        public static readonly Regex rexPrefix = new Regex(@"\$\{(?<prefix>[^}:]*)$");
+        public static readonly Regex rexFunc = new Regex(@"\$\{f(?:unc)?:(?<funcid>[^(:]*)$");
+        public static readonly Regex rexVarName = new Regex(@"\$\{(?<prefix>e?p?[tl]?var|p?tvar(?:[cdr]l)?):(?<name>[^$.[{]*)$");
+        public static readonly Regex rexColHeader = new Regex(@"\$\{(?<persist>p?)tvar[cd]l:(?<name>[^$.[{]+)\[(?<key>[^$.[\]{]*)$");
+        public static readonly Regex rexRowHeader = new Regex(@"\$\{(?<persist>p?)tvar(?:rl:(?<name1>[^$.[{]+)|dl:(?<name2>[^$.[{]+)\[.*\])\[(?<key>[^$.[\]{]*)$");
+        public static readonly Regex rexConst = new Regex(@"\$\{_const\[(?<key>[^$.[\]{]*)$");
+        public static readonly Regex rexListProp = new Regex(@"^p?lvar:.*\.(?<prop>[^.(]*)$");
+        public static readonly Regex rexTableProp = new Regex(@"^p?tvar:.*\.(?<prop>[^.(]*)$");
+        public static readonly Regex rexMeProp = new Regex(@"^_me\.(?<prop>.*)$");
+        public static readonly Regex rexStructProp = new Regex(@"_(?<struct>[^[]+)\[.*\]\.(?<prop>[^.]*)$");
+        public static readonly Regex rexWord = new Regex(@"(?<![[$])\b[\p{L}\w_]+$");
+
         private string CurrentMatch;
 
         public Forms.AutoCompleteForm acf = null;
@@ -306,7 +382,10 @@ namespace Triggernometry.CustomControls
 
         private IEnumerable<string> GetAutocompleteSuggestions(IEnumerable<string> src, string str)
         {
-            return (from ix in src where ix.IndexOf(str, StringComparison.OrdinalIgnoreCase) == 0 && string.Compare(str, ix, true) != 0 select ix).OrderBy(a => a);
+            return (from ix in src 
+                        where ix.StartsWith(str, StringComparison.OrdinalIgnoreCase) && string.Compare(str, ix, true) != 0 
+                        select ix)
+                            .OrderBy(a => a);
         }
 
         private void TextBox1_KeyPress(object sender, KeyPressEventArgs e)
@@ -384,67 +463,289 @@ namespace Triggernometry.CustomControls
             if (ExpressionType != SupportedExpressionTypeEnum.Regex)
             {
                 string temp = textBox1.Text.Substring(0, textBox1.SelectionStart);
-                Match m = PropsCapture.Match(temp);
+                IEnumerable<string> matchedStrings = null;
+
+                // match prefixes (string after "${"): "func:" "numeric:" ...
+                Match m = rexPrefix.Match(temp);
+                if (m.Success)
+                {
+                    matchedStrings = GetAutocompleteSuggestions(prefixes, m.Groups["prefix"].Value);
+                    if (matchedStrings.Count() > 0)
+                    {
+                        CurrentMatch = m.Groups["prefix"].Value;
+                        ShowAutocomplete(matchedStrings);
+                        return;
+                    }
+                }
+                
+                // match functions: "func:xxx" "f:xxx"
+                m = rexFunc.Match(temp);
+                if (m.Success)
+                {
+                    matchedStrings = GetAutocompleteSuggestions(funcs, m.Groups["funcid"].Value);
+                    if (matchedStrings.Count() > 0)
+                    {
+                        CurrentMatch = m.Groups["funcid"].Value;
+                        ShowAutocomplete(matchedStrings);
+                    }
+                    else
+                    {
+                        HideAutocomplete();
+                    }
+                    return;
+                }
+                
+                /*
+                // match variable names:
+                m = rexVarName.Match(temp);
+                if (m.Success)
+                {
+                    string prefix = m.Groups["prefix"].Value;
+
+                    VariableStore vs = prefix.Contains("p") ? ctx.plug.cfg.PersistentVariables : ctx.plug.sessionvars;
+                    List<string> varNames = prefix.Contains("tvar") ? vs.Table.Keys.ToList() :
+                                            prefix.Contains("lvar") ? vs.List.Keys.ToList() :
+                                                                      vs.Scalar.Keys.ToList() ; 
+                    
+                    matchedStrings = GetAutocompleteSuggestions(varNames, m.Groups["name"].Value);
+                    if (matchedStrings.Count() > 0)
+                    {
+                        CurrentMatch = m.Groups["name"].Value;
+                        ShowAutocomplete(matchedStrings);
+                    }
+                    else
+                    {
+                        HideAutocomplete();
+                    }
+                    return;
+                }
+
+                // match table row headers: "${(p)tvarrl:xxx[xxx" or "${(p)tvardl[xxx][xxx":
+                m = rexRowHeader.Match(temp);
+                if (m.Success)
+                {
+                    VariableStore vs = m.Groups["persist"].Value == "p" ? ctx.plug.cfg.PersistentVariables : ctx.plug.sessionvars;
+                    VariableTable vt;
+                    string varName = m.Groups["name1"].Value + m.Groups["name2"].Value;
+                    if (vs.Table.ContainsKey(varName) && vs.Table[varName].Height > 0)
+                    {
+                        vt = vs.Table[varName];
+                    }
+                    else
+                    {
+                        HideAutocomplete();
+                        return;
+                    }
+                    List<string> headers = new List<string>();
+                    for (int index = 1; index <= vt.Height; index++)
+                    {
+                        headers.Add(vt.Peek(1, index).ToString());
+                    }
+
+                    matchedStrings = GetAutocompleteSuggestions(headers, m.Groups["key"].Value);
+                    if (matchedStrings.Count() > 0)
+                    {
+                        CurrentMatch = m.Groups["key"].Value;
+                        ShowAutocomplete(matchedStrings);
+                    }
+                    else
+                    {
+                        HideAutocomplete();
+                    }
+                    return;
+                }
+
+                // match table col headers "${(p)tvarcl:[xxx" or "${(p)tvardl:[xxx":
+                m = rexColHeader.Match(temp);
+                if (m.Success)
+                {
+                    VariableStore vs = m.Groups["persist"].Value == "p" ? ctx.plug.cfg.PersistentVariables : ctx.plug.sessionvars;
+                    VariableTable vt;
+                    string varName = m.Groups["name"].Value;
+                    if (vs.Table.ContainsKey(varName) && vs.Table[varName].Width > 0)
+                    {
+                        vt = vs.Table[varName];
+                    }
+                    else
+                    {
+                        HideAutocomplete();
+                        return;
+                    }
+                    List<string> headers = new List<string>();
+                    for (int index = 1; index <= vt.Width; index++)
+                    {
+                        headers.Add(vt.Peek(index, 1).ToString());
+                    }
+
+                    matchedStrings = GetAutocompleteSuggestions(headers, m.Groups["key"].Value);
+                    if (matchedStrings.Count() > 0)
+                    {
+                        CurrentMatch = m.Groups["key"].Value;
+                        ShowAutocomplete(matchedStrings);
+                    }
+                    else
+                    {
+                        HideAutocomplete();
+                    }
+                    return;
+                }
+                
+                // match "_const["
+                m = rexConst.Match(temp);
+                if (m.Success)
+                {
+                    List<string> constKeys = ctx.plug.cfg.Constants.Keys.ToList();
+                    matchedStrings = GetAutocompleteSuggestions(constKeys, m.Groups["key"].Value);
+                    if (matchedStrings.Count() > 0)
+                    {
+                        CurrentMatch = m.Groups["key"].Value;
+                        ShowAutocomplete(matchedStrings);
+                    }
+                    else
+                    {
+                        HideAutocomplete();
+                    }
+                    return;
+                }
+                */
+
+                // search for the previous unclosed '{'
+                int leftBracketCount = 0;
+                string currentExpr = null;
+                for (int index = temp.Length - 1; index >= 0; index--)
+                {   // search '{' '}' from the end of the string
+                    if (temp[index] == '}')
+                    {
+                        leftBracketCount--;
+                    }
+                    else if (temp[index] == '{')
+                    {
+                        leftBracketCount++;
+                    }
+                    if (leftBracketCount == 1)
+                    {   // get the string after the unclosed '{'
+                        currentExpr = temp.Substring(index + 1);
+                        break;
+                    }
+                }
+
+                if (currentExpr == null)
+                {   // parse later
+                    currentExpr = temp;
+                }
+                else
+                {   
+                    if (currentExpr.Contains('}'))
+                    {   // aaa{bbb{ccc}ddd{eee}fff}ggg.hhh => aaaggg.hhh
+                        currentExpr = currentExpr.Substring(0, currentExpr.IndexOf('{'))
+                                    + currentExpr.Substring(currentExpr.LastIndexOf('}') + 1);
+                    }
+
+                    // match (p)lvar:name.prop
+                    m = rexListProp.Match(currentExpr);
+                    if (m.Success)
+                    {
+                        matchedStrings = GetAutocompleteSuggestions(lvarProps, m.Groups["prop"].Value);
+                        if (matchedStrings != null && matchedStrings.Count() > 0)
+                        {
+                            CurrentMatch = m.Groups["prop"].Value;
+                            ShowAutocomplete(matchedStrings);
+                        }
+                        else
+                        {
+                            HideAutocomplete();
+                        }
+                        return;
+                    }
+
+                    // match (p)tvar:name.prop
+                    m = rexTableProp.Match(currentExpr);
+                    if (m.Success)
+                    {
+                        matchedStrings = GetAutocompleteSuggestions(tvarProps, m.Groups["prop"].Value);
+                        if (matchedStrings != null && matchedStrings.Count() > 0)
+                        {
+                            CurrentMatch = m.Groups["prop"].Value;
+                            ShowAutocomplete(matchedStrings);
+                        }
+                        else
+                        {
+                            HideAutocomplete();
+                        }
+                        return;
+                    }
+
+
+                    // match _me.prop
+                    m = rexMeProp.Match(currentExpr);
+                    if (m.Success)
+                    {
+                        matchedStrings = GetAutocompleteSuggestions(ffxivProps, m.Groups["prop"].Value);
+                        if (matchedStrings != null && matchedStrings.Count() > 0)
+                        {
+                            CurrentMatch = m.Groups["prop"].Value;
+                            ShowAutocomplete(matchedStrings);
+                        }
+                        else
+                        {
+                            HideAutocomplete();
+                        }
+                        return;
+                    }
+
+                    // match _xxx[xxx?].prop
+                    m = rexStructProp.Match(currentExpr);
+                    if (m.Success)
+                    {
+                        switch (m.Groups["struct"].Value)
+                        {
+                            case "ffxivparty":
+                            case "ffxiventity":
+                            case "party":
+                            case "entity":
+                                matchedStrings = GetAutocompleteSuggestions(ffxivProps, m.Groups["prop"].Value);
+                                break;
+                            case "textaura":
+                                matchedStrings = GetAutocompleteSuggestions(textAuraProps, m.Groups["prop"].Value);
+                                break;
+                            case "imageaura":
+                                matchedStrings = GetAutocompleteSuggestions(imageAuraProps, m.Groups["prop"].Value);
+                                break;
+                            case "job":
+                                matchedStrings = GetAutocompleteSuggestions(jobProps, m.Groups["prop"].Value);
+                                break;
+                        }
+                        if (matchedStrings != null && matchedStrings.Count() > 0)
+                        {
+                            CurrentMatch = m.Groups["prop"].Value;
+                            ShowAutocomplete(matchedStrings);
+                        }
+                        else
+                        {
+                            HideAutocomplete();
+                        }
+                        return;
+                    }
+                }
+                
+                // all matches failed or temp contains no unclosed '{'
+                m = rexWord.Match(currentExpr);
                 if (m.Success == true)
                 {
-                    IEnumerable<string> strs = null;
-                    switch (m.Groups["structid"].Value)
+                    IEnumerable<string> strs = GetAutocompleteSuggestions(terms, m.Value);
+                    if (strs.Count() > 0)
                     {
-                        case "ffxivparty":
-                        case "ffxiventity":
-                            strs = GetAutocompleteSuggestions(propsffxiv, m.Groups["propid"].Value);
-                            break;
-                        case "textaura":
-                            strs = GetAutocompleteSuggestions(propstextaura, m.Groups["propid"].Value);
-                            break;
-                        case "imageaura":
-                            strs = GetAutocompleteSuggestions(propsimageaura, m.Groups["propid"].Value);
-                            break;
-                    }
-                    if (strs != null && strs.Count() > 0)
-                    {
-                        CurrentMatch = m.Groups["propid"].Value;
+                        CurrentMatch = m.Value;
                         ShowAutocomplete(strs);
                     }
                     else
                     {
                         HideAutocomplete();
                     }
+                    return;
                 }
-                else
-                {
-                    m = FuncCapture.Match(temp);
-                    if (m.Success == true)
-                    {
-                        IEnumerable<string> strs = GetAutocompleteSuggestions(funcs, m.Groups["funcid"].Value);
-                        if (strs.Count() > 0)
-                        {
-                            CurrentMatch = m.Groups["funcid"].Value;
-                            ShowAutocomplete(strs);
-                        }
-                        else
-                        {
-                            HideAutocomplete();
-                        }
-                    }
-                    else
-                    {
-                        m = WordCapture.Match(temp);
-                        if (m.Success == true)
-                        {
-                            IEnumerable<string> strs = GetAutocompleteSuggestions(terms, m.Value);
-                            if (strs.Count() > 0)
-                            {
-                                CurrentMatch = m.Value;
-                                ShowAutocomplete(strs);
-                            }
-                            else
-                            {
-                                HideAutocomplete();
-                            }
-                        }
-                    }
-                }
+                
+                HideAutocomplete();
             }
         }
 

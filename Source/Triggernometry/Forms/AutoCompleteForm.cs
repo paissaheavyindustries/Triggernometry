@@ -80,7 +80,7 @@ namespace Triggernometry.Forms
             SuspendLayout();
             bool hadold = false;
             string str = "";
-            int calcheight = 1 + Math.Min(5, strs.Count());
+            int calcheight = 1 + Math.Min(10, strs.Count());
             calcheight *= listBox1.ItemHeight;
             float longeststr = 0.0f;
             using (Graphics g = CreateGraphics())
@@ -90,7 +90,8 @@ namespace Triggernometry.Forms
                     longeststr = Math.Max(longeststr, g.MeasureString(st, listBox1.Font).Width);
                 }
             }
-            int strw = Math.Min(300, (int)Math.Ceiling(longeststr) + 40);
+            //int strw = Math.Min(300, (int)Math.Ceiling(longeststr) + 40);
+            int strw = (int)Math.Ceiling(longeststr) + 20;
             listBox1.Width = strw;
             listBox1.Height = calcheight;
             if (listBox1.Items.Count > 0 && listBox1.SelectedItem != null)

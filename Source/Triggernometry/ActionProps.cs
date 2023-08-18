@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -18,31 +18,31 @@ namespace Triggernometry
             SystemBeep,
             PlaySound,
             UseTTS,
-            LaunchProcess,
-            Trigger,
-            KeyPress,
-            ExecuteScript,
-            MessageBox,
             Variable,
-            Aura,
-            Folder,
-            EndEncounter,
-            DiscordWebhook,
-            TextAura,
-            LogMessage,
             ListVariable,
-            ObsControl,
-            LiveSplitControl,
-            GenericJson,
+            TableVariable,
+            MessageBox,
+            LogMessage,
+            TextAura,
+            Aura,
+            Mouse,
+            KeyPress,
+            NamedCallback,
             WindowMessage,
             DiskFile,
-            TableVariable,
+            LaunchProcess,
+            ExecuteScript,
             Mutex,
-            Placeholder,
-            NamedCallback,
-            Mouse,
             Loop,
-            Repository
+            GenericJson,
+            DiscordWebhook,
+            LiveSplitControl,
+            ObsControl,
+            EndEncounter,
+            Trigger,
+            Folder,
+            Repository,
+            Placeholder
         }
 
         public enum VariableOpEnum
@@ -59,12 +59,19 @@ namespace Triggernometry
         public enum TableVariableOpEnum
         {
             Unset,
-            Resize,
             Set,
+            SetAll,
+            Resize,
+            Build,
+            SetLine,
+            InsertLine,
+            RemoveLine,
+            Copy,
+            Append,
+            SortRows,
+            SortColumns,
             UnsetAll,
             UnsetRegex,
-            Copy,
-            Append
         }
 
         public enum TableVariableExpTypeEnum
@@ -92,7 +99,8 @@ namespace Triggernometry
         public enum FolderOpEnum
         {
             EnableFolder,
-            DisableFolder
+            DisableFolder,
+            CancelFolder,
         }
 
         public enum AuraOpEnum
@@ -132,21 +140,24 @@ namespace Triggernometry
             Push,
             Insert,
             Set,
+            SetAll,
             Remove,
             PopLast,
             PopFirst,
+            Build,
+            Join,
+            Split,
+            Copy,
+            InsertList,
+            SortNumericAsc,
+            SortNumericDesc,
             SortAlphaAsc,
             SortAlphaDesc,
             SortFfxivPartyAsc,
             SortFfxivPartyDesc,
-            Copy,
-            InsertList,
-            Join,
-            Split,
+            SortByKeys,
             UnsetAll,
             UnsetRegex,
-            SortNumericAsc,
-            SortNumericDesc
         }
 
         public enum ListVariableExpTypeEnum
