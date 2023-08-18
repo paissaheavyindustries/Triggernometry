@@ -309,6 +309,7 @@
     <Compile Include="I18n.cs" />
     <Compile Include="InternalLog.cs" />
     <Compile Include="Interpreter.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="JsonPath\JsonPath.cs" />
     <Compile Include="JsonPath\Public.cs" />
     <Compile Include="Language.cs" />

@@ -1,4 +1,4 @@
-﻿namespace Triggernometry.Forms
+namespace Triggernometry.Forms
 {
     partial class ActionForm
     {
@@ -529,31 +529,31 @@
             "System beep",
             "Play sound file",
             "Use text-to-speech",
-            "Launch process",
-            "Trigger operation",
-            "Send keypresses to active window",
-            "Execute script",
-            "Show message box",
             "Scalar variable operation",
-            "Image aura operation",
-            "Folder operation",
-            "End encounter",
-            "Discord webhook",
-            "Text aura operation",
-            "Log message",
             "List variable operation",
-            "OBS remote control operation",
-            "LiveSplit remote control operation",
-            "Generic JSON operation",
+            "Table variable operation",
+            "Show message box",
+            "Log message",
+            "Text aura operation",
+            "Image aura operation",
+            "Mouse operation",
+            "Send keypresses to active window",
+            "Named callback operation",
             "Send window message",
             "File operation",
-            "Table variable operation",
+            "Launch process",
+            "Execute script",
             "Mutex operation",
-            "Placeholder",
-            "Named callback operation",
-            "Mouse operation",
             "Loop",
-            "Repository operation"});
+            "Generic JSON operation",
+            "Discord webhook",
+            "LiveSplit remote control operation",
+            "OBS remote control operation",
+            "End encounter",
+            "Trigger operation",
+            "Folder operation",
+            "Repository operation",
+            "Placeholder"});
             this.cbxActionType.Location = new System.Drawing.Point(69, 3);
             this.cbxActionType.Name = "cbxActionType";
             this.cbxActionType.Size = new System.Drawing.Size(672, 21);
@@ -584,34 +584,34 @@
             // tbcActionSettings
             // 
             this.tbcActionSettings.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.tbcActionSettings.Controls.Add(this.tabSystemBeep);
-            this.tbcActionSettings.Controls.Add(this.tabPlaySoundFile);
-            this.tbcActionSettings.Controls.Add(this.tabTextToSpeech);
-            this.tbcActionSettings.Controls.Add(this.tabLaunchProcess);
-            this.tbcActionSettings.Controls.Add(this.tabTriggerOperation);
-            this.tbcActionSettings.Controls.Add(this.tabKeypress);
-            this.tbcActionSettings.Controls.Add(this.tabScript);
-            this.tbcActionSettings.Controls.Add(this.tabMessageBox);
-            this.tbcActionSettings.Controls.Add(this.tabVariable);
-            this.tbcActionSettings.Controls.Add(this.tabImageAura);
-            this.tbcActionSettings.Controls.Add(this.tabFolderOperation);
-            this.tbcActionSettings.Controls.Add(this.tabEndEncounter);
-            this.tbcActionSettings.Controls.Add(this.tabDiscordWebhook);
-            this.tbcActionSettings.Controls.Add(this.tabTextAura);
-            this.tbcActionSettings.Controls.Add(this.tabLogMessage);
-            this.tbcActionSettings.Controls.Add(this.tabListVariable);
-            this.tbcActionSettings.Controls.Add(this.tabObsControl);
-            this.tbcActionSettings.Controls.Add(this.tabLiveSplitControl);
-            this.tbcActionSettings.Controls.Add(this.tabGenericJson);
-            this.tbcActionSettings.Controls.Add(this.tabWindowMessage);
-            this.tbcActionSettings.Controls.Add(this.tabFile);
-            this.tbcActionSettings.Controls.Add(this.tabTableVariable);
-            this.tbcActionSettings.Controls.Add(this.tabMutex);
-            this.tbcActionSettings.Controls.Add(this.tabPlaceholder);
-            this.tbcActionSettings.Controls.Add(this.tabNamedCallback);
-            this.tbcActionSettings.Controls.Add(this.tabMouse);
-            this.tbcActionSettings.Controls.Add(this.tabLoop);
-            this.tbcActionSettings.Controls.Add(this.tabRepo);
+            this.tbcActionSettings.Controls.Add(this.tabSystemBeep);        // "System beep"
+            this.tbcActionSettings.Controls.Add(this.tabPlaySoundFile);     // "Play sound file"
+            this.tbcActionSettings.Controls.Add(this.tabTextToSpeech);      // "Use text-to-speech"
+            this.tbcActionSettings.Controls.Add(this.tabVariable);          // "Scalar variable operation"
+            this.tbcActionSettings.Controls.Add(this.tabListVariable);      // "List variable operation"
+            this.tbcActionSettings.Controls.Add(this.tabTableVariable);     // "Table variable operation"
+            this.tbcActionSettings.Controls.Add(this.tabMessageBox);        // "Show message box"
+            this.tbcActionSettings.Controls.Add(this.tabLogMessage);        // "Log message"
+            this.tbcActionSettings.Controls.Add(this.tabTextAura);          // "Text aura operation"
+            this.tbcActionSettings.Controls.Add(this.tabImageAura);         // "Image aura operation"
+            this.tbcActionSettings.Controls.Add(this.tabMouse);             // "Mouse operation"
+            this.tbcActionSettings.Controls.Add(this.tabKeypress);          // "Send keypresses to active window"
+            this.tbcActionSettings.Controls.Add(this.tabNamedCallback);     // "Named callback operation"
+            this.tbcActionSettings.Controls.Add(this.tabWindowMessage);     // "Send window message"
+            this.tbcActionSettings.Controls.Add(this.tabFile);              // "File operation"
+            this.tbcActionSettings.Controls.Add(this.tabLaunchProcess);     // "Launch process"
+            this.tbcActionSettings.Controls.Add(this.tabScript);            // "Execute script"
+            this.tbcActionSettings.Controls.Add(this.tabMutex);             // "Mutex operation"
+            this.tbcActionSettings.Controls.Add(this.tabLoop);              // "Loop"
+            this.tbcActionSettings.Controls.Add(this.tabGenericJson);       // "Generic JSON operation"
+            this.tbcActionSettings.Controls.Add(this.tabDiscordWebhook);    // "Discord webhook"
+            this.tbcActionSettings.Controls.Add(this.tabLiveSplitControl);  // "LiveSplit remote control operation"
+            this.tbcActionSettings.Controls.Add(this.tabObsControl);        // "OBS remote control operation"
+            this.tbcActionSettings.Controls.Add(this.tabEndEncounter);      // "End encounter"
+            this.tbcActionSettings.Controls.Add(this.tabTriggerOperation);  // "Trigger operation"
+            this.tbcActionSettings.Controls.Add(this.tabFolderOperation);   // "Folder operation"
+            this.tbcActionSettings.Controls.Add(this.tabRepo);              // "Repository operation"
+            this.tbcActionSettings.Controls.Add(this.tabPlaceholder);       // "Placeholder"
             this.tbcActionSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbcActionSettings.Location = new System.Drawing.Point(3, 3);
             this.tbcActionSettings.Margin = new System.Windows.Forms.Padding(0);
@@ -2544,7 +2544,8 @@
             this.cbxFolderOp.FormattingEnabled = true;
             this.cbxFolderOp.Items.AddRange(new object[] {
             "Enable the specified folder",
-            "Disable the specified folder"});
+            "Disable the specified folder",
+            "Cancel all actions in the specified folder"});
             this.cbxFolderOp.Location = new System.Drawing.Point(62, 3);
             this.cbxFolderOp.Name = "cbxFolderOp";
             this.cbxFolderOp.Size = new System.Drawing.Size(677, 21);
@@ -3561,22 +3562,24 @@
             "Push value to the end of the list variable",
             "Insert value to the given index of the list variable",
             "Set value at the given index of the list variable",
+            "Set all values on the list variable to the expression",
             "Remove value at the given index of the list variable",
             "Pop last value from list variable into a scalar variable (stack)",
             "Pop first value from list variable into a scalar variable (queue)",
+            "Build a list variable from the expression separated by its first character",
+            "Join all values in the list variable into a scalar variable (separator in expression)",
+            "Split a scalar variable into a list variable (separator in expression)",
+            "Copy whole list variable to another list variable",
+            "Insert list variable into another list variable at the given index",
+            "Sort list in an numerically ascending order",
+            "Sort list in an numerically descending order",
             "Sort list in an alphabetically ascending order",
             "Sort list in an alphabetically descending order",
             "Sort list in an ascending order based on FFXIV party job order",
             "Sort list in a descending order based on FFXIV party job order",
-            "Copy whole list variable to another list variable",
-            "Insert list variable into another list variable at the given index",
-            "Join all values in the list variable into a scalar variable (separator in express" +
-                "ion)",
-            "Split a scalar variable into a list variable (separator in expression)",
+            "Sort list by the keys in the expression ('n+:key1', 'n-:key2', 's+: key3', ...)",
             "Unset all list variables",
-            "Unset list variables matching regular expression",
-            "Sort list in an numerically ascending order",
-            "Sort list in an numerically descending order"});
+            "Unset list variables matching regular expression"});
             this.cbxLvarOperation.Location = new System.Drawing.Point(119, 3);
             this.cbxLvarOperation.Name = "cbxLvarOperation";
             this.cbxLvarOperation.Size = new System.Drawing.Size(620, 21);
@@ -4781,12 +4784,19 @@
             this.cbxTvarOpType.FormattingEnabled = true;
             this.cbxTvarOpType.Items.AddRange(new object[] {
             "Unset table variable",
-            "Resize table variable",
             "Set value to the given row and column on the table variable ",
-            "Unset all table variables",
-            "Unset table variables matching regular expression",
+            "Set all values in the table variable",
+            "Resize table variable",
+            "Build from the expression separated by its first 2 characters",
+            "Set values to the given col or row (first char of expr as separator)",
+            "Insert values at the given col or row (first char of expr as separator)",
+            "Remove the given column or row",
             "Copy whole table variable to another table variable",
-            "Append whole table variable to another table variable"});
+            "Append whole table variable to another table variable",
+            "Sort the rows by the keys in the expression ('n+:key1', 'n-:key2', 's+: key3', ...)",
+            "Sort the cols by the keys in the expression ('n+:key1', 'n-:key2', 's+: key3', ...)",
+            "Unset all table variables",
+            "Unset table variables matching regular expression"});
             this.cbxTvarOpType.Location = new System.Drawing.Point(119, 3);
             this.cbxTvarOpType.Name = "cbxTvarOpType";
             this.cbxTvarOpType.Size = new System.Drawing.Size(620, 21);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -403,7 +403,7 @@ namespace Triggernometry.Forms
             if (saveFileDialog1.ShowDialog() == DialogResult.OK) 
             {
                 VariableTable v = (VariableTable)VariableToEdit;
-                File.WriteAllText(saveFileDialog1.FileName, v.ToString());
+                File.WriteAllText(saveFileDialog1.FileName, v.ToCSVString());
             }
         }
     }

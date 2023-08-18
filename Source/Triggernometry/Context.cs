@@ -1,13 +1,10 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 using System.Text.RegularExpressions;
-using System.ComponentModel;
 using System.Web.Script.Serialization;
 using Triggernometry.Variables;
 
@@ -26,14 +23,25 @@ namespace Triggernometry
         internal RealPlugin.ActionExecutionHook soundhook;
         internal RealPlugin.ActionExecutionHook ttshook;
 
-        internal static Regex rex = new Regex(@"\$\{(?<id>[^\}\{\$]*)\}");
-        internal static Regex rox = new Regex(@"¤\{[^\}\{\$]*\}");
+        // ${...}
+        internal static Regex rex = new Regex(@"\$\{(?<id>[^${}]*)\}");
+        // ¤{...}
+        internal static Regex rox = new Regex(@"¤\{[^${}]*\}");
+        // $1 $2
         internal static Regex rexnum = new Regex(@"\$(?<id>[0-9]+)");
-        internal static Regex rexnump = new Regex(@"\[(?<index>.+?)\]\.(?<prop>[a-zA-Z]+)");
-        internal static Regex rexlidx = new Regex(@"(?<name>[^\[]+)\[(?<index>.+?)\]");
-        internal static Regex rextidx = new Regex(@"(?<name>[^\[]+)\[(?<column>.+?)\]\[(?<row>.+?)\]");
-        internal static Regex rexlprp = new Regex(@"(?<name>[^\.]+)\.(?<prop>[a-zA-Z]+)(\((?<arg>[^\)]+)\)){0,1}");
-        internal static Regex rexfunc = new Regex(@"(?<name>[^\(]{1,})(\((?<arg>[^\)]+)\)){0,1}");
+        // name[index]
+        internal static Regex rexListIdx = new Regex(@"^(?<name>[^[]+)\[(?<index>[^[\]]*?)\]");
+        // name[col][row]
+        internal static Regex rexTableIdx = new Regex(@"^(?<name>[^[]+)\[(?<column>[^[\]]*?)\]\[(?<row>[^[\]]*?)\] *$");
+        // name(arg)?:val
+        internal static Regex rexFunc = new Regex(@"^(?<name>[^(:]+)(?:\((?<arg>[^)]*)\))?:(?<val>.*)$");
+        // name.prop(arg)?
+        internal static Regex rexProp = new Regex(@"^(?<name>[^.]+)\.(?<prop>[^(]+?)(?:\((?<arg>[^)]*)\))? *$");
+        // name?[index].prop(arg)?
+        internal static Regex rexListProp = new Regex(@"^(?<name>[^[]*)\[(?<index>[^[\]]*?)\]\.(?<prop>[^(]+?)(?:\((?<arg>[^)]*)\))? *$");
+        // name?[col][row].prop(arg)?
+        internal static Regex rexTableProp = new Regex(@"^(?<name>[^[]*)\[(?<column>[^[\]]*)\]\[(?<row>[^[\]]*)\]\.(?<prop>[^(]+?)(?:\((?<arg>[^)]*)\))? *$");
+        
         internal Dictionary<string, string> namedgroups;
 		internal List<string> numgroups;
         internal DateTime triggered;
@@ -45,10 +53,17 @@ namespace Triggernometry
 
         internal List<int> ActionResults = new List<int>();
         internal Dictionary<Mutex, int> heldmutices = new Dictionary<Mutex, int>();
+        
         internal int loopiterator { get; set; } = 0;
         internal Guid loopcontext { get; set; } = Guid.Empty;
+        internal string varName { get; set; } = "";         // for ${_this}
+        internal int listIndex { get; set; } = 0;           // for ${_index}
+        internal int tableColIndex { get; set; } = 0;       // for ${_col}
+        internal int tableRowIndex { get; set; } = 0;       // for ${_row}
 
         internal const double EORZEA_MULTIPLIER = 3600D / 175D;
+        internal const string LINEBREAK_PLACEHOLDER = "⏎";
+        internal Random rng = new Random();
 
         private static MathParser mp = new MathParser();
 		
@@ -176,33 +191,162 @@ namespace Triggernometry
             return vl;
         }
 
-        private static string[] SplitArguments(string args)
+        public static string[] SplitArguments(string args, bool allowEmpty = true)
         {
-            var parmChars = args.ToCharArray();
-            var inSingleQuote = false;
-            var inDoubleQuote = false;
-            for (var index = 0; index < parmChars.Length; index++)
+            if (string.IsNullOrWhiteSpace(args) && allowEmpty)
             {
-                if (parmChars[index] == '"' && !inSingleQuote)
-                {
-                    inDoubleQuote = !inDoubleQuote;
-                    parmChars[index] = '\n';
-                }
-                if (parmChars[index] == '\'' && !inDoubleQuote)
-                {
-                    inSingleQuote = !inSingleQuote;
-                    parmChars[index] = '\n';
-                }
-                if (!inSingleQuote && !inDoubleQuote && parmChars[index] == ',')
-                    parmChars[index] = '\n';
+                return new string[0];
             }
-            return (new string(parmChars)).Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            // (?<=^|,): after a comma or start-of-line
+            // ( *\"[^\"]*\" *| *'[^']*' *|[^,]*): string in "", or string in '', or string without comma
+            // (?=$|,): before a comma or end-of-line
+            var reSingleArg = new Regex("(?<=^|,)( *\"[^\"]*\" *| *'[^']*' *|[^,]*)(?=$|,)");
+            var reDQuoted = new Regex("^ *\"(?<arg>[^\"]*)\" *$");
+            var reSQuoted = new Regex("^ *'(?<arg>[^']*)' *$");
+            var matches = reSingleArg.Matches(args);
+            var result = new List<string>();
+            foreach (Match match in matches)
+            {
+                var currentMatch = match.Value;
+                var dQuotedMatch = reDQuoted.Match(currentMatch);
+                var sQuotedMatch = reSQuoted.Match(currentMatch);
+                if (dQuotedMatch.Success)
+                {
+                    result.Add(dQuotedMatch.Groups["arg"].Value);
+                }
+                else if (sQuotedMatch.Success)
+                {
+                    result.Add(sQuotedMatch.Groups["arg"].Value);
+                }
+                else
+                {
+                    result.Add(currentMatch.Trim());
+                }
+            }
+            return result.ToArray();
+        }
+
+        public string GetArgument(string[] args, int index, string defaultValue, bool setEmptyToDefault = false)
+        {
+            if (index >= args.Length || (args[index] == "" && setEmptyToDefault))
+                return defaultValue;
+            else
+                return args[index];
+        }
+
+        public List<int> GetSliceIndices(string slicesStr, int totalLength, int startIndex = 0)
+        {   // startIndex = 0 for strings; startIndex = 1 for lists/tables. (Triggernometry definition)
+            List<int> indices = new List<int>();
+
+            if (totalLength <= 0)
+            {
+                return indices;
+            }
+
+            string[] slices = SplitArguments(slicesStr, allowEmpty: false);
+            foreach (string slice in slices)
+            {   // parse slice string to int start/end/step
+                string[] sliceArgs = slice.Split(':').Select(s => s.Trim()).ToArray();
+                if (sliceArgs.Length > 3)
+                {
+                    throw new ArgumentException(I18n.Translate("internal/Context/sliceformaterror",
+                        "The given slice ({0}) from slices ({1}) could not be parsed.", slice, slicesStr));
+                }
+                string startStr = GetArgument(sliceArgs, 0, "", true);
+                string endStr = GetArgument(sliceArgs, 1, "", true);
+                string stepStr = GetArgument(sliceArgs, 2, "1", true);
+                int start; int end; int step;
+                try
+                {
+                    if (sliceArgs.Length == 1 && startStr.Trim() != "")
+                    {   // sliceArgs.Length = 1:  a single index i => i:(i+1):1
+                        start = int.Parse(startStr);
+                        start = (start >= 0) ? (start - startIndex) : (start + totalLength);
+                        end = start + 1;
+                        step = 1;
+                    }
+                    else
+                    {   // sliceArgs.Length = 3:  a:b:c, a:b:, a::c, :b:c, a::, :b:, ::c
+                        // sliceArgs.Length = 2:  a:b, a:, :b
+                        // sliceArgs.Length = 0:  ""
+                        step = int.Parse(stepStr);
+                        if (step == 0)
+                        {
+                            throw new ArgumentException(I18n.Translate("internal/Context/slicestepzeroerror",
+                                "Step length is 0 in the slice ({0}) from slices ({1}).", slice, slicesStr));
+                        }
+                        if (startStr != "")
+                        {
+                            start = int.Parse(startStr);
+                            start = (start >= 0) ? (start - startIndex) : (start + totalLength);
+                        }
+                        else
+                        {
+                            start = (step > 0) ? int.MinValue : int.MaxValue;
+                        }
+                        if (endStr != "")
+                        {
+                            end = int.Parse(endStr);
+                            end = (end >= 0) ? (end - startIndex) : (end + totalLength);
+                        }
+                        else
+                        {
+                            end = (step > 0) ? int.MaxValue : int.MinValue;
+                        }
+                    }
+                }
+                catch
+                {
+                    throw new ArgumentException(I18n.Translate("internal/Context/sliceformaterror",
+                        "The given slice ({0}) from slices ({1}) could not be parsed.", slice, slicesStr));
+                }
+
+                // fix the out-of-range early start value / late end value 
+                if (step > 0)
+                {
+                    start = (start < 0) ? 0 : start;
+                    end = (end > totalLength) ? totalLength : end;
+                }
+                else
+                {
+                    start = (start > totalLength - 1) ? (totalLength - 1) : start;
+                    end = (end < -1) ? -1 : end;
+                }
+
+                // get indices
+                int sign = Math.Sign(step);
+                int index = start;
+                while (sign * index >= sign * start && sign * index < sign * end)
+                {
+                    if (index >= 0 && index < totalLength)
+                    {
+                        indices.Add(index);
+                    }
+                    index += step;
+                }
+            }
+
+            return indices;
+        }
+
+        public string ReplaceLineBreak(string str, string placeholder = LINEBREAK_PLACEHOLDER)
+        {
+            // use "⏎" as a single-digit placeholder for linebreaks
+            // to parse linebreaks as regular characters
+            return str.Replace("\r\n", placeholder).Replace("\r", placeholder).Replace("\n", placeholder);
+        }
+
+        public char GetReplacedChar(int charcode)
+        {   // replace linebreaks with the placeholder when converting charcode to char
+            return (charcode == 10 || charcode == 13) ? LINEBREAK_PLACEHOLDER[0] : (char)charcode;
         }
 
         public string ExpandVariables(LoggerDelegate logger, object o, bool numeric, string expr)
         {            
             Match m, mx;
             string newexpr = expr;
+            newexpr = ReplaceLineBreak(newexpr);
+            
             int i = 1;
             while (true)
             {
@@ -283,7 +427,7 @@ namespace Triggernometry
                             val = ((long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds).ToString();
                             found = true;
                         }
-                        else if (x == "_ffxivplayer")
+                        else if (x == "_ffxivplayer" || x == "_me")
                         {
                             VariableDictionary vc = PluginBridges.BridgeFFXIV.GetMyself();
                             if (vc != null)
@@ -368,9 +512,36 @@ namespace Triggernometry
                             val = loopiterator.ToString();
                             found = true;
                         }
-                        else if (x.IndexOf("_actionhistory") == 0)
+                        else if (x == "_index")
                         {
-                            mx = rexlidx.Match(x);
+                            val = listIndex.ToString();
+                            found = true;
+                        }
+                        else if (x == "_col")
+                        {
+                            val = tableColIndex.ToString();
+                            found = true;
+                        }
+                        else if (x == "_row")
+                        {
+                            val = tableRowIndex.ToString();
+                            found = true;
+                        }
+                        else if (x == "_this")
+                        {
+                            if (varName.StartsWith("tvar:") || varName.StartsWith("ptvar:"))
+                            {
+                                val = $"${{{varName}[{tableColIndex}][{tableRowIndex}]}}";
+                            }
+                            else
+                            {
+                                val = $"${{{varName}[{listIndex}]}}";
+                            }
+                            found = true;
+                        }
+                        else if (x.StartsWith("_actionhistory"))
+                        {
+                            mx = rexListIdx.Match(x);
                             if (mx.Success == true)
                             {
                                 string idx = mx.Groups["index"].Value;
@@ -385,9 +556,9 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
-                        else if (x.IndexOf("_env") == 0)
+                        else if (x.StartsWith("_env"))
                         {
-                            mx = rexlidx.Match(x);
+                            mx = rexListIdx.Match(x);
                             if (mx.Success == true)
                             {
                                 string idx = mx.Groups["index"].Value;
@@ -395,9 +566,24 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
-                        else if (x.IndexOf("_const") == 0)
+                        else if (x.StartsWith("_job[")) // ${_job[jobid].prop} or ${_job[GLA].prop}
                         {
-                            mx = rexlidx.Match(x);
+                            mx = rexListProp.Match(x);
+                            if (mx.Success)
+                            {
+                                string job = mx.Groups["index"].Value.Trim();
+                                if (Entity.jobEN3ToIdMap.ContainsKey(job.ToUpper()))
+                                {   // convert "GLA" to "1"
+                                    job = Entity.jobEN3ToIdMap[job.ToUpper()];
+                                }
+                                string prop = mx.Groups["prop"].Value;
+                                val = Entity.jobs[job][prop].ToString();
+                            }
+                            found = true;
+                        }
+                        else if (x.StartsWith("_const"))
+                        {
+                            mx = rexListIdx.Match(x);
                             if (mx.Success == true)
                             {
                                 string idx = mx.Groups["index"].Value;
@@ -415,9 +601,9 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
-                        else if (x.IndexOf("_jsonresponse") == 0)
+                        else if (x.StartsWith("_jsonresponse"))
                         {
-                            mx = rexlidx.Match(x);
+                            mx = rexListIdx.Match(x);
                             if (mx.Success == true)
                             {
                                 string pathspec = mx.Groups["index"].Value;
@@ -438,11 +624,11 @@ namespace Triggernometry
                             }
                         }
                         // check if scalar variable exists
-                        else if ((x.IndexOf("evar:") == 0) || (x.IndexOf("epvar:") == 0))
+                        else if ((x.StartsWith("evar:")) || (x.StartsWith("epvar:")))
                         {
                             Variables.VariableStore store;
                             string varname;
-                            if (x.IndexOf("evar:") == 0)
+                            if (x.StartsWith("evar:"))
                             {
                                 store = plug.sessionvars;
                                 varname = x.Substring(5);
@@ -451,7 +637,7 @@ namespace Triggernometry
                             {
                                 store = plug.cfg.PersistentVariables;
                                 varname = x.Substring(6);
-                            }                            
+                            }
                             lock (store.Scalar) // verified
                             {
                                 if (store.Scalar.ContainsKey(varname) == true)
@@ -466,11 +652,11 @@ namespace Triggernometry
                             }
                         }
                         // check if list variable exists
-                        else if ((x.IndexOf("elvar:") == 0) || (x.IndexOf("eplvar:") == 0))
+                        else if ((x.StartsWith("elvar:")) || (x.StartsWith("eplvar:")))
                         {
                             Variables.VariableStore store;
                             string varname;
-                            if (x.IndexOf("elvar:") == 0)
+                            if (x.StartsWith("elvar:"))
                             {
                                 store = plug.sessionvars;
                                 varname = x.Substring(6);
@@ -479,7 +665,7 @@ namespace Triggernometry
                             {
                                 store = plug.cfg.PersistentVariables;
                                 varname = x.Substring(7);
-                            }                            
+                            }
                             lock (store.List) // verified
                             {
                                 if (store.List.ContainsKey(varname) == true)
@@ -494,11 +680,11 @@ namespace Triggernometry
                             }
                         }
                         // check if table variable exists
-                        else if ((x.IndexOf("etvar:") == 0) || (x.IndexOf("eptvar:") == 0))
+                        else if ((x.StartsWith("etvar:")) || (x.StartsWith("eptvar:")))
                         {
                             Variables.VariableStore store;
                             string varname;
-                            if (x.IndexOf("etvar:") == 0)
+                            if (x.StartsWith("etvar:"))
                             {
                                 store = plug.sessionvars;
                                 varname = x.Substring(6);
@@ -522,11 +708,11 @@ namespace Triggernometry
                             }
                         }
                         // retrieve scalar variable value
-                        else if ((x.IndexOf("var:") == 0) || (x.IndexOf("pvar:") == 0))
+                        else if ((x.StartsWith("var:")) || (x.StartsWith("pvar:")))
                         {
                             Variables.VariableStore store;
                             string varname;
-                            if (x.IndexOf("var:") == 0)
+                            if (x.StartsWith("var:"))
                             {
                                 store = plug.sessionvars;
                                 varname = x.Substring(4);
@@ -544,11 +730,11 @@ namespace Triggernometry
                             }
                         }
                         // retrieve list variable value
-                        else if ((x.IndexOf("lvar:") == 0) || (x.IndexOf("plvar:") == 0))
+                        else if ((x.StartsWith("lvar:")) || (x.StartsWith("plvar:")))
                         {
                             Variables.VariableStore store;
                             string varname;
-                            if (x.IndexOf("lvar:") == 0)
+                            if (x.StartsWith("lvar:"))
                             {
                                 store = plug.sessionvars;
                                 varname = x.Substring(5);
@@ -558,14 +744,19 @@ namespace Triggernometry
                                 store = plug.cfg.PersistentVariables;
                                 varname = x.Substring(6);
                             }
-                            mx = rexlprp.Match(varname);
+                            mx = rexProp.Match(varname);
                             if (mx.Success == true)
                             {
                                 string gname = mx.Groups["name"].Value;
                                 string gprop = mx.Groups["prop"].Value;
+                                string garg = mx.Groups["arg"].Value;
+                                string[] args = SplitArguments(garg);
+                                int argc = args.Length;
+
                                 switch (gprop)
                                 {
                                     case "size":
+                                    case "length":
                                         {
                                             lock (store.List)
                                             {
@@ -576,32 +767,77 @@ namespace Triggernometry
                                         }
                                         break;
                                     case "indexof":
+                                    case "i":
+                                    case "lastindexof":
+                                    case "li":
+                                        if (argc != 1)
                                         {
-                                            string garg = mx.Groups["arg"].Value;
-                                            lock (store.List)
-                                            {
-                                                VariableList vl = GetListVariable(store, gname, false);
-                                                val = vl.IndexOf(garg).ToString();
-                                                found = true;
-                                            }
+                                            throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+                                                "({0}) requires {1} arguments, {2} were given. Expr: ({3})", gprop, "1", argc, x));
+                                        }
+                                        lock (store.List)
+                                        {
+                                            VariableList vl = GetListVariable(store, gname, false);
+                                            val = (gprop.StartsWith("i")) ? vl.IndexOf(args[0]).ToString() : vl.LastIndexOf(args[0]).ToString();
+                                            found = true;
                                         }
                                         break;
-                                    case "lastindexof":
+                                    case "sumslice":
+                                    case "sum":  // lvar:list.sum(slices = "")
+                                        if (argc > 1)
                                         {
-                                            string garg = mx.Groups["arg"].Value;
-                                            lock (store.List)
+                                            throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+                                                "({0}) requires {1} arguments, {2} were given. Expr: ({3})", gprop, "0-1", argc, x));
+                                        }
+                                        lock (store.List)
+                                        {
+                                            VariableList vl = GetListVariable(store, gname, false);
+                                            string sliceStr = GetArgument(args, 0, "");
+                                            var indices = GetSliceIndices(sliceStr, vl.Size(), startIndex: 1);
+                                            val = vl.SumSlice(indices).ToString();
+                                            found = true;
+                                        }
+                                        break;
+                                    case "joinslice":   // = join
+                                    case "join":        // lvar:list.join(joiner = ",", slices = "")
+                                    case "randjoin":    // lvar:list.randjoin(joiner = ",", slices = "")
+                                        if (argc > 2)
+                                        {
+                                            throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+                                                "({0}) requires {1} arguments, {2} were given. Expr: ({3})", gprop, "0-2", argc, x));
+                                        }
+                                        lock (store.List)
+                                        {
+                                            VariableList vl = GetListVariable(store, gname, false);
+                                            string joiner = GetArgument(args, 0, ",");
+                                            string sliceStr = GetArgument(args, 1, "");
+                                            List<int> indices = GetSliceIndices(sliceStr, vl.Size(), startIndex: 1);
+                                            if (gprop == "randjoin")
                                             {
-                                                VariableList vl = GetListVariable(store, gname, false);
-                                                val = vl.LastIndexOf(garg).ToString();
-                                                found = true;
+                                                indices = indices.OrderBy(_ => rng.Next()).ToList();
                                             }
+                                            val = vl.JoinSlice(joiner, indices).ToString();
+                                            found = true;
+                                        }
+                                        break;
+                                    case "count": // count(targetStr, slices = "")
+                                        if (argc != 1 && argc != 2)
+                                        {
+                                            throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+                                                "({0}) requires {1} arguments, {2} were given. Expr: ({3})", gprop, "1-2", argc, x));
+                                        }
+                                        lock (store.List)
+                                        {
+                                            VariableList vl = GetListVariable(store, gname, false);
+                                            val = vl.Count(args[0]).ToString();
+                                            found = true;
                                         }
                                         break;
                                 }
                             }
                             else
                             {
-                                mx = rexlidx.Match(varname);
+                                mx = rexListIdx.Match(varname);
                                 if (mx.Success == true)
                                 {
                                     string gname = mx.Groups["name"].Value;
@@ -609,15 +845,15 @@ namespace Triggernometry
                                     lock (store.List)
                                     {
                                         VariableList vl = GetListVariable(store, gname, false);
-                                        if (gindex == "last")
-                                        {
-                                            gindex = vl.Size().ToString();
-                                        }
+                                        gindex = (gindex == "last") ? "-1" : gindex;
+
                                         int iindex;
-                                        if (Int32.TryParse(gindex, out iindex) == true)
+                                        if (!Int32.TryParse(gindex, out iindex) == true)
                                         {
-                                            val = vl.Peek(iindex).ToString();
+                                            throw new ArgumentException(I18n.Translate("internal/Context/parseTypeError",
+                                                "{0} ({1}) could not be parsed into {2}. Expr: ({3})", "index", gindex, "int", x));
                                         }
+                                        val = vl.Peek(iindex).ToString();
                                         found = true;
                                     }
                                     found = true;
@@ -625,11 +861,11 @@ namespace Triggernometry
                             }
                         }
                         // retrieve table variable value
-                        else if ((x.IndexOf("tvar:") == 0) || (x.IndexOf("ptvar:") == 0))
+                        else if ((x.StartsWith("tvar:")) || (x.StartsWith("ptvar:")))
                         {
                             Variables.VariableStore store;
                             string varname;
-                            if (x.IndexOf("tvar:") == 0)
+                            if (x.StartsWith("tvar:"))
                             {
                                 store = plug.sessionvars;
                                 varname = x.Substring(5);
@@ -639,11 +875,13 @@ namespace Triggernometry
                                 store = plug.cfg.PersistentVariables;
                                 varname = x.Substring(6);
                             }
-                            mx = rexlprp.Match(varname);
+                            mx = rexProp.Match(varname);
                             if (mx.Success == true)
                             {
                                 string gname = mx.Groups["name"].Value;
                                 string gprop = mx.Groups["prop"].Value;
+                                string[] args = SplitArguments(mx.Groups["arg"].Value);
+                                int argc = args.Length;
                                 switch (gprop)
                                 {
                                     case "w":
@@ -668,11 +906,78 @@ namespace Triggernometry
                                             }
                                         }
                                         break;
+                                    case "hjoin": // .hjoin(joiner1 = ",", joiner2 = LINEBREAK_PLACEHOLDER, colSlices = "", rowSlices = "")
+                                    case "vjoin": // .vjoin(joiner1 = ",", joiner2 = LINEBREAK_PLACEHOLDER, colslices = "", rowslices = "")
+                                        lock (store.List)
+                                        {
+                                            if (argc > 4)
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+                                                   "({0}) requires {1} arguments, {2} were given. Expr: ({3})", gprop, "0-4", argc, x));
+                                            }
+                                            VariableTable vt = GetTableVariable(store, gname, false);
+                                            string joiner1 = GetArgument(args, 0, ",", false);
+                                            string joiner2 = GetArgument(args, 1, LINEBREAK_PLACEHOLDER, false);
+                                            string colSlicesStr = GetArgument(args, 2, "");
+                                            string rowSlicesStr = GetArgument(args, 3, "");
+                                            var colIndices = GetSliceIndices(colSlicesStr, vt.Width, startIndex: 1);
+                                            var rowIndices = GetSliceIndices(rowSlicesStr, vt.Height, startIndex: 1);
+                                            if (gprop.StartsWith("hj"))
+                                            {
+                                                val = vt.HJoin(joiner1, joiner2, colIndices, rowIndices);
+                                            }
+                                            else
+                                            {
+                                                val = vt.VJoin(joiner1, joiner2, colIndices, rowIndices);
+                                            }
+                                            found = true;
+                                        }
+                                        break;
+
+                                    case "hl":
+                                    case "hlookup": // .hlookup(targetStr, rowIndex, colslices = "") => colIndex
+                                    case "vl":
+                                    case "vlookup": // .vlookup(targetStr, colIndex, rowslices = "") => rowIndex
+                                        lock (store.List)
+                                        {
+                                            if (argc != 2 && argc != 3)
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+                                                   "({0}) requires {1} arguments, {2} were given. Expr: ({3})", gprop, "2-3", argc, x));
+                                            }
+
+                                            VariableTable vt = GetTableVariable(store, gname, false);
+
+                                            string targetStr = args[0];
+
+                                            if (!int.TryParse(args[1], out int rawIndex))
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/parseTypeError",
+                                                    "{0} ({1}) could not be parsed into {2}. Expr: ({3})", "string", args[1], "int", x));
+                                            }
+                                            int maxLength = (gprop.StartsWith("hl")) ? vt.Height : vt.Width;
+                                            int index = (rawIndex < 0) ? (rawIndex + maxLength) : (rawIndex - 1);
+                                            string slicesStr = GetArgument(args, 2, "");
+
+                                            List<int> indices;
+                                            if (gprop.StartsWith("hl"))
+                                            {
+                                                indices = GetSliceIndices(slicesStr, vt.Width, startIndex: 1);
+                                                val = vt.HLookup(targetStr, index, indices).ToString();
+                                            }
+                                            else
+                                            {
+                                                indices = GetSliceIndices(slicesStr, vt.Height, startIndex: 1);
+                                                val = vt.VLookup(targetStr, index, indices).ToString();
+                                            }
+                                            found = true;
+                                        }
+                                        break;
                                 }
                             }
                             else
                             {
-                                mx = rextidx.Match(varname);
+                                mx = rexTableIdx.Match(varname);
                                 if (mx.Success == true)
                                 {
                                     string gname = mx.Groups["name"].Value;
@@ -681,14 +986,8 @@ namespace Triggernometry
                                     lock (store.Table)
                                     {
                                         VariableTable vt = GetTableVariable(store, gname, false);
-                                        if (gcol == "last")
-                                        {
-                                            gcol = vt.Width.ToString();
-                                        }
-                                        if (grow == "last")
-                                        {
-                                            grow = vt.Height.ToString();
-                                        }
+                                        gcol = (gcol == "last") ? "-1" : gcol;
+                                        grow = (grow == "last") ? "-1" : grow;
                                         int xindex, yindex;
                                         if (Int32.TryParse(gcol, out xindex) == true)
                                         {
@@ -697,18 +996,17 @@ namespace Triggernometry
                                                 val = vt.Peek(xindex, yindex).ToString();
                                             }
                                         }
-                                        found = true;
                                     }
                                     found = true;
                                 }
                             }
                         }
                         // row-based table lookup
-                        else if ((x.IndexOf("tvarrl:") == 0) || (x.IndexOf("ptvarrl:") == 0))
+                        else if ((x.StartsWith("tvarrl:")) || (x.StartsWith("ptvarrl:")))
                         {
                             Variables.VariableStore store;
                             string varname;
-                            if (x.IndexOf("tvarrl:") == 0)
+                            if (x.StartsWith("tvarrl:"))
                             {
                                 store = plug.sessionvars;
                                 varname = x.Substring(7);
@@ -718,73 +1016,47 @@ namespace Triggernometry
                                 store = plug.cfg.PersistentVariables;
                                 varname = x.Substring(8);
                             }
-                            mx = rexlprp.Match(varname);
+                            mx = rexTableIdx.Match(varname);
                             if (mx.Success == true)
                             {
                                 string gname = mx.Groups["name"].Value;
-                                string gprop = mx.Groups["prop"].Value;
-                                switch (gprop)
+                                string gheader = mx.Groups["column"].Value;
+                                string gindex = mx.Groups["row"].Value;
+                                lock (store.Table)
                                 {
-                                    case "w":
-                                    case "width":
-                                        {
-                                            lock (store.Table)
-                                            {
-                                                VariableTable vt = GetTableVariable(store, gname, false);
-                                                val = (vt.Width > 0 ? vt.Width - 1 :0).ToString();
-                                                found = true;
-                                            }
-                                        }
-                                        break;
-                                    case "h":
-                                    case "height":
-                                        {
-                                            lock (store.Table)
-                                            {
-                                                VariableTable vt = GetTableVariable(store, gname, false);
-                                                val = vt.Height.ToString();
-                                                found = true;
-                                            }
-                                        }
-                                        break;
-                                }
-                            }
-                            else
-                            {
-                                mx = rextidx.Match(varname);
-                                if (mx.Success == true)
-                                {
-                                    string gname = mx.Groups["name"].Value;
-                                    string gheader = mx.Groups["column"].Value;
-                                    string gindex = mx.Groups["row"].Value;
-                                    lock (store.Table)
+                                    VariableTable vt = GetTableVariable(store, gname, false);
+                                    gindex = (gindex == "last") ? "-1" : gindex;
+                                    int xindex;
+                                    if (Int32.TryParse(gindex, out xindex) == true)
                                     {
-                                        VariableTable vt = GetTableVariable(store, gname, false);
-                                        if (gindex == "last")
+                                        // index starts from 1; 0 if not found
+                                        int yindex = vt.SeekRow(gheader);
+                                        if (yindex > 0)
                                         {
-                                            gindex = (vt.Width > 0 ? vt.Width - 1 : 0).ToString();
-                                        }
-                                        int xindex;
-                                        if (Int32.TryParse(gindex, out xindex) == true)
-                                        {
-                                            int yindex = vt.SeekRow(gheader);
-                                            if (yindex > 0)
+                                            if (xindex > 0)
                                             {
                                                 val = vt.Peek(xindex + 1, yindex).ToString();
                                             }
+                                            else if (xindex < 0)
+                                            {
+                                                val = vt.Peek(xindex, yindex).ToString();
+                                            }
+                                            else if (xindex == 0)
+                                            {
+                                                val = yindex.ToString();
+                                            }
                                         }
-                                        found = true;
                                     }
-                                    found = true;
                                 }
+                                found = true;
                             }
                         }
                         // column-based table lookup
-                        else if ((x.IndexOf("tvarcl:") == 0) || (x.IndexOf("ptvarcl:") == 0))
+                        else if ((x.StartsWith("tvarcl:")) || (x.StartsWith("ptvarcl:")))
                         {
                             Variables.VariableStore store;
                             string varname;
-                            if (x.IndexOf("tvarcl:") == 0)
+                            if (x.StartsWith("tvarcl:"))
                             {
                                 store = plug.sessionvars;
                                 varname = x.Substring(7);
@@ -794,100 +1066,102 @@ namespace Triggernometry
                                 store = plug.cfg.PersistentVariables;
                                 varname = x.Substring(8);
                             }
-                            mx = rexlprp.Match(varname);
+                            mx = rexTableIdx.Match(varname);
                             if (mx.Success == true)
                             {
                                 string gname = mx.Groups["name"].Value;
-                                string gprop = mx.Groups["prop"].Value;
-                                switch (gprop)
+                                string gheader = mx.Groups["column"].Value;
+                                string gindex = mx.Groups["row"].Value;
+                                lock (store.Table)
                                 {
-                                    case "w":
-                                    case "width":
-                                        {
-                                            lock (store.Table)
-                                            {
-                                                VariableTable vt = GetTableVariable(store, gname, false);
-                                                val = vt.Width.ToString();
-                                                found = true;
-                                            }
-                                        }
-                                        break;
-                                    case "h":
-                                    case "height":
-                                        {
-                                            lock (store.Table)
-                                            {
-                                                VariableTable vt = GetTableVariable(store, gname, false);
-                                                val = (vt.Height > 0 ? vt.Height - 1 : 0).ToString();
-                                                found = true;
-                                            }
-                                        }
-                                        break;
-                                }
-                            }
-                            else
-                            {
-                                mx = rextidx.Match(varname);
-                                if (mx.Success == true)
-                                {
-                                    string gname = mx.Groups["name"].Value;
-                                    string gheader = mx.Groups["column"].Value;
-                                    string gindex = mx.Groups["row"].Value;
-                                    lock (store.Table)
+                                    VariableTable vt = GetTableVariable(store, gname, false);
+                                    gindex = (gindex == "last") ? "-1" : gindex;
+                                    int yindex;
+                                    if (Int32.TryParse(gindex, out yindex) == true)
                                     {
-                                        VariableTable vt = GetTableVariable(store, gname, false);
-                                        if (gindex == "last")
+                                        // index starts from 1; 0 if not found
+                                        int xindex = vt.SeekColumn(gheader);
+                                        if (xindex > 0)
                                         {
-                                            gindex = (vt.Height > 0 ? vt.Height - 1 : 0).ToString();
-                                        }
-                                        int yindex;
-                                        if (Int32.TryParse(gindex, out yindex) == true)
-                                        {
-                                            int xindex = vt.SeekColumn(gheader);
-                                            if (xindex > 0)
+                                            if (yindex > 0)
                                             {
                                                 val = vt.Peek(xindex, yindex + 1).ToString();
                                             }
+                                            else if (yindex < 0)
+                                            {
+                                                val = vt.Peek(xindex, yindex).ToString();
+                                            }
+                                            else if (yindex == 0)
+                                            {
+                                                val = xindex.ToString();
+                                            }
                                         }
-                                        found = true;
                                     }
-                                    found = true;
                                 }
+                                found = true;
                             }
                         }
-                        else if (x.IndexOf("numeric:") == 0)
+                        // double-based lookup based on col/row names
+                        else if ((x.StartsWith("tvardl:")) || (x.StartsWith("ptvardl:")))
                         {
-                            string numexpr = x.Substring(8);
+                            Variables.VariableStore store;
+                            string param;
+                            if (x.StartsWith("tvardl:"))
+                            {
+                                store = plug.sessionvars;
+                                param = x.Substring(7);
+                            }
+                            else
+                            {
+                                store = plug.cfg.PersistentVariables;
+                                param = x.Substring(8);
+                            }
+                            mx = rexTableIdx.Match(param);
+                            if (mx.Success)
+                            {
+                                string varName = mx.Groups["name"].Value;
+                                string colHeader = mx.Groups["column"].Value;
+                                string rowHeader = mx.Groups["row"].Value;
+
+                                lock (store.Table)
+                                {
+                                    VariableTable vt = GetTableVariable(store, varName, false);
+
+                                    // index starts from 1; 0 if not found
+                                    int xindex = vt.SeekColumn(colHeader);
+                                    int yindex = vt.SeekRow(rowHeader);
+
+                                    if (xindex > 0 && yindex > 0)
+                                    {
+                                        val = vt.Peek(xindex, yindex).ToString();
+                                    }
+                                }
+                                found = true;
+                            }
+                        }
+                        else if (x.StartsWith("numeric:") || x.StartsWith("n:"))
+                        {
+                            string numexpr = (x.StartsWith("numeric:")) ? x.Substring(8) : x.Substring(2);
                             val = I18n.ThingToString(EvaluateNumericExpression(logger, o, numexpr));
                             found = true;
                         }
-                        else if (x.IndexOf("string:") == 0)
+                        else if (x.StartsWith("string:") || x.StartsWith("s:"))
                         {
-                            string numexpr = x.Substring(7);
-                            val = EvaluateStringExpression(logger, o, numexpr);
+                            string strexpr = (x.StartsWith("string:")) ? x.Substring(7) : x.Substring(2);
+                            val = EvaluateStringExpression(logger, o, strexpr);
                             found = true;
                         }
-                        else if (x.IndexOf("func:") == 0)
+                        else if (x.StartsWith("func:") || x.StartsWith("f:"))
                         {
                             val = "";
                             found = true;
-                            string funcexpr = x.Substring(5);
-                            Match rxm = rexfunc.Match(funcexpr);
+                            string funcexpr = (x.StartsWith("func:")) ? x.Substring(5) : x.Substring(2);
+                            Match rxm = rexFunc.Match(funcexpr);
                             if (rxm.Success == true)
                             {
                                 string funcname = rxm.Groups["name"].Value.ToLower();
                                 string funcarg = rxm.Groups["arg"].Value;
-                                string funcval = "";
-                                int splitter = funcname.IndexOf(":");
-                                if (splitter > 0 && funcarg == "")
-                                {
-                                    funcname = funcexpr.Substring(0, splitter);
-                                    funcval = funcexpr.Substring(splitter + 1);
-                                }
-                                else
-                                {
-                                    funcval = funcexpr.Substring(rxm.Groups["arg"].Index + rxm.Groups["arg"].Length + 2);
-                                }
+                                string funcval = rxm.Groups["val"].Value;
                                 string[] args = SplitArguments(funcarg);
                                 int argc = args.Count();
                                 switch (funcname)
@@ -901,98 +1175,274 @@ namespace Triggernometry
                                     case "length": // length()
                                         val = funcval.Length.ToString();
                                         break;
-                                    case "hex2dec": // hex2dec()
-                                        val = "" + int.Parse(funcval, System.Globalization.NumberStyles.HexNumber);
-                                        break;
-                                    case "hex2float": // hex2float()
-                                        {
-                                            Int32 bytesArray = Int32.Parse(funcval, System.Globalization.NumberStyles.HexNumber);
-                                            val = "" + BitConverter.ToSingle(BitConverter.GetBytes(bytesArray), 0);
-                                        }
-                                        break;
+                                    case "hex2dec":    // hex2dec()
+                                    case "hex2float":  // hex2float()
                                     case "hex2double": // hex2double()
                                         {
-                                            Int64 bytesArray = Int64.Parse(funcval, System.Globalization.NumberStyles.HexNumber);
-                                            val = "" + BitConverter.ToDouble(BitConverter.GetBytes(bytesArray), 0);
+                                            funcval = funcval.Trim();
+                                            if (!new Regex("^[0-9A-Fa-f]+$").IsMatch(funcval))
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/invalidValueError",
+                                                    "In ({0}), {1} ({2}) is invalid. Expr: ({3})", funcname, "funcval", funcval, x));
+                                            }
+
+                                            switch (funcname)
+                                            {
+                                                case "hex2dec":
+                                                    val = "" + int.Parse(funcval, NumberStyles.HexNumber);
+                                                    break;
+                                                case "hex2float":
+                                                    Int32 bytesArrayFloat = Int32.Parse(funcval, NumberStyles.HexNumber);
+                                                    val = "" + BitConverter.ToSingle(BitConverter.GetBytes(bytesArrayFloat), 0);
+                                                    break;
+                                                case "hex2double":
+                                                    Int64 bytesArrayDouble = Int64.Parse(funcval, NumberStyles.HexNumber);
+                                                    val = "" + BitConverter.ToDouble(BitConverter.GetBytes(bytesArrayDouble), 0);
+                                                    break;
+                                            }
+                                        }
+                                        break;
+                                    case "parsedmg": // parse the hex damage in ACT loglines to dec value
+                                        {
+                                            funcval = funcval.Trim();
+                                            if (!new Regex("^(?:[0-9A-Fa-f]{5,8}|0{1,4})$").IsMatch(funcval))
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/invalidValueError",
+                                                    "In ({0}), {1} ({2}) is invalid. Expr: ({3})", funcname, "funcval", funcval, x));
+                                            }
+                                            funcval = funcval.PadLeft(8, '0');
+                                            string hexDmg = funcval.Substring(6, 2) + funcval.Substring(0, 4);
+                                            Int32 decDmg = Int32.Parse(hexDmg, NumberStyles.HexNumber);
+                                            val = decDmg.ToString();
                                         }
                                         break;
                                     case "float2hex":
                                         {
-                                            byte[] bytesArray = BitConverter.GetBytes(float.Parse(funcval));
+                                            if (!float.TryParse(funcval, out float floatValue))
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/parseTypeError",
+                                                    "{0} ({1}) could not be parsed into {2}. Expr: ({3})", "string", funcval, "float", x));
+                                            }
+                                            byte[] bytesArray = BitConverter.GetBytes(floatValue);
                                             Array.Reverse(bytesArray, 0, bytesArray.Length);
                                             val = BitConverter.ToString(bytesArray).Replace("-", "");
                                         }
                                         break;
                                     case "double2hex":
                                         {
-                                            Int64 bytesArray = BitConverter.DoubleToInt64Bits(double.Parse(funcval));
+                                            if (!double.TryParse(funcval, out double doubleValue))
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/parseTypeError",
+                                                    "{0} ({1}) could not be parsed into {2}. Expr: ({3})", "string", funcval, "double", x));
+                                            }
+                                            Int64 bytesArray = BitConverter.DoubleToInt64Bits(doubleValue);
                                             val = bytesArray.ToString("X");
                                         }
                                         break;
                                     case "dec2hex": // dec2hex()
-                                        val = int.Parse(funcval).ToString("X");
-                                        break;
                                     case "dec2hex2": // dec2hex2()
-                                        val = int.Parse(funcval).ToString("X2");
-                                        break;
                                     case "dec2hex4": // dec2hex4()
-                                        val = int.Parse(funcval).ToString("X4");
-                                        break;
                                     case "dec2hex8": // dec2hex8()
-                                        val = int.Parse(funcval).ToString("X8");
-                                        break;
-                                    case "padleft": // padleft(charcode,length)
-                                        if (argc != 2)
                                         {
-                                            throw new ArgumentException(I18n.Translate("internal/Context/padleftargerror", "Padleft function requires two arguments, {0} were given", argc));
-                                        }
-                                        else
-                                        {
-                                            val = funcval.PadLeft(Int32.Parse(args[1]), (char)Int32.Parse(args[0]));
-                                        }
-                                        break;
-                                    case "padright": // padright(charcode,length)
-                                        if (argc != 2)
-                                        {
-                                            throw new ArgumentException(I18n.Translate("internal/Context/padrightargerror", "Padright function requires two arguments, {0} were given", argc));
-                                        }
-                                        else
-                                        {
-                                            val = funcval.PadRight(Int32.Parse(args[1]), (char)Int32.Parse(args[0]));
-                                        }
-                                        break;
-                                    case "substring": // substring(startindex, length) or substring(startindex)
-                                        if (argc != 1 && argc != 2)
-                                        {
-                                            throw new ArgumentException(I18n.Translate("internal/Context/substringargerror", "Substring function requires one or two arguments, {0} were given", argc));
-                                        }
-                                        else
-                                        {
-                                            switch (argc)
+                                            if (!int.TryParse(funcval, out int intValue))
                                             {
-                                                case 1:
-                                                    val = funcval.Substring(Int32.Parse(args[0]));
-                                                    break;
-                                                case 2:
-                                                    val = funcval.Substring(Int32.Parse(args[0]), Int32.Parse(args[1]));
-                                                    break;
+                                                throw new ArgumentException(I18n.Translate("internal/Context/parseTypeError",
+                                                    "{0} ({1}) could not be parsed into {2}. Expr: ({3})", "string", funcval, "int", x));
+                                            }
+                                            string format = funcname.Substring(6).ToUpper(); // "X" "X2" "X4" "X8"
+                                            val = intValue.ToString(format);
+                                        }
+                                        break;
+                                    case "padleft":
+                                    case "padright":
+                                        {
+                                            if (argc != 2)
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+                                                    "({0}) requires {1} arguments, {2} were given. Expr: ({3})", funcname, "2", argc, x));
+                                            }
+                                            char paddingChar = (args[0].Length == 1) ? args[0][0] : GetReplacedChar(Int32.Parse(args[0]));
+                                            int length = Int32.Parse(args[1]);
+
+                                            if (funcname == "padleft")
+                                                val = funcval.PadLeft(length, paddingChar);
+                                            else
+                                                val = funcval.PadRight(length, paddingChar);
+                                        }
+                                        break;
+                                    case "repeat": // repeat(times, joiner = "")
+                                        {
+                                            if (argc != 1 && argc != 2)
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+                                                    "({0}) requires {1} arguments, {2} were given. Expr: ({3})", funcname, "1-2", argc, x));
+                                            }
+
+                                            int times;
+                                            if (!Int32.TryParse(args[0], out times))
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/parseTypeError",
+                                                    "{0} ({1}) could not be parsed into {2}. Expr: ({3})", "times", times, "int", x));
+                                            }
+                                            string joiner = GetArgument(args, 1, "");
+                                            if (times == 0)
+                                            {
+                                                val = "";
+                                            }
+                                            else
+                                            {
+                                                if (times < 0)
+                                                {
+                                                    times = -times;
+                                                    funcval = new string(funcval.Reverse().ToArray());
+                                                }
+                                                StringBuilder sb = new StringBuilder(funcval);
+                                                string repeatedUnit = joiner + funcval;
+                                                for (int repeatCount = 1; repeatCount < times; repeatCount++)
+                                                {
+                                                    sb.Append(repeatedUnit);
+                                                }
+                                                val = $"{sb}";
                                             }
                                         }
                                         break;
-                                    case "indexof": // indexof(stringtosearch)
+                                    case "replace": // replace(oldStr, newStr = "", isLooped = 0)
+                                        {
+                                            if (argc != 1 && argc != 2 && argc != 3)
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+                                                    "({0}) requires {1} arguments, {2} were given. Expr: ({3})", funcname, "1-3", argc, x));
+                                            }
+
+                                            string oldStr = args[0];
+                                            if (oldStr == "")
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/invalidValueError",
+                                                    "In ({0}), {1} ({2}) is invalid. Expr: ({3})", funcname, "oldString", oldStr, x));
+                                            }
+
+                                            string newStr = GetArgument(args, 1, "");
+                                            string isLoopedStr = GetArgument(args, 2, "0");
+
+                                            if (!int.TryParse(isLoopedStr, out int isLooped))
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/parseTypeError",
+                                                    "{0} ({1}) could not be parsed into {2}. Expr: ({3})", isLooped, isLoopedStr, "int", x));
+                                            }
+                                            if (newStr.Contains(oldStr) && isLooped > 0)
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/infiniteRepeatError",
+                                                    "In the repeat function, new string ({0}) cannot contain old string ({1}) in loop mode. Expr: ({2})", newStr, oldStr, x));
+                                            }
+
+                                            if (isLooped > 0)
+                                            {
+                                                val = funcval;
+                                                if (newStr == oldStr)
+                                                {
+                                                    break;
+                                                }
+                                                while (val.Contains(oldStr))
+                                                {
+                                                    val = val.Replace(oldStr, newStr);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                val = funcval.Replace(oldStr, newStr);
+                                            }
+                                        }
+                                        break;
+                                    case "substring": // substring(startindex, length) or substring(startindex)
+                                        {
+                                            if (argc != 1 && argc != 2)
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+                                                    "({0}) requires {1} arguments, {2} were given. Expr: ({3})", funcname, "1-2", argc, x));
+                                            }
+                                            int startIndex = Int32.Parse(args[0]);
+                                            if (startIndex < 0)
+                                            {
+                                                startIndex += funcval.Length;
+                                            }
+                                            switch (argc)
+                                            {
+                                                case 1:
+                                                    val = funcval.Substring(startIndex);
+                                                    break;
+                                                case 2:
+                                                    val = funcval.Substring(startIndex, Int32.Parse(args[1]));
+                                                    break;
+                                            }
+                                            break;
+                                        }
+                                    case "slice":  // slice(slices = "") 
+                                        {
+                                            if (argc != 0 && argc != 1)
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+                                                    "({0}) requires {1} arguments, {2} were given. Expr: ({3})", funcname, "1-2", argc, x));
+                                            }
+                                            string slicesStr = GetArgument(args, 0, "");
+                                            var indices = GetSliceIndices(slicesStr, funcval.Length, startIndex: 0);
+                                            StringBuilder sb = new StringBuilder();
+                                            foreach (int index in indices)
+                                            {
+                                                sb.Append(funcval[index]);
+                                            }
+                                            val = $"{sb}";
+                                            break;
+                                        }
+                                    case "pick": // pick(index, splitter = ",")
+                                        {
+                                            if (argc != 1 && argc != 2)
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+                                                    "({0}) requires {1} arguments, {2} were given. Expr: ({3})", funcname, "1-2", argc, x));
+                                            }
+                                            else
+                                            {
+                                                string separator = GetArgument(args, 1, ",");
+                                                string[] strArray = funcval.Split(new string[] { separator }, StringSplitOptions.None);
+                                                int index = Int32.Parse(args[0]);
+                                                int normIndex = (index < 0) ? (index + strArray.Length) : index;
+
+                                                if (normIndex < 0 || normIndex >= strArray.Length)
+                                                {
+                                                    val = "";
+                                                    //throw new ArgumentException(I18n.Translate("internal/Context/normalizedIndexRangeError",
+                                                    //    "Index {0} parsed (from raw index {1}) out of range {2}-{3}. Expr: ({4})", index, normIndex, 0, strArray.Length-1, x));
+                                                }
+                                                else
+                                                {
+                                                    val = strArray[normIndex];
+                                                }
+                                            }
+                                            break;
+                                        }
+                                    case "args":
+                                        val = "(" + string.Join(")\n(", args) + ")";
+                                        break;
+                                    case "i":
+                                    case "indexof":      // indexof(stringtosearch)
+                                    case "li":
+                                    case "lastindexof":  // lastindexof(stringtosearch)
                                         if (argc != 1)
-                                        {                                          
-                                            throw new ArgumentException(I18n.Translate("internal/Context/indexofargerror", "Indexof function requires one argument, {0} were given", argc));
+                                        {
+                                            throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+                                                "({0}) requires {1} arguments, {2} were given. Expr: ({3})", funcname, "1", argc, x));
                                         }
                                         else
                                         {
-                                            val = "" + funcval.IndexOf(args[0]);
+                                            int index = (funcname.StartsWith("i")) ? funcval.IndexOf(args[0]) : funcval.LastIndexOf(args[0]);
+                                            val = index.ToString();
                                         }
                                         break;
                                     case "compare": // compare(stringtocompare) or compare(stringtocompare, ignorecase)
                                         if (argc != 1 && argc != 2)
                                         {
-                                            throw new ArgumentException(I18n.Translate("internal/Context/compareargerror", "Compare function requires one or two arguments, {0} were given", argc));
+                                            throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+                                                "({0}) requires {1} arguments, {2} were given. Expr: ({3})", funcname, "1-2", argc, x));
                                         }
                                         else
                                         {
@@ -1005,68 +1455,59 @@ namespace Triggernometry
                                                     bool ignoreCase = bool.Parse(args[1]);
                                                     val = "" + String.Compare(funcval, args[0], ignoreCase);
                                                     break;
-                                            }                                                                                                
-                                        }
-                                        break;
-                                    case "lastindexof": // lastindexof(stringtosearch)
-                                        if (argc != 1)
-                                        {
-                                            throw new ArgumentException(I18n.Translate("internal/Context/lastindexofargerror", "Lastindexof function requires one argument, {0} were given", argc));
-                                        }
-                                        else
-                                        {
-                                            val = "" + funcval.LastIndexOf(args[0]);
-                                        }
-                                        break;
-                                    case "trim": // trim() or trim(charcode,charcode,charcode,...)
-                                        if (argc == 0 || args[0] == "")
-                                        {
-                                            val = funcval.Trim();
-                                        }
-                                        else
-                                        {
-                                            string xx = "";
-                                            foreach (string xyz in args)
-                                            {
-                                                xx += (char)Int32.Parse(xyz);
                                             }
-                                            val = funcval.Trim(xx.ToCharArray());
                                         }
                                         break;
-                                    case "trimleft": // trimleft() or trimleft(charcode,charcode,charcode,...)
-                                        if (argc == 0 || args[0] == "")
+                                    case "trim":        // trim() or trim(charcode/char, charcode/char, ...)
+                                    case "trimleft":    // trimleft() or trimleft(charcode/char, charcode/char, ...)
+                                    case "trimright":   // trimright() or trimright(charcode/char, charcode/char, ...)
+                                        string trimChars = "";
+                                        if (argc > 0)
                                         {
-                                            val = funcval.TrimStart();
-                                        }
-                                        else
-                                        {
-                                            string xx = "";
-                                            foreach (string xyz in args)
+                                            foreach (string arg in args)
                                             {
-                                                xx += (char)Int32.Parse(xyz);
+                                                // length == 1: char    length != 1: charcode
+                                                if (arg.Length == 1)
+                                                {
+                                                    trimChars += arg;
+                                                }
+                                                else if (arg.Length == 0)
+                                                {
+                                                    throw new ArgumentException(I18n.Translate("internal/Context/invalidValueError",
+                                                        "In ({0}), {1} ({2}) is invalid. Expr: ({3})", funcname, "char/charcode", funcval, x));
+                                                }
+                                                else if (arg.Length > 1)
+                                                {
+                                                    if (!int.TryParse(arg, out int charcode))
+                                                    {
+                                                        throw new ArgumentException(I18n.Translate("internal/Context/parseTypeError",
+                                                            "{0} ({1}) could not be parsed into {2}. Expr: ({3})", "charcode", arg, "int", x));
+                                                    }
+                                                    trimChars += GetReplacedChar(charcode).ToString();
+                                                }
                                             }
-                                            val = funcval.TrimStart(xx.ToCharArray());
                                         }
-                                        break;
-                                    case "trimright": // trimright() or trimright(charcode,charcode,charcode,...)
-                                        if (argc == 0 || args[0] == "")
+
+                                        char[] trimCharsArray = trimChars.ToCharArray();
+
+                                        switch (funcname)
                                         {
-                                            val = funcval.TrimEnd();
-                                        }
-                                        else
-                                        {
-                                            string xx = "";
-                                            foreach (string xyz in args)
-                                            {
-                                                xx += (char)Int32.Parse(xyz);
-                                            }
-                                            val = funcval.TrimEnd(xx.ToCharArray());
+                                            case "trim":
+                                                val = argc == 0 ? funcval.Trim() : funcval.Trim(trimCharsArray);
+                                                break;
+                                            case "trimleft":
+                                                val = argc == 0 ? funcval.TrimStart() : funcval.TrimStart(trimCharsArray);
+                                                break;
+                                            case "trimright":
+                                                val = argc == 0 ? funcval.TrimEnd() : funcval.TrimEnd(trimCharsArray);
+                                                break;
                                         }
                                         break;
                                     case "format": // format(type,formatstring)
                                         if (argc != 2)
                                         {
-                                            throw new ArgumentException(I18n.Translate("internal/Context/formatargerror", "Format function requires two arguments, {0} were given", argc));
+                                            throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+                                                "({0}) requires {1} arguments, {2} were given. Expr: ({3})", funcname, "2", argc, x));
                                         }
                                         else
                                         {
@@ -1106,24 +1547,64 @@ namespace Triggernometry
                                             }
                                         }
                                         break;
+                                    case "nextetms": // func:nextETms:01:30 or func:nextETms:90
+                                        {
+                                            if (argc > 0)
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+                                                    "({0}) requires {1} arguments, {2} were given. Expr: ({3})", "nextETms", "0", argc, x));
+                                            }
+                                            string etString = funcval;
+                                            double totalMin;
+                                            try
+                                            {
+                                                if (etString.Contains(':'))
+                                                {
+                                                    double etHour = int.Parse(etString.Substring(0, etString.IndexOf(':')));
+                                                    double etMin = double.Parse(etString.Substring(etString.IndexOf(':') + 1));
+                                                    totalMin = etHour * 60.0 + etMin;
+                                                    if (etHour < 0 || etMin < 0 || etMin > 60)
+                                                    {
+                                                        throw new Exception();
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    totalMin = double.Parse(etString);
+                                                }
+                                                if (totalMin < 0 || totalMin > 1440)
+                                                {
+                                                    throw new Exception();
+                                                }
+                                            }
+                                            catch
+                                            {
+                                                throw new ArgumentException(I18n.Translate("internal/Context/parseTypeError",
+                                                        "{0} ({1}) could not be parsed into {2}. Expr: ({3})", "", etString, "time", x));
+                                            }
+
+                                            TimeSpan ez = GetEorzeanTime();
+                                            val = Math.Round((totalMin - ez.TotalMinutes + 1440) % 1440 * 70 / 24 * 1000).ToString();
+                                            found = true;
+                                        }
+                                        break;
                                 }
                             }
                         }
-                        else if (x.IndexOf("_ffxivparty") == 0)
+                        else if (x.StartsWith("_ffxivparty[") || x.StartsWith("_party["))
                         {
-                            mx = rexnump.Match(x);
+                            mx = rexListProp.Match(x);
                             if (mx.Success == true)
                             {
-                                string gindex = mx.Groups["index"].Value;
-                                string gprop = mx.Groups["prop"].Value;
+                                string gindex = mx.Groups["index"].Value.Trim();
+                                string gprop = mx.Groups["prop"].Value.Trim();
                                 int iindex = 0;
-                                Int64 honk;
                                 VariableDictionary vc = null;
                                 bool foundid = false;
-                                if (Int64.TryParse(gindex, System.Globalization.NumberStyles.HexNumber, CultureInfo.InvariantCulture, out honk) == true)
+                                if (Int64.TryParse(gindex, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out Int64 honk) == true)
                                 {
                                     vc = PluginBridges.BridgeFFXIV.GetIdPartyMember(gindex, out foundid);
-                                }                                
+                                }
                                 if (foundid == false)
                                 {
                                     if (Int32.TryParse(gindex, out iindex) == true)
@@ -1137,14 +1618,22 @@ namespace Triggernometry
                                 }
                                 if (vc != null)
                                 {
-                                    val = vc.GetValue(gprop).ToString();
+                                    if (Entity.jobs["1"].ContainsKey(gprop))
+                                    {
+                                        string jobid = vc.GetValue("jobid").ToString();
+                                        val = Entity.jobs[jobid][gprop].ToString();
+                                    }
+                                    else
+                                    {
+                                        val = vc.GetValue(gprop).ToString();
+                                    }
                                 }
                             }
                             found = true;
                         }
-                        else if (x.IndexOf("_ffxiventity") == 0)
+                        else if (x.StartsWith("_ffxiventity[") || x.StartsWith("_entity["))
                         {
-                            mx = rexnump.Match(x);
+                            mx = rexListProp.Match(x);
                             if (mx.Success == true)
                             {
                                 string gindex = mx.Groups["index"].Value;
@@ -1152,7 +1641,7 @@ namespace Triggernometry
                                 Int64 honk;
                                 VariableDictionary vc = null;
                                 bool foundid = false;
-                                if (Int64.TryParse(gindex, System.Globalization.NumberStyles.HexNumber, CultureInfo.InvariantCulture, out honk) == true)
+                                if (Int64.TryParse(gindex, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out honk) == true)
                                 {
                                     vc = PluginBridges.BridgeFFXIV.GetIdEntity(gindex, out foundid);
                                 }
@@ -1162,16 +1651,36 @@ namespace Triggernometry
                                 }
                                 if (vc != null)
                                 {
-                                    val = vc.GetValue(gprop).ToString();
+                                    if (Entity.jobs["1"].ContainsKey(gprop))
+                                    {
+                                        string jobid = vc.GetValue("jobid").ToString();
+                                        val = Entity.jobs[jobid][gprop].ToString();
+                                    }
+                                    else
+                                    {
+                                        val = vc.GetValue(gprop).ToString();
+                                    }
                                 }
                             }
                             found = true;
                         }
-                        else if (x == "_ffxivtime")
+                        else if (x.StartsWith("_me."))
+                        {
+                            string prop = x.Substring(4);
+                            val = "${_ffxiventity[${_me}]." + prop + "}";
+                            found = true;
+                        }
+                        else if (x == "_ffxivtime" || x == "_ET")
                         {
                             TimeSpan ez = GetEorzeanTime();
                             int mins = (int)Math.Floor(ez.TotalMinutes);
                             val = mins.ToString();
+                            found = true;
+                        }
+                        else if (x == "_ETprecise")
+                        {
+                            TimeSpan ez = GetEorzeanTime();
+                            val = ez.TotalMinutes.ToString();
                             found = true;
                         }
                         else if (x == "_lastencounter")
@@ -1184,9 +1693,9 @@ namespace Triggernometry
                             val = plug != null ? plug.ActiveEncounterHook() : "";
                             found = true;
                         }
-                        else if (x.IndexOf("_textaura") == 0)
+                        else if (x.StartsWith("_textaura"))
                         {
-                            mx = rexnump.Match(x);
+                            mx = rexListProp.Match(x);
                             if (mx.Success == true)
                             {
                                 string gindex = mx.Groups["index"].Value;
@@ -1261,9 +1770,9 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
-                        else if (x.IndexOf("_imageaura") == 0)
+                        else if (x.StartsWith("_imageaura"))
                         {
-                            mx = rexnump.Match(x);
+                            mx = rexListProp.Match(x);
                             if (mx.Success == true)
                             {
                                 string gindex = mx.Groups["index"].Value;
@@ -1345,7 +1854,7 @@ namespace Triggernometry
                             found = true;
                         }
                         else if (x == "_screenminx")
-                        {                            
+                        {
                             val = plug.MinX.ToString(CultureInfo.InvariantCulture);
                             found = true;
                         }
@@ -1367,15 +1876,6 @@ namespace Triggernometry
                     }
                 }
                 newexpr = newexpr.Substring(0, m.Index) + val + newexpr.Substring(m.Index + m.Length);
-                /*
-                if (logger != null)
-                {
-                    logger(o, I18n.Translate("internal/Context/expansionstep", "Expansion step {0} from '{1}' to '{2}' ({3}) = '{4}'", i, expr, newexpr, val, found));
-                }
-                else if (plug != null)
-                {
-                    plug.FilteredAddToLog(Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Context/expansionstep", "Expansion step {0} from '{1}' to '{2}' ({3}) = '{4}'", i, expr, newexpr, val, found));
-                }*/
                 i++;
             };
             while (true)
@@ -1390,6 +1890,10 @@ namespace Triggernometry
                     break;
                 }
             }
+
+            // replace back linebreaks
+            newexpr = newexpr.Replace(LINEBREAK_PLACEHOLDER, "\n");
+
             if (trig != null)
             {
                 if (trig._DebugLevel == RealPlugin.DebugLevelEnum.Inherit)

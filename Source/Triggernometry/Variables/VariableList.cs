@@ -1,5 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace Triggernometry.Variables
@@ -111,9 +113,19 @@ namespace Triggernometry.Variables
             return null;
         }
 
+        private int ProcessIndex(int i)
+        {
+            if (i < 0) {
+                i += Values.Count;
+            } else {
+                i--;
+            }
+            return i;
+        }
+        
         public void Insert(int index, Variable value, string changer)
         {
-            int idx = index - 1;
+            int idx = ProcessIndex(index);
             if (idx < 0)
             {
                 idx = 0;
@@ -123,7 +135,7 @@ namespace Triggernometry.Variables
                 int needcre = idx - Values.Count;
                 while (needcre > 0)
                 {
-                    Push(null, changer);
+                    Push(new VariableScalar() { Value = "" }, changer);
                     needcre--;
                 }                
             }
@@ -139,14 +151,14 @@ namespace Triggernometry.Variables
 
         public void Set(int index, Variable value, string changer)
         {
-            int idx = index - 1;
+            int idx = ProcessIndex(index);
             if (idx < 0)
             {
                 idx = 0;
             }
             if (idx >= Values.Count)
             {
-                int needcre = idx - Values.Count;
+                int needcre = idx - Values.Count + 1;
                 while (needcre > 0)
                 {
                     Push(new VariableScalar() { Value = "" }, changer);
@@ -165,10 +177,10 @@ namespace Triggernometry.Variables
 
         public void Remove(int index, string changer)
         {
-            int idx = index - 1;
+            int idx = ProcessIndex(index);
             if (idx >= 0 && idx < Values.Count)
             {
-                Values.RemoveAt(index - 1);
+                Values.RemoveAt(idx);
                 LastChanged = DateTime.Now;
                 LastChanger = changer;
             }
@@ -176,10 +188,10 @@ namespace Triggernometry.Variables
 
         public Variable Peek(int index)
         {
-            int idx = index - 1;
+            int idx = ProcessIndex(index);
             if (idx >= 0 && idx < Values.Count)
             {
-                return Values[index - 1];
+                return Values[idx];
             }
             return new VariableScalar();
         }
@@ -228,6 +240,21 @@ namespace Triggernometry.Variables
         public int Size()
         {
             return Values.Count;
+        }
+        public int Count(string str)
+        {
+            return Values.Count(value => value.ToString() == str);
+        }
+
+        public double SumSlice(List<int> indices)
+        {
+            return indices.Where(index => double.TryParse(Values[index].ToString(), out _))
+                          .Sum(index => double.Parse(Values[index].ToString()));
+        }
+
+        public string JoinSlice(string joiner, List<int> indices)
+        {
+            return string.Join(joiner, indices.Select(index => Values[index].ToString()));
         }
 
         public string Join(string joiner)

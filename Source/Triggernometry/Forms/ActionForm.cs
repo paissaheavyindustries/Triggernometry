@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -199,12 +199,16 @@ namespace Triggernometry.Forms
         {
             int oldsel = tbcActionSettings.SelectedIndex;
             tbcActionSettings.SelectedIndex = cbxActionType.SelectedIndex;
-            if (cbxActionType.SelectedIndex == 9 || cbxActionType.SelectedIndex == 13 || cbxActionType.SelectedIndex == 24)
+            if (cbxActionType.SelectedIndex == (int)Action.ActionTypeEnum.Aura
+                || cbxActionType.SelectedIndex == (int)Action.ActionTypeEnum.TextAura
+                || cbxActionType.SelectedIndex == (int)Action.ActionTypeEnum.NamedCallback)
             {
                 timer2.Enabled = true;
                 stsMouseHelp.Visible = true;
             }
-            else if (oldsel == 9 || oldsel == 13 || oldsel == 24)
+            else if (oldsel == (int)Action.ActionTypeEnum.Aura
+                || oldsel == (int)Action.ActionTypeEnum.TextAura
+                || oldsel == (int)Action.ActionTypeEnum.NamedCallback)
             {
                 stsMouseHelp.Visible = false;
                 timer2.Enabled = false;
@@ -1623,7 +1627,15 @@ namespace Triggernometry.Forms
                     expLvarTarget.Enabled = false;
                     expLvarIndex.Enabled = true;
                     break;
-                case 4: // Remove value at the given index of the list variable
+                case 4: // Set all values on the list variable to the expression
+                    expLvarName.Enabled = true;
+                    expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expLvarValue.Enabled = true;
+                    cbxLvarExpType.Enabled = true;
+                    expLvarTarget.Enabled = false;
+                    expLvarIndex.Enabled = true;
+                    break;
+                case 5: // Remove value at the given index of the list variable
                     expLvarName.Enabled = true;
                     expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expLvarValue.Enabled = false;
@@ -1631,7 +1643,7 @@ namespace Triggernometry.Forms
                     expLvarTarget.Enabled = false;
                     expLvarIndex.Enabled = true;
                     break;
-                case 5: // Pop last value from list variable into a simple variable (stack)
+                case 6: // Pop last value from list variable into a simple variable (stack)
                     expLvarName.Enabled = true;
                     expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expLvarValue.Enabled = false;
@@ -1639,7 +1651,7 @@ namespace Triggernometry.Forms
                     expLvarTarget.Enabled = true;
                     expLvarIndex.Enabled = false;
                     break;
-                case 6: // Pop first value from list variable into a simple variable (queue)
+                case 7: // Pop first value from list variable into a simple variable (queue)
                     expLvarName.Enabled = true;
                     expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expLvarValue.Enabled = false;
@@ -1647,36 +1659,28 @@ namespace Triggernometry.Forms
                     expLvarTarget.Enabled = true;
                     expLvarIndex.Enabled = false;
                     break;
-                case 7: // Sort list in an alphabetically ascending order
-                    expLvarName.Enabled = true;
+                case 8: // Build a list variable from a string splitted by the first character
+                    expLvarName.Enabled = false;
                     expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-                    expLvarValue.Enabled = false;
-                    cbxLvarExpType.Enabled = false;
-                    expLvarTarget.Enabled = false;
+                    expLvarValue.Enabled = true;
+                    cbxLvarExpType.Enabled = true;
+                    expLvarTarget.Enabled = true;
                     expLvarIndex.Enabled = false;
                     break;
-                case 8: // Sort list in an alphabetically descending order
+                case 9: // Join all values in the list variable into a single string (separator in expression)
                     expLvarName.Enabled = true;
                     expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-                    expLvarValue.Enabled = false;
-                    cbxLvarExpType.Enabled = false;
-                    expLvarTarget.Enabled = false;
+                    expLvarValue.Enabled = true;
+                    cbxLvarExpType.Enabled = true;
+                    expLvarTarget.Enabled = true;
                     expLvarIndex.Enabled = false;
                     break;
-                case 9: // Sort list in ffxiv party ascending order
+                case 10: // Split a scalar variable into a list variable (separator in expression)
                     expLvarName.Enabled = true;
                     expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-                    expLvarValue.Enabled = false;
-                    cbxLvarExpType.Enabled = false;
-                    expLvarTarget.Enabled = false;
-                    expLvarIndex.Enabled = false;
-                    break;
-                case 10: // Sort list in ffxiv party descending order
-                    expLvarName.Enabled = true;
-                    expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-                    expLvarValue.Enabled = false;
-                    cbxLvarExpType.Enabled = false;
-                    expLvarTarget.Enabled = false;
+                    expLvarValue.Enabled = true;
+                    cbxLvarExpType.Enabled = true;
+                    expLvarTarget.Enabled = true;
                     expLvarIndex.Enabled = false;
                     break;
                 case 11: // Copy whole list variable to another list variable
@@ -1695,23 +1699,63 @@ namespace Triggernometry.Forms
                     expLvarTarget.Enabled = true;
                     expLvarIndex.Enabled = true;
                     break;
-                case 13: // Join all values in the list variable into a single string (separator in expression)
+                case 13: // Sort list in an numerically ascending order
+                    expLvarName.Enabled = true;
+                    expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expLvarValue.Enabled = false;
+                    cbxLvarExpType.Enabled = false;
+                    expLvarTarget.Enabled = false;
+                    expLvarIndex.Enabled = false;
+                    break;
+                case 14: // Sort list in an numerically descending order
+                    expLvarName.Enabled = true;
+                    expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expLvarValue.Enabled = false;
+                    cbxLvarExpType.Enabled = false;
+                    expLvarTarget.Enabled = false;
+                    expLvarIndex.Enabled = false;
+                    break;
+                case 15: // Sort list in an alphabetically ascending order
+                    expLvarName.Enabled = true;
+                    expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expLvarValue.Enabled = false;
+                    cbxLvarExpType.Enabled = false;
+                    expLvarTarget.Enabled = false;
+                    expLvarIndex.Enabled = false;
+                    break;
+                case 16: // Sort list in an alphabetically descending order
+                    expLvarName.Enabled = true;
+                    expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expLvarValue.Enabled = false;
+                    cbxLvarExpType.Enabled = false;
+                    expLvarTarget.Enabled = false;
+                    expLvarIndex.Enabled = false;
+                    break;
+                case 17: // Sort list in ffxiv party ascending order
+                    expLvarName.Enabled = true;
+                    expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expLvarValue.Enabled = false;
+                    cbxLvarExpType.Enabled = false;
+                    expLvarTarget.Enabled = false;
+                    expLvarIndex.Enabled = false;
+                    break;
+                case 18: // Sort list in ffxiv party descending order
+                    expLvarName.Enabled = true;
+                    expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expLvarValue.Enabled = false;
+                    cbxLvarExpType.Enabled = false;
+                    expLvarTarget.Enabled = false;
+                    expLvarIndex.Enabled = false;
+                    break;
+                case 19: // Sort list by given keys
                     expLvarName.Enabled = true;
                     expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expLvarValue.Enabled = true;
-                    cbxLvarExpType.Enabled = true;
-                    expLvarTarget.Enabled = true;
+                    cbxLvarExpType.Enabled = false;
+                    expLvarTarget.Enabled = false;
                     expLvarIndex.Enabled = false;
                     break;
-                case 14: // Split a scalar variable into a list variable (separator in expression)
-                    expLvarName.Enabled = true;
-                    expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-                    expLvarValue.Enabled = true;
-                    cbxLvarExpType.Enabled = true;
-                    expLvarTarget.Enabled = true;
-                    expLvarIndex.Enabled = false;
-                    break;
-                case 15: // Unset all list variables
+                case 20: // Unset all list variables
                     expLvarName.Enabled = false;
                     expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expLvarValue.Enabled = false;
@@ -1719,25 +1763,9 @@ namespace Triggernometry.Forms
                     expLvarTarget.Enabled = false;
                     expLvarIndex.Enabled = false;
                     break;
-                case 16: // Unset by regex
+                case 21: // Unset by regex
                     expLvarName.Enabled = true;
                     expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
-                    expLvarValue.Enabled = false;
-                    cbxLvarExpType.Enabled = false;
-                    expLvarTarget.Enabled = false;
-                    expLvarIndex.Enabled = false;
-                    break;
-                case 17: // Sort list in an numerically ascending order
-                    expLvarName.Enabled = true;
-                    expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-                    expLvarValue.Enabled = false;
-                    cbxLvarExpType.Enabled = false;
-                    expLvarTarget.Enabled = false;
-                    expLvarIndex.Enabled = false;
-                    break;
-                case 18: // Sort list in an numerically descending order
-                    expLvarName.Enabled = true;
-                    expLvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expLvarValue.Enabled = false;
                     cbxLvarExpType.Enabled = false;
                     expLvarTarget.Enabled = false;
@@ -2004,7 +2032,7 @@ namespace Triggernometry.Forms
         {
             switch (cbxTvarOpType.SelectedIndex)
             {
-                case 0: // unset
+                case 0: // Unset
                     expTvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expTvarName.Enabled = true;
                     cbxTvarExpType.Enabled = false;
@@ -2013,16 +2041,7 @@ namespace Triggernometry.Forms
                     expTvarRow.Enabled = false;
                     expTvarTarget.Enabled = false;
                     break;
-                case 1: // resize
-                    expTvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-                    expTvarName.Enabled = true;
-                    cbxTvarExpType.Enabled = false;
-                    expTvarValue.Enabled = false;
-                    expTvarColumn.Enabled = true;
-                    expTvarRow.Enabled = true;
-                    expTvarTarget.Enabled = false;
-                    break;
-                case 2: // set
+                case 1: // Set
                     expTvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expTvarName.Enabled = true;
                     cbxTvarExpType.Enabled = true;
@@ -2031,7 +2050,97 @@ namespace Triggernometry.Forms
                     expTvarRow.Enabled = true;
                     expTvarTarget.Enabled = false;
                     break;
-                case 3: // unsetall
+                case 2: // SetAll
+                    expTvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expTvarName.Enabled = true;
+                    cbxTvarExpType.Enabled = true;
+                    expTvarValue.Enabled = true;
+                    expTvarColumn.Enabled = true;
+                    expTvarRow.Enabled = true;
+                    expTvarTarget.Enabled = false;
+                    break;
+                case 3: // Resize
+                    expTvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expTvarName.Enabled = true;
+                    cbxTvarExpType.Enabled = false;
+                    expTvarValue.Enabled = false;
+                    expTvarColumn.Enabled = true;
+                    expTvarRow.Enabled = true;
+                    expTvarTarget.Enabled = false;
+                    break;
+                case 4: // Build
+                    expTvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expTvarName.Enabled = false;
+                    cbxTvarExpType.Enabled = true;
+                    expTvarValue.Enabled = true;
+                    expTvarColumn.Enabled = false;
+                    expTvarRow.Enabled = false;
+                    expTvarTarget.Enabled = true;
+                    break;
+                case 5: // SetLine
+                    expTvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expTvarName.Enabled = true;
+                    cbxTvarExpType.Enabled = true;
+                    expTvarValue.Enabled = true;
+                    expTvarColumn.Enabled = true;
+                    expTvarRow.Enabled = true;
+                    expTvarTarget.Enabled = false;
+                    break;
+                case 6: // InsertLine
+                    expTvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expTvarName.Enabled = true;
+                    cbxTvarExpType.Enabled = true;
+                    expTvarValue.Enabled = true;
+                    expTvarColumn.Enabled = true;
+                    expTvarRow.Enabled = true;
+                    expTvarTarget.Enabled = false;
+                    break;
+                case 7: // RemoveLine
+                    expTvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expTvarName.Enabled = true;
+                    cbxTvarExpType.Enabled = false;
+                    expTvarValue.Enabled = false;
+                    expTvarColumn.Enabled = true;
+                    expTvarRow.Enabled = true;
+                    expTvarTarget.Enabled = false;
+                    break;
+                case 8: // copy
+                    expTvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expTvarName.Enabled = true;
+                    cbxTvarExpType.Enabled = false;
+                    expTvarValue.Enabled = false;
+                    expTvarColumn.Enabled = false;
+                    expTvarRow.Enabled = false;
+                    expTvarTarget.Enabled = true;
+                    break;
+                case 9: // append
+                    expTvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expTvarName.Enabled = true;
+                    cbxTvarExpType.Enabled = false;
+                    expTvarValue.Enabled = false;
+                    expTvarColumn.Enabled = false;
+                    expTvarRow.Enabled = false;
+                    expTvarTarget.Enabled = true;
+                    break;
+                case 10: // sort rows
+                    expTvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expTvarName.Enabled = true;
+                    cbxTvarExpType.Enabled = false;
+                    expTvarValue.Enabled = true;
+                    expTvarColumn.Enabled = false;
+                    expTvarRow.Enabled = false;
+                    expTvarTarget.Enabled = false;
+                    break;
+                case 11: // sort cols
+                    expTvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expTvarName.Enabled = true;
+                    cbxTvarExpType.Enabled = false;
+                    expTvarValue.Enabled = true;
+                    expTvarColumn.Enabled = false;
+                    expTvarRow.Enabled = false;
+                    expTvarTarget.Enabled = false;
+                    break;
+                case 12: // unsetall
                     expTvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expTvarName.Enabled = false;
                     cbxTvarExpType.Enabled = false;
@@ -2040,7 +2149,7 @@ namespace Triggernometry.Forms
                     expTvarRow.Enabled = false;
                     expTvarTarget.Enabled = false;
                     break;
-                case 4: // unsetregex
+                case 13: // unsetregex
                     expTvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
                     expTvarName.Enabled = true;
                     cbxTvarExpType.Enabled = false;
@@ -2048,24 +2157,6 @@ namespace Triggernometry.Forms
                     expTvarColumn.Enabled = false;
                     expTvarRow.Enabled = false;
                     expTvarTarget.Enabled = false;
-                    break;
-                case 5: // copy
-                    expTvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-                    expTvarName.Enabled = true;
-                    cbxTvarExpType.Enabled = false;
-                    expTvarValue.Enabled = false;
-                    expTvarColumn.Enabled = false;
-                    expTvarRow.Enabled = false;
-                    expTvarTarget.Enabled = true;
-                    break;
-                case 6: // append
-                    expTvarName.ExpressionType = CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
-                    expTvarName.Enabled = true;
-                    cbxTvarExpType.Enabled = false;
-                    expTvarValue.Enabled = false;
-                    expTvarColumn.Enabled = false;
-                    expTvarRow.Enabled = false;
-                    expTvarTarget.Enabled = true;
                     break;
             }
             prsTableSource.Enabled = expTvarName.Enabled;
