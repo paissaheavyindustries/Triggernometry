@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading;
 using System.Diagnostics;
 using Triggernometry.Variables;
+using System.Linq;
 
 namespace Triggernometry.PluginBridges
 {
@@ -268,7 +269,7 @@ namespace Triggernometry.PluginBridges
 
         public static void PopulateClumpFromCombatant(VariableDictionary vc, dynamic cmx, int inParty, int inAlliance, int orderNum)
         {
-            vc.SetValue("name", cmx.Name);
+            vc.SetValue("name", cmx.Name ?? "");
             vc.SetValue("currenthp", cmx.CurrentHP);
             vc.SetValue("currentmp", cmx.CurrentMP);
             vc.SetValue("currentgp", cmx.CurrentGP);
@@ -288,29 +289,25 @@ namespace Triggernometry.PluginBridges
             vc.SetValue("inparty", inParty);
             vc.SetValue("inalliance", inAlliance);
             vc.SetValue("order", orderNum);
-            if (cmx.IsCasting == true)
-            {
-                vc.SetValue("casttargetid", ConvertToHex(cmx.CastTargetID));
-            }
-            else
-            {
-                vc.SetValue("casttargetid", 0);
-            }
-            if (cmx.TargetID > 0)
-            {
-                vc.SetValue("targetid", ConvertToHex(cmx.TargetID));
-            }
-            else
-            {
-                vc.SetValue("targetid", 0);
-            }
+            vc.SetValue("casttargetid", (cmx.IsCasting) ? ConvertToHex(cmx.CastTargetID) : 0);
+            vc.SetValue("targetid", (cmx.TargetID > 0) ? ConvertToHex(cmx.TargetID) : 0);
+            vc.SetValue("iscasting", Convert.ToInt32(cmx.IsCasting));
+            vc.SetValue("casttime", cmx.CastDurationCurrent);
+            vc.SetValue("maxcasttime", cmx.CastDurationMax);
+            vc.SetValue("castid", (cmx.CastBuffID > 0) ? cmx.CastBuffID.ToString("X") : 0);
             vc.SetValue("heading", cmx.Heading);
+            vc.SetValue("h", cmx.Heading);
             vc.SetValue("distance", cmx.EffectiveDistance);
             vc.SetValue("worldid", cmx.WorldID);
             vc.SetValue("worldname", cmx.WorldName);
             vc.SetValue("currentworldid", cmx.CurrentWorldID);
             vc.SetValue("homeworldid", cmx.WorldID);
             vc.SetValue("homeworldname", cmx.WorldName);
+            vc.SetValue("ownerid", (cmx.OwnerID > 0) ? ConvertToHex(cmx.OwnerID) : 0);
+            vc.SetValue("bnpcnameid", cmx.BNpcNameID);
+            vc.SetValue("bnpcid", cmx.BNpcID);
+            vc.SetValue("type", cmx.type);
+            vc.SetValue("order", cmx.Order);
         }
 
         private static object GetInstance()
@@ -407,7 +404,8 @@ namespace Triggernometry.PluginBridges
             {
                 Int64 old = Interlocked.Read(ref LastCheck);
                 Int64 now = DateTime.Now.Ticks;
-                if (((now - old) / TimeSpan.TicksPerMillisecond) < 1000)
+                if (((now - old) / TimeSpan.TicksPerMillisecond) < 500
+                    )
                 {
                     return;
                 }
