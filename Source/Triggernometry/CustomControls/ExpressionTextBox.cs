@@ -110,8 +110,10 @@ namespace Triggernometry.CustomControls
 
         public static List<string> ffxivProps = new List<string>()
         {
-            "name", "job", "jobid", "currenthp", "currentmp", "currentcp", "currentgp", "maxhp", "maxmp", "maxcp", "maxgp", "level", "x", "y", "z",
-            "inparty", "id", "order", "worldid", "worldname", "currentworldid", "heading", "targetid", "casttargetid", "distance", "role", 
+            "name", "job", "jobid", "role", "id", "ownerid", "bnpcid", "bnpcnameid", "type",
+            "currenthp", "currentmp", "currentcp", "currentgp", "maxhp", "maxmp", "maxcp", "maxgp", "level",
+            "x", "y", "z", "heading", "h", "distance", "iscasting", "casttime", "maxcasttime", "castid",
+            "inparty", "order", "worldid", "worldname", "currentworldid", "targetid", "casttargetid", 
             "isT", "isH", "isD", "isM", "isR", "isC", "isG", "isTH", "isCG", 
             "jobCN", "jobDE", "jobEN", "jobFR", "jobJP", "jobKR", "jobCN1", "jobCN2", "jobEN3", "jobJP1"
         };

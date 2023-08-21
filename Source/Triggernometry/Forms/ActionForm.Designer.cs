@@ -3571,8 +3571,8 @@ namespace Triggernometry.Forms
             "Split a scalar variable into a list variable (separator in expression)",
             "Copy whole list variable to another list variable",
             "Insert list variable into another list variable at the given index",
-            "Sort list in an numerically ascending order",
-            "Sort list in an numerically descending order",
+            "Sort list in a numerically ascending order",
+            "Sort list in a numerically descending order",
             "Sort list in an alphabetically ascending order",
             "Sort list in an alphabetically descending order",
             "Sort list in an ascending order based on FFXIV party job order",
@@ -4784,7 +4784,7 @@ namespace Triggernometry.Forms
             this.cbxTvarOpType.FormattingEnabled = true;
             this.cbxTvarOpType.Items.AddRange(new object[] {
             "Unset table variable",
-            "Set value to the given row and column on the table variable ",
+            "Set value to the given row and column on the table variable",
             "Set all values in the table variable",
             "Resize table variable",
             "Build from the expression separated by its first 2 characters",

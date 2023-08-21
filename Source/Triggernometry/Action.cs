@@ -672,13 +672,13 @@ namespace Triggernometry
                                 case ListVariableExpTypeEnum.Numeric:
                                     if (string.IsNullOrWhiteSpace(_ListVariableIndex))
                                     {
-                                        temp += I18n.Translate("internal/Action/desclistsetallnumeric",
+                                        temp += I18n.Translate("internal/Action/desclistsetallnum",
                                             "set all values on list ({0}) to numeric expr ({1})", 
                                             _ListVariableName, _ListVariableExpression);
                                     }
                                     else
                                     {
-                                        temp += I18n.Translate("internal/Action/desclistsetallnumericexpand",
+                                        temp += I18n.Translate("internal/Action/desclistsetallnumexpand",
                                             "set all values on list ({0}) to numeric expr ({1}) (expanded to length ({2}))", 
                                             _ListVariableName, _ListVariableExpression, _ListVariableIndex);
                                     }
@@ -686,13 +686,13 @@ namespace Triggernometry
                                 case ListVariableExpTypeEnum.String:
                                     if (string.IsNullOrWhiteSpace(_ListVariableIndex))
                                     {
-                                        temp += I18n.Translate("internal/Action/desclistsetallstring",
-                                            "Set all values on list ({0}) to string expr ({1})",
+                                        temp += I18n.Translate("internal/Action/desclistsetallstr",
+                                            "set all values on list ({0}) to string expr ({1})",
                                             _ListVariableName, _ListVariableExpression);
                                     }
                                     else
                                     {
-                                        temp += I18n.Translate("internal/Action/desclistsetallstringexpand",
+                                        temp += I18n.Translate("internal/Action/desclistsetallstrexpand",
                                             "set all values on list ({0}) to string expr ({1}) (expanded to length ({2}))",
                                             _ListVariableName, _ListVariableExpression, _ListVariableIndex);
                                     }
@@ -801,7 +801,7 @@ namespace Triggernometry
                             temp += I18n.Translate("internal/Action/descobstogglerecord", "start/stop recording on OBS (toggle)");
                             break;
                         case ObsControlTypeEnum.RestartRecording:
-                            temp += I18n.Translate("internal/Action/descobstrestartrecord", "stop then start recording on OBS");
+                            temp += I18n.Translate("internal/Action/descobsrestartrecord", "stop then start recording on OBS");
                             break;
                         case ObsControlTypeEnum.RestartRecordingIfActive:
                             temp += I18n.Translate("internal/Action/descobsrestartrecordifactive", "stop then start recording on OBS (if currently recording)");
@@ -973,7 +973,7 @@ namespace Triggernometry
                         case TableVariableOpEnum.SetLine:
                             if (!string.IsNullOrWhiteSpace(_TableVariableX))
                             {
-                                temp += I18n.Translate("internal/Action/desctablesetcolumn",
+                                temp += I18n.Translate("internal/Action/desctablesetcol",
                                     "set table ({0}) column #({1}) values from string ({2}) separated by ({3})", 
                                     _TableVariableName, _TableVariableX,
                                     (_TableVariableExpression.Length < 1) ? "" : _TableVariableExpression.Substring(1), 
@@ -991,7 +991,7 @@ namespace Triggernometry
                         case TableVariableOpEnum.InsertLine:
                             if (!string.IsNullOrWhiteSpace(_TableVariableX))
                             {
-                                temp += I18n.Translate("internal/Action/desctableinsertcolumn",
+                                temp += I18n.Translate("internal/Action/desctableinsertcol",
                                     "at table ({0}) column #({1}), insert values from string ({2}) separated by ({3})",
                                     _TableVariableName, _TableVariableX,
                                     (_TableVariableExpression.Length < 1) ? "" : _TableVariableExpression.Substring(1),
@@ -1009,12 +1009,12 @@ namespace Triggernometry
                         case TableVariableOpEnum.RemoveLine:
                             if (!string.IsNullOrWhiteSpace(_TableVariableX))
                             {
-                                temp += I18n.Translate("internal/Action/desctableinsertcolumn",
+                                temp += I18n.Translate("internal/Action/desctableremovecol",
                                     "removed column #({1}) from table ({0})", _TableVariableName, _TableVariableX);
                             }
                             else
                             {
-                                temp += I18n.Translate("internal/Action/desctableinsertrow",
+                                temp += I18n.Translate("internal/Action/desctableremoverow",
                                     "removed row #({1}) from table ({0})", _TableVariableName, _TableVariableY);
                             }
                             break;
@@ -2155,7 +2155,7 @@ namespace Triggernometry
                                             }
                                             vs.List[targetname] = vl;
                                         }
-                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarlistsplit", "Scalar variable ({0}) split into list variable ({1}) with separator ({2})", sourcename, targetname, separator));
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsplit", "Scalar variable ({0}) split into list variable ({1}) with separator ({2})", sourcename, targetname, separator));
                                     }
                                     break;
                                 case ListVariableOpEnum.Build:
@@ -2181,7 +2181,7 @@ namespace Triggernometry
                                             }
                                             vs.List[targetname] = vl;
                                         }
-                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarlistbuild", 
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listbuild", 
                                             "List variable ({0}) built from expression ({1}) splitted by ({2})", targetname, splitval, separator));
                                     }
                                     break;

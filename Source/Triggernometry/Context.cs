@@ -1631,6 +1631,38 @@ namespace Triggernometry
                             }
                             found = true;
                         }
+                        /*else if (x.StartsWith("_ffxiventity[") || x.StartsWith("_entity["))
+                        {
+                            mx = rexListProp.Match(x);
+                            if (mx.Success == true)
+                            {
+                                string gindex = mx.Groups["index"].Value;
+                                string gprop = mx.Groups["prop"].Value;
+                                VariableDictionary vc = null;
+                                bool foundid = false;
+                                if (Int64.TryParse(gindex, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out Int64 honk) == true)
+                                {
+                                    vc = PluginBridges.BridgeFFXIV.GetIdEntity(gindex, out foundid);
+                                }
+                                if (foundid == false)
+                                {
+                                    vc = PluginBridges.BridgeFFXIV.GetNamedEntity(gindex);
+                                }
+                                if (vc != null)
+                                {
+                                    if (Entity.jobs["1"].ContainsKey(gprop))
+                                    {
+                                        string jobid = vc.GetValue("jobid").ToString();
+                                        val = Entity.jobs[jobid][gprop].ToString();
+                                    }
+                                    else
+                                    {
+                                        val = vc.GetValue(gprop).ToString();
+                                    }
+                                }
+                            }
+                            found = true;
+                        }*/
                         else if (x.StartsWith("_ffxiventity[") || x.StartsWith("_entity["))
                         {
                             mx = rexListProp.Match(x);
@@ -1638,10 +1670,9 @@ namespace Triggernometry
                             {
                                 string gindex = mx.Groups["index"].Value;
                                 string gprop = mx.Groups["prop"].Value;
-                                Int64 honk;
                                 VariableDictionary vc = null;
                                 bool foundid = false;
-                                if (Int64.TryParse(gindex, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out honk) == true)
+                                if (Int64.TryParse(gindex, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out Int64 honk) == true)
                                 {
                                     vc = PluginBridges.BridgeFFXIV.GetIdEntity(gindex, out foundid);
                                 }

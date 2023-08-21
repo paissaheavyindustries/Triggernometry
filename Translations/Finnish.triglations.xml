@@ -809,17 +809,12 @@
     <TranslationEntry Key="Plugin/UserInterface/ctxImport" Translation="Tuo" />
     <TranslationEntry Key="Plugin/UserInterface/ctxPaste" Translation="Liitä" />
     <TranslationEntry Key="Plugin/UserInterface/errThing1" Translation="Virheitä havaittu" />
-    <TranslationEntry Key="Plugin/UserInterface/lblWelcomeCreate" Translation="Kun olet sulkenut tämän tervetulotoivotuksen, näet Triggernometryn pääruudun. Valitse kansio johon haluat luoda herättimen (esim. juuri), ja paina ylhäällä vasemmalta löytyvää Lisää-nappia.&#xD;&#xA;&#xD;&#xA;Nappi näyttää suunnilleen tältä:" />
-    <TranslationEntry Key="Plugin/UserInterface/lblWelcomeCreateHeader" Translation="Miten voin luoda uuden herättimen?" />
-    <TranslationEntry Key="Plugin/UserInterface/lblWelcomeDifferences" Translation="Triggernometry tarjoaa laajennettuja toimintoja (esim. peittokuvat), ja ehdollisen suorituksen jossa toimintoja suoritetaan vain ehtojen täyttyessä (esim. pelaajan nimen oltaessa jotain tiettyä)." />
-    <TranslationEntry Key="Plugin/UserInterface/lblWelcomeDifferencesHeader" Translation="Miten tämä eroaa ACT:n herättimistä?" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeImport" Translation="Se on aika lähellä herättimen luontia. Tämän tervetulotoivotuksen jälkeen voit valita kansion johon haluat tuoda kaikki herättimet (esim. juuri), ja painaa ylhäällä vasemmalta löytyvää Tuo-nappia.&#xD;&#xA;&#xD;&#xA;Nappi näyttää suunnilleen tältä:" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeImportHeader" Translation="Miten käytän tätä saamaani herättimiä sisältävää XML-tiedostoa?" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeIntro" Translation="Tässä joitain vastauksista yleisesti kysyttyihin kysymyksiin:" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeResources" Translation="Triggernometryllä on Discord-serveri jossa voit kysyä kysymyksiä, löytää herättimiä, ja saada uusimmat päivitykset. Löydät sieltä myös lisätietoa eri toimintojen käyttäytymisestä. Liity mukaan osoitteessa:" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeResourcesHeader" Translation="Mistä löydän lisätietoja, herättimiä, tai apua Triggernometryn kanssa?" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeSpse" Translation="Liitännäiset kuten SpecialSpellTimer and Cactbot tarjoavat hyviä yleisiä työkaluja ja toimintoja sellaisenaan.&#xD;&#xA;&#xD;&#xA;Triggernometry on enemmänkin tee-se-itse -sarja, tarjoten erilaisia rakennuspalikoita omien työkalujen ja toimintojen toteuttamiseksi. Se ei sisällä mitään sisäänrakennettuja herättimiä, ja on siten hieman teknisempi työkalu." />
-    <TranslationEntry Key="Plugin/UserInterface/lblWelcomeSpseHeader" Translation="Miten tämä eroaa SpecialSpellTimeristä tai Cactbotista?" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeThanks" Translation="Kiitos Triggernometryn asentamisesta!" />
     <TranslationEntry Key="TestInputForm" Translation="Syötä lokirivejä käsin" />
     <TranslationEntry Key="TestInputForm/btnCancel" Translation="Peruuta" />
@@ -976,6 +971,7 @@
 	<TranslationEntry Key="ActionForm/lblWmsgCode" Translation="Viestikoodi" />
 	<TranslationEntry Key="ActionForm/lblWmsgWparam" Translation="WParam" />
 	<TranslationEntry Key="ActionForm/lblWmsgLparam" Translation="LParam" />	
+    <TranslationEntry Key="internal/PersistenceSwitch/string" Translation="Determines if the variable to be modified is persistent, as in, will be saved to disk on exit and loaded back in when Triggernometry starts. Persistent variables live in a different namespace from regular variables." />
 	<TranslationEntry Key="internal/Plugin/repoupdates" Translation="Päivitetään {0} säilöä" />	
 	<TranslationEntry Key="internal/Plugin/repoupdate" Translation="Päivitetään säilöä {0} osoitteessa {1}" />
 	<TranslationEntry Key="internal/Plugin/repoupdateexception" Translation="Säilön {0} päivitys epäonnistui poikkeuksen takia: {1}" />	
@@ -1009,7 +1005,7 @@
 	<TranslationEntry Key="LogForm/cbxLevelMethod[Level must be higher than (&amp;gt;)]" Translation="Taso on oltava korkeampi kuin (&amp;gt;)" />
 	<TranslationEntry Key="LogForm/cbxLevelMethod[Level must not be equal to (≠)]" Translation="Taso ei saa olla sama kuin (≠)" />
 	<TranslationEntry Key="internal/UserInterface/adddefaultrepo" Translation="Haluaisitko lisätä joitain säilöjä päästäksesi alkuun?" />
-	<TranslationEntry Key="internal/Plugin/repoexportnull" Translation="Tietoja säilölle {0} ei voitu avata" />
+	<TranslationEntry Key="internal/Plugin/repoexportnull" Translation="Tietoja säilölle {0} ei voitu purkaa sarjasta, varmista, että käytät Triggernometryn viimeisintä versiota." />
 	<TranslationEntry Key="internal/RepositoryForm/exception" Translation="Poikkeus" />
 	<TranslationEntry Key="internal/RepositoryForm/warning" Translation="Varoitus" />	
 	<TranslationEntry Key="internal/RepositoryForm/allowprocesswarn" Translation="Ohjelmien käynnistyksen salliminen säilössä oleville herättimille voi olla erittäin riskialtista, sillä säilössä voi olla (tai sinne voi myöhemmin tulla) herättimiä jotka osoittautuvat vahingollisiksi. Oletko täysin varma että haluat sallia tämän?" />

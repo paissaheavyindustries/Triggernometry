@@ -1,4 +1,6 @@
 ﻿
+using System.Windows.Forms;
+
 namespace Triggernometry.CustomControls
 {
     partial class ActionViewer
@@ -170,8 +172,8 @@ namespace Triggernometry.CustomControls
             this.Column1.Frozen = true;
             this.Column1.HeaderText = " ";
             this.Column1.Name = "Column1";
-            this.Column1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Column1.Width = 30;
+            this.Column1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Column1.Width = Screen.PrimaryScreen.Bounds.Width / 50;
             // 
             // colDescription
             // 
@@ -179,7 +181,7 @@ namespace Triggernometry.CustomControls
             this.colDescription.HeaderText = "Description";
             this.colDescription.Name = "colDescription";
             this.colDescription.ReadOnly = true;
-            this.colDescription.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.colDescription.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.colDescription.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // ctxAction
