@@ -18,8 +18,8 @@ namespace Triggernometry.Aura.Renderer
         #region Generic properties
 
         private OverlayWindow _window = null;
-        private Graphics _graphics = null;
-        private Color _bgColor = new Color();
+        // private Graphics _graphics = null;
+        // private Color _bgColor = new Color();
 
         internal bool NeedRender { get; set; } = true;
         internal bool WasHidden { get; set; } = false;

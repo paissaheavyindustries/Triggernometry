@@ -90,7 +90,6 @@ namespace Triggernometry.Forms
                     longeststr = Math.Max(longeststr, g.MeasureString(st, listBox1.Font).Width);
                 }
             }
-            //int strw = Math.Min(300, (int)Math.Ceiling(longeststr) + 40);
             int strw = (int)Math.Ceiling(longeststr) + 20;
             listBox1.Width = strw;
             listBox1.Height = calcheight;

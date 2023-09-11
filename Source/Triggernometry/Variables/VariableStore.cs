@@ -19,6 +19,8 @@ namespace Triggernometry.Variables
 
         public SerializableDictionary<string, VariableTable> Table { get; set; } = new SerializableDictionary<string, VariableTable>();
 
+        public SerializableDictionary<string, VariableDictionary> Dict { get; set; } = new SerializableDictionary<string, VariableDictionary>();
+
     }
 
 }

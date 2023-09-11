@@ -1,5 +1,4 @@
-﻿
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace Triggernometry.CustomControls
 {
@@ -39,8 +38,11 @@ namespace Triggernometry.CustomControls
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.btnActionUp = new System.Windows.Forms.ToolStripButton();
             this.btnActionDown = new System.Windows.Forms.ToolStripButton();
+            this.btnActionTop = new System.Windows.Forms.ToolStripButton();
+            this.btnActionBottom = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnRemoveAction = new System.Windows.Forms.ToolStripButton();
+            this.btnUndo = new System.Windows.Forms.ToolStripButton();
             this.dgvActions = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.colDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -53,7 +55,10 @@ namespace Triggernometry.CustomControls
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
             this.ctxMoveUp = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxMoveDown = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxMoveTop = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxMoveBottom = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.ctxUndo = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxRemoveAction = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActions)).BeginInit();
@@ -69,7 +74,10 @@ namespace Triggernometry.CustomControls
             this.toolStripSeparator2,
             this.btnActionUp,
             this.btnActionDown,
+            this.btnActionTop,
+            this.btnActionBottom,
             this.toolStripSeparator1,
+            this.btnUndo,
             this.btnRemoveAction});
             this.toolStrip2.Location = new System.Drawing.Point(0, 0);
             this.toolStrip2.Name = "toolStrip2";
@@ -120,10 +128,40 @@ namespace Triggernometry.CustomControls
             this.btnActionDown.Text = "Move down";
             this.btnActionDown.Click += new System.EventHandler(this.btnActionDown_Click);
             // 
+            // btnActionTop
+            // 
+            this.btnActionTop.Enabled = false;
+            this.btnActionTop.Image = ((System.Drawing.Image)(resources.GetObject("btnActionTop.Image")));
+            this.btnActionTop.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnActionTop.Name = "btnActionTop";
+            this.btnActionTop.Size = new System.Drawing.Size(74, 22);
+            this.btnActionTop.Text = "Move to top";
+            this.btnActionTop.Click += new System.EventHandler(this.btnActionTop_Click);
+            // 
+            // btnActionBottom
+            // 
+            this.btnActionBottom.Enabled = false;
+            this.btnActionBottom.Image = ((System.Drawing.Image)(resources.GetObject("btnActionBottom.Image")));
+            this.btnActionBottom.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnActionBottom.Name = "btnActionBottom";
+            this.btnActionBottom.Size = new System.Drawing.Size(90, 22);
+            this.btnActionBottom.Text = "Move to bottom";
+            this.btnActionBottom.Click += new System.EventHandler(this.btnActionBottom_Click);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnUndo
+            // 
+            this.btnUndo.Enabled = false;
+            this.btnUndo.Image = ((System.Drawing.Image)(resources.GetObject("btnUndo.Image")));
+            this.btnUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnUndo.Name = "btnUndo";
+            this.btnUndo.Size = new System.Drawing.Size(106, 22);
+            this.btnUndo.Text = "Undo";
+            this.btnUndo.Click += new System.EventHandler(this.btnUndo_Click);
             // 
             // btnRemoveAction
             // 
@@ -169,11 +207,13 @@ namespace Triggernometry.CustomControls
             // 
             // Column1
             // 
+            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.Column1.Frozen = true;
-            this.Column1.HeaderText = " ";
+            this.Column1.HeaderText = "　";
+            this.Column1.MinimumWidth = 12;
             this.Column1.Name = "Column1";
             this.Column1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Column1.Width = Screen.PrimaryScreen.Bounds.Width / 50;
+            this.Column1.Width = 30;
             // 
             // colDescription
             // 
@@ -195,7 +235,10 @@ namespace Triggernometry.CustomControls
             this.toolStripSeparator10,
             this.ctxMoveUp,
             this.ctxMoveDown,
+            this.ctxMoveTop,
+            this.ctxMoveBottom,
             this.toolStripSeparator4,
+            this.ctxUndo,
             this.ctxRemoveAction});
             this.ctxAction.Name = "contextMenuStrip1";
             this.ctxAction.Size = new System.Drawing.Size(181, 198);
@@ -261,10 +304,34 @@ namespace Triggernometry.CustomControls
             this.ctxMoveDown.Text = "Move down";
             this.ctxMoveDown.Click += new System.EventHandler(this.ctxMoveDown_Click);
             // 
+            // ctxMoveTop
+            // 
+            this.ctxMoveTop.Image = ((System.Drawing.Image)(resources.GetObject("ctxMoveTop.Image")));
+            this.ctxMoveTop.Name = "ctxMoveTop";
+            this.ctxMoveTop.Size = new System.Drawing.Size(180, 22);
+            this.ctxMoveTop.Text = "Move to top";
+            this.ctxMoveTop.Click += new System.EventHandler(this.ctxMoveTop_Click);
+            // 
+            // ctxMoveBottom
+            // 
+            this.ctxMoveBottom.Image = ((System.Drawing.Image)(resources.GetObject("ctxMoveBottom.Image")));
+            this.ctxMoveBottom.Name = "ctxMoveBottom";
+            this.ctxMoveBottom.Size = new System.Drawing.Size(180, 22);
+            this.ctxMoveBottom.Text = "Move to bottom";
+            this.ctxMoveBottom.Click += new System.EventHandler(this.ctxMoveBottom_Click);
+            // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(150, 6);
+            // 
+            // ctxUndo
+            // 
+            this.ctxUndo.Image = ((System.Drawing.Image)(resources.GetObject("ctxUndo.Image")));
+            this.ctxUndo.Name = "ctxUndo";
+            this.ctxUndo.Size = new System.Drawing.Size(180, 22);
+            this.ctxUndo.Text = "Move to bottom";
+            this.ctxUndo.Click += new System.EventHandler(this.ctxUndo_Click);
             // 
             // ctxRemoveAction
             // 
@@ -299,9 +366,12 @@ namespace Triggernometry.CustomControls
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton btnActionUp;
         private System.Windows.Forms.ToolStripButton btnActionDown;
+        private System.Windows.Forms.ToolStripButton btnActionTop;
+        private System.Windows.Forms.ToolStripButton btnActionBottom;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton btnUndo;
         private System.Windows.Forms.ToolStripButton btnRemoveAction;
-        private System.Windows.Forms.DataGridView dgvActions;
+        internal System.Windows.Forms.DataGridView dgvActions;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDescription;
         private System.Windows.Forms.ContextMenuStrip ctxAction;
@@ -313,7 +383,10 @@ namespace Triggernometry.CustomControls
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
         private System.Windows.Forms.ToolStripMenuItem ctxMoveUp;
         private System.Windows.Forms.ToolStripMenuItem ctxMoveDown;
+        private System.Windows.Forms.ToolStripMenuItem ctxMoveTop;
+        private System.Windows.Forms.ToolStripMenuItem ctxMoveBottom;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem ctxUndo;
         private System.Windows.Forms.ToolStripMenuItem ctxRemoveAction;
     }
 }

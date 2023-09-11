@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Triggernometry.CustomControls;
 using Triggernometry.Variables;
 
 namespace Triggernometry.Forms
@@ -87,6 +88,7 @@ namespace Triggernometry.Forms
             {
                 tlsOptionsList.Visible = false;
                 tlsOptionsTable.Visible = false;
+                tlsOptionsDict.Visible = false;
                 DataGridViewColumn col = CreateNewColumn("col1", I18n.Translate("internal/VariableEditorForm/colvalue", "Value"));
                 col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 dgvVariableData.Columns.Add(col);
@@ -97,11 +99,12 @@ namespace Triggernometry.Forms
             {
                 tlsOptionsList.Visible = true;
                 tlsOptionsTable.Visible = false;
+                tlsOptionsDict.Visible = false;
                 VariableList v = (VariableList)VariableToEdit;
                 DataGridViewColumn col = CreateNewColumn("col1", I18n.Translate("internal/VariableEditorForm/colvalue", "Value"));
                 col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;                
                 dgvVariableData.Columns.Add(col);
-                dgvVariableData.RowCount = v.Size();
+                dgvVariableData.RowCount = v.Size;
                 RenumberRows();            
                 dgvVariableData.RowHeadersVisible = true;
             }
@@ -109,6 +112,7 @@ namespace Triggernometry.Forms
             {
                 tlsOptionsList.Visible = false;
                 tlsOptionsTable.Visible = true;
+                tlsOptionsDict.Visible = false;
                 VariableTable v = (VariableTable)VariableToEdit;
                 for (int x = 0; x < v.Width; x++)
                 {
@@ -116,6 +120,27 @@ namespace Triggernometry.Forms
                     dgvVariableData.Columns.Add(col);
                 }
                 dgvVariableData.RowCount = v.Height;
+                RenumberRows();
+                dgvVariableData.RowHeadersVisible = true;
+            }
+            else if (VariableToEdit is VariableDictionary)
+            {
+                tlsOptionsList.Visible = false;
+                tlsOptionsTable.Visible = false;
+                tlsOptionsDict.Visible = true;
+                VariableDictionary v = (VariableDictionary)VariableToEdit;
+
+                DataGridViewColumn colKey = CreateNewColumn("colDictKey", I18n.Translate("internal/VariableEditorForm/coldictkey", "Key"));
+                colKey.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                colKey.FillWeight = 33.3F;
+                dgvVariableData.Columns.Add(colKey);
+
+                DataGridViewColumn colValue = CreateNewColumn("colDictValue", I18n.Translate("internal/VariableEditorForm/coldictvalue", "Value"));
+                colValue.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                colValue.FillWeight = 66.7F;
+                dgvVariableData.Columns.Add(colValue);
+
+                dgvVariableData.RowCount = v.Size;
                 RenumberRows();
                 dgvVariableData.RowHeadersVisible = true;
             }
@@ -139,10 +164,30 @@ namespace Triggernometry.Forms
                 Variable vx = e.RowIndex < v.Height && e.ColumnIndex < v.Width ? v.Rows[e.RowIndex].Values[e.ColumnIndex] : null;
                 e.Value = vx != null ? vx.ToString() : "";
             }
+            else if (VariableToEdit is VariableDictionary)
+            {
+                VariableDictionary v = (VariableDictionary)VariableToEdit;
+                //var sortedKeys = v.Values.Keys.OrderBy(k => k).ToList();
+                if (e.RowIndex < v.Size)
+                {
+                    var kv = v.Values.ElementAt(e.RowIndex);
+                    e.Value = (e.ColumnIndex == 0) ? kv.Key
+                            : (e.ColumnIndex == 1) ? kv.Value.ToString() 
+                            : "";
+                }
+                else
+                {
+                    e.Value = "";
+                }
+            }
         }
 
+        private bool isInCellValuePushed = false;
         private void dgvVariableData_CellValuePushed(object sender, DataGridViewCellValueEventArgs e)
         {
+            if (isInCellValuePushed) return;
+            isInCellValuePushed = true;    // switch back to false before each "return"
+
             if (VariableToEdit is VariableScalar)
             {
                 VariableScalar v = (VariableScalar)VariableToEdit;
@@ -158,13 +203,60 @@ namespace Triggernometry.Forms
                 VariableTable v = (VariableTable)VariableToEdit;
                 v.Rows[e.RowIndex].Values[e.ColumnIndex] = new VariableScalar() { Value = (e != null && e.Value != null) ? e.Value.ToString() : "" };
             }
+            else if (VariableToEdit is VariableDictionary)
+            {
+                bool isKey = (e.ColumnIndex == 0);
+                int rowIndex = e.RowIndex;
+                string data = (e.Value ?? "").ToString();
+                
+                VariableDictionary v = (VariableDictionary)VariableToEdit;
+                string oldKey = dgvVariableData.Rows[rowIndex].Cells[0].Value.ToString();
+                if (isKey)
+                {
+                    if (oldKey == data)  // key not changed
+                    {
+                        isInCellValuePushed = false;
+                        return; 
+                    }
+                    if (!v.Values.ContainsKey(data))  // set a new key
+                    {
+                        v.Values[data] = new VariableScalar() { Value = dgvVariableData.Rows[rowIndex].Cells[1].Value.ToString() };
+                        v.Values.Remove(oldKey);
+                    }
+                    else  // key already exists
+                    {
+                        for (int i = 0; i < dgvVariableData.Rows.Count; i++)
+                        {
+                            if (dgvVariableData.Rows[i].Cells[0].Value.ToString() == data)
+                            {
+                                BeginInvoke((MethodInvoker)delegate ()
+                                {   // otherwise the selected grid will be the user-selected one
+                                    dgvVariableData.CurrentCell = dgvVariableData.Rows[i].Cells[0];
+                                });
+                                MessageBox.Show(I18n.Translate("internal/VariableForm/keyexists", 
+                                    "The key {0} already exists (row {1}).", data, i + 1));
+                                isInCellValuePushed = false;
+                                return;
+                            }
+                        }
+                    }
+                    dgvVariableData.Refresh();
+                }
+                else // value edited
+                {
+                    v.SetValue(oldKey, data);
+                }
+            }
+            isInCellValuePushed = false;
         }
 
         private void dgvVariableData_SelectionChanged(object sender, EventArgs e)
         {
-            btnColumnRemove.Enabled = (dgvVariableData.SelectedCells.Count > 0);
-            btnRowRemove.Enabled = (dgvVariableData.SelectedCells.Count > 0);
-            btnItemRemove.Enabled = (dgvVariableData.SelectedCells.Count > 0);
+            bool enableBtnRemove = (dgvVariableData.SelectedCells.Count > 0);
+            btnColumnRemove.Enabled = enableBtnRemove;
+            btnRowRemove.Enabled = enableBtnRemove;
+            btnItemRemove.Enabled = enableBtnRemove;
+            btnKeyRemove.Enabled = enableBtnRemove;
         }
 
         private void RenumberRows()
@@ -241,7 +333,7 @@ namespace Triggernometry.Forms
             dgvVariableData.RowCount++;
             RenumberRows();
             dgvVariableData.Refresh();
-            RestoreEdit();
+            dgvVariableData.CurrentCell = dgvVariableData.Rows[idx + 1].Cells[0];
         }
 
         private void btnItemInsert_Click(object sender, EventArgs e)
@@ -280,21 +372,23 @@ namespace Triggernometry.Forms
 
         private void btnRowAdd_Click(object sender, EventArgs e)
         {
-            int idx = 0;
+            int rowIndex = 0;
+            int colIndex = 0;
             dgvVariableData.EndEdit();
             if (dgvVariableData.SelectedCells.Count > 0)
             {
                 DataGridViewCell c = dgvVariableData.SelectedCells[0];
-                idx = c.RowIndex;
+                rowIndex = c.RowIndex;
+                colIndex = c.ColumnIndex;
             }
             ResetEdit();
             VariableTable v = (VariableTable)VariableToEdit;
-            v.InsertRow(idx + 1);
+            v.InsertRow(rowIndex + 1);
             dgvVariableData.RowCount++;
             RenumberRows();
             RenumberColumns();
             dgvVariableData.Refresh();
-            RestoreEdit();
+            dgvVariableData.CurrentCell = dgvVariableData.Rows[rowIndex + 1].Cells[colIndex];
         }
 
         private void btnRowInsert_Click(object sender, EventArgs e)
@@ -336,15 +430,18 @@ namespace Triggernometry.Forms
 
         private void btnColumnAdd_Click(object sender, EventArgs e)
         {
-            int idx = 0;
+            int rowIndex = 0;
+            int colIndex = 0;
+            dgvVariableData.EndEdit();
             if (dgvVariableData.SelectedCells.Count > 0)
             {
                 DataGridViewCell c = dgvVariableData.SelectedCells[0];
-                idx = c.ColumnIndex;
+                rowIndex = c.RowIndex;
+                colIndex = c.ColumnIndex;
             }
             ResetEdit();
             VariableTable v = (VariableTable)VariableToEdit;
-            v.InsertColumn(idx + 1);
+            v.InsertColumn(colIndex + 1);
             if (dgvVariableData.RowCount != v.Height)
             {
                 dgvVariableData.RowCount = v.Height;
@@ -352,7 +449,7 @@ namespace Triggernometry.Forms
             RenumberRows();
             RenumberColumns();
             dgvVariableData.Refresh();
-            RestoreEdit();
+            dgvVariableData.CurrentCell = dgvVariableData.Rows[rowIndex].Cells[colIndex + 1];
         }
 
         private void btnColumnInsert_Click(object sender, EventArgs e)
@@ -405,6 +502,37 @@ namespace Triggernometry.Forms
                 VariableTable v = (VariableTable)VariableToEdit;
                 File.WriteAllText(saveFileDialog1.FileName, v.ToCSVString());
             }
+        }
+
+        private void btnKeyAdd_Click(object sender, EventArgs e)
+        {
+            ResetEdit();
+            VariableDictionary vd = (VariableDictionary)VariableToEdit;
+            if (!vd.Values.ContainsKey(""))
+            {
+                vd.Values[""] = new VariableScalar();
+                dgvVariableData.RowCount++;
+            }
+            RenumberRows();
+            dgvVariableData.Refresh();
+            dgvVariableData.CurrentCell = dgvVariableData.Rows[dgvVariableData.RowCount - 1].Cells[0];
+            RestoreEdit();
+        }
+
+        private void btnKeyRemove_Click(object sender, EventArgs e)
+        {
+            if (dgvVariableData.SelectedCells.Count <= 0) { return; }
+            DataGridViewCell c = dgvVariableData.SelectedCells[0];
+            string key = dgvVariableData.Rows[c.RowIndex].Cells[0].Value.ToString();
+            ResetEdit();
+            VariableDictionary vd = (VariableDictionary)VariableToEdit;
+            if (vd.Values.Remove(key))
+            {
+                dgvVariableData.RowCount--;
+            }
+            RenumberRows();
+            dgvVariableData.Refresh();
+            RestoreEdit();
         }
     }
 

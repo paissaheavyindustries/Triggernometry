@@ -6,11 +6,11 @@ namespace Triggernometry
     {
         public static Dictionary<string, Dictionary<string, object>> jobs = new Dictionary<string, Dictionary<string, object>>();
 
-        public static Dictionary<string, string> jobEN3ToIdMap = new Dictionary<string, string>();
+        public static Dictionary<string, string> jobNameToIdMap = new Dictionary<string, string>();
 
-        static Entity()
+        static Entity() 
         {   //     index role  CN1   CN2     EN3   JP1    CN         DE                EN               FR                  JP                KR    
-            AddJob( "0", " ", "无", "无职", "NON", "無", "无职业",   "Kein",           "None",          "Non",              "無職",           "없음");
+            AddJob( "0", " ", "冒", "冒险", "ADV", "無", "冒险者",   "Abenteurer",     "Adventurer",    "Aventurier",       "冒険者",         "모험가");
             AddJob( "1", "T", "剑", "剑术", "GLA", "剣", "剑术师",   "Gladiator",      "Gladiator",     "Gladiateur",       "剣術士",         "검술사");
             AddJob( "2", "M", "斗", "格斗", "PGL", "闘", "格斗家",   "Faustkämpfer",   "Pugilist",      "Pugiliste",        "格闘士",         "격투사");
             AddJob( "3", "T", "斧", "斧术", "MRD", "斧", "斧术师",   "Marodeur",       "Marauder",      "Maraudeur",        "斧術士",         "도끼술사");
@@ -51,9 +51,11 @@ namespace Triggernometry
             AddJob("38", "R", "舞", "舞者", "DNC", "踊", "舞者",     "Tänzer",         "Dancer",       "Danseur",           "踊り子",         "무도가");
             AddJob("39", "M", "镰", "钐镰", "RPR", "リ", "钐镰客",   "Schnitter",      "Reaper",       "Faucheur",          "リーパー",       "리퍼");
             AddJob("40", "H", "贤", "贤者", "SGE", "賢", "贤者",     "Weiser",         "Sage",         "Sage",              "賢者",           "현자");
-            AddJob("41", " ", "未", "未知", "???", "？", "未知职业", "Unbekannt",      "Unknown",      "Inconnu",           "？",             "？");
-            AddJob("42", " ", "未", "未知", "???", "？", "未知职业", "Unbekannt",      "Unknown",      "Inconnu",           "？",             "？");
-        }
+            AddJob("41", " ", "金", "４１", "041", "金", "职业４１", "job_41",         "job_41",       "job_41",            "job_41",         "job_41");
+            AddJob("42", " ", "生", "４２", "042", "生", "职业４２", "job_42",         "job_42",       "job_42",            "job_42",         "job_42");
+            AddJob("43", " ", "丽", "４３", "043", "丽", "职业４３", "job_43",         "job_43",       "job_43",            "job_43",         "job_43");
+            AddJob("44", " ", "水", "４４", "044", "水", "职业４４", "job_44",         "job_44",       "job_44",            "job_44",         "job_44");
+        }   // use 《千字文》 as placeholders for new jobs to avoid repeated keys in jobNameToIdMap
 
         private static void AddJob(string id, string role, string jobCN1, string jobCN2, string jobEN3, string jobJP1,
             string jobCN, string jobDE, string jobEN, string jobFR, string jobJP, string jobKR)
@@ -85,17 +87,21 @@ namespace Triggernometry
             jobs[id] = new Dictionary<string, object>
             {
                 {"role", roleString},
+                {"jobid",  id},
                 {"isT",   (role == "T") ? "1" : "0"},
                 {"isH",   (role == "H") ? "1" : "0"},
                 {"isTH", ((role == "T") || (role == "H")) ? "1" : "0"},
                 {"isD",  ((role == "M") || (role == "R")) ? "1" : "0"},
                 {"isM",   (role == "M") ? "1" : "0"},
                 {"isR",   (role == "R") ? "1" : "0"},
+                {"isTM", ((role == "T") || (role == "M")) ? "1" : "0"},
+                {"isHR", ((role == "H") || (role == "R")) ? "1" : "0"},
                 {"isC",   (role == "C") ? "1" : "0"},
                 {"isG",   (role == "G") ? "1" : "0"},
                 {"isCG", ((role == "C") || (role == "G")) ? "1" : "0"},
                 {"jobCN1", jobCN1},
                 {"jobCN2", jobCN2},
+                {"job",    jobEN3},
                 {"jobEN3", jobEN3},
                 {"jobJP1", jobJP1},
                 {"jobCN",  jobCN},
@@ -106,23 +112,17 @@ namespace Triggernometry
                 {"jobKR",  jobKR},
             };
 
-            jobEN3ToIdMap[jobEN3] = id;
+            jobNameToIdMap[id] = id;
+            jobNameToIdMap[jobCN1.ToLower()] = id;
+            jobNameToIdMap[jobCN2.ToLower()] = id;
+            jobNameToIdMap[jobEN3.ToLower()] = id;
+            jobNameToIdMap[jobJP1.ToLower()] = id;
+            jobNameToIdMap[jobCN.ToLower()]  = id;
+            jobNameToIdMap[jobDE.ToLower()]  = id;
+            jobNameToIdMap[jobEN.ToLower()]  = id;
+            jobNameToIdMap[jobFR.ToLower()]  = id;
+            jobNameToIdMap[jobJP.ToLower()]  = id;
+            jobNameToIdMap[jobKR.ToLower()]  = id;
         }
     }
 }
-
-/*
-public Dictionary<string, string[]> XIVJobNames = new Dictionary<string, string[]>
-        {
-            { "cn",  new string[] { "0", "剑术师", "格斗家", "斧术师", "枪术师", "弓箭手", "幻术师", "咒术师", "刻木匠", "锻铁匠", "铸甲匠", "雕金匠", "制革匠", "裁衣匠", "炼金术士", "烹调师", "采矿工", "园艺工", "捕鱼人", "骑士", "武僧", "战士", "龙骑士", "吟游诗人", "白魔法师", "青魔法师", "秘术师", "召唤师", "学者", "双剑师", "忍者", "机工士", "暗黑骑士", "占星术士", "武士", "赤魔法师", "青魔法师", "绝枪战士", "舞者", "钐镰客", "贤者" } },
-            { "de",  new string[] { "0", "Gladiator", "Faustkämpfer", "Marodeur", "Pikenier", "Waldläufer", "Druide", "Thaumaturg", "Zimmerer", "Grobschmied", "Plattner", "Goldschmied", "Gerber", "Weber", "Alchemist", "Gourmet", "Minenarbeiter", "Gärtner", "Fischer", "Paladin", "Mönch", "Krieger", "Dragoon", "Barde", "Weißmagier", "Blaumagier", "Hermetiker", "Beschwörer", "Gelehrter", "Schurke", "Ninja", "Maschinist", "Dunkelritter", "Astrologe", "Samurai", "Rotmagier", "Blaumagier", "Revolverklinge", "Tänzer", "Schnitter", "Weiser" } },
-            { "en",  new string[] { "0", "Gladiator", "Pugilist", "Marauder", "Lancer", "Archer", "Conjurer", "Thaumaturge", "Carpenter", "Blacksmith", "Armorer", "Goldsmith", "Leatherworker", "Weaver", "Alchemist", "Culinarian", "Miner", "Botanist", "Fisher", "Paladin", "Monk", "Warrior", "Dragoon", "Bard", "White Mage", "Black Mage", "Arcanist", "Summoner", "Scholar", "Rogue", "Ninja", "Machinist", "Dark Knight", "Astrologian", "Samurai", "Red Mage", "Blue Mage", "Gunbreaker", "Dancer", "Reaper", "Sage" } },
-            { "fr",  new string[] { "0", "Gladiateur", "Pugiliste", "Maraudeur", "Maître d'hast", "Archer", "Élémentaliste", "Occultiste", "Menuisier", "Forgeron", "Armurier", "Orfèvre", "Tanneur", "Couturier", "Alchimiste", "Cuisinier", "Mineur", "Botaniste", "Pêcheur", "Paladin", "Moine", "Guerrier", "Chevalier dragon", "Barde", "Mage blanc", "Mage bleu", "Arcaniste", "Invocateur", "Érudit", "Surineur", "Ninja", "Machiniste", "Chevalier noir", "Astromancien", "Samouraï", "Mage rouge", "Mage bleu", "Pistosabreur", "Danseur", "Faucheur", "Sage" } },
-            { "jp",  new string[] { "0", "剣術士", "格闘士", "斧術士", "槍術士", "弓術士", "幻術士", "呪術士", "木工師", "鍛冶師", "甲冑師", "彫金師", "革細工師", "裁縫師", "錬金術師", "調理師", "採掘師", "園芸師", "漁師", "ナイト", "モンク", "戦士", "竜騎士", "吟遊詩人", "白魔道士", "青魔道士", "巴術士", "召喚士", "学者", "双剣士", "忍者", "機工士", "暗黒騎士", "占星術師", "侍", "赤魔道士", "青魔道士", "ガンブレイカー", "踊り子", "リーパー", "賢者" } },
-            { "kr",  new string[] { "0", "검술사", "격투사", "도끼술사", "창술사", "궁술사", "환술사", "주술사", "목수", "대장장이", "갑주제작사", "보석공예가", "가죽공예가", "재봉사", "연금술사", "요리사", "광부", "원예가", "어부", "나이트", "몽크", "전사", "용기사", "음유시인", "백마도사", "흑마도사", "비술사", "소환사", "학자", "쌍검사", "닌자", "기공사", "암흑기사", "점성술사", "사무라이", "적마도사", "청마도사", "건브레이커", "무도가", "리퍼", "현자" } },
-            { "cn1", new string[] { "无", "剑", "斗", "斧", "枪", "弓", "幻", "咒", "木", "铁", "甲", "雕", "革", "衣", "炼", "厨", "矿", "园", "鱼", "骑", "僧", "战", "龙", "诗", "白", "黑", "秘", "召", "学", "双", "忍", "机", "暗", "占", "侍", "赤", "青", "绝", "舞", "镰", "贤", "？", "？", "？" } },
-            { "cn2", new string[] { "无职", "剑术", "格斗", "斧术", "枪术", "弓术", "幻术", "咒术", "刻木", "锻铁", "铸甲", "雕金", "制革", "裁衣", "炼金", "烹调", "采矿", "园艺", "捕鱼", "骑士", "武僧", "战士", "龙骑", "诗人", "白魔", "黑魔", "秘术", "召唤", "学者", "双剑", "忍者", "机工", "黑骑", "占星", "武士", "赤魔", "青魔", "绝枪", "舞者", "钐镰", "贤者", "未知", "未知", "未知" } },
-            { "en3", new string[] { "NON", "GLA", "PGL", "MRD", "LNC", "ARC", "CNJ", "THM", "CRP", "BSM", "ARM", "GSM", "LTW", "WVR", "ALC", "CUL", "MIN", "BTN", "FSH", "PLD", "MNK", "WAR", "DRG", "BRD", "WHM", "BLM", "ACN", "SMN", "SCH", "ROG", "NIN", "MCH", "DRK", "AST", "SAM", "RDM", "BLM", "GNB", "DNC", "RPR", "SGE", "???", "???", "???" } },
-            { "jp1", new string[] { "無", "剣", "闘", "斧", "槍", "弓", "幻", "呪", "木", "鍛", "甲", "彫", "革", "裁", "錬", "調", "鉱", "園", "漁", "ナ", "モ", "戦", "竜", "詩", "白", "黒", "巴", "召", "学", "双", "忍", "機", "暗", "占", "侍", "赤", "青", "ガ", "踊", "リ", "賢", "？", "？", "？" } },
-        };
-*/

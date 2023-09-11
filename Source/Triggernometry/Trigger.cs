@@ -315,6 +315,23 @@ namespace Triggernometry
                 _EditAutofire = Boolean.Parse(value);
             }
         }
+        internal bool _EditAutofireAllowCondition { get; set; } = false;
+        [XmlAttribute]
+        public string EditAutofireAllowCondition
+        {
+            get
+            {
+                if (_EditAutofireAllowCondition == false)
+                {
+                    return null;
+                }
+                return _EditAutofireAllowCondition.ToString();
+            }
+            set
+            {
+                _EditAutofireAllowCondition = Boolean.Parse(value);
+            }
+        }
 
         internal string _TestInput;
         [XmlAttribute]
@@ -814,6 +831,7 @@ namespace Triggernometry
             t._RefirePeriodExpression = _RefirePeriodExpression;
             t._MutexToCapture = _MutexToCapture;
             t._EditAutofire = _EditAutofire;
+            t._EditAutofireAllowCondition = _EditAutofireAllowCondition;
             t._Description = _Description;
             t._TestInput = _TestInput;
         }
