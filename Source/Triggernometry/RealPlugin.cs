@@ -29,6 +29,8 @@ namespace Triggernometry
             None,
             Error,
             Warning,
+            Custom,
+            Custom2,
             Info,
             Verbose,
             Inherit

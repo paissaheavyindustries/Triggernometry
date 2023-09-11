@@ -5,6 +5,9 @@ using System.Threading;
 using System.Diagnostics;
 using Triggernometry.Variables;
 using System.Linq;
+using System.Text;
+using System.Diagnostics.Eventing.Reader;
+using System.Globalization;
 
 namespace Triggernometry.PluginBridges
 {
@@ -63,6 +66,7 @@ namespace Triggernometry.PluginBridges
             vc.SetValue("x", 0);
             vc.SetValue("y", 0);
             vc.SetValue("z", 0);
+            vc.SetValue("h", 0);
             vc.SetValue("id", "");
             vc.SetValue("inparty", 0);
             vc.SetValue("inalliance", 0);
@@ -74,6 +78,16 @@ namespace Triggernometry.PluginBridges
             vc.SetValue("worldid", 0);
             vc.SetValue("worldname", "");
             vc.SetValue("currentworldid", 0);
+            vc.SetValue("bnpcid", 0);
+            vc.SetValue("bnpcnameid", 0);
+            vc.SetValue("ownerid", 0);
+            vc.SetValue("type", 0);
+            vc.SetValue("iscasting", 0);
+            vc.SetValue("castid", 0);
+            vc.SetValue("casttime", 0);
+            vc.SetValue("maxcasttime", 0);
+            vc.SetValue("partytype", "None");
+            vc.SetValue("address", 0);
         }
 
         public static void SetupNullCombatant()
@@ -306,9 +320,31 @@ namespace Triggernometry.PluginBridges
             vc.SetValue("ownerid", (cmx.OwnerID > 0) ? ConvertToHex(cmx.OwnerID) : 0);
             vc.SetValue("bnpcnameid", cmx.BNpcNameID);
             vc.SetValue("bnpcid", cmx.BNpcID);
-            vc.SetValue("type", cmx.type);
-            vc.SetValue("order", cmx.Order);
+            vc.SetValue("partytype", cmx.PartyType.ToString());
+            vc.SetValue("address", $"{cmx.Address}"); // IntPtr
+            //vc.SetValue("all", GetPropertiesAndValues(cmx));
         }
+
+        /*
+        public static string GetPropertiesAndValues(object obj)
+        {
+            if (obj == null) return "Object is null";
+
+            StringBuilder result = new StringBuilder();
+
+            Type type = obj.GetType();
+            PropertyInfo[] properties = type.GetProperties();
+
+            foreach (PropertyInfo property in properties)
+            {
+                object value = property.GetValue(obj);
+                string typeName = property.PropertyType.Name;
+                result.AppendLine($"{property.Name}: ({typeName}){value}");
+            }
+
+            return result.ToString();
+        }
+        */
 
         private static object GetInstance()
         {            
@@ -404,8 +440,7 @@ namespace Triggernometry.PluginBridges
             {
                 Int64 old = Interlocked.Read(ref LastCheck);
                 Int64 now = DateTime.Now.Ticks;
-                if (((now - old) / TimeSpan.TicksPerMillisecond) < 500
-                    )
+                if (((now - old) / TimeSpan.TicksPerMillisecond) < 500)
                 {
                     return;
                 }

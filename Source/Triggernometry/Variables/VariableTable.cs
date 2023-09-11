@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace Triggernometry.Variables
@@ -130,9 +130,12 @@ namespace Triggernometry.Variables
             {
                 while (Height < newHeight)
                 {
-                    VariableTableRow vtr = new VariableTableRow();
-                    vtr.Values.AddRange(new Variable[newWidth]);
-                    Rows.Add(vtr);
+                    var emptyRow = new VariableTableRow();
+                    for (int i = 0; i < newWidth; i++)
+                    {
+                        emptyRow.Values.Add(new VariableScalar());
+                    }
+                    Rows.Add(emptyRow);
                 }
             }
             else if (Height > newHeight)
@@ -151,7 +154,11 @@ namespace Triggernometry.Variables
                     }
                     else if (Rows[i].Values.Count < newWidth)
                     {
-                        Rows[i].Values.AddRange(new Variable[newWidth - Rows[i].Values.Count]);
+                        int num = newWidth - Rows[i].Values.Count;
+                        for (int j = 0; j < num; j++)
+                        {
+                            Rows[i].Values.Add(new VariableScalar());
+                        }
                     }
                 }
             }
@@ -168,26 +175,16 @@ namespace Triggernometry.Variables
             InternalSet(x, y, nv, changer);
         }
         
-        private int ProcessColIndex(int x)
-        {
-            if (x < 0) {
-                x += Width;
-            } else {
-                x--;
-            }
-            return x;
+        private int ProcessColIndex(int rawIndex)
+        {   // rawIndex: starts from 1; could be negative
+            return (rawIndex < 0) ? (rawIndex + Width) : (rawIndex - 1);
         }
         
-        private int ProcessRowIndex(int y)
-        {
-            if (y < 0) {
-                y += Height;
-            } else {
-                y--;
-            }
-            return y;
+        private int ProcessRowIndex(int rawIndex)
+        {   // rawIndex: starts from 1; could be negative
+            return (rawIndex < 0) ? (rawIndex + Height) : (rawIndex - 1);
         }
-        
+
         private void InternalSet(int x, int y, Variable value, string changer)
         {
             x = ProcessColIndex(x);
@@ -341,6 +338,20 @@ namespace Triggernometry.Variables
             return sb.ToString().TrimEnd('\r', '\n');
         }
 
+        public double Sum(List<int> colIndices, List<int> rowIndices)
+        {
+            double sum = 0;
+            foreach (int x in colIndices)
+            {
+                foreach (int y in rowIndices)
+                {
+                    if (double.TryParse(Rows[y].Values[x].ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out double value))
+                        sum += value;
+                }
+            }
+            return sum;
+        }
+
         public string VJoin(string joiner1, string joiner2, List<int> colSlices, List<int> rowSlices)
         {
             List<string> cols = new List<string>();
@@ -377,37 +388,6 @@ namespace Triggernometry.Variables
             }
 
             return String.Join(joiner2, rows);
-        }
-
-        public void Build(string expression, string colSeparator, string rowSeparator, string changer)
-        {
-            // split the expression
-            string[] rowStrings = expression.Split(new string[] { rowSeparator }, StringSplitOptions.None);
-            List<string[]> cellStrings = new List<string[]>();
-            int width = 0;
-            int height = rowStrings.Length;
-            foreach (string row in rowStrings)
-            {
-                string[] cells = row.Split(new string[] { colSeparator }, StringSplitOptions.None);
-                cellStrings.Add(cells);
-                width = Math.Max(width, cells.Length);
-            }
-
-            // set values to the table
-            Rows.Clear();
-            Resize(width, height);
-
-            for (int rowIndex = 0; rowIndex < height; rowIndex++)
-            {
-                for (int colIndex = 0; colIndex < cellStrings[rowIndex].Length; colIndex++)
-                {
-                    VariableScalar varScalar = new VariableScalar { Value = cellStrings[rowIndex][colIndex] };
-                    Rows[rowIndex].Values[colIndex] = varScalar;
-                }
-            }
-
-            LastChanger = changer;
-            LastChanged = DateTime.Now;
         }
 
         public void SetRow(int index, string[] newValues = null, string changer = "")
@@ -517,6 +497,7 @@ namespace Triggernometry.Variables
 
         public void RemoveRow(int index, string changer = "")
         {   // index starts from 0
+            if (index < 0 || index >= Height) { return; }
             for (int y = index; y < Height - 1; y++)
             {
                 Rows[y] = Rows[y + 1];
@@ -531,6 +512,7 @@ namespace Triggernometry.Variables
 
         public void RemoveColumn(int index, string changer = "")
         {   // index starts from 0
+            if (index < 0 || index >= Width) { return; }
             for (int y = 0; y < Height; y++)
             {
                 for (int x = index; x < Width - 1; x++)
@@ -544,6 +526,66 @@ namespace Triggernometry.Variables
                 LastChanger = changer;
                 LastChanged = DateTime.Now;
             }
+        }
+
+        public int Count(string str, List<int> colIndices, List<int> rowIndices)
+        {
+            int count = 0;
+            foreach (int y in rowIndices)
+            { 
+                count += colIndices.Count(x => Rows[y].Values[x].ToString() == str);
+            }
+            return count;
+        }
+
+        public static VariableTable Build(string expression, char colSeparator, char rowSeparator, string changer)
+        {   // in actions
+            string[] rowStrings = expression.Split(rowSeparator);
+            List<string[]> cellStrings = new List<string[]>();
+            int width = 0;
+            int height = rowStrings.Length;
+            foreach (string row in rowStrings)
+            {
+                string[] cells = row.Split(colSeparator);
+                cellStrings.Add(cells);
+                width = Math.Max(width, cells.Length);
+            }
+            VariableTable vt = ActualBuild(cellStrings, width, height);
+            vt.LastChanger = changer;
+            vt.LastChanged = DateTime.Now;
+            return vt;
+        }
+
+        public static VariableTable BuildTemp(string expression)
+        {   // in expressions: ${?t: 1, 2;  3, 4;  5, 6 [xxx][xxx]}
+            string[] rowStrings = Context.SplitArguments(expression, separator: "|");
+            List<string[]> cellStrings = new List<string[]>();
+            int width = 0;
+            int height = rowStrings.Length;
+            foreach (string row in rowStrings)
+            {
+                string[] cells = Context.SplitArguments(row);
+                cellStrings.Add(cells);
+                width = Math.Max(width, cells.Length);
+            }
+            return ActualBuild(cellStrings, width, height);
+        }
+
+        private static VariableTable ActualBuild(List<string[]> cellStrings, int width, int height)
+        {
+            VariableTable vt = new VariableTable();
+            for (int rowIndex = 0; rowIndex < height; rowIndex++)
+            {
+                vt.Rows.Add(new VariableTableRow());
+                for (int colIndex = 0; colIndex < width; colIndex++)
+                {
+                    vt.Rows[rowIndex].Values.Add(
+                        (colIndex < cellStrings[rowIndex].Length)
+                        ? new VariableScalar { Value = cellStrings[rowIndex][colIndex] }
+                        : new VariableScalar());
+                }
+            }
+            return vt;
         }
 
     }
