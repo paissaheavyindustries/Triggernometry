@@ -268,7 +268,7 @@ namespace Triggernometry
         public Interpreter(RealPlugin plug)
         {
             _plug = plug;
-            _so = ScriptOptions.Default;
+            _so = ScriptOptions.Default;            
             var asms = AppDomain.CurrentDomain.GetAssemblies();
             foreach (Assembly asm in asms)
             {
@@ -294,8 +294,28 @@ namespace Triggernometry
                     }
                 }
             }
-            _so = _so.AddImports("System");
+            _so = _so.AddImports("System");            
             Evaluate("int whee;", null, new Context() { plug = plug });
+        }
+
+        public bool GetUnsafeUsage(Context ctx)
+        {
+            Configuration.UnsafeUsageEnum us = ctx.plug.cfg.UnsafeUsage;
+            bool isremote = ctx.trig != null && ctx.trig.Repo != null;
+            bool isadmin = ctx.plug.runningAsAdmin;
+            if (isadmin == true && (us & Configuration.UnsafeUsageEnum.AllowAdmin) == 0)
+            {
+                return false;
+            }
+            if (isremote == false && (us & Configuration.UnsafeUsageEnum.AllowLocal) == 0)
+            {
+                return false;
+            }
+            if (isremote == true && (us & Configuration.UnsafeUsageEnum.AllowRemote) == 0)
+            {
+                return false;
+            }
+            return true;
         }
 
         public string[] GetBadApis(Context ctx)
@@ -328,12 +348,12 @@ namespace Triggernometry
         {
             Globs g = new Globs() { TriggernometryHelpers = new Helpers() { Plugin = ctx != null ? ctx.plug : null, CurrentContext = ctx } };
             g.TriggernometryHelpers.Storage = g.TriggernometryHelpers.Plugin != null ? g.TriggernometryHelpers.Plugin.scriptingStorage : null;
-            ScriptOptions _myso = _so;
+            ScriptOptions _myso = _so.WithAllowUnsafe(GetUnsafeUsage(ctx));
             if (assy != null)
             {
                 string[] assys = assy.Split(',');
                 _myso = _myso.AddReferences(assys.Select(x => x.Trim()));
-            }
+            }            
             string[] badApis = GetBadApis(ctx);
             if (badApis != null && badApis.Length > 0)
             {

@@ -85,6 +85,13 @@ namespace Triggernometry.Forms
             {
                 dgvApiAccess.Rows.Add(new object[] { ap.Name, ap.AllowLocal, ap.AllowRemote, ap.AllowAdmin });
             }
+            Configuration.UnsafeUsageEnum us = cfg.UnsafeUsage;
+            dgvAdditionalFeatures.Rows.Add(new object[] {
+                "Unsafe",
+                (us & Configuration.UnsafeUsageEnum.AllowLocal) != 0,
+                (us & Configuration.UnsafeUsageEnum.AllowRemote) != 0,
+                (us & Configuration.UnsafeUsageEnum.AllowAdmin) != 0 }
+            );
         }
 
         internal void SettingsFromConfiguration(Configuration a)
@@ -271,6 +278,24 @@ namespace Triggernometry.Forms
                 };
                 setter.Invoke(a, new object[] { au, true });
             }
+            foreach (DataGridViewRow r in dgvAdditionalFeatures.Rows)
+            {
+                string Name = (string)r.Cells[0].Value;
+                bool AllowLocal = (bool)r.Cells[1].Value;
+                bool AllowRemote = (bool)r.Cells[2].Value;
+                bool AllowAdmin = (bool)r.Cells[3].Value;
+                switch (Name.ToLower())
+                {
+                    case "unsafe":
+                        Configuration.UnsafeUsageEnum us = Configuration.UnsafeUsageEnum.None;
+                        if (AllowLocal == true) us |= Configuration.UnsafeUsageEnum.AllowLocal;
+                        if (AllowRemote == true) us |= Configuration.UnsafeUsageEnum.AllowRemote;
+                        if (AllowAdmin == true) us |= Configuration.UnsafeUsageEnum.AllowAdmin;
+                        setter = a.GetType().GetMethod("SetUnsafeUsage", BindingFlags.NonPublic | BindingFlags.Instance);
+                        setter.Invoke(a, new object[] { us });
+                        break;
+                }                
+            };                            
             lock (plug.cfg.Constants)
             {
                 plug.cfg.Constants.Clear();
@@ -874,6 +899,8 @@ namespace Triggernometry.Forms
                 case DialogResult.Yes:
                     dgvApiAccess.Enabled = true;
                     dgvApiAccess.ReadOnly = false;
+                    dgvAdditionalFeatures.Enabled = true;
+                    dgvAdditionalFeatures.ReadOnly = false;
                     btnUnlockSecurity.Visible = false;
                     panel18.Visible = false;
                     break;
@@ -882,6 +909,10 @@ namespace Triggernometry.Forms
 
         private void dgvApiAccess_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex == -1)
+            {
+                return;
+            }
             DataGridViewRow r = dgvApiAccess.Rows[e.RowIndex];
             DataGridViewCell c = r.Cells[e.ColumnIndex];
             c.Value = ((bool)c.Value == false);
@@ -1135,6 +1166,27 @@ namespace Triggernometry.Forms
                     e.Value = t.Item2;
                     break;
             }
+        }
+
+        private void dgvAdditionalFeatures_SelectionChanged(object sender, EventArgs e)
+        {
+            dgvAdditionalFeatures.ClearSelection();
+        }
+
+        private void dgvAdditionalFeatures_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex == -1)
+            {
+                return;
+            }
+            DataGridViewRow r = dgvAdditionalFeatures.Rows[e.RowIndex];
+            DataGridViewCell c = r.Cells[e.ColumnIndex];
+            c.Value = ((bool)c.Value == false);
+        }
+
+        private void dgvAdditionalFeatures_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            dgvAdditionalFeatures_CellContentClick(sender, e);
         }
 
     }

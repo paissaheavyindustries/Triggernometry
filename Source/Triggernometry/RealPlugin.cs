@@ -2556,9 +2556,9 @@ namespace Triggernometry
             f.Repo = r;
         }
 
-        private bool ApplyRepositoryRestrictions(Trigger t, Repository r)
+        private bool ApplyActionSpecificRestrictions(IEnumerable<Action> actions, Repository r)
         {
-            foreach (Action a in t.Actions)
+            foreach (Action a in actions)
             {
                 if (a.ActionType == Action.ActionTypeEnum.ExecuteScript && r.AllowScriptExecution == false)
                 {
@@ -2580,6 +2580,24 @@ namespace Triggernometry
                 {
                     return false;
                 }
+                if (a.ActionType == Action.ActionTypeEnum.Loop)
+                {
+                    bool ret = ApplyActionSpecificRestrictions(a.LoopActions, r);
+                    if (ret == false)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        private bool ApplyRepositoryRestrictions(Trigger t, Repository r)
+        {
+            bool ret = ApplyActionSpecificRestrictions(t.Actions, r);
+            if (ret == false)
+            {
+                return false;
             }
             var ix = from tx in r.TriggerStates where tx.Id == t.Id select tx;
             if (ix.Count() == 0)
