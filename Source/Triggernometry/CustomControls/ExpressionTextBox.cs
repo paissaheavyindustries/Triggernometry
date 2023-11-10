@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using Triggernometry.Variables;
 using System.Runtime.InteropServices;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Triggernometry.CustomControls
 {
@@ -43,6 +42,7 @@ namespace Triggernometry.CustomControls
             "radtodeg(rad)", "degtorad(deg)",
             "angle(x1, y1, x2, y2)", "θ(x1, y1, x2, y2)", "relangle(θ1, θ2)", "relθ(θ1, θ2)",
             "roundir(θ, ±n)", "roundir(θ, ±n, digits)", "roundvec(dx, dy, ±n)", "roundvec(dx, dy, ±n, digits)",
+            "isanglebetween(θ, θ1, θ2)", "isθbetween(θ, θ1, θ2)",
 
             // numeric string func
             "hex2dec(hex)", "hex2float(hex)", "hex2double(hex)", "X8float(hex)", "parsedmg(hex)", "len(alphanumstr)",
@@ -58,7 +58,7 @@ namespace Triggernometry.CustomControls
             "dvar:", "pdvar:", "edvar:", "epdvar:", "d:", "pd:", "ed:", "epd:",
             "tvarcl:", "ptvarcl:", "tvarrl:", "ptvarrl:", "tvardl:", "ptvardl:",
             "?l:", "?lvar:", "?t:", "?tvar:", "?d:", "?dvar:",
-            "etext:", "eimage:",
+            "etext:", "eimage:", "ecallback:",
 
             // special variables
             "_incombat", "_lastencounter", "_activeencounter",
@@ -108,9 +108,9 @@ namespace Triggernometry.CustomControls
             "hjoin()", "hjoin(joiner1, joiner2, colSlices, rowSlices)",
             "vjoin()", "vjoin(joiner1, joiner2, colSlices, rowSlices)",
             "hlookup(str, rowIndex)", "hlookup(str, rowIndex, colSlices)",
-            "vlookup(str, rowIndex)", "vlookup(str, rowIndex, colSlices)",
+            "vlookup(str, colIndex)", "vlookup(str, colIndex, rowSlices)",
             "hl(str, rowIndex)", "hl(str, rowIndex, colSlices)",
-            "vl(str, rowIndex)", "vl(str, rowIndex, colSlices)",
+            "vl(str, colIndex)", "vl(str, colIndex, rowSlices)",
             "count(str)", "count(str, colSlices, rowSlices)",
             "sum()", "sum(colSlices, rowSlices)",
             "max()", "max(type, colSlices, rowSlices)",
@@ -140,12 +140,12 @@ namespace Triggernometry.CustomControls
 
         public static List<string> ffxivProps = new List<string>()
         {
-            "name", "job", "jobid", "role", "id", "ownerid", "bnpcid", "bnpcnameid", "type", "partytype", "address",
+            "name", "job", "jobid", "role", "subrole", "roleid", "id", "ownerid", "bnpcid", "bnpcnameid", "type", "partytype", "address",
             "currenthp", "currentmp", "currentcp", "currentgp", "maxhp", "maxmp", "maxcp", "maxgp", "level",
             "x", "y", "z", "heading", "h", "distance", "iscasting", "casttime", "maxcasttime", "castid",
             "inparty", "order", "worldid", "worldname", "currentworldid", "targetid", "casttargetid",
             "isT", "isH", "isD", "isM", "isR", "isC", "isG", "isTH", "isCG", "isTM", "isHR",
-            "jobCN", "jobDE", "jobEN", "jobFR", "jobJP", "jobKR", "jobCN1", "jobCN2", "jobEN3", "jobJP1"
+            "jobCN", "jobDE", "jobEN", "jobFR", "jobJP", "jobKR", "jobCN1", "jobCN2", "jobEN3", "jobJP1", 
         };
 
         public static List<string> jobProps = new List<string>()
@@ -298,7 +298,7 @@ namespace Triggernometry.CustomControls
         public static readonly Regex rexFunc
             = new Regex(@"\$\{f(?:unc)?:(?<funcid>[^(:]*)$");
         public static readonly Regex rexVarName
-            = new Regex(@"\$\{(?<e>e?)(?<persist>p?)(?<type>[vltd]|text|image)(?:v?ar)?(?:[cdr]l)?:(?<name>[^$¤.[]*)$");
+            = new Regex(@"\$\{(?<e>e?)(?<persist>p?)(?<type>[vltd]|text|image|callback)(?:v?ar)?(?:[cdr]l)?:(?<name>[^$¤.[]*)$");
         public static readonly Regex rexColHeader
             = new Regex(@"\$\{(?<persist>p?)t(?:var)?[cd]l:(?<name>[^$¤[]+)\[(?<key>[^$¤\]]*)$");
         public static readonly Regex rexRowHeader
@@ -327,31 +327,17 @@ namespace Triggernometry.CustomControls
             InitializeComponent();
             ctx = new Context();
             fakectx = new Context();
-            fakectx.testmode = true;
+            fakectx.testByPlaceholder = true;
             ResetTooltip();
             textBox1.TextChanged += TextBox1_TextChanged;
             textBox1.KeyPress += TextBox1_KeyPress;
             textBox1.KeyDown += TextBox1_KeyDown;
+            textBox1.MaxLength = 10000000; // for scripts
             Disposed += ExpressionTextBox_Disposed;
             Leave += ExpressionTextBox_Leave;
             LostFocus += ExpressionTextBox_LostFocus;
             acfDebounceTimer.Interval = 100; // debounce timer for autocomplete
             acfDebounceTimer.Tick += (sender, e) => ProcessAutocomplete();
-        }
-
-        public static void SetPlugForTextBoxes(Control parent, RealPlugin plug)
-        {
-            foreach (Control control in parent.Controls)
-            {
-                if (control is ExpressionTextBox expressionTextBox)
-                {
-                    expressionTextBox.ctx.plug = plug;
-                }
-                else
-                {
-                    SetPlugForTextBoxes(control, plug);
-                }
-            }
         }
 
         private void ExpressionTextBox_LostFocus(object sender, EventArgs e)
@@ -786,8 +772,19 @@ namespace Triggernometry.CustomControls
                     case "l": varNames = vs.List.Keys.ToList(); break;
                     case "t": varNames = vs.Table.Keys.ToList(); break;
                     case "d": varNames = vs.Dict.Keys.ToList(); break;
-                    case "text": varNames = ctx.plug.sc.textitems.Keys.ToList(); break;
-                    case "image": varNames = ctx.plug.sc.imageitems.Keys.ToList(); break;
+                    case "text":
+                        if (ctx.plug.sc != null)
+                            varNames = ctx.plug.sc.textitems.Keys.ToList();
+                        else
+                            varNames = ctx.plug.textauras.Keys.ToList();
+                        break;
+                    case "image":
+                        if (ctx.plug.sc != null)
+                            varNames = ctx.plug.sc.imageitems.Keys.ToList();
+                        else
+                            varNames = ctx.plug.imageauras.Keys.ToList();
+                        break;
+                    case "callback": varNames = ctx.plug.callbacksByName.Keys.ToList(); break;
                 }
                 matchedStrings = GetAutocompleteSuggestions(varNames, m.Groups["name"].Value);
                 if (matchedStrings.Count() > 0)
@@ -1088,8 +1085,8 @@ namespace Triggernometry.CustomControls
             else
             {
                 textBox1.Multiline = true;
-                textBox1.MinimumSize = new Size(textBox1.MinimumSize.Width, 100);
-                textBox1.MaximumSize = new Size(textBox1.MinimumSize.Width, 300);
+                textBox1.MinimumSize = new Size(textBox1.MinimumSize.Width, 80);
+                textBox1.MaximumSize = new Size(textBox1.MaximumSize.Width, 300);
                 textBox1.ScrollBars = ScrollBars.Both;
                 MultiLineAdjustHeight();
                 Image tmp = panel1.BackgroundImage;
@@ -1100,9 +1097,11 @@ namespace Triggernometry.CustomControls
 
         private void MultiLineAdjustHeight()
         {
-            int singleLineHeight = textBox1.Font.Height;
-            int totalLines = textBox1.Lines.Length;
-            textBox1.Height = (int)(singleLineHeight * (totalLines + 0.2));
+            using (Graphics g = textBox1.CreateGraphics())
+            {
+                SizeF size = g.MeasureString(textBox1.Text + "\n1", textBox1.Font); // add one more line
+                textBox1.Height = (int)size.Height;
+            }
         }
     }
 }

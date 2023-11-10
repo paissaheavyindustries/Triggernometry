@@ -75,6 +75,7 @@ namespace Triggernometry
             Copy,
             Append,
             SortLine,
+            GetAllEntities,
             UnsetAll,
             UnsetRegex,
         }
@@ -95,6 +96,8 @@ namespace Triggernometry
             Filter,
             Merge,
             MergeHard,
+            GetEntityByName,
+            GetEntityById,
             UnsetAll,
             UnsetRegex,
         }
@@ -1546,6 +1549,24 @@ namespace Triggernometry
             set
             {
                 _LogProcess = Boolean.Parse(value);
+            }
+        }
+
+        internal bool _LogProcessACT { get; set; } = false;
+        [XmlAttribute]
+        public string LogProcessACT
+        {
+            get
+            {
+                if (_LogProcessACT == false)
+                {
+                    return null;
+                }
+                return _LogProcessACT.ToString();
+            }
+            set
+            {
+                _LogProcessACT = Boolean.Parse(value);
             }
         }
 

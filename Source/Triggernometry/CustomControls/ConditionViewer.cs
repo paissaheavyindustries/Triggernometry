@@ -70,6 +70,7 @@ namespace Triggernometry.CustomControls
                 if (_ConditionToEdit != null)
                 {
                     UpdateEditorToCondition(_ConditionToEdit);
+                    trvNodes.ExpandAll();
                 }
             }
         }
@@ -763,6 +764,9 @@ namespace Triggernometry.CustomControls
                 (plug.cfg.UseOsClipboard == true && System.Windows.Forms.Clipboard.ContainsText() == true)
             );
             ctxPasteOver.Enabled = ctxPaste.Enabled;
+            TreeNode selectedNode = trvNodes.SelectedNode;
+            ctxExpandAll.Enabled = selectedNode != null && selectedNode.Tag is ConditionGroup;
+            ctxCollapseAll.Enabled = ctxExpandAll.Enabled;
         }
 
         private void ctxBtnConditionGroup_Click(object sender, EventArgs e)
@@ -979,6 +983,24 @@ namespace Triggernometry.CustomControls
         private void btnProperties_CheckedChanged(object sender, EventArgs e)
         {
             PanelStateFromOption = btnProperties.Checked;
+        }
+
+        private void expandAllStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = trvNodes.SelectedNode;
+            if (selectedNode != null)
+            {
+                selectedNode.ExpandAll();
+            }
+        }
+
+        private void collapseAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = trvNodes.SelectedNode;
+            if (selectedNode != null)
+            {
+                selectedNode.Collapse(false);
+            }
         }
 
     }

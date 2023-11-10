@@ -241,7 +241,7 @@ namespace Triggernometry.Forms
             foreach (DataGridViewColumn column in dgv.Columns)
             {
                 Size textSize = TextRenderer.MeasureText(column.HeaderText, dgv.Font);
-                column.MinimumWidth = textSize.Width + 30; //  margin and sorting glyph width 
+                column.MinimumWidth = textSize.Width + TextRenderer.MeasureText("M", dgv.Font).Width * 3; //  margin and sorting glyph width 
             }
         }
 
@@ -1702,6 +1702,11 @@ namespace Triggernometry.Forms
         #region Named callbacks
         private void RefreshNamedCallbacks()
         {
+            lock (plug.callbacksById)
+            {
+                dgvCallback.RowCount = plug.callbacksById.Count;
+            }
+            Refresh();
         }
 
         private void btnCallbackRefresh_Click(object sender, EventArgs e)

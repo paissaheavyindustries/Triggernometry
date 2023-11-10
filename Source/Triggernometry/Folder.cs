@@ -271,6 +271,10 @@ namespace Triggernometry
 
         public bool PassesZoneRestriction(string zone)
         {
+            if (zone == null)
+            {
+                return false;
+            }
             bool ret = true;
             Folder f = this;
             while (f != null && ret == true)

@@ -92,12 +92,8 @@ namespace Triggernometry.Forms
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.btnKeycodesListen = new System.Windows.Forms.Button();
             this.btnSendKeysListen = new System.Windows.Forms.Button();
-            this.lblKeypressProcInfo = new System.Windows.Forms.Label();
             this.expKeypressProcId = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblKeypressProcId = new System.Windows.Forms.Label();
-            this.btnKeycodesLink = new System.Windows.Forms.Button();
-            this.txtKeyCodesLink = new System.Windows.Forms.TextBox();
-            this.lblKeypressInfo = new System.Windows.Forms.Label();
             this.expKeypress = new Triggernometry.CustomControls.ExpressionTextBox();
             this.expWindowTitle = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblKeypress = new System.Windows.Forms.Label();
@@ -107,7 +103,6 @@ namespace Triggernometry.Forms
             this.btnSendKeysLink = new System.Windows.Forms.Button();
             this.lblKeypresses = new System.Windows.Forms.Label();
             this.expKeypresses = new Triggernometry.CustomControls.ExpressionTextBox();
-            this.lblKeypressesInfo = new System.Windows.Forms.Label();
             this.txtSendKeysLink = new System.Windows.Forms.TextBox();
             this.tabScript = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
@@ -137,7 +132,6 @@ namespace Triggernometry.Forms
             this.lblVariableOp = new System.Windows.Forms.Label();
             this.cbxVariableOp = new System.Windows.Forms.ComboBox();
             this.prsScalarName = new Triggernometry.CustomControls.PersistenceSwitch();
-            this.lblVariableHelper = new System.Windows.Forms.Label();
             this.tabImageAura = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel11 = new System.Windows.Forms.TableLayoutPanel();
             this.btnHide = new System.Windows.Forms.Button();
@@ -228,7 +222,8 @@ namespace Triggernometry.Forms
             this.lblLogMessageTarget = new System.Windows.Forms.Label();
             this.cbxLogMessageLevel = new System.Windows.Forms.ComboBox();
             this.lblLogMessageLevel = new System.Windows.Forms.Label();
-            this.cbxProcessLog = new System.Windows.Forms.CheckBox();
+            this.chkProcessLog = new System.Windows.Forms.CheckBox();
+            this.chkProcessLogACT = new System.Windows.Forms.CheckBox();
             this.lblLogMessageText = new System.Windows.Forms.Label();
             this.expLogMessageText = new Triggernometry.CustomControls.ExpressionTextBox();
             this.tabListVariable = new System.Windows.Forms.TabPage();
@@ -247,7 +242,6 @@ namespace Triggernometry.Forms
             this.lblLvarName = new System.Windows.Forms.Label();
             this.lblLvarOperation = new System.Windows.Forms.Label();
             this.cbxLvarOperation = new System.Windows.Forms.ComboBox();
-            this.lblLvarHelper = new System.Windows.Forms.Label();
             this.tabObsControl = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel18 = new System.Windows.Forms.TableLayoutPanel();
             this.expObsPassword = new Triggernometry.CustomControls.ExpressionTextBox();
@@ -281,7 +275,6 @@ namespace Triggernometry.Forms
             this.cbxJsonType = new System.Windows.Forms.ComboBox();
             this.lblJsonType = new System.Windows.Forms.Label();
             this.cbxJsonCache = new System.Windows.Forms.CheckBox();
-            this.lblJsonInstructions = new System.Windows.Forms.Label();
             this.expJsonFiring = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblJsonFiring = new System.Windows.Forms.Label();
             this.expJsonPayload = new Triggernometry.CustomControls.ExpressionTextBox();
@@ -290,7 +283,6 @@ namespace Triggernometry.Forms
             this.expJsonEndpoint = new Triggernometry.CustomControls.ExpressionTextBox();
             this.tabWindowMessage = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel19 = new System.Windows.Forms.TableLayoutPanel();
-            this.lblWmsgProcInfo = new System.Windows.Forms.Label();
             this.expWmsgProcid = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblWmsgProcid = new System.Windows.Forms.Label();
             this.expWmsgLparam = new Triggernometry.CustomControls.ExpressionTextBox();
@@ -333,7 +325,6 @@ namespace Triggernometry.Forms
             this.lblTvarName = new System.Windows.Forms.Label();
             this.lblTvarOpType = new System.Windows.Forms.Label();
             this.cbxTvarOpType = new System.Windows.Forms.ComboBox();
-            this.lblTvarHelper = new System.Windows.Forms.Label();
             this.tabDictVariable = new System.Windows.Forms.TabPage();
             this.tableLayoutPanelDict = new System.Windows.Forms.TableLayoutPanel();
             this.lblDictOpType = new System.Windows.Forms.Label();
@@ -354,7 +345,6 @@ namespace Triggernometry.Forms
             this.lblDictTarget = new System.Windows.Forms.Label();
             this.expDictTarget = new Triggernometry.CustomControls.ExpressionTextBox();
             this.prsDictTarget = new Triggernometry.CustomControls.PersistenceSwitch();
-            this.lblDictHelper = new System.Windows.Forms.Label();
             this.tabMutex = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel22 = new System.Windows.Forms.TableLayoutPanel();
             this.expMutexName = new Triggernometry.CustomControls.ExpressionTextBox();
@@ -617,9 +607,9 @@ namespace Triggernometry.Forms
             this.tbcActionSettings.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
             this.tbcActionSettings.Controls.Add(this.tabSystemBeep);
             this.tbcActionSettings.Controls.Add(this.tabPlaySoundFile);
-            this.tbcActionSettings.Controls.Add(this.tabTextToSpeech); 
-            this.tbcActionSettings.Controls.Add(this.tabVariable); 
-            this.tbcActionSettings.Controls.Add(this.tabListVariable); 
+            this.tbcActionSettings.Controls.Add(this.tabTextToSpeech);
+            this.tbcActionSettings.Controls.Add(this.tabVariable);
+            this.tbcActionSettings.Controls.Add(this.tabListVariable);
             this.tbcActionSettings.Controls.Add(this.tabTableVariable);
             this.tbcActionSettings.Controls.Add(this.tabDictVariable);
             this.tbcActionSettings.Controls.Add(this.tabMessageBox);
@@ -632,7 +622,7 @@ namespace Triggernometry.Forms
             this.tbcActionSettings.Controls.Add(this.tabWindowMessage);
             this.tbcActionSettings.Controls.Add(this.tabFile);
             this.tbcActionSettings.Controls.Add(this.tabLaunchProcess);
-            this.tbcActionSettings.Controls.Add(this.tabScript);        
+            this.tbcActionSettings.Controls.Add(this.tabScript);
             this.tbcActionSettings.Controls.Add(this.tabMutex);
             this.tbcActionSettings.Controls.Add(this.tabLoop);
             this.tbcActionSettings.Controls.Add(this.tabGenericJson);
@@ -1399,40 +1389,31 @@ namespace Triggernometry.Forms
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel6.Controls.Add(this.btnKeycodesListen, 2, 7);
-            this.tableLayoutPanel6.Controls.Add(this.btnSendKeysListen, 2, 3);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypressProcInfo, 1, 2);
-            this.tableLayoutPanel6.Controls.Add(this.expKeypressProcId, 1, 1);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypressProcId, 0, 1);
-            this.tableLayoutPanel6.Controls.Add(this.btnKeycodesLink, 3, 9);
-            this.tableLayoutPanel6.Controls.Add(this.txtKeyCodesLink, 1, 9);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypressInfo, 1, 8);
-            this.tableLayoutPanel6.Controls.Add(this.expKeypress, 1, 7);
-            this.tableLayoutPanel6.Controls.Add(this.expWindowTitle, 1, 6);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypress, 0, 7);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypressWindow, 0, 6);
-            this.tableLayoutPanel6.Controls.Add(this.cbxKeypressMethod, 1, 0);
             this.tableLayoutPanel6.Controls.Add(this.lblKeypressMethod, 0, 0);
-            this.tableLayoutPanel6.Controls.Add(this.btnSendKeysLink, 2, 5);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypresses, 0, 3);
-            this.tableLayoutPanel6.Controls.Add(this.expKeypresses, 1, 3);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypressesInfo, 1, 4);
+            this.tableLayoutPanel6.Controls.Add(this.cbxKeypressMethod, 1, 0);
+            this.tableLayoutPanel6.Controls.Add(this.lblKeypressProcId, 0, 1);
+            this.tableLayoutPanel6.Controls.Add(this.expKeypressProcId, 1, 1);
+            this.tableLayoutPanel6.Controls.Add(this.lblKeypresses, 0, 2);
+            this.tableLayoutPanel6.Controls.Add(this.expKeypresses, 1, 2);
+            this.tableLayoutPanel6.Controls.Add(this.btnSendKeysListen, 2, 2);
+            this.tableLayoutPanel6.Controls.Add(this.lblKeypressWindow, 0, 3);
+            this.tableLayoutPanel6.Controls.Add(this.expWindowTitle, 1, 3);
+            this.tableLayoutPanel6.Controls.Add(this.lblKeypress, 0, 4);
+            this.tableLayoutPanel6.Controls.Add(this.expKeypress, 1, 4);
+            this.tableLayoutPanel6.Controls.Add(this.btnKeycodesListen, 2, 4);
             this.tableLayoutPanel6.Controls.Add(this.txtSendKeysLink, 1, 5);
+            this.tableLayoutPanel6.Controls.Add(this.btnSendKeysLink, 2, 5);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-            this.tableLayoutPanel6.RowCount = 10;
+            this.tableLayoutPanel6.RowCount = 6;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+
             this.tableLayoutPanel6.Size = new System.Drawing.Size(742, 321);
             this.tableLayoutPanel6.TabStop = false;
             // 
@@ -1460,17 +1441,6 @@ namespace Triggernometry.Forms
             this.btnSendKeysListen.UseVisualStyleBackColor = true;
             this.btnSendKeysListen.Click += new System.EventHandler(this.btnSendKeysListen_Click);
             // 
-            // lblKeypressProcInfo
-            // 
-            this.lblKeypressProcInfo.AutoSize = true;
-            this.tableLayoutPanel6.SetColumnSpan(this.lblKeypressProcInfo, 2);
-            this.lblKeypressProcInfo.Location = new System.Drawing.Point(123, 53);
-            this.lblKeypressProcInfo.Name = "lblKeypressProcInfo";
-            this.lblKeypressProcInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
-            this.lblKeypressProcInfo.Size = new System.Drawing.Size(609, 46);
-            this.lblKeypressProcInfo.TabStop = false;
-            this.lblKeypressProcInfo.Text = resources.GetString("lblKeypressProcInfo.Text");
-            // 
             // expKeypressProcId
             // 
             this.expKeypressProcId.AutocompleteAvailable = true;
@@ -1495,39 +1465,6 @@ namespace Triggernometry.Forms
             this.lblKeypressProcId.TabStop = false;
             this.lblKeypressProcId.Text = "Process ID";
             this.lblKeypressProcId.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // btnKeycodesLink
-            // 
-            this.btnKeycodesLink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnKeycodesLink.Image = ((System.Drawing.Image)(resources.GetObject("btnKeycodesLink.Image")));
-            this.btnKeycodesLink.Location = new System.Drawing.Point(702, 295);
-            this.btnKeycodesLink.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.btnKeycodesLink.Name = "btnKeycodesLink";
-            this.btnKeycodesLink.Size = new System.Drawing.Size(37, 26);
-            this.btnKeycodesLink.TabStop = false;
-            this.btnKeycodesLink.UseVisualStyleBackColor = true;
-            this.btnKeycodesLink.Click += new System.EventHandler(this.btnKeycodesLink_Click);
-            // 
-            // txtKeyCodesLink
-            // 
-            this.txtKeyCodesLink.Dock = System.Windows.Forms.DockStyle.Top;
-            this.txtKeyCodesLink.Location = new System.Drawing.Point(123, 298);
-            this.txtKeyCodesLink.Name = "txtKeyCodesLink";
-            this.txtKeyCodesLink.ReadOnly = true;
-            this.txtKeyCodesLink.Size = new System.Drawing.Size(576, 20);
-            this.txtKeyCodesLink.TabStop = false;
-            this.txtKeyCodesLink.Text = "https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.keys";
-            // 
-            // lblKeypressInfo
-            // 
-            this.lblKeypressInfo.AutoSize = true;
-            this.tableLayoutPanel6.SetColumnSpan(this.lblKeypressInfo, 2);
-            this.lblKeypressInfo.Location = new System.Drawing.Point(123, 236);
-            this.lblKeypressInfo.Name = "lblKeypressInfo";
-            this.lblKeypressInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
-            this.lblKeypressInfo.Size = new System.Drawing.Size(602, 59);
-            this.lblKeypressInfo.TabStop = false;
-            this.lblKeypressInfo.Text = resources.GetString("lblKeypressInfo.Text");
             // 
             // expKeypress
             // 
@@ -1615,7 +1552,7 @@ namespace Triggernometry.Forms
             this.btnSendKeysLink.Size = new System.Drawing.Size(37, 26);
             this.btnSendKeysLink.TabStop = false;
             this.btnSendKeysLink.UseVisualStyleBackColor = true;
-            this.btnSendKeysLink.Click += new System.EventHandler(this.button1_Click);
+            this.btnSendKeysLink.Click += new System.EventHandler(this.btnSendKeysLink_Click);
             // 
             // lblKeypresses
             // 
@@ -1640,18 +1577,6 @@ namespace Triggernometry.Forms
             this.expKeypresses.ReadOnly = false;
             this.expKeypresses.Size = new System.Drawing.Size(576, 20);
             this.expKeypresses.TabIndex = 14;
-            // 
-            // lblKeypressesInfo
-            // 
-            this.lblKeypressesInfo.AutoSize = true;
-            this.tableLayoutPanel6.SetColumnSpan(this.lblKeypressesInfo, 2);
-            this.lblKeypressesInfo.Location = new System.Drawing.Point(123, 125);
-            this.lblKeypressesInfo.Name = "lblKeypressesInfo";
-            this.lblKeypressesInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
-            this.lblKeypressesInfo.Size = new System.Drawing.Size(558, 33);
-            this.lblKeypressesInfo.TabStop = false;
-            this.lblKeypressesInfo.Text = "The SendKeys keypress format, including how to represent modifier keys such as Sh" +
-    "ift, is described on this webpage:";
             // 
             // txtSendKeysLink
             // 
@@ -1907,12 +1832,10 @@ namespace Triggernometry.Forms
             this.tableLayoutPanel9.Controls.Add(this.lblVariableOp, 0, 0);
             this.tableLayoutPanel9.Controls.Add(this.cbxVariableOp, 1, 0);
             this.tableLayoutPanel9.Controls.Add(this.prsScalarName, 2, 1);
-            this.tableLayoutPanel9.Controls.Add(this.lblVariableHelper, 1, 4);
             this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel9.Name = "tableLayoutPanel9";
-            this.tableLayoutPanel9.RowCount = 5;
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel9.RowCount = 4;
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -2053,17 +1976,6 @@ namespace Triggernometry.Forms
             this.prsScalarName.Size = new System.Drawing.Size(24, 20);
             this.prsScalarName.TabStop = false;
             this.prsScalarName.Tag = ((object)(resources.GetObject("prsScalarName.Tag")));
-            // 
-            // lblVariableHelper
-            // 
-            this.lblVariableHelper.AutoSize = true;
-            this.tableLayoutPanel9.SetColumnSpan(this.lblVariableHelper, 2);
-            this.lblVariableHelper.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblVariableHelper.Margin = new System.Windows.Forms.Padding(3, 15, 3, 7);
-            this.lblVariableHelper.Name = "lblVariableHelper";
-            this.lblVariableHelper.TabStop = false;
-            this.lblVariableHelper.Text = "This text should be programmatically edited.";
-            this.lblVariableHelper.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tabImageAura
             // 
@@ -3279,13 +3191,14 @@ namespace Triggernometry.Forms
             this.tableLayoutPanel14.ColumnCount = 2;
             this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel14.Controls.Add(this.cbxLogMessageTarget, 1, 3);
-            this.tableLayoutPanel14.Controls.Add(this.lblLogMessageTarget, 0, 3);
-            this.tableLayoutPanel14.Controls.Add(this.cbxLogMessageLevel, 1, 2);
-            this.tableLayoutPanel14.Controls.Add(this.lblLogMessageLevel, 0, 2);
-            this.tableLayoutPanel14.Controls.Add(this.cbxProcessLog, 0, 1);
             this.tableLayoutPanel14.Controls.Add(this.lblLogMessageText, 0, 0);
             this.tableLayoutPanel14.Controls.Add(this.expLogMessageText, 1, 0);
+            this.tableLayoutPanel14.Controls.Add(this.chkProcessLog, 0, 1);
+            this.tableLayoutPanel14.Controls.Add(this.chkProcessLogACT, 0, 2);
+            this.tableLayoutPanel14.Controls.Add(this.lblLogMessageLevel, 0, 3);
+            this.tableLayoutPanel14.Controls.Add(this.cbxLogMessageLevel, 1, 3);
+            this.tableLayoutPanel14.Controls.Add(this.lblLogMessageTarget, 0, 4);
+            this.tableLayoutPanel14.Controls.Add(this.cbxLogMessageTarget, 1, 4);
             this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel14.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel14.Name = "tableLayoutPanel14";
@@ -3351,20 +3264,34 @@ namespace Triggernometry.Forms
             this.lblLogMessageLevel.Text = "Level to log message on";
             this.lblLogMessageLevel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // cbxProcessLog
+            // chkProcessLog
             // 
-            this.cbxProcessLog.AutoSize = true;
-            this.cbxProcessLog.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.tableLayoutPanel14.SetColumnSpan(this.cbxProcessLog, 3);
-            this.cbxProcessLog.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cbxProcessLog.Location = new System.Drawing.Point(3, 31);
-            this.cbxProcessLog.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
-            this.cbxProcessLog.Name = "cbxProcessLog";
-            this.cbxProcessLog.Size = new System.Drawing.Size(737, 17);
-            this.cbxProcessLog.TabStop = false;
-            this.cbxProcessLog.Text = "Process message as log line";
-            this.cbxProcessLog.UseVisualStyleBackColor = true;
-            this.cbxProcessLog.CheckedChanged += new System.EventHandler(this.cbxProcessLog_CheckedChanged);
+            this.chkProcessLog.AutoSize = true;
+            this.chkProcessLog.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel14.SetColumnSpan(this.chkProcessLog, 2);
+            this.chkProcessLog.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkProcessLog.Location = new System.Drawing.Point(3, 31);
+            this.chkProcessLog.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
+            this.chkProcessLog.Name = "chkProcessLog";
+            this.chkProcessLog.Size = new System.Drawing.Size(737, 17);
+            this.chkProcessLog.TabStop = false;
+            this.chkProcessLog.Text = "Process message as log line";
+            this.chkProcessLog.UseVisualStyleBackColor = true;
+            this.chkProcessLog.CheckedChanged += new System.EventHandler(this.chkProcessLog_CheckedChanged);
+            // 
+            // chkProcessLogACT
+            // 
+            this.chkProcessLogACT.AutoSize = true;
+            this.chkProcessLogACT.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel14.SetColumnSpan(this.chkProcessLogACT, 2);
+            this.chkProcessLogACT.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkProcessLogACT.Location = new System.Drawing.Point(3, 31);
+            this.chkProcessLogACT.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
+            this.chkProcessLogACT.Name = "chkProcessLogACT";
+            this.chkProcessLogACT.Size = new System.Drawing.Size(737, 17);
+            this.chkProcessLogACT.TabStop = false;
+            this.chkProcessLogACT.Text = "Add the log message to ACT combat log";
+            this.chkProcessLogACT.UseVisualStyleBackColor = true;
             // 
             // lblLogMessageText
             // 
@@ -3421,12 +3348,10 @@ namespace Triggernometry.Forms
             this.tableLayoutPanel17.Controls.Add(this.lblLvarName, 0, 1);
             this.tableLayoutPanel17.Controls.Add(this.lblLvarOperation, 0, 0);
             this.tableLayoutPanel17.Controls.Add(this.cbxLvarOperation, 1, 0);
-            this.tableLayoutPanel17.Controls.Add(this.lblLvarHelper, 1, 6);
             this.tableLayoutPanel17.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel17.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel17.Name = "tableLayoutPanel17";
-            this.tableLayoutPanel17.RowCount = 7;
-            this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel17.RowCount = 6;
             this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -3620,7 +3545,7 @@ namespace Triggernometry.Forms
             "Pop and set a value from a list into another list",
             "Pop last value from list variable into a scalar variable (old action)",
             "Build a list variable from the expression separated by its first character",
-            "Filter elements into another list based on the truthiness of the expression",
+            "Filter elements into another list",
             "Join all values in the list variable into a scalar variable (separator in expression)",
             "Split a scalar variable into a list variable (separator in expression)",
             "Copy whole list variable to another list variable",
@@ -3631,7 +3556,7 @@ namespace Triggernometry.Forms
             "Sort list in an alphabetically descending order",
             "Sort list in an ascending order based on FFXIV party job order",
             "Sort list in a descending order based on FFXIV party job order",
-            "Sort list by the key functions ('n+:key1', 'n-:key2', 's+: key3', ...)",
+            "Sort list by the key functions",
             "Unset all list variables",
             "Unset list variables matching regular expression"});
             this.cbxLvarOperation.Location = new System.Drawing.Point(119, 3);
@@ -3639,17 +3564,6 @@ namespace Triggernometry.Forms
             this.cbxLvarOperation.Size = new System.Drawing.Size(620, 21);
             this.cbxLvarOperation.TabStop = false;
             this.cbxLvarOperation.SelectedIndexChanged += new System.EventHandler(this.cbxLvarOperation_SelectedIndexChanged);
-            // 
-            // lblLvarHelper
-            // 
-            this.lblLvarHelper.AutoSize = true;
-            this.tableLayoutPanel17.SetColumnSpan(this.lblLvarHelper, 2);
-            this.lblLvarHelper.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblLvarHelper.Margin = new System.Windows.Forms.Padding(3, 15, 3, 7);
-            this.lblLvarHelper.Name = "lblLvarHelper";
-            this.lblLvarHelper.TabStop = false;
-            this.lblLvarHelper.Text = "This text should be programmatically edited.";
-            this.lblLvarHelper.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tabObsControl
             // 
@@ -4021,7 +3935,6 @@ namespace Triggernometry.Forms
             this.jsonTableLayout.Controls.Add(this.cbxJsonType, 1, 1);
             this.jsonTableLayout.Controls.Add(this.lblJsonType, 0, 1);
             this.jsonTableLayout.Controls.Add(this.cbxJsonCache, 0, 6);
-            this.jsonTableLayout.Controls.Add(this.lblJsonInstructions, 1, 7);
             this.jsonTableLayout.Controls.Add(this.expJsonFiring, 1, 5);
             this.jsonTableLayout.Controls.Add(this.lblJsonFiring, 0, 5);
             this.jsonTableLayout.Controls.Add(this.expJsonPayload, 1, 2);
@@ -4031,7 +3944,7 @@ namespace Triggernometry.Forms
             this.jsonTableLayout.Dock = System.Windows.Forms.DockStyle.Top;
             this.jsonTableLayout.Location = new System.Drawing.Point(0, 0);
             this.jsonTableLayout.Name = "jsonTableLayout";
-            this.jsonTableLayout.RowCount = 8;
+            this.jsonTableLayout.RowCount = 7;
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -4039,8 +3952,6 @@ namespace Triggernometry.Forms
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.jsonTableLayout.Size = new System.Drawing.Size(742, 282);
             this.jsonTableLayout.TabStop = false;
             // 
@@ -4146,17 +4057,6 @@ namespace Triggernometry.Forms
             this.cbxJsonCache.Text = "Cache response on disk";
             this.cbxJsonCache.UseVisualStyleBackColor = true;
             // 
-            // lblJsonInstructions
-            // 
-            this.lblJsonInstructions.AutoSize = true;
-            this.jsonTableLayout.SetColumnSpan(this.lblJsonInstructions, 2);
-            this.lblJsonInstructions.Location = new System.Drawing.Point(150, 184);
-            this.lblJsonInstructions.Name = "lblJsonInstructions";
-            this.lblJsonInstructions.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
-            this.lblJsonInstructions.Size = new System.Drawing.Size(583, 98);
-            this.lblJsonInstructions.TabStop = false;
-            this.lblJsonInstructions.Text = resources.GetString("lblJsonInstructions.Text");
-            // 
             // expJsonFiring
             // 
             this.expJsonFiring.AutocompleteAvailable = true;
@@ -4250,41 +4150,27 @@ namespace Triggernometry.Forms
             this.tableLayoutPanel19.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel19.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel19.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel19.Controls.Add(this.lblWmsgProcInfo, 1, 1);
             this.tableLayoutPanel19.Controls.Add(this.expWmsgProcid, 1, 0);
             this.tableLayoutPanel19.Controls.Add(this.lblWmsgProcid, 0, 0);
-            this.tableLayoutPanel19.Controls.Add(this.expWmsgLparam, 1, 5);
-            this.tableLayoutPanel19.Controls.Add(this.lblWmsgLparam, 0, 5);
-            this.tableLayoutPanel19.Controls.Add(this.expWmsgWparam, 1, 4);
-            this.tableLayoutPanel19.Controls.Add(this.lblWmsgWparam, 0, 4);
-            this.tableLayoutPanel19.Controls.Add(this.expWmsgCode, 1, 3);
-            this.tableLayoutPanel19.Controls.Add(this.expWmsgTitle, 1, 2);
-            this.tableLayoutPanel19.Controls.Add(this.lblWmsgCode, 0, 3);
-            this.tableLayoutPanel19.Controls.Add(this.lblWmsgTitle, 0, 2);
+            this.tableLayoutPanel19.Controls.Add(this.expWmsgLparam, 1, 4);
+            this.tableLayoutPanel19.Controls.Add(this.lblWmsgLparam, 0, 4);
+            this.tableLayoutPanel19.Controls.Add(this.expWmsgWparam, 1, 3);
+            this.tableLayoutPanel19.Controls.Add(this.lblWmsgWparam, 0, 3);
+            this.tableLayoutPanel19.Controls.Add(this.expWmsgCode, 1, 2);
+            this.tableLayoutPanel19.Controls.Add(this.expWmsgTitle, 1, 1);
+            this.tableLayoutPanel19.Controls.Add(this.lblWmsgCode, 0, 2);
+            this.tableLayoutPanel19.Controls.Add(this.lblWmsgTitle, 0, 1);
             this.tableLayoutPanel19.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel19.Location = new System.Drawing.Point(0, 51);
             this.tableLayoutPanel19.Name = "tableLayoutPanel19";
-            this.tableLayoutPanel19.RowCount = 6;
+            this.tableLayoutPanel19.RowCount = 5;
             this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel19.Size = new System.Drawing.Size(742, 176);
             this.tableLayoutPanel19.TabStop = false;
-            // 
-            // lblWmsgProcInfo
-            // 
-            this.lblWmsgProcInfo.AutoSize = true;
-            this.tableLayoutPanel19.SetColumnSpan(this.lblWmsgProcInfo, 2);
-            this.lblWmsgProcInfo.Location = new System.Drawing.Point(86, 26);
-            this.lblWmsgProcInfo.Name = "lblWmsgProcInfo";
-            this.lblWmsgProcInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
-            this.lblWmsgProcInfo.Size = new System.Drawing.Size(652, 46);
-            this.lblWmsgProcInfo.TabStop = false;
-            this.lblWmsgProcInfo.Text = resources.GetString("lblWmsgProcInfo.Text");
             // 
             // expWmsgProcid
             // 
@@ -4635,12 +4521,10 @@ namespace Triggernometry.Forms
             this.tableLayoutPanel21.Controls.Add(this.lblTvarName, 0, 1);
             this.tableLayoutPanel21.Controls.Add(this.lblTvarOpType, 0, 0);
             this.tableLayoutPanel21.Controls.Add(this.cbxTvarOpType, 1, 0);
-            this.tableLayoutPanel21.Controls.Add(this.lblTvarHelper, 1, 7);
             this.tableLayoutPanel21.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel21.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel21.Name = "tableLayoutPanel21";
-            this.tableLayoutPanel21.RowCount = 8;
-            this.tableLayoutPanel21.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel21.RowCount = 7;
             this.tableLayoutPanel21.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel21.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel21.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -4689,7 +4573,7 @@ namespace Triggernometry.Forms
             this.expTvarRow.Name = "expTvarRow";
             this.expTvarRow.ReadOnly = false;
             this.expTvarRow.Size = new System.Drawing.Size(620, 20);
-            this.expTvarRow.TabIndex = 31;
+            this.expTvarRow.TabIndex = 26;
             this.expTvarRow.EnabledChanged += new System.EventHandler(this.expTvarRow_EnabledChanged);
             // 
             // lblTvarRow
@@ -4855,15 +4739,16 @@ namespace Triggernometry.Forms
             "Set all values in the table variable",
             "Set all values in the selected rows and columns",
             "Resize table variable",
-            "Build from the expression separated by its first 2 characters",
-            "Set values to the given col or row (first char of expr as separator)",
-            "Insert values at the given col or row (first char of expr as separator)",
+            "Build from the expression",
+            "Set values to the given col or row",
+            "Insert values at the given col or row",
             "Remove the given column or row",
-            "Filter elements into another list based on the truthiness of the expression",
-            "Filter rows/cols into another table based on the truthiness of the expression",
+            "Filter elements into another list",
+            "Filter rows/cols into another table",
             "Copy whole table variable to another table variable",
             "Append whole table variable to another table variable",
-            "Sort the rows/cols by the key functions ('n+:key1', 'n-:key2', 's+: key3', ...)",
+            "Sort the rows/cols by the key functions",
+            "Get complete data for all FFXIV entities",
             "Unset all table variables",
             "Unset table variables matching regular expression"});
             this.cbxTvarOpType.Location = new System.Drawing.Point(119, 3);
@@ -4871,17 +4756,6 @@ namespace Triggernometry.Forms
             this.cbxTvarOpType.Size = new System.Drawing.Size(620, 21);
             this.cbxTvarOpType.TabStop = false;
             this.cbxTvarOpType.SelectedIndexChanged += new System.EventHandler(this.cbxTvarOpType_SelectedIndexChanged);
-            // 
-            // lblTvarHelper
-            // 
-            this.lblTvarHelper.AutoSize = true;
-            this.tableLayoutPanel21.SetColumnSpan(this.lblTvarHelper, 2);
-            this.lblTvarHelper.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTvarHelper.Margin = new System.Windows.Forms.Padding(3, 15, 3, 7);
-            this.lblTvarHelper.Name = "lblTvarHelper";
-            this.lblTvarHelper.TabStop = false;
-            this.lblTvarHelper.Text = "This text should be programmatically edited.";
-            this.lblTvarHelper.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tabDictVariable
             // 
@@ -4918,12 +4792,10 @@ namespace Triggernometry.Forms
             this.tableLayoutPanelDict.Controls.Add(this.lblDictTarget, 0, 7);
             this.tableLayoutPanelDict.Controls.Add(this.expDictTarget, 1, 7);
             this.tableLayoutPanelDict.Controls.Add(this.prsDictTarget, 2, 7);
-            this.tableLayoutPanelDict.Controls.Add(this.lblDictHelper, 1, 8);
             this.tableLayoutPanelDict.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanelDict.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanelDict.Name = "tableLayoutPanelDict";
-            this.tableLayoutPanelDict.RowCount = 9;
-            this.tableLayoutPanelDict.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelDict.RowCount = 8;
             this.tableLayoutPanelDict.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelDict.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelDict.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -4953,16 +4825,18 @@ namespace Triggernometry.Forms
             this.cbxDictOpType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxDictOpType.FormattingEnabled = true;
             this.cbxDictOpType.Items.AddRange(new object[] {
-            "Unset dict variable",
-            "Set value of the given key in the dict variable",
-            "Remove the given key in the dict variable",
-            "Set all keys and values in the dict variable",
-            "Build a dict from the value expression separated by its first 2 characters",
-            "Filter the pairs into another dict based on the truthiness of the expression",
-            "Merge the source dict into the target dict (keep the repeated keys)",
-            "Merge the source dict into the target dict (overwrite the repeated keys)",
-            "Unset all dict variables",
-            "Unset dict variables matching regular expression"});
+            "Unset dictionary variable",
+            "Set value of the given key",
+            "Remove the given key",
+            "Set all keys and values",
+            "Build from the expression",
+            "Filter into another dictionary",
+            "Merge two dictionaries (keep)",
+            "Merge two dictionaries (overwrite)",
+            "Get entity data by name",
+            "Get entity data by hex ID",
+            "Unset all dictionary variables",
+            "Unset dictionary variables matching regular expression"});
             this.cbxDictOpType.Location = new System.Drawing.Point(119, 0);
             this.cbxDictOpType.Name = "cbxDictOpType";
             this.cbxDictOpType.Size = new System.Drawing.Size(620, 21);
@@ -5176,17 +5050,6 @@ namespace Triggernometry.Forms
             this.prsDictTarget.Size = new System.Drawing.Size(24, 20);
             this.prsDictTarget.TabStop = false;
             this.prsDictTarget.Tag = ((object)(resources.GetObject("prsDictTarget.Tag")));
-            // 
-            // lblDictHelper
-            // 
-            this.lblDictHelper.AutoSize = true;
-            this.tableLayoutPanelDict.SetColumnSpan(this.lblDictHelper, 2);
-            this.lblDictHelper.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDictHelper.Margin = new System.Windows.Forms.Padding(3, 15, 3, 7);
-            this.lblDictHelper.Name = "lblDictHelper";
-            this.lblDictHelper.TabStop = false;
-            this.lblDictHelper.Text = "This text should be programmatically edited.";
-            this.lblDictHelper.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tabMutex
             // 
@@ -6491,7 +6354,6 @@ namespace Triggernometry.Forms
         private System.Windows.Forms.Label lblVariableName;
         private System.Windows.Forms.Label lblVariableOp;
         private System.Windows.Forms.ComboBox cbxVariableOp;
-        private System.Windows.Forms.Label lblVariableHelper;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
         private System.Windows.Forms.Label lblTrigger;
         private CustomControls.ExpressionTextBox expTriggerText;
@@ -6502,7 +6364,6 @@ namespace Triggernometry.Forms
         private System.Windows.Forms.Label lblTriggerZone;
         internal System.Windows.Forms.TreeView trvTrigger;
         private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.Label lblKeypressesInfo;
         private System.Windows.Forms.Button btnSendKeysLink;
         private System.Windows.Forms.TextBox txtSendKeysLink;
         private System.Windows.Forms.TabPage tabImageAura;
@@ -6627,7 +6488,6 @@ namespace Triggernometry.Forms
         private System.Windows.Forms.Label lblLvarName;
         private System.Windows.Forms.Label lblLvarOperation;
         private System.Windows.Forms.ComboBox cbxLvarOperation;
-        private System.Windows.Forms.Label lblLvarHelper;
         private System.Windows.Forms.TabPage tabObsControl;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel18;
         private System.Windows.Forms.ComboBox cbxObsOpType;
@@ -6637,12 +6497,12 @@ namespace Triggernometry.Forms
         private CustomControls.ExpressionTextBox expObsSceneName;
         private System.Windows.Forms.Label lblObsWebsocketInfo;
         private System.Windows.Forms.TextBox txtObsWebsocketLink;
-        private System.Windows.Forms.CheckBox cbxProcessLog;
+        private System.Windows.Forms.CheckBox chkProcessLog;
+        private System.Windows.Forms.CheckBox chkProcessLogACT;
         private System.Windows.Forms.CheckBox chkSoundMyOutput;
         private System.Windows.Forms.CheckBox chkSpeechMyOutput;
         private System.Windows.Forms.TabPage tabGenericJson;
         private System.Windows.Forms.TableLayoutPanel jsonTableLayout;
-        private System.Windows.Forms.Label lblJsonInstructions;
         private CustomControls.ExpressionTextBox expJsonFiring;
         private System.Windows.Forms.Label lblJsonFiring;
         private CustomControls.ExpressionTextBox expJsonPayload;
@@ -6653,9 +6513,6 @@ namespace Triggernometry.Forms
         private CustomControls.ConditionViewer cndCondition;
         private System.Windows.Forms.ComboBox cbxKeypressMethod;
         private System.Windows.Forms.Label lblKeypressMethod;
-        private System.Windows.Forms.Button btnKeycodesLink;
-        private System.Windows.Forms.TextBox txtKeyCodesLink;
-        private System.Windows.Forms.Label lblKeypressInfo;
         private CustomControls.ExpressionTextBox expKeypress;
         private CustomControls.ExpressionTextBox expWindowTitle;
         private System.Windows.Forms.Label lblKeypress;
@@ -6706,7 +6563,6 @@ namespace Triggernometry.Forms
         private System.Windows.Forms.ComboBox cbxTvarOpType;
         private CustomControls.ExpressionTextBox expTvarRow;
         private System.Windows.Forms.Label lblTvarRow;
-        private System.Windows.Forms.Label lblTvarHelper;
         private System.Windows.Forms.CheckBox cbxFileOpCache;
         private System.Windows.Forms.TabPage tabDictVariable;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelDict;
@@ -6728,7 +6584,6 @@ namespace Triggernometry.Forms
         private System.Windows.Forms.Label lblDictTarget;
         private CustomControls.ExpressionTextBox expDictTarget;
         private CustomControls.PersistenceSwitch prsDictTarget;
-        private System.Windows.Forms.Label lblDictHelper;
         private System.Windows.Forms.TabPage tabMutex;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel22;
         private CustomControls.ExpressionTextBox expMutexName;
@@ -6804,10 +6659,8 @@ namespace Triggernometry.Forms
         private CustomControls.ExpressionTextBox expVariableTarget;
         private System.Windows.Forms.Label label6;
         private CustomControls.PersistenceSwitch prsJsonVariable;
-        private System.Windows.Forms.Label lblWmsgProcInfo;
         private CustomControls.ExpressionTextBox expWmsgProcid;
         private System.Windows.Forms.Label lblWmsgProcid;
-        private System.Windows.Forms.Label lblKeypressProcInfo;
         private CustomControls.ExpressionTextBox expKeypressProcId;
         private System.Windows.Forms.Label lblKeypressProcId;
         private System.Windows.Forms.Label label5;

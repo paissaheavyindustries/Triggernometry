@@ -910,7 +910,6 @@ namespace Triggernometry.Forms
                 Trigger.TriggerSourceEnum oldSource = t._Source;
                 tf.AllowAnonymousTrigger = true;
                 tf.plug = plug;
-                ExpressionTextBox.SetPlugForTextBoxes(tf, plug);
                 ExpressionTextBox.CurrentTriggerRegexStr = t.RegularExpression;
                 tf.fakectx.trig = t;
                 tf.fakectx.plug = plug;

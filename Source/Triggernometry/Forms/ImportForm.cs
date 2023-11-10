@@ -838,7 +838,6 @@ namespace Triggernometry.Forms
                     tf.SettingsFromTrigger(t);
                     tf.initialDescriptions = tf.GetAllDescriptionsStr();
                     tf.plug = plug;
-                    ExpressionTextBox.SetPlugForTextBoxes(tf, plug);
                     ExpressionTextBox.CurrentTriggerRegexStr = t.RegularExpression;
                     tf.fakectx.plug = plug;
                     tf.Text = I18n.Translate("internal/ImportForm/editimportedtrigger", "Edit imported trigger '{0}'", t.Name);

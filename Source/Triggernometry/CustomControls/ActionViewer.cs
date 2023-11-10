@@ -20,7 +20,7 @@ namespace Triggernometry.CustomControls
 
         private bool IsReadonly { get; set; } = false;
 
-        internal List<Action> Actions { get; set; } = null;
+        internal List<Action> Actions { get; set; } = new List<Action>();
 
         internal WMPLib.WindowsMediaPlayer wmp;
         internal SpeechSynthesizer tts;
@@ -37,7 +37,6 @@ namespace Triggernometry.CustomControls
         {
             InitializeComponent();
             fakectx = new Context();
-            dgvActions.MouseClick += dgvActions_MouseClick;
         }
 
         internal event EventHandler ActionsUpdated;
@@ -130,11 +129,20 @@ namespace Triggernometry.CustomControls
         private void dgvActions_SelectionChanged(object sender, EventArgs e)
         {
             btnEditAction.Enabled = (dgvActions.SelectedRows.Count == 1);
-            btnRemoveAction.Enabled = IsReadonly == false && (dgvActions.SelectedRows.Count > 0);
-            btnActionUp.Enabled = IsReadonly == false;
-            btnActionDown.Enabled = IsReadonly == false;
-            btnActionTop.Enabled = btnActionUp.Enabled;
-            btnActionBottom.Enabled = btnActionDown.Enabled;
+            bool allowMoveAndRemove = IsReadonly == false && (dgvActions.SelectedRows.Count > 0);
+            btnRemoveAction.Enabled = allowMoveAndRemove;
+            btnActionUp.Enabled = allowMoveAndRemove;
+            btnActionDown.Enabled = allowMoveAndRemove;
+            btnActionTop.Enabled = allowMoveAndRemove;
+            btnActionBottom.Enabled = allowMoveAndRemove;
+        }
+
+        internal List<Action> SelectedActions()
+        {
+            return dgvActions.SelectedRows
+                             .Cast<DataGridViewRow>()
+                             .Select(row => Actions[row.Index])
+                             .ToList();
         }
 
         private void dgvActions_Leave(object sender, EventArgs e)
@@ -166,7 +174,6 @@ namespace Triggernometry.CustomControls
             using (Forms.ActionForm af = new Forms.ActionForm())
             {
                 af.plug = plug;
-                ExpressionTextBox.SetPlugForTextBoxes(af, plug);
                 af.wmp = wmp;
                 af.tts = tts;
                 af.trv = trv;
@@ -195,7 +202,7 @@ namespace Triggernometry.CustomControls
                     Action a = new Action();
                     af.SettingsToAction(a);
                     a._Enabled = true;
-                    int insertIndex = (dgvActions.Rows.Count > 0) ? (dgvActions.SelectedRows[0].Index + 1) : 0;
+                    int insertIndex = (dgvActions.Rows.Count > 0 && dgvActions.SelectedRows.Count > 0) ? (dgvActions.SelectedRows[0].Index + 1) : dgvActions.Rows.Count;
                     Actions.Insert(insertIndex, a);
                     a.OrderNumber = insertIndex + 1;
                     for (int i = insertIndex + 1; i < Actions.Count; i++) { Actions[i].OrderNumber++; }
@@ -209,14 +216,16 @@ namespace Triggernometry.CustomControls
 
         private void btnEditAction_Click(object sender, EventArgs e)
         {
+            if (dgvActions.SelectedRows.Count == 0) { return; }
+            int rowIndex = dgvActions.SelectedRows[0].Index;
+            if (rowIndex < 0 || rowIndex >= Actions.Count ) { return; }
             Context ctx = new Context();
             ctx.plug = plug;
             ctx.trig = fakectx.trig;
             using (Forms.ActionForm af = new Forms.ActionForm())
             {
-                Action a = Actions[dgvActions.SelectedRows[0].Index];
+                Action a = Actions[rowIndex];
                 af.plug = plug;
-                ExpressionTextBox.SetPlugForTextBoxes(af, plug);
                 af.wmp = wmp;
                 af.trv = trv;
                 af.fakectx = fakectx;
@@ -242,6 +251,7 @@ namespace Triggernometry.CustomControls
                 af.btnOk.Text = I18n.Translate("internal/TriggerForm/savechanges", "Save changes");
                 if (af.ShowDialog() == DialogResult.OK)
                 {
+                    StoreActions();
                     af.SettingsToAction(a);
                     dgvActions.Refresh();
                     OnActionsUpdated();
@@ -259,8 +269,8 @@ namespace Triggernometry.CustomControls
             switch (moveType)
             {
                 case "up":
-                    start = Math.Max(selectedRowIndices[0] - 1, 0); // the first selected row move to this index
-                    end = start + selectedRowIndices.Count - 1;     // the last selected row move to this index
+                    start = Math.Max(selectedRowIndices[0] - 1, 0); // the first selected row moves to this index
+                    end = start + selectedRowIndices.Count - 1;     // the last selected row moves to this index
                     break;
                 case "top":
                     start = 0;
@@ -349,12 +359,7 @@ namespace Triggernometry.CustomControls
             {
                 case DialogResult.Yes:
                     StoreActions();
-                    List<Action> acts = new List<Action>();
-                    foreach (DataGridViewRow r in dgvActions.SelectedRows)
-                    {
-                        acts.Add(Actions[r.Index]);
-                    }
-                    foreach (Action a in acts)
+                    foreach (Action a in SelectedActions())
                     {
                         Actions.Remove(a);
                         List<Action> px = new List<Action>();
@@ -376,9 +381,7 @@ namespace Triggernometry.CustomControls
         {
             if (PrevActions == null || PrevSelectedIndices == null) { return; }
 
-            var tempActions = Actions;
-            Actions = PrevActions;
-            PrevActions = tempActions;
+            (Actions, PrevActions) = (PrevActions, Actions);
 
             var tempIndices = PrevSelectedIndices;
             PrevSelectedIndices = dgvActions.SelectedRows.Cast<DataGridViewRow>()
@@ -398,7 +401,14 @@ namespace Triggernometry.CustomControls
 
         private void StoreActions()
         {
-            PrevActions = Actions.ToList();
+            PrevActions = new List<Action>();
+            foreach (var originalAction in Actions)
+            {
+                Action copiedAction = new Action();
+                originalAction.CopySettingsTo(copiedAction);
+                PrevActions.Add(copiedAction);
+            }
+
             PrevSelectedIndices = dgvActions.SelectedRows.Cast<DataGridViewRow>()
                 .Select(row => row.Index).ToList();
             btnUndo.Enabled = true;
@@ -529,7 +539,7 @@ namespace Triggernometry.CustomControls
 
         private void dgvActions_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0 || e.RowIndex >= Actions.Count)
+            if (e.RowIndex < 0 || e.RowIndex >= Actions.Count || dgvActions.SelectedRows.Count == 0)
             {
                 return;
             }
@@ -549,10 +559,7 @@ namespace Triggernometry.CustomControls
             if (dgvActions.SelectedRows.Count > 1)
             {
                 Action.ActionBundle ab = new Action.ActionBundle();
-                foreach (DataGridViewRow r in dgvActions.SelectedRows)
-                {
-                    ab.Actions.Add(Actions[r.Index]);
-                }
+                ab.Actions.AddRange(SelectedActions());
                 ab.Actions.Sort((a, b) => a.OrderNumber.CompareTo(b.OrderNumber));
                 toSerialize = ab;
                 xs = new XmlSerializer(typeof(Action.ActionBundle));
@@ -605,6 +612,7 @@ namespace Triggernometry.CustomControls
             {
                 return;
             }
+            StoreActions();
             string data = null;
             if (plug.cfg.UseOsClipboard == true)
             {
@@ -656,6 +664,11 @@ namespace Triggernometry.CustomControls
                             }
                         }
                         dgvActions.RowCount = Actions.Count;
+                        dgvActions.ClearSelection();
+                        foreach (Action a in ab.Actions)
+                        {
+                            dgvActions.Rows[Actions.IndexOf(a)].Selected = true;
+                        }
                         dgvActions.Invalidate();
                     }
 
@@ -686,6 +699,8 @@ namespace Triggernometry.CustomControls
                         }
                         Actions.Insert(cx.OrderNumber - 1, cx);
                         dgvActions.RowCount = Actions.Count;
+                        dgvActions.ClearSelection(); 
+                        dgvActions.Rows[Actions.IndexOf(cx)].Selected = true;
                         dgvActions.Invalidate();
                     }
                 }
@@ -712,6 +727,7 @@ namespace Triggernometry.CustomControls
             double totalDelay = 0;
             foreach (var action in Actions)
             {
+                if (!action._Enabled) { continue; }
                 string delay = action._ExecutionDelayExpression;
                 if (delay.Contains("$") || delay.ToLower().Contains("random"))
                 {
@@ -776,16 +792,246 @@ namespace Triggernometry.CustomControls
             btnUndo_Click(sender, e);
         }
 
+        private void ctxTest_Click(object sender, EventArgs e)
+        {
+            Action selectedAction = SelectedActions().FirstOrDefault();
+            if (selectedAction == null)
+                return;
+            Action a = new Action();
+            selectedAction.CopySettingsTo(a);
+            Context ctx = new Context();
+            ctx.plug = RealPlugin.plug;
+            ctx.trig = null;
+            ctx.soundhook = RealPlugin.plug.SoundPlaybackSmart;
+            ctx.ttshook = RealPlugin.plug.TtsPlaybackSmart;
+            ctx.triggered = DateTime.UtcNow;
+
+            var item = (ToolStripMenuItem)sender;
+            switch (item.Name)
+            {
+                case "ctxTest":
+                    ctx.testByPlaceholder = RealPlugin.plug.cfg.TestLiveByDefault == false;
+                    if (plug.cfg.TestIgnoreConditionsByDefault)
+                        a.Condition = new ConditionGroup();
+                    ctxAction.Close();
+                    break;
+                case "ctxTestPlaceholder":
+                    ctx.testByPlaceholder = true;
+                    break;
+                case "ctxTestLive":
+                    ctx.testByPlaceholder = false;
+                    break;
+                case "ctxTestLiveIgnoreCnd":
+                    ctx.testByPlaceholder = false;
+                    if (plug.cfg.TestIgnoreConditionsByDefault)
+                        a.Condition = new ConditionGroup();
+                    break;
+            }
+            
+            a.Execute(null, ctx);
+        }
+
+        private void ctxEditPropCopyCnd_Click(object sender, EventArgs e)
+        {
+            ActionViewer.copiedCondition = (ConditionGroup)SelectedActions().FirstOrDefault()?.Condition.Duplicate();
+        }
+
+        private void ctxEditPropPasteCnd_Click(object sender, EventArgs e)
+        {
+            if (ActionViewer.copiedCondition == null) 
+                return;
+            foreach (Action a in SelectedActions())
+            {
+                a.Condition = (ConditionGroup)ActionViewer.copiedCondition.Duplicate();
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
+        private void ctxEditPropRemoveCnd_Click(object sender, EventArgs e)
+        {
+            foreach (Action a in SelectedActions())
+            {
+                a.Condition = new ConditionGroup();
+                a.Condition.Enabled = false;
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
+        private void ctxEditPropCndGroupingAnd_Click(object sender, EventArgs e)
+        {
+            SetCndGroupingType(ConditionGroup.CndGroupingEnum.And);
+        }
+
+        private void ctxEditPropCndGroupingOr_Click(object sender, EventArgs e)
+        {
+            SetCndGroupingType(ConditionGroup.CndGroupingEnum.Or);
+        }
+
+        private void ctxEditPropCndGroupingXor_Click(object sender, EventArgs e)
+        {
+            SetCndGroupingType(ConditionGroup.CndGroupingEnum.Xor);
+        }
+
+        private void ctxEditPropCndGroupingNot_Click(object sender, EventArgs e)
+        {
+            SetCndGroupingType(ConditionGroup.CndGroupingEnum.Not);
+        }
+
+        private void ctxEditPropAsyncOn_Click(object sender, EventArgs e)
+        {
+            foreach (Action a in SelectedActions())
+            {
+                a._Asynchronous = true;
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
+        private void ctxEditPropAsyncOff_Click(object sender, EventArgs e)
+        {
+            foreach (Action a in SelectedActions())
+            {
+                a._Asynchronous = false;
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
+        private void ctxEditPropDelay_Click(object sender, EventArgs e)
+        {
+            string value = ShowInputDialog(I18n.Translate("internal/ActionViewer/setDelay", "Set Action Delay To (ms)"),
+                ExpressionTextBox.SupportedExpressionTypeEnum.Numeric);
+            if (value != null)
+            {
+                foreach (Action a in SelectedActions())
+                {
+                    a._ExecutionDelayExpression = value;
+                }
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
+        private void ctxEditPropBgColor_Click(object sender, EventArgs e)
+        {
+            string value = ShowInputDialog(I18n.Translate("internal/ActionViewer/setBgColor", "Set Description Background Color To"),
+                ExpressionTextBox.SupportedExpressionTypeEnum.Color);
+            if (value != null)
+            {
+                foreach (Action a in SelectedActions())
+                {
+                    a._DescBgColor = value;
+                }
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
+        private void ctxEditPropTextColor_Click(object sender, EventArgs e)
+        {
+            string value = ShowInputDialog(I18n.Translate("internal/ActionViewer/setTextColor", "Set Description Text Color To"), 
+                ExpressionTextBox.SupportedExpressionTypeEnum.Color);
+            if (value != null)
+            {
+                foreach (Action a in SelectedActions())
+                {
+                    a._DescTextColor = value;
+                }
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
+        private void ctxEditPropRemoveDesc_Click(object sender, EventArgs e)
+        {
+            foreach (Action a in SelectedActions())
+            {
+                a._DescriptionOverride = false;
+                a._Description = "";
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
+        private void SetCndGroupingType(ConditionGroup.CndGroupingEnum cndGroupingType)
+        {
+            foreach (Action a in SelectedActions())
+            {
+                if (a.Condition == null) 
+                { 
+                    a.Condition = new ConditionGroup();
+                    a.Condition.Enabled = false;
+                }
+                a.Condition.Grouping = cndGroupingType;
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
+        private string ShowInputDialog(string title, ExpressionTextBox.SupportedExpressionTypeEnum exprType)
+        {
+            Form inputForm = new Form();
+            inputForm.Text = title;
+            inputForm.FormBorderStyle = FormBorderStyle.FixedDialog;
+            inputForm.StartPosition = FormStartPosition.CenterScreen;
+            inputForm.MaximizeBox = false;
+            inputForm.MinimizeBox = false;
+            inputForm.MinimumSize = new Size(300, 0);
+            inputForm.AutoSize = true;
+            inputForm.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+
+            ExpressionTextBox expEditedValue = new ExpressionTextBox();
+            expEditedValue.Anchor = AnchorStyles.None;
+            expEditedValue.Dock = DockStyle.Fill;
+            expEditedValue.ExpressionType = exprType;
+            expEditedValue.textBox1.MinimumSize = new Size(200, 0);
+
+            Button okButton = new Button();
+            okButton.Text = I18n.Translate("ActionForm/btnOk", "OK");
+            okButton.Anchor = AnchorStyles.None;
+            okButton.Margin = new Padding(10, 20, 10, 10);
+            okButton.Padding = new Padding(5);
+            okButton.DialogResult = DialogResult.OK;
+            okButton.TextAlign = ContentAlignment.MiddleCenter;
+            okButton.AutoSize = true;
+            inputForm.AcceptButton = okButton;
+
+            TableLayoutPanel table = new TableLayoutPanel();
+            table.Dock = DockStyle.Fill;
+            table.Padding = new Padding(20);
+            table.AutoSize = true;
+            table.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            table.RowCount = 2;
+            table.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            table.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            table.Controls.Add(expEditedValue, 0, 0);
+            table.Controls.Add(okButton, 0, 1);
+
+            inputForm.Controls.Add(table);
+
+            if (inputForm.ShowDialog() == DialogResult.OK)
+            {
+                return expEditedValue.Text;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         private void ctxAction_Opening(object sender, CancelEventArgs e)
         {
             ctxAddAction.Enabled = btnAddAction.Enabled;
             ctxEditAction.Enabled = btnEditAction.Enabled;
-            ctxCopyAction.Enabled = btnEditAction.Enabled;
-            ctxMoveUp.Enabled = btnActionUp.Enabled;
-            ctxMoveDown.Enabled = btnActionDown.Enabled;
-            ctxMoveTop.Enabled = btnActionTop.Enabled;
-            ctxMoveBottom.Enabled = btnActionBottom.Enabled;
-            ctxRemoveAction.Enabled = btnRemoveAction.Enabled;
+            bool allowMoveAndRemove = IsReadonly == false && (dgvActions.SelectedRows.Count > 0);
+            ctxCopyAction.Enabled = allowMoveAndRemove;
+            ctxMoveUp.Enabled = allowMoveAndRemove;
+            ctxMoveDown.Enabled = allowMoveAndRemove;
+            ctxMoveTop.Enabled = allowMoveAndRemove;
+            ctxMoveBottom.Enabled = allowMoveAndRemove;
+            ctxRemoveAction.Enabled = allowMoveAndRemove;
             ctxUndo.Enabled = btnUndo.Enabled;
             ctxPasteAction.Enabled = OkToPasteAction();
         }
@@ -810,6 +1056,23 @@ namespace Triggernometry.CustomControls
             if (rowIndex == -1 || rowIndex >= dgvActions.RowCount)
             {
                 dgvActions.ClearSelection();
+            }
+        }
+
+        private void dgvActions_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                DataGridView.HitTestInfo hitTestInfo = dgvActions.HitTest(e.X, e.Y);
+                if (hitTestInfo.Type == DataGridViewHitTestType.Cell)
+                {
+                    int rowIndex = hitTestInfo.RowIndex;
+                    if (!dgvActions.Rows[rowIndex].Selected) // if not right-clicking on a selected row: change selection
+                    {
+                        dgvActions.ClearSelection();
+                        dgvActions.Rows[rowIndex].Selected = true;
+                    }
+                }
             }
         }
 

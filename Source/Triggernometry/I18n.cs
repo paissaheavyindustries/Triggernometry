@@ -267,56 +267,56 @@ namespace Triggernometry
             }
         }
 
-        internal static string TrlBool() => Translate("I18n/bool", "bool");
-        internal static string TrlChar() => Translate("I18n/char", "char");
-        internal static string TrlCharcode() => Translate("I18n/charcode", "charcode");
-        internal static string TrlDouble() => Translate("I18n/double", "double");
-        internal static string TrlFloat() => Translate("I18n/float", "float");
-        internal static string TrlHex() => Translate("I18n/hex", "hex");
-        internal static string TrlIndex() => Translate("I18n/index", "index");
-        internal static string TrlInt() => Translate("I18n/int", "int");
-        internal static string TrlKey() => Translate("I18n/key", "key");
-        internal static string TrlLength() => Translate("I18n/length", "length");
-        internal static string TrlSlice() => Translate("I18n/slice", "slice");
-        internal static string TrlStartIndex() => Translate("I18n/startindex", "startindex");
-        internal static string TrlString() => Translate("I18n/string", "string");
-        internal static string TrlTime() => Translate("I18n/time", "time");
-        internal static string TrlTimes() => Translate("I18n/times", "times");
-        internal static string TrlType() => Translate("I18n/type", "type");
+        internal static string TrlBool() => Translate("internal/I18n/bool", "bool");
+        internal static string TrlChar() => Translate("internal/I18n/char", "char");
+        internal static string TrlCharcode() => Translate("internal/I18n/charcode", "charcode");
+        internal static string TrlDouble() => Translate("internal/I18n/double", "double");
+        internal static string TrlFloat() => Translate("internal/I18n/float", "float");
+        internal static string TrlHex() => Translate("internal/I18n/hex", "hex");
+        internal static string TrlIndex() => Translate("internal/I18n/index", "index");
+        internal static string TrlInt() => Translate("internal/I18n/int", "int");
+        internal static string TrlKey() => Translate("internal/I18n/key", "key");
+        internal static string TrlLength() => Translate("internal/I18n/length", "length");
+        internal static string TrlSlice() => Translate("internal/I18n/slice", "slice");
+        internal static string TrlStartIndex() => Translate("internal/I18n/startindex", "startindex");
+        internal static string TrlString() => Translate("internal/I18n/string", "string");
+        internal static string TrlTime() => Translate("internal/I18n/time", "time");
+        internal static string TrlTimes() => Translate("internal/I18n/times", "times");
+        internal static string TrlType() => Translate("internal/I18n/type", "type");
 
         internal static string TrlVarPersist(bool isPersist)
         {
-            return isPersist ? Translate("internal/Action/descpersistent", "persistent ") 
+            return isPersist ? Translate("internal/I18n/descpersistent", "persistent ") 
                              : "";
         }
 
         internal static string TrlExprType(bool isStringExpr)
         {
-            return isStringExpr ? Translate("internal/Action/descexprtypestring", "string")
-                                : Translate("internal/Action/descexprtypenumeric", "numeric");
+            return isStringExpr ? Translate("internal/I18n/descexprtypestring", "string")
+                                : Translate("internal/I18n/descexprtypenumeric", "numeric");
         }
 
         internal static string TrlTableColOrRow(bool isCol)
         {
-            return isCol ? Translate("internal/Action/desctablelineopcol", "column")
-                         : Translate("internal/Action/desctablelineoprow", "row");
+            return isCol ? Translate("internal/I18n/desctablelineopcol", "column")
+                         : Translate("internal/I18n/desctablelineoprow", "row");
         }
 
         internal static string TrlCacheFile(bool cache)
         {
-            return cache ? Translate("internal/Action/desccachefile", ", caching the file on disk") : "";
+            return cache ? Translate("internal/I18n/desccachefile", ", caching the file on disk") : "";
         }
 
         internal static string TrlSortAscOrDesc(bool isAsc)
         {
-            return isAsc ? Translate("internal/Action/descsortasc", "ascending")
-                         : Translate("internal/Action/descsortdesc", "descending");
+            return isAsc ? Translate("internal/I18n/descsortasc", "ascending")
+                         : Translate("internal/I18n/descsortdesc", "descending");
         }
 
         internal static string TrlAsync(bool isAsync)
         {
-            return isAsync ? Translate("internal/Action/descasynctrue", "")
-                           : Translate("internal/Action/descasyncfalse", "[Sync] ");
+            return isAsync ? Translate("internal/I18n/descasynctrue", "")
+                           : Translate("internal/I18n/descasyncfalse", "[Sync] ");
         }
 
         internal static string TrlTriggerDescTime(double ms)
@@ -325,19 +325,19 @@ namespace Triggernometry
             double s = ms / 1000;
             if (Math.Abs(s) >= 300 || s == Math.Round(s)) // > 5 min   or is integer
             {
-                return I18n.Translate("TriggerForm/descTimeSec", "{0} s", (int)s);
+                return I18n.Translate("internal/I18n/desctimesec", "{0} s", (int)s);
             }
             else if (Math.Abs(s) >= 10 || s == Math.Round(s, 1)) // > 10 s   or 1-digit decimal
             {
-                return I18n.Translate("TriggerForm/descTimeSec", "{0} s", s.ToString("F1", CultureInfo.InvariantCulture));
+                return I18n.Translate("internal/I18n/desctimesec", "{0} s", s.ToString("F1", CultureInfo.InvariantCulture));
             }
             else if (Math.Abs(s) >= 0.1 || s == Math.Round(s, 2)) // > 0.1 s   or 2-digit decimal
             {
-                return I18n.Translate("TriggerForm/descTimeSec", "{0} s", s.ToString("F2", CultureInfo.InvariantCulture));
+                return I18n.Translate("internal/I18n/desctimesec", "{0} s", s.ToString("F2", CultureInfo.InvariantCulture));
             }
             else    // < 0.1 s
             {
-                return I18n.Translate("TriggerForm/descTimeMillisec", "{0} ms", ms);
+                return I18n.Translate("internal/I18n/desctimems", "{0} ms", ms);
             }
         }
 

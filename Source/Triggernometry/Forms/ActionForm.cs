@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Diagnostics;
 using Triggernometry.CustomControls;
 using static Triggernometry.Action;
+using System.Runtime.InteropServices;
 
 namespace Triggernometry.Forms
 {
@@ -123,7 +124,6 @@ namespace Triggernometry.Forms
         public ActionForm()
         {
             InitializeComponent();
-            // SetComboBoxItemHeight(this);   the drawing is too slow
             expAuraImage.textBox1.TextChanged += TextBox1_TextChanged;
             if (DesignMode == false)
             {
@@ -164,38 +164,16 @@ namespace Triggernometry.Forms
             prsTableSource.RelatedTextbox = expTvarName;
             prsDictSource.RelatedTextbox = expDictName;
             prsDictTarget.RelatedTextbox = expDictTarget;
+            rtbVariableHelper = new RichTextBoxHelper("rtbVariableHelper", this, tableLayoutPanel9);
+            rtbLvarHelper = new RichTextBoxHelper("rtbLvarHelper", this, tableLayoutPanel17);
+            rtbTvarHelper = new RichTextBoxHelper("rtbTvarHelper", this, tableLayoutPanel21);
+            rtbDictHelper = new RichTextBoxHelper("rtbDictHelper", this, tableLayoutPanelDict);
+            rtbSendKeysHelper = new RichTextBoxHelper("rtbSendKeysHelper", this, tableLayoutPanel6);
+            rtbCallbackHelper = new RichTextBoxHelper("rtbCallbackHelper", this, tableLayoutPanel24);
+            rtbWmsgHelper = new RichTextBoxHelper("rtbWmsgHelper", this, tableLayoutPanel19);
+            rtbJsonHelper = new RichTextBoxHelper("rtbJsonHelper", this, jsonTableLayout);
+            if (I18n.CurrentLanguage.LanguageName.Contains("CN")) { SetComboBoxFontCN(this); }
         }
-        /*
-        public void SetComboBoxItemHeight(Control parent)
-        {
-            foreach (Control control in parent.Controls)
-            {
-                if (control is ComboBox cbx)
-                {
-                    cbx.DrawMode = DrawMode.OwnerDrawFixed;
-                    int fontHeight = cbx.Font.Height;
-                    cbx.ItemHeight = (int)Math.Ceiling(fontHeight * 1.15);
-                    cbx.DrawItem += new DrawItemEventHandler(ComboBox_DrawItem);
-                }
-                else
-                {
-                    SetComboBoxItemHeight(control);
-                }
-            }
-        }
-
-        private void ComboBox_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            e.DrawBackground();
-            e.DrawFocusRectangle();
-
-            ComboBox cbx = sender as ComboBox;
-            using (Brush brush = new SolidBrush(e.ForeColor))
-            {
-                e.Graphics.DrawString(cbx.Items[e.Index].ToString(), e.Font, brush, e.Bounds);
-            }
-        }
-        */
 
         private void ActionForm_Disposed(object sender, EventArgs e)
         {
@@ -245,6 +223,9 @@ namespace Triggernometry.Forms
             btnAuraGuide.Enabled = (expAuraImage.textBox1.Text.Length > 0);
         }
 
+        private RichTextBoxHelper rtbVariableHelper, rtbLvarHelper, rtbTvarHelper, rtbDictHelper, 
+            rtbSendKeysHelper, rtbCallbackHelper, rtbWmsgHelper, rtbJsonHelper;
+
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             int oldsel = tbcActionSettings.SelectedIndex;
@@ -256,12 +237,23 @@ namespace Triggernometry.Forms
                 timer2.Enabled = true;
                 stsMouseHelp.Visible = true;
             }
-            else if (oldsel == (int)ActionTypeEnum.Aura
-                || oldsel == (int)ActionTypeEnum.TextAura
-                || oldsel == (int)ActionTypeEnum.NamedCallback)
+            else if (oldsel == (int)ActionTypeEnum.Aura ||
+                     oldsel == (int)ActionTypeEnum.TextAura ||
+                     oldsel == (int)ActionTypeEnum.NamedCallback)
             {
                 stsMouseHelp.Visible = false;
                 timer2.Enabled = false;
+            }
+            switch (cbxActionType.SelectedIndex)
+            {
+                case ((int)ActionTypeEnum.Variable): rtbVariableHelper.Expanded = RichTextBoxHelper._Expanded; break;
+                case ((int)ActionTypeEnum.ListVariable): rtbLvarHelper.Expanded = RichTextBoxHelper._Expanded; break;
+                case ((int)ActionTypeEnum.TableVariable): rtbTvarHelper.Expanded = RichTextBoxHelper._Expanded; break;
+                case ((int)ActionTypeEnum.DictVariable): rtbDictHelper.Expanded = RichTextBoxHelper._Expanded; break;
+                case ((int)ActionTypeEnum.KeyPress): rtbSendKeysHelper.Expanded = RichTextBoxHelper._Expanded; break;
+                case ((int)ActionTypeEnum.NamedCallback): rtbCallbackHelper.Expanded = RichTextBoxHelper._Expanded; break;
+                case ((int)ActionTypeEnum.WindowMessage): rtbWmsgHelper.Expanded = RichTextBoxHelper._Expanded; break;
+                case ((int)ActionTypeEnum.GenericJson): rtbJsonHelper.Expanded = RichTextBoxHelper._Expanded; break;
             }
         }
 
@@ -431,7 +423,8 @@ namespace Triggernometry.Forms
                 expTextAuraText.Expression = "";
                 expTextAuraXIni.Expression = "";
                 expTextAuraYIni.Expression = "";
-                cbxProcessLog.Checked = false;
+                chkProcessLog.Checked = false;
+                chkProcessLogACT.Checked = false;
                 cbxLogMessageTarget.SelectedIndex = 0;
                 expTextAuraWIni.Expression = "";
                 expTextAuraHIni.Expression = "";
@@ -699,7 +692,8 @@ namespace Triggernometry.Forms
                 expTextAuraWTick.Expression = a._TextAuraWTickExpression;
                 expTextAuraHTick.Expression = a._TextAuraHTickExpression;
                 expTextAuraOTick.Expression = a._TextAuraOTickExpression;
-                cbxProcessLog.Checked = a._LogProcess;
+                chkProcessLog.Checked = a._LogProcess;
+                chkProcessLogACT.Checked = a._LogProcessACT;
                 cbxLogMessageTarget.SelectedIndex = (int)a._LogMessageTarget;
                 expTextAuraTTLTick.Expression = a._TextAuraTTLTickExpression;
                 expLogMessageText.Expression = a._LogMessageText;
@@ -819,7 +813,7 @@ namespace Triggernometry.Forms
                 cbxTriggerZoneType.SelectedIndex = (int)a._TriggerZoneType;
                 expJsonVariable.Expression = a._JsonResultVariable;
             }
-            cbxProcessLog_CheckedChanged(null, null);
+            chkProcessLog_CheckedChanged(null, null);
         }
 
         internal void SettingsToAction(Action a)
@@ -836,7 +830,8 @@ namespace Triggernometry.Forms
             a._PlaySoundExclusive = chkSoundExclusive.Checked;
             a._PlaySoundMyself = chkSoundMyOutput.Checked;
             a._UseTTSTextExpression = expTextToSay.Expression;
-            a._LogProcess = cbxProcessLog.Checked;
+            a._LogProcess = chkProcessLog.Checked;
+            a._LogProcessACT = chkProcessLogACT.Checked;
             a._LogMessageTarget = (LogEvent.SourceEnum)cbxLogMessageTarget.SelectedIndex;
             a._UseTTSVolumeExpression = expSpeechVolume.Expression;
             a._UseTTSRateExpression = expSpeechRate.Expression;
@@ -1085,7 +1080,7 @@ namespace Triggernometry.Forms
             Action a = new Action();
             Context ctx = new Context();
             ctx.plug = plug;
-            ctx.testmode = (liveValues == false);
+            ctx.testByPlaceholder = (liveValues == false);
             ctx.trig = null;
             ctx.soundhook = plug.SoundPlaybackSmart;
             ctx.ttshook = plug.TtsPlaybackSmart;
@@ -1154,7 +1149,7 @@ namespace Triggernometry.Forms
             expVariableExpression.ExpressionType = (cbxVariableOp.SelectedIndex == (int)VariableOpEnum.SetNumeric)
                                      ? ExpressionTextBox.SupportedExpressionTypeEnum.Numeric
                                      : ExpressionTextBox.SupportedExpressionTypeEnum.String;
-            SetScalarHelperText(cbxVariableOp.SelectedIndex);
+            rtbVariableHelper.UpdateText();
         }
 
         private void cbxTriggerOp_SelectedIndexChanged(object sender, EventArgs e)
@@ -1209,9 +1204,19 @@ namespace Triggernometry.Forms
 
         private void TestActionPrepare(bool liveValues, bool ignoreConditions)
         {
-            if (cbxActionType.SelectedIndex == (int)ActionTypeEnum.KeyPress && cbxKeypressMethod.SelectedIndex == 0)
+            if (cbxActionType.SelectedIndex == (int)ActionTypeEnum.KeyPress && cbxKeypressMethod.SelectedIndex == (int)KeypressTypeEnum.SendKeys)
             {
-                MessageBox.Show(this, I18n.Translate("internal/ActionForm/confirmkeypress", "The keypresses you defined will be sent in two seconds after you hit OK, to allow you to change to the window you want to send the keypresses to."), I18n.Translate("internal/ActionForm/confirmkeypressdelay", "Confirm"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (DialogResult.OK == MessageBox.Show(this, I18n.Translate("internal/ActionForm/confirmkeypress", "The keypresses you defined will be sent in two seconds after you hit OK, to allow you to change to the window you want to send the keypresses to."), I18n.Translate("internal/ActionForm/confirmkeypressdelay", "Confirm"), MessageBoxButtons.OK, MessageBoxIcon.Information))
+                {
+                    Timer delayTimer = new Timer() { Interval = 2000 };
+                    delayTimer.Tick += (s, e) =>
+                    {
+                        delayTimer.Stop();
+                        TestAction(liveValues, ignoreConditions);
+                    };
+                    delayTimer.Start();
+                }
+                return;
             }
             if (cbxActionType.SelectedIndex == (int)ActionTypeEnum.Aura)
             {
@@ -1223,11 +1228,6 @@ namespace Triggernometry.Forms
                 }
             }
             TestAction(liveValues, ignoreConditions);
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start(txtSendKeysLink.Text.ToString());
         }
 
         private void cbxAuraOp_SelectedIndexChanged(object sender, EventArgs e)
@@ -1293,7 +1293,7 @@ namespace Triggernometry.Forms
         {
             Context ctx = new Context();
             ctx.plug = plug;
-            ctx.testmode = false;
+            ctx.testByPlaceholder = false;
             ctx.trig = null;
             ctx.triggered = DateTime.UtcNow;
             string fn = ctx.EvaluateStringExpression(null, null, expAuraImage.Expression);
@@ -1386,7 +1386,7 @@ namespace Triggernometry.Forms
         {
             Context ctx = new Context();
             ctx.plug = plug;
-            ctx.testmode = true;
+            ctx.testByPlaceholder = true;
             ctx.trig = null;
             ctx.triggered = DateTime.UtcNow;
             using (AuraDesignForm adf = new AuraDesignForm(AuraContainerForm.AuraTypeEnum.Text))
@@ -1522,7 +1522,7 @@ namespace Triggernometry.Forms
             Action a = new Action();
             Context ctx = new Context();
             ctx.plug = plug;
-            ctx.testmode = true;
+            ctx.testByPlaceholder = true;
             ctx.trig = null;
             SettingsToAction(a);
             a.ActionType = Action.ActionTypeEnum.Aura;
@@ -1536,7 +1536,7 @@ namespace Triggernometry.Forms
             Action a = new Action();
             Context ctx = new Context();
             ctx.plug = plug;
-            ctx.testmode = true;
+            ctx.testByPlaceholder = true;
             ctx.trig = null;
             SettingsToAction(a);
             a.ActionType = Action.ActionTypeEnum.TextAura;
@@ -1929,7 +1929,7 @@ namespace Triggernometry.Forms
                               && cbxLvarOperation.SelectedIndex != (int)ListVariableOpEnum.PopToListSet)
                               ? I18n.Translate("ActionForm/lblLvarValue", "Expression")
                               : I18n.Translate("ActionForm/lblLvarValueTgtIndex", "Target Index");
-            SetListHelperText(cbxLvarOperation.SelectedIndex);
+            rtbLvarHelper.UpdateText();
         }
 
         private void expVariableName_EnabledChanged(object sender, EventArgs e)
@@ -2114,7 +2114,6 @@ namespace Triggernometry.Forms
         {
             lblKeypresses.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
             expKeypresses.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
-            lblKeypressesInfo.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
             txtSendKeysLink.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
             btnSendKeysLink.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
             btnSendKeysListen.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
@@ -2122,13 +2121,14 @@ namespace Triggernometry.Forms
             expWindowTitle.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
             lblKeypress.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
             expKeypress.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
-            lblKeypressInfo.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
-            txtKeyCodesLink.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
-            btnKeycodesLink.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
             btnKeycodesListen.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
             lblKeypressProcId.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
             expKeypressProcId.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
-            lblKeypressProcInfo.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
+            txtSendKeysLink.Text = (cbxKeypressMethod.SelectedIndex == 0)
+                ? @"https://msdn.microsoft.com/en-us/library/system.windows.forms.sendkeys.send.aspx"
+                : @"https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.keys";
+            rtbSendKeysHelper.UpdateText();
+
             switch (cbxKeypressMethod.SelectedIndex)
             {
                 case 0:
@@ -2143,9 +2143,9 @@ namespace Triggernometry.Forms
             }
         }
 
-        private void btnKeycodesLink_Click(object sender, EventArgs e)
+        private void btnSendKeysLink_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(txtKeyCodesLink.Text.ToString());
+            Process.Start(txtSendKeysLink.Text.ToString());
         }
 
         private void timer2_Tick(object sender, EventArgs e)
@@ -2315,6 +2315,15 @@ namespace Triggernometry.Forms
                     expTvarRow.Enabled = true;      // set to numeric after switch-case
                     expTvarTarget.Enabled = false;
                     break;
+                case (int)TableVariableOpEnum.GetAllEntities:
+                    expTvarName.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expTvarName.Enabled = true;
+                    cbxTvarExpType.Enabled = false;
+                    expTvarValue.Enabled = false;
+                    expTvarColumn.Enabled = false;
+                    expTvarRow.Enabled = false;
+                    expTvarTarget.Enabled = false;
+                    break;
                 case (int)TableVariableOpEnum.UnsetAll:
                     expTvarName.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expTvarName.Enabled = false;
@@ -2342,7 +2351,7 @@ namespace Triggernometry.Forms
             prsTableSource.Enabled = (cbxTvarOpType.SelectedIndex == (int)TableVariableOpEnum.UnsetAll)
                                    ? true : expTvarName.Enabled;
             prsTableTarget.Enabled = expTvarTarget.Enabled;
-            SetTableHelperText(cbxTvarOpType.SelectedIndex);
+            rtbTvarHelper.UpdateText();
         }
 
         private void expTvarName_EnabledChanged(object sender, EventArgs e)
@@ -2408,6 +2417,7 @@ namespace Triggernometry.Forms
                 case (int)DictVariableOpEnum.Unset:
                     expDictName.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expDictName.Enabled = true;
+                    prsDictSource.Enabled = true;
                     expDictLength.Enabled = false;
                     cbxDictKeyType.Enabled = false;
                     expDictKey.Enabled = false;
@@ -2418,6 +2428,7 @@ namespace Triggernometry.Forms
                 case (int)DictVariableOpEnum.Set:
                     expDictName.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expDictName.Enabled = true;
+                    prsDictSource.Enabled = true;
                     expDictLength.Enabled = false;
                     cbxDictKeyType.Enabled = true;
                     expDictKey.Enabled = true;
@@ -2428,6 +2439,7 @@ namespace Triggernometry.Forms
                 case (int)DictVariableOpEnum.Remove:
                     expDictName.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expDictName.Enabled = true;
+                    prsDictSource.Enabled = true;
                     expDictLength.Enabled = false;
                     cbxDictKeyType.Enabled = true;
                     expDictKey.Enabled = true;
@@ -2438,6 +2450,7 @@ namespace Triggernometry.Forms
                 case (int)DictVariableOpEnum.SetAll:
                     expDictName.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expDictName.Enabled = true;
+                    prsDictSource.Enabled = true;
                     expDictLength.Enabled = true;
                     cbxDictKeyType.Enabled = true;
                     expDictKey.Enabled = true;
@@ -2448,6 +2461,7 @@ namespace Triggernometry.Forms
                 case (int)DictVariableOpEnum.Build:
                     expDictName.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expDictName.Enabled = false;
+                    prsDictSource.Enabled = false;
                     expDictLength.Enabled = false;
                     cbxDictKeyType.Enabled = false;
                     expDictKey.Enabled = false;
@@ -2458,6 +2472,7 @@ namespace Triggernometry.Forms
                 case (int)DictVariableOpEnum.Filter:
                     expDictName.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expDictName.Enabled = true;
+                    prsDictSource.Enabled = true;
                     expDictLength.Enabled = false;
                     cbxDictKeyType.Enabled = false;
                     expDictKey.Enabled = false;
@@ -2469,6 +2484,7 @@ namespace Triggernometry.Forms
                 case (int)DictVariableOpEnum.Merge:
                     expDictName.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expDictName.Enabled = true;
+                    prsDictSource.Enabled = true;
                     expDictLength.Enabled = false;
                     cbxDictKeyType.Enabled = false;
                     expDictKey.Enabled = false;
@@ -2479,16 +2495,31 @@ namespace Triggernometry.Forms
                 case (int)DictVariableOpEnum.MergeHard:
                     expDictName.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expDictName.Enabled = true;
+                    prsDictSource.Enabled = true;
+                    expDictLength.Enabled = false;
+                    cbxDictKeyType.Enabled = false;
+                    expDictKey.Enabled = false;
+                    cbxDictValueType.Enabled = true;
+                    expDictValue.Enabled = false;
+                    expDictTarget.Enabled = false;
+                    break;
+                case (int)DictVariableOpEnum.GetEntityByName:
+                case (int)DictVariableOpEnum.GetEntityById:
+                    expDictName.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    expDictName.Enabled = true;
+                    prsDictSource.Enabled = true;
                     expDictLength.Enabled = false;
                     cbxDictKeyType.Enabled = false;
                     expDictKey.Enabled = false;
                     cbxDictValueType.Enabled = false;
-                    expDictValue.Enabled = false;
-                    expDictTarget.Enabled = true;
+                    cbxDictValueType.SelectedIndex = 0; // string
+                    expDictValue.Enabled = true;
+                    expDictTarget.Enabled = false;
                     break;
                 case (int)DictVariableOpEnum.UnsetAll:
                     expDictName.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expDictName.Enabled = false;
+                    prsDictSource.Enabled = true;
                     expDictLength.Enabled = false;
                     cbxDictKeyType.Enabled = false;
                     expDictKey.Enabled = false;
@@ -2499,6 +2530,7 @@ namespace Triggernometry.Forms
                 case (int)DictVariableOpEnum.UnsetRegex:
                     expDictName.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
                     expDictName.Enabled = true;
+                    prsDictSource.Enabled = true;
                     expDictLength.Enabled = false;
                     cbxDictKeyType.Enabled = false;
                     expDictKey.Enabled = false;
@@ -2507,11 +2539,8 @@ namespace Triggernometry.Forms
                     expDictTarget.Enabled = false;
                     break;
             }
-            prsDictSource.Enabled = (cbxDictOpType.SelectedIndex == (int)DictVariableOpEnum.UnsetAll)
-                                  ? true : expDictName.Enabled;
-            expDictName.IsPersistent = prsDictSource.IsPersistent;
             prsDictTarget.Enabled = expDictTarget.Enabled;
-            SetDictHelperText(cbxDictOpType.SelectedIndex);
+            rtbDictHelper.UpdateText();
         }
 
         private void expDictName_EnabledChanged(object sender, EventArgs e)
@@ -2555,9 +2584,10 @@ namespace Triggernometry.Forms
             expJsonPayload.Enabled = (cbxJsonType.SelectedIndex == 0);
         }
 
-        private void cbxProcessLog_CheckedChanged(object sender, EventArgs e)
+        private void chkProcessLog_CheckedChanged(object sender, EventArgs e)
         {
-            cbxLogMessageTarget.Enabled = cbxProcessLog.Checked;
+            chkProcessLogACT.Enabled = chkProcessLog.Checked;
+            cbxLogMessageTarget.Enabled = chkProcessLog.Checked;
             lblLogMessageTarget.Enabled = cbxLogMessageTarget.Enabled;
             cbxLogMessageLevel.Enabled = (cbxLogMessageTarget.Enabled == false);
             lblLogMessageLevel.Enabled = cbxLogMessageLevel.Enabled;
@@ -2657,15 +2687,32 @@ namespace Triggernometry.Forms
 
         private void btnSendKeysListen_Click(object sender, EventArgs e)
         {
-            ListenToKeypresses(true);
+            ListenToKeypresses();
         }
 
         private void btnKeycodesListen_Click(object sender, EventArgs e)
         {
-            ListenToKeypresses(false);
+            ListenToKeypresses();
         }
 
-        private void ListenToKeypresses(bool isSendKeys)
+        private static Dictionary<string, string> SendKeysMap = new Dictionary<string, string>
+        {
+            {"Back", "{BS}"}, {"Escape", "{ESC}"}, {"Enter", "{ENTER}"}, {"Tab", "{TAB}"}, {"Space", " "},
+            {"Scroll", "{SCROLLLOCK}"}, {"CapsLock", "{CAPSLOCK}"}, {"NumLock", "{NUMLOCK}"}, 
+            {"Insert", "{INS}"}, {"Delete", "{DEL}"}, {"Home", "{HOME}"}, {"End", "{END}"}, {"PageUp", "{PGUP}"}, {"PageDown", "{PGDN}"},
+            {"Up", "{UP}"}, {"Down", "{DOWN}"}, {"Left", "{LEFT}"}, {"Right", "{RIGHT}"},
+            {"Add", "{ADD}"}, {"Subtract", "{SUBTRACT}"}, {"Multiply", "{MULTIPLY}"}, {"Divide", "{DIVIDE}"},
+            {"PrintScreen", "{PRTSC}"}, {"Help", "{HELP}"},
+            {"Oem1", ":"}, {"OemSemicolon", ":"}, {"Oem2", "/"}, {"OemQuestion", "/"}, {"Oem3", "`"}, {"Oemtilde", "`"}, 
+            {"Oem4", "["}, {"OemOpenBrackets", "["}, {"Oem5", "\\"}, {"OemPipe", "\\"}, {"Oem6", "]"}, {"OemCloseBrackets", "]"},
+            {"Oem7", "'"}, {"OemQuotes", "'"}, {"Oemcomma", ","}, {"OemPeriod", "."}, {"OemMinus", "-"}, {"Oemplus", "="},
+            {"A", "a"}, {"B", "b"}, {"C", "c"}, {"D", "d"}, {"E", "e"}, {"F", "f"}, {"G", "g"}, {"H", "h"}, {"I", "i"}, {"J", "j"}, {"K", "k"}, {"L", "l"}, {"M", "m"}, {"N", "n"}, {"O", "o"}, {"P", "p"}, {"Q", "q"}, {"R", "r"}, {"S", "s"}, {"T", "t"}, {"U", "u"}, {"V", "v"}, {"W", "w"}, {"X", "x"}, {"Y", "y"}, {"Z", "z"},
+            {"F1", "{F1}"}, {"F2", "{F2}"}, {"F3", "{F3}"}, {"F4", "{F4}"}, {"F5", "{F5}"}, {"F6", "{F6}"}, {"F7", "{F7}"}, {"F8", "{F8}"}, {"F9", "{F9}"}, {"F10", "{F10}"}, {"F11", "{F11}"}, {"F12", "{F12}"}, {"F13", "{F13}"}, {"F14", "{F14}"}, {"F15", "{F15}"}, {"F16", "{F16}"},
+            {"D0", "0"}, {"D1", "1"}, {"D2", "2"}, {"D3", "3"}, {"D4", "4"}, {"D5", "5"}, {"D6", "6"}, {"D7", "7"}, {"D8", "8"}, {"D9", "9"},
+            {"None", ""}
+        };
+
+        private void ListenToKeypresses()
         {
             Keys keyData = Keys.None;
             string keyRep = "";
@@ -2679,7 +2726,7 @@ namespace Triggernometry.Forms
             }
             if (keyData != Keys.None)
             {
-                if (isSendKeys == false)
+                if (cbxKeypressMethod.SelectedIndex != (int)KeypressTypeEnum.SendKeys)
                 {
                     keyRep = ((int)keyData).ToString();
                 }
@@ -2698,181 +2745,349 @@ namespace Triggernometry.Forms
                         keyRep += "%";
                     }
                     Keys keyCode = keyData & Keys.KeyCode;
-                    switch (keyCode)
+                    string keyName = keyCode.ToString();
+                    if (SendKeysMap.ContainsKey(keyName))
                     {
-                        case Keys.Back: keyRep += "{BS}"; break;
-                        case Keys.CapsLock: keyRep += "{CAPSLOCK}"; break;
-                        case Keys.Delete: keyRep += "{DEL}"; break;
-                        case Keys.Down: keyRep += "{DOWN}"; break;
-                        case Keys.End: keyRep += "{END}"; break;
-                        case Keys.Enter: keyRep += "{ENTER}"; break;
-                        case Keys.Escape: keyRep += "{ESC}"; break;
-                        case Keys.Help: keyRep += "{HELP}"; break;
-                        case Keys.Home: keyRep += "{HOME}"; break;
-                        case Keys.Insert: keyRep += "{INS}"; break;
-                        case Keys.Left: keyRep += "{LEFT}"; break;
-                        case Keys.NumLock: keyRep += "{NUMLOCK}"; break;
-                        case Keys.PageDown: keyRep += "{PGDN}"; break;
-                        case Keys.PageUp: keyRep += "{PGUP}"; break;
-                        case Keys.PrintScreen: keyRep += "{PRTSC}"; break;
-                        case Keys.Right: keyRep += "{RIGHT}"; break;
-                        case Keys.Scroll: keyRep += "{SCROLLLOCK}"; break;
-                        case Keys.Tab: keyRep += "{TAB}"; break;
-                        case Keys.Up: keyRep += "{UP}"; break;
-                        case Keys.F1: keyRep += "{F1}"; break;
-                        case Keys.F2: keyRep += "{F2}"; break;
-                        case Keys.F3: keyRep += "{F3}"; break;
-                        case Keys.F4: keyRep += "{F4}"; break;
-                        case Keys.F5: keyRep += "{F5}"; break;
-                        case Keys.F6: keyRep += "{F6}"; break;
-                        case Keys.F7: keyRep += "{F7}"; break;
-                        case Keys.F8: keyRep += "{F8}"; break;
-                        case Keys.F9: keyRep += "{F9}"; break;
-                        case Keys.F10: keyRep += "{F10}"; break;
-                        case Keys.F11: keyRep += "{F11}"; break;
-                        case Keys.F12: keyRep += "{F12}"; break;
-                        case Keys.F13: keyRep += "{F13}"; break;
-                        case Keys.F14: keyRep += "{F14}"; break;
-                        case Keys.F15: keyRep += "{F15}"; break;
-                        case Keys.F16: keyRep += "{F16}"; break;
-                        case Keys.Add: keyRep += "{ADD}"; break;
-                        case Keys.Subtract: keyRep += "{SUBTRACT}"; break;
-                        case Keys.Multiply: keyRep += "{MULTIPLY}"; break;
-                        case Keys.Divide: keyRep += "{DIVIDE}"; break;
-                        default: keyRep += keyCode != Keys.None ? keyCode.ToString() : ""; break;
+                        keyRep += SendKeysMap[keyName];
+                    }
+                    else 
+                    {
+                        MessageBox.Show(I18n.Translate("internal/ActionForm/sendkeyinvalid", "This key is not supported in the SendKeys method."), 
+                            I18n.Translate("internal/ConfigurationForm/warning", "Warning"));
                     }
                 }
             }
-            if (isSendKeys == true)
+            switch (cbxKeypressMethod.SelectedIndex)
             {
-                expKeypresses.Expression = keyRep;
-            }
-            else
-            {
-                expKeypress.Expression = keyRep;
+                case (int)KeypressTypeEnum.SendKeys: 
+                    expKeypresses.Expression += keyRep; break;
+                case (int)KeypressTypeEnum.WindowMessage: 
+                    expKeypress.Expression = keyRep; break;
+                case (int)KeypressTypeEnum.WindowMessageCombo: 
+                    expKeypress.Expression = (expKeypress.Expression == "") ? keyRep : expKeypress.Expression + "," + keyRep; break;
             }
         }
 
-
-        #region Helper Text
-
-        private void SetScalarHelperText(int cbxOpIndex)
+        // Applying a different font for Chinese characters to fix the issue of no line spacings in the cbx.
+        // Will try to apply the font globally depending on the selected languages later, but for now, this fix should suffice.
+        public void SetComboBoxFontCN(Control parent)
         {
-            string enumName = Enum.GetName(typeof(VariableOpEnum), cbxOpIndex);
-            if (enumName != null)
+            foreach (Control control in parent.Controls)
             {
-                string key = "ActionForm/helpVar" + enumName;
-                string textEN = "";
-                switch (cbxOpIndex)
+                if (control is ComboBox cbx)
                 {
-                    case (int)VariableOpEnum.Unset: textEN = ""; break;
-                    case (int)VariableOpEnum.SetString: textEN = ""; break;
-                    case (int)VariableOpEnum.SetNumeric: textEN = ""; break;
-                    case (int)VariableOpEnum.Clipboard: textEN = ""; break;
-                    case (int)VariableOpEnum.UnsetAll: textEN = ""; break;
-                    case (int)VariableOpEnum.UnsetRegex: textEN = ""; break;
-                    case (int)VariableOpEnum.UnsetRegexUniversal: textEN = ""; break;
-                    case (int)VariableOpEnum.QueryJsonPath: textEN = ""; break;
-                    case (int)VariableOpEnum.QueryJsonPathList: textEN = ""; break;
+                    cbx.Font = new Font("Microsoft YaHei", cbx.Font.Size);
                 }
-                lblVariableHelper.Text = I18n.Translate(key, textEN);
+                else
+                {
+                    SetComboBoxFontCN(control);
+                }
             }
         }
 
-        private void SetListHelperText(int cbxOpIndex)
-        {
-            string enumName = Enum.GetName(typeof(ListVariableOpEnum), cbxOpIndex);
-            if (enumName != null)
+        public class RichTextBoxHelper : RichTextBox // to do: change to CustomControls
+        {   
+            private readonly Form ParentForm;
+            private readonly TableLayoutPanel ParentTable;
+            private const double lineSpacing = 1.4;
+            internal static bool _Expanded = false;  // all textboxes share the same state
+            public bool Expanded
             {
-                string key = "ActionForm/helpLvar" + enumName;
-                string textEN = "";
-                switch (cbxOpIndex)
+                get { return _Expanded; }
+                set
                 {
-                    case (int)ListVariableOpEnum.Unset: textEN = ""; break;
-                    case (int)ListVariableOpEnum.Push: textEN = ""; break;
-                    case (int)ListVariableOpEnum.Insert: textEN = ""; break;
-                    case (int)ListVariableOpEnum.Set: textEN = ""; break;
-                    case (int)ListVariableOpEnum.SetAll: textEN = ""; break;
-                    case (int)ListVariableOpEnum.Remove: textEN = ""; break;
-                    case (int)ListVariableOpEnum.PopFirst: textEN = ""; break;
-                    case (int)ListVariableOpEnum.PopToListInsert: textEN = "";  break;
-                    case (int)ListVariableOpEnum.PopToListSet: textEN = ""; break;
-                    case (int)ListVariableOpEnum.PopLast: textEN = ""; break;
-                    case (int)ListVariableOpEnum.Build: textEN = ""; break;
-                    case (int)ListVariableOpEnum.Filter: textEN = ""; break;
-                    case (int)ListVariableOpEnum.Join: textEN = ""; break;
-                    case (int)ListVariableOpEnum.Split: textEN = ""; break;
-                    case (int)ListVariableOpEnum.Copy: textEN = ""; break;
-                    case (int)ListVariableOpEnum.InsertList: textEN = ""; break;
-                    case (int)ListVariableOpEnum.SortNumericAsc: textEN = ""; break;
-                    case (int)ListVariableOpEnum.SortNumericDesc: textEN = ""; break;
-                    case (int)ListVariableOpEnum.SortAlphaAsc: textEN = ""; break;
-                    case (int)ListVariableOpEnum.SortAlphaDesc: textEN = ""; break;
-                    case (int)ListVariableOpEnum.SortFfxivPartyAsc: textEN = ""; break;
-                    case (int)ListVariableOpEnum.SortFfxivPartyDesc: textEN = ""; break;
-                    case (int)ListVariableOpEnum.SortByKeys: textEN = ""; break;
-                    case (int)ListVariableOpEnum.UnsetAll: textEN = ""; break;
-                    case (int)ListVariableOpEnum.UnsetRegex: textEN = ""; break;
+                    _Expanded = value;
+                    UpdateText();
                 }
-                lblLvarHelper.Text = I18n.Translate(key, textEN);
             }
-        }
 
-        private void SetTableHelperText(int cbxOpIndex)
-        {
-            string enumName = Enum.GetName(typeof(TableVariableOpEnum), cbxOpIndex);
-            if (enumName != null)
+            /// <summary> Append the RichTextBoxHelper to the end of the given TableLayoutPanel in the given form.</summary>
+            public RichTextBoxHelper(string name, Form parentForm, TableLayoutPanel table, int colIndex = 1)
             {
-                string key = "ActionForm/helpTvar" + enumName;
-                string textEN = "";
-                switch (cbxOpIndex)
-                {
-                    case (int)TableVariableOpEnum.Unset: textEN = ""; break;
-                    case (int)TableVariableOpEnum.Set: textEN = ""; break;
-                    case (int)TableVariableOpEnum.SetAll: textEN = ""; break;
-                    case (int)TableVariableOpEnum.SlicesSetAll: textEN = ""; break;
-                    case (int)TableVariableOpEnum.Resize: textEN = ""; break;
-                    case (int)TableVariableOpEnum.Build: textEN = ""; break;
-                    case (int)TableVariableOpEnum.SetLine: textEN = ""; break;
-                    case (int)TableVariableOpEnum.InsertLine: textEN = ""; break;
-                    case (int)TableVariableOpEnum.RemoveLine: textEN = ""; break;
-                    case (int)TableVariableOpEnum.Filter: textEN = ""; break;
-                    case (int)TableVariableOpEnum.FilterLine: textEN = ""; break;
-                    case (int)TableVariableOpEnum.Copy: textEN = ""; break;
-                    case (int)TableVariableOpEnum.Append: textEN = ""; break;
-                    case (int)TableVariableOpEnum.SortLine: textEN = ""; break;
-                    case (int)TableVariableOpEnum.UnsetAll: textEN = ""; break;
-                    case (int)TableVariableOpEnum.UnsetRegex: textEN = ""; break;
-                }
-                lblTvarHelper.Text = I18n.Translate(key, textEN);
-            }
-        }
+                Name = name;
+                ReadOnly = true;
+                Tag = I18n.DoNotTranslate;
 
-        private void SetDictHelperText(int cbxOpIndex)
-        {
-            string enumName = Enum.GetName(typeof(DictVariableOpEnum), cbxOpIndex);
-            if (enumName != null)
+                ParentForm = parentForm;
+                ParentTable = table;
+                // append to the last row and span to the last grid of the row
+                ParentTable.RowCount += 1;
+                ParentTable.RowStyles.Add(new RowStyle());
+                ParentTable.Controls.Add(this, colIndex, ParentTable.RowCount - 1);
+                if (ParentTable.ColumnCount - colIndex > 1) 
+                { 
+                    table.SetColumnSpan(this, ParentTable.ColumnCount - colIndex); 
+                }
+                Dock = DockStyle.Left;
+                Margin = new Padding(3, 15, 15, 7);
+                TabStop = false;
+
+                BorderStyle = BorderStyle.None;
+                ScrollBars = RichTextBoxScrollBars.Vertical;
+                Cursor = Cursors.Hand;
+                BackColor = parentForm.BackColor;
+                if (I18n.CurrentLanguage.LanguageName.Contains("CN")) // will switch to a more general implementation
+                { 
+                    Font = new Font("Microsoft YaHei", Font.Size); 
+                } 
+
+                Expanded = _Expanded;
+            }
+
+            internal void UpdateText()
             {
-                string key = "ActionForm/helpDict" + enumName;
-                string textEN = "";
-                switch (cbxOpIndex)
+                LockRichTextBox();
+                if (_Expanded)
                 {
-                    case (int)DictVariableOpEnum.Unset: textEN = ""; break;
-                    case (int)DictVariableOpEnum.Set: textEN = ""; break;
-                    case (int)DictVariableOpEnum.Remove: textEN = ""; break;
-                    case (int)DictVariableOpEnum.SetAll: textEN = ""; break;
-                    case (int)DictVariableOpEnum.Build: textEN = ""; break;
-                    case (int)DictVariableOpEnum.Filter: textEN = ""; break;
-                    case (int)DictVariableOpEnum.Merge: textEN = ""; break;
-                    case (int)DictVariableOpEnum.MergeHard: textEN = ""; break;
-                    case (int)DictVariableOpEnum.UnsetAll: textEN = ""; break;
-                    case (int)DictVariableOpEnum.UnsetRegex: textEN = ""; break;
+                    Dock = DockStyle.Fill;
+                    string key = "";
+                    switch (Name)
+                    {
+                        case "rtbVariableHelper":
+                            key = "rtbHelperVar" + Enum.GetName(typeof(VariableOpEnum), ((ActionForm)ParentForm).cbxVariableOp.SelectedIndex); break;
+                        case "rtbLvarHelper":
+                            key = "rtbHelperLvar" + Enum.GetName(typeof(ListVariableOpEnum), ((ActionForm)ParentForm).cbxLvarOperation.SelectedIndex); break;
+                        case "rtbTvarHelper":
+                            key = "rtbHelperTvar" + Enum.GetName(typeof(TableVariableOpEnum), ((ActionForm)ParentForm).cbxTvarOpType.SelectedIndex); break;
+                        case "rtbDictHelper":
+                            key = "rtbHelperDict" + Enum.GetName(typeof(DictVariableOpEnum), ((ActionForm)ParentForm).cbxDictOpType.SelectedIndex); break;
+                        case "rtbSendKeysHelper":
+                            key = "rtbHelperSendKeys" + Enum.GetName(typeof(KeypressTypeEnum), ((ActionForm)ParentForm).cbxKeypressMethod.SelectedIndex); break;
+                        case "rtbCallbackHelper": key = "rtbHelperCallback"; break;
+                        case "rtbWmsgHelper": key = "rtbHelperWmsg"; break;
+                        case "rtbJsonHelper": key = "rtbHelperJson"; break;
+                    }
+                    var resources = new System.ComponentModel.ComponentResourceManager(typeof(ActionForm));
+                    Text = I18n.Translate($"ActionForm/{key}", resources.GetString($"{key}.Text") ?? "");
                 }
-                lblDictHelper.Text = I18n.Translate(key, textEN);
+                else
+                {
+                    Dock = DockStyle.Left;
+                    Text = I18n.Translate("ActionForm/rtbHelper", "[Show Help]");
+                }
+                SetStyles();
+                SetHeight();
+                UnlockRichTextBox();
             }
-        }
 
-        #endregion
+            private const int WM_SETFOCUS = 0x7;
+            private const int WM_SETREDRAW = 0x000B;
+            private const int WM_SETCURSOR = 0x0020;
+            private const int WM_MOUSEMOVE = 0x0200;
+            private const int WM_LBUTTONDOWN = 0x201;
+            private const int WM_LBUTTONUP = 0x202;
+            private const int WM_LBUTTONDBLCLK = 0x203;
+            private const int WM_RBUTTONDOWN = 0x204;
+            private const int WM_RBUTTONUP = 0x205;
+            private const int WM_RBUTTONDBLCLK = 0x206;
+            private const int WM_KEYDOWN = 0x0100;
+            private const int WM_KEYUP = 0x0101;
+
+            [DllImport("user32.dll")]
+            static extern bool HideCaret(IntPtr hWnd);
+            [DllImport("user32.dll")]
+            public static extern IntPtr SetCursor(IntPtr hCursor);
+            protected override void WndProc(ref Message m)
+            {
+                HideCaret(Handle);
+                if (m.Msg == WM_SETFOCUS || m.Msg == WM_KEYDOWN || m.Msg == WM_KEYUP ||
+                    m.Msg == WM_LBUTTONDOWN || m.Msg == WM_MOUSEMOVE || m.Msg == WM_LBUTTONDBLCLK ||
+                    m.Msg == WM_RBUTTONDOWN || m.Msg == WM_RBUTTONUP || m.Msg == WM_RBUTTONDBLCLK)
+                {
+                    return;
+                }
+                else if (m.Msg == WM_LBUTTONUP)
+                {
+                    Expanded = !Expanded;
+                }
+                else if (m.Msg == WM_SETCURSOR)
+                {
+                    SetCursor(Cursors.Help.Handle);
+                    return;
+                }
+                else
+                {
+                    base.WndProc(ref m);
+                }
+            }
+
+            [DllImport("user32.dll")]
+            private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
+
+            public void LockRichTextBox()
+            {
+                SendMessage(this.Handle, WM_SETREDRAW, IntPtr.Zero, IntPtr.Zero);
+                ReadOnly = false;
+            }
+
+            public void UnlockRichTextBox()
+            {
+                SendMessage(this.Handle, WM_SETREDRAW, new IntPtr(1), IntPtr.Zero);
+                ReadOnly = true;
+                Refresh();
+            }
+
+            /*
+            private const int EM_SETLINESPACING = 0x00CA;
+            private const int LINE_SPACE_MULTIPLE = 1;
+            private const int LINE_SPACE_TWIPS = 2;
+            
+            private void SetLineSpacing(double spacing)
+            {
+                float fontSize = this.Font.SizeInPoints;
+                int spacingTwips = (int)(fontSize * spacing * 20);
+                SendMessage(this.Handle, EM_SETLINESPACING, (IntPtr)LINE_SPACE_TWIPS, (IntPtr)spacingTwips);
+            }
+            */
+
+            private void SetHeight()
+            {
+                int residueHeight;
+                if (ParentTable.Parent is TabPage tabPage)
+                {
+                    Point rtbLocation = ParentTable.PointToScreen(Location);
+                    int tabControlBottom = tabPage.PointToScreen(new Point(0, tabPage.Height)).Y;
+                    residueHeight = tabControlBottom - rtbLocation.Y - 10;
+                }
+                else
+                {
+                    residueHeight = 200;
+                }
+
+                int totalLines = GetLineFromCharIndex(TextLength) + 1;
+                int lineHeight = (int)(Font.Height * 1.5);
+                int textHeight = totalLines * lineHeight;
+
+                Height = Math.Min(residueHeight, textHeight);
+            }
+
+            internal static Color[] expressionColors = {
+                Color.FromArgb(0, 85, 221),
+                Color.FromArgb(140, 0, 0)
+            };
+            internal static Color monospaceColor = Color.FromArgb(32, 64, 144);
+            internal static Color stringColor = Color.FromArgb(34, 153, 0);
+            internal static Color separatorColor = Color.FromArgb(204, 102, 0);
+
+            private void SetStyles()
+            {   // this is currently a very rough implementation for setting colors for formatted text
+                SelectAll();
+                if (!_Expanded)
+                {
+                    SelectionColor = Color.FromArgb(160, 160, 160);
+                }
+                else
+                {
+                    // initial color
+                    SelectionColor = Color.Black;
+
+                    // set color for ${...}
+                    int depth = 0;
+                    int totalLength = Text.Length;
+                    for (int i = 0; i < totalLength; i++)
+                    {
+                        if (i < totalLength - 1 && Text.Substring(i, 2) == "${")
+                        {
+                            depth++;
+                        }
+                        if (depth > 0)
+                        {
+                            Select(i, 1);
+                            SelectionColor = expressionColors[(depth - 1) % expressionColors.Count()];
+                            if (Text[i] == '}') { depth--; }
+                        }
+                    }
+
+                    // set color and style for `...`
+                    Font monospaceFont = new Font("Consolas", Font.Size);
+                    int start = 0;
+                    while (start < Text.Length)
+                    {
+                        int openIndex = Find("`", start, RichTextBoxFinds.None);
+                        if (openIndex == -1) break;
+
+                        int closeIndex = Find("`", openIndex + 1, RichTextBoxFinds.None);
+                        if (closeIndex == -1) break;
+
+                        Select(openIndex, closeIndex - openIndex + 1);
+                        SelectionFont = monospaceFont;
+
+                        for (int i = openIndex; i <= closeIndex; i++)
+                        {
+                            Select(i, 1);
+                            if (SelectionColor == Color.Black)
+                            {
+                                SelectionColor = monospaceColor;
+                            }
+                        }
+                        Select(closeIndex, 1);
+                        SelectedText = "";
+                        Select(openIndex, 1);
+                        SelectedText = "";
+                        start = closeIndex - 1;
+                    }
+
+                    // set color for '...'
+                    start = 0;
+                    while (start < Text.Length)
+                    {
+                        int openIndex = Find("'", start, RichTextBoxFinds.None);
+                        if (openIndex == -1) break;
+
+                        int closeIndex = Find("'", openIndex + 1, RichTextBoxFinds.None);
+                        if (closeIndex == -1) break;
+
+                        Select(openIndex, closeIndex - openIndex + 1);
+                        if (!SelectedText.Contains("$"))
+                        {
+                            SelectionColor = stringColor;
+                        }
+                        Select(openIndex, 1);
+                        SelectionColor = stringColor;
+                        Select(closeIndex, 1);
+                        SelectionColor = stringColor;
+                        start = closeIndex + 1;
+                    }
+
+                    // set color for "..."
+                    start = 0;
+                    while (start < Text.Length)
+                    {
+                        int openIndex = Find("\"", start, RichTextBoxFinds.None);
+                        if (openIndex == -1) break;
+
+                        int closeIndex = Find("\"", openIndex + 1, RichTextBoxFinds.None);
+                        if (closeIndex == -1) break;
+
+                        Select(openIndex, closeIndex - openIndex + 1);
+                        if (!SelectedText.Contains("$"))
+                        {
+                            SelectionColor = stringColor;
+                        }
+                        Select(openIndex, 1);
+                        SelectionColor = stringColor;
+                        Select(closeIndex, 1);
+                        SelectionColor = stringColor;
+                        start = closeIndex + 1;
+                    }
+
+                    // set color for separators
+                    for (start = 0; start < Text.Length; start++)
+                    {
+                        Select(start, 1);
+                        char ch = Text[start];
+                        if (SelectionColor == Color.Black) { continue; } // plain text
+                        if (ch == ',' && SelectionColor == stringColor) { continue; }
+                        if (ch == ',' || ch == '|' || ch == '=' || ch == ';' || ch == ':' || ch == Context.LINEBREAK_PLACEHOLDER[0])
+                        {
+                            SelectionColor = separatorColor;
+                        }
+                    }
+                }
+                Select(0, 0);
+            }
+
+        }
     }
 
 }

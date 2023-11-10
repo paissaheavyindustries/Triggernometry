@@ -489,7 +489,6 @@ namespace Triggernometry.CustomControls
                 }
                 tf.initialDescriptions = tf.GetAllDescriptionsStr();
                 tf.plug = plug;
-                ExpressionTextBox.SetPlugForTextBoxes(tf, plug);
                 tf.fakectx.plug = plug;
                 tf.Text = I18n.Translate("internal/UserInterface/addtrigger", "Add new trigger");
                 tf.BtnOkSetText();
@@ -625,7 +624,6 @@ namespace Triggernometry.CustomControls
                     Trigger t = (Trigger)treeView1.SelectedNode.Tag;
                     Trigger.TriggerSourceEnum oldSource = t._Source;
                     tf.plug = plug;
-                    ExpressionTextBox.SetPlugForTextBoxes(tf, plug);
                     ExpressionTextBox.CurrentTriggerRegexStr = t.RegularExpression;
                     tf.fakectx.trig = t;
                     tf.fakectx.plug = plug;
@@ -2071,13 +2069,13 @@ namespace Triggernometry.CustomControls
         {
             Context ctx = new Context();
             ctx.plug = plug;
-            ctx.testmode = false;
+            ctx.testByPlaceholder = false;
             ctx.trig = t;
             ctx.soundhook = plug.SoundPlaybackSmart;
             ctx.ttshook = plug.TtsPlaybackSmart;
             ctx.triggered = DateTime.UtcNow;
             ctx.force = force;
-            if (!(t._TestInput?.Length > 0))
+            if ((t._TestInput?.Length ?? 0) == 0)
             {
                 t.Fire(plug, ctx, null);
             }
@@ -2111,7 +2109,7 @@ namespace Triggernometry.CustomControls
                     LogEvent le = new LogEvent() { Text = line, Timestamp = DateTime.Now, TestMode = true, ZoneName = "", ZoneId = null, Source = source };
                     plug.TestTrigger(t, le, force);
                 }
-            }            
+            }
         }
 
         private void btnCornerPopup_Click(object sender, EventArgs e)

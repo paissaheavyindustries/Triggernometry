@@ -421,7 +421,7 @@ namespace Triggernometry
                 List<IntPtr> wins = FindWindows(windowtitle);
                 if (wins.Count > 0)
                 {
-                    switch (procid)
+                    switch (procid.Trim())
                     {
                         case "-1":
                             {
@@ -488,6 +488,7 @@ namespace Triggernometry
         public delegate void SoundDelegate(string filename, int volume);
         public delegate List<CustomTriggerCategoryProxy> CustomTriggerDelegate();
         public delegate PluginWrapper InstanceDelegate(string ActPluginName, string ActPluginType);
+        public delegate void ACTEncounterLogDelegate(string message);
 
         internal Scarborough.Scarborough sc;
         private Queue<LogEvent> EventQueue;
@@ -566,6 +567,7 @@ namespace Triggernometry
         public TabPageDelegate TabLocateHook { get; set; }
         public SimpleVoidDelegate CheckUpdateHook { get; set; }
         public SimpleBoolDelegate ActInitedHook { get; set; }
+        public ACTEncounterLogDelegate ACTEncounterLogHook { get; set; }
 
         private bool _HideAllAuras = false;
         internal bool HideAllAuras
@@ -2312,7 +2314,7 @@ namespace Triggernometry
                 _obs = new ObsController();
                 _livesplit = new LiveSplitController();
                 exwhere = I18n.Translate("internal/Plugin/iniscripting", "setting up scripting - try changing the plugin load order in ACT");
-                scripting = new Interpreter(this);
+                scripting = new Interpreter();
                 pluginStatusText.Text = I18n.Translate("internal/Plugin/iniready", "Ready");
                 FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/inited", "Initialized"));
                 Task tx = new Task(() =>
@@ -3587,12 +3589,20 @@ namespace Triggernometry
                     return c;
                 }
                 bool corruptFallback = false;
-                if (fi.Length == 0)
+                string lastLine = File.ReadLines(filename).LastOrDefault();
+                if (lastLine == null || lastLine.Trim() != "</Configuration>")
                 {
                     // configuration has been corrupted, try loading previous config file instead
                     string newfilename = filename + ".previous";
                     fi = new FileInfo(newfilename);
-                    cre = I18n.Translate("internal/Plugin/cfgcorrupted", "Configuration file '{0}' appears to have been corrupted, loading previous configuration file '{1}'", filename, newfilename);
+                    // translation file is loaded after this, so the I18n won't work
+                    cre = I18n.Translate("internal/Plugin/cfgcorrupted", 
+                        "Configuration file has been corrupted: \n" +
+                        "'{0}' \n\n" +
+                        "Loading previous configuration file: \n" +
+                        "'{1}'", 
+                        filename, newfilename);
+                    MessageBox.Show(cre, "Triggernometry", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     if (fi.Exists == true)
                     {
                         filename = newfilename;
@@ -3743,6 +3753,11 @@ namespace Triggernometry
                         sw.Flush();
                     }
                 }
+                string lastLine = File.ReadLines(filename + ".temp").LastOrDefault();
+                if (lastLine == null || lastLine.Trim() != "</Configuration>")
+                {
+                    throw new Exception(I18n.Translate("internal/Plugin/cfgsaveincomplete", "The saving process was interrupted.") + "\n");
+                }
                 if (switchprevious == true)
                 {
                     if (File.Exists(filename + ".previous") == true)
@@ -3812,14 +3827,14 @@ namespace Triggernometry
                 }
                 a.AddToLog(ctx, DebugLevelEnum.Info, I18n.Translate("internal/Plugin/actionqueued", "Queuing trigger '{0}' action '{1}' to {2} slot {3}", t.LogName, a.GetDescription(ctx), FormatDateTime(when), newOrdinal));
                 ActionQueue.Add(new QueuedAction(when, newOrdinal, m, a, ctx, releaseMutex));
-                ActionQueue.Sort();
+                ActionQueue.Sort(); 
                 ActionUpdateEvent.Set();
             }
         }
 
         internal bool ReadyForOperation()
         {
-            return mainform.IsHandleCreated == true && ActInitedHook() == true;
+            return mainform?.IsHandleCreated == true && ActInitedHook?.Invoke() == true;
         }
 
         internal void ActionThreadProc()
@@ -4012,7 +4027,6 @@ namespace Triggernometry
 
         public void RegisterNamedCallback(int id, string name, Delegate del, object o)
         {
-            
             NamedCallback nc = new NamedCallback();
             nc.Id = id;
             nc.Callback = del;
@@ -4027,6 +4041,23 @@ namespace Triggernometry
                 }
                 callbacksByName[name].Add(nc);
             }
+        }
+
+        public int RegisterNamedCallback(string name, Delegate callback, object o, bool allowDuplicatedName = false)
+        {   // used in scripts to register callbacks manually
+            if (!allowDuplicatedName)
+            {
+                UnregisterNamedCallback(name);
+            }
+
+            int id;
+            lock (callbacksById)
+            {
+                id = (callbacksById.Count == 0) ? 1 : callbacksById.Keys.Max() + 1;
+            }
+
+            RegisterNamedCallback(id, name, callback, o);
+            return id;
         }
 
         public void UnregisterNamedCallback(int id)
@@ -4048,6 +4079,21 @@ namespace Triggernometry
             }
         }
 
+        public void UnregisterNamedCallback(string name)
+        {   // unregister all callbacks with the given name
+            lock (callbacksById)
+            {
+                if (!callbacksByName.ContainsKey(name))
+                {
+                    return;
+                }
+                foreach (NamedCallback nc in callbacksByName[name])
+                {
+                    callbacksById.Remove(nc.Id);
+                }
+                callbacksByName.Remove(name);
+            }
+        }
     }
 
 }
