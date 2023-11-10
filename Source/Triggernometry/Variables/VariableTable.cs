@@ -557,7 +557,7 @@ namespace Triggernometry.Variables
         }
 
         public static VariableTable BuildTemp(string expression)
-        {   // in expressions: ${?t: 1, 2;  3, 4;  5, 6 [xxx][xxx]}
+        {   // in expressions: ${?t: 1, 2 | 3, 4 | 5, 6 [xxx][xxx]}
             string[] rowStrings = Context.SplitArguments(expression, separator: "|");
             List<string[]> cellStrings = new List<string[]>();
             int width = 0;

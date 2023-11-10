@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using Triggernometry.Variables;
 
 namespace Triggernometry
@@ -25,18 +26,20 @@ namespace Triggernometry
                 return badApis.Any(x => assy.Contains(x) == true);
             }
 
-            public static bool Validate(Script script, params string[] badApis)
+            public static bool Validate(Script script, out string badApi, params string[] badApis)
             {
                 Compilation comp = script.GetCompilation();
                 SyntaxTree st = comp.SyntaxTrees.First();
                 CompilationUnitSyntax srn = st.GetRoot() as CompilationUnitSyntax;
                 SemanticModel model = comp.GetSemanticModel(comp.SyntaxTrees.First());
+                badApi = "";
                 foreach (UsingDirectiveSyntax usingdir in srn.Usings)
                 {
                     ISymbol symbol = model.GetSymbolInfo(usingdir.Name).Symbol;
                     string name = symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                     if (IsBadApi(name, badApis) == true)
                     {
+                        badApi = name;
                         return false;
                     }
                 }
@@ -61,6 +64,7 @@ namespace Triggernometry
                     string name = type.ContainingNamespace != null ? type.ContainingNamespace.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat) : null;
                     if (name != null && IsBadApi(name, badApis) == true)
                     {
+                        badApi = name;
                         return false;
                     }
                 }
@@ -73,6 +77,7 @@ namespace Triggernometry
                     string name = ns.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                     if (IsBadApi(name, badApis) == true)
                     {
+                        badApi = name;
                         return false;
                     }
                 }
@@ -83,6 +88,7 @@ namespace Triggernometry
                     string name = symbol.ContainingAssembly.Name;
                     if (IsBadApi(name, badApis) == true)
                     {
+                        badApi = name;
                         return false;
                     }
                 }
@@ -93,11 +99,13 @@ namespace Triggernometry
                     string name = symbol.Type.ContainingAssembly.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                     if (IsBadApi(name, badApis) == true)
                     {
+                        badApi = name;
                         return false;
                     }
                     name = symbol.Type.ContainingNamespace.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                     if (IsBadApi(name, badApis) == true)
                     {
+                        badApi = name;
                         return false;
                     }
                 }
@@ -176,8 +184,15 @@ namespace Triggernometry
                     {
                         vs.Scalar[varname] = new VariableScalar();
                     }
-                    VariableScalar x = vs.Scalar[varname];
-                    x.Value = data;
+                    if (data == null)
+                    {
+                        vs.Scalar.Remove(varname);
+                    }
+                    else
+                    {
+                        VariableScalar x = vs.Scalar[varname];
+                        x.Value = data;
+                    }
                 }
             }
 
@@ -199,7 +214,14 @@ namespace Triggernometry
                 VariableStore vs = persistent == true ? CurrentContext.plug.cfg.PersistentVariables : CurrentContext.plug.sessionvars;
                 lock (vs.List)
                 {
-                    vs.List[varname] = data;
+                    if (data == null)
+                    {
+                        vs.List.Remove(varname);
+                    }
+                    else
+                    {
+                        vs.List[varname] = data;
+                    }
                 }
             }
 
@@ -221,7 +243,43 @@ namespace Triggernometry
                 VariableStore vs = persistent == true ? CurrentContext.plug.cfg.PersistentVariables : CurrentContext.plug.sessionvars;
                 lock (vs.Table)
                 {
-                    vs.Table[varname] = data;
+                    if (data == null)
+                    {
+                        vs.Table.Remove(varname);
+                    }
+                    else
+                    {
+                        vs.Table[varname] = data;
+                    }
+                }
+            }
+
+            public VariableDictionary GetDictVariable(bool persistent, string varname)
+            {
+                VariableStore vs = persistent == true ? CurrentContext.plug.cfg.PersistentVariables : CurrentContext.plug.sessionvars;
+                lock (vs.Dict)
+                {
+                    if (vs.Dict.ContainsKey(varname) == false)
+                    {
+                        return null;
+                    }
+                    return vs.Dict[varname];
+                }
+            }
+
+            public void SetDictVariable(bool persistent, string varname, VariableDictionary data)
+            {
+                VariableStore vs = persistent == true ? CurrentContext.plug.cfg.PersistentVariables : CurrentContext.plug.sessionvars;
+                lock (vs.Dict)
+                {
+                    if (data == null)
+                    {
+                        vs.Dict.Remove(varname);
+                    }
+                    else
+                    {
+                        vs.Dict[varname] = data;
+                    }
                 }
             }
 
@@ -338,7 +396,7 @@ namespace Triggernometry
             if (badApis != null && badApis.Length > 0)
             {
                 Script<object> scp = CSharpScript.Create(command, _myso, typeof(Globs));
-                if (Validator.Validate(scp, badApis) == true)
+                if (Validator.Validate(scp, out string badApi, badApis) == true)
                 {
                     Task<ScriptState<object>> ts = scp.RunAsync(g);
                     Task.Run(async () => { await ts; }).Wait();
@@ -348,8 +406,8 @@ namespace Triggernometry
                     g.TriggernometryHelpers.Log(
                         RealPlugin.DebugLevelEnum.Error, 
                         I18n.Translate(
-                            "internal/scriptblocked", "Script execution on trigger {0} blocked due to restricted APIs",
-                            (ctx != null && ctx.trig != null) ? ctx.trig.LogName : "(null)"
+                            "internal/Interpreter/scriptblocked", "Script execution on trigger {0} blocked due to restricted API: {1}",
+                            ctx?.trig?.LogName ?? "(null)", badApi
                         )
                     );
                 }
@@ -357,7 +415,19 @@ namespace Triggernometry
             else
             {
                 Task<object> t = CSharpScript.EvaluateAsync(command, _myso, g, typeof(Globs));
-                Task.Run(async() => { await t; }).Wait();
+                try
+                {
+                    Task.Run(async () => { await t; }).Wait();
+                }
+                catch (AggregateException aex)
+                {
+                    foreach (var ex in aex.Flatten().InnerExceptions)
+                    {
+                        g.TriggernometryHelpers.Log(RealPlugin.DebugLevelEnum.Error, I18n.Translate(
+                                "internal/Interpreter/scriptExecutionError", 
+                                "Error occurred during script execution: \n{0}", ex.ToString()));
+                    }
+                }
             }
         }
 

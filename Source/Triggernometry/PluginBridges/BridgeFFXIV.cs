@@ -18,7 +18,7 @@ namespace Triggernometry.PluginBridges
         private static string ActPluginName = "FFXIV_ACT_Plugin.dll";
         private static string ActPluginType = "FFXIV_ACT_Plugin";
 
-        private static VariableDictionary NullCombatant = new VariableDictionary();
+        internal static VariableDictionary NullCombatant = new VariableDictionary();
 
         internal delegate void LoggingDelegate(RealPlugin.DebugLevelEnum level, string text);
         internal static event LoggingDelegate OnLogEvent;
@@ -26,6 +26,7 @@ namespace Triggernometry.PluginBridges
         public static Int64 LastCheck = 0;
         public static Int64 TickNum = 0;
         public static uint PlayerId = 0;
+        public static string PlayerHexId = "";
 
         public static uint ZoneID = 0;
 
@@ -48,46 +49,53 @@ namespace Triggernometry.PluginBridges
 
         private delegate void NetworkReceiveDelegate(string connection, long epoch, byte[] message);
 
+        static BridgeFFXIV()
+        {
+            SetupNullCombatant();
+        }
+
         public static void ClearCombatant(VariableDictionary vc)
         {
             vc.SetValue("name", "");
-            vc.SetValue("currenthp", 0);
-            vc.SetValue("currentmp", 0);
-            vc.SetValue("currentgp", 0);
-            vc.SetValue("currentcp", 0);
-            vc.SetValue("maxhp", 0);
-            vc.SetValue("maxmp", 0);
-            vc.SetValue("maxgp", 0);
-            vc.SetValue("maxcp", 0);
-            vc.SetValue("level", 0);
-            vc.SetValue("jobid", 0);
-            vc.SetValue("job", "");
-            vc.SetValue("role", "");
-            vc.SetValue("x", 0);
-            vc.SetValue("y", 0);
-            vc.SetValue("z", 0);
-            vc.SetValue("h", 0);
+            vc.SetValue("currenthp", "");
+            vc.SetValue("currentmp", "");
+            vc.SetValue("currentgp", "");
+            vc.SetValue("currentcp", "");
+            vc.SetValue("maxhp", "");
+            vc.SetValue("maxmp", "");
+            vc.SetValue("maxgp", "");
+            vc.SetValue("maxcp", "");
+            vc.SetValue("level", "");
+            vc.SetValue("jobid", "");
+            foreach (var kvp in Entity.jobs["-1"])
+            {
+                vc.SetValue(kvp.Key, kvp.Value);  // role, job, etc.
+            }
+            vc.SetValue("x", "");
+            vc.SetValue("y", "");
+            vc.SetValue("z", "");
+            vc.SetValue("h", "");
             vc.SetValue("id", "");
-            vc.SetValue("inparty", 0);
-            vc.SetValue("inalliance", 0);
-            vc.SetValue("order", 0);
-            vc.SetValue("casttargetid", 0);
-            vc.SetValue("targetid", 0);
-            vc.SetValue("heading", 0);
-            vc.SetValue("distance", 0);
-            vc.SetValue("worldid", 0);
+            vc.SetValue("inparty", "");
+            vc.SetValue("inalliance", "");
+            vc.SetValue("order", "");
+            vc.SetValue("casttargetid", "");
+            vc.SetValue("targetid", "");
+            vc.SetValue("heading", "");
+            vc.SetValue("distance", "");
+            vc.SetValue("worldid", "");
             vc.SetValue("worldname", "");
-            vc.SetValue("currentworldid", 0);
-            vc.SetValue("bnpcid", 0);
-            vc.SetValue("bnpcnameid", 0);
-            vc.SetValue("ownerid", 0);
-            vc.SetValue("type", 0);
-            vc.SetValue("iscasting", 0);
-            vc.SetValue("castid", 0);
-            vc.SetValue("casttime", 0);
-            vc.SetValue("maxcasttime", 0);
-            vc.SetValue("partytype", "None");
-            vc.SetValue("address", 0);
+            vc.SetValue("currentworldid", "");
+            vc.SetValue("bnpcid", "");
+            vc.SetValue("bnpcnameid", "");
+            vc.SetValue("ownerid", "");
+            vc.SetValue("type", "");
+            vc.SetValue("iscasting", "");
+            vc.SetValue("castid", "");
+            vc.SetValue("casttime", "");
+            vc.SetValue("maxcasttime", "");
+            vc.SetValue("partytype", "");
+            vc.SetValue("address", "");
         }
 
         public static void SetupNullCombatant()
@@ -177,113 +185,10 @@ namespace Triggernometry.PluginBridges
             }
         }
 
-        public static string TranslateJob(string id)
-        {
-            switch (id)
-            {
-                // JOBS
-                case "33": return "AST";
-                case "23": return "BRD";
-                case "25": return "BLM";
-                case "36": return "BLU";
-                case "38": return "DNC";
-                case "32": return "DRK";
-                case "22": return "DRG";
-                case "37": return "GNB";
-                case "31": return "MCH";
-                case "20": return "MNK";
-                case "30": return "NIN";
-                case "19": return "PLD";
-                case "35": return "RDM";
-                case "39": return "RPR";
-                case "34": return "SAM";
-                case "28": return "SCH";
-                case "40": return "SGE";
-                case "27": return "SMN";
-                case "21": return "WAR";
-                case "24": return "WHM";
-                // CRAFTERS
-                case "14": return "ALC";
-                case "10": return "ARM";
-                case "9": return "BSM";
-                case "8": return "CRP";
-                case "15": return "CUL";
-                case "11": return "GSM";
-                case "12": return "LTW";
-                case "13": return "WVR";
-                // GATHERERS
-                case "17": return "BTN";
-                case "18": return "FSH";
-                case "16": return "MIN";
-                // CLASSES
-                case "26": return "ACN";
-                case "5": return "ARC";
-                case "6": return "CNJ";
-                case "1": return "GLA";
-                case "4": return "LNC";
-                case "3": return "MRD";
-                case "2": return "PUG";
-                case "29": return "ROG";
-                case "7": return "THM";
-            }
-            return "";
-        }
-
-        public static string TranslateRole(string id)
-        {
-            switch (id)
-            {
-                // JOBS
-                case "19": return "Tank";
-                case "21": return "Tank";
-                case "32": return "Tank";
-                case "37": return "Tank";
-                case "24": return "Healer";
-                case "28": return "Healer";
-                case "33": return "Healer";
-                case "40": return "Healer";
-                case "20": return "DPS";
-                case "22": return "DPS";
-                case "23": return "DPS";
-                case "25": return "DPS";
-                case "27": return "DPS";
-                case "30": return "DPS";
-                case "31": return "DPS";
-                case "34": return "DPS";
-                case "35": return "DPS";
-                case "36": return "DPS";
-                case "38": return "DPS";
-                case "39": return "DPS";
-                // CRAFTERS
-                case "8": return "Crafter";
-                case "9": return "Crafter";
-                case "10": return "Crafter";
-                case "11": return "Crafter";
-                case "12": return "Crafter";
-                case "13": return "Crafter";
-                case "14": return "Crafter";
-                case "15": return "Crafter";
-                // GATHERERS
-                case "16": return "Gatherer";
-                case "17": return "Gatherer";
-                case "18": return "Gatherer";
-                // CLASSES
-                case "1": return "Tank";
-                case "3": return "Tank";
-                case "6": return "Healer";
-                case "26": return "Healer";
-                case "2": return "DPS";
-                case "4": return "DPS";
-                case "5": return "DPS";
-                case "7": return "DPS";
-                case "29": return "DPS";
-            }
-            return "";
-        }
-
         public static void PopulateClumpFromCombatant(VariableDictionary vc, dynamic cmx, int inParty, int inAlliance, int orderNum)
         {
-            vc.SetValue("name", cmx.Name ?? "");
+            if (cmx == null || cmx.Name == null) { ClearCombatant(vc); return; }
+            vc.SetValue("name", cmx.Name);
             vc.SetValue("currenthp", cmx.CurrentHP);
             vc.SetValue("currentmp", cmx.CurrentMP);
             vc.SetValue("currentgp", cmx.CurrentGP);
@@ -293,9 +198,6 @@ namespace Triggernometry.PluginBridges
             vc.SetValue("maxgp", cmx.MaxGP);
             vc.SetValue("maxcp", cmx.MaxCP);
             vc.SetValue("level", cmx.Level);
-            vc.SetValue("jobid", cmx.Job);
-            vc.SetValue("job", TranslateJob(cmx.Job.ToString()));
-            vc.SetValue("role", TranslateRole(cmx.Job.ToString()));
             vc.SetValue("x", cmx.PosX);
             vc.SetValue("y", cmx.PosY);
             vc.SetValue("z", cmx.PosZ);
@@ -322,6 +224,15 @@ namespace Triggernometry.PluginBridges
             vc.SetValue("bnpcid", cmx.BNpcID);
             vc.SetValue("partytype", cmx.PartyType.ToString());
             vc.SetValue("address", $"{cmx.Address}"); // IntPtr
+            string jobid = cmx.Job.ToString();
+            vc.SetValue("jobid", jobid);
+            if (Entity.jobs.ContainsKey(jobid))
+            {
+                foreach (var kvp in Entity.jobs[jobid])
+                {
+                    vc.SetValue(kvp.Key, kvp.Value);  // role, job, etc.
+                }
+            }
             //vc.SetValue("all", GetPropertiesAndValues(cmx));
         }
 
@@ -411,6 +322,7 @@ namespace Triggernometry.PluginBridges
                 }
                 fi = cmbt.GetType().GetField("_CurrentPlayerID", BindingFlags.GetField | BindingFlags.NonPublic | BindingFlags.Instance);
                 PlayerId = fi.GetValue(cmbt);
+                PlayerHexId = ConvertToHex(PlayerId);
                 CombatantData cd = new CombatantData();
                 fi = cmbt.GetType().GetField("_Combatants", BindingFlags.GetField | BindingFlags.NonPublic | BindingFlags.Instance);
                 cd.Combatants = fi.GetValue(cmbt);
@@ -425,6 +337,7 @@ namespace Triggernometry.PluginBridges
                 object o = mi.Invoke(plug, null);
                 mi = o.GetType().GetMethod("GetCurrentPlayerID", BindingFlags.Instance | BindingFlags.Public);
                 PlayerId = (uint)mi.Invoke(o, null);
+                PlayerHexId = ConvertToHex(PlayerId);
                 mi = o.GetType().GetMethod("GetCombatantList", BindingFlags.Instance | BindingFlags.Public);
                 CombatantData cd = new CombatantData();
                 cd.Combatants = mi.Invoke(o, null);
@@ -628,10 +541,8 @@ namespace Triggernometry.PluginBridges
             return NullCombatant;
         }
 
-        public static VariableDictionary GetIdEntity(string id, out bool found)
+        public static VariableDictionary GetIdEntity(string id)
         {
-            
-            found = false;
             try
             {
                 object plug = null;
@@ -658,7 +569,6 @@ namespace Triggernometry.PluginBridges
                             }
                             VariableDictionary vc = new VariableDictionary();
                             PopulateClumpFromCombatant(vc, cmx, nump == 1 ? 1 : 0, nump == 2 ? 1 : 0, 0);
-                            found = true;
                             return vc;
                         }
                     }
@@ -669,6 +579,53 @@ namespace Triggernometry.PluginBridges
                 LogMessage(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/idexception", "Exception in FFXIV ID entity retrieve: {0}", ex.Message));
             }
             return NullCombatant;
+        }
+
+        public static List<VariableDictionary> GetAllEntities()
+        {
+            List<VariableDictionary> allEntities = new List<VariableDictionary>();
+            try
+            {
+                object plug = null;
+                plug = GetInstance(); 
+                if (plug == null)
+                {
+                    return allEntities;
+                }
+                PropertyInfo pi = GetDataRepository(plug);
+                CombatantData cd = GetCombatants(plug, pi); 
+                lock (cd.Lock)
+                {
+                    foreach (dynamic cmx in cd.Combatants) 
+                    {
+                        int nump = 0;
+                        try
+                        {
+                            nump = (int)cmx.PartyType;
+                        }
+                        catch { }
+
+                        VariableDictionary vc = new VariableDictionary();
+                        try
+                        {
+                            PopulateClumpFromCombatant(vc, cmx, nump == 1 ? 1 : 0, nump == 2 ? 1 : 0, 0);
+                            allEntities.Add(vc);
+                        }
+                        catch (Exception ex)
+                        {   // some NPC entities do not follow the same memory struct with ordinary combatants.
+                            // the wrongly parsed properties could cause errors.
+                            LogMessage(RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/ffxiv/allentitiesexceptionsingle",
+                                "Failed to get entity data: name = {0}, id = {1}. Exception: {2}", 
+                                cmx.Name, ConvertToHex(cmx.ID), ex.Message));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogMessage(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/allentitiesexception", "Exception in FFXIV all entities retrieve: {0}", ex.Message));
+            }
+            return allEntities;
         }
 
         public static VariableDictionary GetPartyMember(int index)
@@ -700,15 +657,13 @@ namespace Triggernometry.PluginBridges
             return NullCombatant;
         }
 
-        public static VariableDictionary GetIdPartyMember(string id, out bool found)
+        public static VariableDictionary GetIdPartyMember(string id)
         {
-            found = false;
             UpdateState();
             foreach (VariableDictionary vc in PartyMembers)
             {
                 if (String.Compare(vc.GetValue("id").ToString(), id, true) == 0)
                 {
-                    found = true;
                     return vc;
                 }
             }

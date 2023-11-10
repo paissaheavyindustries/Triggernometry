@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using Triggernometry.Variables;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace Triggernometry
 {
@@ -37,13 +38,13 @@ namespace Triggernometry
         internal static Regex rexFunc           // name(arg)?:val
             = new Regex(@"^(?<name>[^(:]+)(?:\((?<arg>[^)]*)\))?:(?<val>.*)$");        
         internal static Regex rexProp           // name.prop(arg)?
-            = new Regex(@"^(?<name>.+)\.(?<prop>[^(]+?)(?:\((?<arg>[^)]*)\))? *$");
+            = new Regex(@"^(?<name>.+?)\.(?<prop>[^([.]+?)(?:\((?<arg>[^)]*)\))? *$");
         internal static Regex rexListProp       // name?[index].prop(arg)?
-            = new Regex(@"^(?<name>[^[]*)\[(?<index>[^[\]]*?)\]\.(?<prop>[^(]+?)(?:\((?<arg>[^)]*)\))? *$");
-        internal static Regex rexTableProp      // name?[col][row].prop(arg)?
-            = new Regex(@"^(?<name>[^[]*)\[(?<column>[^[\]]*)\]\[(?<row>[^[\]]*)\]\.(?<prop>[^(]+?)(?:\((?<arg>[^)]*)\))? *$");
+            = new Regex(@"^(?<name>[^[]*)\[(?<index>[^[\]]*?)\]\.(?<prop>[^([]+?)(?:\((?<arg>[^)]*)\))? *$");
+        internal static Regex rexTableProp      // name?[index1][index2].prop(arg)?
+            = new Regex(@"^(?<name>[^[]*)\[(?<column>[^[\]]*)\]\[(?<row>[^[\]]*)\]\.(?<prop>[^([]+?)(?:\((?<arg>[^)]*)\))? *$");
         internal static Regex rexExistVar       // evar: / epvar: / elvar: ...
-            = new Regex(@"^e(?<persist>p?)(?<type>[vltd]|text|image)(?:v?ar)?:(?<name>.*)$");
+            = new Regex(@"^e(?<persist>p?)(?<type>[vltd]|text|image|callback)(?:v?ar)?:(?<name>.*)$");
         // for splitting arguments:
         internal static Regex reSplitArgComma = new Regex("(?<=^|,)( *\"[^\"]*\" *| *'[^']*' *|[^,]*)(?=$|,)");
         internal static Regex reSplitArgEqual = new Regex("(?<=^|=)( *\"[^\"]*\" *| *'[^']*' *|[^=]*)(?=$|=)");
@@ -51,7 +52,7 @@ namespace Triggernometry
         internal static Regex reDQuotedArg = new Regex("^ *\"(?<arg>[^\"]*)\" *$");
         internal static Regex reSQuotedArg = new Regex("^ *'(?<arg>[^']*)' *$");
 
-        internal static Regex reParseDmg = new Regex("^(?:[0-9A-Fa-f]{1,8})$");
+        internal static Regex reHex8 = new Regex("^[0-9A-Fa-f]{1,8}$");
 
         internal Dictionary<string, string> namedgroups;
         internal List<string> numgroups;
@@ -449,37 +450,6 @@ namespace Triggernometry
             return result;
         }
 
-        private static bool TryParseEntityHexId(Match match, bool isParty, out VariableDictionary entity, out string gindex, out string gprop)
-        {
-            gindex = match.Groups["index"].Value.Trim();
-            gprop = match.Groups["prop"].Value.Trim();
-            entity = null;
-            bool foundid = false;
-            if (Int64.TryParse(gindex, NumberStyles.HexNumber, InvClt, out Int64 _))
-            {
-                entity = isParty ? PluginBridges.BridgeFFXIV.GetIdPartyMember(gindex, out foundid)
-                                 : PluginBridges.BridgeFFXIV.GetIdEntity(gindex, out foundid);
-            }
-            return foundid;
-        }
-
-        public static string GetEntityProperty(VariableDictionary entity, string property)
-        {
-            if (entity != null)
-            {
-                if (Entity.jobs["1"].ContainsKey(property))
-                {
-                    string jobid = entity.GetValue("jobid").ToString();
-                    return Entity.jobs[jobid][property].ToString();
-                }
-                else
-                {
-                    return entity.GetValue(property).ToString();
-                }
-            }
-            return null;
-        }
-
         /// <summary> use "⏎" as a single-digit placeholder for linebreaks
         /// to parse linebreaks as regular characters.</summary>
         public static string ReplaceLineBreak(string str, string placeholder = LINEBREAK_PLACEHOLDER)
@@ -709,6 +679,24 @@ namespace Triggernometry
                             val = $"${{{varName}[{colIndex}][{tableRowIndex}]}}";
                             found = true;
                         }
+                        else if (x.StartsWith("_colrl["))
+                        {
+                            int colonIndex = varName.IndexOf(":");
+                            string prefix = varName.Substring(0, colonIndex) + "dl" + varName.Substring(colonIndex);
+                            string colHeader = $"${{{varName}[{tableColIndex}][1]}}";
+                            string rowHeader = x.Substring(7, x.Length - 8);
+                            val = $"${{{prefix}[{colHeader}][{rowHeader}]}}";
+                            found = true;
+                        }
+                        else if (x.StartsWith("_rowcl["))
+                        {
+                            int colonIndex = varName.IndexOf(":");
+                            string prefix = varName.Substring(0, colonIndex) + "dl" + varName.Substring(colonIndex);
+                            string colHeader = x.Substring(7, x.Length - 8);
+                            string rowHeader = $"${{{varName}[1][{tableRowIndex}]}}";
+                            val = $"${{{prefix}[{colHeader}][{rowHeader}]}}";
+                            found = true;
+                        }
                         else if (x == "_key")
                         {
                             val = dictKey;
@@ -770,7 +758,7 @@ namespace Triggernometry
                                 }
                                 string jobid = Entity.jobNameToIdMap[rawJob.ToLower()];
                                 string prop = mx.Groups["prop"].Value;
-                                val = Entity.jobs[jobid][prop].ToString();
+                                val = Entity.jobs[jobid][prop];
                             }
                             found = true;
                         }
@@ -848,11 +836,9 @@ namespace Triggernometry
                             }
                         }
                         // check if variable exists (combined the logic for all types of variable expressions)
-                        // evar  = ev, epvar  = epv;
-                        // elvar = el, eplvar = epl;
-                        // etvar = et, eptvar = ept;
-                        // edvar = ed, epdvar = epd;
-                        // etext, eimage for Auras
+                        // evar  = ev, epvar  = epv;    elvar = el, eplvar = epl;
+                        // etvar = et, eptvar = ept;    edvar = ed, epdvar = epd;
+                        // etext, eimage for Auras;     ecallback for named callbacks
                         else if ((matchExistVar = rexExistVar.Match(x)).Success)
                         {
                             bool persist = matchExistVar.Groups["persist"].Value == "p";
@@ -866,12 +852,23 @@ namespace Triggernometry
                                 case "l": source = store.List; break;
                                 case "t": source = store.Table; break;
                                 case "d": source = store.Dict; break;
-                                case "text": source = plug.sc.textitems; break;
-                                case "image": source = plug.sc.imageitems; break;
+                                case "text":
+                                    if (plug.sc != null)
+                                        source = plug.sc.textitems;
+                                    else
+                                        source = plug.textauras;
+                                    break;
+                                case "image":
+                                    if (plug.sc != null)
+                                        source = plug.sc.imageitems;
+                                    else
+                                        source = plug.imageauras;
+                                    break;
+                                case "callback": source = plug.callbacksByName; break;
                             }
                             lock (source)
                             {
-                                val = /*(source == null) ? "" :*/ source.ContainsKey(varname) ? "1" : "0";
+                                val = (source == null) ? "" : source.ContainsKey(varname) ? "1" : "0";
                             }
                             found = true;
                         }
@@ -1191,33 +1188,6 @@ namespace Triggernometry
                                             found = true;
                                         }
                                         break;
-                                    case "contain":
-                                        {
-                                            if (argc == 0 || argc > 3) { ArgCountError(gprop, "1-3", argc, x); }
-                                            string colSlicesStr = GetArgument(args, 1, ":");
-                                            string rowSlicesStr = GetArgument(args, 2, ":");
-                                            lock (store.Dict)
-                                            {
-                                                VariableTable vt = GetTableVariable(store, gname, false);
-                                                List<int> colIndices = GetSliceIndices(colSlicesStr, vt.Width, x, startIndex: 1);
-                                                List<int> rowIndices = GetSliceIndices(rowSlicesStr, vt.Height, x, startIndex: 1);
-                                                val = (colIndices.Any(col => rowIndices.Any(
-                                                    row => vt.Rows[row].Values[col].ToString() == args[0])
-                                                )) ? "1" : "0";
-                                                found = true;
-                                            }
-                                        }
-                                        break;
-                                    case "ifcontain":
-                                        if (argc != 3) { ArgCountError(gprop, "3", argc, x); }
-                                        lock (store.Table)
-                                        {
-                                            VariableTable vt = GetTableVariable(store, gname, false);
-                                            val = vt.Rows.SelectMany(row => row.Values).Any(cell => cell.ToString() == args[0])
-                                                ? args[1] : args[2];
-                                            found = true;
-                                        }
-                                        break;
                                 }
                                 found = true;
                             }
@@ -1391,6 +1361,33 @@ namespace Triggernometry
                                                     ).ToList();
                                             }
                                             val = ExtremumGetResult(strings, type, isMin, gname, gprop, x);
+                                            found = true;
+                                        }
+                                        break;
+                                    case "contain":
+                                        {
+                                            if (argc == 0 || argc > 3) { ArgCountError(gprop, "1-3", argc, x); }
+                                            string colSlicesStr = GetArgument(args, 1, ":");
+                                            string rowSlicesStr = GetArgument(args, 2, ":");
+                                            lock (store.Dict)
+                                            {
+                                                VariableTable vt = GetTableVariable(store, gname, false);
+                                                List<int> colIndices = GetSliceIndices(colSlicesStr, vt.Width, x, startIndex: 1);
+                                                List<int> rowIndices = GetSliceIndices(rowSlicesStr, vt.Height, x, startIndex: 1);
+                                                val = (colIndices.Any(col => rowIndices.Any(
+                                                    row => vt.Rows[row].Values[col].ToString() == args[0])
+                                                )) ? "1" : "0";
+                                                found = true;
+                                            }
+                                        }
+                                        break;
+                                    case "ifcontain":
+                                        if (argc != 3) { ArgCountError(gprop, "3", argc, x); }
+                                        lock (store.Table)
+                                        {
+                                            VariableTable vt = GetTableVariable(store, gname, false);
+                                            val = vt.Rows.SelectMany(row => row.Values).Any(cell => cell.ToString() == args[0])
+                                                ? args[1] : args[2];
                                             found = true;
                                         }
                                         break;
@@ -1579,7 +1576,7 @@ namespace Triggernometry
                                     case "parsedmg": // parse the hex damage in ACT loglines to dec value
                                         {
                                             funcval = funcval.Trim();
-                                            if (!reParseDmg.IsMatch(funcval))
+                                            if (!reHex8.IsMatch(funcval))
                                             {
                                                 InvalidValueError(funcname, "funcval", funcval, x);
                                             }
@@ -1732,11 +1729,12 @@ namespace Triggernometry
                                         {
                                             if (argc != 1 && argc != 2) { ArgCountError(funcname, "1-2", argc, x); }
                                             string separator = GetArgument(args, 1, ",");
-                                            string[] strArray = SplitArguments(val); 
-                                            int index = Int32.Parse(args[0], InvClt);
-                                            int normIndex = (index < 0) ? (index + strArray.Length) : index;
+                                            string[] strArray = SplitArguments(funcval, separator: separator);
+                                            if (!int.TryParse(args[0], NSFloat, InvClt, out int index))
+                                            { ParseTypeError(I18n.TrlIndex(), args[0], I18n.TrlInt(), x); }
 
-                                            val = (normIndex >= 0 || normIndex < strArray.Length)
+                                            int normIndex = (index < 0) ? (index + strArray.Length) : index;
+                                            val = (normIndex >= 0 && normIndex < strArray.Length)
                                                 ? strArray[normIndex] : "";
                                         }
                                         break;
@@ -1911,48 +1909,44 @@ namespace Triggernometry
                                 }
                             }
                         }
-                        else if (x.StartsWith("_ffxivparty[") || x.StartsWith("_party["))
+                        else if (x.StartsWith("_ffxivparty[")  || x.StartsWith("_party[") ||
+                                 x.StartsWith("_ffxiventity[") || x.StartsWith("_entity["))
                         {
                             mx = rexListProp.Match(x);
                             if (mx.Success)
                             {
-                                bool foundid = TryParseEntityHexId(mx, isParty: true,
-                                    out VariableDictionary entity, out string key, out string prop);
-                                if (!foundid)
-                                {
-                                    if (Int32.TryParse(key, NSFloat, InvClt, out int partyIndex))
-                                    {
-                                        entity = PluginBridges.BridgeFFXIV.GetPartyMember(partyIndex);
-                                    }
-                                    else
-                                    {
-                                        entity = PluginBridges.BridgeFFXIV.GetNamedPartyMember(key);
-                                    }
+                                bool isParty = x.Contains("party[");
+                                string key = mx.Groups["index"].Value.Trim();
+                                string prop = mx.Groups["prop"].Value.Trim();
+                                VariableDictionary entity = new VariableDictionary();
+
+                                if (isParty && key.Length == 1 && char.IsDigit(key[0]))
+                                {   // ffxivparty[1]
+                                    entity = PluginBridges.BridgeFFXIV.GetPartyMember(int.Parse(key));
                                 }
-                                val = GetEntityProperty(entity, prop) ?? "";
-                            }
-                            found = true;
-                        }
-                        else if (x.StartsWith("_ffxiventity[") || x.StartsWith("_entity["))
-                        {
-                            mx = rexListProp.Match(x);
-                            if (mx.Success)
-                            {
-                                bool foundid = TryParseEntityHexId(mx, isParty: false,
-                                    out VariableDictionary entity, out string key, out string prop);
-                                if (!foundid)
-                                {
-                                    entity = PluginBridges.BridgeFFXIV.GetNamedEntity(key);
+                                else if (reHex8.Match(key).Success)
+                                {   // [10ABCDEF]
+                                    entity = isParty ? PluginBridges.BridgeFFXIV.GetIdPartyMember(key)
+                                                     : PluginBridges.BridgeFFXIV.GetIdEntity(key);
                                 }
-                                val = GetEntityProperty(entity, prop) ?? "";
+                                if (entity.GetValue("id").ToString() == "")
+                                {   // [name]
+                                    entity = isParty ? PluginBridges.BridgeFFXIV.GetNamedPartyMember(key)
+                                                     : PluginBridges.BridgeFFXIV.GetNamedEntity(key);
+                                }
+                                val = entity.GetValue(prop).ToString();
                             }
                             found = true;
                         }
                         else if (x.StartsWith("_me.")) // ${_me.prop}
                         {
-                            string prop = x.Substring(4);
-                            VariableDictionary me = PluginBridges.BridgeFFXIV.GetMyself();
-                            val = GetEntityProperty(me, prop) ?? "";
+                            string prop = x.Substring(4).Trim();
+                            if (PluginBridges.BridgeFFXIV.PlayerHexId == "")
+                            {
+                                PluginBridges.BridgeFFXIV.UpdateState();
+                            }
+                            VariableDictionary me = PluginBridges.BridgeFFXIV.GetIdEntity(PluginBridges.BridgeFFXIV.PlayerHexId);
+                            val = me.GetValue(prop).ToString();
                             found = true;
                         }
                         else if (x == "_clipboard")

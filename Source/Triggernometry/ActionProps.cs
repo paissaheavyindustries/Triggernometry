@@ -75,6 +75,7 @@ namespace Triggernometry
             Copy,
             Append,
             SortLine,
+            GetAllEntities,
             UnsetAll,
             UnsetRegex,
         }
@@ -95,6 +96,8 @@ namespace Triggernometry
             Filter,
             Merge,
             MergeHard,
+            GetEntityByName,
+            GetEntityById,
             UnsetAll,
             UnsetRegex,
         }

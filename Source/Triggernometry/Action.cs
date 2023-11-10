@@ -612,10 +612,30 @@ namespace Triggernometry
                             temp += I18n.Translate("internal/Action/desckeypresses", "send keypresses ({0}) to the active window", _KeyPressExpression);
                             break;
                         case KeypressTypeEnum.WindowMessage:
-                            temp += I18n.Translate("internal/Action/desckeypress", "send keycode ({0}) to window ({1})", _KeyPressCode, _KeyPressWindow);
-                            break;
                         case KeypressTypeEnum.WindowMessageCombo:
-                            temp += I18n.Translate("internal/Action/desckeypresscombo", "send keycodes ({0}) to window ({1})", _KeyPressCode, _KeyPressWindow);
+                            string target;
+                            string procid = _KeyPressProcId.Trim();
+                            if (procid == "" || procid == "0")
+                            {
+                                target = I18n.Translate("internal/Action/desckeypresstgtwindow", "window ({0})", _KeyPressWindow);
+                            }
+                            else if (procid == "-1")
+                            {
+                                target = I18n.Translate("internal/Action/desckeypresstgtwindows", "all windows named ({0})", _KeyPressWindow);
+                            }
+                            else
+                            { 
+                                target = I18n.Translate("internal/Action/desckeypresstgtid", "process id ({0})", procid);
+                            }
+
+                            if (_KeypressType == KeypressTypeEnum.WindowMessage)
+                            {
+                                temp += I18n.Translate("internal/Action/desckeypress", "send keycode ({0}) to {1}", _KeyPressCode, target);
+                            }
+                            else
+                            {
+                                temp += I18n.Translate("internal/Action/desckeypresscombo", "send keycodes ({0}) to {1}", _KeyPressCode, target);
+                            }
                             break;
                     }
                     break;
@@ -1020,9 +1040,24 @@ namespace Triggernometry
                             }
                             break;
                         case TableVariableOpEnum.Resize:
-                            temp += I18n.Translate("internal/Action/desctableresize",
-                                "resize {3}table variable ({0}) to ({1},{2})",
-                                _TableVariableName, _TableVariableX, _TableVariableY, sPersistT);
+                            {
+                                temp += I18n.Translate("internal/Action/desctableresizeprefix",
+                                        "resize {1}table variable ({0}) to", _TableVariableName, sPersistT);
+                                bool givenCol = !string.IsNullOrWhiteSpace(_TableVariableX);
+                                bool givenRow = !string.IsNullOrWhiteSpace(_TableVariableY);
+                                if (!givenCol && !givenRow)
+                                {
+                                    temp += I18n.Translate("internal/Action/desctableresizeunchanged", " (unchanged)");
+                                }
+                                if (givenCol)
+                                {
+                                    temp += I18n.Translate("internal/Action/desctableresizecol", " width ({0})", _TableVariableX);
+                                }
+                                if (givenRow)
+                                {
+                                    temp += I18n.Translate("internal/Action/desctableresizerow", " height ({0})", _TableVariableY);
+                                }
+                            }
                             break;
                         case TableVariableOpEnum.Unset:
                             temp += I18n.Translate("internal/Action/desctableunset",
@@ -1131,6 +1166,10 @@ namespace Triggernometry
                                     _TableVariableName, sPersistT, lineType, isCol ? _TableVariableX : _TableVariableY);
                             }
                             break;
+                        case TableVariableOpEnum.GetAllEntities:
+                            temp += I18n.Translate("internal/Action/desctablegetallentities",
+                                "Save all FFXIV entity data {1}table variable ({0})", _TableVariableName, sPersistT);
+                            break;
                     }
                     break;
                 case ActionTypeEnum.DictVariable:
@@ -1195,6 +1234,16 @@ namespace Triggernometry
                             temp += I18n.Translate("internal/Action/descdictmergehard",
                                 "merge {1}dict variable ({0}) into {3}dict variable ({2}), and overwrite the values of repeated keys",
                                 _DictVariableName, sPersistD, _DictVariableTarget, tPersistD);
+                            break;
+                        case DictVariableOpEnum.GetEntityByName:
+                            temp += I18n.Translate("internal/Action/descdictgetentitybyname",
+                                "save the properties of entity name ({2}) into {1}dict variable ({0})",
+                                _DictVariableName, sPersistD, _DictVariableValue);
+                            break;
+                        case DictVariableOpEnum.GetEntityById:
+                            temp += I18n.Translate("internal/Action/descdictgetentitybyid",
+                                "save the properties of entity id ({2}) into {1}dict variable ({0})",
+                                _DictVariableName, sPersistD, _DictVariableValue);
                             break;
                         case DictVariableOpEnum.UnsetAll:
                             temp += I18n.Translate("internal/Action/descdictunsetall",
@@ -1284,7 +1333,7 @@ namespace Triggernometry
                                 case LogMessageEnum.Verbose: level = "Verbose"; break;
                                 case LogMessageEnum.Warning: level = "Warning"; break;
                                 case LogMessageEnum.Custom: level = "Custom"; break;
-                                case LogMessageEnum.Custom2: level = "Custom2"; break;
+                                case LogMessageEnum.Custom2: level = "Custom 2"; break;
                             }
                             level = I18n.Translate($"ActionForm/cbxLogMessageLevel[{level}]", level);
                             temp += I18n.Translate("internal/Action/desclogmessage", 
@@ -1293,8 +1342,24 @@ namespace Triggernometry
                     }
                     break;
                 case ActionTypeEnum.WindowMessage:
-                    temp += I18n.Translate("internal/Action/descwmsg", "send message ({0}) wparam ({1}) lparam ({2}) to window ({3})", _WmsgCode, _WmsgWparam, _WmsgLparam, _WmsgTitle);
-                    break;
+                    {
+                        string target;
+                        string procid = _WmsgProcId.Trim();
+                        if (procid == "" || procid == "0")
+                        {
+                            target = I18n.Translate("internal/Action/desckeypresstgtwindow", "window ({0})", _WmsgTitle);
+                        }
+                        else if (procid == "-1")
+                        {
+                            target = I18n.Translate("internal/Action/desckeypresstgtwindows", "all windows named ({0})", _WmsgTitle);
+                        }
+                        else
+                        {
+                            target = I18n.Translate("internal/Action/desckeypresstgtid", "process id ({0})", procid);
+                        }
+                        temp += I18n.Translate("internal/Action/descwmsg", "send message ({0}) wparam ({1}) lparam ({2}) to {3}", _WmsgCode, _WmsgWparam, _WmsgLparam, target);
+                        break;
+                    }
                 case ActionTypeEnum.DiskFile:
                     {
                         string persist = I18n.TrlVarPersist(_DiskPersist);
@@ -1356,7 +1421,8 @@ namespace Triggernometry
                     break;
                 case ActionTypeEnum.Loop:
                     temp += I18n.Translate("internal/Action/descloop", "Loop with {0} actions at ({1}) ms intervals", 
-                        LoopActions != null ? LoopActions.Count : 0, _LoopDelayExpression);
+                        LoopActions?.Count(action => action._Enabled) ?? 0,
+                        string.IsNullOrWhiteSpace(_LoopDelayExpression) ? "0" : _LoopDelayExpression);
                     break;
                 case ActionTypeEnum.Repository:
                     {
@@ -1715,25 +1781,48 @@ namespace Triggernometry
                                     break;
                                 case DictVariableOpEnum.Merge:
                                 case DictVariableOpEnum.MergeHard:
-                                    bool shouldOverwrite = (_DictVariableOp == DictVariableOpEnum.MergeHard);
-                                    VariableDictionary svdCopy;
-                                    lock (svs.Dict)
                                     {
-                                        svdCopy = (VariableDictionary)GetDictVariable(svs, sourcename, false).Duplicate();
+                                        bool shouldOverwrite = (_DictVariableOp == DictVariableOpEnum.MergeHard);
+                                        VariableDictionary svdCopy;
+                                        lock (svs.Dict)
+                                        {
+                                            svdCopy = (VariableDictionary)GetDictVariable(svs, sourcename, false).Duplicate();
+                                        }
+                                        lock (tvs.Dict)
+                                        {
+                                            VariableDictionary tvd = GetDictVariable(tvs, targetname, true);
+                                            tvd.Merge(svdCopy, overwriteExistingKeys: shouldOverwrite);
+                                        }
+                                        if (shouldOverwrite)
+                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/dictmergehard",
+                                                "Merged {1}dict variable ({0}) into {3}dict variable ({2}) (overwrite repeated keys)",
+                                                sourcename, sPersist, targetname, tPersist));
+                                        else
+                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/dictmerge",
+                                                "Merged {1}dict variable ({0}) into {3}dict variable ({2}) (keep repeated keys)",
+                                                sourcename, sPersist, targetname, tPersist));
                                     }
-                                    lock (tvs.Dict)
+                                    break;
+                                case DictVariableOpEnum.GetEntityByName:
+                                case DictVariableOpEnum.GetEntityById:
                                     {
-                                        VariableDictionary tvd = GetDictVariable(tvs, targetname, true);
-                                        tvd.Merge(svdCopy, overwriteExistingKeys: shouldOverwrite);
+                                        string value = ParseValue();
+                                        VariableDictionary entity = _DictVariableOp == DictVariableOpEnum.GetEntityByName
+                                                                  ? PluginBridges.BridgeFFXIV.GetNamedEntity(value)
+                                                                  : PluginBridges.BridgeFFXIV.GetIdEntity(value);
+                                        lock (svs.Dict)
+                                        {
+                                            svs.Dict[sourcename] = (VariableDictionary)entity.Duplicate();
+                                        }
+                                        if (entity.GetValue("id").ToString() != "")
+                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/dictgetentity",
+                                                "Saved the data of entity ({2}) into {1}dict variable ({0})",
+                                                sourcename, sPersist, value));
+                                        else
+                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/dictgetentityfail",
+                                                "Entity ({2}) not found when trying to save into {1}dict variable ({0})",
+                                                sourcename, sPersist, value));
                                     }
-                                    if (shouldOverwrite)
-                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/dictmergehard",
-                                            "Merged {1}dict variable ({0}) into {3}dict variable ({2}) (overwrite repeated keys)",
-                                            sourcename, sPersist, targetname, tPersist));
-                                    else
-                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/dictmerge",
-                                            "Merged {1}dict variable ({0}) into {3}dict variable ({2}) (keep repeated keys)",
-                                            sourcename, sPersist, targetname, tPersist));
                                     break;
                                 case DictVariableOpEnum.Build:
                                     {   // Using the first 2 characters in the expression as the separator to split the remaining part into a new dict
@@ -3258,12 +3347,13 @@ namespace Triggernometry
                                     }
                                 case TableVariableOpEnum.Resize:
                                     {
-                                        int w = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableX);
-                                        int h = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableY);
+                                        int w = string.IsNullOrWhiteSpace(_TableVariableX) ? int.MinValue : (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableX);
+                                        int h = string.IsNullOrWhiteSpace(_TableVariableY) ? int.MinValue : (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableY);
                                         lock (svs.Table) // verified
                                         {
-                                            VariableTable vt = null;
-                                            vt = GetTableVariable(svs, sourcename, createNew: true);
+                                            VariableTable vt = GetTableVariable(svs, sourcename, createNew: true);
+                                            w = (w == int.MinValue) ? vt.Width : w;
+                                            h = (h == int.MinValue) ? vt.Height : h;
                                             vt.Resize(w, h);
                                         }
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tableresize",
@@ -3704,6 +3794,39 @@ namespace Triggernometry
                                                 (isNumeric[i] ? "n" : "s") + (isAscending[i] ? "+" : "-"),
                                                 String.Join(", ", values[i])));
                                         }
+                                    }
+                                    break;
+                                case TableVariableOpEnum.GetAllEntities:
+                                    {
+                                        List<VariableDictionary> entities = PluginBridges.BridgeFFXIV.GetAllEntities();
+                                        VariableTable vt = new VariableTable();
+
+                                        var keys = PluginBridges.BridgeFFXIV.NullCombatant.Values.Keys.OrderBy(k => k).ToList();
+                                        var specialKeys = new List<string> { "id", "name", "x", "y", "z", "h" };
+                                        keys = specialKeys.Concat(keys.Except(specialKeys)).ToList();
+
+                                        var headerRow = new VariableTable.VariableTableRow
+                                        {
+                                            Values = keys.Select(k => (Variable) new VariableScalar() { Value = k }).ToList()
+                                        };
+                                        vt.Rows.Add(headerRow);
+
+                                        foreach (var entity in entities)
+                                        {
+                                            if (entity.GetValue("id").ToString() == "") { continue; }
+                                            var row = new VariableTable.VariableTableRow
+                                            {
+                                                Values = keys.Select(k => (Variable) new VariableScalar() { Value = entity.GetValue(k).ToString() }).ToList()
+                                            };
+                                            vt.Rows.Add(row);
+                                        }
+                                        lock (svs.Table)
+                                        {
+                                            svs.Table[sourcename] = vt;
+                                        }
+                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tablegetallentities",
+                                            "Saved {2} entities into {1}table variable ({0})",
+                                            sourcename, sPersist, vt.Rows.Count - 1));
                                     }
                                     break;
                             }

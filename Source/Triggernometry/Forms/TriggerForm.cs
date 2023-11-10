@@ -481,9 +481,9 @@ namespace Triggernometry.Forms
 
         internal void BtnOkSetText()
         {
-            btnOk.Text = (!cbxEditAutofire.Checked) ? I18n.Translate("TriggerForm/btnOk", "Save Changes")
-                       : (cbxEditAutofireAllowCondition.Checked) ? I18n.Translate("TriggerForm/btnOkAutofire", "Save and Fire")
-                       : I18n.Translate("TriggerForm/btnOkAutofireForce", "Save and Fire (Force)");
+            btnOk.Text = (!cbxEditAutofire.Checked) ? I18n.Translate("internal/TriggerForm/btnOk", "Save Changes")
+                       : (cbxEditAutofireAllowCondition.Checked) ? I18n.Translate("internal/TriggerForm/btnOkAutofire", "Save and Fire")
+                       : I18n.Translate("internal/TriggerForm/btnOkAutofireForce", "Save and Fire (Force)");
         }
 
         private void cbxEditAutofire_CheckedChanged(object sender, EventArgs e)
@@ -566,15 +566,15 @@ namespace Triggernometry.Forms
             // [Actions: 3]
             if (actionViewer1.Actions.Count != 0)
             {
-                desc += I18n.Translate("TriggerForm/descActionCnt", "[Actions: {0}]  ", actionViewer1.Actions.Count);
+                desc += I18n.Translate("internal/TriggerForm/descActionCnt", "[Actions: {0}]  ", actionViewer1.Actions.Count);
             }
 
             // [Delay 8.5 s]
             if (totalDelay != 0)
             {
                 desc += (totalDelay > 0)
-                      ? I18n.Translate("TriggerForm/descDelayNum", "[Delay {0}]  ", I18n.TrlTriggerDescTime(totalDelay))  // > 0: all numeric
-                      : I18n.Translate("TriggerForm/descDelay", "[Delay: active]  ");                                     // NaN: contains expressions
+                      ? I18n.Translate("internal/TriggerForm/descDelayNum", "[Delay {0}]  ", I18n.TrlTriggerDescTime(totalDelay))  // > 0: all numeric
+                      : I18n.Translate("internal/TriggerForm/descDelay", "[Delay: active]  ");                                     // NaN: contains expressions
             }
 
             // [Conditions: 2 (OR)]
@@ -582,22 +582,22 @@ namespace Triggernometry.Forms
             {
                 string count = (rootConditionCount > 0) 
                              ? rootConditionCount.ToString()                             // > 0: active nodes are all triggers
-                             : I18n.Translate("TriggerForm/descCndGrouped", "Grouped");  // -1: contains active group folder
+                             : I18n.Translate("internal/TriggerForm/descCndGrouped", "Grouped");  // -1: contains active group folder
                 if (rootConditionCount > 1)
                 {
                     string type = "";
                     switch (rootConditionType)
                     {
-                        case CndGroupingEnum.And: type = I18n.Translate("TriggerForm/descCndTypeAnd", "AND"); break;
-                        case CndGroupingEnum.Not: type = I18n.Translate("TriggerForm/descCndTypeNot", "NOT"); break;
-                        case CndGroupingEnum.Or: type = I18n.Translate("TriggerForm/descCndTypeOr", "OR"); break;
-                        case CndGroupingEnum.Xor: type = I18n.Translate("TriggerForm/descCndTypeXor", "XOR"); break;
+                        case CndGroupingEnum.And: type = I18n.Translate("internal/TriggerForm/descCndTypeAnd", "AND"); break;
+                        case CndGroupingEnum.Not: type = I18n.Translate("internal/TriggerForm/descCndTypeNot", "NOT"); break;
+                        case CndGroupingEnum.Or: type = I18n.Translate("internal/TriggerForm/descCndTypeOr", "OR"); break;
+                        case CndGroupingEnum.Xor: type = I18n.Translate("internal/TriggerForm/descCndTypeXor", "XOR"); break;
                     }
-                    desc += I18n.Translate("TriggerForm/descCndCntLogic", "[Conditions: {0} ({1})]  ", count, type);
+                    desc += I18n.Translate("internal/TriggerForm/descCndCntLogic", "[Conditions: {0} ({1})]  ", count, type);
                 }
                 else 
                 {
-                    desc += I18n.Translate("TriggerForm/descCndCnt", "[Conditions: {0}]  ", count);
+                    desc += I18n.Translate("internal/TriggerForm/descCndCnt", "[Conditions: {0}]  ", count);
                 }
             }
 
@@ -608,34 +608,34 @@ namespace Triggernometry.Forms
             // [Network Event]
             switch (cbxTriggerSource.SelectedIndex)
             {
-                case 3: desc += I18n.Translate("TriggerForm/descSrcTypeActEvent", "[ACT Event]  "); break;
-                case 4: desc += I18n.Translate("TriggerForm/descSrcTypeEndpoint", "[Endpoint]  "); break;
-                case 1: desc += I18n.Translate("TriggerForm/descSrcTypeNetwork", "[Network Event]  "); break;
-                case 2: desc += I18n.Translate("TriggerForm/descSrcTypeNone", "[Inactive]  "); break;
-                case 0: desc += I18n.Translate("TriggerForm/descSrcTypeNormalLog", "[Normal Log]  "); break;
+                case 3: desc += I18n.Translate("internal/TriggerForm/descSrcTypeActEvent", "[ACT Event]  "); break;
+                case 4: desc += I18n.Translate("internal/TriggerForm/descSrcTypeEndpoint", "[Endpoint]  "); break;
+                case 1: desc += I18n.Translate("internal/TriggerForm/descSrcTypeNetwork", "[Network Event]  "); break;
+                case 2: desc += I18n.Translate("internal/TriggerForm/descSrcTypeNone", "[Inactive]  "); break;
+                case 0: desc += I18n.Translate("internal/TriggerForm/descSrcTypeNormalLog", "[Normal Log]  "); break;
             }
 
             // [Interrupt]
             if (interrupt)
-                desc += I18n.Translate("TriggerForm/descInterrupt", "[Interrupt] ");
+                desc += I18n.Translate("internal/TriggerForm/descInterrupt", "[Interrupt] ");
 
             // [Schedule]
             if (cbxScheduleFrom.SelectedIndex != 0)
-                desc += I18n.Translate("TriggerForm/descSchedule", "[Schedule] ");
+                desc += I18n.Translate("internal/TriggerForm/descSchedule", "[Schedule] ");
 
             // [Cooldown 50 s]
             if (cooldown != 0)
                 desc += (cooldown > 0)
-                      ? I18n.Translate("TriggerForm/descCooldownNum", "[Cooldown {0}] ", I18n.TrlTriggerDescTime(cooldown))
-                      : I18n.Translate("TriggerForm/descCooldown", "[Cooldown] ");
+                      ? I18n.Translate("internal/TriggerForm/descCooldownNum", "[Cooldown {0}] ", I18n.TrlTriggerDescTime(cooldown))
+                      : I18n.Translate("internal/TriggerForm/descCooldown", "[Cooldown] ");
 
             // [Mutex]
             if (expMutexName.Text != "") 
-                desc += I18n.Translate("TriggerForm/descMutex", "[Mutex] ");
+                desc += I18n.Translate("internal/TriggerForm/descMutex", "[Mutex] ");
 
             // [Sequential]
             if (cbxSequential.Checked)
-                desc += I18n.Translate("TriggerForm/descSequential", "[Sequential] ");
+                desc += I18n.Translate("internal/TriggerForm/descSequential", "[Sequential] ");
 
             desc = desc.Trim().Trim(';', '；', ',', '，', '、', '　');
             lblTriggerDesc.Text = desc;
