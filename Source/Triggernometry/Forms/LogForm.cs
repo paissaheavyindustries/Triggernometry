@@ -25,6 +25,7 @@ namespace Triggernometry.Forms
         public LogForm()
         {
             InitializeComponent();
+            splitContainer1.SplitterDistance = (int)(splitContainer1.Width * 0.75);
             logData = new List<InternalLog>();
             Shown += LogForm_Shown;
             RestoredSavedDimensions();
@@ -297,14 +298,18 @@ namespace Triggernometry.Forms
 
         private void ChkOther_CheckedChanged(object sender, EventArgs e)
         {
-            if (isChkProgrammaticChange) { return; }
             CheckBox currentChkBox = sender as CheckBox;
-            if (currentChkBox != null && !currentChkBox.Checked)
+            if (isChkProgrammaticChange || currentChkBox == null) { return; }
+            isChkProgrammaticChange = true;
+            if (chkError.Checked && chkWarning.Checked && chkInfo.Checked && chkVerbose.Checked && chkCustom.Checked && chkCustom2.Checked)
             {
-                isChkProgrammaticChange = true;
-                chkAll.Checked = false;
-                isChkProgrammaticChange = false;
+                chkAll.Checked = true;
             }
+            else 
+            {
+                chkAll.Checked = false;
+            }
+            isChkProgrammaticChange = false;
             RefreshLog();
         }
 

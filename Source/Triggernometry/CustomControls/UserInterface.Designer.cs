@@ -177,6 +177,7 @@
             this.ctxFire.Name = "ctxFire";
             this.ctxFire.Size = new System.Drawing.Size(168, 22);
             this.ctxFire.Text = "Fire (Ignore Conditions)";
+            this.ctxFire.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
             this.ctxFire.Click += new System.EventHandler(this.ctxFire_Click);
             // 
             // ctxFireAllowCondition
@@ -185,6 +186,7 @@
             this.ctxFireAllowCondition.Name = "ctxFireAllowCondition";
             this.ctxFireAllowCondition.Size = new System.Drawing.Size(168, 22);
             this.ctxFireAllowCondition.Text = "Fire (Allow Conditions)";
+            this.ctxFireAllowCondition.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
             this.ctxFireAllowCondition.Click += new System.EventHandler(this.ctxFireAllowCondition_Click);
             // 
             // toolStripSeparator12

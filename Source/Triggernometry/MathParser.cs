@@ -41,7 +41,7 @@ namespace Triggernometry
             AddOperator(" *", false, 2, binaryOperation: (a, b) => a * b);                              // programmatically added "*"
             AddOperator("^", true, 2, binaryOperation: Math.Pow);
             AddOperator("%", false, 2, binaryOperation: (a, b) => a % b);                               // remainder
-            AddOperator("%%", false, 2, binaryOperation: (a, b) => (a % b + b) % b);                    // modulo
+            AddOperator("%%", false, 2, binaryOperation: (a, b) => ModFunction(a, b));                  // modulo
             AddOperator("/", false, 2, binaryOperation: (a, b) => a / b);
             AddOperator("//", false, 2, binaryOperation: (a, b) => Math.Floor(a / b + TOLERANCE));      // exact division (always floor)
             AddOperator("*", false, 2, binaryOperation: (a, b) => a * b);
@@ -52,13 +52,14 @@ namespace Triggernometry
             AddOperator("+", false, 2, binaryOperation: (a, b) => a + b);
             AddOperator("<<", false, 2, binaryOperation: (a, b) => Truncate(a) << Truncate(b));         // bitwise left
             AddOperator(">>", false, 2, binaryOperation: (a, b) => Truncate(a) >> Truncate(b));         // bitwise right
+            AddOperator("??", true, 2);      // string operator: (a is numeric) ? a : b. Similar to null-coalescing operator ??
             AddOperator(">", false, 2, binaryOperation: (a, b) => a > b + TOLERANCE ? 1 : 0);
             AddOperator("≥", false, 2, binaryOperation: (a, b) => a + TOLERANCE >= b ? 1 : 0);
             AddOperator(">=", false, 2, binaryOperation: (a, b) => a + TOLERANCE >= b ? 1 : 0);
             AddOperator("<", false, 2, binaryOperation: (a, b) => a + TOLERANCE < b ? 1 : 0);
             AddOperator("≤", false, 2, binaryOperation: (a, b) => a <= b + TOLERANCE ? 1 : 0);
             AddOperator("<=", false, 2, binaryOperation: (a, b) => a <= b + TOLERANCE ? 1 : 0);
-            AddOperator("==", false, 2);     // the only string operator: string equal
+            AddOperator("==", false, 2);     // string operator: string equal
             AddOperator("=", false, 2, binaryOperation: (a, b) => IsZero(a - b) ? 1 : 0);
             AddOperator("≠", false, 2, binaryOperation: (a, b) => IsZero(a - b) ? 0 : 1);
             AddOperator("!=", false, 2, binaryOperation: (a, b) => IsZero(a - b) ? 0 : 1);
@@ -104,14 +105,16 @@ namespace Triggernometry
             LocalFunctions.Add("projh", ProjectHeightFunction);
             LocalFunctions.Add("angle", x => Math.Atan2(x[2] - x[0], x[3] - x[1]));
             LocalFunctions.Add("θ", x => Math.Atan2(x[2] - x[0], x[3] - x[1]));
-            LocalFunctions.Add("relangle", x => ((x[1] - x[0]) % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI) - Math.PI);
-            LocalFunctions.Add("relθ", x => ((x[1] - x[0]) % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI) - Math.PI);
+            LocalFunctions.Add("relangle", x => ModFunction(x[1] - x[0] + Math.PI, 2 * Math.PI) - Math.PI);
+            LocalFunctions.Add("relθ", x => ModFunction(x[1] - x[0] + Math.PI, 2 * Math.PI) - Math.PI);
+            LocalFunctions.Add("isanglebetween", IsAngleBetweenFunction);
+            LocalFunctions.Add("isθbetween", IsAngleBetweenFunction);
             LocalFunctions.Add("roundir", RoundirFunction);
             LocalFunctions.Add("roundvec", RoundvecFunction);
             LocalFunctions.Add("random", x => RandomNumber(x[0], x[1]));
             LocalFunctions.Add("sqrt", x => Math.Sqrt(x[0]));
             LocalFunctions.Add("rem", x => Math.IEEERemainder(x[0], x[1]));
-            LocalFunctions.Add("mod", x => (x[0] % x[1] + x[1]) % x[1]);
+            LocalFunctions.Add("mod", x => ModFunction(x[0], x[1]));
             LocalFunctions.Add("root", x => Math.Pow(x[0], 1.0 / x[1]));
             LocalFunctions.Add("pow", x => Math.Pow(x[0], x[1]));
             LocalFunctions.Add("exp", x => Math.Exp(x[0]));
@@ -180,6 +183,11 @@ namespace Triggernometry
                 return (int)(x + tolerance);
             else
                 return (int)(x - tolerance);
+        }
+
+        public static double ModFunction(double a, double b)
+        {
+            return (a % b + b) % b;
         }
 
         public static double IfFunction(double a, double b, double c)
@@ -264,27 +272,20 @@ namespace Triggernometry
             // e.g. 4: corresponds to cardinal directions (N = 0, W = 1, S = 2, E = 3);
             // -4: corresponds to intercardinal directions (NW = 0, SW = 1, SE = 2, NE = 3)
 
-            // normalize radian to [-π, π)
-            rad = ((rad + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
-            double dir = 0;
+            double dir;
             if (segments > 0)
-            {
-                dir = (rad + Math.PI) / (2 * Math.PI) * segments;
-                // convert value range: [0, segments] => [0, segments)
-                dir = (dir == segments) ? 0 : dir;
+            {   // -pi => 0, pi => segments
+                dir = (rad / Math.PI + 1) / 2 * segments;
             }
-            else if (segments < 0)
-            {
+            else
+            {   // -pi => -0.5, pi => segments - 0.5
                 segments = -segments;
-                dir = (rad + Math.PI) / (2 * Math.PI) * segments - 0.5;
-                // convert value range: [-0.5, segments - 0.5] => [-0.5, segments - 0.5)
-                dir = (dir == segments - 0.5) ? -0.5 : dir;
+                dir = (rad / Math.PI + 1) / 2 * segments - 0.5;
             }
 
-            if (digits >= 0)
-                return Math.Round(dir, digits);
-            else
-                return dir;
+            // convert value range to [-0.5, segments - 0.5)
+            dir = ModFunction(dir + 0.5, segments) - 0.5;
+            return (digits >= 0) ? Math.Round(dir, digits) : dir;
         }
 
         public static double RoundirFunction(double[] input)
@@ -307,6 +308,28 @@ namespace Triggernometry
                     return ProcessRoundir(Math.Atan2(input[0], input[1]), input[2]);
                 case 4: // roundir(dx, dy, segments, digits)
                     return ProcessRoundir(Math.Atan2(input[0], input[1]), input[2], (int)input[3]);
+                default:
+                    return 0;
+            }
+        }
+
+        /// <summary>
+        /// Determine whether a given angle θ is within the range from θ1 to θ2 
+        /// in the direction of increasing angles (counterclockwise in the game coordinate system). <br />
+        /// The angles do not need to be in the range of -pi to pi.
+        /// </summary>
+        /// <param name="input">An array of { θ, θ1, θ2 }.</param>
+        /// <returns>1 if between, else 0</returns>
+        public static double IsAngleBetweenFunction(double[] input)
+        {
+            switch (input.Length)
+            {
+                case 3:
+                    var θ  = ModFunction(input[0] + Math.PI, 2 * Math.PI) /*- Math.PI*/;
+                    var θ1 = ModFunction(input[1] + Math.PI, 2 * Math.PI) /*- Math.PI*/;
+                    var θ2 = ModFunction(input[2] + Math.PI, 2 * Math.PI) /*- Math.PI*/;
+                    bool inRange = (θ1 <= θ2) ? (θ1 <= θ && θ <= θ2) : (θ1 <= θ || θ <= θ2);
+                    return inRange ? 1 : 0;
                 default:
                     return 0;
             }
@@ -439,7 +462,7 @@ namespace Triggernometry
                 semitones += 12 * octaves;
 
                 // A4 = 57 semitones relative to C0
-                return 440 * Math.Pow(2, (semitones - 57.0) / 12);
+                return 440 * Math.Pow(2, (semitones - 57) / 12.0);
             }
             else { return 0; }
         }
@@ -465,7 +488,7 @@ namespace Triggernometry
             }
             catch
             {
-                Context.ParseTypeError(I18n.TrlString(), etString, I18n.TrlTime(), $"nextET({string.Join(", ", input)})");
+                throw Context.ParseTypeError(I18n.TranslateWord("string"), etString, I18n.TranslateWord("time"), $"nextETms({string.Join(", ", input)})");
             }
 
             TimeSpan ez = Context.GetEorzeanTime();
@@ -554,7 +577,8 @@ namespace Triggernometry
         }
 
         /// <summary>
-        /// This will convert a string expression into a list of tokens that can be later executed by Parse or ProgrammaticallyParse methods.
+        /// This will convert a string expression into a list of tokens that 
+        /// can be later executed by Parse or ProgrammaticallyParse methods.
         /// </summary>
         /// <param name="mathExpression"></param>
         /// <returns>A ReadOnlyCollection</returns>
@@ -573,7 +597,11 @@ namespace Triggernometry
             var tokens = new List<string>();
 
             // delete all spaces to avoid the splitting error of +/- when parsing strings like "1 + -1".
-            expr = expr.Replace(" ", "");
+            // ignore all \r and \n to support multi-line input when writing long expressions
+            expr = expr.Replace(" ", "").Replace("\r", "").Replace("\n", "");
+
+            // degree → rad
+            expr = expr.Replace("°", "*0.01745329251994329576923690768488612");
 
             // replace continuous +/- to a single +/- base on the count of "-"
             expr = MultiplePlusMinus.Replace(expr, match => match.Value.Replace("+", "").Length % 2 == 0 ? "+" : "-");
@@ -608,7 +636,7 @@ namespace Triggernometry
                         op = ch.ToString();
                     }
                     // add a " *" if the previous char is not an operator and the previous token is not a function.
-                    // 2(1+3) => 2*(1+3)  pi(1+3) => pi*(1+3)  sin(1+3) => unchanged  6√3 => 6 *√3
+                    // 2(1+3) => 2 *(1+3)  pi(1+3) => pi *(1+3)  sin(1+3) => unchanged  6√3 => 6 *√3
                     // " *" has the highest prio among all binary ops.
                     if (op == "(" || OperatorArity[op] == 1)
                     {
@@ -628,12 +656,45 @@ namespace Triggernometry
             return tokens;
         }
 
+        private static Regex regexHexNumber = new Regex(@"^0x[0-9A-Fa-f]+$");
+        private static Regex regexBinNumber = new Regex(@"^0b[01]+$");
+        private static Regex regexOctNumber = new Regex(@"^0o[0-7]+$");
+
         private static double MathParserLogic(List<string> tokens)
         {
             // for error information
             var originalTokens = tokens.ToArray();
 
             // Variables replacement: pi => 3.14159...
+            // Hex number replacement: 0xA0 => 160
+            for (var i = 0; i < tokens.Count; i++)
+            {
+                if (LocalVariables.TryGetValue(tokens[i], out var variableValue))
+                {
+                    tokens[i] = variableValue.ToString(CultureInfo);
+                    continue;
+                }
+
+                if (tokens[i].Length <= 2) continue; 
+                switch (tokens[i].Substring(0, 2))
+                {
+                    case "0x":
+                        if (regexHexNumber.Match(tokens[i]).Success)
+                            tokens[i] = Convert.ToInt64(tokens[i].Substring(2), 16).ToString(CultureInfo);
+                        break;
+                    case "0b":
+                        if (regexBinNumber.Match(tokens[i]).Success)
+                            tokens[i] = Convert.ToInt64(tokens[i].Substring(2), 2).ToString(CultureInfo);
+                        break;
+                    case "0o":
+                        if (regexOctNumber.Match(tokens[i]).Success)
+                            tokens[i] = Convert.ToInt64(tokens[i].Substring(2), 8).ToString(CultureInfo);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
             for (var i = 0; i < tokens.Count; i++)
             {
                 if (LocalVariables.Keys.Contains(tokens[i]))
@@ -684,8 +745,6 @@ namespace Triggernometry
 
                         // finally, passing the arguments to the given function
                         tmpResult = LocalFunctions[functionName](args.ToArray());
-                        // tmpResult = double.Parse(LocalFunctions[functionName](args.ToArray()).ToString(CultureInfo), CultureInfo);
-                        // ↑ is there any reason to parse it twice? LocalFunction should only return double
                     }
                     else
                     {
@@ -779,6 +838,10 @@ namespace Triggernometry
                         {
                             return 0;
                         }
+                        else if (tokens[0] == "??")
+                        {
+                            return double.Parse(tokens[1], CultureInfo);
+                        }
                         else
                         {
                             return UnaryOperation[tokens[0]](double.Parse(tokens[1], CultureInfo));
@@ -802,10 +865,16 @@ namespace Triggernometry
                         while (tokens.IndexOf(op) != -1)
                         {
                             int opPlace = tokens.IndexOf(op);
-                            string result = (opPlace > 0) && (opPlace < tokens.Count - 1) && (tokens[opPlace - 1] == tokens[opPlace + 1])
-                                          ? "1" : (tokens.Count == 1) ? "1" : "0";
-                            tokens[opPlace - 1] = result;
-                            tokens.RemoveRange(opPlace, 2);
+                            ApplyStringEqual(tokens, opPlace);
+                        }
+                        continue;
+                    }
+                    if (op == "??")
+                    {
+                        while (tokens.IndexOf(op) != -1)
+                        {
+                            int opPlace = tokens.LastIndexOf(op);
+                            ApplyStringCoalescing(tokens, opPlace, originalTokens);
                         }
                         continue;
                     }
@@ -851,10 +920,10 @@ namespace Triggernometry
                             }
                             break;
                         case 3: // currently only for  "? :"
-                            while (tokens.LastIndexOf(op) != -1)
+                            while (tokens.IndexOf(op) != -1)
                             {
                                 //var opPlace = (OperatorRightAssociative[op]) ? tokens.LastIndexOf(op) : tokens.IndexOf(op);
-                                var opPlace = tokens.IndexOf(op);
+                                var opPlace = tokens.LastIndexOf(op);
                                 if (tokens[opPlace + 2] != ":") { throw new Exception(); }
                                 var result = IsZero(double.Parse(tokens[opPlace - 1], CultureInfo)) 
                                            ? double.Parse(tokens[opPlace + 3], CultureInfo)
@@ -886,7 +955,51 @@ namespace Triggernometry
                 tokens[opIndex] = (tokens[opIndex].StartsWith("-"))     // It is impossible to have a token starting with "+" now.
                                 ? tokens[opIndex].Substring(1)          // "-11" => "11"
                                 : "-" + tokens[opIndex];                // "11" => "-11"
-            }                                                           // "+" is ignored
+            }                                                           // pm == "+" is ignored
+        }
+
+        private static void ApplyStringEqual(List<string> tokens, int opIndex)
+        {
+            if (tokens.Count == 1)                  // ["=="]
+            {
+                tokens[opIndex] = "1";
+            }
+            else if (opIndex == 0)                  // ["==", ...]
+            {
+                tokens[opIndex + 1] = "0";
+                tokens.RemoveRange(opIndex, 1);
+            }
+            else if (opIndex == tokens.Count - 1)   // [..., "=="]
+            {
+                tokens[opIndex - 1] = "0";
+                tokens.RemoveRange(opIndex, 1);
+            }
+            else                                    // [..., "==", ...]
+            {
+                string result = (tokens[opIndex - 1] == tokens[opIndex + 1]) ? "1" : "0";
+                tokens[opIndex - 1] = result;
+                tokens.RemoveRange(opIndex, 2);
+            }
+        }
+
+        private static void ApplyStringCoalescing(List<string> tokens, int opIndex, string[] originalTokens)
+        {   // a ?? b  means  (a is numeric) ? a : b
+            if (opIndex == tokens.Count - 1)        // [..., "??"]
+            {
+                throw new ArithmeticException(I18n.Translate("internal/MathParser/basicMathExprOpError",
+                    "The operation '{0}' from the basic math expression: '{1}' could not be applied. Original expression: '{2}'",
+                    "??", string.Join(" ", tokens), string.Join(" ", originalTokens)));
+            }
+            else if (opIndex == 0)                  // ["??", ...]
+            {
+                tokens.RemoveRange(opIndex, 1);
+            }
+            else                                    // [..., "??", ...]
+            {
+                bool isNumeric = double.TryParse(tokens[opIndex - 1], NumberStyles.Float, CultureInfo, out double numberA);
+                if (isNumeric) { tokens.RemoveRange(opIndex, 2); }
+                else { tokens.RemoveRange(opIndex - 1, 2); }
+            }
         }
 
         #endregion

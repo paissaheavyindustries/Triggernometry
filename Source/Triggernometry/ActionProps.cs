@@ -51,6 +51,7 @@ namespace Triggernometry
             Unset,
             SetString,
             SetNumeric,
+            Increment,
             Clipboard,
             UnsetAll,
             UnsetRegex,
@@ -74,7 +75,9 @@ namespace Triggernometry
             FilterLine,
             Copy,
             Append,
+            AppendH,
             SortLine,
+            GetAllEntities,
             UnsetAll,
             UnsetRegex,
         }
@@ -95,6 +98,8 @@ namespace Triggernometry
             Filter,
             Merge,
             MergeHard,
+            GetEntityByName,
+            GetEntityById,
             UnsetAll,
             UnsetRegex,
         }
@@ -1549,6 +1554,24 @@ namespace Triggernometry
             }
         }
 
+        internal bool _LogProcessACT { get; set; } = false;
+        [XmlAttribute]
+        public string LogProcessACT
+        {
+            get
+            {
+                if (_LogProcessACT == false)
+                {
+                    return null;
+                }
+                return _LogProcessACT.ToString();
+            }
+            set
+            {
+                _LogProcessACT = Boolean.Parse(value);
+            }
+        }
+
         internal LogMessageEnum _LogLevel { get; set; } = LogMessageEnum.Error;
         [XmlAttribute]
         public string LogLevel
@@ -2595,15 +2618,15 @@ namespace Triggernometry
             }
         }
 
-        internal Color _TextAuraForegroundClInt = Color.Black;
+        internal string _TextAuraForegroundClInt = "";
         [XmlAttribute]
         public string TextAuraForeground
         {
             get
             {
-                if (_TextAuraForegroundClInt != Color.Black)
+                if (!string.IsNullOrWhiteSpace(_TextAuraForegroundClInt))
                 {
-                    return System.Drawing.ColorTranslator.ToHtml(_TextAuraForegroundClInt);
+                    return _TextAuraForegroundClInt;
                 }
                 else
                 {
@@ -2612,19 +2635,19 @@ namespace Triggernometry
             }
             set
             {
-                _TextAuraForegroundClInt = System.Drawing.ColorTranslator.FromHtml(value);
+                _TextAuraForegroundClInt = value;
             }
         }
 
-        internal Color _TextAuraBackgroundClInt = Color.Transparent;
+        internal string _TextAuraBackgroundClInt = "";
         [XmlAttribute]
         public string TextAuraBackground
         {
             get
             {
-                if (_TextAuraBackgroundClInt != Color.Transparent)
+                if (!string.IsNullOrWhiteSpace(_TextAuraBackgroundClInt))
                 {
-                    return System.Drawing.ColorTranslator.ToHtml(_TextAuraBackgroundClInt);
+                    return _TextAuraBackgroundClInt;
                 }
                 else
                 {
@@ -2633,19 +2656,19 @@ namespace Triggernometry
             }
             set
             {
-                _TextAuraBackgroundClInt = System.Drawing.ColorTranslator.FromHtml(value);
+                _TextAuraBackgroundClInt = value;
             }
         }
 
-        internal Color _TextAuraOutlineClInt = Color.White;
+        internal string _TextAuraOutlineClInt = "";
         [XmlAttribute]
         public string TextAuraOutline
         {
             get
             {
-                if (_TextAuraOutlineClInt != Color.White)
+                if (!string.IsNullOrWhiteSpace(_TextAuraOutlineClInt))
                 {
-                    return System.Drawing.ColorTranslator.ToHtml(_TextAuraOutlineClInt);
+                    return _TextAuraOutlineClInt;
                 }
                 else
                 {
@@ -2654,7 +2677,7 @@ namespace Triggernometry
             }
             set
             {
-                _TextAuraOutlineClInt = System.Drawing.ColorTranslator.FromHtml(value);
+                _TextAuraOutlineClInt = value;
             }
         }
 
@@ -2889,24 +2912,6 @@ namespace Triggernometry
             set
             {
                 _TextAuraTTLTickExpression = value;
-            }
-        }
-
-        internal bool _TextAuraUseOutline { get; set; } = false;
-        [XmlAttribute]
-        public string TextAuraUseOutline
-        {
-            get
-            {
-                if (_TextAuraUseOutline == false)
-                {
-                    return null;
-                }
-                return _TextAuraUseOutline.ToString();
-            }
-            set
-            {
-                _TextAuraUseOutline = Boolean.Parse(value);
             }
         }
 

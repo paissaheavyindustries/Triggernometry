@@ -194,6 +194,12 @@
             this.btnConstRemove = new System.Windows.Forms.ToolStripButton();
             this.tabSecurity = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.dgvAdditionalFeatures = new Triggernometry.CustomControls.DataGridViewEx();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewCheckBoxColumn1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.dataGridViewCheckBoxColumn2 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.dataGridViewCheckBoxColumn3 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.panel8 = new System.Windows.Forms.Panel();
             this.dgvApiAccess = new Triggernometry.CustomControls.DataGridViewEx();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column5 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -287,6 +293,7 @@
             this.tlsScalar.SuspendLayout();
             this.tabSecurity.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAdditionalFeatures)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvApiAccess)).BeginInit();
             this.tabMisc.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -2406,6 +2413,8 @@
             // groupBox2
             // 
             this.groupBox2.AutoSize = true;
+            this.groupBox2.Controls.Add(this.dgvAdditionalFeatures);
+            this.groupBox2.Controls.Add(this.panel8);
             this.groupBox2.Controls.Add(this.dgvApiAccess);
             this.groupBox2.Controls.Add(this.panel18);
             this.groupBox2.Controls.Add(this.btnUnlockSecurity);
@@ -2417,6 +2426,73 @@
             this.groupBox2.TabIndex = 20;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = " Scripting API access ";
+            //
+            // dgvAdditionalFeatures
+            //
+            this.dgvAdditionalFeatures.AllowUserToAddRows = false;
+            this.dgvAdditionalFeatures.AllowUserToDeleteRows = false;
+            this.dgvAdditionalFeatures.AllowUserToResizeColumns = false;
+            this.dgvAdditionalFeatures.AllowUserToResizeRows = false;
+            this.dgvAdditionalFeatures.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvAdditionalFeatures.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewCheckBoxColumn1,
+            this.dataGridViewCheckBoxColumn2,
+            this.dataGridViewCheckBoxColumn3});
+            this.dgvAdditionalFeatures.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvAdditionalFeatures.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dgvAdditionalFeatures.Enabled = false;
+            this.dgvAdditionalFeatures.Location = new System.Drawing.Point(10, 357);
+            this.dgvAdditionalFeatures.Name = "dgvAdditionalFeatures";
+            this.dgvAdditionalFeatures.ReadOnly = true;
+            this.dgvAdditionalFeatures.RowHeadersVisible = false;
+            this.dgvAdditionalFeatures.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvAdditionalFeatures.ShowCellErrors = false;
+            this.dgvAdditionalFeatures.ShowEditingIcon = false;
+            this.dgvAdditionalFeatures.ShowRowErrors = false;
+            this.dgvAdditionalFeatures.Size = new System.Drawing.Size(722, 189);
+            this.dgvAdditionalFeatures.TabIndex = 28;
+            this.dgvAdditionalFeatures.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAdditionalFeatures_CellContentClick);
+            this.dgvAdditionalFeatures.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAdditionalFeatures_CellContentDoubleClick);
+            this.dgvAdditionalFeatures.SelectionChanged += new System.EventHandler(this.dgvAdditionalFeatures_SelectionChanged);
+            //
+            // dataGridViewTextBoxColumn1
+            //
+            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn1.HeaderText = "Additional features";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            //
+            // dataGridViewCheckBoxColumn1
+            //
+            this.dataGridViewCheckBoxColumn1.HeaderText = "Allow for local triggers";
+            this.dataGridViewCheckBoxColumn1.Name = "dataGridViewCheckBoxColumn1";
+            this.dataGridViewCheckBoxColumn1.ReadOnly = true;
+            this.dataGridViewCheckBoxColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            //
+            // dataGridViewCheckBoxColumn2
+            //
+            this.dataGridViewCheckBoxColumn2.HeaderText = "Allow for remote triggers";
+            this.dataGridViewCheckBoxColumn2.Name = "dataGridViewCheckBoxColumn2";
+            this.dataGridViewCheckBoxColumn2.ReadOnly = true;
+            this.dataGridViewCheckBoxColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            //
+            // dataGridViewCheckBoxColumn3
+            //
+            this.dataGridViewCheckBoxColumn3.HeaderText = "Allow if running as admin";
+            this.dataGridViewCheckBoxColumn3.Name = "dataGridViewCheckBoxColumn3";
+            this.dataGridViewCheckBoxColumn3.ReadOnly = true;
+            this.dataGridViewCheckBoxColumn3.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            //
+            // panel8
+            //
+            this.panel8.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel8.Location = new System.Drawing.Point(10, 347);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(722, 10);
+            this.panel8.TabIndex = 27;
             // 
             // dgvApiAccess
             // 
@@ -2430,7 +2506,7 @@
             this.Column5,
             this.Column6,
             this.Column7});
-            this.dgvApiAccess.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvApiAccess.Dock = System.Windows.Forms.DockStyle.Top;
             this.dgvApiAccess.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvApiAccess.Enabled = false;
             this.dgvApiAccess.Location = new System.Drawing.Point(10, 63);
@@ -2441,7 +2517,7 @@
             this.dgvApiAccess.ShowCellErrors = false;
             this.dgvApiAccess.ShowEditingIcon = false;
             this.dgvApiAccess.ShowRowErrors = false;
-            this.dgvApiAccess.Size = new System.Drawing.Size(722, 483);
+            this.dgvApiAccess.Size = new System.Drawing.Size(722, 284);
             this.dgvApiAccess.TabIndex = 0;
             this.dgvApiAccess.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApiAccess_CellContentClick);
             this.dgvApiAccess.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApiAccess_CellContentDoubleClick);
@@ -2952,6 +3028,7 @@
             this.tabSecurity.ResumeLayout(false);
             this.tabSecurity.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAdditionalFeatures)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvApiAccess)).EndInit();
             this.tabMisc.ResumeLayout(false);
             this.tabMisc.PerformLayout();
@@ -3168,5 +3245,11 @@
         private CustomControls.DataGridViewEx dgvEndpointHistory;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column9;
+        private CustomControls.DataGridViewEx dgvAdditionalFeatures;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn1;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn2;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn3;
+        private System.Windows.Forms.Panel panel8;
     }
 }

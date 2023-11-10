@@ -44,6 +44,15 @@ namespace Triggernometry.Variables
             public Variable Value { get; set; }
         }
 
+        public VariableDictionary() { }
+        public VariableDictionary(Dictionary<string, string> dict)
+        {
+            Values = dict.ToDictionary(
+                p => p.Key,
+                p => (Variable)new VariableScalar(p.Value)
+            );
+        }
+
         public int Size
         {
             get { return Values.Count; }
@@ -53,7 +62,7 @@ namespace Triggernometry.Variables
 
         public override string ToString()
         {
-            return String.Join(",", Values);
+            return String.Join(",", Values.Select(pair => $"{pair.Key}={pair.Value}"));
         }
 
         public override int CompareTo(object o)

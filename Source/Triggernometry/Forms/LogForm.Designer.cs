@@ -246,6 +246,7 @@
             this.rexSearch.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
             this.rexSearch.Location = new System.Drawing.Point(3, 32);
             this.rexSearch.Name = "rexSearch";
+            this.rexSearch.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.rexSearch.ReadOnly = false;
             this.rexSearch.Size = new System.Drawing.Size(194, 20);
             this.rexSearch.TabIndex = 8;
@@ -256,7 +257,7 @@
             this.lblRegularExpression.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblRegularExpression.Location = new System.Drawing.Point(3, 0);
             this.lblRegularExpression.Name = "lblRegularExpression";
-            this.lblRegularExpression.Padding = new System.Windows.Forms.Padding(0, 15, 0, 8);
+            this.lblRegularExpression.Padding = new System.Windows.Forms.Padding(5, 15, 5, 8);
             this.lblRegularExpression.Size = new System.Drawing.Size(194, 29);
             this.lblRegularExpression.TabIndex = 0;
             this.lblRegularExpression.Text = "Regular expression";
@@ -264,25 +265,27 @@
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.AutoSize = true;
-            this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Controls.Add(this.chkError = new System.Windows.Forms.CheckBox(), 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.chkWarning = new System.Windows.Forms.CheckBox(), 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.chkCustom = new System.Windows.Forms.CheckBox(), 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.chkCustom2 = new System.Windows.Forms.CheckBox(), 1, 1);
-            this.tableLayoutPanel2.Controls.Add(this.chkInfo = new System.Windows.Forms.CheckBox(), 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.chkVerbose = new System.Windows.Forms.CheckBox(), 1, 2);
-            this.tableLayoutPanel2.Controls.Add(this.panelBar = new System.Windows.Forms.Panel(), 0, 3);
-            this.tableLayoutPanel2.Controls.Add(this.chkAll = new System.Windows.Forms.CheckBox(), 0, 4);
+            this.tableLayoutPanel2.ColumnCount = 1;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.Controls.Add(this.chkError, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.chkWarning, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.chkCustom, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.chkCustom2, 0, 3);
+            this.tableLayoutPanel2.Controls.Add(this.chkInfo, 0, 4);
+            this.tableLayoutPanel2.Controls.Add(this.chkVerbose, 0, 5);
+            this.tableLayoutPanel2.Controls.Add(this.panelBar, 0, 6);
+            this.tableLayoutPanel2.Controls.Add(this.chkAll, 0, 7);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 30);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 5;
+            this.tableLayoutPanel2.RowCount = 8;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 3));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 4));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.Size = new System.Drawing.Size(200, 83);
             this.tableLayoutPanel2.TabIndex = 6;
@@ -293,7 +296,7 @@
             this.chkError.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkError.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkError.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(156)))), ((int)(((byte)(24)))), ((int)(((byte)(24)))));
-            this.chkError.Margin = new System.Windows.Forms.Padding(15, 15, 15, 15);
+            this.chkError.Margin = new System.Windows.Forms.Padding(20, 17, 20, 3);
             this.chkError.Name = "chkError";
             this.chkError.Text = "Error";
             this.chkError.UseVisualStyleBackColor = true;
@@ -306,7 +309,7 @@
             this.chkWarning.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkWarning.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkWarning.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(128)))), ((int)(((byte)(24)))));
-            this.chkWarning.Margin = new System.Windows.Forms.Padding(15, 15, 15, 15);
+            this.chkWarning.Margin = new System.Windows.Forms.Padding(20, 7, 20, 3);
             this.chkWarning.Name = "chkWarning";
             this.chkWarning.Text = "Warning";
             this.chkWarning.UseVisualStyleBackColor = true;
@@ -319,7 +322,7 @@
             this.chkCustom.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkCustom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkCustom.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(144)))), ((int)(((byte)(72)))));
-            this.chkCustom.Margin = new System.Windows.Forms.Padding(15, 15, 15, 15);
+            this.chkCustom.Margin = new System.Windows.Forms.Padding(20, 7, 20, 3);
             this.chkCustom.Name = "chkCustom";
             this.chkCustom.Text = "Custom";
             this.chkCustom.UseVisualStyleBackColor = true;
@@ -332,7 +335,7 @@
             this.chkCustom2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkCustom2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkCustom2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(72)))), ((int)(((byte)(144)))));
-            this.chkCustom2.Margin = new System.Windows.Forms.Padding(15, 15, 15, 15);
+            this.chkCustom2.Margin = new System.Windows.Forms.Padding(20, 7, 20, 3);
             this.chkCustom2.Name = "chkCustom2";
             this.chkCustom2.Text = "Custom 2";
             this.chkCustom2.UseVisualStyleBackColor = true;
@@ -345,7 +348,7 @@
             this.chkInfo.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
-            this.chkInfo.Margin = new System.Windows.Forms.Padding(15, 15, 15, 15);
+            this.chkInfo.Margin = new System.Windows.Forms.Padding(20, 7, 20, 3);
             this.chkInfo.Name = "chkInfo";
             this.chkInfo.Text = "Info";
             this.chkInfo.UseVisualStyleBackColor = true;
@@ -358,7 +361,7 @@
             this.chkVerbose.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkVerbose.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkVerbose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
-            this.chkVerbose.Margin = new System.Windows.Forms.Padding(15, 15, 15, 15);
+            this.chkVerbose.Margin = new System.Windows.Forms.Padding(20, 7, 20, 3);
             this.chkVerbose.Name = "chkVerbose";
             this.chkVerbose.Text = "Verbose";
             this.chkVerbose.UseVisualStyleBackColor = true;
@@ -369,18 +372,17 @@
             // 
             this.panelBar.AutoSize = true;
             this.panelBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-            this.tableLayoutPanel2.SetColumnSpan(this.panelBar, 2);
+            this.panelBar.Margin = new System.Windows.Forms.Padding(5, 10, 5, 10);
             this.panelBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelBar.Name = "panelBar";
             // 
             // chkAll
             // 
             this.chkAll.AutoSize = true;
-            this.tableLayoutPanel2.SetColumnSpan(this.chkAll, 2);
             this.chkAll.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkAll.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkAll.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
-            this.chkAll.Margin = new System.Windows.Forms.Padding(15, 15, 15, 15);
+            this.chkAll.Margin = new System.Windows.Forms.Padding(20, 17, 20, 3);
             this.chkAll.Name = "chkAll";
             this.chkAll.Text = "Select All";
             this.chkAll.UseVisualStyleBackColor = true;

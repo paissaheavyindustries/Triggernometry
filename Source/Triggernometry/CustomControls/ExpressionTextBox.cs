@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using Triggernometry.Variables;
 using System.Runtime.InteropServices;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Globalization;
 
 namespace Triggernometry.CustomControls
 {
@@ -43,6 +43,7 @@ namespace Triggernometry.CustomControls
             "radtodeg(rad)", "degtorad(deg)",
             "angle(x1, y1, x2, y2)", "θ(x1, y1, x2, y2)", "relangle(θ1, θ2)", "relθ(θ1, θ2)",
             "roundir(θ, ±n)", "roundir(θ, ±n, digits)", "roundvec(dx, dy, ±n)", "roundvec(dx, dy, ±n, digits)",
+            "isanglebetween(θ, θ1, θ2)", "isθbetween(θ, θ1, θ2)",
 
             // numeric string func
             "hex2dec(hex)", "hex2float(hex)", "hex2double(hex)", "X8float(hex)", "parsedmg(hex)", "len(alphanumstr)",
@@ -58,19 +59,21 @@ namespace Triggernometry.CustomControls
             "dvar:", "pdvar:", "edvar:", "epdvar:", "d:", "pd:", "ed:", "epd:",
             "tvarcl:", "ptvarcl:", "tvarrl:", "ptvarrl:", "tvardl:", "ptvardl:",
             "?l:", "?lvar:", "?t:", "?tvar:", "?d:", "?dvar:",
-            "etext:", "eimage:",
+            "etext:", "eimage:", "ecallback:", "estorage:",
 
             // special variables
-            "_incombat", "_lastencounter", "_activeencounter",
+            "_incombat", "_lastencounter", "_activeencounter", "_configpath", "_pluginpath",
             "_duration", "_event", "_since", "_sincems", "_triggerid", "_triggername", "_zone",
             "_response", "_responsecode", "_jsonresponse[x]",
             "_timestamp", "_timestampms", "_systemtime", "_systemtimems", "_clipboard",
             "_screenwidth", "_screenheight", "_textaura[x]", "_imageaura[x]",
             "_x", "_y", "_w", "_width", "_h", "_height", "_opacity",
-            "_ffxivparty[x]", "_party[x]", "_ffxiventity[x]", "_entity[x]", "_ffxivplayer", "_me",
-            "_job[jobid]", "_job[jobName]", "_job[jobAbbrev]",
+            "_ffxivparty[x]", "_party[x]", "_ffxiventity[x]", "_entity[x]", "_ffxivplayer", "_me", "_me.id",
+            "_job[jobid/jobName/jobAbbrev]",
             "_ffxivtime", "_ET", "_ETprecise", "_ffxivpartyorder", "_ffxivprocid", "_ffxivprocname", "_ffxivzoneid",
-            "_env[x]", "_const[x]", "_config[x]", "_loopiterator", "_i", "_this", "_idx", "_col", "_row", "_col[i]", "_row[i]", "_key", "_val",
+            "_env[x]", "_const[x]", "_config[x]", "_storage[x]", "_actionhistory[i/previous]",
+            "_this", "_idx", "_col", "_row", "_col[i]", "_row[i]", "_colrl[...]", "_rowcl[...]", "_key", "_val",
+            "_loopiterator", "_i",
         };
 
         public static List<string> funcs = new List<string>()
@@ -108,9 +111,9 @@ namespace Triggernometry.CustomControls
             "hjoin()", "hjoin(joiner1, joiner2, colSlices, rowSlices)",
             "vjoin()", "vjoin(joiner1, joiner2, colSlices, rowSlices)",
             "hlookup(str, rowIndex)", "hlookup(str, rowIndex, colSlices)",
-            "vlookup(str, rowIndex)", "vlookup(str, rowIndex, colSlices)",
+            "vlookup(str, colIndex)", "vlookup(str, colIndex, rowSlices)",
             "hl(str, rowIndex)", "hl(str, rowIndex, colSlices)",
-            "vl(str, rowIndex)", "vl(str, rowIndex, colSlices)",
+            "vl(str, colIndex)", "vl(str, colIndex, rowSlices)",
             "count(str)", "count(str, colSlices, rowSlices)",
             "sum()", "sum(colSlices, rowSlices)",
             "max()", "max(type, colSlices, rowSlices)",
@@ -140,12 +143,12 @@ namespace Triggernometry.CustomControls
 
         public static List<string> ffxivProps = new List<string>()
         {
-            "name", "job", "jobid", "role", "id", "ownerid", "bnpcid", "bnpcnameid", "type", "partytype", "address",
+            "name", "job", "jobid", "role", "subrole", "roleid", "id", "ownerid", "bnpcid", "bnpcnameid", "type", "partytype", "address",
             "currenthp", "currentmp", "currentcp", "currentgp", "maxhp", "maxmp", "maxcp", "maxgp", "level",
             "x", "y", "z", "heading", "h", "distance", "iscasting", "casttime", "maxcasttime", "castid",
             "inparty", "order", "worldid", "worldname", "currentworldid", "targetid", "casttargetid",
             "isT", "isH", "isD", "isM", "isR", "isC", "isG", "isTH", "isCG", "isTM", "isHR",
-            "jobCN", "jobDE", "jobEN", "jobFR", "jobJP", "jobKR", "jobCN1", "jobCN2", "jobEN3", "jobJP1"
+            "jobCN", "jobDE", "jobEN", "jobFR", "jobJP", "jobKR", "jobCN1", "jobCN2", "jobEN3", "jobJP1", 
         };
 
         public static List<string> jobProps = new List<string>()
@@ -156,8 +159,8 @@ namespace Triggernometry.CustomControls
 
         public static List<string> configurations = new List<string>()
         {
-            "DebugLevel", "UseACTForSound", "UseACTForTTS", "FfxivLogNetwork", "UseOsClipboard", "DeveloperMode", "Autosave", "Language", 
-            "Microsoft.CodeAnalysis", "Microsoft.Win32", "System.CodeDom.Compiler", "System.Diagnostics", 
+            "DebugLevel", "UseACTForSound", "UseACTForTTS", "FfxivLogNetwork", "UseOsClipboard", "DeveloperMode", "Autosave", "Language", "UnsafeUsage",
+            "Microsoft.CodeAnalysis", "Microsoft.Win32", "System.CodeDom.Compiler", "System.Diagnostics", "Triggernometry.Utilities",
             "System.IO", "System.Net", "System.Reflection", "System.Runtime", "System.Security", "System.Web",
         };
 
@@ -165,10 +168,7 @@ namespace Triggernometry.CustomControls
 
         public enum SupportedExpressionTypeEnum
         {
-            String,
-            Numeric,
-            Regex,
-            Color
+            String, Numeric, Regex, Color
         }
 
         public bool ReadOnly
@@ -286,7 +286,7 @@ namespace Triggernometry.CustomControls
 
         private static List<string> CurrentRegexGroupsAndPrefixes = new List<string>();
         private static HashSet<string> CurrentRegexGroupsAndPrefixesHashset = new HashSet<string>();
-        private string suffix = "";
+        private string suffix = "";  // to do
 
         public delegate void EnterDelegate();
         public event EnterDelegate OnEnterKeyHit;
@@ -294,19 +294,19 @@ namespace Triggernometry.CustomControls
         public IButtonControl CancelButton;
 
         public static readonly Regex rexPrefix
-            = new Regex(@"\$\{(?<prefix>[^[$}:.]*)$");
+            = new Regex(@"[$¤]\{(?<prefix>[^[$}:.]*)$");
         public static readonly Regex rexFunc
-            = new Regex(@"\$\{f(?:unc)?:(?<funcid>[^(:]*)$");
+            = new Regex(@"[$¤]\{f(?:unc)?:(?<funcid>[^(:]*)$");
         public static readonly Regex rexVarName
-            = new Regex(@"\$\{(?<e>e?)(?<persist>p?)(?<type>[vltd]|text|image)(?:v?ar)?(?:[cdr]l)?:(?<name>[^$¤.[]*)$");
+            = new Regex(@"[$¤]\{(?<e>e?)(?<persist>p?)(?<type>[vltd]|text|image|callback|storage)(?:v?ar)?(?:[cdr]l)?:(?<name>[^$¤.[]*)$");
         public static readonly Regex rexColHeader
-            = new Regex(@"\$\{(?<persist>p?)t(?:var)?[cd]l:(?<name>[^$¤[]+)\[(?<key>[^$¤\]]*)$");
+            = new Regex(@"[$¤]\{(?<persist>p?)t(?:var)?[cd]l:(?<name>[^$¤[]+)\[(?<key>[^$¤\]]*)$");
         public static readonly Regex rexRowHeader
-            = new Regex(@"\$\{(?<persist>p?)t(?:var)?(?:rl:(?<name1>[^$¤[]+)|dl:(?<name2>[^$¤[]+)\[.*\])\[(?<key>[^$¤\]]*)$");
+            = new Regex(@"[$¤]\{(?<persist>p?)t(?:var)?(?:rl:(?<name1>[^$¤[]+)|dl:(?<name2>[^$¤[]+)\[.*\])\[(?<key>[^$¤\]]*)$");
         public static readonly Regex rexDictKey
-            = new Regex(@"\$\{(?<persist>p?)d(?:var)?:(?<name>[^$¤[]+)\[(?<key>[^$¤\]]*)$");
+            = new Regex(@"[$¤]\{(?<persist>p?)d(?:var)?:(?<name>[^$¤[]+)\[(?<key>[^$¤\]]*)$");
         public static readonly Regex rexStructKey
-            = new Regex(@"\$\{_(?<struct>const|textaura|imageaura|config)\[(?<key>[^$¤\]]*)$");
+            = new Regex(@"[$¤]\{_(?<struct>const|textaura|imageaura|config|storage)\[(?<key>[^$¤\]]*)$");
         // The regexes "rex...Prop" and "rexMath" are matched after looking for the previous unclosed '{'
         public static readonly Regex rexVarProp
             = new Regex(@"^[p?]?(?<type>[ltd])(?:var)?:.*\.(?<prop>[^.(]*)$");
@@ -315,7 +315,10 @@ namespace Triggernometry.CustomControls
         public static readonly Regex rexStructProp
             = new Regex(@"_(?<struct>[^[]+)\[.*\]\.(?<prop>[^.]*)$");
         public static readonly Regex rexMath
-            = new Regex(@"(?<![[$.])\b[\p{L}\w]+$");
+            = new Regex(@"(?<![[$¤.])\b[\p{L}\w]+$");
+
+        private static readonly Regex rexDynamicNames // capture the names in the expressions and store into lists for autofill
+            = new Regex(@"[$¤]\{e?(?<persist>p?)(?<type>[vltd]|text|image)(?:v?ar)?(?:[cdr]l)?:(?<name>[^$¤.[{}\n]*)[^\${}]*\}");
 
         private string CurrentMatch;
         private Timer acfDebounceTimer = new Timer();
@@ -327,31 +330,18 @@ namespace Triggernometry.CustomControls
             InitializeComponent();
             ctx = new Context();
             fakectx = new Context();
-            fakectx.testmode = true;
+            fakectx.testByPlaceholder = true;
             ResetTooltip();
             textBox1.TextChanged += TextBox1_TextChanged;
             textBox1.KeyPress += TextBox1_KeyPress;
             textBox1.KeyDown += TextBox1_KeyDown;
+            textBox1.MaxLength = 10000000; // for scripts
+            textBox1.GotFocus += ReplaceIncompleteLineBreaksInClipboard;
             Disposed += ExpressionTextBox_Disposed;
             Leave += ExpressionTextBox_Leave;
             LostFocus += ExpressionTextBox_LostFocus;
             acfDebounceTimer.Interval = 100; // debounce timer for autocomplete
             acfDebounceTimer.Tick += (sender, e) => ProcessAutocomplete();
-        }
-
-        public static void SetPlugForTextBoxes(Control parent, RealPlugin plug)
-        {
-            foreach (Control control in parent.Controls)
-            {
-                if (control is ExpressionTextBox expressionTextBox)
-                {
-                    expressionTextBox.ctx.plug = plug;
-                }
-                else
-                {
-                    SetPlugForTextBoxes(control, plug);
-                }
-            }
         }
 
         private void ExpressionTextBox_LostFocus(object sender, EventArgs e)
@@ -532,12 +522,16 @@ namespace Triggernometry.CustomControls
                     e.SuppressKeyPress = true;
                 }
             }
+            else if (e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
+            {
+                HideAutocomplete();
+            }
         }
 
         private IEnumerable<string> GetAutocompleteSuggestions(IEnumerable<string> src, string str)
         {
             return (from ix in src
-                    where ix.StartsWith(str) && string.Compare(str, ix, true) != 0
+                    where ix.StartsWith(str, StringComparison.OrdinalIgnoreCase) && string.Compare(str, ix, true) != 0
                     select ix)
                         .OrderBy(a => a);
         }
@@ -546,10 +540,19 @@ namespace Triggernometry.CustomControls
         {
             if (e.KeyChar == Convert.ToChar(Keys.Enter))
             {
+                e.Handled = true;
                 if (AutocompleteActive() == true)
                 {
-                    e.Handled = true;
-                    string ac = GetChosenAutocomplete().Substring(CurrentMatch.Length);
+                    string ac = GetChosenAutocomplete();
+                    int cursorPos = textBox1.SelectionStart;
+
+                    // remove the existing part to fix the capitalization typos
+                    if (CurrentMatch.Length > 0 && cursorPos >= CurrentMatch.Length)
+                    {
+                        textBox1.Text = textBox1.Text.Remove(cursorPos - CurrentMatch.Length, CurrentMatch.Length);
+                        textBox1.SelectionStart = cursorPos - CurrentMatch.Length;
+                    }
+
                     /* To do: 
                      * close () [] {} automatically and 
                      * moves the cursor to the correct position
@@ -582,7 +585,7 @@ namespace Triggernometry.CustomControls
                     int pIndex = ac.IndexOf('(');
                     int bIndex = ac.IndexOf("[");
                     if (pIndex >= 0)
-                    {   
+                    {
                         textBox1.Paste(ac.Substring(0, pIndex) + ")");
                         textBox1.SelectionStart--;
                         textBox1.Paste("(");
@@ -599,6 +602,23 @@ namespace Triggernometry.CustomControls
                 else if (OnEnterKeyHit != null)
                 {
                     OnEnterKeyHit();
+                }
+                else
+                {
+                    if (!textBox1.Multiline) // switch to multiline mode
+                    {   
+                        ToggleExpand();
+                    }
+                    else // input linebreaks (+ indent), instead of closing the form
+                    {
+                        int currentPosition = textBox1.SelectionStart;
+                        int currentLineIndex = textBox1.GetLineFromCharIndex(currentPosition);
+                        int lineStartIndex = textBox1.GetFirstCharIndexOfCurrentLine();
+                        string currentLineText = textBox1.Text.Substring(lineStartIndex, currentPosition - lineStartIndex);
+
+                        string indent = new string(currentLineText.TakeWhile(c => c == ' ' || c == '　').ToArray());
+                        textBox1.Paste(Environment.NewLine + indent);
+                    }
                 }
             }
             else if (e.KeyChar == Convert.ToChar(Keys.Escape))
@@ -621,10 +641,10 @@ namespace Triggernometry.CustomControls
                 );
         }
 
-        internal static Color BgRed = Color.FromArgb(255, 225, 225);        // invalid expression
-        internal static Color BgYellow = Color.FromArgb(255, 240, 210);     // capture group not found
-        internal static Color BgGreen = Color.FromArgb(225, 255, 225);      // correct
-        internal static Color BgBlue = Color.FromArgb(210, 240, 255);       // persistent variable
+        internal static Color BgRed    = Color.FromArgb(255, 225, 225);        // invalid expression
+        internal static Color BgYellow = Color.FromArgb(255, 240, 210);        // capture group not found
+        internal static Color BgGreen  = Color.FromArgb(225, 255, 225);        // correct
+        internal static Color BgBlue   = Color.FromArgb(210, 240, 255);        // persistent variable
 
         private void UpdateBackground()
         {
@@ -700,7 +720,7 @@ namespace Triggernometry.CustomControls
                     try
                     {
                         string rawColor = ctx.ExpandVariables(null, null, false, textBox1.Text);
-                        color = ActionViewer.ParseColor(rawColor);
+                        color = ParseColor(rawColor, Color.Empty);
                     }
                     catch { color = Color.Empty; }
 
@@ -711,7 +731,7 @@ namespace Triggernometry.CustomControls
                     }
                     else
                     {
-                        textBox1.BackColor = color;
+                        textBox1.BackColor = color != Color.Transparent ? color : SystemColors.Window;
                         double brightness = 0.299 * color.R + 0.587 * color.G + 0.114 * color.B;
                         textBox1.ForeColor = (brightness > 128) ? Color.FromArgb(0, 0, 0) : Color.FromArgb(255, 255, 255);
                     }
@@ -723,7 +743,7 @@ namespace Triggernometry.CustomControls
         {
             UpdateBackground();
             if (textBox1.Multiline) { MultiLineAdjustHeight(); }
-            if (ExpressionType != SupportedExpressionTypeEnum.Regex)
+            if (ExpressionType != SupportedExpressionTypeEnum.Regex && textBox1.Focused)
             {
                 acfDebounceTimer.Stop();
                 acfDebounceTimer.Start(); 
@@ -733,6 +753,8 @@ namespace Triggernometry.CustomControls
         private void ProcessAutocomplete()
         {
             acfDebounceTimer.Stop();
+
+            if (!textBox1.Focused) return;
 
             string temp = textBox1.Text.Substring(0, textBox1.SelectionStart);
             IEnumerable<string> matchedStrings = null;
@@ -777,18 +799,16 @@ namespace Triggernometry.CustomControls
             m = rexVarName.Match(temp);
             if (m.Success)
             {
-                VariableStore vs = (m.Groups["persist"].Value == "p") ? ctx.plug.cfg.PersistentVariables : ctx.plug.sessionvars;
-                List<string> varNames = null;
-
-                switch (m.Groups["type"].Value)
+                bool isPersist = m.Groups["persist"].Value == "p";
+                string typeString = m.Groups["type"].Value;
+                if (!StringToAutofillEnum.TryGetValue(typeString, out AutofillTypeEnum type))
                 {
-                    case "v": varNames = vs.Scalar.Keys.ToList(); break;
-                    case "l": varNames = vs.List.Keys.ToList(); break;
-                    case "t": varNames = vs.Table.Keys.ToList(); break;
-                    case "d": varNames = vs.Dict.Keys.ToList(); break;
-                    case "text": varNames = ctx.plug.sc.textitems.Keys.ToList(); break;
-                    case "image": varNames = ctx.plug.sc.imageitems.Keys.ToList(); break;
+                    type = AutofillTypeEnum.None;
                 }
+
+                List<string> varNames = GetExistingAutofillNameList(type, isPersist);
+                varNames.AddRange(GetDynamicAutofillNameList(type, isPersist) ?? new List<string>());
+
                 matchedStrings = GetAutocompleteSuggestions(varNames, m.Groups["name"].Value);
                 if (matchedStrings.Count() > 0)
                 {
@@ -810,7 +830,7 @@ namespace Triggernometry.CustomControls
             m = rexRowHeader.Match(temp);
             if (m.Success)
             {
-                VariableStore vs = m.Groups["persist"].Value == "p" ? ctx.plug.cfg.PersistentVariables : ctx.plug.sessionvars;
+                VariableStore vs = m.Groups["persist"].Value == "p" ? RealPlugin.plug.cfg.PersistentVariables : RealPlugin.plug.sessionvars;
                 VariableTable vt;
                 string varName = m.Groups["name1"].Value + m.Groups["name2"].Value;
                 if (vs.Table.ContainsKey(varName) && vs.Table[varName].Height > 0)
@@ -847,7 +867,7 @@ namespace Triggernometry.CustomControls
             m = rexColHeader.Match(temp);
             if (m.Success)
             {
-                VariableStore vs = m.Groups["persist"].Value == "p" ? ctx.plug.cfg.PersistentVariables : ctx.plug.sessionvars;
+                VariableStore vs = m.Groups["persist"].Value == "p" ? RealPlugin.plug.cfg.PersistentVariables : RealPlugin.plug.sessionvars;
                 VariableTable vt;
                 string varName = m.Groups["name"].Value;
                 if (vs.Table.ContainsKey(varName) && vs.Table[varName].Width > 0)
@@ -883,7 +903,7 @@ namespace Triggernometry.CustomControls
             m = rexDictKey.Match(temp);
             if (m.Success)
             {
-                VariableStore vs = m.Groups["persist"].Value == "p" ? ctx.plug.cfg.PersistentVariables : ctx.plug.sessionvars;
+                VariableStore vs = m.Groups["persist"].Value == "p" ? RealPlugin.plug.cfg.PersistentVariables : RealPlugin.plug.sessionvars;
                 VariableDictionary vd;
                 string varName = m.Groups["name"].Value;
                 if (vs.Dict.ContainsKey(varName) && vs.Dict[varName].Size > 0)
@@ -918,10 +938,21 @@ namespace Triggernometry.CustomControls
                 List<string> keys = null;
                 switch (m.Groups["struct"].Value)
                 {
-                    case "const": keys = ctx.plug.cfg.Constants.Keys.ToList(); break;
-                    case "textaura": keys = ctx.plug.sc.textitems.Keys.ToList(); break;
-                    case "imageaura": keys = ctx.plug.sc.imageitems.Keys.ToList(); break;
+                    case "const": keys = RealPlugin.plug.cfg.Constants.Keys.ToList(); break;
+                    case "textaura":
+                        {
+                            keys = (RealPlugin.plug.sc != null) ? RealPlugin.plug.sc.textitems.Keys.ToList() : RealPlugin.plug.textauras.Keys.ToList();
+                            keys.AddRange(tmpTextNames);
+                            break;
+                        }
+                    case "imageaura":
+                        {
+                            keys = (RealPlugin.plug.sc != null) ? RealPlugin.plug.sc.imageitems.Keys.ToList() : RealPlugin.plug.imageauras.Keys.ToList();
+                            keys.AddRange(tmpImageNames);
+                            break;
+                        }
                     case "config": keys = configurations; break;
+                    case "storage": keys = RealPlugin.plug.scriptingStorage.Keys.ToList(); break;
                 }
                 matchedStrings = GetAutocompleteSuggestions(keys, m.Groups["key"].Value);
                 if (matchedStrings.Count() > 0)
@@ -968,7 +999,25 @@ namespace Triggernometry.CustomControls
                     currentExpr = currentExpr.Substring(0, currentExpr.IndexOf('{'))
                                 + currentExpr.Substring(currentExpr.LastIndexOf('}') + 1);
                 }
-
+                // match numeric:
+                if (currentExpr.StartsWith("n:") || currentExpr.StartsWith("numeric:"))
+                {
+                    m = rexMath.Match(currentExpr);
+                    if (m.Success)
+                    {
+                        matchedStrings = GetAutocompleteSuggestions(math, m.Value);
+                        if (matchedStrings != null && matchedStrings.Count() > 0)
+                        {
+                            CurrentMatch = m.Value;
+                            ShowAutocomplete(matchedStrings);
+                        }
+                        else
+                        {
+                            HideAutocomplete();
+                        }
+                        return;
+                    }
+                }
                 // match (p)[ltd](var):name.prop
                 m = rexVarProp.Match(currentExpr);
                 if (m.Success)
@@ -1046,20 +1095,41 @@ namespace Triggernometry.CustomControls
             }
 
             // all matches failed or temp contains no unclosed '{'
-            m = rexMath.Match(currentExpr);
-            if (m.Success)
+            
+            if (AutofillType != AutofillTypeEnum.None) 
             {
-                IEnumerable<string> strs = GetAutocompleteSuggestions(math, m.Value);
-                if (strs.Count() > 0)
+                var names = GetExistingAutofillNameList(AutofillType, IsPersistent);
+                names.AddRange(GetDynamicAutofillNameList(AutofillType, IsPersistent) ?? new List<string>());
+                matchedStrings = GetAutocompleteSuggestions(names, temp);
+                if (matchedStrings != null && matchedStrings.Count() > 0)
                 {
-                    CurrentMatch = m.Value;
-                    ShowAutocomplete(strs);
+                    CurrentMatch = temp;
+                    ShowAutocomplete(matchedStrings);
                 }
                 else
                 {
                     HideAutocomplete();
                 }
                 return;
+            }
+
+            if (ExpressionType == SupportedExpressionTypeEnum.Numeric)
+            {
+                m = rexMath.Match(currentExpr);
+                if (m.Success)
+                {
+                    matchedStrings = GetAutocompleteSuggestions(math, m.Value);
+                    if (matchedStrings != null && matchedStrings.Count() > 0)
+                    {
+                        CurrentMatch = m.Value;
+                        ShowAutocomplete(matchedStrings);
+                    }
+                    else
+                    {
+                        HideAutocomplete();
+                    }
+                    return;
+                }
             }
             HideAutocomplete();
         }
@@ -1088,8 +1158,8 @@ namespace Triggernometry.CustomControls
             else
             {
                 textBox1.Multiline = true;
-                textBox1.MinimumSize = new Size(textBox1.MinimumSize.Width, 100);
-                textBox1.MaximumSize = new Size(textBox1.MinimumSize.Width, 300);
+                textBox1.MinimumSize = new Size(textBox1.MinimumSize.Width, 80);
+                textBox1.MaximumSize = new Size(textBox1.MaximumSize.Width, 300);
                 textBox1.ScrollBars = ScrollBars.Both;
                 MultiLineAdjustHeight();
                 Image tmp = panel1.BackgroundImage;
@@ -1100,9 +1170,226 @@ namespace Triggernometry.CustomControls
 
         private void MultiLineAdjustHeight()
         {
-            int singleLineHeight = textBox1.Font.Height;
-            int totalLines = textBox1.Lines.Length;
-            textBox1.Height = (int)(singleLineHeight * (totalLines + 0.2));
+            using (Graphics g = textBox1.CreateGraphics())
+            {
+                SizeF size = g.MeasureString(textBox1.Text + "\n1", textBox1.Font); // add one more line
+                textBox1.Height = (int)size.Height;
+            }
         }
+
+        // Prevent pasting a hidden \n (usually from ACT loglines) into the txtbox
+        // Did not use WinProc since there are some regular TextBoxes in the forms besides ExpTxtBox.
+        public static void ReplaceIncompleteLineBreaksInClipboard(object sender, EventArgs e)
+        {
+            if (Clipboard.ContainsText())
+            {
+                string clipboardText = Clipboard.GetText();
+                Regex rexIncompleteLinebreaks = new Regex(@"\r(?!\n)|(?<!\r)\n");
+                string replacedText = rexIncompleteLinebreaks.Replace(clipboardText, "\r\n");
+                if (replacedText.Length != clipboardText.Length)
+                {
+                    MessageBox.Show($"Before: {clipboardText.Length}\nAfter:{replacedText.Length}");
+                    Clipboard.SetText(replacedText);
+                }
+            }
+        }
+
+        #region Color
+        private static Regex regexHexColor = new Regex(@"^#? *(?<rgb>[\dA-Fa-f]{3}|[\dA-Fa-f]{6})$");
+        private static Regex regexNumColor = new Regex(@"^(?<r>\d+(?:.\d+)?) *, *(?<g>\d+(?:.\d+)?) *, *(?<b>\d+(?:.\d+)?)$");
+
+        /// <summary>
+        /// Parse a user-input raw color string to a Color. <br />
+        /// Input could be: <br />
+        /// · Color names: white <br />
+        /// · RGB: 192, 0, 18 <br />
+        /// · Hex value: #acf / #aaccff / acf / aaccff <br />
+        /// </summary>
+        /// <param name="defaultColor">The default color returned if the string is invalid.</param>
+        /// <returns>The representing Color</returns>
+        public static Color ParseColor(string rawColor, Color defaultColor)
+        {
+            rawColor = rawColor.Trim();
+
+            Color namedColor = Color.FromName(rawColor);
+            if (namedColor.IsKnownColor)
+            {   // "white"
+                return namedColor;
+            }
+
+            int r, g, b;
+            Match hexMatch = regexHexColor.Match(rawColor);
+            if (hexMatch.Success)
+            {
+                string rgb = hexMatch.Groups["rgb"].Value;
+                if (rgb.Length == 3)
+                {   // "#acf" or "acf"
+                    rgb = string.Concat(rgb[0], rgb[0], rgb[1], rgb[1], rgb[2], rgb[2]);
+                }
+                // "#aaccff" or "aaccff"
+                r = Convert.ToInt32(rgb.Substring(0, 2), 16);
+                g = Convert.ToInt32(rgb.Substring(2, 2), 16);
+                b = Convert.ToInt32(rgb.Substring(4, 2), 16);
+            }
+            else
+            {   // "192, 0, 18"
+                Match numMatch = regexNumColor.Match(rawColor);
+                if (numMatch.Success)
+                {
+                    r = (int)Math.Round(double.Parse(numMatch.Groups["r"].Value, CultureInfo.InvariantCulture));
+                    g = (int)Math.Round(double.Parse(numMatch.Groups["g"].Value, CultureInfo.InvariantCulture));
+                    b = (int)Math.Round(double.Parse(numMatch.Groups["b"].Value, CultureInfo.InvariantCulture));
+                }
+                else return defaultColor;
+            }
+
+            return Color.FromArgb(r < 0 ? 0 : r > 255 ? 255 : r,
+                                  g < 0 ? 0 : g > 255 ? 255 : g,
+                                  b < 0 ? 0 : b > 255 ? 255 : b);
+        }
+
+        public static string ColorToString(Color color, Color defaultColor)
+        {
+            if (color == Color.Empty || color == defaultColor)
+            {
+                return "";
+            }
+            else if (color.IsKnownColor)
+            {
+                return color.Name;
+            }
+            else
+            {
+                return $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+            }
+        }
+        #endregion
+
+        #region Store Variable Names Dynamically
+
+        private static List<string> tmpScalarNames = new List<string>();
+        private static List<string> tmpListNames = new List<string>();
+        private static List<string> tmpTableNames = new List<string>();
+        private static List<string> tmpDictNames = new List<string>();
+        private static List<string> tmpTextNames = new List<string>();
+        private static List<string> tmpImageNames = new List<string>();
+
+        private static List<string> prsScalarNames = new List<string>();
+        private static List<string> prsListNames = new List<string>();
+        private static List<string> prsTableNames = new List<string>();
+        private static List<string> prsDictNames = new List<string>();
+
+        public enum AutofillTypeEnum { None, Scalar, List, Table, Dict, Image, Text, Callback, Storage }
+
+        public static Dictionary<string, AutofillTypeEnum> StringToAutofillEnum = new Dictionary<string, AutofillTypeEnum> {
+            { "v", AutofillTypeEnum.Scalar },
+            { "l", AutofillTypeEnum.List },
+            { "t", AutofillTypeEnum.Table },
+            { "d", AutofillTypeEnum.Dict },
+            { "image",    AutofillTypeEnum.Image },
+            { "text",     AutofillTypeEnum.Text },
+            { "callback", AutofillTypeEnum.Callback },
+            { "storage",  AutofillTypeEnum.Storage },
+        };
+
+        public AutofillTypeEnum AutofillType { get; set; } = AutofillTypeEnum.None;
+
+        /// <summary> 
+        /// Returns the list for dynamically storing the names in the expression textboxes, 
+        /// based on the autofill type. 
+        /// </summary>
+        private static List<string> GetDynamicAutofillNameList(AutofillTypeEnum type, bool isPersistent)
+        {
+            switch (type)
+            {
+                case AutofillTypeEnum.Scalar: return isPersistent ? prsScalarNames : tmpScalarNames;
+                case AutofillTypeEnum.List:   return isPersistent ? prsListNames   : tmpListNames;
+                case AutofillTypeEnum.Table:  return isPersistent ? prsTableNames  : tmpTableNames;
+                case AutofillTypeEnum.Dict:   return isPersistent ? prsDictNames   : tmpDictNames;
+                case AutofillTypeEnum.Text:   return tmpTextNames;
+                case AutofillTypeEnum.Image:  return tmpImageNames;
+                default: return null;
+            }
+        }
+
+        /// <summary> 
+        /// Returns the list of existing variable/aura/... names corresponding to the autofill type.
+        /// </summary>
+        private static List<string> GetExistingAutofillNameList(AutofillTypeEnum type, bool isPersistent)
+        {
+            VariableStore vs = isPersistent ? RealPlugin.plug.cfg.PersistentVariables : RealPlugin.plug.sessionvars;
+            switch (type)
+            {
+                case AutofillTypeEnum.Scalar: return vs.Scalar.Keys.ToList();
+                case AutofillTypeEnum.List:   return vs.List.Keys.ToList();
+                case AutofillTypeEnum.Table:  return vs.Table.Keys.ToList();
+                case AutofillTypeEnum.Dict:   return vs.Dict.Keys.ToList();
+                case AutofillTypeEnum.Text:   return (RealPlugin.plug.sc != null) ? RealPlugin.plug.sc.textitems.Keys.ToList()  : RealPlugin.plug.textauras.Keys.ToList();
+                case AutofillTypeEnum.Image:  return (RealPlugin.plug.sc != null) ? RealPlugin.plug.sc.imageitems.Keys.ToList() : RealPlugin.plug.imageauras.Keys.ToList();
+                case AutofillTypeEnum.Callback: return RealPlugin.plug.callbacksByName.Keys.ToList();
+                case AutofillTypeEnum.Storage:  return RealPlugin.plug.scriptingStorage.Keys.ToList();
+                default: return new List<string>();
+            }
+        }
+
+        private void RegisterAutofillNames()
+        {
+            if (ExpressionType == SupportedExpressionTypeEnum.Regex)
+                return;
+            
+            // search for all expressions like ${var:xxx}, ${l:xxx.prop}, ${pd:xxx[key]},
+            // and add the names "xxx" to their corresponding namelist. 
+            foreach (Match match in rexDynamicNames.Matches(Text))
+            {
+                bool isPersistent = match.Groups["persist"].ToString() == "p";
+                string typeString = match.Groups["type"].ToString();
+                if (!StringToAutofillEnum.TryGetValue(typeString, out AutofillTypeEnum type))
+                {
+                    type = AutofillTypeEnum.None;
+                }
+                string name = match.Groups["name"].ToString();
+                RegisterDynamicVarName(name, type, isPersistent);
+            }
+
+            // If the textbox is used for entering variable names,
+            // add the name to the corresponding namelist.
+            if (Text.Count(c => c == '$') <= 1) // skip variable names with too many expressions
+            {
+                RegisterDynamicVarName(Text, AutofillType, IsPersistent);
+            }
+        }
+
+        private static void RegisterDynamicVarName(string name, AutofillTypeEnum type, bool isPersistent)
+        {
+            List<string> dynamicNames = GetDynamicAutofillNameList(type, isPersistent);
+            if (dynamicNames == null)
+            {
+                return;
+            }
+            dynamicNames.Remove(name);
+
+            List<string> existingNames = GetExistingAutofillNameList(type, isPersistent);
+            if (!existingNames.Contains(name))
+            {
+                dynamicNames.Add(name);
+                if (dynamicNames.Count > 20)
+                {
+                    dynamicNames.RemoveAt(0);
+                }
+            }
+        }
+
+        internal static void RegisterAllDynamicVarNamesOnForm(Control parent)
+        {
+            if (parent is ExpressionTextBox exp)
+            {
+                exp.RegisterAutofillNames();
+            }
+            foreach (Control children in parent.Controls)
+            {
+                RegisterAllDynamicVarNamesOnForm(children);
+            }
+        }
+        #endregion 
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Triggernometry.CustomControls;
 
 namespace Triggernometry.Forms
 {
@@ -22,6 +23,8 @@ namespace Triggernometry.Forms
             Shown += TestInputForm_Shown;
             cbxEventDestination.SelectedIndex = 0;
             cbxZoneType.SelectedIndex = 0;
+            txtEvent.GotFocus += ExpressionTextBox.ReplaceIncompleteLineBreaksInClipboard;
+            txtZoneName.GotFocus += ExpressionTextBox.ReplaceIncompleteLineBreaksInClipboard;
             RestoredSavedDimensions();
         }
 

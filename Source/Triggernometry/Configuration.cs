@@ -30,6 +30,15 @@ namespace Triggernometry
 
         }
 
+        [Flags]
+        public enum UnsafeUsageEnum
+        {
+            None = 0,
+            AllowLocal = 1,
+            AllowRemote = 2,
+            AllowAdmin = 4
+        }
+
         public class Substitution : IComparable
         {
 
@@ -136,6 +145,23 @@ namespace Triggernometry
         public List<Substitution> Substitutions { get; set; } = new List<Substitution>();
 
         private bool Locked { get; set; } = false;
+
+        [XmlAttribute]
+        private UnsafeUsageEnum _UnsafeUsage = UnsafeUsageEnum.None;
+        public UnsafeUsageEnum UnsafeUsage
+        {
+            get
+            {
+                return _UnsafeUsage;
+            }
+            set
+            {
+                if (Locked == false)
+                {
+                    _UnsafeUsage = value;
+                }
+            }
+        }
 
         private List<APIUsage> _APIUsages { get; set; } = new List<APIUsage>();
         public List<APIUsage> APIUsages
@@ -389,6 +415,11 @@ namespace Triggernometry
                 ax.AllowRemote = au.AllowRemote;
                 ax.AllowAdmin = au.AllowAdmin;
             }
+        }
+
+        private void SetUnsafeUsage(UnsafeUsageEnum us)
+        {
+            _UnsafeUsage = us;
         }
 
         /*

@@ -110,7 +110,7 @@ namespace Triggernometry.Variables
             return v;
         }
 
-        public void Resize(int newWidth, int newHeight)
+        public void Resize(int newWidth, int newHeight, string changer = "")
         {
             if (newWidth == 0 || newHeight == 0)
             {
@@ -162,6 +162,8 @@ namespace Triggernometry.Variables
                     }
                 }
             }
+            LastChanged = DateTime.Now;
+            LastChanger = changer;
         }
 
         public void Set(int x, int y, string value, string changer)
@@ -210,7 +212,7 @@ namespace Triggernometry.Variables
             return v != null ? v : new VariableScalar();
         }
 
-        public void Append(VariableTable vt, string changer)
+        public void AppendVertical(VariableTable vt, string changer)
         {
             if (vt.Height == 0)
             {
@@ -226,6 +228,27 @@ namespace Triggernometry.Variables
                     Rows[my].Values[x] = vt.Rows[y].Values[x];
                 }
                 my++;
+            }
+            LastChanger = changer;
+            LastChanged = DateTime.Now;
+        }
+
+        public void AppendHorizontal(VariableTable vt, string changer)
+        {
+            if (vt.Width == 0)
+            {
+                return;
+            }
+            int newWidth = Width + vt.Width;
+            int maxHeight = Math.Max(Height, vt.Height);
+            Resize(newWidth, maxHeight);
+
+            for (int y = 0; y < vt.Height; y++)
+            {
+                for (int x = 0; x < vt.Width; x++)
+                {
+                    Rows[y].Values[Width - vt.Width + x] = vt.Rows[y].Values[x];
+                }
             }
             LastChanger = changer;
             LastChanged = DateTime.Now;
@@ -336,6 +359,11 @@ namespace Triggernometry.Variables
                 sb.AppendLine(String.Join(colJoiner, temp));
             }
             return sb.ToString().TrimEnd('\r', '\n');
+        }
+
+        public override string ToString()
+        {
+            return String.Join("|", Rows.Select(row => string.Join(",", row.Values)));
         }
 
         public double Sum(List<int> colIndices, List<int> rowIndices)
@@ -557,7 +585,7 @@ namespace Triggernometry.Variables
         }
 
         public static VariableTable BuildTemp(string expression)
-        {   // in expressions: ${?t: 1, 2;  3, 4;  5, 6 [xxx][xxx]}
+        {   // in expressions: ${?t: 1, 2 | 3, 4 | 5, 6 [xxx][xxx]}
             string[] rowStrings = Context.SplitArguments(expression, separator: "|");
             List<string[]> cellStrings = new List<string[]>();
             int width = 0;

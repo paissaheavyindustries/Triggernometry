@@ -17,9 +17,10 @@ namespace Triggernometry.Variables
         [XmlArrayItem(ElementName = "VariableTable", Type = typeof(VariableTable))]
         public List<Variable> Values { get; set; } = new List<Variable>();
 
-        public VariableList()
-        {
-        }
+        public VariableList() { }
+        public VariableList(IEnumerable<string> values) { Values = values.Select(v => (Variable)new VariableScalar(v)).ToList(); }
+        public VariableList(IEnumerable<double> values) : this(values.Select(v => v.ToString(CultureInfo.InvariantCulture))) { }
+        public VariableList(IEnumerable<int> values) : this(values.Select(v => v.ToString(CultureInfo.InvariantCulture))) { }
 
         public int Size
         {

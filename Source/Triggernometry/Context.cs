@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using Triggernometry.Variables;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace Triggernometry
 {
@@ -16,7 +17,7 @@ namespace Triggernometry
     {
 
         internal Guid id = Guid.NewGuid();
-        internal bool testmode;
+        internal bool testByPlaceholder;
         internal RealPlugin plug;
         public Trigger trig { get; set; }
         internal Action.TriggerForceTypeEnum force;
@@ -37,13 +38,13 @@ namespace Triggernometry
         internal static Regex rexFunc           // name(arg)?:val
             = new Regex(@"^(?<name>[^(:]+)(?:\((?<arg>[^)]*)\))?:(?<val>.*)$");        
         internal static Regex rexProp           // name.prop(arg)?
-            = new Regex(@"^(?<name>.+)\.(?<prop>[^(]+?)(?:\((?<arg>[^)]*)\))? *$");
+            = new Regex(@"^(?<name>.+?)\.(?<prop>[^([.]+?)(?:\((?<arg>[^)]*)\))? *$");
         internal static Regex rexListProp       // name?[index].prop(arg)?
-            = new Regex(@"^(?<name>[^[]*)\[(?<index>[^[\]]*?)\]\.(?<prop>[^(]+?)(?:\((?<arg>[^)]*)\))? *$");
-        internal static Regex rexTableProp      // name?[col][row].prop(arg)?
-            = new Regex(@"^(?<name>[^[]*)\[(?<column>[^[\]]*)\]\[(?<row>[^[\]]*)\]\.(?<prop>[^(]+?)(?:\((?<arg>[^)]*)\))? *$");
+            = new Regex(@"^(?<name>[^[]*)\[(?<index>[^[\]]*?)\]\.(?<prop>[^([]+?)(?:\((?<arg>[^)]*)\))? *$");
+        internal static Regex rexTableProp      // name?[index1][index2].prop(arg)?
+            = new Regex(@"^(?<name>[^[]*)\[(?<column>[^[\]]*)\]\[(?<row>[^[\]]*)\]\.(?<prop>[^([]+?)(?:\((?<arg>[^)]*)\))? *$");
         internal static Regex rexExistVar       // evar: / epvar: / elvar: ...
-            = new Regex(@"^e(?<persist>p?)(?<type>[vltd]|text|image)(?:v?ar)?:(?<name>.*)$");
+            = new Regex(@"^e(?<persist>p?)(?<type>[vltd]|text|image|callback|storage)(?:v?ar)?:(?<name>.*)$");
         // for splitting arguments:
         internal static Regex reSplitArgComma = new Regex("(?<=^|,)( *\"[^\"]*\" *| *'[^']*' *|[^,]*)(?=$|,)");
         internal static Regex reSplitArgEqual = new Regex("(?<=^|=)( *\"[^\"]*\" *| *'[^']*' *|[^=]*)(?=$|=)");
@@ -51,7 +52,7 @@ namespace Triggernometry
         internal static Regex reDQuotedArg = new Regex("^ *\"(?<arg>[^\"]*)\" *$");
         internal static Regex reSQuotedArg = new Regex("^ *'(?<arg>[^']*)' *$");
 
-        internal static Regex reParseDmg = new Regex("^(?:[0-9A-Fa-f]{1,8})$");
+        internal static Regex reHex8 = new Regex("^[0-9A-Fa-f]{1,8}$");
 
         internal Dictionary<string, string> namedgroups;
         internal List<string> numgroups;
@@ -74,11 +75,11 @@ namespace Triggernometry
         internal string dictKey { get; set; } = "";         // for ${_key}
         internal string dictValue { get; set; } = "";       // for ${_val}
 
-        internal const double EORZEA_MULTIPLIER = 3600D / 175D;
-        internal const string LINEBREAK_PLACEHOLDER = "⏎";
+        public const double EORZEA_MULTIPLIER = 3600D / 175D;
+        public const string LINEBREAK_PLACEHOLDER = "⏎";
         private static readonly CultureInfo InvClt = CultureInfo.InvariantCulture;
         private static readonly NumberStyles NSFloat = NumberStyles.Float;
-        internal Random rng = new Random();
+        public Random rng = new Random();
 
         public Context()
         {
@@ -132,7 +133,7 @@ namespace Triggernometry
 
         public double EvaluateNumericExpression(LoggerDelegate logger, object o, string expr)
         {
-            string exp = ExpandVariables(logger, o, true, expr == null ? "" : expr);
+            string exp = ExpandVariables(logger, o, true, expr ?? "");
             if (plug != null)
             {
                 exp = plug.cfg.PerformSubstitution(exp, Configuration.Substitution.SubstitutionScopeEnum.NumericExpression);
@@ -142,7 +143,7 @@ namespace Triggernometry
 
         public string EvaluateStringExpression(LoggerDelegate logger, object o, string expr)
         {
-            string exp = ExpandVariables(logger, o, false, expr == null ? "" : expr);
+            string exp = ExpandVariables(logger, o, false, expr ?? "");
             if (plug != null)
             {
                 exp = plug.cfg.PerformSubstitution(exp, Configuration.Substitution.SubstitutionScopeEnum.StringExpression);
@@ -152,7 +153,7 @@ namespace Triggernometry
 
         public delegate void LoggerDelegate(object o, string msg);
 
-        internal static TimeSpan GetEorzeanTime()
+        public static TimeSpan GetEorzeanTime()
         {
             long epochTicks = DateTime.UtcNow.Ticks - (new DateTime(1970, 1, 1).Ticks);
             long eorzeaTicks = (long)Math.Round(epochTicks * EORZEA_MULTIPLIER);
@@ -294,7 +295,7 @@ namespace Triggernometry
             foreach (string slice in slices)
             {   // parse slice string to int start/end/step
                 string[] sliceArgs = slice.Split(':').Select(s => s.Trim()).ToArray();
-                if (sliceArgs.Length > 3) { ArgCountError(I18n.TrlSlice(), "0-3", sliceArgs.Length, rawExpr); }
+                if (sliceArgs.Length > 3) { throw ArgCountError(I18n.TranslateWord("slice"), "0-3", sliceArgs.Length, rawExpr); }
 
                 string startStr = GetArgument(sliceArgs, 0, "", true);
                 string endStr = GetArgument(sliceArgs, 1, "", true);
@@ -317,7 +318,7 @@ namespace Triggernometry
                         // sliceArgs.Length = 2:  a:b, a:, :b, :
                         // sliceArgs.Length = 0:  "" (= ":")
                         step = int.Parse(stepStr, InvClt);
-                        if (step == 0) { InvalidValueError(I18n.TrlSlice(), "step", "0", rawExpr); }
+                        if (step == 0) { throw InvalidValueError(I18n.TranslateWord("slice"), "step", "0", rawExpr); }
                         if (startStr != "")
                         {   // `start` value given: apply the negative-index and startIndex logics
                             start = int.Parse(startStr, InvClt);
@@ -338,7 +339,7 @@ namespace Triggernometry
                         }
                     }
                 }
-                catch { ParseTypeError(I18n.TrlString(), slice, I18n.TrlSlice(), rawExpr); }
+                catch { throw ParseTypeError(I18n.TranslateWord("string"), slice, I18n.TranslateWord("slice"), rawExpr); }
 
                 // fix the out-of-range early start value / late end value
                 if (step > 0)
@@ -429,7 +430,7 @@ namespace Triggernometry
             type = (GetArgument(args, 0, "n") + " ").Substring(0, 1);
             if (type != "n" && type != "s" && type != "h")
             {
-                InvalidValueError(gprop, "type", type, expr);
+                throw InvalidValueError(gprop, "type", type, expr);
             }
             isMin = gprop.StartsWith("min");
         }
@@ -437,47 +438,16 @@ namespace Triggernometry
         private string ExtremumGetResult(List<string> strings, string type, bool isMin,
             string varName, string funcName, string totalExpression)
         {
-            if (strings.Count == 0) { ExtremumListZeroElementError(varName, totalExpression); }
+            if (strings.Count == 0) { throw ExtremumListZeroElementError(varName, totalExpression); }
             string result = null;
             switch (type)
             {
-                case "n": result = GetExtremumNum(strings, isMin); type = I18n.TrlDouble(); break;
-                case "h": result = GetExtremumHex(strings, isMin); type = I18n.TrlHex(); break;
-                case "s": result = GetExtremumStr(strings, isMin); type = I18n.TrlString(); break;
+                case "n": result = GetExtremumNum(strings, isMin); type = I18n.TranslateWord("double"); break;
+                case "h": result = GetExtremumHex(strings, isMin); type = I18n.TranslateWord("hex"); break;
+                case "s": result = GetExtremumStr(strings, isMin); type = I18n.TranslateWord("string"); break;
             }
-            if (result == null) { ExtremumParseTypeError(funcName, type, totalExpression); }
+            if (result == null) { throw ExtremumParseTypeError(funcName, type, totalExpression); }
             return result;
-        }
-
-        private static bool TryParseEntityHexId(Match match, bool isParty, out VariableDictionary entity, out string gindex, out string gprop)
-        {
-            gindex = match.Groups["index"].Value.Trim();
-            gprop = match.Groups["prop"].Value.Trim();
-            entity = null;
-            bool foundid = false;
-            if (Int64.TryParse(gindex, NumberStyles.HexNumber, InvClt, out Int64 _))
-            {
-                entity = isParty ? PluginBridges.BridgeFFXIV.GetIdPartyMember(gindex, out foundid)
-                                 : PluginBridges.BridgeFFXIV.GetIdEntity(gindex, out foundid);
-            }
-            return foundid;
-        }
-
-        public static string GetEntityProperty(VariableDictionary entity, string property)
-        {
-            if (entity != null)
-            {
-                if (Entity.jobs["1"].ContainsKey(property))
-                {
-                    string jobid = entity.GetValue("jobid").ToString();
-                    return Entity.jobs[jobid][property].ToString();
-                }
-                else
-                {
-                    return entity.GetValue(property).ToString();
-                }
-            }
-            return null;
         }
 
         /// <summary> use "⏎" as a single-digit placeholder for linebreaks
@@ -488,7 +458,7 @@ namespace Triggernometry
         }
 
         /// <summary> replace linebreaks with the placeholder when converting charcode to char </summary>
-        public static char GetReplacedChar(int charcode)
+        private static char GetReplacedChar(int charcode)
         {   
             return (charcode == 10 || charcode == 13) ? LINEBREAK_PLACEHOLDER[0] : (char)charcode;
         }
@@ -498,7 +468,7 @@ namespace Triggernometry
         /// __LP__ / '（' => '(';   __RP__ / '）' => ')';
         /// __FLB__ => '｛';        __FRB__ => '｝'; 
         /// __FLP__ => '（';        __FRP__ => '）';
-        public static string UnescapeCustomExpr(string rawExpr)
+        private static string UnescapeCustomExpr(string rawExpr)
         {
             StringBuilder sb = new StringBuilder(rawExpr);
             sb.Replace("__LB__", "{").Replace("__RB__", "}")
@@ -514,7 +484,7 @@ namespace Triggernometry
         {
             Match m, mx;
             string newexpr = expr;
-            newexpr = ReplaceLineBreak(newexpr);
+            newexpr = ReplaceLineBreak(newexpr); // replace back after parsed
 
             int i = 1;
             while (true)
@@ -531,7 +501,7 @@ namespace Triggernometry
                 string x = m.Groups["id"].Value;
                 string val = "";
                 bool found = false;
-                if (testmode == true)
+                if (testByPlaceholder == true)
                 {
                     if (x == "_since")
                     {
@@ -709,6 +679,24 @@ namespace Triggernometry
                             val = $"${{{varName}[{colIndex}][{tableRowIndex}]}}";
                             found = true;
                         }
+                        else if (x.StartsWith("_colrl["))
+                        {
+                            int colonIndex = varName.IndexOf(":");
+                            string prefix = varName.Substring(0, colonIndex) + "dl" + varName.Substring(colonIndex);
+                            string colHeader = $"${{{varName}[{tableColIndex}][1]}}";
+                            string rowHeader = x.Substring(7, x.Length - 8);
+                            val = $"${{{prefix}[{colHeader}][{rowHeader}]}}";
+                            found = true;
+                        }
+                        else if (x.StartsWith("_rowcl["))
+                        {
+                            int colonIndex = varName.IndexOf(":");
+                            string prefix = varName.Substring(0, colonIndex) + "dl" + varName.Substring(colonIndex);
+                            string colHeader = x.Substring(7, x.Length - 8);
+                            string rowHeader = $"${{{varName}[1][{tableRowIndex}]}}";
+                            val = $"${{{prefix}[{colHeader}][{rowHeader}]}}";
+                            found = true;
+                        }
                         else if (x == "_key")
                         {
                             val = dictKey;
@@ -748,6 +736,16 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
+                        else if (x == "_configpath")
+                        {
+                            val = RealPlugin.plug.path;
+                            found = true;
+                        }
+                        else if (x == "_pluginpath")
+                        {
+                            val = RealPlugin.plug.pluginPath;
+                            found = true;
+                        }
                         else if (x.StartsWith("_env"))
                         {
                             mx = rexListIdx.Match(x);
@@ -758,6 +756,28 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
+                        else if (x.StartsWith("_storage["))
+                        {
+                            mx = rexListIdx.Match(x);
+                            if (mx.Success)
+                            {
+                                string key = mx.Groups["index"].Value.Trim();
+                                Dictionary<string, object> storage = plug.scriptingStorage;
+
+                                if (!storage.ContainsKey(key))
+                                    val = "";
+                                else
+                                {
+                                    object item = storage[key];
+                                    Type type = item.GetType();
+                                    if (type.IsPrimitive && type != typeof(char) || type == typeof(decimal) || type == typeof(string))
+                                        val = Convert.ChangeType(item, type, InvClt).ToString();
+                                    else
+                                        val = item.ToString();
+                                }
+                            }
+                            found = true;
+                        }
                         else if (x.StartsWith("_job[")) // ${_job[jobid].prop} or ${_job[Name].prop}
                         {
                             mx = rexListProp.Match(x);
@@ -766,11 +786,11 @@ namespace Triggernometry
                                 string rawJob = mx.Groups["index"].Value.Trim();
                                 if (!Entity.jobNameToIdMap.ContainsKey(rawJob.ToLower()))
                                 {
-                                    InvalidValueError("_job", "key", rawJob, x);
+                                    throw InvalidValueError("_job", "key", rawJob, x);
                                 }
                                 string jobid = Entity.jobNameToIdMap[rawJob.ToLower()];
                                 string prop = mx.Groups["prop"].Value;
-                                val = Entity.jobs[jobid][prop].ToString();
+                                val = Entity.jobs[jobid][prop];
                             }
                             found = true;
                         }
@@ -810,16 +830,17 @@ namespace Triggernometry
                                     case "DeveloperMode": val = plug.cfg.DeveloperMode ? "1" : "0"; break;
                                     case "Autosave": val = plug.cfg.AutosaveEnabled ? plug.cfg.AutosaveInterval.ToString(InvClt) : "0"; break;
                                     case "Language": val = plug.cfg.Language; break;
+                                    case "UnsafeUsage": val = ((int)plug.cfg.UnsafeUsage).ToString(); break;
                                     default:
                                         try
                                         {
                                             foreach (var api in plug.cfg.GetAPIUsages())
                                             {
                                                 if (api.Name == idx)
-                                                    val = (api.AllowLocal ? "1" : "0") + (api.AllowRemote ? "1" : "0") + (api.AllowAdmin ? "1" : "0");
+                                                    val = ((api.AllowLocal ? 1 : 0) + (api.AllowRemote ? 2 : 0) + (api.AllowAdmin ? 4 : 0)).ToString();
                                             }
                                         }
-                                        catch { InvalidValueError("_config", I18n.TrlKey(), idx, x); }
+                                        catch { throw InvalidValueError("_config", I18n.TranslateWord("key"), idx, x); }
                                         break;
                                 }
                                 found = true;
@@ -848,11 +869,9 @@ namespace Triggernometry
                             }
                         }
                         // check if variable exists (combined the logic for all types of variable expressions)
-                        // evar  = ev, epvar  = epv;
-                        // elvar = el, eplvar = epl;
-                        // etvar = et, eptvar = ept;
-                        // edvar = ed, epdvar = epd;
-                        // etext, eimage for Auras
+                        // evar  = ev, epvar  = epv;    elvar = el, eplvar = epl;
+                        // etvar = et, eptvar = ept;    edvar = ed, epdvar = epd;
+                        // etext, eimage for Auras;     ecallback for named callbacks;   estorage for script storage
                         else if ((matchExistVar = rexExistVar.Match(x)).Success)
                         {
                             bool persist = matchExistVar.Groups["persist"].Value == "p";
@@ -866,12 +885,24 @@ namespace Triggernometry
                                 case "l": source = store.List; break;
                                 case "t": source = store.Table; break;
                                 case "d": source = store.Dict; break;
-                                case "text": source = plug.sc.textitems; break;
-                                case "image": source = plug.sc.imageitems; break;
+                                case "text":
+                                    if (plug.sc != null)
+                                        source = plug.sc.textitems;
+                                    else
+                                        source = plug.textauras;
+                                    break;
+                                case "image":
+                                    if (plug.sc != null)
+                                        source = plug.sc.imageitems;
+                                    else
+                                        source = plug.imageauras;
+                                    break;
+                                case "callback": source = plug.callbacksByName; break;
+                                case "storage": source = plug.scriptingStorage; break;
                             }
                             lock (source)
                             {
-                                val = /*(source == null) ? "" :*/ source.ContainsKey(varname) ? "1" : "0";
+                                val = (source == null) ? "" : source.ContainsKey(varname) ? "1" : "0";
                             }
                             found = true;
                         }
@@ -922,7 +953,7 @@ namespace Triggernometry
                                     case "indexof":
                                     case "i":
                                     case "lastindexof":
-                                        if (argc != 1) { ArgCountError(gprop, "1", argc, x); }
+                                        if (argc != 1) { throw ArgCountError(gprop, "1", argc, x); }
                                         lock (store.List)
                                         {
                                             VariableList vl = GetListVariable(store, gname, false);
@@ -932,7 +963,7 @@ namespace Triggernometry
                                         break;
                                     case "indicesof":
                                         {
-                                            if (argc == 0 || argc > 3) { ArgCountError(gprop, "1-3", argc, x); }
+                                            if (argc == 0 || argc > 3) { throw ArgCountError(gprop, "1-3", argc, x); }
                                             string joiner = GetArgument(args, 1, defaultValue: ",");
                                             string slicesStr = GetArgument(args, 2, defaultValue: ":");
                                             lock (store.List)
@@ -946,7 +977,7 @@ namespace Triggernometry
                                         break;
                                     case "sum":  // lvar:list.sum(slices = ":")
                                         {
-                                            if (argc > 1) { ArgCountError(gprop, "0-1", argc, x); }
+                                            if (argc > 1) { throw ArgCountError(gprop, "0-1", argc, x); }
                                             string slicesStr = GetArgument(args, 0, ":");
                                             lock (store.List)
                                             {
@@ -960,7 +991,7 @@ namespace Triggernometry
                                     case "min":  // lvar:list.min(type = "n", slices = ":")  num = "n" / str = "s" / hex = "h"
                                     case "max":
                                         {
-                                            if (argc > 2) { ArgCountError(gprop, "0-2", argc, x); }
+                                            if (argc > 2) { throw ArgCountError(gprop, "0-2", argc, x); }
                                             ExtremumInit(args, gprop, x, out string type, out bool isMin);
                                             string slicesStr = GetArgument(args, 1, ":");
                                             List<string> strings;
@@ -977,7 +1008,7 @@ namespace Triggernometry
                                     case "join":        // lvar:list.join(joiner = ",", slices = ":")
                                     case "randjoin":    // lvar:list.randjoin(joiner = ",", slices = ":")
                                         {
-                                            if (argc > 2) { ArgCountError(gprop, "0-2", argc, x); }
+                                            if (argc > 2) { throw ArgCountError(gprop, "0-2", argc, x); }
                                             string joiner = GetArgument(args, 0, ",");
                                             string slicesStr = GetArgument(args, 1, ":");
                                             lock (store.List)
@@ -995,7 +1026,7 @@ namespace Triggernometry
                                         break;
                                     case "count": // count(targetStr, slices = ":")
                                         {
-                                            if (argc != 1 && argc != 2) { ArgCountError(gprop, "1-2", argc, x); }
+                                            if (argc != 1 && argc != 2) { throw ArgCountError(gprop, "1-2", argc, x); }
                                             var slicesStr = GetArgument(args, 1, ":");
                                             lock (store.List)
                                             {
@@ -1008,7 +1039,7 @@ namespace Triggernometry
                                         break;
                                     case "contain":
                                         {
-                                            if (argc != 1 && argc != 2) { ArgCountError(gprop, "1-2", argc, x); }
+                                            if (argc != 1 && argc != 2) { throw ArgCountError(gprop, "1-2", argc, x); }
                                             string slicesStr = GetArgument(args, 1, ":");
                                             lock (store.List)
                                             {
@@ -1020,7 +1051,7 @@ namespace Triggernometry
                                         }
                                         break;
                                     case "ifcontain":
-                                        if (argc != 3) { ArgCountError(gprop, "3", argc, x); }
+                                        if (argc != 3) { throw ArgCountError(gprop, "3", argc, x); }
                                         lock (store.List)
                                         {
                                             VariableList vl = GetListVariable(store, gname, false);
@@ -1046,7 +1077,7 @@ namespace Triggernometry
                                     }
                                     if (!int.TryParse(gindex, NSFloat, InvClt, out int iindex))
                                     {
-                                        ParseTypeError(I18n.TrlIndex(), gindex, I18n.TrlInt(), x);
+                                        throw ParseTypeError(I18n.TranslateWord("index"), gindex, I18n.TranslateWord("int"), x);
                                     }
                                     lock (store.List)
                                     {
@@ -1093,7 +1124,7 @@ namespace Triggernometry
                                         break;
                                     case "ekey":
                                     case "evalue":
-                                        if (argc != 1) { ArgCountError(gprop, "1", argc, x); }
+                                        if (argc != 1) { throw ArgCountError(gprop, "1", argc, x); }
                                         lock (store.Dict)
                                         {
                                             VariableDictionary vd = GetDictVariable(store, gname, false);
@@ -1104,7 +1135,7 @@ namespace Triggernometry
                                         break;
                                     case "ifekey":
                                     case "ifevalue":
-                                        if (argc != 3) { ArgCountError(gprop, "3", argc, x); }
+                                        if (argc != 3) { throw ArgCountError(gprop, "3", argc, x); }
                                         lock (store.Dict)
                                         {
                                             VariableDictionary vd = GetDictVariable(store, gname, false);
@@ -1115,7 +1146,7 @@ namespace Triggernometry
                                         break;
                                     case "count": // count(value)
                                         {
-                                            if (argc != 1) { ArgCountError(gprop, "1", argc, x); }
+                                            if (argc != 1) { throw ArgCountError(gprop, "1", argc, x); }
                                             lock (store.Dict)
                                             {
                                                 VariableDictionary vd = GetDictVariable(store, gname, false);
@@ -1125,7 +1156,7 @@ namespace Triggernometry
                                         }
                                         break;
                                     case "keyof":
-                                        if (argc != 1) { ArgCountError(gprop, "1", argc, x); }
+                                        if (argc != 1) { throw ArgCountError(gprop, "1", argc, x); }
                                         lock (store.Dict)
                                         {
                                             VariableDictionary vd = GetDictVariable(store, gname, false);
@@ -1134,7 +1165,7 @@ namespace Triggernometry
                                         }
                                         break;
                                     case "keysof":
-                                        if (argc != 1 && argc != 2) { ArgCountError(gprop, "1-2", argc, x); }
+                                        if (argc != 1 && argc != 2) { throw ArgCountError(gprop, "1-2", argc, x); }
                                         lock (store.Dict)
                                         {
                                             VariableDictionary vd = GetDictVariable(store, gname, false);
@@ -1145,7 +1176,7 @@ namespace Triggernometry
                                         break;
                                     case "joinkeys":
                                     case "joinvalues":
-                                        if (argc > 1) { ArgCountError(gprop, "0-1", argc, x); }
+                                        if (argc > 1) { throw ArgCountError(gprop, "0-1", argc, x); }
                                         lock (store.Dict)
                                         {
                                             VariableDictionary vd = GetDictVariable(store, gname, false);
@@ -1154,7 +1185,7 @@ namespace Triggernometry
                                         }
                                         break;
                                     case "joinall":
-                                        if (argc > 2) { ArgCountError(gprop, "0-2", argc, x); }
+                                        if (argc > 2) { throw ArgCountError(gprop, "0-2", argc, x); }
                                         lock (store.Dict)
                                         {
                                             VariableDictionary vd = GetDictVariable(store, gname, false);
@@ -1165,7 +1196,7 @@ namespace Triggernometry
                                         break;
                                     case "sumkeys":
                                     case "sum": // sum values
-                                        if (argc > 0) { ArgCountError(gprop, "0", argc, x); }
+                                        if (argc > 0) { throw ArgCountError(gprop, "0", argc, x); }
                                         lock (store.Dict)
                                         {
                                             VariableDictionary vd = GetDictVariable(store, gname, false);
@@ -1178,7 +1209,7 @@ namespace Triggernometry
                                     case "min":  // dvar:list.min(type = "n")  num = "n" / str = "s" / hex = "h"
                                     case "max":
                                         {
-                                            if (argc > 1) { ArgCountError(gprop, "0-1", argc, x); }
+                                            if (argc > 1) { throw ArgCountError(gprop, "0-1", argc, x); }
                                             ExtremumInit(args, gprop, x, out string type, out bool isMin);
                                             List<string> strings;
                                             lock (store.Dict)
@@ -1188,33 +1219,6 @@ namespace Triggernometry
                                                                                   : vd.Values.Values.Select(var => var.ToString()).ToList();
                                             }
                                             val = ExtremumGetResult(strings, type, isMin, gname, gprop, x);
-                                            found = true;
-                                        }
-                                        break;
-                                    case "contain":
-                                        {
-                                            if (argc == 0 || argc > 3) { ArgCountError(gprop, "1-3", argc, x); }
-                                            string colSlicesStr = GetArgument(args, 1, ":");
-                                            string rowSlicesStr = GetArgument(args, 2, ":");
-                                            lock (store.Dict)
-                                            {
-                                                VariableTable vt = GetTableVariable(store, gname, false);
-                                                List<int> colIndices = GetSliceIndices(colSlicesStr, vt.Width, x, startIndex: 1);
-                                                List<int> rowIndices = GetSliceIndices(rowSlicesStr, vt.Height, x, startIndex: 1);
-                                                val = (colIndices.Any(col => rowIndices.Any(
-                                                    row => vt.Rows[row].Values[col].ToString() == args[0])
-                                                )) ? "1" : "0";
-                                                found = true;
-                                            }
-                                        }
-                                        break;
-                                    case "ifcontain":
-                                        if (argc != 3) { ArgCountError(gprop, "3", argc, x); }
-                                        lock (store.Table)
-                                        {
-                                            VariableTable vt = GetTableVariable(store, gname, false);
-                                            val = vt.Rows.SelectMany(row => row.Values).Any(cell => cell.ToString() == args[0])
-                                                ? args[1] : args[2];
                                             found = true;
                                         }
                                         break;
@@ -1291,7 +1295,7 @@ namespace Triggernometry
                                         break;
                                     case "hjoin": // .hjoin(joiner1 = ",", joiner2 = LINEBREAK_PLACEHOLDER, colSlices = ":", rowSlices = ":")
                                     case "vjoin": // .vjoin(joiner1 = ",", joiner2 = LINEBREAK_PLACEHOLDER, colslices = ":", rowslices = ":")
-                                        if (argc > 4) { ArgCountError(gprop, "0-4", argc, x); }
+                                        if (argc > 4) { throw ArgCountError(gprop, "0-4", argc, x); }
                                         lock (store.Table)
                                         {
                                             VariableTable vt = GetTableVariable(store, gname, false);
@@ -1316,14 +1320,14 @@ namespace Triggernometry
                                     case "hlookup": // .hlookup(targetStr, rowIndex, colslices = ":") => colIndex
                                     case "vl":
                                     case "vlookup": // .vlookup(targetStr, colIndex, rowslices = ":") => rowIndex
-                                        if (argc != 2 && argc != 3) { ArgCountError(gprop, "2-3", argc, x); }
+                                        if (argc != 2 && argc != 3) { throw ArgCountError(gprop, "2-3", argc, x); }
                                         lock (store.Table)
                                         {
                                             VariableTable vt = GetTableVariable(store, gname, false);
                                             string targetStr = args[0];
                                             if (!int.TryParse(args[1], NSFloat, InvClt, out int rawIndex))
                                             {
-                                                ParseTypeError(I18n.TrlString(), args[1], I18n.TrlInt(), x);
+                                                throw ParseTypeError(I18n.TranslateWord("string"), args[1], I18n.TranslateWord("int"), x);
                                             }
                                             int maxLength = (gprop.StartsWith("hl")) ? vt.Height : vt.Width;
                                             int index = (rawIndex < 0) ? (rawIndex + maxLength) : (rawIndex - 1);
@@ -1345,7 +1349,7 @@ namespace Triggernometry
                                         break;
                                     case "count": // count(targetStr, colslices = ":", rowslices = ":")
                                         {
-                                            if (argc == 0 || argc > 3) { ArgCountError(gprop, "1-3", argc, x); }
+                                            if (argc == 0 || argc > 3) { throw ArgCountError(gprop, "1-3", argc, x); }
                                             var colSlicesStr = GetArgument(args, 1, ":");
                                             var rowSlicesStr = GetArgument(args, 2, ":");
                                             lock (store.Table)
@@ -1360,7 +1364,7 @@ namespace Triggernometry
                                         break;
                                     case "sum":
                                         {
-                                            if (argc > 2) { ArgCountError(gprop, "0-2", argc, x); }
+                                            if (argc > 2) { throw ArgCountError(gprop, "0-2", argc, x); }
                                             var colSlicesStr = GetArgument(args, 0, ":");
                                             var rowSlicesStr = GetArgument(args, 1, ":");
                                             lock (store.Table)
@@ -1376,7 +1380,7 @@ namespace Triggernometry
                                     case "min":  // tvar:table.min(type = "n", colSlices = ":", rowSlices = ":")  num = "n" / str = "s" / hex = "h"
                                     case "max":
                                         {
-                                            if (argc > 3) { ArgCountError(gprop, "0-3", argc, x); }
+                                            if (argc > 3) { throw ArgCountError(gprop, "0-3", argc, x); }
                                             ExtremumInit(args, gprop, x, out string type, out bool isMin);
                                             string colSlicesStr = GetArgument(args, 1, ":");
                                             string rowSlicesStr = GetArgument(args, 2, ":");
@@ -1391,6 +1395,33 @@ namespace Triggernometry
                                                     ).ToList();
                                             }
                                             val = ExtremumGetResult(strings, type, isMin, gname, gprop, x);
+                                            found = true;
+                                        }
+                                        break;
+                                    case "contain":
+                                        {
+                                            if (argc == 0 || argc > 3) { throw ArgCountError(gprop, "1-3", argc, x); }
+                                            string colSlicesStr = GetArgument(args, 1, ":");
+                                            string rowSlicesStr = GetArgument(args, 2, ":");
+                                            lock (store.Dict)
+                                            {
+                                                VariableTable vt = GetTableVariable(store, gname, false);
+                                                List<int> colIndices = GetSliceIndices(colSlicesStr, vt.Width, x, startIndex: 1);
+                                                List<int> rowIndices = GetSliceIndices(rowSlicesStr, vt.Height, x, startIndex: 1);
+                                                val = (colIndices.Any(col => rowIndices.Any(
+                                                    row => vt.Rows[row].Values[col].ToString() == args[0])
+                                                )) ? "1" : "0";
+                                                found = true;
+                                            }
+                                        }
+                                        break;
+                                    case "ifcontain":
+                                        if (argc != 3) { throw ArgCountError(gprop, "3", argc, x); }
+                                        lock (store.Table)
+                                        {
+                                            VariableTable vt = GetTableVariable(store, gname, false);
+                                            val = vt.Rows.SelectMany(row => row.Values).Any(cell => cell.ToString() == args[0])
+                                                ? args[1] : args[2];
                                             found = true;
                                         }
                                         break;
@@ -1414,11 +1445,11 @@ namespace Triggernometry
                                     }
                                     if (!Int32.TryParse(gcol, NSFloat, InvClt, out int xindex))
                                     {
-                                        ParseTypeError(I18n.TrlIndex(), gcol, I18n.TrlInt(), x);
+                                        throw ParseTypeError(I18n.TranslateWord("index"), gcol, I18n.TranslateWord("int"), x);
                                     }
                                     if (!Int32.TryParse(grow, NSFloat, InvClt, out int yindex))
                                     {
-                                        ParseTypeError(I18n.TrlIndex(), grow, I18n.TrlInt(), x);
+                                        throw ParseTypeError(I18n.TranslateWord("index"), grow, I18n.TranslateWord("int"), x);
                                     }
                                     lock (store.Table)
                                     {
@@ -1444,7 +1475,7 @@ namespace Triggernometry
 
                                 if (!Int32.TryParse(gindex, NSFloat, InvClt, out int xindex))
                                 {
-                                    ParseTypeError(I18n.TrlIndex(), gindex, I18n.TrlInt(), x);
+                                    throw ParseTypeError(I18n.TranslateWord("index"), gindex, I18n.TranslateWord("int"), x);
                                 }
                                 lock (store.Table)
                                 {
@@ -1472,7 +1503,7 @@ namespace Triggernometry
                                 gindex = (gindex == "last") ? "-1" : gindex;
                                 if (!Int32.TryParse(gindex, NSFloat, InvClt, out int yindex))
                                 {
-                                    ParseTypeError(I18n.TrlIndex(), gindex, I18n.TrlInt(), x);
+                                    throw ParseTypeError(I18n.TranslateWord("index"), gindex, I18n.TranslateWord("int"), x);
                                 }
                                 lock (store.Table)
                                 {
@@ -1558,7 +1589,7 @@ namespace Triggernometry
                                             funcval = funcval.Trim();
                                             if (!new Regex("^[0-9A-Fa-f]+$").IsMatch(funcval))
                                             {
-                                                InvalidValueError(funcname, "funcval", funcval, x);
+                                                throw InvalidValueError(funcname, "funcval", funcval, x);
                                             }
                                             switch (funcname)
                                             {
@@ -1579,9 +1610,9 @@ namespace Triggernometry
                                     case "parsedmg": // parse the hex damage in ACT loglines to dec value
                                         {
                                             funcval = funcval.Trim();
-                                            if (!reParseDmg.IsMatch(funcval))
+                                            if (!reHex8.IsMatch(funcval))
                                             {
-                                                InvalidValueError(funcname, "funcval", funcval, x);
+                                                throw InvalidValueError(funcname, "funcval", funcval, x);
                                             }
                                             val = MathParser.ParseDamage(funcval).ToString(InvClt);
                                         }
@@ -1590,7 +1621,7 @@ namespace Triggernometry
                                         {
                                             if (!float.TryParse(funcval, NSFloat, InvClt, out float floatValue))
                                             {
-                                                ParseTypeError(I18n.TrlString(), funcval, I18n.TrlFloat(), x);
+                                                throw ParseTypeError(I18n.TranslateWord("string"), funcval, I18n.TranslateWord("float"), x);
                                             }
                                             byte[] bytesArray = BitConverter.GetBytes(floatValue);
                                             Array.Reverse(bytesArray, 0, bytesArray.Length);
@@ -1601,7 +1632,7 @@ namespace Triggernometry
                                         {
                                             if (!double.TryParse(funcval, NSFloat, InvClt, out double doubleValue))
                                             {
-                                                ParseTypeError(I18n.TrlString(), funcval, I18n.TrlDouble(), x);
+                                                throw ParseTypeError(I18n.TranslateWord("string"), funcval, I18n.TranslateWord("double"), x);
                                             }
                                             Int64 bytesArray = BitConverter.DoubleToInt64Bits(doubleValue);
                                             val = bytesArray.ToString("X");
@@ -1614,7 +1645,7 @@ namespace Triggernometry
                                         {
                                             if (!Int64.TryParse(funcval, NSFloat, InvClt, out Int64 intValue))
                                             {
-                                                ParseTypeError(I18n.TrlString(), funcval, I18n.TrlInt(), x);
+                                                throw ParseTypeError(I18n.TranslateWord("string"), funcval, I18n.TranslateWord("int"), x);
                                             }
                                             string format = funcname.Substring(6).ToUpper(); // "X" "X2" "X4" "X8"
                                             val = intValue.ToString(format);
@@ -1623,7 +1654,7 @@ namespace Triggernometry
                                     case "padleft":
                                     case "padright":
                                         {
-                                            if (argc != 2) { ArgCountError(funcname, "2", argc, x); }
+                                            if (argc != 2) { throw ArgCountError(funcname, "2", argc, x); }
                                             char paddingChar = (args[0].Length == 1) ? args[0][0] : GetReplacedChar(Int32.Parse(args[0], InvClt));
                                             int length = Int32.Parse(args[1], InvClt);
 
@@ -1635,10 +1666,10 @@ namespace Triggernometry
                                         break;
                                     case "repeat": // repeat(times, joiner = "")
                                         {
-                                            if (argc != 1 && argc != 2) { ArgCountError(funcname, "1-2", argc, x); }
+                                            if (argc != 1 && argc != 2) { throw ArgCountError(funcname, "1-2", argc, x); }
                                             if (!Int32.TryParse(args[0], NSFloat, InvClt, out int times))
                                             {
-                                                ParseTypeError(I18n.TrlTimes(), args[0], I18n.TrlInt(), x);
+                                                throw ParseTypeError(I18n.TranslateWord("times"), args[0], I18n.TranslateWord("int"), x);
                                             }
                                             string joiner = GetArgument(args, 1, "");
                                             if (times == 0)
@@ -1664,10 +1695,10 @@ namespace Triggernometry
                                         break;
                                     case "replace": // replace(oldStr, newStr = "", isLooped = false)
                                         {
-                                            if (argc == 0 || argc > 3) { ArgCountError(funcname, "1-3", argc, x); }
+                                            if (argc == 0 || argc > 3) { throw ArgCountError(funcname, "1-3", argc, x); }
 
                                             string oldStr = args[0];
-                                            if (oldStr == "") { InvalidValueError(funcname, "oldString", oldStr, x); }
+                                            if (oldStr == "") { throw InvalidValueError(funcname, "oldString", oldStr, x); }
 
                                             string newStr = GetArgument(args, 1, "");
                                             if (newStr == oldStr) { break; }
@@ -1675,11 +1706,11 @@ namespace Triggernometry
                                             string isLoopedStr = GetArgument(args, 2, "false");
                                             if (!bool.TryParse(isLoopedStr, out bool isLooped))
                                             {
-                                                ParseTypeError("isLooped", isLoopedStr, I18n.TrlBool(), x);
+                                                throw ParseTypeError("isLooped", isLoopedStr, I18n.TranslateWord("bool"), x);
                                             }
                                             if (newStr.Contains(oldStr) && isLooped)
                                             {
-                                                InfiniteRepeatError(newStr, oldStr, x);
+                                                throw InfiniteRepeatError(newStr, oldStr, x);
                                             }
 
                                             val = funcval.Replace(oldStr, newStr);
@@ -1691,10 +1722,10 @@ namespace Triggernometry
                                         break;
                                     case "substring": // substring(startindex, length) or substring(startindex)
                                         {
-                                            if (argc != 1 && argc != 2) { ArgCountError(funcname, "1-2", argc, x); }
+                                            if (argc != 1 && argc != 2) { throw ArgCountError(funcname, "1-2", argc, x); }
                                             if (!int.TryParse(args[0], NSFloat, InvClt, out int startIndex))
                                             {
-                                                ParseTypeError(I18n.TrlStartIndex(), args[0], I18n.TrlInt(), x);
+                                                throw ParseTypeError(I18n.TranslateWord("startIndex"), args[0], I18n.TranslateWord("int"), x);
                                             }
                                             if (startIndex < 0)
                                             {
@@ -1708,7 +1739,7 @@ namespace Triggernometry
                                                 case 2:
                                                     if (!int.TryParse(args[1], NSFloat, InvClt, out int length))
                                                     {
-                                                        ParseTypeError(I18n.TrlLength(), args[1], I18n.TrlInt(), x);
+                                                        throw ParseTypeError(I18n.TranslateWord("length"), args[1], I18n.TranslateWord("int"), x);
                                                     }
                                                     val = funcval.Substring(startIndex, length);
                                                     break;
@@ -1717,7 +1748,7 @@ namespace Triggernometry
                                         }
                                     case "slice":  // slice(slices = ":") 
                                         {
-                                            if (argc > 1) { ArgCountError(funcname, "0-1", argc, x); }
+                                            if (argc > 1) { throw ArgCountError(funcname, "0-1", argc, x); }
                                             string slicesStr = GetArgument(args, 0, ":");
                                             var indices = GetSliceIndices(slicesStr, funcval.Length, x, startIndex: 0);
                                             StringBuilder sb = new StringBuilder();
@@ -1730,13 +1761,14 @@ namespace Triggernometry
                                         }
                                     case "pick": // pick(index, splitter = ",")
                                         {
-                                            if (argc != 1 && argc != 2) { ArgCountError(funcname, "1-2", argc, x); }
+                                            if (argc != 1 && argc != 2) { throw ArgCountError(funcname, "1-2", argc, x); }
                                             string separator = GetArgument(args, 1, ",");
-                                            string[] strArray = SplitArguments(val); 
-                                            int index = Int32.Parse(args[0], InvClt);
-                                            int normIndex = (index < 0) ? (index + strArray.Length) : index;
+                                            string[] strArray = SplitArguments(funcval, separator: separator);
+                                            if (!int.TryParse(args[0], NSFloat, InvClt, out int index))
+                                            { throw ParseTypeError(I18n.TranslateWord("index"), args[0], I18n.TranslateWord("int"), x); }
 
-                                            val = (normIndex >= 0 || normIndex < strArray.Length)
+                                            int normIndex = (index < 0) ? (index + strArray.Length) : index;
+                                            val = (normIndex >= 0 && normIndex < strArray.Length)
                                                 ? strArray[normIndex] : "";
                                         }
                                         break;
@@ -1747,14 +1779,14 @@ namespace Triggernometry
                                     case "indexof":      // indexof(stringtosearch)
                                     case "lastindexof":  // lastindexof(stringtosearch)
                                         {
-                                            if (argc != 1) { ArgCountError(funcname, "1", argc, x); }
+                                            if (argc != 1) { throw ArgCountError(funcname, "1", argc, x); }
                                             int index = (funcname.StartsWith("i")) ? funcval.IndexOf(args[0]) : funcval.LastIndexOf(args[0]);
                                             val = I18n.ThingToString(index);
                                         }
                                         break;
                                     case "indicesof":
                                         {
-                                            if (argc == 0 || argc > 3) { ArgCountError(funcname, "1-3", argc, x); }
+                                            if (argc == 0 || argc > 3) { throw ArgCountError(funcname, "1-3", argc, x); }
                                             string targetStr = args[0];
                                             int subLength = targetStr.Length;
                                             int totalLength = funcval.Length;
@@ -1775,11 +1807,11 @@ namespace Triggernometry
                                             break;
                                         }
                                     case "compare": // compare(stringtocompare) or compare(stringtocompare, ignorecase)
-                                        if (argc != 1 && argc != 2) { ArgCountError(funcname, "1-2", argc, x); }
+                                        if (argc != 1 && argc != 2) { throw ArgCountError(funcname, "1-2", argc, x); }
                                         string ignoreCaseStr = GetArgument(args, 1, "true");
                                         if (!bool.TryParse(ignoreCaseStr, out bool ignoreCase))
                                         {
-                                            ParseTypeError("ignoreCase", ignoreCaseStr, I18n.TrlBool(), x);
+                                            throw ParseTypeError("ignoreCase", ignoreCaseStr, I18n.TranslateWord("bool"), x);
                                         }
                                         val = "" + String.Compare(funcval, args[0], ignoreCase);
                                         break;
@@ -1788,7 +1820,7 @@ namespace Triggernometry
                                     case "endwith":
                                     case "equal":
                                         {
-                                            if (argc != 1) { ArgCountError(funcname, "1", argc, x); }
+                                            if (argc != 1) { throw ArgCountError(funcname, "1", argc, x); }
                                             switch (funcname)
                                             {
                                                 case "contain": val = (funcval.Contains(args[0])) ? "1" : "0"; break;
@@ -1803,7 +1835,7 @@ namespace Triggernometry
                                     case "ifendwith":
                                     case "ifequal":
                                         {
-                                            if (argc != 3) { ArgCountError(funcname, "3", argc, x); }
+                                            if (argc != 3) { throw ArgCountError(funcname, "3", argc, x); }
                                             switch (funcname)
                                             {
                                                 case "ifcontain": val = (funcval.Contains(args[0])) ? args[1] : args[2]; break;
@@ -1815,14 +1847,14 @@ namespace Triggernometry
                                         break;
                                     case "match": // func:match(str):regex
                                         {
-                                            if (argc != 1) { ArgCountError(funcname, "1", argc, x); }
+                                            if (argc != 1) { throw ArgCountError(funcname, "1", argc, x); }
                                             Match match = new Regex(UnescapeCustomExpr(funcval)).Match(args[0]);
                                             val = (match.Success) ? "1" : "0";
                                         }
                                         break;
                                     case "capture": // func:capture(str, group):regex
                                         {
-                                            if (argc != 2) { ArgCountError(funcname, "2", argc, x); }
+                                            if (argc != 2) { throw ArgCountError(funcname, "2", argc, x); }
                                             Match match = new Regex(UnescapeCustomExpr(funcval)).Match(args[0]);
                                             if (int.TryParse(args[1], NSFloat, InvClt, out int groupNumber))
                                             {
@@ -1837,7 +1869,7 @@ namespace Triggernometry
                                         break;
                                     case "ifmatch": // func:ifmatch(str, successStr, failStr):regex
                                         {
-                                            if (argc != 3) { ArgCountError(funcname, "3", argc, x); }
+                                            if (argc != 3) { throw ArgCountError(funcname, "3", argc, x); }
                                             Match match = new Regex(UnescapeCustomExpr(funcval)).Match(args[0]);
                                             val = (match.Success) ? args[1] : args[2];
                                         }
@@ -1857,13 +1889,13 @@ namespace Triggernometry
                                                 }
                                                 else if (arg.Length == 0)
                                                 {
-                                                    InvalidValueError(funcname, I18n.TrlChar() + "/" + I18n.TrlCharcode(), funcval, x);
+                                                    throw InvalidValueError(funcname, I18n.TranslateWord("char") + "/" + I18n.TranslateWord("charcode"), funcval, x);
                                                 }
                                                 else if (arg.Length > 1)
                                                 {
                                                     if (!int.TryParse(arg, NSFloat, InvClt, out int charcode))
                                                     {
-                                                        ParseTypeError(I18n.TrlCharcode(), arg, I18n.TrlInt(), x);
+                                                        throw ParseTypeError(I18n.TranslateWord("charcode"), arg, I18n.TranslateWord("int"), x);
                                                     }
                                                     trimChars += GetReplacedChar(charcode).ToString();
                                                 }
@@ -1885,7 +1917,7 @@ namespace Triggernometry
                                         }
                                         break;
                                     case "format": // format(type,formatstring)
-                                        if (argc != 2) { ArgCountError(funcname, "2", argc, x); }
+                                        if (argc != 2) { throw ArgCountError(funcname, "2", argc, x); }
                                         else
                                         {
                                             Type type = Type.GetType(args[0]);
@@ -1896,7 +1928,7 @@ namespace Triggernometry
                                     case "utctime": // utctime(formatstring)
                                     case "localtime": // localtime(formatstring)
                                         {
-                                            if (argc > 1) { ArgCountError(funcname, "0-1", argc, x); }
+                                            if (argc > 1) { throw ArgCountError(funcname, "0-1", argc, x); }
                                             Int64 ts = Int64.Parse(funcval, InvClt);
                                             DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                                             dt = dt.AddSeconds(ts);
@@ -1911,48 +1943,69 @@ namespace Triggernometry
                                 }
                             }
                         }
-                        else if (x.StartsWith("_ffxivparty[") || x.StartsWith("_party["))
+                        else if (x.StartsWith("_ffxivparty[")  || x.StartsWith("_party[") ||
+                                 x.StartsWith("_ffxiventity[") || x.StartsWith("_entity["))
                         {
                             mx = rexListProp.Match(x);
                             if (mx.Success)
                             {
-                                bool foundid = TryParseEntityHexId(mx, isParty: true,
-                                    out VariableDictionary entity, out string key, out string prop);
-                                if (!foundid)
+                                bool isParty = x.Contains("party[");
+                                string key = mx.Groups["index"].Value.Trim();
+                                string prop = mx.Groups["prop"].Value.Trim();
+                                VariableDictionary entity = new VariableDictionary();
+
+                                if (isParty && key.Length == 1 && char.IsDigit(key[0]))
+                                {   // ffxivparty[n]
+                                    entity = PluginBridges.BridgeFFXIV.GetPartyMember(int.Parse(key));
+                                }
+                                else
                                 {
-                                    if (Int32.TryParse(key, NSFloat, InvClt, out int partyIndex))
+                                    int idx = key.IndexOf("=");
+                                    string key2 = null;
+                                    if (!isParty && idx > 0)
                                     {
-                                        entity = PluginBridges.BridgeFFXIV.GetPartyMember(partyIndex);
+                                        key2 = key.Substring(0, idx).Trim();
                                     }
-                                    else
-                                    {
-                                        entity = PluginBridges.BridgeFFXIV.GetNamedPartyMember(key);
+
+                                    if (key2 != null && PluginBridges.BridgeFFXIV._nullCombatant.ContainsKey(key2))
+                                    {   // _entity[bnpcid=13681]
+                                        string value2 = key.Substring(idx + 1).Trim();
+                                        var entities = PluginBridges.BridgeFFXIV.GetAllEntities();
+                                        entity = entities.FirstOrDefault(vd => vd.GetValue(key2).ToString() == value2) 
+                                            ?? PluginBridges.BridgeFFXIV._nullCombatant;
+                                    }
+                                    else if (reHex8.Match(key).Success)
+                                    {   // [10ABCDEF]
+                                        entity = isParty ? PluginBridges.BridgeFFXIV.GetIdPartyMember(key)
+                                                         : PluginBridges.BridgeFFXIV.GetIdEntity(key);
+                                    }
+                                    if (entity.GetValue("id").ToString() == "")
+                                    {   // [name]
+                                        entity = isParty ? PluginBridges.BridgeFFXIV.GetNamedPartyMember(key)
+                                                         : PluginBridges.BridgeFFXIV.GetNamedEntity(key);
                                     }
                                 }
-                                val = GetEntityProperty(entity, prop) ?? "";
-                            }
-                            found = true;
-                        }
-                        else if (x.StartsWith("_ffxiventity[") || x.StartsWith("_entity["))
-                        {
-                            mx = rexListProp.Match(x);
-                            if (mx.Success)
-                            {
-                                bool foundid = TryParseEntityHexId(mx, isParty: false,
-                                    out VariableDictionary entity, out string key, out string prop);
-                                if (!foundid)
-                                {
-                                    entity = PluginBridges.BridgeFFXIV.GetNamedEntity(key);
-                                }
-                                val = GetEntityProperty(entity, prop) ?? "";
+
+                                val = entity.GetValue(prop).ToString();
                             }
                             found = true;
                         }
                         else if (x.StartsWith("_me.")) // ${_me.prop}
                         {
-                            string prop = x.Substring(4);
-                            VariableDictionary me = PluginBridges.BridgeFFXIV.GetMyself();
-                            val = GetEntityProperty(me, prop) ?? "";
+                            string prop = x.Substring(4).Trim();
+                            if (PluginBridges.BridgeFFXIV.PlayerHexId == "")
+                            {
+                                PluginBridges.BridgeFFXIV.UpdateState();
+                            }
+                            if (prop == "id")
+                            {
+                                val = PluginBridges.BridgeFFXIV.PlayerHexId;
+                            }
+                            else
+                            {
+                                VariableDictionary me = PluginBridges.BridgeFFXIV.GetIdEntity(PluginBridges.BridgeFFXIV.PlayerHexId);
+                                val = me.GetValue(prop).ToString();
+                            }
                             found = true;
                         }
                         else if (x == "_clipboard")
@@ -1963,7 +2016,7 @@ namespace Triggernometry
                             staThread.Join();
                             if (val.Contains("${_clipboard}"))
                             {
-                                InfiniteClipboardError();
+                                throw InfiniteClipboardError();
                             }
                             found = true;
                         }
@@ -2232,50 +2285,51 @@ namespace Triggernometry
             return newexpr;
         }
 
-        internal static void ArgCountError(string functionName, string requiredArgCount, int givenArgCount, string totalExpression)
+        public static Exception ArgCountError(string functionName, string requiredArgCount, int givenArgCount, string totalExpression)
         {
-            throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+            return new ArgumentException(I18n.Translate("internal/Context/argCountError",
                 "({0}) requires {1} arguments, {2} were given. Expr: ({3})",
                 functionName, requiredArgCount, givenArgCount, totalExpression));
         }
 
-        internal static void InvalidValueError(string functionName, string exprDesc, string exprValue, string totalExpression)
+        public static Exception InvalidValueError(string functionName, string exprDesc, string exprValue, string totalExpression)
         {
-            throw new ArgumentException(I18n.Translate("internal/Context/invalidValueError",
+            return new ArgumentException(I18n.Translate("internal/Context/invalidValueError",
                 "In ({0}), {1} ({2}) is invalid. Expr: ({3})",
                 functionName, exprDesc, exprValue, totalExpression));
         }
 
-        internal static void ParseTypeError(string exprDesc, string exprValue, string parseFormat, string totalExpression)
+        public static Exception ParseTypeError(string exprDesc, string exprValue, string parseFormat, string totalExpression)
         {
-            throw new ArgumentException(I18n.Translate("internal/Context/parseTypeError",
+            return new ArgumentException(I18n.Translate("internal/Context/parseTypeError",
                 "{0} ({1}) could not be parsed into {2}. Expr: ({3})",
                 exprDesc, exprValue, parseFormat, totalExpression));
         }
-        internal static void ExtremumListZeroElementError(string varName, string totalExpression)
+
+        private static Exception ExtremumListZeroElementError(string varName, string totalExpression)
         {
-            throw new ArgumentException(I18n.Translate("internal/Context/extremumlistzeroelementerror",
+            return new ArgumentException(I18n.Translate("internal/Context/extremumlistzeroelementerror",
                     "The variable ({0}) selected zero elements to get its extremum value. Expr: ({1})",
                     varName, totalExpression));
-        }        
-        
-        internal static void ExtremumParseTypeError(string funcName, string parseFormat, string totalExpression)
+        }
+
+        private static Exception ExtremumParseTypeError(string funcName, string parseFormat, string totalExpression)
         {
-            throw new ArgumentException(I18n.Translate("internal/Context/extremumparsetypeerror",
+            return new ArgumentException(I18n.Translate("internal/Context/extremumparsetypeerror",
                     "In the function ({0}), not all selected values could be parsed into {1}. Expr: ({2})",
                     funcName, parseFormat, totalExpression));
         }
 
-        internal static void InfiniteRepeatError(string newStr, string oldStr, string totalExpression)
+        private static Exception InfiniteRepeatError(string newStr, string oldStr, string totalExpression)
         {
-            throw new ArgumentException(I18n.Translate("internal/Context/infiniteRepeatError",
+            return new ArgumentException(I18n.Translate("internal/Context/infiniteRepeatError",
                 "In the repeat function, new string ({0}) cannot contain old string ({1}) in loop mode. Expr: ({2})", 
                 newStr, oldStr, totalExpression));
         }
 
-        internal static void InfiniteClipboardError()
+        private static Exception InfiniteClipboardError()
         {
-            throw new ArgumentException(I18n.Translate("internal/Context/infiniteClipboardError",
+            return new ArgumentException(I18n.Translate("internal/Context/infiniteClipboardError",
                 "The current clipboard contains the expression ${{_clipboard}}, which would cause infinite loop"));
         }
 
