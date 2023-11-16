@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using Triggernometry.CustomControls;
 
 namespace Triggernometry.Forms
 {
@@ -24,12 +25,9 @@ namespace Triggernometry.Forms
         public LogForm()
         {
             InitializeComponent();
+            splitContainer1.SplitterDistance = (int)(splitContainer1.Width * 0.75);
             logData = new List<InternalLog>();
             Shown += LogForm_Shown;
-            cbxLevel.Items.Add(I18n.Translate("internal/Plugin/loglevel" + RealPlugin.DebugLevelEnum.Error.ToString(), "{0}", RealPlugin.DebugLevelEnum.Error.ToString()));
-            cbxLevel.Items.Add(I18n.Translate("internal/Plugin/loglevel" + RealPlugin.DebugLevelEnum.Warning.ToString(), "{0}", RealPlugin.DebugLevelEnum.Warning.ToString()));
-            cbxLevel.Items.Add(I18n.Translate("internal/Plugin/loglevel" + RealPlugin.DebugLevelEnum.Info.ToString(), "{0}", RealPlugin.DebugLevelEnum.Info.ToString()));
-            cbxLevel.Items.Add(I18n.Translate("internal/Plugin/loglevel" + RealPlugin.DebugLevelEnum.Verbose.ToString(), "{0}", RealPlugin.DebugLevelEnum.Verbose.ToString()));
             RestoredSavedDimensions();
             if (dgvLog.VirtualMode == true)
             {
@@ -44,28 +42,37 @@ namespace Triggernometry.Forms
             btnSearch_Click(null, null);
         }
 
+        internal static Color BgRed = Color.FromArgb(255, 210, 210);  
+        internal static Color BgYellow = Color.FromArgb(255, 240, 195);  
+        internal static Color BgGreen = Color.FromArgb(195, 255, 225);
+        internal static Color BgBlue = Color.FromArgb(195, 225, 255);
+        internal static Color BgGray = Color.FromArgb(225, 225, 225); 
+
         private void DgvLog_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             InternalLog il = virtualData[e.RowIndex];
             switch (il.Level)
             {
                 case RealPlugin.DebugLevelEnum.Verbose:
-                    e.CellStyle.BackColor = Color.LightGray;
-                    e.CellStyle.ForeColor = Color.Black;
+                    e.CellStyle.BackColor = BgGray;
                     break;
                 case RealPlugin.DebugLevelEnum.Info:
                     e.CellStyle.BackColor = Color.White;
-                    e.CellStyle.ForeColor = Color.Black;
                     break;
                 case RealPlugin.DebugLevelEnum.Warning:
-                    e.CellStyle.BackColor = Color.Yellow;
-                    e.CellStyle.ForeColor = Color.Black;
+                    e.CellStyle.BackColor = BgYellow; 
                     break;
                 case RealPlugin.DebugLevelEnum.Error:
-                    e.CellStyle.BackColor = Color.Red;
-                    e.CellStyle.ForeColor = Color.Yellow;
+                    e.CellStyle.BackColor = BgRed;
+                    break;
+                case RealPlugin.DebugLevelEnum.Custom:
+                    e.CellStyle.BackColor = BgGreen;
+                    break;
+                case RealPlugin.DebugLevelEnum.Custom2:
+                    e.CellStyle.BackColor = BgBlue;
                     break;
             }
+            e.CellStyle.ForeColor = Color.Black;
             e.FormattingApplied = true;
         }
 
@@ -78,7 +85,7 @@ namespace Triggernometry.Forms
                     e.Value = RealPlugin.FormatDateTime(il.Timestamp);
                     break;
                 case 1:
-                    e.Value = I18n.Translate("internal/Plugin/loglevel" + il.Level.ToString(), "{0}", il.Level.ToString());
+                    e.Value = I18n.Translate($"LogForm/chk{il.Level}", $"{il.Level}");
                     break;
                 case 2:
                     e.Value = il.Message;
@@ -90,13 +97,23 @@ namespace Triggernometry.Forms
         {
             if (startWithErrorSearch == true)
             {
-                cbxLevelMethod.SelectedIndex = 2;
-                cbxLevel.SelectedIndex = 0;
+                chkAll.Checked = false;
+                chkError.Checked = true;
+                chkWarning.Checked = true;
+                chkInfo.Checked = false;
+                chkVerbose.Checked = false;
+                chkCustom.Checked = false;
+                chkCustom2.Checked = false;
             }
             else
             {
-                cbxLevelMethod.SelectedIndex = 3;
-                cbxLevel.SelectedIndex = 3;
+                chkAll.Checked = false;
+                chkError.Checked = true;
+                chkWarning.Checked = true;
+                chkInfo.Checked = true;
+                chkVerbose.Checked = false;
+                chkCustom.Checked = true;
+                chkCustom2.Checked = true;
             }
             RefreshLog();
             rexSearch.Focus();
@@ -116,41 +133,28 @@ namespace Triggernometry.Forms
             }
             else
             {
-                RefreshViewStatic();
+                RefreshViewStatic(); 
             }
         }
 
         private List<InternalLog> BuildDataset()
         {
-            List<InternalLog> p1 = new List<InternalLog>();
-            RealPlugin.DebugLevelEnum level = (RealPlugin.DebugLevelEnum)(cbxLevel.SelectedIndex + 1);
             Regex rex = null;
             if (rexSearch.Text != null && rexSearch.Text.Trim().Length > 0)
             {
                 rex = new Regex(rexSearch.Text);
             }
-            switch (cbxLevelMethod.SelectedIndex)
-            {
-                case 0:
-                    p1.AddRange(from ix in logData where ix.Level > level && (rex == null || rex.IsMatch(ix.Message) == true) select ix);
-                    break;
-                case 1:
-                    p1.AddRange(from ix in logData where ix.Level >= level && (rex == null || rex.IsMatch(ix.Message) == true) select ix);
-                    break;
-                case 2:
-                    p1.AddRange(from ix in logData where ix.Level == level && (rex == null || rex.IsMatch(ix.Message) == true) select ix);
-                    break;
-                case 3:
-                    p1.AddRange(from ix in logData where ix.Level <= level && (rex == null || rex.IsMatch(ix.Message) == true) select ix);
-                    break;
-                case 4:
-                    p1.AddRange(from ix in logData where ix.Level < level && (rex == null || rex.IsMatch(ix.Message) == true) select ix);
-                    break;
-                case 5:
-                    p1.AddRange(from ix in logData where ix.Level != level && (rex == null || rex.IsMatch(ix.Message) == true) select ix);
-                    break;
-            }
-            return p1;
+
+            return logData.Where(ix =>
+                (chkAll.Checked ||
+                (chkError.Checked && ix.Level == RealPlugin.DebugLevelEnum.Error) ||
+                (chkWarning.Checked && ix.Level == RealPlugin.DebugLevelEnum.Warning) ||
+                (chkInfo.Checked && ix.Level == RealPlugin.DebugLevelEnum.Info) ||
+                (chkVerbose.Checked && ix.Level == RealPlugin.DebugLevelEnum.Verbose) ||
+                (chkCustom.Checked && ix.Level == RealPlugin.DebugLevelEnum.Custom) ||
+                (chkCustom2.Checked && ix.Level == RealPlugin.DebugLevelEnum.Custom2) )
+                && (rex == null || rex.IsMatch(ix.Message))
+            ).ToList();
         }
 
         private void RefreshViewVirtual()
@@ -168,31 +172,34 @@ namespace Triggernometry.Forms
             lblStatus.Text = I18n.Translate("internal/LogForm/displaying", "Displaying {0} out of {1}", p1.Count, logData.Count);
         }
 
-        private void RefreshViewStatic()
+        // is this actually used?
+        private void RefreshViewStatic() 
         {
             List<DataGridViewRow> rows = new List<DataGridViewRow>();
             List<InternalLog> p1 = BuildDataset();
             foreach (InternalLog il in p1)
             {
                 DataGridViewRow row = (DataGridViewRow)dgvLog.RowTemplate.Clone();
-                row.CreateCells(dgvLog, RealPlugin.FormatDateTime(il.Timestamp), I18n.Translate("internal/Plugin/loglevel" + il.Level.ToString(), "{0}", il.Level.ToString()), il.Message);
+                row.CreateCells(dgvLog, RealPlugin.FormatDateTime(il.Timestamp), I18n.Translate($"LogForm/chk{il.Level}", $"{il.Level}"));
                 switch (il.Level)
                 {
                     case RealPlugin.DebugLevelEnum.Verbose:
-                        row.DefaultCellStyle.BackColor = Color.LightGray;
-                        row.DefaultCellStyle.ForeColor = Color.Black;
+                        row.DefaultCellStyle.BackColor = BgGray;
                         break;
                     case RealPlugin.DebugLevelEnum.Info:
                         row.DefaultCellStyle.BackColor = Color.White;
-                        row.DefaultCellStyle.ForeColor = Color.Black;
                         break;
                     case RealPlugin.DebugLevelEnum.Warning:
-                        row.DefaultCellStyle.BackColor = Color.Yellow;
-                        row.DefaultCellStyle.ForeColor = Color.Black;
+                        row.DefaultCellStyle.BackColor = BgYellow;
                         break;
                     case RealPlugin.DebugLevelEnum.Error:
-                        row.DefaultCellStyle.BackColor = Color.Red;
-                        row.DefaultCellStyle.ForeColor = Color.Yellow;
+                        row.DefaultCellStyle.BackColor = BgRed;
+                        break;
+                    case RealPlugin.DebugLevelEnum.Custom:
+                        row.DefaultCellStyle.BackColor = BgGreen;
+                        break;
+                    case RealPlugin.DebugLevelEnum.Custom2:
+                        row.DefaultCellStyle.BackColor = BgBlue;
                         break;
                 }
                 rows.Add(row);
@@ -269,6 +276,77 @@ namespace Triggernometry.Forms
         private void btnClose_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private bool isChkProgrammaticChange = false;
+
+        private void ChkAll_CheckedChanged(object sender, EventArgs e)
+        {
+            if (isChkProgrammaticChange) { return; }
+            bool checkState = chkAll.Checked;
+
+            isChkProgrammaticChange = true;
+            chkError.Checked = checkState;
+            chkWarning.Checked = checkState;
+            chkInfo.Checked = checkState;
+            chkVerbose.Checked = checkState;
+            chkCustom.Checked = checkState;
+            chkCustom2.Checked = checkState;
+            isChkProgrammaticChange = false;
+            RefreshLog();
+        }
+
+        private void ChkOther_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox currentChkBox = sender as CheckBox;
+            if (isChkProgrammaticChange || currentChkBox == null) { return; }
+            isChkProgrammaticChange = true;
+            if (chkError.Checked && chkWarning.Checked && chkInfo.Checked && chkVerbose.Checked && chkCustom.Checked && chkCustom2.Checked)
+            {
+                chkAll.Checked = true;
+            }
+            else 
+            {
+                chkAll.Checked = false;
+            }
+            isChkProgrammaticChange = false;
+            RefreshLog();
+        }
+
+        private void ChkAll_RightClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                isChkProgrammaticChange = true;
+                chkAll.Checked = true;
+                chkError.Checked = true;
+                chkWarning.Checked = true;
+                chkInfo.Checked = true;
+                chkVerbose.Checked = true;
+                chkCustom.Checked = true;
+                chkCustom2.Checked = true;
+                isChkProgrammaticChange = false;
+                RefreshLog();
+            }
+        }
+
+        private void ChkOther_RightClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                isChkProgrammaticChange = true;
+                chkAll.Checked = false;
+                chkError.Checked = false;
+                chkWarning.Checked = false;
+                chkInfo.Checked = false;
+                chkVerbose.Checked = false;
+                chkCustom.Checked = false;
+                chkCustom2.Checked = false;
+                CheckBox currentChkBox = sender as CheckBox;
+                currentChkBox.Checked = true;
+                isChkProgrammaticChange = false;
+                RefreshLog();
+            }
         }
 
     }

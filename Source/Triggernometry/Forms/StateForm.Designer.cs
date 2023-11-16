@@ -40,6 +40,8 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dgvCellStyleDict = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dgvCellStylePeDict = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel3 = new System.Windows.Forms.Panel();
             this.btnClose = new System.Windows.Forms.Button();
             this.tlsScalar = new System.Windows.Forms.ToolStrip();
@@ -140,6 +142,38 @@
             this.btnPeTableRemove = new System.Windows.Forms.ToolStripButton();
             this.btnPeTableRefresh = new System.Windows.Forms.ToolStripSplitButton();
             this.btnPeTableRemoveAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabDict = new System.Windows.Forms.TabPage();
+            this.tbcDict = new System.Windows.Forms.TabControl();
+            this.tabDictSession = new System.Windows.Forms.TabPage();
+            this.panelDict = new System.Windows.Forms.Panel();
+            this.dgvDictVariables = new Triggernometry.CustomControls.DataGridViewEx();
+            this.colDictName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDictSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDictValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDictLastChanged = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDictChangedBy = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tlsDict = new System.Windows.Forms.ToolStrip();
+            this.btnDictAdd = new System.Windows.Forms.ToolStripButton();
+            this.btnDictEdit = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparatorDict = new System.Windows.Forms.ToolStripSeparator();
+            this.btnDictRemove = new System.Windows.Forms.ToolStripButton();
+            this.btnDictRefresh = new System.Windows.Forms.ToolStripSplitButton();
+            this.btnDictRemoveAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabDictPersistent = new System.Windows.Forms.TabPage();
+            this.panelPeDict = new System.Windows.Forms.Panel();
+            this.dgvPeDictVariables = new Triggernometry.CustomControls.DataGridViewEx();
+            this.colPeDictName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPeDictSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPeDictValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPeDictLastChanged = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPeDictChangedBy = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tlsPeDict = new System.Windows.Forms.ToolStrip();
+            this.btnPeDictAdd = new System.Windows.Forms.ToolStripButton();
+            this.btnPeDictEdit = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparatorPeDict = new System.Windows.Forms.ToolStripSeparator();
+            this.btnPeDictRemove = new System.Windows.Forms.ToolStripButton();
+            this.btnPeDictRefresh = new System.Windows.Forms.ToolStripSplitButton();
+            this.btnPeDictRemoveAll = new System.Windows.Forms.ToolStripMenuItem();
             this.tabMutexes = new System.Windows.Forms.TabPage();
             this.dgvMutexes = new Triggernometry.CustomControls.DataGridViewEx();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -201,6 +235,15 @@
             this.panel7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPeTableVariables)).BeginInit();
             this.toolStrip4.SuspendLayout();
+            this.tbcDict.SuspendLayout();
+            this.tabDictSession.SuspendLayout();
+            this.panelDict.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDictVariables)).BeginInit();
+            this.tlsDict.SuspendLayout();
+            this.tabDictPersistent.SuspendLayout();
+            this.panelPeDict.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPeDictVariables)).BeginInit();
+            this.tlsPeDict.SuspendLayout();
             this.tabMutexes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMutexes)).BeginInit();
             this.tlsMutex.SuspendLayout();
@@ -356,6 +399,7 @@
             this.dgvScalarVariables.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvScalarVariables_CellValueNeeded);
             this.dgvScalarVariables.SelectionChanged += new System.EventHandler(this.dgvScalarVariables_SelectionChanged);
             this.dgvScalarVariables.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvScalarVariables_KeyDown);
+            this.dgvScalarVariables.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvCommon_ColumnHeaderMouseClick);
             // 
             // colScalarName
             // 
@@ -363,35 +407,38 @@
             this.colScalarName.HeaderText = "Name";
             this.colScalarName.Name = "colScalarName";
             this.colScalarName.ReadOnly = true;
-            this.colScalarName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colScalarName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.colScalarName.Width = 240;
             // 
             // colScalarValue
             // 
-            this.colScalarValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colScalarValue.HeaderText = "Value";
             this.colScalarValue.Name = "colScalarValue";
-            this.colScalarValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colScalarValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.colScalarValue.Width = 240;
             // 
             // colScalarLastChanged
             // 
             this.colScalarLastChanged.HeaderText = "Last changed";
             this.colScalarLastChanged.Name = "colScalarLastChanged";
             this.colScalarLastChanged.ReadOnly = true;
-            this.colScalarLastChanged.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colScalarLastChanged.Width = 120;
+            this.colScalarLastChanged.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.colScalarLastChanged.Width = 100;
             // 
             // colScalarChangedBy
             // 
+            this.colScalarChangedBy.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colScalarChangedBy.HeaderText = "Changed by";
             this.colScalarChangedBy.Name = "colScalarChangedBy";
             this.colScalarChangedBy.ReadOnly = true;
-            this.colScalarChangedBy.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colScalarChangedBy.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             // 
             // tbcMain
             // 
             this.tbcMain.Controls.Add(this.tabScalar);
             this.tbcMain.Controls.Add(this.tabList);
             this.tbcMain.Controls.Add(this.tabTable);
+            this.tbcMain.Controls.Add(this.tabDict);
             this.tbcMain.Controls.Add(this.tabMutexes);
             this.tbcMain.Controls.Add(this.tabImageAura);
             this.tbcMain.Controls.Add(this.tabTextAura);
@@ -494,6 +541,7 @@
             this.dgvPeScalarVariables.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvPeScalarVariables_CellValueNeeded);
             this.dgvPeScalarVariables.SelectionChanged += new System.EventHandler(this.dgvPeScalarVariables_SelectionChanged);
             this.dgvPeScalarVariables.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvPeScalarVariables_KeyDown);
+            this.dgvPeScalarVariables.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvCommon_ColumnHeaderMouseClick);
             // 
             // dataGridViewTextBoxColumn10
             // 
@@ -501,29 +549,35 @@
             this.dataGridViewTextBoxColumn10.HeaderText = "Name";
             this.dataGridViewTextBoxColumn10.Name = "dataGridViewTextBoxColumn10";
             this.dataGridViewTextBoxColumn10.ReadOnly = true;
-            this.dataGridViewTextBoxColumn10.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn10.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn10.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn10.Width = 240;
             // 
             // dataGridViewTextBoxColumn11
             // 
-            this.dataGridViewTextBoxColumn11.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridViewTextBoxColumn11.HeaderText = "Value";
             this.dataGridViewTextBoxColumn11.Name = "dataGridViewTextBoxColumn11";
-            this.dataGridViewTextBoxColumn11.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn11.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn11.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn11.Width = 240;
             // 
             // dataGridViewTextBoxColumn12
             // 
             this.dataGridViewTextBoxColumn12.HeaderText = "Last changed";
             this.dataGridViewTextBoxColumn12.Name = "dataGridViewTextBoxColumn12";
             this.dataGridViewTextBoxColumn12.ReadOnly = true;
-            this.dataGridViewTextBoxColumn12.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxColumn12.Width = 120;
+            this.dataGridViewTextBoxColumn12.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn12.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn12.Width = 100;
             // 
             // dataGridViewTextBoxColumn13
             // 
+            this.dataGridViewTextBoxColumn13.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridViewTextBoxColumn13.HeaderText = "Changed by";
             this.dataGridViewTextBoxColumn13.Name = "dataGridViewTextBoxColumn13";
             this.dataGridViewTextBoxColumn13.ReadOnly = true;
-            this.dataGridViewTextBoxColumn13.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn13.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn13.MinimumWidth = 50;
             // 
             // toolStrip2
             // 
@@ -606,6 +660,7 @@
             this.imageList1.Images.SetKeyName(6, "callback.png");
             this.imageList1.Images.SetKeyName(7, "appointment-new.png");
             this.imageList1.Images.SetKeyName(8, "media-floppy.png");
+            this.imageList1.Images.SetKeyName(9, "var_dict.png");
             // 
             // tabList
             // 
@@ -685,6 +740,7 @@
             this.dgvListVariables.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvListVariables_CellValueNeeded);
             this.dgvListVariables.SelectionChanged += new System.EventHandler(this.dgvListVariables_SelectionChanged);
             this.dgvListVariables.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvListVariables_KeyDown);
+            this.dgvListVariables.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvCommon_ColumnHeaderMouseClick);
             // 
             // colListName
             // 
@@ -692,37 +748,39 @@
             this.colListName.HeaderText = "Name";
             this.colListName.Name = "colListName";
             this.colListName.ReadOnly = true;
-            this.colListName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colListName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.colListName.Width = 200;
             // 
             // colListSize
             // 
             this.colListSize.HeaderText = "Size";
             this.colListSize.Name = "colListSize";
             this.colListSize.ReadOnly = true;
-            this.colListSize.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colListSize.Width = 40;
+            this.colListSize.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.colListSize.Width = 50;
             // 
             // colListValue
             // 
-            this.colListValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colListValue.HeaderText = "Value";
             this.colListValue.Name = "colListValue";
-            this.colListValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colListValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.colListValue.Width = 240;
             // 
             // colListLastChanged
             // 
             this.colListLastChanged.HeaderText = "Last changed";
             this.colListLastChanged.Name = "colListLastChanged";
             this.colListLastChanged.ReadOnly = true;
-            this.colListLastChanged.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colListLastChanged.Width = 120;
+            this.colListLastChanged.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.colListLastChanged.Width = 100;
             // 
             // colListChangedBy
             // 
+            this.colListChangedBy.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colListChangedBy.HeaderText = "Changed by";
             this.colListChangedBy.Name = "colListChangedBy";
             this.colListChangedBy.ReadOnly = true;
-            this.colListChangedBy.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colListChangedBy.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             // 
             // tlsList
             // 
@@ -845,6 +903,7 @@
             this.dgvPeListVariables.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvPeListVariables_CellValueNeeded);
             this.dgvPeListVariables.SelectionChanged += new System.EventHandler(this.dgvPeListVariables_SelectionChanged);
             this.dgvPeListVariables.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvPeListVariables_KeyDown);
+            this.dgvPeListVariables.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvCommon_ColumnHeaderMouseClick);
             // 
             // dataGridViewTextBoxColumn14
             // 
@@ -852,37 +911,44 @@
             this.dataGridViewTextBoxColumn14.HeaderText = "Name";
             this.dataGridViewTextBoxColumn14.Name = "dataGridViewTextBoxColumn14";
             this.dataGridViewTextBoxColumn14.ReadOnly = true;
-            this.dataGridViewTextBoxColumn14.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn14.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn14.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn14.Width = 200;
             // 
             // dataGridViewTextBoxColumn15
             // 
             this.dataGridViewTextBoxColumn15.HeaderText = "Size";
             this.dataGridViewTextBoxColumn15.Name = "dataGridViewTextBoxColumn15";
             this.dataGridViewTextBoxColumn15.ReadOnly = true;
-            this.dataGridViewTextBoxColumn15.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxColumn15.Width = 40;
+            this.dataGridViewTextBoxColumn15.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn15.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn15.Width = 50;
             // 
             // dataGridViewTextBoxColumn16
             // 
-            this.dataGridViewTextBoxColumn16.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridViewTextBoxColumn16.HeaderText = "Value";
             this.dataGridViewTextBoxColumn16.Name = "dataGridViewTextBoxColumn16";
-            this.dataGridViewTextBoxColumn16.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn16.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn16.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn16.Width = 240;
             // 
             // dataGridViewTextBoxColumn17
             // 
             this.dataGridViewTextBoxColumn17.HeaderText = "Last changed";
             this.dataGridViewTextBoxColumn17.Name = "dataGridViewTextBoxColumn17";
             this.dataGridViewTextBoxColumn17.ReadOnly = true;
-            this.dataGridViewTextBoxColumn17.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxColumn17.Width = 120;
+            this.dataGridViewTextBoxColumn17.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn17.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn17.Width = 100;
             // 
             // dataGridViewTextBoxColumn18
             // 
+            this.dataGridViewTextBoxColumn18.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridViewTextBoxColumn18.HeaderText = "Changed by";
             this.dataGridViewTextBoxColumn18.Name = "dataGridViewTextBoxColumn18";
             this.dataGridViewTextBoxColumn18.ReadOnly = true;
-            this.dataGridViewTextBoxColumn18.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn18.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn18.MinimumWidth = 50;
             // 
             // toolStrip3
             // 
@@ -1030,45 +1096,51 @@
             this.dgvTableVariables.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvTableVariables_CellValueNeeded);
             this.dgvTableVariables.SelectionChanged += new System.EventHandler(this.dgvTableVariables_SelectionChanged);
             this.dgvTableVariables.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvTableVariables_KeyDown);
+            this.dgvTableVariables.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvCommon_ColumnHeaderMouseClick);
             // 
             // dataGridViewTextBoxColumn1
             // 
-            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridViewTextBoxColumn1.HeaderText = "Name";
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            this.dataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn1.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn1.Width = 240;
             // 
             // dataGridViewTextBoxColumn2
             // 
             this.dataGridViewTextBoxColumn2.HeaderText = "Width";
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             this.dataGridViewTextBoxColumn2.ReadOnly = true;
-            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxColumn2.Width = 60;
+            this.dataGridViewTextBoxColumn2.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn2.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn2.Width = 70;
             // 
             // Column1
             // 
             this.Column1.HeaderText = "Height";
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
-            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column1.Width = 60;
+            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.Column1.Width = 70;
             // 
             // dataGridViewTextBoxColumn4
             // 
             this.dataGridViewTextBoxColumn4.HeaderText = "Last changed";
             this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
             this.dataGridViewTextBoxColumn4.ReadOnly = true;
-            this.dataGridViewTextBoxColumn4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn4.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn4.MinimumWidth = 50;
             this.dataGridViewTextBoxColumn4.Width = 120;
             // 
             // dataGridViewTextBoxColumn5
             // 
+            this.dataGridViewTextBoxColumn5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridViewTextBoxColumn5.HeaderText = "Changed by";
             this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
             this.dataGridViewTextBoxColumn5.ReadOnly = true;
-            this.dataGridViewTextBoxColumn5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn5.MinimumWidth = 50;
             // 
             // tlsTable
             // 
@@ -1191,45 +1263,52 @@
             this.dgvPeTableVariables.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvPeTableVariables_CellValueNeeded);
             this.dgvPeTableVariables.SelectionChanged += new System.EventHandler(this.dgvPeTableVariables_SelectionChanged);
             this.dgvPeTableVariables.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvPeTableVariables_KeyDown);
+            this.dgvPeTableVariables.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvCommon_ColumnHeaderMouseClick);
             // 
             // dataGridViewTextBoxColumn19
             // 
-            this.dataGridViewTextBoxColumn19.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridViewTextBoxColumn19.HeaderText = "Name";
             this.dataGridViewTextBoxColumn19.Name = "dataGridViewTextBoxColumn19";
             this.dataGridViewTextBoxColumn19.ReadOnly = true;
-            this.dataGridViewTextBoxColumn19.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn19.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn19.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn19.Width = 240;
             // 
             // dataGridViewTextBoxColumn20
             // 
             this.dataGridViewTextBoxColumn20.HeaderText = "Width";
             this.dataGridViewTextBoxColumn20.Name = "dataGridViewTextBoxColumn20";
             this.dataGridViewTextBoxColumn20.ReadOnly = true;
-            this.dataGridViewTextBoxColumn20.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxColumn20.Width = 60;
+            this.dataGridViewTextBoxColumn20.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn20.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn20.Width = 70;
             // 
             // dataGridViewTextBoxColumn21
             // 
             this.dataGridViewTextBoxColumn21.HeaderText = "Height";
             this.dataGridViewTextBoxColumn21.Name = "dataGridViewTextBoxColumn21";
             this.dataGridViewTextBoxColumn21.ReadOnly = true;
-            this.dataGridViewTextBoxColumn21.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxColumn21.Width = 60;
+            this.dataGridViewTextBoxColumn21.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn21.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn21.Width = 70;
             // 
             // dataGridViewTextBoxColumn22
             // 
             this.dataGridViewTextBoxColumn22.HeaderText = "Last changed";
             this.dataGridViewTextBoxColumn22.Name = "dataGridViewTextBoxColumn22";
             this.dataGridViewTextBoxColumn22.ReadOnly = true;
-            this.dataGridViewTextBoxColumn22.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.dataGridViewTextBoxColumn22.Width = 120;
+            this.dataGridViewTextBoxColumn22.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn22.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn22.Width = 160;
             // 
             // dataGridViewTextBoxColumn23
             // 
+            this.dataGridViewTextBoxColumn23.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridViewTextBoxColumn23.HeaderText = "Changed by";
             this.dataGridViewTextBoxColumn23.Name = "dataGridViewTextBoxColumn23";
             this.dataGridViewTextBoxColumn23.ReadOnly = true;
-            this.dataGridViewTextBoxColumn23.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn23.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.dataGridViewTextBoxColumn23.MinimumWidth = 50;
             // 
             // toolStrip4
             // 
@@ -1299,6 +1378,357 @@
             this.btnPeTableRemoveAll.Text = "Remove all variables";
             this.btnPeTableRemoveAll.Click += new System.EventHandler(this.btnPeTableRemoveAll_Click);
             // 
+            // tabDict
+            // 
+            this.tabDict.Controls.Add(this.tbcDict);
+            this.tabDict.ImageKey = "var_dict.png";
+            this.tabDict.Location = new System.Drawing.Point(4, 23);
+            this.tabDict.Name = "tabDict";
+            this.tabDict.Padding = new System.Windows.Forms.Padding(10);
+            this.tabDict.Size = new System.Drawing.Size(706, 419);
+            this.tabDict.TabIndex = 1;
+            this.tabDict.Text = "Dict variables";
+            this.tabDict.UseVisualStyleBackColor = true;
+            // 
+            // tbcDict
+            // 
+            this.tbcDict.Controls.Add(this.tabDictSession);
+            this.tbcDict.Controls.Add(this.tabDictPersistent);
+            this.tbcDict.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbcDict.ImageList = this.imageList1;
+            this.tbcDict.Location = new System.Drawing.Point(10, 10);
+            this.tbcDict.Name = "tbcDict";
+            this.tbcDict.SelectedIndex = 0;
+            this.tbcDict.Size = new System.Drawing.Size(686, 399);
+            this.tbcDict.TabIndex = 24;
+            this.tbcDict.SelectedIndexChanged += new System.EventHandler(this.tbcDict_SelectedIndexChanged);
+            // 
+            // tabDictSession
+            // 
+            this.tabDictSession.Controls.Add(this.panelDict);
+            this.tabDictSession.ImageKey = "appointment-new.png";
+            this.tabDictSession.Location = new System.Drawing.Point(4, 23);
+            this.tabDictSession.Name = "tabDictSession";
+            this.tabDictSession.Padding = new System.Windows.Forms.Padding(3);
+            this.tabDictSession.Size = new System.Drawing.Size(678, 372);
+            this.tabDictSession.TabIndex = 0;
+            this.tabDictSession.Text = "Session";
+            this.tabDictSession.UseVisualStyleBackColor = true;
+            // 
+            // panelDict
+            // 
+            this.panelDict.Controls.Add(this.dgvDictVariables);
+            this.panelDict.Controls.Add(this.tlsDict);
+            this.panelDict.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelDict.Location = new System.Drawing.Point(3, 3);
+            this.panelDict.Name = "panelDict";
+            this.panelDict.Size = new System.Drawing.Size(672, 366);
+            this.panelDict.TabIndex = 23;
+            // 
+            // dgvDictVariables
+            // 
+            this.dgvDictVariables.AllowUserToAddRows = false;
+            this.dgvDictVariables.AllowUserToDeleteRows = false;
+            this.dgvDictVariables.AllowUserToResizeRows = false;
+            dgvCellStyleDict.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.dgvDictVariables.AlternatingRowsDefaultCellStyle = dgvCellStyleDict;
+            this.dgvDictVariables.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvDictVariables.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colDictName,
+            this.colDictSize,
+            this.colDictValue,
+            this.colDictLastChanged,
+            this.colDictChangedBy});
+            this.dgvDictVariables.ContextMenuStrip = this.contextMenuStrip1;
+            this.dgvDictVariables.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvDictVariables.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dgvDictVariables.Location = new System.Drawing.Point(0, 25);
+            this.dgvDictVariables.Name = "dgvDictVariables";
+            this.dgvDictVariables.RowHeadersVisible = false;
+            this.dgvDictVariables.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvDictVariables.ShowCellErrors = false;
+            this.dgvDictVariables.ShowEditingIcon = false;
+            this.dgvDictVariables.ShowRowErrors = false;
+            this.dgvDictVariables.Size = new System.Drawing.Size(672, 341);
+            this.dgvDictVariables.TabIndex = 21;
+            this.dgvDictVariables.VirtualMode = true;
+            this.dgvDictVariables.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDictVariables_CellDoubleClick);
+            this.dgvDictVariables.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvDictVariables_CellValueNeeded);
+            this.dgvDictVariables.SelectionChanged += new System.EventHandler(this.dgvDictVariables_SelectionChanged);
+            this.dgvDictVariables.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvDictVariables_KeyDown);
+            this.dgvDictVariables.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvCommon_ColumnHeaderMouseClick);
+            // 
+            // colDictName
+            // 
+            this.colDictName.Frozen = true;
+            this.colDictName.HeaderText = "Name";
+            this.colDictName.Name = "colDictName";
+            this.colDictName.ReadOnly = true;
+            this.colDictName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.colDictName.Width = 200;
+            // 
+            // colDictSize
+            // 
+            this.colDictSize.HeaderText = "Size";
+            this.colDictSize.Name = "colDictSize";
+            this.colDictSize.ReadOnly = true;
+            this.colDictSize.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.colDictSize.Width = 50;
+            // 
+            // colDictValue
+            // 
+            this.colDictValue.HeaderText = "Value";
+            this.colDictValue.Name = "colDictValue";
+            this.colDictValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.colDictValue.Width = 240;
+            // 
+            // colDictLastChanged
+            // 
+            this.colDictLastChanged.HeaderText = "Last changed";
+            this.colDictLastChanged.Name = "colDictLastChanged";
+            this.colDictLastChanged.ReadOnly = true;
+            this.colDictLastChanged.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.colDictLastChanged.Width = 100;
+            // 
+            // colDictChangedBy
+            // 
+            this.colDictChangedBy.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colDictChangedBy.HeaderText = "Changed by";
+            this.colDictChangedBy.Name = "colDictChangedBy";
+            this.colDictChangedBy.ReadOnly = true;
+            this.colDictChangedBy.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            // 
+            // tlsDict
+            // 
+            this.tlsDict.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.tlsDict.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnDictAdd,
+            this.btnDictEdit,
+            this.toolStripSeparatorDict,
+            this.btnDictRemove,
+            this.btnDictRefresh});
+            this.tlsDict.Location = new System.Drawing.Point(0, 0);
+            this.tlsDict.Name = "tlsDict";
+            this.tlsDict.Size = new System.Drawing.Size(672, 25);
+            this.tlsDict.TabIndex = 22;
+            // 
+            // btnDictAdd
+            // 
+            this.btnDictAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnDictAdd.Image")));
+            this.btnDictAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnDictAdd.Name = "btnDictAdd";
+            this.btnDictAdd.Size = new System.Drawing.Size(93, 22);
+            this.btnDictAdd.Text = "Add variable";
+            this.btnDictAdd.Click += new System.EventHandler(this.btnDictAdd_Click);
+            // 
+            // btnDictEdit
+            // 
+            this.btnDictEdit.Enabled = false;
+            this.btnDictEdit.Image = ((System.Drawing.Image)(resources.GetObject("btnDictEdit.Image")));
+            this.btnDictEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnDictEdit.Name = "btnDictEdit";
+            this.btnDictEdit.Size = new System.Drawing.Size(91, 22);
+            this.btnDictEdit.Text = "Edit variable";
+            this.btnDictEdit.Click += new System.EventHandler(this.btnDictEdit_Click);
+            // 
+            // toolStripSeparatorDict
+            // 
+            this.toolStripSeparatorDict.Name = "toolStripSeparatorDict";
+            this.toolStripSeparatorDict.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnDictRemove
+            // 
+            this.btnDictRemove.Enabled = false;
+            this.btnDictRemove.Image = ((System.Drawing.Image)(resources.GetObject("btnDictRemove.Image")));
+            this.btnDictRemove.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnDictRemove.Name = "btnDictRemove";
+            this.btnDictRemove.Size = new System.Drawing.Size(114, 22);
+            this.btnDictRemove.Text = "Remove variable";
+            this.btnDictRemove.Click += new System.EventHandler(this.btnDictRemove_Click);
+            // 
+            // btnDictRefresh
+            // 
+            this.btnDictRefresh.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.btnDictRefresh.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnDictRemoveAll});
+            this.btnDictRefresh.Image = ((System.Drawing.Image)(resources.GetObject("btnDictRefresh.Image")));
+            this.btnDictRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnDictRefresh.Name = "btnDictRefresh";
+            this.btnDictRefresh.Size = new System.Drawing.Size(78, 22);
+            this.btnDictRefresh.Text = "Refresh";
+            this.btnDictRefresh.ButtonClick += new System.EventHandler(this.btnDictRefresh_ButtonClick);
+            // 
+            // btnDictRemoveAll
+            // 
+            this.btnDictRemoveAll.Image = ((System.Drawing.Image)(resources.GetObject("btnDictRemoveAll.Image")));
+            this.btnDictRemoveAll.Name = "btnDictRemoveAll";
+            this.btnDictRemoveAll.Size = new System.Drawing.Size(181, 22);
+            this.btnDictRemoveAll.Text = "Remove all variables";
+            this.btnDictRemoveAll.Click += new System.EventHandler(this.btnDictRemoveAll_Click);
+            // 
+            // tabDictPersistent
+            // 
+            this.tabDictPersistent.Controls.Add(this.panelPeDict);
+            this.tabDictPersistent.ImageKey = "media-floppy.png";
+            this.tabDictPersistent.Location = new System.Drawing.Point(4, 23);
+            this.tabDictPersistent.Name = "tabDictPersistent";
+            this.tabDictPersistent.Padding = new System.Windows.Forms.Padding(3);
+            this.tabDictPersistent.Size = new System.Drawing.Size(678, 372);
+            this.tabDictPersistent.TabIndex = 1;
+            this.tabDictPersistent.Text = "Persistent";
+            this.tabDictPersistent.UseVisualStyleBackColor = true;
+            // 
+            // panelPeDict
+            // 
+            this.panelPeDict.Controls.Add(this.dgvPeDictVariables);
+            this.panelPeDict.Controls.Add(this.tlsPeDict);
+            this.panelPeDict.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelPeDict.Location = new System.Drawing.Point(3, 3);
+            this.panelPeDict.Name = "panelPeDict";
+            this.panelPeDict.Size = new System.Drawing.Size(672, 366);
+            this.panelPeDict.TabIndex = 24;
+            // 
+            // dgvPeDictVariables
+            // 
+            this.dgvPeDictVariables.AllowUserToAddRows = false;
+            this.dgvPeDictVariables.AllowUserToDeleteRows = false;
+            this.dgvPeDictVariables.AllowUserToResizeRows = false;
+            dgvCellStylePeDict.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.dgvPeDictVariables.AlternatingRowsDefaultCellStyle = dgvCellStylePeDict;
+            this.dgvPeDictVariables.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvPeDictVariables.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colPeDictName,
+            this.colPeDictSize,
+            this.colPeDictValue,
+            this.colPeDictLastChanged,
+            this.colPeDictChangedBy});
+            this.dgvPeDictVariables.ContextMenuStrip = this.contextMenuStrip1;
+            this.dgvPeDictVariables.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvPeDictVariables.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dgvPeDictVariables.Location = new System.Drawing.Point(0, 25);
+            this.dgvPeDictVariables.Name = "dgvPeDictVariables";
+            this.dgvPeDictVariables.RowHeadersVisible = false;
+            this.dgvPeDictVariables.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvPeDictVariables.ShowCellErrors = false;
+            this.dgvPeDictVariables.ShowEditingIcon = false;
+            this.dgvPeDictVariables.ShowRowErrors = false;
+            this.dgvPeDictVariables.Size = new System.Drawing.Size(672, 341);
+            this.dgvPeDictVariables.TabIndex = 21;
+            this.dgvPeDictVariables.VirtualMode = true;
+            this.dgvPeDictVariables.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPeDictVariables_CellDoubleClick);
+            this.dgvPeDictVariables.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvPeDictVariables_CellValueNeeded);
+            this.dgvPeDictVariables.SelectionChanged += new System.EventHandler(this.dgvPeDictVariables_SelectionChanged);
+            this.dgvPeDictVariables.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvPeDictVariables_KeyDown);
+            this.dgvPeDictVariables.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvCommon_ColumnHeaderMouseClick);
+            // 
+            // colPeDictName
+            // 
+            this.colPeDictName.Frozen = true;
+            this.colPeDictName.HeaderText = "Name";
+            this.colPeDictName.Name = "colPeDictName";
+            this.colPeDictName.ReadOnly = true;
+            this.colPeDictName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.colPeDictName.Width = 200;
+            // 
+            // colPeDictSize
+            // 
+            this.colPeDictSize.HeaderText = "Size";
+            this.colPeDictSize.Name = "colPeDictSize";
+            this.colPeDictSize.ReadOnly = true;
+            this.colPeDictSize.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.colPeDictSize.Width = 50;
+            // 
+            // colPeDictValue
+            // 
+            this.colPeDictValue.HeaderText = "Value";
+            this.colPeDictValue.Name = "colPeDictValue";
+            this.colPeDictValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.colPeDictValue.Width = 240;
+            // 
+            // colPeDictLastChanged
+            // 
+            this.colPeDictLastChanged.HeaderText = "Last changed";
+            this.colPeDictLastChanged.Name = "colPeDictLastChanged";
+            this.colPeDictLastChanged.ReadOnly = true;
+            this.colPeDictLastChanged.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.colPeDictLastChanged.Width = 100;
+            // 
+            // colPeDictChangedBy
+            // 
+            this.colPeDictChangedBy.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colPeDictChangedBy.HeaderText = "Changed by";
+            this.colPeDictChangedBy.Name = "colPeDictChangedBy";
+            this.colPeDictChangedBy.ReadOnly = true;
+            this.colPeDictChangedBy.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            // 
+            // tlsPeDict
+            // 
+            this.tlsPeDict.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.tlsPeDict.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnPeDictAdd,
+            this.btnPeDictEdit,
+            this.toolStripSeparatorPeDict,
+            this.btnPeDictRemove,
+            this.btnPeDictRefresh});
+            this.tlsPeDict.Location = new System.Drawing.Point(0, 0);
+            this.tlsPeDict.Name = "tlsPeDict";
+            this.tlsPeDict.Size = new System.Drawing.Size(672, 25);
+            this.tlsPeDict.TabIndex = 22;
+            // 
+            // btnPeDictAdd
+            // 
+            this.btnPeDictAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnPeDictAdd.Image")));
+            this.btnPeDictAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnPeDictAdd.Name = "btnPeDictAdd";
+            this.btnPeDictAdd.Size = new System.Drawing.Size(93, 22);
+            this.btnPeDictAdd.Text = "Add variable";
+            this.btnPeDictAdd.Click += new System.EventHandler(this.btnPeDictAdd_Click);
+            // 
+            // btnPeDictEdit
+            // 
+            this.btnPeDictEdit.Enabled = false;
+            this.btnPeDictEdit.Image = ((System.Drawing.Image)(resources.GetObject("btnPeDictEdit.Image")));
+            this.btnPeDictEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnPeDictEdit.Name = "btnPeDictEdit";
+            this.btnPeDictEdit.Size = new System.Drawing.Size(91, 22);
+            this.btnPeDictEdit.Text = "Edit variable";
+            this.btnPeDictEdit.Click += new System.EventHandler(this.btnPeDictEdit_Click);
+            // 
+            // toolStripSeparatorPeDict
+            // 
+            this.toolStripSeparatorPeDict.Name = "toolStripSeparatorPeDict";
+            this.toolStripSeparatorPeDict.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnPeDictRemove
+            // 
+            this.btnPeDictRemove.Enabled = false;
+            this.btnPeDictRemove.Image = ((System.Drawing.Image)(resources.GetObject("btnPeDictRemove.Image")));
+            this.btnPeDictRemove.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnPeDictRemove.Name = "btnPeDictRemove";
+            this.btnPeDictRemove.Size = new System.Drawing.Size(114, 22);
+            this.btnPeDictRemove.Text = "Remove variable";
+            this.btnPeDictRemove.Click += new System.EventHandler(this.btnPeDictRemove_Click);
+            // 
+            // btnPeDictRefresh
+            // 
+            this.btnPeDictRefresh.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.btnPeDictRefresh.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnPeDictRemoveAll});
+            this.btnPeDictRefresh.Image = ((System.Drawing.Image)(resources.GetObject("btnPeDictRefresh.Image")));
+            this.btnPeDictRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnPeDictRefresh.Name = "btnPeDictRefresh";
+            this.btnPeDictRefresh.Size = new System.Drawing.Size(78, 22);
+            this.btnPeDictRefresh.Text = "Refresh";
+            this.btnPeDictRefresh.ButtonClick += new System.EventHandler(this.btnPeDictRefresh_ButtonClick);
+            // 
+            // btnPeDictRemoveAll
+            // 
+            this.btnPeDictRemoveAll.Image = ((System.Drawing.Image)(resources.GetObject("btnPeDictRemoveAll.Image")));
+            this.btnPeDictRemoveAll.Name = "btnPeDictRemoveAll";
+            this.btnPeDictRemoveAll.Size = new System.Drawing.Size(181, 22);
+            this.btnPeDictRemoveAll.Text = "Remove all variables";
+            this.btnPeDictRemoveAll.Click += new System.EventHandler(this.btnPeDictRemoveAll_Click);
+            // 
             // tabMutexes
             // 
             this.tabMutexes.Controls.Add(this.dgvMutexes);
@@ -1340,13 +1770,14 @@
             this.dgvMutexes.VirtualMode = true;
             this.dgvMutexes.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvMutexes_CellValueNeeded);
             this.dgvMutexes.SelectionChanged += new System.EventHandler(this.dgvMutexes_SelectionChanged);
+            this.dgvMutexes.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvCommon_ColumnHeaderMouseClick);
             // 
             // dataGridViewTextBoxColumn3
             // 
             this.dataGridViewTextBoxColumn3.HeaderText = "Name";
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             this.dataGridViewTextBoxColumn3.ReadOnly = true;
-            this.dataGridViewTextBoxColumn3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             this.dataGridViewTextBoxColumn3.Width = 150;
             // 
             // Column2
@@ -1436,13 +1867,14 @@
             this.dgvImage.VirtualMode = true;
             this.dgvImage.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvImage_CellValueNeeded);
             this.dgvImage.SelectionChanged += new System.EventHandler(this.dgvImage_SelectionChanged);
+            this.dgvImage.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvCommon_ColumnHeaderMouseClick);
             // 
             // dataGridViewTextBoxColumn6
             // 
             this.dataGridViewTextBoxColumn6.HeaderText = "Name";
             this.dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
             this.dataGridViewTextBoxColumn6.ReadOnly = true;
-            this.dataGridViewTextBoxColumn6.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn6.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             this.dataGridViewTextBoxColumn6.Width = 200;
             // 
             // dataGridViewTextBoxColumn7
@@ -1450,7 +1882,7 @@
             this.dataGridViewTextBoxColumn7.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridViewTextBoxColumn7.HeaderText = "Created by";
             this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
-            this.dataGridViewTextBoxColumn7.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn7.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             // 
             // tlsImageAura
             // 
@@ -1522,13 +1954,14 @@
             this.dgvText.VirtualMode = true;
             this.dgvText.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvText_CellValueNeeded);
             this.dgvText.SelectionChanged += new System.EventHandler(this.dgvText_SelectionChanged);
+            this.dgvText.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvCommon_ColumnHeaderMouseClick);
             // 
             // dataGridViewTextBoxColumn8
             // 
             this.dataGridViewTextBoxColumn8.HeaderText = "Name";
             this.dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
             this.dataGridViewTextBoxColumn8.ReadOnly = true;
-            this.dataGridViewTextBoxColumn8.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn8.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             this.dataGridViewTextBoxColumn8.Width = 200;
             // 
             // dataGridViewTextBoxColumn9
@@ -1536,7 +1969,7 @@
             this.dataGridViewTextBoxColumn9.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridViewTextBoxColumn9.HeaderText = "Created by";
             this.dataGridViewTextBoxColumn9.Name = "dataGridViewTextBoxColumn9";
-            this.dataGridViewTextBoxColumn9.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.dataGridViewTextBoxColumn9.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             // 
             // tlsTextAura
             // 
@@ -1608,6 +2041,7 @@
             this.dgvCallback.VirtualMode = true;
             this.dgvCallback.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvCallback_CellValueNeeded);
             this.dgvCallback.SelectionChanged += new System.EventHandler(this.dgvCallback_SelectionChanged);
+            this.dgvCallback.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvCommon_ColumnHeaderMouseClick);
             // 
             // colCallbackId
             // 
@@ -1621,7 +2055,7 @@
             this.colCallbackName.HeaderText = "Name";
             this.colCallbackName.Name = "colCallbackName";
             this.colCallbackName.ReadOnly = true;
-            this.colCallbackName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colCallbackName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             // 
             // toolStrip1
             // 
@@ -1703,6 +2137,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvPeTableVariables)).EndInit();
             this.toolStrip4.ResumeLayout(false);
             this.toolStrip4.PerformLayout();
+            this.tabDict.ResumeLayout(false);
+            this.tbcDict.ResumeLayout(false);
+            this.tabDictSession.ResumeLayout(false);
+            this.panelDict.ResumeLayout(false);
+            this.panelDict.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDictVariables)).EndInit();
+            this.tlsDict.ResumeLayout(false);
+            this.tlsDict.PerformLayout();
+            this.tabDictPersistent.ResumeLayout(false);
+            this.panelPeDict.ResumeLayout(false);
+            this.panelPeDict.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPeDictVariables)).EndInit();
+            this.tlsPeDict.ResumeLayout(false);
+            this.tlsPeDict.PerformLayout();
             this.tabMutexes.ResumeLayout(false);
             this.tabMutexes.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMutexes)).EndInit();
@@ -1858,5 +2306,37 @@
         private System.Windows.Forms.ToolStripButton btnPeTableRemove;
         private System.Windows.Forms.ToolStripSplitButton btnPeTableRefresh;
         private System.Windows.Forms.ToolStripMenuItem btnPeTableRemoveAll;
+        private System.Windows.Forms.TabPage tabDict;
+        private System.Windows.Forms.TabControl tbcDict;
+        private System.Windows.Forms.TabPage tabDictSession;
+        private System.Windows.Forms.Panel panelDict;
+        private CustomControls.DataGridViewEx dgvDictVariables;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDictName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDictSize;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDictValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDictLastChanged;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDictChangedBy;
+        private System.Windows.Forms.ToolStrip tlsDict;
+        private System.Windows.Forms.ToolStripButton btnDictAdd;
+        private System.Windows.Forms.ToolStripButton btnDictEdit;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparatorDict;
+        private System.Windows.Forms.ToolStripButton btnDictRemove;
+        private System.Windows.Forms.ToolStripSplitButton btnDictRefresh;
+        private System.Windows.Forms.ToolStripMenuItem btnDictRemoveAll;
+        private System.Windows.Forms.TabPage tabDictPersistent;
+        private System.Windows.Forms.Panel panelPeDict;
+        private CustomControls.DataGridViewEx dgvPeDictVariables;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPeDictName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPeDictSize;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPeDictValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPeDictLastChanged;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPeDictChangedBy;
+        private System.Windows.Forms.ToolStrip tlsPeDict;
+        private System.Windows.Forms.ToolStripButton btnPeDictAdd;
+        private System.Windows.Forms.ToolStripButton btnPeDictEdit;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparatorPeDict;
+        private System.Windows.Forms.ToolStripButton btnPeDictRemove;
+        private System.Windows.Forms.ToolStripSplitButton btnPeDictRefresh;
+        private System.Windows.Forms.ToolStripMenuItem btnPeDictRemoveAll;
     }
 }

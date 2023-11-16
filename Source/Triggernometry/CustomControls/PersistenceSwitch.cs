@@ -26,6 +26,7 @@ namespace Triggernometry.CustomControls
                 if (_IsPersistent != value)
                 {
                     _IsPersistent = value;
+                    RelatedTextbox.IsPersistent = value;
                     RefreshIcon();
                 }
             }
@@ -68,6 +69,7 @@ namespace Triggernometry.CustomControls
                 BackgroundImage = (Image)Tag;
             }
         }
+        public ExpressionTextBox RelatedTextbox { get; set; }
 
     }
 

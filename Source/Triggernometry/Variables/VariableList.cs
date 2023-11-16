@@ -1,7 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
 using System.Xml.Serialization;
-
 namespace Triggernometry.Variables
 {
 
@@ -16,6 +19,11 @@ namespace Triggernometry.Variables
 
         public VariableList()
         {
+        }
+
+        public int Size
+        {
+            get { return Values.Count; }
         }
 
         public VariableList(IEnumerable<object> objs)
@@ -65,6 +73,11 @@ namespace Triggernometry.Variables
             return -1;
         }
 
+        private int ProcessRawIndex(int rawIndex)
+        {   // rawIndex: starts from 1; could be negative
+            return (rawIndex < 0) ? (rawIndex + Size) : (rawIndex - 1);
+        }
+
         public override Variable Duplicate()
         {
             VariableList v = new VariableList();
@@ -84,46 +97,30 @@ namespace Triggernometry.Variables
             LastChanger = changer;
         }
 
-        public Variable QueuePop(string changer)
+        public Variable Pop(int rawIndex, string changer)
         {
-            if (Values.Count > 0)
+            int index = ProcessRawIndex(rawIndex);
+            if (index >= 0 && index < Size)
             {
-                Variable x = Values[0];
-                Values.RemoveAt(0);
+                Variable x = Values[index];
+                Values.RemoveAt(index);
                 LastChanged = DateTime.Now;
                 LastChanger = changer;
                 return x;
             }
-            return null;
+            else return new VariableScalar();
         }
-
-        public Variable StackPop(string changer)
+        
+        public void Insert(int rawIndex, Variable value, string changer)
         {
-            if (Values.Count > 0)
-            {
-                int idx = Values.Count - 1;
-                Variable x = Values[idx];
-                Values.RemoveAt(idx);
-                LastChanged = DateTime.Now;
-                LastChanger = changer;
-                return x;
-            }
-            return null;
-        }
-
-        public void Insert(int index, Variable value, string changer)
-        {
-            int idx = index - 1;
-            if (idx < 0)
-            {
-                idx = 0;
-            }
+            int idx = ProcessRawIndex(rawIndex);
+            if (idx < 0) { return; }
             if (idx >= Values.Count)
             {
                 int needcre = idx - Values.Count;
                 while (needcre > 0)
                 {
-                    Push(null, changer);
+                    Push(new VariableScalar() { Value = "" }, changer);
                     needcre--;
                 }                
             }
@@ -132,21 +129,42 @@ namespace Triggernometry.Variables
             LastChanger = changer;
         }
 
-        public void Insert(int index, string value, string changer)
+        public void Insert(int rawIndex, string value, string changer)
         {
-            Insert(index, new VariableScalar() { Value = value }, changer);
+            Insert(rawIndex, new VariableScalar() { Value = value }, changer);
         }
 
-        public void Set(int index, Variable value, string changer)
+        public void InsertList(int rawIndex, VariableList srcList, string changer)
         {
-            int idx = index - 1;
-            if (idx < 0)
-            {
-                idx = 0;
-            }
+            int idx = ProcessRawIndex(rawIndex);
+            if (idx < 0) { return; }
             if (idx >= Values.Count)
             {
                 int needcre = idx - Values.Count;
+                while (needcre > 0)
+                {
+                    Push(new VariableScalar() { Value = "" }, changer);
+                    needcre--;
+                }
+            }
+            for (int i = srcList.Size - 1; i >= 0; i--)
+            {
+                Values.Insert(idx, srcList.Values[i].Duplicate());
+            }
+            LastChanged = DateTime.Now;
+            LastChanger = changer;
+        }
+
+        public void Set(int rawIndex, Variable value, string changer)
+        {
+            int idx = ProcessRawIndex(rawIndex);
+            if (idx < 0)
+            {
+                return;
+            }
+            if (idx >= Values.Count)
+            {
+                int needcre = idx - Values.Count + 1;
                 while (needcre > 0)
                 {
                     Push(new VariableScalar() { Value = "" }, changer);
@@ -158,28 +176,28 @@ namespace Triggernometry.Variables
             LastChanger = changer;
         }
 
-        public void Set(int index, string value, string changer)
+        public void Set(int rawIndex, string value, string changer)
         {
-            Set(index, new VariableScalar() { Value = value }, changer);
+            Set(rawIndex, new VariableScalar() { Value = value }, changer);
         }
 
-        public void Remove(int index, string changer)
+        public void Remove(int rawIndex, string changer)
         {
-            int idx = index - 1;
+            int idx = ProcessRawIndex(rawIndex);
             if (idx >= 0 && idx < Values.Count)
             {
-                Values.RemoveAt(index - 1);
+                Values.RemoveAt(idx);
                 LastChanged = DateTime.Now;
                 LastChanger = changer;
             }
         }
 
-        public Variable Peek(int index)
+        public Variable Peek(int rawIndex)
         {
-            int idx = index - 1;
+            int idx = ProcessRawIndex(rawIndex);
             if (idx >= 0 && idx < Values.Count)
             {
-                return Values[index - 1];
+                return Values[idx];
             }
             return new VariableScalar();
         }
@@ -225,9 +243,31 @@ namespace Triggernometry.Variables
             return LastIndexOf(new VariableScalar() { Value = value });
         }
 
-        public int Size()
+        public string IndicesOf(string targetStr, string joiner, List<int> indices)
+        {   // accepts indices starts from 0; returns indices starts from 1
+            var selectedIndices = indices.Where(i => Values[i].ToString() == targetStr).Select(i => i + 1).ToList();
+            return string.Join(joiner, selectedIndices);
+        }
+
+        public int Count(string str, List<int> indices)
         {
-            return Values.Count;
+            return indices.Count(index => Values[index].ToString() == str);
+        }
+
+        public double Sum(List<int> indices)
+        {
+            double sum = 0;
+            foreach (int i in indices)
+            {
+                if (double.TryParse(Values[i].ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out double value))
+                    sum += value;
+            }
+            return sum;
+        }
+
+        public string Join(string joiner, List<int> indices)
+        {
+            return string.Join(joiner, indices.Select(index => Values[index].ToString()));
         }
 
         public string Join(string joiner)
@@ -325,6 +365,30 @@ namespace Triggernometry.Variables
                 }
                 return pa.GetValue("name").CompareTo(pb.GetValue("name")) * -1;
             });
+        }
+
+        public static VariableList Build(string expression, char separator, string changer)
+        {   // in actions
+            string[] elements = expression.Split(separator);
+            VariableList vl = new VariableList();
+            foreach (string element in elements)
+            {
+                vl.Values.Add(new VariableScalar { Value = element });
+            }
+            vl.LastChanger = changer;
+            vl.LastChanged = DateTime.Now;
+            return vl;
+        }
+
+        public static VariableList BuildTemp(string expression)
+        {   // in expressions: ${?l: 1, 2, 3 [xxx]}
+            string[] elements = Context.SplitArguments(expression);
+            VariableList vl = new VariableList();
+            foreach (string element in elements)
+            {
+                vl.Values.Add(new VariableScalar { Value = element });
+            }
+            return vl;
         }
 
     }

@@ -16,7 +16,7 @@ namespace Triggernometry
 
         public override string ToString()
         {
-            return RealPlugin.FormatDateTime(Timestamp) + " - " + I18n.Translate("internal/Plugin/loglevel" + Level.ToString(), "{0}", Level.ToString()) + " - " + Message;
+            return RealPlugin.FormatDateTime(Timestamp) + " - " + I18n.Translate($"LogForm/chk{Level}", $"{Level}") + " - " + Message;
         }
 
     }

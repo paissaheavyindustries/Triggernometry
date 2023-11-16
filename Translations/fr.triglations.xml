@@ -809,17 +809,12 @@
     <TranslationEntry Key="Plugin/UserInterface/ctxImport" Translation="Importer" />
     <TranslationEntry Key="Plugin/UserInterface/ctxPaste" Translation="Coller" />
     <TranslationEntry Key="Plugin/UserInterface/errThing1" Translation="Des erreurs ont été rencontrées" />
-    <TranslationEntry Key="Plugin/UserInterface/lblWelcomeCreate" Translation="Lorsque vous fermez cet écran de bienvenue, vous verrez l'interface utilisateur principale de Triggernometry. Sélectionnez simplement le dossier dans lequel vous souhaitez créer une trigger (ou racine) et appuyez sur le bouton Ajouter dans le coin supérieur gauche.&#xD;&#xA;&#xD;&#xA;Voici le bouton que vous devriez rechercher:" />
-    <TranslationEntry Key="Plugin/UserInterface/lblWelcomeCreateHeader" Translation="Comment puis-je créer une nouvelle trigger?" />
-    <TranslationEntry Key="Plugin/UserInterface/lblWelcomeDifferences" Translation="Triggernometry offre des fonctionnalités étendues, telles que plusieurs types d'action (auras et autres) et l'exécution conditionnelle lorsque certaines mesures ne sont prises que si les conditions sont remplies (par exemple, les besoins de nom de joueur à être quelque chose de spécifique)." />
-    <TranslationEntry Key="Plugin/UserInterface/lblWelcomeDifferencesHeader" Translation="En quoi est-ce différent des triggers d'ACT habituels?" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeImport" Translation="C'est très similaire à la création d'un trigger. Après cet écran, vous pouvez sélectionner le dossier dans lequel vous souhaitez importer tous les trigger(ou Root), puis appuyer sur le bouton Importer dans la barre supérieure.&#xD;&#xA;&#xD;&#xA;Voici le bouton que vous devriez rechercher:" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeImportHeader" Translation="J'ai ce fichier XML qui est censé avoir des triggers. Comment dois-je l'utiliser?" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeIntro" Translation="Voici quelques réponses aux questions fréquemment posées pour vous aider à démarrer:" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeResources" Translation="Triggernometry a un serveur Discord disponible, où vous pourrez poser des questions, trouver des triggers et obtenir les dernières mises à jour du plugin. Vous trouverez également des exemples et des informations détaillées sur le comportement des différentes opérations. N'hésitez pas à nous rejoindre à:" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeResourcesHeader" Translation="Où puis-je trouver plus de ressources, de triggersou d'aide sur la Triggernometry?" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeSpse" Translation="Les plugins tels que SpecialSpellTimer et Cactbot fournissent d'excellents outils et fonctionnalités généralisés prêts à l'emploi, sans tracas supplémentaire.&#xD;&#xA;&#xD;&#xA;La triggernométrie est plus un kit de construction de bricolage, vous offrant des options accessibles pour créer vos propres outils et fonctionnalités personnalisés. Il ne vient pas avec des délais ou des légendes, et en tant que tel, il est un peu plus compliqué pour commencer." />
-    <TranslationEntry Key="Plugin/UserInterface/lblWelcomeSpseHeader" Translation="En quoi est-ce différent de SpecialSpellTimer ou Cactbot?" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeThanks" Translation="Merci d'avoir installé Triggernometry!" />
     <TranslationEntry Key="TestInputForm" Translation="Test input" />
     <TranslationEntry Key="TestInputForm/btnCancel" Translation="Annuler" />
@@ -977,6 +972,7 @@
 	  <TranslationEntry Key="ActionForm/lblWmsgCode" Translation="Code de message" />
 	  <TranslationEntry Key="ActionForm/lblWmsgWparam" Translation="WParam" />
 	  <TranslationEntry Key="ActionForm/lblWmsgLparam" Translation="LParam" />
+    <TranslationEntry Key="internal/PersistenceSwitch/string" Translation="Determines if the variable to be modified is persistent, as in, will be saved to disk on exit and loaded back in when Triggernometry starts. Persistent variables live in a different namespace from regular variables." />
 	  <TranslationEntry Key="internal/Plugin/repoupdates" Translation="Sur le point de mettre à jour {0} dépôts" />
 	  <TranslationEntry Key="internal/Plugin/repoupdate" Translation="&quot;Mise à jour de dépôt {0} au {1}" />
 	  <TranslationEntry Key="internal/Plugin/repoupdateexception" Translation="Impossible de mettre à jour le dépôt {0} en raison d'une exception: {1}" />

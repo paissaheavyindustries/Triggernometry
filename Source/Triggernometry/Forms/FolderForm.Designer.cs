@@ -161,7 +161,7 @@
             // 
             this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOk.Dock = System.Windows.Forms.DockStyle.Left;
-            this.btnOk.Enabled = false;
+            this.btnOk.Enabled = true;
             this.btnOk.Location = new System.Drawing.Point(0, 0);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(150, 35);

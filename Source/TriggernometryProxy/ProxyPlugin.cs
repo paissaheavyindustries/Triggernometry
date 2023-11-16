@@ -109,7 +109,7 @@ namespace TriggernometryProxy
         {
             lock (this)
             {
-                Instance = new Triggernometry.RealPlugin();
+                Instance = Triggernometry.RealPlugin.plug;
                 foreach (Tuple<int, string, CustomCallbackDelegate, object> t in queuedRegs)
                 {
                     Instance.RegisterNamedCallback(t.Item1, t.Item2, t.Item3, t.Item4);
