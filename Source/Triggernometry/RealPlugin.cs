@@ -29,6 +29,8 @@ namespace Triggernometry
             None,
             Error,
             Warning,
+            Custom,
+            Custom2,
             Info,
             Verbose,
             Inherit
@@ -3603,12 +3605,20 @@ namespace Triggernometry
                     return c;
                 }
                 bool corruptFallback = false;
-                if (fi.Length == 0)
+                string lastLine = File.ReadLines(filename).LastOrDefault();
+                if (lastLine == null || lastLine.Trim() != "</Configuration>")
                 {
                     // configuration has been corrupted, try loading previous config file instead
                     string newfilename = filename + ".previous";
                     fi = new FileInfo(newfilename);
-                    cre = I18n.Translate("internal/Plugin/cfgcorrupted", "Configuration file '{0}' appears to have been corrupted, loading previous configuration file '{1}'", filename, newfilename);
+                    // translation file is loaded after this, so the I18n won't work
+                    cre = I18n.Translate("internal/Plugin/cfgcorrupted", 
+                        "Configuration file has been corrupted: \n" +
+                        "'{0}' \n\n" +
+                        "Loading previous configuration file: \n" +
+                        "'{1}'", 
+                        filename, newfilename);
+                    MessageBox.Show(cre, "Triggernometry", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     if (fi.Exists == true)
                     {
                         filename = newfilename;
@@ -3759,6 +3769,11 @@ namespace Triggernometry
                         sw.Flush();
                     }
                 }
+                string lastLine = File.ReadLines(filename + ".temp").LastOrDefault();
+                if (lastLine == null || lastLine.Trim() != "</Configuration>")
+                {
+                    throw new Exception(I18n.Translate("internal/Plugin/cfgsaveincomplete", "The saving process was interrupted.") + "\n");
+                }
                 if (switchprevious == true)
                 {
                     if (File.Exists(filename + ".previous") == true)
@@ -3835,7 +3850,7 @@ namespace Triggernometry
 
         internal bool ReadyForOperation()
         {
-            return mainform.IsHandleCreated == true && ActInitedHook() == true;
+            return mainform?.IsHandleCreated == true && ActInitedHook?.Invoke() == true;
         }
 
         internal void ActionThreadProc()
@@ -4028,7 +4043,6 @@ namespace Triggernometry
 
         public void RegisterNamedCallback(int id, string name, Delegate del, object o)
         {
-            
             NamedCallback nc = new NamedCallback();
             nc.Id = id;
             nc.Callback = del;
@@ -4043,6 +4057,23 @@ namespace Triggernometry
                 }
                 callbacksByName[name].Add(nc);
             }
+        }
+
+        public int RegisterNamedCallback(string name, Delegate callback, object o, bool allowDuplicatedName = false)
+        {   // used in scripts to register callbacks manually
+            if (!allowDuplicatedName)
+            {
+                UnregisterNamedCallback(name);
+            }
+
+            int id;
+            lock (callbacksById)
+            {
+                id = (callbacksById.Count == 0) ? 1 : callbacksById.Keys.Max() + 1;
+            }
+
+            RegisterNamedCallback(id, name, callback, o);
+            return id;
         }
 
         public void UnregisterNamedCallback(int id)
@@ -4064,6 +4095,21 @@ namespace Triggernometry
             }
         }
 
+        public void UnregisterNamedCallback(string name)
+        {   // unregister all callbacks with the given name
+            lock (callbacksById)
+            {
+                if (!callbacksByName.ContainsKey(name))
+                {
+                    return;
+                }
+                foreach (NamedCallback nc in callbacksByName[name])
+                {
+                    callbacksById.Remove(nc.Id);
+                }
+                callbacksByName.Remove(name);
+            }
+        }
     }
 
 }

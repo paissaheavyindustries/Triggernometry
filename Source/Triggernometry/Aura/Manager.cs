@@ -457,7 +457,7 @@ namespace Triggernometry.Aura
                     ac.Add(a);
                 }
             }
-            catch (Exception ex)
+            catch (Exception /*ex*/)
             {
                 /* tododoo
                 if (a.ctx != null && a.ctx.trig != null)

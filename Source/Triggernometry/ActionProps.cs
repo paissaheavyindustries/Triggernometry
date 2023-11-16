@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -18,31 +18,32 @@ namespace Triggernometry
             SystemBeep,
             PlaySound,
             UseTTS,
-            LaunchProcess,
-            Trigger,
-            KeyPress,
-            ExecuteScript,
-            MessageBox,
             Variable,
-            Aura,
-            Folder,
-            EndEncounter,
-            DiscordWebhook,
-            TextAura,
-            LogMessage,
             ListVariable,
-            ObsControl,
-            LiveSplitControl,
-            GenericJson,
+            TableVariable,
+            DictVariable,
+            MessageBox,
+            LogMessage,
+            TextAura,
+            Aura,
+            Mouse,
+            KeyPress,
+            NamedCallback,
             WindowMessage,
             DiskFile,
-            TableVariable,
+            LaunchProcess,
+            ExecuteScript,
             Mutex,
-            Placeholder,
-            NamedCallback,
-            Mouse,
             Loop,
-            Repository
+            GenericJson,
+            DiscordWebhook,
+            LiveSplitControl,
+            ObsControl,
+            EndEncounter,
+            Trigger,
+            Folder,
+            Repository,
+            Placeholder
         }
 
         public enum VariableOpEnum
@@ -50,8 +51,10 @@ namespace Triggernometry
             Unset,
             SetString,
             SetNumeric,
+            Clipboard,
             UnsetAll,
             UnsetRegex,
+            UnsetRegexUniversal,
             QueryJsonPath,
             QueryJsonPathList
         }
@@ -59,15 +62,47 @@ namespace Triggernometry
         public enum TableVariableOpEnum
         {
             Unset,
-            Resize,
             Set,
+            SetAll,
+            SlicesSetAll,
+            Resize,
+            Build,
+            SetLine,
+            InsertLine,
+            RemoveLine,
+            Filter,
+            FilterLine,
+            Copy,
+            Append,
+            SortLine,
+            GetAllEntities,
             UnsetAll,
             UnsetRegex,
-            Copy,
-            Append
         }
 
         public enum TableVariableExpTypeEnum
+        {
+            String,
+            Numeric
+        }
+
+        public enum DictVariableOpEnum
+        {
+            Unset,
+            Set,
+            Remove,
+            SetAll,
+            Build,
+            Filter,
+            Merge,
+            MergeHard,
+            GetEntityByName,
+            GetEntityById,
+            UnsetAll,
+            UnsetRegex,
+        }
+
+        public enum DictVariableExpTypeEnum
         {
             String,
             Numeric
@@ -92,7 +127,8 @@ namespace Triggernometry
         public enum FolderOpEnum
         {
             EnableFolder,
-            DisableFolder
+            DisableFolder,
+            CancelFolder,
         }
 
         public enum AuraOpEnum
@@ -132,21 +168,27 @@ namespace Triggernometry
             Push,
             Insert,
             Set,
+            SetAll,
             Remove,
-            PopLast,
             PopFirst,
+            PopToListInsert,
+            PopToListSet,
+            PopLast,
+            Build,
+            Filter,
+            Join,
+            Split,
+            Copy,
+            InsertList,
+            SortNumericAsc,
+            SortNumericDesc,
             SortAlphaAsc,
             SortAlphaDesc,
             SortFfxivPartyAsc,
             SortFfxivPartyDesc,
-            Copy,
-            InsertList,
-            Join,
-            Split,
+            SortByKeys,
             UnsetAll,
             UnsetRegex,
-            SortNumericAsc,
-            SortNumericDesc
         }
 
         public enum ListVariableExpTypeEnum
@@ -208,8 +250,10 @@ namespace Triggernometry
         {
             Error,
             Warning,
+            Custom,
+            Custom2,
             Info,
-            Verbose
+            Verbose,
         }
 
         [Flags]
@@ -221,6 +265,7 @@ namespace Triggernometry
             SkipRefire = 4,
             SkipParent = 8,
             SkipActive = 16,
+            SkipExceptConditions = SkipRegexp | SkipRefire | SkipParent | SkipActive,
             SkipAll = SkipRegexp | SkipConditions | SkipRefire | SkipParent | SkipActive
         }
 
@@ -272,13 +317,13 @@ namespace Triggernometry
 
         #region Action specific properties - Beep
 
-        internal string _SystemBeepFreqExpression = "1000";
+        internal string _SystemBeepFreqExpression = "1046.5"; // freq(C6)
         [XmlAttribute]
         public string SystemBeepFreqExpression
         {
             get
             {
-                if (_SystemBeepFreqExpression == "1000")
+                if (_SystemBeepFreqExpression == "1046.5")
                 {
                     return null;
                 }
@@ -305,6 +350,156 @@ namespace Triggernometry
             set
             {
                 _SystemBeepLengthExpression = value;
+            }
+        }
+
+        #endregion
+        #region Action specific properties - Dict variable
+
+        internal DictVariableOpEnum _DictVariableOp { get; set; } = DictVariableOpEnum.Unset;
+        [XmlAttribute]
+        public string DictVariableOp
+        {
+            get
+            {
+                if (_DictVariableOp != DictVariableOpEnum.Unset)
+                {
+                    return _DictVariableOp.ToString();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                _DictVariableOp = (DictVariableOpEnum)Enum.Parse(typeof(DictVariableOpEnum), value);
+            }
+        }
+
+        internal DictVariableExpTypeEnum _DictVariableKeyType { get; set; } = DictVariableExpTypeEnum.String;
+        [XmlAttribute]
+        public string DictVariableKeyType
+        {
+            get
+            {
+                return (_DictVariableKeyType != DictVariableExpTypeEnum.String) ? _DictVariableKeyType.ToString() : null;
+            }
+            set
+            {
+                _DictVariableKeyType = (DictVariableExpTypeEnum)Enum.Parse(typeof(DictVariableExpTypeEnum), value);
+            }
+        }
+
+        internal DictVariableExpTypeEnum _DictVariableValueType { get; set; } = DictVariableExpTypeEnum.String;
+        [XmlAttribute]
+        public string DictVariableValueType
+        {
+            get
+            {
+                return (_DictVariableValueType != DictVariableExpTypeEnum.String) ? _DictVariableValueType.ToString() : null;
+            }
+            set
+            {
+                _DictVariableValueType = (DictVariableExpTypeEnum)Enum.Parse(typeof(DictVariableExpTypeEnum), value);
+            }
+        }
+
+        internal string _DictVariableName = "";
+        [XmlAttribute]
+        public string DictVariableName
+        {
+            get
+            {
+                return (_DictVariableName == "") ? null : _DictVariableName;
+            }
+            set
+            {
+                _DictVariableName = value;
+            }
+        }
+
+        internal string _DictVariableTarget = "";
+        [XmlAttribute]
+        public string DictVariableTarget
+        {
+            get
+            {
+                return (_DictVariableTarget == "") ? null : _DictVariableTarget;
+            }
+            set
+            {
+                _DictVariableTarget = value;
+            }
+        }
+
+        internal string _DictVariableLength = "";
+        [XmlAttribute]
+        public string DictVariableLength
+        {
+            get
+            {
+                return (_DictVariableLength == "") ? null : _DictVariableLength;
+            }
+            set
+            {
+                _DictVariableLength = value;
+            }
+        }
+
+        internal string _DictVariableKey = "";
+        [XmlAttribute]
+        public string DictVariableKey
+        {
+            get
+            {
+                return (_DictVariableKey == "") ? null : _DictVariableKey;
+            }
+            set
+            {
+                _DictVariableKey = value;
+            }
+        }
+
+        internal string _DictVariableValue = "";
+        [XmlAttribute]
+        public string DictVariableValue
+        {
+            get
+            {
+                return (_DictVariableValue == "") ? null : _DictVariableValue;
+            }
+            set
+            {
+                _DictVariableValue = value;
+            }
+        }
+
+        internal bool _DictSourcePersist { get; set; } = false;
+        [XmlAttribute]
+        public string DictSourcePersist
+        {
+            get
+            {
+                return (_DictSourcePersist) ? _DictSourcePersist.ToString() : null;
+            }
+            set
+            {
+                _DictSourcePersist = Boolean.Parse(value);
+            }
+        }
+
+        internal bool _DictTargetPersist { get; set; } = false;
+        [XmlAttribute]
+        public string DictTargetPersist
+        {
+            get
+            {
+                return (_DictTargetPersist) ? _DictTargetPersist.ToString() : null;
+            }
+            set
+            {
+                _DictTargetPersist = Boolean.Parse(value);
             }
         }
 

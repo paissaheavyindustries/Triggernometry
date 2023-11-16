@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Triggernometry.CustomControls;
 using Triggernometry.Variables;
 
 namespace Triggernometry.Forms
@@ -101,7 +102,7 @@ namespace Triggernometry.Forms
                 Configuration c = new Configuration();
                 trbSoundVolume.Value = 100;
                 trbTtsVolume.Value = 100;
-                cbxLoggingLevel.SelectedIndex = 2;
+                cbxLoggingLevel.SelectedIndex = (int)RealPlugin.DebugLevelEnum.Custom2;
                 chkActTts.Checked = false;
                 chkActSoundFiles.Checked = false;
                 chkClipboard.Checked = false;
@@ -113,6 +114,7 @@ namespace Triggernometry.Forms
                 cbxUpdateMethod.SelectedIndex = 1;
                 chkWarnAdmin.Checked = true;
                 cbxTestLive.Checked = false;
+                cbxTestIgnoreConditions.Checked = false;
                 cbxActionAsync.Checked = true;
                 chkLogNormalEvents.Checked = true;
                 chkLogVariableExpansions.Checked = false;
@@ -147,6 +149,7 @@ namespace Triggernometry.Forms
                 chkWelcome.Checked = a.ShowWelcome;
                 chkWarnAdmin.Checked = a.WarnAdmin;
                 cbxTestLive.Checked = a.TestLiveByDefault;
+                cbxTestIgnoreConditions.Checked = a.TestIgnoreConditionsByDefault;
                 cbxActionAsync.Checked = a.ActionAsyncByDefault;
                 chkUpdates.Checked = (a.UpdateNotifications == Configuration.UpdateNotificationsEnum.Yes);
                 cbxUpdateMethod.SelectedIndex = (int)a.UpdateCheckMethod;
@@ -208,6 +211,7 @@ namespace Triggernometry.Forms
             a.ShowWelcome = chkWelcome.Checked;
             a.WarnAdmin = chkWarnAdmin.Checked;
             a.TestLiveByDefault = cbxTestLive.Checked;
+            a.TestIgnoreConditionsByDefault = cbxTestIgnoreConditions.Checked;
             a.ActionAsyncByDefault = cbxActionAsync.Checked;
             a.LogNormalEvents = chkLogNormalEvents.Checked;
             a.LogVariableExpansions = chkLogVariableExpansions.Checked;
@@ -937,13 +941,18 @@ namespace Triggernometry.Forms
                 Trigger.TriggerSourceEnum oldSource = t._Source;
                 tf.AllowAnonymousTrigger = true;
                 tf.plug = plug;
+                ExpressionTextBox.SetPlugForTextBoxes(tf, plug);
+                ExpressionTextBox.CurrentTriggerRegexStr = t.RegularExpression;
                 tf.fakectx.trig = t;
                 tf.fakectx.plug = plug;
                 tf.SettingsFromTrigger(t);
+                tf.initialDescriptions = tf.GetAllDescriptionsStr();
                 tf.imgs = plug.ui.imageList1;
                 tf.trv = plug.ui.treeView1;
                 tf.Text = I18n.Translate("internal/UserInterface/edittemplatetrigger", "Edit template trigger");
-                tf.btnOk.Text = I18n.Translate("internal/UserInterface/savechanges", "Save changes");
+                tf.btnOk.Text = I18n.Translate("TriggerForm/btnOk", "Save Changes");
+                tf.GetTriggerDescription();
+                tf.SetTriggerDescription();
                 tf.wmp = plug.wmp;
                 tf.tts = plug.tts;
                 if (tf.ShowDialog() == DialogResult.OK)

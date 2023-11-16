@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace Triggernometry.Variables
@@ -38,21 +38,6 @@ namespace Triggernometry.Variables
             {
                 return Rows != null ? Rows.Count : 0;
             }
-        }
-
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-            for (int y = 1; y <= Height; y++)
-            {
-                List<string> temp = new List<string>();
-                for (int x = 1; x <= Width; x++)
-                {
-                    temp.Add(Peek(x, y).ToString());
-                }
-                sb.AppendLine(String.Join(",", temp));
-            }
-            return sb.ToString();
         }
 
         public override int CompareTo(object o)
@@ -145,9 +130,12 @@ namespace Triggernometry.Variables
             {
                 while (Height < newHeight)
                 {
-                    VariableTableRow vtr = new VariableTableRow();
-                    vtr.Values.AddRange(new Variable[newWidth]);
-                    Rows.Add(vtr);
+                    var emptyRow = new VariableTableRow();
+                    for (int i = 0; i < newWidth; i++)
+                    {
+                        emptyRow.Values.Add(new VariableScalar());
+                    }
+                    Rows.Add(emptyRow);
                 }
             }
             else if (Height > newHeight)
@@ -166,7 +154,11 @@ namespace Triggernometry.Variables
                     }
                     else if (Rows[i].Values.Count < newWidth)
                     {
-                        Rows[i].Values.AddRange(new Variable[newWidth - Rows[i].Values.Count]);
+                        int num = newWidth - Rows[i].Values.Count;
+                        for (int j = 0; j < num; j++)
+                        {
+                            Rows[i].Values.Add(new VariableScalar());
+                        }
                     }
                 }
             }
@@ -182,11 +174,21 @@ namespace Triggernometry.Variables
             Variable nv = value.Duplicate();
             InternalSet(x, y, nv, changer);
         }
+        
+        private int ProcessColIndex(int rawIndex)
+        {   // rawIndex: starts from 1; could be negative
+            return (rawIndex < 0) ? (rawIndex + Width) : (rawIndex - 1);
+        }
+        
+        private int ProcessRowIndex(int rawIndex)
+        {   // rawIndex: starts from 1; could be negative
+            return (rawIndex < 0) ? (rawIndex + Height) : (rawIndex - 1);
+        }
 
         private void InternalSet(int x, int y, Variable value, string changer)
         {
-            x--;
-            y--;
+            x = ProcessColIndex(x);
+            y = ProcessRowIndex(y);
             if (x < 0 || y < 0 || x >= Width || y >= Height)
             {
                 return;
@@ -198,8 +200,8 @@ namespace Triggernometry.Variables
 
         public Variable Peek(int x, int y)
         {
-            x--;
-            y--;
+            x = ProcessColIndex(x);
+            y = ProcessRowIndex(y);
             if (x < 0 || y < 0 || x >= Width || y >= Height)
             {
                 return new VariableScalar();
@@ -271,51 +273,246 @@ namespace Triggernometry.Variables
             return 0;
         }
 
-        public void InsertRow(int index)
+        public int VLookup(string targetStr, int rowIndex, List<int> colIndices)
         {
-            Resize(Width > 0 ? Width : 1, Height + 1);
-            for (int y = Height - 1; y > index; y--)
-            {
-                Rows[y] = Rows[y - 1];
-            }
-            if (index >= Height)
-            {
-                index = Height - 1;
-            }
-            VariableScalar[] vs = new VariableScalar[Width];
-            Rows[index] = new VariableTableRow();
-            Rows[index].Values = new List<Variable>();
-            Rows[index].Values.AddRange(vs);
+            return VLookup(new VariableScalar() { Value = targetStr }, rowIndex, colIndices);
         }
 
-        public void RemoveRow(int index)
+        public int VLookup(Variable targetStr, int colIndex, List<int> rowIndices)
         {
+            if (colIndex < 0 || colIndex >= Width)
+            {
+                return 0;
+            }
+
+            foreach (int rowIndex in rowIndices)
+            {
+                if (Rows[rowIndex].Values[colIndex].CompareTo(targetStr) == 0)
+                {
+                    return rowIndex + 1;
+                }
+            }
+            return 0;
+        }
+
+        public int HLookup(string targetStr, int rowIndex, List<int> colIndices)
+        {
+            return HLookup(new VariableScalar() { Value = targetStr }, rowIndex, colIndices);
+        }
+
+        public int HLookup(Variable targetStr, int rowIndex, List<int> colIndices)
+        {
+            if (rowIndex < 0 || rowIndex >= Height)
+            {
+                return 0;
+            }
+
+            foreach (int colIndex in colIndices)
+            {
+                var a = Rows[rowIndex].Values[colIndex];
+                if (Rows[rowIndex].Values[colIndex].CompareTo(targetStr) == 0)
+                {
+                    return colIndex + 1;
+                }
+            }
+            return 0;
+        }
+
+        public string ToCSVString(string colJoiner = ",")
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int y = 1; y <= Height; y++)
+            {
+                List<string> temp = new List<string>();
+                for (int x = 1; x <= Width; x++)
+                {
+                    string tempStr = Peek(x, y).ToString();
+                    if (tempStr.Contains(',') || tempStr.Contains('"') || tempStr.Contains('\n') || tempStr.Contains('\r'))
+                    {
+                        tempStr = "\"" + tempStr.Replace("\"", "\"\"") + "\"";
+                    }
+                    temp.Add(tempStr);
+                }
+                sb.AppendLine(String.Join(colJoiner, temp));
+            }
+            return sb.ToString().TrimEnd('\r', '\n');
+        }
+
+        public double Sum(List<int> colIndices, List<int> rowIndices)
+        {
+            double sum = 0;
+            foreach (int x in colIndices)
+            {
+                foreach (int y in rowIndices)
+                {
+                    if (double.TryParse(Rows[y].Values[x].ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out double value))
+                        sum += value;
+                }
+            }
+            return sum;
+        }
+
+        public string VJoin(string joiner1, string joiner2, List<int> colSlices, List<int> rowSlices)
+        {
+            List<string> cols = new List<string>();
+
+            foreach (int colIndex in colSlices)
+            {
+                List<string> rows = new List<string>();
+
+                foreach (int rowIndex in rowSlices)
+                {
+                    rows.Add(Rows[rowIndex].Values[colIndex].ToString());
+                }
+
+                cols.Add(String.Join(joiner1, rows));
+            }
+
+            return String.Join(joiner2, cols);
+        }
+
+        public string HJoin(string joiner1, string joiner2, List<int> colSlices, List<int> rowSlices)
+        {
+            List<string> rows = new List<string>();
+
+            foreach (int rowIndex in rowSlices)
+            {
+                List<string> cols = new List<string>();
+
+                foreach (int colIndex in colSlices)
+                {
+                    cols.Add(Rows[rowIndex].Values[colIndex].ToString());
+                }
+
+                rows.Add(String.Join(joiner1, cols));
+            }
+
+            return String.Join(joiner2, rows);
+        }
+
+        public void SetRow(int index, string[] newValues = null, string changer = "")
+        {   // index starts from 0
+            newValues = newValues ?? new string[0];
+            int mx = Math.Max(Math.Max(newValues.Length, Width), 1);
+            int my = Math.Max(index + 1, Height);
+            if (mx != Width || my != Height)
+            {
+                Resize(mx, my);
+            }
+
+            for (int x = 0; x < mx; x++)
+            {
+                Set(x + 1, index + 1, ((x < newValues.Length) ? newValues[x] : ""), changer);
+            }
+            if (changer != "")
+            {
+                LastChanger = changer;
+                LastChanged = DateTime.Now;
+            }
+        }
+
+        public void SetColumn(int index, string[] newValues = null, string changer = "")
+        {
+            // index starts from 0
+            newValues = newValues ?? new string[0];
+
+            int mx = Math.Max(index + 1, Width);
+            int my = Math.Max(Math.Max(newValues.Length, Height), 1);
+            if (mx != Width || my != Height)
+            {
+                Resize(mx, my);
+            }
+
+            for (int y = 0; y < my; y++)
+            {
+                Set(index + 1, y + 1, ((y < newValues.Length) ? newValues[y] : ""), changer);
+            }
+            if (changer != "")
+            {
+                LastChanger = changer;
+                LastChanged = DateTime.Now;
+            }
+        }
+
+        public void InsertRow(int index, string[] newValues = null, string changer = "")
+        {   // index starts from 0
+            newValues = newValues ?? new string[0];
+            if (index >= Height)
+            {   
+                SetRow(index, newValues, changer);
+            }
+            else
+            {
+                int mx = Math.Max(Math.Max(newValues.Length, Width), 1);
+                Resize(mx, Height + 1);
+                for (int y = Height - 1; y > index; y--)
+                {
+                    Rows[y] = Rows[y - 1];
+                }
+                VariableScalar[] vs = new VariableScalar[Width];
+                for (int x = 0; x < Width; x++)
+                {
+                    vs[x] = (x < newValues.Length) ? new VariableScalar { Value = newValues[x] } 
+                                                   : new VariableScalar();
+                }
+
+                Rows[index] = new VariableTableRow();
+                Rows[index].Values = new List<Variable>();
+                Rows[index].Values.AddRange(vs);
+            }
+            if (changer != "")
+            {
+                LastChanger = changer;
+                LastChanged = DateTime.Now;
+            }
+        }
+
+        public void InsertColumn(int index, string[] newValues = null, string changer = "")
+        {   // index starts from 0
+            newValues = newValues ?? new string[0];
+            if (index >= Width)
+            {
+                SetColumn(index, newValues, changer);
+            }
+            else 
+            {
+                int my = Math.Max(Math.Max(newValues.Length, Height), 1);
+                Resize(Width + 1, my);
+                for (int y = 0; y < Height; y++)
+                {
+                    for (int x = Width - 1; x > index; x--)
+                    {
+                        Rows[y].Values[x] = Rows[y].Values[x - 1];
+                    }
+                    Rows[y].Values[index] = (y < newValues.Length) ? new VariableScalar { Value = newValues[y] }
+                                                                   : new VariableScalar();
+                }
+            }
+            if (changer != "")
+            {
+                LastChanger = changer;
+                LastChanged = DateTime.Now;
+            }
+        }
+
+        public void RemoveRow(int index, string changer = "")
+        {   // index starts from 0
+            if (index < 0 || index >= Height) { return; }
             for (int y = index; y < Height - 1; y++)
             {
                 Rows[y] = Rows[y + 1];
             }
             Resize(Width, Height - 1);
-        }
-
-        public void InsertColumn(int index)
-        {
-            Resize(Width + 1, Height > 0 ? Height : 1);
-            for (int y = 0; y < Height; y++)
+            if (changer != "")
             {
-                for (int x = Width - 1; x > index; x--)
-                {
-                    Rows[y].Values[x] = Rows[y].Values[x - 1];
-                }
-                if (index >= Width)
-                {
-                    index = Width - 1;
-                }
-                Rows[y].Values[index] = new VariableScalar();
+                LastChanger = changer;
+                LastChanged = DateTime.Now;
             }
         }
 
-        public void RemoveColumn(int index)
-        {
+        public void RemoveColumn(int index, string changer = "")
+        {   // index starts from 0
+            if (index < 0 || index >= Width) { return; }
             for (int y = 0; y < Height; y++)
             {
                 for (int x = index; x < Width - 1; x++)
@@ -324,6 +521,71 @@ namespace Triggernometry.Variables
                 }
             }
             Resize(Width - 1, Height);
+            if (changer != "")
+            {
+                LastChanger = changer;
+                LastChanged = DateTime.Now;
+            }
+        }
+
+        public int Count(string str, List<int> colIndices, List<int> rowIndices)
+        {
+            int count = 0;
+            foreach (int y in rowIndices)
+            { 
+                count += colIndices.Count(x => Rows[y].Values[x].ToString() == str);
+            }
+            return count;
+        }
+
+        public static VariableTable Build(string expression, char colSeparator, char rowSeparator, string changer)
+        {   // in actions
+            string[] rowStrings = expression.Split(rowSeparator);
+            List<string[]> cellStrings = new List<string[]>();
+            int width = 0;
+            int height = rowStrings.Length;
+            foreach (string row in rowStrings)
+            {
+                string[] cells = row.Split(colSeparator);
+                cellStrings.Add(cells);
+                width = Math.Max(width, cells.Length);
+            }
+            VariableTable vt = ActualBuild(cellStrings, width, height);
+            vt.LastChanger = changer;
+            vt.LastChanged = DateTime.Now;
+            return vt;
+        }
+
+        public static VariableTable BuildTemp(string expression)
+        {   // in expressions: ${?t: 1, 2 | 3, 4 | 5, 6 [xxx][xxx]}
+            string[] rowStrings = Context.SplitArguments(expression, separator: "|");
+            List<string[]> cellStrings = new List<string[]>();
+            int width = 0;
+            int height = rowStrings.Length;
+            foreach (string row in rowStrings)
+            {
+                string[] cells = Context.SplitArguments(row);
+                cellStrings.Add(cells);
+                width = Math.Max(width, cells.Length);
+            }
+            return ActualBuild(cellStrings, width, height);
+        }
+
+        private static VariableTable ActualBuild(List<string[]> cellStrings, int width, int height)
+        {
+            VariableTable vt = new VariableTable();
+            for (int rowIndex = 0; rowIndex < height; rowIndex++)
+            {
+                vt.Rows.Add(new VariableTableRow());
+                for (int colIndex = 0; colIndex < width; colIndex++)
+                {
+                    vt.Rows[rowIndex].Values.Add(
+                        (colIndex < cellStrings[rowIndex].Length)
+                        ? new VariableScalar { Value = cellStrings[rowIndex][colIndex] }
+                        : new VariableScalar());
+                }
+            }
+            return vt;
         }
 
     }

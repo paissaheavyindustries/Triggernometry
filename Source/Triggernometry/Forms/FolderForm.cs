@@ -192,7 +192,7 @@ namespace Triggernometry.Forms
 
         private void txtName_TextChanged(object sender, EventArgs e)
         {
-            btnOk.Enabled = (txtFolderName.TextLength > 0);
+            btnOk.Enabled = true; // (txtFolderName.TextLength > 0);
         }
 
         private void chkZoneFilter_CheckedChanged(object sender, EventArgs e)

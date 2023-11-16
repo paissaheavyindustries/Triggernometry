@@ -1,13 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Xml.Serialization;
 
 namespace Triggernometry.Variables
 {
-
+    [XmlRoot(ElementName = "VariableDictionary")]
     public sealed class VariableDictionary : Variable
     {
+        [XmlIgnore]
+        public Dictionary<string, Variable> Values { get; set; } = new Dictionary<string, Variable>();
 
-        private Dictionary<string, Variable> Values { get; set; } = new Dictionary<string, Variable>();
+        [XmlArray("Items")]
+        [XmlArrayItem("Item")]
+        public KeyValue[] KeyValuePairs
+        {
+            get
+            {
+                List<KeyValue> list = new List<KeyValue>();
+                foreach (KeyValuePair<string, Variable> pair in Values)
+                {
+                    list.Add(new KeyValue() { Key = pair.Key, Value = pair.Value });
+                }
+                return list.ToArray();
+            }
+            set
+            {
+                Values.Clear();
+                foreach (KeyValue kv in value)
+                {
+                    Values[kv.Key] = kv.Value;
+                }
+            }
+        }
+
+        public class KeyValue
+        {
+            [XmlElement("Key")]
+            public string Key { get; set; }
+
+            [XmlElement("Value")]
+            public Variable Value { get; set; }
+        }
+
+        public int Size
+        {
+            get { return Values.Count; }
+        }
+
+        private const string DEFAULTCHANGER = "VariableDictionary";
 
         public override string ToString()
         {
@@ -30,7 +72,7 @@ namespace Triggernometry.Variables
             }
             if (o is VariableDictionary)
             {
-                VariableDictionary v = (VariableDictionary)o;                
+                VariableDictionary v = (VariableDictionary)o;
                 if (v.Values.Keys.Count > Values.Keys.Count)
                 {
                     return -1;
@@ -82,38 +124,164 @@ namespace Triggernometry.Variables
             return new VariableScalar();
         }
 
-        public void SetValue(string id, int val)
+        public void SetValue(string id, int val, string changer = DEFAULTCHANGER)
         {
-            InternalSetValue(id, new VariableScalar() { Value = val.ToString() });
+            InternalSetValue(id, new VariableScalar() { Value = I18n.ThingToString(val) }, changer);
         }
 
-        public void SetValue(string id, float val)
+        public void SetValue(string id, float val, string changer = DEFAULTCHANGER)
         {
-            InternalSetValue(id, new VariableScalar() { Value = I18n.ThingToString(val) });
+            InternalSetValue(id, new VariableScalar() { Value = I18n.ThingToString(val) }, changer);
         }
 
-        public void SetValue(string id, double val)
+        public void SetValue(string id, double val, string changer = DEFAULTCHANGER)
         {
-            InternalSetValue(id, new VariableScalar() { Value = I18n.ThingToString(val) });            
+            InternalSetValue(id, new VariableScalar() { Value = I18n.ThingToString(val) }, changer);
         }
 
-        public void SetValue(string id, string val)
+        public void SetValue(string id, string val, string changer = DEFAULTCHANGER)
         {
-            InternalSetValue(id, new VariableScalar() { Value = val });
+            InternalSetValue(id, new VariableScalar() { Value = val }, changer);
         }
 
-        public void SetValue(string id, Variable val)
+        public void SetValue(string id, Variable val, string changer = DEFAULTCHANGER)
         {
-            InternalSetValue(id, val.Duplicate());
+            InternalSetValue(id, val.Duplicate(), changer);
         }
 
-        private void InternalSetValue(string id, Variable val)
+        private void InternalSetValue(string id, Variable val, string changer)
         {
             Values[id] = val;
             LastChanged = DateTime.Now;
-            LastChanger = "VariableDictionary";
+            LastChanger = changer;
         }
 
+        public void RemoveKey(string key, string changer)
+        {
+            if (Values.ContainsKey(key))
+            {
+                Values.Remove(key);
+                LastChanged = DateTime.Now;
+                LastChanger = changer;
+            }
+        }
+
+        public bool ContainsKey(string key)
+        {
+            return Values.ContainsKey(key);
+        }
+
+        public bool ContainsValue(string value)
+        {
+            return Values.Values.Any(var => var.ToString() == value);
+        }
+
+        public int Count(string str)
+        {
+            return Values.Count(pair => pair.Value.ToString() == str);
+        }
+
+        public double Sum()
+        {
+            double sum = 0;
+            foreach (Variable varValue in Values.Values)
+            {
+                if (double.TryParse(varValue.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out double value))
+                    sum += value;
+            }
+            return sum;
+        }
+
+        public double SumKeys()
+        {
+            double sum = 0;
+            foreach (string key in Values.Keys)
+            {
+                if (double.TryParse(key, NumberStyles.Float, CultureInfo.InvariantCulture, out double value))
+                    sum += value;
+            }
+            return sum;
+        }
+
+        public double Min(double initValue)
+        {
+            double min = initValue;
+            foreach (var item in Values.Values)
+            {
+                if (double.TryParse(item.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out double num))
+                {
+                    if (num < min) { min = num; }
+                }
+            }
+            return min;
+        }
+
+        public string KeyOf(string value)
+        {
+            var keys = Values.Where(pair => pair.Value.ToString() == value)
+                             .Select(pair => pair.Key);
+            return keys.FirstOrDefault() ?? "";
+        }
+
+        public string KeysOf(string value, string joiner)
+        {
+            var keys = Values.Where(pair => pair.Value.ToString() == value)
+                             .Select(pair => pair.Key);
+            return String.Join(joiner, keys);
+        }
+
+        public string JoinKeys(string joiner)
+        {
+            return String.Join(joiner, Values.Keys);
+        }
+
+        public string JoinValues(string joiner)
+        {
+            return String.Join(joiner, Values.Values.Select(v => v.ToString()));
+        }
+
+        public string JoinAll(string kvJoiner, string pairJoiner)
+        {
+            return String.Join(pairJoiner, Values.Select(pair => pair.Key + kvJoiner + pair.Value.ToString()));
+        }
+
+        public void Merge(VariableDictionary sourceDict, bool overwriteExistingKeys = true)
+        {
+            foreach (var pair in sourceDict.Values)
+            {
+                if (overwriteExistingKeys || !Values.ContainsKey(pair.Key))
+                {
+                    Values[pair.Key] = pair.Value;
+                }
+            }
+        }
+
+        public static VariableDictionary Build(string expression, char kvSeparator, char pairSeparator, string changer)
+        {   // in actions
+            string[] pairs = expression.Split(pairSeparator);
+            VariableDictionary vd = new VariableDictionary();
+            foreach (string pair in pairs)
+            {
+                int sepIndex = pair.IndexOf(kvSeparator);
+                bool sep = (sepIndex >= 0);
+                string k = sep ? pair.Substring(0, sepIndex) : pair;
+                string v = sep ? pair.Substring(sepIndex + 1) : "";
+                vd.SetValue(k, v, changer);
+            }
+            return vd;
+        }
+
+        public static VariableDictionary BuildTemp(string expression)
+        {   // in expressions: ${?d: a:1, b:2, c:3 [xxx][xxx]}
+            string[] pairs = Context.SplitArguments(expression);
+            VariableDictionary vd = new VariableDictionary();
+            foreach (string pair in pairs)
+            {
+                string[] kv = Context.SplitArguments(pair + "=", separator: "="); // in case only a key was given
+                vd.Values[kv[0]] = new VariableScalar() { Value = kv[1] };
+            }
+            return vd;
+        }
     }
 
 }
