@@ -1,0 +1,32 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Triggernometry Plugin
+
+on:
+  push:
+    branches-ignore: [ 'master' ]
+  pull_request:
+    branches: [ master ]
+  
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      ACTFileName: 'ACTv3-setup.exe'
+      ACTDownloadURI: 'https://advancedcombattracker.com/download.php?id=56'
+      ProjectFile: 'Source\Triggernometry.sln'
+    steps:
+      - uses: actions/checkout@main
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+      - name: Download ACTv3 file
+        run: Invoke-WebRequest ${{env.ACTDownloadURI}} -OutFile ${{github.workspace}}\${{env.ACTFileName}}
+      - name: Silent Install of ACTv3
+        run: ${{github.workspace}}\${{env.ACTFileName}} /S
+      - name: Setup Nuget
+        uses: nuget/setup-nuget@v1
+      - name: Restore nuget packages
+        run: nuget restore ${{env.ProjectFile}}
+      - name: Build solution
+        run: msbuild -t:build -property:Configuration=Release /p:TargetFrameworkVersion=v4.8 ${{env.ProjectFile}}
