@@ -1262,6 +1262,7 @@
     <TranslationEntry Key="internal/ffxiv/partytoobig" Translation="Party structure has more than {0} members" />
     <TranslationEntry Key="internal/ffxiv/procexception" Translation="Exception in FFXIV process retrieve: {0}" />
     <TranslationEntry Key="internal/ffxiv/updateexception" Translation="Exception in FFXIV state update: {0} at stage {1}" />
+    <TranslationEntry Key="internal/ffxiv/ffxivzonechangednoinstance" Translation="Could not subscribe to FFXIV zone change (no plugin instance available)" />
     <TranslationEntry Key="internal/I18n/bool" Translation="bool" />
     <TranslationEntry Key="internal/I18n/char" Translation="char" />
     <TranslationEntry Key="internal/I18n/charcode" Translation="charcode" />
