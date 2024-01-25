@@ -3,6 +3,20 @@
 	<Categories>
 		<Category Name="Final Fantasy XIV" Description="Triggers for Final Fantasy XIV">
 			<Categories>
+				<Category Name="Shared triggers" Description="Automatically updated repository of triggers, straight from the Triggernometry Discord sharing channel.">
+					<Categories>
+					</Categories>
+					<Repositories>
+						<Repository Name="Sharing channel" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry-Triggers/main/Repositories/ffxiv_sharingchannel.xml" Description="Sharing channel triggers" />
+					</Repositories>
+				</Category>				
+				<Category Name="Raiding" Description="Triggers related to high end raiding">
+					<Categories>
+					</Categories>
+					<Repositories>
+						<Repository Name="The Omega Protocol (patch 6.3)" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry-Triggers/main/Repositories/ffxiv_ultimate_top.xml" Description="Live repository for the latest and hottest triggers for The Omega Protocol!" />
+					</Repositories>
+				</Category>
 				<Category Name="Combat &amp; Duties by Aho Senpai" Description="Triggers for all sorts of Final Fantasy XIV content, from dungeons to raids. Trigger collection created by Aho Senpai (Discord: Aho Senpai#0818).">
 					<Categories>
 					</Categories>

@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Speech.Synthesis;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
@@ -29,11 +30,20 @@ namespace Triggernometry.CustomControls
         internal Context fakectx;
 
         internal string ClipboardAction = "";
+        internal List<Action> PrevActions;
+        internal List<int> PrevSelectedIndices;
 
         public ActionViewer()
         {
             InitializeComponent();
             fakectx = new Context();
+        }
+
+        internal event EventHandler ActionsUpdated;
+
+        internal void OnActionsUpdated()
+        {
+            ActionsUpdated?.Invoke(this, EventArgs.Empty);
         }
 
         internal void RefreshDgv()
@@ -47,7 +57,10 @@ namespace Triggernometry.CustomControls
             btnAddAction.Enabled = false;
             btnActionUp.Enabled = false;
             btnActionDown.Enabled = false;
+            btnActionTop.Enabled = false;
+            btnActionBottom.Enabled = false;
             btnRemoveAction.Enabled = false;
+            btnUndo.Enabled = false;
         }
 
         private void CloseTree(TreeNode tn)
@@ -116,9 +129,20 @@ namespace Triggernometry.CustomControls
         private void dgvActions_SelectionChanged(object sender, EventArgs e)
         {
             btnEditAction.Enabled = (dgvActions.SelectedRows.Count == 1);
-            btnRemoveAction.Enabled = IsReadonly == false && (dgvActions.SelectedRows.Count > 0);
-            btnActionUp.Enabled = IsReadonly == false && (dgvActions.SelectedRows.Count == 1 && dgvActions.SelectedRows[0].Index > 0);
-            btnActionDown.Enabled = IsReadonly == false && (dgvActions.SelectedRows.Count == 1 && dgvActions.SelectedRows[0].Index < (Actions.Count - 1));
+            bool allowMoveAndRemove = IsReadonly == false && (dgvActions.SelectedRows.Count > 0);
+            btnRemoveAction.Enabled = allowMoveAndRemove;
+            btnActionUp.Enabled = allowMoveAndRemove;
+            btnActionDown.Enabled = allowMoveAndRemove;
+            btnActionTop.Enabled = allowMoveAndRemove;
+            btnActionBottom.Enabled = allowMoveAndRemove;
+        }
+
+        internal List<Action> SelectedActions()
+        {
+            return dgvActions.SelectedRows
+                             .Cast<DataGridViewRow>()
+                             .Select(row => Actions[row.Index])
+                             .ToList();
         }
 
         private void dgvActions_Leave(object sender, EventArgs e)
@@ -150,6 +174,7 @@ namespace Triggernometry.CustomControls
             using (Forms.ActionForm af = new Forms.ActionForm())
             {
                 af.plug = plug;
+                ExpressionTextBox.SetPlugForTextBoxes(af, plug);
                 af.wmp = wmp;
                 af.tts = tts;
                 af.trv = trv;
@@ -178,24 +203,31 @@ namespace Triggernometry.CustomControls
                     Action a = new Action();
                     af.SettingsToAction(a);
                     a._Enabled = true;
-                    Actions.Add(a);
-                    a.OrderNumber = Actions.Count;
+                    int insertIndex = (dgvActions.Rows.Count > 0 && dgvActions.SelectedRows.Count > 0) ? (dgvActions.SelectedRows[0].Index + 1) : dgvActions.Rows.Count;
+                    Actions.Insert(insertIndex, a);
+                    a.OrderNumber = insertIndex + 1;
+                    for (int i = insertIndex + 1; i < Actions.Count; i++) { Actions[i].OrderNumber++; }
                     dgvActions.RowCount = Actions.Count;
                     dgvActions.ClearSelection();
-                    dgvActions.Rows[dgvActions.RowCount - 1].Selected = true;
+                    dgvActions.Rows[insertIndex].Selected = true;
+                    OnActionsUpdated();
                 }
             }
         }
 
         private void btnEditAction_Click(object sender, EventArgs e)
         {
+            if (dgvActions.SelectedRows.Count == 0) { return; }
+            int rowIndex = dgvActions.SelectedRows[0].Index;
+            if (rowIndex < 0 || rowIndex >= Actions.Count ) { return; }
             Context ctx = new Context();
             ctx.plug = plug;
             ctx.trig = fakectx.trig;
             using (Forms.ActionForm af = new Forms.ActionForm())
             {
-                Action a = Actions[dgvActions.SelectedRows[0].Index];
+                Action a = Actions[rowIndex];
                 af.plug = plug;
+                ExpressionTextBox.SetPlugForTextBoxes(af, plug);
                 af.wmp = wmp;
                 af.trv = trv;
                 af.fakectx = fakectx;
@@ -221,34 +253,97 @@ namespace Triggernometry.CustomControls
                 af.btnOk.Text = I18n.Translate("internal/TriggerForm/savechanges", "Save changes");
                 if (af.ShowDialog() == DialogResult.OK)
                 {
+                    StoreActions();
                     af.SettingsToAction(a);
                     dgvActions.Refresh();
+                    OnActionsUpdated();
                 }
             }
         }
 
+        private void MoveSelectedRows(string moveType)
+        {
+            int length = Actions.Count;
+            List<int> selectedRowIndices = dgvActions.SelectedRows.Cast<DataGridViewRow>().Select(row => row.Index).ToList();
+            List<int> unselectedRowIndices = Enumerable.Range(0, length).Except(selectedRowIndices).ToList();
+            selectedRowIndices.Sort();
+            int start, end;
+            switch (moveType)
+            {
+                case "up":
+                    start = Math.Max(selectedRowIndices[0] - 1, 0); // the first selected row moves to this index
+                    end = start + selectedRowIndices.Count - 1;     // the last selected row moves to this index
+                    break;
+                case "top":
+                    start = 0;
+                    end = selectedRowIndices.Count - 1;
+                    break;
+                case "down":
+                    end = Math.Min(selectedRowIndices[selectedRowIndices.Count - 1] + 1, length - 1);
+                    start = end - selectedRowIndices.Count + 1;
+                    break;
+                case "bottom":
+                    end = length - 1;
+                    start = length - selectedRowIndices.Count;
+                    break;
+                default: throw new Exception($"Wrong moveType argument {moveType}");
+            }
+
+            List<int> ordMap = new List<int>(new int[length]);
+
+            for (int i = 0; i < length; i++)
+            {
+                if (i >= start && i <= end)
+                {
+                    ordMap[i] = selectedRowIndices[0] + 1;
+                    selectedRowIndices.RemoveAt(0);
+                }
+                else
+                {
+                    ordMap[i] = unselectedRowIndices[0] + 1;
+                    unselectedRowIndices.RemoveAt(0);
+                }
+            }
+
+            for (int i = 0; i < length; i++)
+            {
+                Actions[ordMap[i] - 1].OrderNumber = i + 1;
+            }
+
+            Actions.Sort((a, b) => a.OrderNumber.CompareTo(b.OrderNumber));
+
+            dgvActions.ClearSelection();
+            for (int i = start; i <= end; i++)
+            {
+                dgvActions.Rows[i].Selected = true;
+            }
+
+            dgvActions.Refresh();
+        }
+
         private void btnActionUp_Click(object sender, EventArgs e)
         {
-            int idx = dgvActions.SelectedRows[0].Index;
-            Action ao = Actions[idx];
-            Action an = Actions[idx - 1];
-            ao.OrderNumber--;
-            an.OrderNumber++;
-            Actions.Sort((a, b) => a.OrderNumber.CompareTo(b.OrderNumber));
-            dgvActions.Rows[idx].Selected = false;
-            dgvActions.Rows[idx - 1].Selected = true;
+            StoreActions();
+            MoveSelectedRows("up");
+            // OnActionsUpdated();  not used since moving actions would not change trigger descriptions
         }
 
         private void btnActionDown_Click(object sender, EventArgs e)
         {
-            int idx = dgvActions.SelectedRows[0].Index;
-            Action ao = Actions[idx];
-            Action an = Actions[idx + 1];
-            ao.OrderNumber++;
-            an.OrderNumber--;
-            Actions.Sort((a, b) => a.OrderNumber.CompareTo(b.OrderNumber));
-            dgvActions.Rows[idx].Selected = false;
-            dgvActions.Rows[idx + 1].Selected = true;
+            StoreActions();
+            MoveSelectedRows("down");
+        }
+
+        private void btnActionTop_Click(object sender, EventArgs e)
+        {
+            StoreActions();
+            MoveSelectedRows("top");
+        }
+
+        private void btnActionBottom_Click(object sender, EventArgs e)
+        {
+            StoreActions();
+            MoveSelectedRows("bottom");
         }
 
         private void btnRemoveAction_Click(object sender, EventArgs e)
@@ -265,12 +360,8 @@ namespace Triggernometry.CustomControls
             switch (MessageBox.Show(this, temp, I18n.Translate("internal/TriggerForm/confirmremoval", "Confirm removal"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
             {
                 case DialogResult.Yes:
-                    List<Action> acts = new List<Action>();
-                    foreach (DataGridViewRow r in dgvActions.SelectedRows)
-                    {
-                        acts.Add(Actions[r.Index]);
-                    }
-                    foreach (Action a in acts)
+                    StoreActions();
+                    foreach (Action a in SelectedActions())
                     {
                         Actions.Remove(a);
                         List<Action> px = new List<Action>();
@@ -283,8 +374,46 @@ namespace Triggernometry.CustomControls
                     dgvActions.RowCount = Actions.Count;
                     dgvActions.ClearSelection();
                     dgvActions.Refresh();
+                    OnActionsUpdated();
                     break;
             }
+        }
+
+        private void btnUndo_Click(object sender, EventArgs e)
+        {
+            if (PrevActions == null || PrevSelectedIndices == null) { return; }
+
+            (Actions, PrevActions) = (PrevActions, Actions);
+
+            var tempIndices = PrevSelectedIndices;
+            PrevSelectedIndices = dgvActions.SelectedRows.Cast<DataGridViewRow>()
+                .Select(row => row.Index).ToList();
+            dgvActions.RowCount = Actions.Count;
+            dgvActions.ClearSelection();
+            dgvActions.Refresh();
+            foreach (int index in tempIndices)
+            {
+                if (index < dgvActions.RowCount)
+                {
+                    dgvActions.Rows[index].Selected = true;
+                }
+            }
+            OnActionsUpdated();
+        }
+
+        private void StoreActions()
+        {
+            PrevActions = new List<Action>();
+            foreach (var originalAction in Actions)
+            {
+                Action copiedAction = new Action();
+                originalAction.CopySettingsTo(copiedAction);
+                PrevActions.Add(copiedAction);
+            }
+
+            PrevSelectedIndices = dgvActions.SelectedRows.Cast<DataGridViewRow>()
+                .Select(row => row.Index).ToList();
+            btnUndo.Enabled = true;
         }
 
         private void dgvActions_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
@@ -304,6 +433,50 @@ namespace Triggernometry.CustomControls
             }
         }
 
+        private static Regex regexHexColor = new Regex(@"^#? *(?<rgb>[\dA-Fa-f]{3}|[\dA-Fa-f]{6})$");
+        private static Regex regexNumColor = new Regex(@"^(?<r>\d+(?:.\d+)?) *, *(?<g>\d+(?:.\d+)?) *, *(?<b>\d+(?:.\d+)?)$");
+
+        public static Color ParseColor(string rawColor)
+        {
+            rawColor = rawColor.Trim();
+
+            Color namedColor = Color.FromName(rawColor);
+            if (namedColor.IsKnownColor)
+            {   // "white"
+                return namedColor;
+            }
+
+            int r, g, b;
+            Match hexMatch = regexHexColor.Match(rawColor);
+            if (hexMatch.Success)
+            {
+                string rgb = hexMatch.Groups["rgb"].Value;
+                if (rgb.Length == 3)
+                {   // "#fff" or "fff"
+                    rgb = string.Concat(rgb[0], rgb[0], rgb[1], rgb[1], rgb[2], rgb[2]);
+                }
+                // "#ffffff" or "ffffff"
+                r = Convert.ToInt32(rgb.Substring(0, 2), 16);
+                g = Convert.ToInt32(rgb.Substring(2, 2), 16);
+                b = Convert.ToInt32(rgb.Substring(4, 2), 16);
+            }
+            else
+            {   // "255, 255, 255"
+                Match numMatch = regexNumColor.Match(rawColor);
+                if (numMatch.Success)
+                {
+                    r = (int)Math.Round(double.Parse(numMatch.Groups["r"].Value));
+                    g = (int)Math.Round(double.Parse(numMatch.Groups["g"].Value));
+                    b = (int)Math.Round(double.Parse(numMatch.Groups["b"].Value));
+                }
+                else return Color.Empty;
+            }
+
+            return Color.FromArgb( r < 0 ? 0 : r > 255 ? 255 : r,
+                                   g < 0 ? 0 : g > 255 ? 255 : g,
+                                   b < 0 ? 0 : b > 255 ? 255 : b );
+        }
+
         private void dgvActions_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (e.RowIndex < 0 || e.RowIndex >= Actions.Count)
@@ -311,15 +484,44 @@ namespace Triggernometry.CustomControls
                 return;
             }
             Action a = Actions[e.RowIndex];
-            if (a.ActionType == Action.ActionTypeEnum.Placeholder)
+
+            // set a warning color when a delay (not zero) is hidden under the description
+            string delay = "0" + a._ExecutionDelayExpression.Trim();
+            if (a._Enabled && a._DescriptionOverride && !(double.TryParse(delay, out double result) && result == 0))
             {
-                e.CellStyle.BackColor = SystemColors.InactiveCaption;
+                e.CellStyle.BackColor = Color.FromArgb(240, 224, 128); // light yellow
                 e.CellStyle.ForeColor = SystemColors.InactiveCaptionText;
             }
-            else
-            {
-                e.CellStyle.BackColor = dgvActions.DefaultCellStyle.BackColor;
-                e.CellStyle.ForeColor = dgvActions.DefaultCellStyle.ForeColor;
+            else 
+            {   
+                // customized colors
+                Color bgColor, textColor;
+                try
+                {
+                    string rawBgColor = fakectx.ExpandVariables(null, null, false, a._DescBgColor);
+                    bgColor = ParseColor(rawBgColor);
+                }
+                catch { bgColor = Color.Empty; }
+
+                try
+                {
+                    string rawTextColor = fakectx.ExpandVariables(null, null, false, a._DescTextColor);
+                    textColor = ParseColor(rawTextColor);
+                }
+                catch { textColor = Color.Empty; }
+
+                // placeholder / normal color
+                if (a.ActionType == Action.ActionTypeEnum.Placeholder)
+                {
+                    e.CellStyle.BackColor = (bgColor != Color.Empty) ? bgColor : SystemColors.InactiveCaption;
+                    e.CellStyle.ForeColor = (textColor != Color.Empty) ? textColor : SystemColors.InactiveCaptionText;
+                }
+                else
+                {
+                    e.CellStyle.BackColor = (bgColor != Color.Empty) ? bgColor : dgvActions.DefaultCellStyle.BackColor;
+                    e.CellStyle.ForeColor = (textColor != Color.Empty) ? textColor :
+                                            (a._Enabled) ? dgvActions.DefaultCellStyle.ForeColor : Color.FromArgb(176, 192, 208);
+                }
             }
         }
 
@@ -333,12 +535,13 @@ namespace Triggernometry.CustomControls
             {
                 return;
             }
-            Actions[e.RowIndex]._Enabled = (Actions[e.RowIndex]._Enabled == false);
+            Actions[e.RowIndex]._Enabled = !Actions[e.RowIndex]._Enabled;
+            OnActionsUpdated();
         }
 
         private void dgvActions_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0 || e.RowIndex >= Actions.Count)
+            if (e.RowIndex < 0 || e.RowIndex >= Actions.Count || dgvActions.SelectedRows.Count == 0)
             {
                 return;
             }
@@ -358,10 +561,7 @@ namespace Triggernometry.CustomControls
             if (dgvActions.SelectedRows.Count > 1)
             {
                 Action.ActionBundle ab = new Action.ActionBundle();
-                foreach (DataGridViewRow r in dgvActions.SelectedRows)
-                {
-                    ab.Actions.Add(Actions[r.Index]);
-                }
+                ab.Actions.AddRange(SelectedActions());
                 ab.Actions.Sort((a, b) => a.OrderNumber.CompareTo(b.OrderNumber));
                 toSerialize = ab;
                 xs = new XmlSerializer(typeof(Action.ActionBundle));
@@ -414,6 +614,7 @@ namespace Triggernometry.CustomControls
             {
                 return;
             }
+            StoreActions();
             string data = null;
             if (plug.cfg.UseOsClipboard == true)
             {
@@ -465,6 +666,11 @@ namespace Triggernometry.CustomControls
                             }
                         }
                         dgvActions.RowCount = Actions.Count;
+                        dgvActions.ClearSelection();
+                        foreach (Action a in ab.Actions)
+                        {
+                            dgvActions.Rows[Actions.IndexOf(a)].Selected = true;
+                        }
                         dgvActions.Invalidate();
                     }
 
@@ -495,14 +701,47 @@ namespace Triggernometry.CustomControls
                         }
                         Actions.Insert(cx.OrderNumber - 1, cx);
                         dgvActions.RowCount = Actions.Count;
+                        dgvActions.ClearSelection(); 
+                        dgvActions.Rows[Actions.IndexOf(cx)].Selected = true;
                         dgvActions.Invalidate();
                     }
                 }
+                OnActionsUpdated();
             }
             catch (Exception ex)
             {
                 plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/TriggerForm/actionpastefail", "Action paste failed due to exception: {0}", ex.Message));
             }
+        }
+
+        public List<string> GetActionDescriptions()
+        {
+            List<string> descriptions = new List<string>();
+            foreach (Action action in Actions)
+            {
+                descriptions.Add(action.GetDescription(fakectx));
+            }
+            return descriptions;
+        }
+
+        public double GetActionTotalDelay()
+        {   // return the total delay, or NaN if at least one of the expressions is not numeric
+            double totalDelay = 0;
+            foreach (var action in Actions)
+            {
+                if (!action._Enabled) { continue; }
+                string delay = action._ExecutionDelayExpression;
+                if (delay.Contains("$") || delay.ToLower().Contains("random"))
+                {
+                    return Double.NaN;
+                }
+                else
+                {
+                    try { totalDelay += fakectx.EvaluateNumericExpression(null, null, delay); }
+                    catch { return Double.NaN; }
+                }
+            }
+            return totalDelay;
         }
 
         private void ctxAddAction_Click(object sender, EventArgs e)
@@ -535,19 +774,211 @@ namespace Triggernometry.CustomControls
             btnActionDown_Click(sender, e);
         }
 
+        private void ctxMoveTop_Click(object sender, EventArgs e)
+        {
+            btnActionTop_Click(sender, e);
+        }
+
+        private void ctxMoveBottom_Click(object sender, EventArgs e)
+        {
+            btnActionBottom_Click(sender, e);
+        }
+
         private void ctxRemoveAction_Click(object sender, EventArgs e)
         {
             btnRemoveAction_Click(sender, e);
+        }
+
+        private void ctxUndo_Click(object sender, EventArgs e)
+        {
+            btnUndo_Click(sender, e);
+        }
+
+        private void ctxEditPropRemoveCnd_Click(object sender, EventArgs e)
+        {
+            foreach (Action a in SelectedActions())
+            {
+                a.Condition = new ConditionGroup();
+                a.Condition.Enabled = false;
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
+        private void ctxEditPropCndGroupingAnd_Click(object sender, EventArgs e)
+        {
+            SetCndGroupingType(ConditionGroup.CndGroupingEnum.And);
+        }
+
+        private void ctxEditPropCndGroupingOr_Click(object sender, EventArgs e)
+        {
+            SetCndGroupingType(ConditionGroup.CndGroupingEnum.Or);
+        }
+
+        private void ctxEditPropCndGroupingXor_Click(object sender, EventArgs e)
+        {
+            SetCndGroupingType(ConditionGroup.CndGroupingEnum.Xor);
+        }
+
+        private void ctxEditPropCndGroupingNot_Click(object sender, EventArgs e)
+        {
+            SetCndGroupingType(ConditionGroup.CndGroupingEnum.Not);
+        }
+
+        private void ctxEditPropAsyncOn_Click(object sender, EventArgs e)
+        {
+            foreach (Action a in SelectedActions())
+            {
+                a._Asynchronous = true;
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
+        private void ctxEditPropAsyncOff_Click(object sender, EventArgs e)
+        {
+            foreach (Action a in SelectedActions())
+            {
+                a._Asynchronous = false;
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
+        private void ctxEditPropDelay_Click(object sender, EventArgs e)
+        {
+            string value = ShowInputDialog(I18n.Translate("internal/ActionViewer/setDelay", "Set Action Delay To (ms)"),
+                ExpressionTextBox.SupportedExpressionTypeEnum.Numeric);
+            if (value != null)
+            {
+                foreach (Action a in SelectedActions())
+                {
+                    a._ExecutionDelayExpression = value;
+                }
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
+        private void ctxEditPropBgColor_Click(object sender, EventArgs e)
+        {
+            string value = ShowInputDialog(I18n.Translate("internal/ActionViewer/setBgColor", "Set Description Background Color To"),
+                ExpressionTextBox.SupportedExpressionTypeEnum.Color);
+            if (value != null)
+            {
+                foreach (Action a in SelectedActions())
+                {
+                    a._DescBgColor = value;
+                }
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
+        private void ctxEditPropTextColor_Click(object sender, EventArgs e)
+        {
+            string value = ShowInputDialog(I18n.Translate("internal/ActionViewer/setTextColor", "Set Description Text Color To"), 
+                ExpressionTextBox.SupportedExpressionTypeEnum.Color);
+            if (value != null)
+            {
+                foreach (Action a in SelectedActions())
+                {
+                    a._DescTextColor = value;
+                }
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
+        private void ctxEditPropRemoveDesc_Click(object sender, EventArgs e)
+        {
+            foreach (Action a in SelectedActions())
+            {
+                a._DescriptionOverride = false;
+                a._Description = "";
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
+        private void SetCndGroupingType(ConditionGroup.CndGroupingEnum cndGroupingType)
+        {
+            foreach (Action a in SelectedActions())
+            {
+                if (a.Condition == null) 
+                { 
+                    a.Condition = new ConditionGroup();
+                    a.Condition.Enabled = false;
+                }
+                a.Condition.Grouping = cndGroupingType;
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
+        private string ShowInputDialog(string title, ExpressionTextBox.SupportedExpressionTypeEnum exprType)
+        {
+            Form inputForm = new Form();
+            inputForm.Text = title;
+            inputForm.FormBorderStyle = FormBorderStyle.FixedDialog;
+            inputForm.StartPosition = FormStartPosition.CenterScreen;
+            inputForm.MaximizeBox = false;
+            inputForm.MinimizeBox = false;
+            inputForm.MinimumSize = new Size(300, 0);
+            inputForm.AutoSize = true;
+            inputForm.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+
+            ExpressionTextBox expEditedValue = new ExpressionTextBox();
+            expEditedValue.Anchor = AnchorStyles.None;
+            expEditedValue.Dock = DockStyle.Fill;
+            expEditedValue.ExpressionType = exprType;
+            expEditedValue.textBox1.MinimumSize = new Size(200, 0);
+
+            Button okButton = new Button();
+            okButton.Text = I18n.Translate("ActionForm/btnOk", "OK");
+            okButton.Anchor = AnchorStyles.None;
+            okButton.Margin = new Padding(10, 20, 10, 10);
+            okButton.Padding = new Padding(5);
+            okButton.DialogResult = DialogResult.OK;
+            okButton.TextAlign = ContentAlignment.MiddleCenter;
+            okButton.AutoSize = true;
+            inputForm.AcceptButton = okButton;
+
+            TableLayoutPanel table = new TableLayoutPanel();
+            table.Dock = DockStyle.Fill;
+            table.Padding = new Padding(20);
+            table.AutoSize = true;
+            table.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            table.RowCount = 2;
+            table.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            table.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            table.Controls.Add(expEditedValue, 0, 0);
+            table.Controls.Add(okButton, 0, 1);
+
+            inputForm.Controls.Add(table);
+
+            if (inputForm.ShowDialog() == DialogResult.OK)
+            {
+                return expEditedValue.Text;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private void ctxAction_Opening(object sender, CancelEventArgs e)
         {
             ctxAddAction.Enabled = btnAddAction.Enabled;
             ctxEditAction.Enabled = btnEditAction.Enabled;
-            ctxCopyAction.Enabled = btnEditAction.Enabled;
-            ctxMoveUp.Enabled = btnActionUp.Enabled;
-            ctxMoveDown.Enabled = btnActionDown.Enabled;
-            ctxRemoveAction.Enabled = btnRemoveAction.Enabled;
+            bool allowMoveAndRemove = IsReadonly == false && (dgvActions.SelectedRows.Count > 0);
+            ctxCopyAction.Enabled = allowMoveAndRemove;
+            ctxMoveUp.Enabled = allowMoveAndRemove;
+            ctxMoveDown.Enabled = allowMoveAndRemove;
+            ctxMoveTop.Enabled = allowMoveAndRemove;
+            ctxMoveBottom.Enabled = allowMoveAndRemove;
+            ctxRemoveAction.Enabled = allowMoveAndRemove;
+            ctxUndo.Enabled = btnUndo.Enabled;
             ctxPasteAction.Enabled = OkToPasteAction();
         }
 
@@ -563,6 +994,32 @@ namespace Triggernometry.CustomControls
                 data = ClipboardAction;
             }
             return IsReadonly == false && (data != null && data.Length > 0);
+        }
+
+        private void dgvActions_MouseClick(object sender, MouseEventArgs e)
+        {   // clicking the grey region
+            int rowIndex = dgvActions.HitTest(e.X, e.Y).RowIndex;
+            if (rowIndex == -1 || rowIndex >= dgvActions.RowCount)
+            {
+                dgvActions.ClearSelection();
+            }
+        }
+
+        private void dgvActions_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                DataGridView.HitTestInfo hitTestInfo = dgvActions.HitTest(e.X, e.Y);
+                if (hitTestInfo.Type == DataGridViewHitTestType.Cell)
+                {
+                    int rowIndex = hitTestInfo.RowIndex;
+                    if (!dgvActions.Rows[rowIndex].Selected) // if not right-clicking on a selected row: change selection
+                    {
+                        dgvActions.ClearSelection();
+                        dgvActions.Rows[rowIndex].Selected = true;
+                    }
+                }
+            }
         }
 
     }

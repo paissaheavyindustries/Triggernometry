@@ -45,7 +45,8 @@ namespace Triggernometry
             Log,
             FFXIVNetwork,
             None,
-            ACT
+            ACT,
+            Endpoint
         }
 
         internal TriggerSourceEnum _Source { get; set; } = TriggerSourceEnum.Log;
@@ -312,6 +313,23 @@ namespace Triggernometry
             set
             {
                 _EditAutofire = Boolean.Parse(value);
+            }
+        }
+        internal bool _EditAutofireAllowCondition { get; set; } = false;
+        [XmlAttribute]
+        public string EditAutofireAllowCondition
+        {
+            get
+            {
+                if (_EditAutofireAllowCondition == false)
+                {
+                    return null;
+                }
+                return _EditAutofireAllowCondition.ToString();
+            }
+            set
+            {
+                _EditAutofireAllowCondition = Boolean.Parse(value);
             }
         }
 
@@ -652,50 +670,8 @@ namespace Triggernometry
         internal void QueueActions(Context ctx, DateTime curtime, RealPlugin.MutexInformation mtx)
         {
             RealPlugin p = ctx.plug;
-            System.Diagnostics.Debug.WriteLine("### queuing actions for " + ctx.ToString());
-            if (_Sequential == false)
-            {
-                var ix = from tx in Actions
-                         orderby tx.OrderNumber ascending
-                         select tx;
-                foreach (Action a in ix)
-                {
-                    if (a._Enabled == true)
-                    {
-                        curtime = curtime.AddMilliseconds(ctx.EvaluateNumericExpression(TriggerContextLogger, p, a._ExecutionDelayExpression));
-                        p.QueueAction(ctx, this, mtx, a, curtime);
-                    }
-                }
-            }
-            else
-            {
-                Action prev = null;
-                Action first = null;
-                var ix = from tx in Actions
-                         orderby tx.OrderNumber ascending
-                         select tx;
-                foreach (Action a in ix)
-                {
-                    if (a._Enabled == false)
-                    {
-                        continue;
-                    }
-                    if (prev != null)
-                    {
-                        prev.NextAction = a;
-                    }
-                    else
-                    {
-                        first = a;
-                        curtime = curtime.AddMilliseconds(ctx.EvaluateNumericExpression(TriggerContextLogger, p, a._ExecutionDelayExpression));
-                    }
-                    prev = a;
-                }
-                if (first != null)
-                {
-                    p.QueueAction(ctx, this, mtx, first, curtime);
-                }
-            }
+            //System.Diagnostics.Debug.WriteLine("### queuing actions for " + ctx.ToString());
+            p.QueueActions(ctx, curtime, Actions, _Sequential, mtx, TriggerContextLogger);
         }
 
         internal bool Fire(RealPlugin p, Context ctx, RealPlugin.MutexInformation mtx)
@@ -813,6 +789,7 @@ namespace Triggernometry
                     }
                 }
                 QueueActions(ctx, curtime, mtx);
+                return true;
             }
             catch (Exception ex)
             {
@@ -854,6 +831,7 @@ namespace Triggernometry
             t._RefirePeriodExpression = _RefirePeriodExpression;
             t._MutexToCapture = _MutexToCapture;
             t._EditAutofire = _EditAutofire;
+            t._EditAutofireAllowCondition = _EditAutofireAllowCondition;
             t._Description = _Description;
             t._TestInput = _TestInput;
         }

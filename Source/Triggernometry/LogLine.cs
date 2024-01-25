@@ -14,7 +14,8 @@ namespace Triggernometry
         {
             Log,
             NetworkFFXIV,
-            ACT
+            ACT,
+            Endpoint
         }
 
         public string Text { get; set; }

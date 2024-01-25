@@ -1,15 +1,14 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 using System.Text.RegularExpressions;
-using System.ComponentModel;
 using System.Web.Script.Serialization;
 using Triggernometry.Variables;
+using System.Windows.Forms;
+using System.Reflection;
 
 namespace Triggernometry
 {
@@ -17,7 +16,8 @@ namespace Triggernometry
     public class Context
     {
 
-		internal bool testmode;
+        internal Guid id = Guid.NewGuid();
+        internal bool testmode;
         internal RealPlugin plug;
         public Trigger trig { get; set; }
         internal Action.TriggerForceTypeEnum force;
@@ -25,38 +25,77 @@ namespace Triggernometry
         internal RealPlugin.ActionExecutionHook soundhook;
         internal RealPlugin.ActionExecutionHook ttshook;
 
-        internal static Regex rex = new Regex(@"\$\{(?<id>[^\}\{\$]*)\}");
-        internal static Regex rexnum = new Regex(@"\$(?<id>[0-9]+)");
-        internal static Regex rexnump = new Regex(@"\[(?<index>.+?)\]\.(?<prop>[a-zA-Z]+)");
-        internal static Regex rexlidx = new Regex(@"(?<name>[^\[]+)\[(?<index>.+?)\]");
-        internal static Regex rextidx = new Regex(@"(?<name>[^\[]+)\[(?<column>.+?)\]\[(?<row>.+?)\]");
-        internal static Regex rexlprp = new Regex(@"(?<name>[^\.]+)\.(?<prop>[a-zA-Z]+)(\((?<arg>[^\)]+)\)){0,1}");
-        internal static Regex rexfunc = new Regex(@"(?<name>[^\(]{1,})(\((?<arg>[^\)]+)\)){0,1}");
+        internal static Regex rex               // ${...}
+            = new Regex(@"\$\{(?<id>[^${}]*)\}");        
+        internal static Regex rox               // ¤{...}
+            = new Regex(@"¤\{[^${}]*\}");        
+        internal static Regex rexnum            // $1 $2
+            = new Regex(@"\$(?<id>[0-9]+)");        
+        internal static Regex rexListIdx        // name[index]
+            = new Regex(@"^(?<name>[^[]+)\[(?<index>[^[\]]*?)\]");        
+        internal static Regex rexTableIdx       // name[col][row]
+            = new Regex(@"^(?<name>[^[]+)\[(?<column>[^[\]]*?)\]\[(?<row>[^[\]]*?)\] *$");        
+        internal static Regex rexFunc           // name(arg)?:val
+            = new Regex(@"^(?<name>[^(:]+)(?:\((?<arg>[^)]*)\))?:(?<val>.*)$");        
+        internal static Regex rexProp           // name.prop(arg)?
+            = new Regex(@"^(?<name>.+?)\.(?<prop>[^([.]+?)(?:\((?<arg>[^)]*)\))? *$");
+        internal static Regex rexListProp       // name?[index].prop(arg)?
+            = new Regex(@"^(?<name>[^[]*)\[(?<index>[^[\]]*?)\]\.(?<prop>[^([]+?)(?:\((?<arg>[^)]*)\))? *$");
+        internal static Regex rexTableProp      // name?[index1][index2].prop(arg)?
+            = new Regex(@"^(?<name>[^[]*)\[(?<column>[^[\]]*)\]\[(?<row>[^[\]]*)\]\.(?<prop>[^([]+?)(?:\((?<arg>[^)]*)\))? *$");
+        internal static Regex rexExistVar       // evar: / epvar: / elvar: ...
+            = new Regex(@"^e(?<persist>p?)(?<type>[vltd]|text|image|callback)(?:v?ar)?:(?<name>.*)$");
+        // for splitting arguments:
+        internal static Regex reSplitArgComma = new Regex("(?<=^|,)( *\"[^\"]*\" *| *'[^']*' *|[^,]*)(?=$|,)");
+        internal static Regex reSplitArgEqual = new Regex("(?<=^|=)( *\"[^\"]*\" *| *'[^']*' *|[^=]*)(?=$|=)");
+        internal static Regex reSplitArgPipe = new Regex("(?<=^|\\|)( *\"[^\"]*\" *| *'[^']*' *|[^|]*)(?=$|\\|)");
+        internal static Regex reDQuotedArg = new Regex("^ *\"(?<arg>[^\"]*)\" *$");
+        internal static Regex reSQuotedArg = new Regex("^ *'(?<arg>[^']*)' *$");
+
+        internal static Regex reHex8 = new Regex("^[0-9A-Fa-f]{1,8}$");
+
         internal Dictionary<string, string> namedgroups;
-		internal List<string> numgroups;
+        internal List<string> numgroups;
         internal DateTime triggered;
+        internal string zoneIdOverride = null;
         internal string contextResponse = "";
         internal int contextResponseCode = 0;
         internal dynamic contextJsonResponse;
         internal bool contextJsonParsed = false;
-        internal int loopIterator = 0;
 
         internal List<int> ActionResults = new List<int>();
         internal Dictionary<Mutex, int> heldmutices = new Dictionary<Mutex, int>();
 
-        internal const double EORZEA_MULTIPLIER = 3600D / 175D;
+        internal int loopiterator { get; set; } = 0;
+        internal Guid loopcontext { get; set; } = Guid.Empty;
+        internal string varName { get; set; } = "";         // for ${_this} ${_row[i]} ${_col[i]}
+        internal int listIndex { get; set; } = 0;           // for ${_idx}
+        internal int tableColIndex { get; set; } = 0;       // for ${_col}
+        internal int tableRowIndex { get; set; } = 0;       // for ${_row}
+        internal string dictKey { get; set; } = "";         // for ${_key}
+        internal string dictValue { get; set; } = "";       // for ${_val}
 
-        private static MathParser mp = new MathParser();
-		
-		public Context()
-		{
-			namedgroups = new Dictionary<string, string>();
-			numgroups = new List<string>();
+        internal const double EORZEA_MULTIPLIER = 3600D / 175D;
+        internal const string LINEBREAK_PLACEHOLDER = "⏎";
+        private static readonly CultureInfo InvClt = CultureInfo.InvariantCulture;
+        private static readonly NumberStyles NSFloat = NumberStyles.Float;
+        internal Random rng = new Random();
+
+        public Context()
+        {
+            namedgroups = new Dictionary<string, string>();
+            numgroups = new List<string>();
         }
 
         public override string ToString()
         {
-            return (trig != null ? trig.LogName : "(no trigger)") + " at " + triggered.ToString();
+            return id.ToString() + " for " + (trig != null ? trig.LogName : "(no trigger)") + " at " + triggered.ToString();
+        }
+
+        internal Context Duplicate()
+        {
+            Context ctx = (Context)MemberwiseClone();
+            return ctx;
         }
 
         internal void PushActionResult(int i)
@@ -99,14 +138,11 @@ namespace Triggernometry
             {
                 exp = plug.cfg.PerformSubstitution(exp, Configuration.Substitution.SubstitutionScopeEnum.NumericExpression);
             }
-            lock (mp)
-            {
-                return mp.Parse(exp);
-            }
+            return MathParser.Parse(exp);
         }
 
         public string EvaluateStringExpression(LoggerDelegate logger, object o, string expr)
-        {            
+        {
             string exp = ExpandVariables(logger, o, false, expr == null ? "" : expr);
             if (plug != null)
             {
@@ -117,7 +153,7 @@ namespace Triggernometry
 
         public delegate void LoggerDelegate(object o, string msg);
 
-        private TimeSpan GetEorzeanTime()
+        internal static TimeSpan GetEorzeanTime()
         {
             long epochTicks = DateTime.UtcNow.Ticks - (new DateTime(1970, 1, 1).Ticks);
             long eorzeaTicks = (long)Math.Round(epochTicks * EORZEA_MULTIPLIER);
@@ -126,26 +162,26 @@ namespace Triggernometry
 
         private VariableScalar GetScalarVariable(VariableStore vs, string varname, bool createNew)
         {
-            if (vs.Scalar.ContainsKey(varname) == true)
+            if (vs.Scalar.ContainsKey(varname))
             {
                 return vs.Scalar[varname];
             }
-            VariableScalar vl = new VariableScalar();
-            if (createNew == true)
+            VariableScalar v = new VariableScalar();
+            if (createNew)
             {
-                vs.Scalar[varname] = vl;
+                vs.Scalar[varname] = v;
             }
-            return vl;
+            return v;
         }
 
         private VariableList GetListVariable(VariableStore vs, string varname, bool createNew)
         {
-            if (vs.List.ContainsKey(varname) == true)
+            if (vs.List.ContainsKey(varname))
             {
                 return vs.List[varname];
             }
             VariableList vl = new VariableList();
-            if (createNew == true)
+            if (createNew)
             {
                 vs.List[varname] = vl;
             }
@@ -154,45 +190,302 @@ namespace Triggernometry
 
         private VariableTable GetTableVariable(VariableStore vs, string varname, bool createNew)
         {
-            if (vs.Table.ContainsKey(varname) == true)
+            if (vs.Table.ContainsKey(varname))
             {
                 return vs.Table[varname];
             }
-            VariableTable vl = new VariableTable();
-            if (createNew == true)
+            VariableTable vt = new VariableTable();
+            if (createNew)
             {
-                vs.Table[varname] = vl;
+                vs.Table[varname] = vt;
             }
-            return vl;
+            return vt;
         }
 
-        private static string[] SplitArguments(string args)
+        private VariableDictionary GetDictVariable(VariableStore vs, string varname, bool createNew)
         {
-            var parmChars = args.ToCharArray();
-            var inSingleQuote = false;
-            var inDoubleQuote = false;
-            for (var index = 0; index < parmChars.Length; index++)
+            if (vs.Dict.ContainsKey(varname))
             {
-                if (parmChars[index] == '"' && !inSingleQuote)
-                {
-                    inDoubleQuote = !inDoubleQuote;
-                    parmChars[index] = '\n';
-                }
-                if (parmChars[index] == '\'' && !inDoubleQuote)
-                {
-                    inSingleQuote = !inSingleQuote;
-                    parmChars[index] = '\n';
-                }
-                if (!inSingleQuote && !inDoubleQuote && parmChars[index] == ',')
-                    parmChars[index] = '\n';
+                return vs.Dict[varname];
             }
-            return (new string(parmChars)).Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            VariableDictionary vd = new VariableDictionary();
+            if (createNew)
+            {
+                vs.Dict[varname] = vd;
+            }
+            return vd;
+        }
+
+        /// <summary> Split an expression with commas or other specified separators to a list of arguments. 
+        /// If the argument contains separator, single/double quotes, it should be quoted like "xx,xx" 'xx,xx' 'xx"xx' "xx'xx".</summary>
+        /// <param name="args"> </param>
+        /// <param name="allowEmptyList"> Converts an empty string or spaces to an empty list, or a list with an empty string.</param>>
+        public static string[] SplitArguments(string args, bool allowEmptyList = true, string separator = ",")
+        {
+            if (string.IsNullOrWhiteSpace(args) && allowEmptyList)
+            {
+                return new string[0];
+            }
+            // (?<=^|{s}): after a separator or start-of-line
+            // ( *\"[^\"]*\" *| *'[^']*' *|[^{s}]*): string in "", or string in '', or string without separator
+            // (?=$|{s}): before a separator or end-of-line
+            string s = Regex.Escape(separator);
+            var reSingleArg = (separator == ",") ? reSplitArgComma 
+                            : (separator == "=") ? reSplitArgEqual
+                            : (separator == "|") ? reSplitArgPipe
+                            : new Regex($"(?<=^|{s})( *\"[^\"]*\" *| *'[^']*' *|[^{s}]*)(?=$|{s})");
+
+            args = UnescapeCustomExpr(args);
+            var matches = reSingleArg.Matches(args);
+            var result = new List<string>();
+            foreach (Match match in matches)
+            {
+                var currentMatch = match.Value;
+                var dQuotedMatch = reDQuotedArg.Match(currentMatch);
+                var sQuotedMatch = reSQuotedArg.Match(currentMatch);
+                if (dQuotedMatch.Success)
+                {
+                    result.Add(dQuotedMatch.Groups["arg"].Value);
+                }
+                else if (sQuotedMatch.Success)
+                {
+                    result.Add(sQuotedMatch.Groups["arg"].Value);
+                }
+                else
+                {
+                    result.Add(currentMatch.Trim());
+                }
+            }
+            return result.ToArray();
+        }
+
+        /// <summary> Pick the argument with the given index from a string[]. </summary>
+        /// <param name="args"> </param>
+        /// <param name="index"> The selected index from the string[] (0-based).</param>
+        /// <param name="defaultValue"> If the index is out of range, returns this value.</param>
+        /// <param name="setEmptyToDefault"> If the selected argument is an empty string, consider it as the default value or not.</param>
+        public static string GetArgument(string[] args, int index, string defaultValue, bool setEmptyToDefault = false)
+        {
+            if (index >= args.Length || (args[index] == "" && setEmptyToDefault))
+                return defaultValue;
+            else
+                return args[index];
+        }
+
+
+        /// <summary> Parse the slices expression to a list of indices (starts from 0). </summary>
+        /// <param name="slicesStr"> String expression of slices.</param>
+        /// <param name="totalLength"> The length of the string, list, or table row/column.</param>
+        /// <param name="rawExpr"> The raw expression before parsed. Used in error messages.</param>
+        /// <param name="startIndex"> The start index in the given expression. 0 for strings; 1 for other variables. (Triggernometry definition)</param>
+        /// <returns>A list of selected indices.</returns>
+        public static List<int> GetSliceIndices(string slicesStr, int totalLength, string rawExpr, int startIndex)
+        {
+            if (totalLength <= 0) { return new List<int>(); }
+
+            // optimize for default input
+            string checkDefault = slicesStr.Replace(" ", "");  
+            if (checkDefault == "" || checkDefault == ":" || checkDefault == "::")
+            {   
+                return Enumerable.Range(0, totalLength).ToList();
+            }
+
+            List<int> indices = new List<int>();
+            string[] slices = SplitArguments(slicesStr, allowEmptyList: false);
+            foreach (string slice in slices)
+            {   // parse slice string to int start/end/step
+                string[] sliceArgs = slice.Split(':').Select(s => s.Trim()).ToArray();
+                if (sliceArgs.Length > 3) { ArgCountError(I18n.TrlSlice(), "0-3", sliceArgs.Length, rawExpr); }
+
+                string startStr = GetArgument(sliceArgs, 0, "", true);
+                string endStr = GetArgument(sliceArgs, 1, "", true);
+                string stepStr = GetArgument(sliceArgs, 2, "1", true);
+                int start = 0; int end = 0; int step = 0;
+                try
+                {
+                    if (sliceArgs.Length == 1 && startStr.Trim() != "")
+                    {   // sliceArgs.Length = 1: push a single index
+                        start = int.Parse(startStr, InvClt);
+                        start = (start >= 0) ? (start - startIndex) : (start + totalLength);
+                        if (start >= 0 && start < totalLength)
+                        {
+                            indices.Add(start);
+                        }
+                        continue;
+                    }
+                    else
+                    {   // sliceArgs.Length = 3:  a:b:c, a:b:, a::c, :b:c, a::, :b:, ::c, ::
+                        // sliceArgs.Length = 2:  a:b, a:, :b, :
+                        // sliceArgs.Length = 0:  "" (= ":")
+                        step = int.Parse(stepStr, InvClt);
+                        if (step == 0) { InvalidValueError(I18n.TrlSlice(), "step", "0", rawExpr); }
+                        if (startStr != "")
+                        {   // `start` value given: apply the negative-index and startIndex logics
+                            start = int.Parse(startStr, InvClt);
+                            start = (start >= 0) ? (start - startIndex) : (start + totalLength);
+                        }
+                        else
+                        {   // `start` value not given: set init value based on the sign of `step`
+                            start = (step > 0) ? int.MinValue : int.MaxValue;
+                        }
+                        if (endStr != "") // logic similar to `start`
+                        {
+                            end = int.Parse(endStr, InvClt);
+                            end = (end >= 0) ? (end - startIndex) : (end + totalLength);
+                        }
+                        else
+                        {
+                            end = (step > 0) ? int.MaxValue : int.MinValue;
+                        }
+                    }
+                }
+                catch { ParseTypeError(I18n.TrlString(), slice, I18n.TrlSlice(), rawExpr); }
+
+                // fix the out-of-range early start value / late end value
+                if (step > 0)
+                {
+                    start = (start < 0) ? 0 : start;
+                    end = (end > totalLength) ? totalLength : end;
+                }
+                else
+                {
+                    start = (start > totalLength - 1) ? (totalLength - 1) : start;
+                    end = (end < -1) ? -1 : end;
+                }
+
+                // get indices
+                int sign = Math.Sign(step);
+                int index = start;
+                while (sign * index >= sign * start && sign * index < sign * end)
+                {
+                    indices.Add(index);
+                    index += step;
+                }
+            }
+            return indices;
+        }
+
+        /// <summary> Get the extremum double number from a list of strings. The list should not be empty. </summary>
+        public static string GetExtremumNum(List<string> strings, bool isMin)
+        {
+            try
+            {
+                string extremum = strings[0];
+                double parsedExtremum = double.Parse(extremum, NSFloat, InvClt);
+                foreach (var str in strings)
+                {
+                    double parsedStr = double.Parse(str, NSFloat, InvClt);
+                    if ((parsedStr > parsedExtremum) ^ isMin)
+                    {
+                        extremum = str;
+                        parsedExtremum = parsedStr;
+                    }
+                }
+                return extremum;
+            }
+            catch { return null; }
+        }
+
+        /// <summary> Get the extremum hex number from a list of strings. The list should not be empty.  </summary>
+        public static string GetExtremumHex(List<string> strings, bool isMin)
+        {
+            try
+            {
+                string extremum = strings[0];
+                Int64 parsedExtremum = Int64.Parse(extremum, NumberStyles.HexNumber, InvClt);
+                foreach (var str in strings)
+                {
+                    Int64 parsedStr = Int64.Parse(str, NumberStyles.HexNumber, InvClt);
+                    if ((parsedStr > parsedExtremum) ^ isMin)
+                    {
+                        extremum = str;
+                        parsedExtremum = parsedStr;
+                    }
+                }
+                return extremum;
+            }
+            catch { return null; }
+        }
+
+        /// <summary> Get the extremum string from a list of strings. The list should not be empty. </summary>
+        public static string GetExtremumStr(List<string> strings, bool isMin)
+        {
+            try
+            {
+                string extremum = strings[0];
+                foreach (var str in strings)
+                {
+                    if ((str.CompareTo(extremum) > 0) ^ isMin)
+                    {
+                        extremum = str;
+                    }
+                }
+                return extremum;
+            }
+            catch { return null; }
+        }
+
+        private static void ExtremumInit(string[] args, string gprop, string expr, out string type, out bool isMin)
+        {
+            type = (GetArgument(args, 0, "n") + " ").Substring(0, 1);
+            if (type != "n" && type != "s" && type != "h")
+            {
+                InvalidValueError(gprop, "type", type, expr);
+            }
+            isMin = gprop.StartsWith("min");
+        }
+
+        private string ExtremumGetResult(List<string> strings, string type, bool isMin,
+            string varName, string funcName, string totalExpression)
+        {
+            if (strings.Count == 0) { ExtremumListZeroElementError(varName, totalExpression); }
+            string result = null;
+            switch (type)
+            {
+                case "n": result = GetExtremumNum(strings, isMin); type = I18n.TrlDouble(); break;
+                case "h": result = GetExtremumHex(strings, isMin); type = I18n.TrlHex(); break;
+                case "s": result = GetExtremumStr(strings, isMin); type = I18n.TrlString(); break;
+            }
+            if (result == null) { ExtremumParseTypeError(funcName, type, totalExpression); }
+            return result;
+        }
+
+        /// <summary> use "⏎" as a single-digit placeholder for linebreaks
+        /// to parse linebreaks as regular characters.</summary>
+        public static string ReplaceLineBreak(string str, string placeholder = LINEBREAK_PLACEHOLDER)
+        {
+            return str.Replace("\r\n", placeholder).Replace("\r", placeholder).Replace("\n", placeholder);
+        }
+
+        /// <summary> replace linebreaks with the placeholder when converting charcode to char </summary>
+        public static char GetReplacedChar(int charcode)
+        {   
+            return (charcode == 10 || charcode == 13) ? LINEBREAK_PLACEHOLDER[0] : (char)charcode;
+        }
+
+        /// For arguments and regex in ${func:...}.
+        /// __LB__ / '｛' => '{';   __RB__ / '｝' => '}';
+        /// __LP__ / '（' => '(';   __RP__ / '）' => ')';
+        /// __FLB__ => '｛';        __FRB__ => '｝'; 
+        /// __FLP__ => '（';        __FRP__ => '）';
+        public static string UnescapeCustomExpr(string rawExpr)
+        {
+            StringBuilder sb = new StringBuilder(rawExpr);
+            sb.Replace("__LB__", "{").Replace("__RB__", "}")
+              .Replace("｛", "{").Replace("｝", "}")
+              .Replace("__FLB__", "｛").Replace("__FRB__", "｝")
+              .Replace("__LP__", "(").Replace("__RP__", ")")
+              .Replace("（", "(").Replace("）", ")")
+              .Replace("__FLP__", "（").Replace("__FRP__", "）");
+            return sb.ToString();
         }
 
         public string ExpandVariables(LoggerDelegate logger, object o, bool numeric, string expr)
-        {            
+        {
             Match m, mx;
             string newexpr = expr;
+            newexpr = ReplaceLineBreak(newexpr);
+
             int i = 1;
             while (true)
             {
@@ -212,11 +505,11 @@ namespace Triggernometry
                 {
                     if (x == "_since")
                     {
-                        val = ((int)Math.Floor((DateTime.UtcNow - triggered).TotalSeconds)).ToString();                        
+                        val = ((int)Math.Floor((DateTime.UtcNow - triggered).TotalSeconds)).ToString();
                     }
                     else if (x == "_sincems")
                     {
-                        val = ((int)Math.Floor((DateTime.UtcNow - triggered).TotalMilliseconds)).ToString();                        
+                        val = ((int)Math.Floor((DateTime.UtcNow - triggered).TotalMilliseconds)).ToString();
                     }
                     else
                     {
@@ -253,6 +546,7 @@ namespace Triggernometry
                     }
                     if (found == false)
                     {
+                        Match matchExistVar;
                         if (x == "_since")
                         {
                             val = ((int)Math.Floor((DateTime.UtcNow - triggered).TotalSeconds)).ToString();
@@ -273,7 +567,7 @@ namespace Triggernometry
                             val = ((long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds).ToString();
                             found = true;
                         }
-                        else if (x == "_ffxivplayer")
+                        else if (x == "_ffxivplayer" || x == "_me")
                         {
                             VariableDictionary vc = PluginBridges.BridgeFFXIV.GetMyself();
                             if (vc != null)
@@ -284,7 +578,14 @@ namespace Triggernometry
                         }
                         else if (x == "_ffxivzoneid")
                         {
-                            val = PluginBridges.BridgeFFXIV.ZoneID.ToString();
+                            if (zoneIdOverride != null)
+                            {
+                                val = zoneIdOverride;
+                            }
+                            else
+                            {
+                                val = PluginBridges.BridgeFFXIV.ZoneID.ToString();
+                            }
                             found = true;
                         }
                         else if (x == "_ffxivpartyorder")
@@ -346,15 +647,82 @@ namespace Triggernometry
                             val = trig != null ? trig.Id.ToString() : "(null)";
                             found = true;
                         }
-                        else if (x == "_loopiterator")
+                        else if (x == "_loopiterator" || x == "_i")
                         {
-                            val = loopIterator.ToString();
+                            val = loopiterator.ToString();
                             found = true;
                         }
-                        else if (x.IndexOf("_actionhistory") == 0)
+                        else if (x == "_idx")
                         {
-                            mx = rexlidx.Match(x);
-                            if (mx.Success == true)
+                            val = listIndex.ToString();
+                            found = true;
+                        }
+                        else if (x == "_col")
+                        {
+                            val = tableColIndex.ToString();
+                            found = true;
+                        }
+                        else if (x == "_row")
+                        {
+                            val = tableRowIndex.ToString();
+                            found = true;
+                        }
+                        else if (x.StartsWith("_col["))
+                        {
+                            string rowIndex = x.Substring(5, x.Length - 6);
+                            val = $"${{{varName}[{tableColIndex}][{rowIndex}]}}";
+                            found = true;
+                        }
+                        else if (x.StartsWith("_row["))
+                        {
+                            string colIndex = x.Substring(5, x.Length - 6);
+                            val = $"${{{varName}[{colIndex}][{tableRowIndex}]}}";
+                            found = true;
+                        }
+                        else if (x.StartsWith("_colrl["))
+                        {
+                            int colonIndex = varName.IndexOf(":");
+                            string prefix = varName.Substring(0, colonIndex) + "dl" + varName.Substring(colonIndex);
+                            string colHeader = $"${{{varName}[{tableColIndex}][1]}}";
+                            string rowHeader = x.Substring(7, x.Length - 8);
+                            val = $"${{{prefix}[{colHeader}][{rowHeader}]}}";
+                            found = true;
+                        }
+                        else if (x.StartsWith("_rowcl["))
+                        {
+                            int colonIndex = varName.IndexOf(":");
+                            string prefix = varName.Substring(0, colonIndex) + "dl" + varName.Substring(colonIndex);
+                            string colHeader = x.Substring(7, x.Length - 8);
+                            string rowHeader = $"${{{varName}[1][{tableRowIndex}]}}";
+                            val = $"${{{prefix}[{colHeader}][{rowHeader}]}}";
+                            found = true;
+                        }
+                        else if (x == "_key")
+                        {
+                            val = dictKey;
+                            found = true;
+                        }
+                        else if (x == "_val")
+                        {
+                            val = dictValue;
+                            found = true;
+                        }
+                        else if (x == "_this")
+                        {
+                            if (varName.StartsWith("tvar:") || varName.StartsWith("ptvar:"))
+                            {
+                                val = $"${{{varName}[{tableColIndex}][{tableRowIndex}]}}";
+                            }
+                            else
+                            {
+                                val = $"${{{varName}[{listIndex}]}}";
+                            }
+                            found = true;
+                        }
+                        else if (x.StartsWith("_actionhistory"))
+                        {
+                            mx = rexListIdx.Match(x);
+                            if (mx.Success)
                             {
                                 string idx = mx.Groups["index"].Value;
                                 if (idx == "previous")
@@ -368,25 +736,41 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
-                        else if (x.IndexOf("_env") == 0)
+                        else if (x.StartsWith("_env"))
                         {
-                            mx = rexlidx.Match(x);
-                            if (mx.Success == true)
+                            mx = rexListIdx.Match(x);
+                            if (mx.Success)
                             {
                                 string idx = mx.Groups["index"].Value;
                                 val = System.Environment.GetEnvironmentVariable(idx);
                                 found = true;
                             }
                         }
-                        else if (x.IndexOf("_const") == 0)
+                        else if (x.StartsWith("_job[")) // ${_job[jobid].prop} or ${_job[Name].prop}
                         {
-                            mx = rexlidx.Match(x);
-                            if (mx.Success == true)
+                            mx = rexListProp.Match(x);
+                            if (mx.Success)
                             {
-                                string idx = mx.Groups["index"].Value;
+                                string rawJob = mx.Groups["index"].Value.Trim();
+                                if (!Entity.jobNameToIdMap.ContainsKey(rawJob.ToLower()))
+                                {
+                                    InvalidValueError("_job", "key", rawJob, x);
+                                }
+                                string jobid = Entity.jobNameToIdMap[rawJob.ToLower()];
+                                string prop = mx.Groups["prop"].Value;
+                                val = Entity.jobs[jobid][prop];
+                            }
+                            found = true;
+                        }
+                        else if (x.StartsWith("_const"))
+                        {
+                            mx = rexListIdx.Match(x);
+                            if (mx.Success)
+                            {
+                                string idx = mx.Groups["index"].Value.Trim();
                                 lock (plug.cfg.Constants)
                                 {
-                                    if (plug.cfg.Constants.ContainsKey(idx) == true)
+                                    if (plug.cfg.Constants.ContainsKey(idx))
                                     {
                                         val = plug.cfg.Constants[idx].Value;
                                     }
@@ -398,10 +782,41 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
-                        else if (x.IndexOf("_jsonresponse") == 0)
+                        else if (x.StartsWith("_config["))
                         {
-                            mx = rexlidx.Match(x);
-                            if (mx.Success == true)
+                            mx = rexListIdx.Match(x);
+                            if (mx.Success)
+                            {
+                                string idx = mx.Groups["index"].Value.Trim();
+                                switch (idx)
+                                {
+                                    case "DebugLevel": val = ((int)plug.cfg.DebugLevel).ToString(InvClt); break;
+                                    case "UseACTForSound": val = plug.cfg.UseACTForSound ? "1" : "0"; break;
+                                    case "UseACTForTTS": val = plug.cfg.UseACTForTTS ? "1" : "0"; break;
+                                    case "FfxivLogNetwork": val = plug.cfg.FfxivLogNetwork ? "1" : "0"; break;
+                                    case "UseOsClipboard": val = plug.cfg.UseOsClipboard ? "1" : "0"; break;
+                                    case "DeveloperMode": val = plug.cfg.DeveloperMode ? "1" : "0"; break;
+                                    case "Autosave": val = plug.cfg.AutosaveEnabled ? plug.cfg.AutosaveInterval.ToString(InvClt) : "0"; break;
+                                    case "Language": val = plug.cfg.Language; break;
+                                    default:
+                                        try
+                                        {
+                                            foreach (var api in plug.cfg.GetAPIUsages())
+                                            {
+                                                if (api.Name == idx)
+                                                    val = (api.AllowLocal ? "1" : "0") + (api.AllowRemote ? "1" : "0") + (api.AllowAdmin ? "1" : "0");
+                                            }
+                                        }
+                                        catch { InvalidValueError("_config", I18n.TrlKey(), idx, x); }
+                                        break;
+                                }
+                                found = true;
+                            }
+                        }
+                        else if (x.StartsWith("_jsonresponse"))
+                        {
+                            mx = rexListIdx.Match(x);
+                            if (mx.Success)
                             {
                                 string pathspec = mx.Groups["index"].Value;
                                 if (contextJsonParsed == false)
@@ -420,213 +835,406 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
-                        // check if scalar variable exists
-                        else if ((x.IndexOf("evar:") == 0) || (x.IndexOf("epvar:") == 0))
+                        // check if variable exists (combined the logic for all types of variable expressions)
+                        // evar  = ev, epvar  = epv;    elvar = el, eplvar = epl;
+                        // etvar = et, eptvar = ept;    edvar = ed, epdvar = epd;
+                        // etext, eimage for Auras;     ecallback for named callbacks
+                        else if ((matchExistVar = rexExistVar.Match(x)).Success)
                         {
-                            Variables.VariableStore store;
-                            string varname;
-                            if (x.IndexOf("evar:") == 0)
+                            bool persist = matchExistVar.Groups["persist"].Value == "p";
+                            string type = matchExistVar.Groups["type"].Value;
+                            string varname = matchExistVar.Groups["name"].Value;
+                            VariableStore store = persist ? plug.cfg.PersistentVariables : plug.sessionvars;
+                            dynamic source = null;
+                            switch (type)
                             {
-                                store = plug.sessionvars;
-                                varname = x.Substring(5);
+                                case "v": source = store.Scalar; break;
+                                case "l": source = store.List; break;
+                                case "t": source = store.Table; break;
+                                case "d": source = store.Dict; break;
+                                case "text":
+                                    if (plug.sc != null)
+                                        source = plug.sc.textitems;
+                                    else
+                                        source = plug.textauras;
+                                    break;
+                                case "image":
+                                    if (plug.sc != null)
+                                        source = plug.sc.imageitems;
+                                    else
+                                        source = plug.imageauras;
+                                    break;
+                                case "callback": source = plug.callbacksByName; break;
                             }
-                            else
+                            lock (source)
                             {
-                                store = plug.cfg.PersistentVariables;
-                                varname = x.Substring(6);
-                            }                            
-                            lock (store.Scalar) // verified
-                            {
-                                if (store.Scalar.ContainsKey(varname) == true)
-                                {
-                                    val = "1";
-                                }
-                                else
-                                {
-                                    val = "0";
-                                }
-                                found = true;
+                                val = (source == null) ? "" : source.ContainsKey(varname) ? "1" : "0";
                             }
-                        }
-                        // check if list variable exists
-                        else if ((x.IndexOf("elvar:") == 0) || (x.IndexOf("eplvar:") == 0))
-                        {
-                            Variables.VariableStore store;
-                            string varname;
-                            if (x.IndexOf("elvar:") == 0)
-                            {
-                                store = plug.sessionvars;
-                                varname = x.Substring(6);
-                            }
-                            else
-                            {
-                                store = plug.cfg.PersistentVariables;
-                                varname = x.Substring(7);
-                            }                            
-                            lock (store.List) // verified
-                            {
-                                if (store.List.ContainsKey(varname) == true)
-                                {
-                                    val = "1";
-                                }
-                                else
-                                {
-                                    val = "0";
-                                }
-                                found = true;
-                            }
-                        }
-                        // check if table variable exists
-                        else if ((x.IndexOf("etvar:") == 0) || (x.IndexOf("eptvar:") == 0))
-                        {
-                            Variables.VariableStore store;
-                            string varname;
-                            if (x.IndexOf("etvar:") == 0)
-                            {
-                                store = plug.sessionvars;
-                                varname = x.Substring(6);
-                            }
-                            else
-                            {
-                                store = plug.cfg.PersistentVariables;
-                                varname = x.Substring(7);
-                            }
-                            lock (store.Table) // verified
-                            {
-                                if (store.Table.ContainsKey(varname) == true)
-                                {
-                                    val = "1";
-                                }
-                                else
-                                {
-                                    val = "0";
-                                }
-                                found = true;
-                            }
+                            found = true;
                         }
                         // retrieve scalar variable value
-                        else if ((x.IndexOf("var:") == 0) || (x.IndexOf("pvar:") == 0))
+                        else if (x.StartsWith("var:") || x.StartsWith("pvar:") || x.StartsWith("v:") || x.StartsWith("pv:"))
                         {
-                            Variables.VariableStore store;
-                            string varname;
-                            if (x.IndexOf("var:") == 0)
-                            {
-                                store = plug.sessionvars;
-                                varname = x.Substring(4);
-                            }
-                            else
-                            {
-                                store = plug.cfg.PersistentVariables;
-                                varname = x.Substring(5);
-                            }
+                            VariableStore store = x.StartsWith("p") ? plug.cfg.PersistentVariables : plug.sessionvars;
+                            string varname = x.Substring(x.IndexOf(":") + 1);
                             lock (store.Scalar) // verified
                             {
                                 VariableScalar vs = GetScalarVariable(store, varname, false);
                                 val = vs.Value;
-                                found = true;
                             }
+                            found = true;
                         }
                         // retrieve list variable value
-                        else if ((x.IndexOf("lvar:") == 0) || (x.IndexOf("plvar:") == 0))
+                        else if (x.StartsWith("lvar:") || x.StartsWith("l:")
+                              || x.StartsWith("plvar:") || x.StartsWith("pl:")
+                              || x.StartsWith("?lvar:") || x.StartsWith("?l:"))
                         {
-                            Variables.VariableStore store;
-                            string varname;
-                            if (x.IndexOf("lvar:") == 0)
-                            {
-                                store = plug.sessionvars;
-                                varname = x.Substring(5);
-                            }
-                            else
-                            {
-                                store = plug.cfg.PersistentVariables;
-                                varname = x.Substring(6);
-                            }
-                            mx = rexlprp.Match(varname);
-                            if (mx.Success == true)
+                            VariableStore store = x.StartsWith("p") ? plug.cfg.PersistentVariables
+                                                : x.StartsWith("l") ? plug.sessionvars : new VariableStore();
+                            string varname = x.Substring(x.IndexOf(":") + 1);
+                            mx = rexProp.Match(varname);
+                            if (mx.Success)
                             {
                                 string gname = mx.Groups["name"].Value;
                                 string gprop = mx.Groups["prop"].Value;
+                                string garg = mx.Groups["arg"].Value;
+                                string[] args = SplitArguments(garg);
+                                int argc = args.Length;
+                                if (x.StartsWith("?"))
+                                {   // build temp var
+                                    store.List["?lvar"] = VariableList.BuildTemp(gname);
+                                    gname = "?lvar";
+                                }
                                 switch (gprop)
                                 {
                                     case "size":
+                                    case "length":
+                                        lock (store.List)
                                         {
-                                            lock (store.List)
-                                            {
-                                                VariableList vl = GetListVariable(store, gname, false);
-                                                val = vl.Size().ToString();
-                                                found = true;
-                                            }
+                                            VariableList vl = GetListVariable(store, gname, false);
+                                            val = vl.Size.ToString();
                                         }
+                                        found = true;
                                         break;
                                     case "indexof":
+                                    case "i":
+                                    case "lastindexof":
+                                        if (argc != 1) { ArgCountError(gprop, "1", argc, x); }
+                                        lock (store.List)
                                         {
-                                            string garg = mx.Groups["arg"].Value;
+                                            VariableList vl = GetListVariable(store, gname, false);
+                                            val = (gprop.StartsWith("i")) ? vl.IndexOf(args[0]).ToString() : vl.LastIndexOf(args[0]).ToString();
+                                        }
+                                        found = true;
+                                        break;
+                                    case "indicesof":
+                                        {
+                                            if (argc == 0 || argc > 3) { ArgCountError(gprop, "1-3", argc, x); }
+                                            string joiner = GetArgument(args, 1, defaultValue: ",");
+                                            string slicesStr = GetArgument(args, 2, defaultValue: ":");
                                             lock (store.List)
                                             {
                                                 VariableList vl = GetListVariable(store, gname, false);
-                                                val = vl.IndexOf(garg).ToString();
+                                                var indices = GetSliceIndices(slicesStr, vl.Size, x, startIndex: 1);
+                                                val = vl.IndicesOf(args[0], joiner, indices);
+                                            }
+                                            found = true;
+                                        }
+                                        break;
+                                    case "sum":  // lvar:list.sum(slices = ":")
+                                        {
+                                            if (argc > 1) { ArgCountError(gprop, "0-1", argc, x); }
+                                            string slicesStr = GetArgument(args, 0, ":");
+                                            lock (store.List)
+                                            {
+                                                VariableList vl = GetListVariable(store, gname, false);
+                                                var indices = GetSliceIndices(slicesStr, vl.Size, x, startIndex: 1);
+                                                val = I18n.ThingToString(vl.Sum(indices));
+                                            }
+                                            found = true;
+                                        }
+                                        break;
+                                    case "min":  // lvar:list.min(type = "n", slices = ":")  num = "n" / str = "s" / hex = "h"
+                                    case "max":
+                                        {
+                                            if (argc > 2) { ArgCountError(gprop, "0-2", argc, x); }
+                                            ExtremumInit(args, gprop, x, out string type, out bool isMin);
+                                            string slicesStr = GetArgument(args, 1, ":");
+                                            List<string> strings;
+                                            lock (store.List)
+                                            {
+                                                VariableList vl = GetListVariable(store, gname, false);
+                                                var indices = GetSliceIndices(slicesStr, vl.Size, x, startIndex: 1);
+                                                strings = vl.Values.Where((_, idx) => indices.Contains(idx)).Select(var => var.ToString()).ToList();
+                                            }
+                                            val = ExtremumGetResult(strings, type, isMin, gname, gprop, x);
+                                            found = true;
+                                        }
+                                        break;
+                                    case "join":        // lvar:list.join(joiner = ",", slices = ":")
+                                    case "randjoin":    // lvar:list.randjoin(joiner = ",", slices = ":")
+                                        {
+                                            if (argc > 2) { ArgCountError(gprop, "0-2", argc, x); }
+                                            string joiner = GetArgument(args, 0, ",");
+                                            string slicesStr = GetArgument(args, 1, ":");
+                                            lock (store.List)
+                                            {
+                                                VariableList vl = GetListVariable(store, gname, false);
+                                                List<int> indices = GetSliceIndices(slicesStr, vl.Size, x, startIndex: 1);
+                                                if (gprop == "randjoin")
+                                                {
+                                                    indices = indices.OrderBy(_ => rng.Next()).ToList();
+                                                }
+                                                val = vl.Join(joiner, indices);
                                                 found = true;
                                             }
                                         }
                                         break;
-                                    case "lastindexof":
+                                    case "count": // count(targetStr, slices = ":")
                                         {
-                                            string garg = mx.Groups["arg"].Value;
+                                            if (argc != 1 && argc != 2) { ArgCountError(gprop, "1-2", argc, x); }
+                                            var slicesStr = GetArgument(args, 1, ":");
                                             lock (store.List)
                                             {
                                                 VariableList vl = GetListVariable(store, gname, false);
-                                                val = vl.LastIndexOf(garg).ToString();
+                                                var indices = GetSliceIndices(slicesStr, vl.Size, x, startIndex: 1);
+                                                val = vl.Count(args[0], indices).ToString();
                                                 found = true;
                                             }
+                                        }
+                                        break;
+                                    case "contain":
+                                        {
+                                            if (argc != 1 && argc != 2) { ArgCountError(gprop, "1-2", argc, x); }
+                                            string slicesStr = GetArgument(args, 1, ":");
+                                            lock (store.List)
+                                            {
+                                                VariableList vl = GetListVariable(store, gname, false);
+                                                List<int> indices = GetSliceIndices(slicesStr, vl.Size, x, startIndex: 1);
+                                                val = (indices.Any(idx => vl.Values[idx].ToString() == args[0])) ? "1" : "0";
+                                                found = true;
+                                            }
+                                        }
+                                        break;
+                                    case "ifcontain":
+                                        if (argc != 3) { ArgCountError(gprop, "3", argc, x); }
+                                        lock (store.List)
+                                        {
+                                            VariableList vl = GetListVariable(store, gname, false);
+                                            val = (vl.Values.Any(v => v.ToString() == args[0])) ? args[1] : args[2];
+                                            found = true;
                                         }
                                         break;
                                 }
                             }
                             else
                             {
-                                mx = rexlidx.Match(varname);
-                                if (mx.Success == true)
+                                mx = rexListIdx.Match(varname);
+                                if (mx.Success)
                                 {
                                     string gname = mx.Groups["name"].Value;
                                     string gindex = mx.Groups["index"].Value;
+                                    gindex = (gindex == "last") ? "-1" : gindex;
+
+                                    if (x.StartsWith("?"))
+                                    {   // build temp var
+                                        store.List["?lvar"] = VariableList.BuildTemp(gname);
+                                        gname = "?lvar";
+                                    }
+                                    if (!int.TryParse(gindex, NSFloat, InvClt, out int iindex))
+                                    {
+                                        ParseTypeError(I18n.TrlIndex(), gindex, I18n.TrlInt(), x);
+                                    }
                                     lock (store.List)
                                     {
                                         VariableList vl = GetListVariable(store, gname, false);
-                                        if (gindex == "last")
+                                        val = vl.Peek(iindex).ToString();
+                                    }
+                                    found = true;
+                                }
+                            }
+                        }
+                        // retrieve dict variable value
+                        else if (x.StartsWith("dvar:") || x.StartsWith("d:")
+                              || x.StartsWith("pdvar:") || x.StartsWith("pd:")
+                              || x.StartsWith("?dvar:") || x.StartsWith("?d:"))
+                        {
+                            VariableStore store = x.StartsWith("p") ? plug.cfg.PersistentVariables
+                                                : x.StartsWith("d") ? plug.sessionvars : new VariableStore();
+                            string varname = x.Substring(x.IndexOf(":") + 1);
+
+                            mx = rexProp.Match(varname);
+                            if (mx.Success)
+                            {
+                                string gname = mx.Groups["name"].Value;
+                                string gprop = mx.Groups["prop"].Value;
+                                string garg = mx.Groups["arg"].Value;
+                                string[] args = SplitArguments(garg);
+                                int argc = args.Length;
+                                if (x.StartsWith("?"))
+                                {   // build temp var
+                                    store.Dict["?dvar"] = VariableDictionary.BuildTemp(gname);
+                                    gname = "?dvar";
+                                }
+                                switch (gprop)
+                                {
+                                    case "size":
+                                    case "length":
                                         {
-                                            gindex = vl.Size().ToString();
+                                            lock (store.Dict)
+                                            {
+                                                VariableDictionary vd = GetDictVariable(store, gname, false);
+                                                val = vd.Size.ToString();
+                                            }
                                         }
-                                        int iindex;
-                                        if (Int32.TryParse(gindex, out iindex) == true)
+                                        break;
+                                    case "ekey":
+                                    case "evalue":
+                                        if (argc != 1) { ArgCountError(gprop, "1", argc, x); }
+                                        lock (store.Dict)
                                         {
-                                            val = vl.Peek(iindex).ToString();
+                                            VariableDictionary vd = GetDictVariable(store, gname, false);
+                                            string queryStr = args[0];
+                                            bool exist = (gprop == "ekey") ? vd.ContainsKey(queryStr) : vd.ContainsValue(queryStr);
+                                            val = exist ? "1" : "0";
                                         }
-                                        found = true;
+                                        break;
+                                    case "ifekey":
+                                    case "ifevalue":
+                                        if (argc != 3) { ArgCountError(gprop, "3", argc, x); }
+                                        lock (store.Dict)
+                                        {
+                                            VariableDictionary vd = GetDictVariable(store, gname, false);
+                                            string queryStr = args[0];
+                                            bool exist = (gprop == "ekey") ? vd.ContainsKey(queryStr) : vd.ContainsValue(queryStr);
+                                            val = exist ? args[1] : args[2];
+                                        }
+                                        break;
+                                    case "count": // count(value)
+                                        {
+                                            if (argc != 1) { ArgCountError(gprop, "1", argc, x); }
+                                            lock (store.Dict)
+                                            {
+                                                VariableDictionary vd = GetDictVariable(store, gname, false);
+                                                val = vd.Count(args[0]).ToString();
+                                                found = true;
+                                            }
+                                        }
+                                        break;
+                                    case "keyof":
+                                        if (argc != 1) { ArgCountError(gprop, "1", argc, x); }
+                                        lock (store.Dict)
+                                        {
+                                            VariableDictionary vd = GetDictVariable(store, gname, false);
+                                            string queryStr = args[0];
+                                            val = vd.KeyOf(queryStr);
+                                        }
+                                        break;
+                                    case "keysof":
+                                        if (argc != 1 && argc != 2) { ArgCountError(gprop, "1-2", argc, x); }
+                                        lock (store.Dict)
+                                        {
+                                            VariableDictionary vd = GetDictVariable(store, gname, false);
+                                            string queryStr = args[0];
+                                            string joiner = GetArgument(args, 1, ",");
+                                            val = vd.KeysOf(queryStr, joiner);
+                                        }
+                                        break;
+                                    case "joinkeys":
+                                    case "joinvalues":
+                                        if (argc > 1) { ArgCountError(gprop, "0-1", argc, x); }
+                                        lock (store.Dict)
+                                        {
+                                            VariableDictionary vd = GetDictVariable(store, gname, false);
+                                            string joiner = GetArgument(args, 0, ",");
+                                            val = (gprop == "joinkeys") ? vd.JoinKeys(joiner) : vd.JoinValues(joiner);
+                                        }
+                                        break;
+                                    case "joinall":
+                                        if (argc > 2) { ArgCountError(gprop, "0-2", argc, x); }
+                                        lock (store.Dict)
+                                        {
+                                            VariableDictionary vd = GetDictVariable(store, gname, false);
+                                            string kvjoiner = GetArgument(args, 0, "=");
+                                            string pairjoiner = GetArgument(args, 1, ",");
+                                            val = vd.JoinAll(kvjoiner, pairjoiner);
+                                        }
+                                        break;
+                                    case "sumkeys":
+                                    case "sum": // sum values
+                                        if (argc > 0) { ArgCountError(gprop, "0", argc, x); }
+                                        lock (store.Dict)
+                                        {
+                                            VariableDictionary vd = GetDictVariable(store, gname, false);
+                                            double sum = (gprop == "sumkeys") ? vd.SumKeys() : vd.Sum();
+                                            val = I18n.ThingToString(sum);
+                                        }
+                                        break;
+                                    case "minkey":
+                                    case "maxkey":
+                                    case "min":  // dvar:list.min(type = "n")  num = "n" / str = "s" / hex = "h"
+                                    case "max":
+                                        {
+                                            if (argc > 1) { ArgCountError(gprop, "0-1", argc, x); }
+                                            ExtremumInit(args, gprop, x, out string type, out bool isMin);
+                                            List<string> strings;
+                                            lock (store.Dict)
+                                            {
+                                                VariableDictionary vd = GetDictVariable(store, gname, false);
+                                                strings = (gprop.EndsWith("key")) ? vd.Values.Keys.ToList()
+                                                                                  : vd.Values.Values.Select(var => var.ToString()).ToList();
+                                            }
+                                            val = ExtremumGetResult(strings, type, isMin, gname, gprop, x);
+                                            found = true;
+                                        }
+                                        break;
+                                }
+                                found = true;
+                            }
+                            else
+                            {
+                                mx = rexListIdx.Match(varname);
+                                if (mx.Success)
+                                {
+                                    string gname = mx.Groups["name"].Value;
+                                    string gindex = mx.Groups["index"].Value;
+                                    if (x.StartsWith("?"))
+                                    {
+                                        var vd = VariableDictionary.BuildTemp(gname);
+                                        val = vd.GetValue(gindex).ToString();
+                                    }
+                                    else
+                                    {
+                                        lock (store.Dict)
+                                        {
+                                            VariableDictionary vd = GetDictVariable(store, gname, false);
+                                            val = vd.GetValue(gindex).ToString();
+                                        }
                                     }
                                     found = true;
                                 }
                             }
                         }
                         // retrieve table variable value
-                        else if ((x.IndexOf("tvar:") == 0) || (x.IndexOf("ptvar:") == 0))
+                        else if (x.StartsWith("tvar:") || x.StartsWith("t:")
+                              || x.StartsWith("ptvar:") || x.StartsWith("pt:")
+                              || x.StartsWith("?tvar:") || x.StartsWith("?t:"))
                         {
-                            Variables.VariableStore store;
-                            string varname;
-                            if (x.IndexOf("tvar:") == 0)
-                            {
-                                store = plug.sessionvars;
-                                varname = x.Substring(5);
-                            }
-                            else
-                            {
-                                store = plug.cfg.PersistentVariables;
-                                varname = x.Substring(6);
-                            }
-                            mx = rexlprp.Match(varname);
-                            if (mx.Success == true)
+                            VariableStore store = x.StartsWith("p") ? plug.cfg.PersistentVariables
+                                                : x.StartsWith("t") ? plug.sessionvars : new VariableStore();
+                            string varname = x.Substring(x.IndexOf(":") + 1);
+                            mx = rexProp.Match(varname);
+                            if (mx.Success)
                             {
                                 string gname = mx.Groups["name"].Value;
                                 string gprop = mx.Groups["prop"].Value;
+                                string[] args = SplitArguments(mx.Groups["arg"].Value);
+                                int argc = args.Length;
+                                if (x.StartsWith("?"))
+                                {   // build temp var
+                                    store.Table["?tvar"] = VariableTable.BuildTemp(gname);
+                                    gname = "?tvar";
+                                }
                                 switch (gprop)
                                 {
                                     case "w":
@@ -651,226 +1259,282 @@ namespace Triggernometry
                                             }
                                         }
                                         break;
+                                    case "hjoin": // .hjoin(joiner1 = ",", joiner2 = LINEBREAK_PLACEHOLDER, colSlices = ":", rowSlices = ":")
+                                    case "vjoin": // .vjoin(joiner1 = ",", joiner2 = LINEBREAK_PLACEHOLDER, colslices = ":", rowslices = ":")
+                                        if (argc > 4) { ArgCountError(gprop, "0-4", argc, x); }
+                                        lock (store.Table)
+                                        {
+                                            VariableTable vt = GetTableVariable(store, gname, false);
+                                            string joiner1 = GetArgument(args, 0, ",", false);
+                                            string joiner2 = GetArgument(args, 1, LINEBREAK_PLACEHOLDER, false);
+                                            string colSlicesStr = GetArgument(args, 2, ":");
+                                            string rowSlicesStr = GetArgument(args, 3, ":");
+                                            var colIndices = GetSliceIndices(colSlicesStr, vt.Width, x, startIndex: 1);
+                                            var rowIndices = GetSliceIndices(rowSlicesStr, vt.Height, x, startIndex: 1);
+                                            if (gprop.StartsWith("hj"))
+                                            {
+                                                val = vt.HJoin(joiner1, joiner2, colIndices, rowIndices);
+                                            }
+                                            else
+                                            {
+                                                val = vt.VJoin(joiner1, joiner2, colIndices, rowIndices);
+                                            }
+                                            found = true;
+                                        }
+                                        break;
+                                    case "hl":
+                                    case "hlookup": // .hlookup(targetStr, rowIndex, colslices = ":") => colIndex
+                                    case "vl":
+                                    case "vlookup": // .vlookup(targetStr, colIndex, rowslices = ":") => rowIndex
+                                        if (argc != 2 && argc != 3) { ArgCountError(gprop, "2-3", argc, x); }
+                                        lock (store.Table)
+                                        {
+                                            VariableTable vt = GetTableVariable(store, gname, false);
+                                            string targetStr = args[0];
+                                            if (!int.TryParse(args[1], NSFloat, InvClt, out int rawIndex))
+                                            {
+                                                ParseTypeError(I18n.TrlString(), args[1], I18n.TrlInt(), x);
+                                            }
+                                            int maxLength = (gprop.StartsWith("hl")) ? vt.Height : vt.Width;
+                                            int index = (rawIndex < 0) ? (rawIndex + maxLength) : (rawIndex - 1);
+                                            string slicesStr = GetArgument(args, 2, ":");
+
+                                            List<int> indices;
+                                            if (gprop.StartsWith("hl"))
+                                            {
+                                                indices = GetSliceIndices(slicesStr, vt.Width, x, startIndex: 1);
+                                                val = vt.HLookup(targetStr, index, indices).ToString();
+                                            }
+                                            else
+                                            {
+                                                indices = GetSliceIndices(slicesStr, vt.Height, x, startIndex: 1);
+                                                val = vt.VLookup(targetStr, index, indices).ToString();
+                                            }
+                                            found = true;
+                                        }
+                                        break;
+                                    case "count": // count(targetStr, colslices = ":", rowslices = ":")
+                                        {
+                                            if (argc == 0 || argc > 3) { ArgCountError(gprop, "1-3", argc, x); }
+                                            var colSlicesStr = GetArgument(args, 1, ":");
+                                            var rowSlicesStr = GetArgument(args, 2, ":");
+                                            lock (store.Table)
+                                            {
+                                                VariableTable vt = GetTableVariable(store, gname, false);
+                                                var colIndices = GetSliceIndices(colSlicesStr, vt.Width, x, startIndex: 1);
+                                                var rowIndices = GetSliceIndices(rowSlicesStr, vt.Height, x, startIndex: 1);
+                                                val = vt.Count(args[0], colIndices, rowIndices).ToString();
+                                                found = true;
+                                            }
+                                        }
+                                        break;
+                                    case "sum":
+                                        {
+                                            if (argc > 2) { ArgCountError(gprop, "0-2", argc, x); }
+                                            var colSlicesStr = GetArgument(args, 0, ":");
+                                            var rowSlicesStr = GetArgument(args, 1, ":");
+                                            lock (store.Table)
+                                            {
+                                                VariableTable vt = GetTableVariable(store, gname, false);
+                                                var colIndices = GetSliceIndices(colSlicesStr, vt.Width, x, startIndex: 1);
+                                                var rowIndices = GetSliceIndices(rowSlicesStr, vt.Height, x, startIndex: 1);
+                                                val = I18n.ThingToString(vt.Sum(colIndices, rowIndices));
+                                                found = true;
+                                            }
+                                        }
+                                        break;
+                                    case "min":  // tvar:table.min(type = "n", colSlices = ":", rowSlices = ":")  num = "n" / str = "s" / hex = "h"
+                                    case "max":
+                                        {
+                                            if (argc > 3) { ArgCountError(gprop, "0-3", argc, x); }
+                                            ExtremumInit(args, gprop, x, out string type, out bool isMin);
+                                            string colSlicesStr = GetArgument(args, 1, ":");
+                                            string rowSlicesStr = GetArgument(args, 2, ":");
+                                            List<string> strings;
+                                            lock (store.Table)
+                                            {
+                                                VariableTable vt = GetTableVariable(store, gname, false);
+                                                var colIndices = GetSliceIndices(colSlicesStr, vt.Width, x, startIndex: 1);
+                                                var rowIndices = GetSliceIndices(rowSlicesStr, vt.Height, x, startIndex: 1);
+                                                strings = rowIndices.SelectMany(
+                                                    row => colIndices.Select(col => vt.Rows[row].Values[col].ToString())
+                                                    ).ToList();
+                                            }
+                                            val = ExtremumGetResult(strings, type, isMin, gname, gprop, x);
+                                            found = true;
+                                        }
+                                        break;
+                                    case "contain":
+                                        {
+                                            if (argc == 0 || argc > 3) { ArgCountError(gprop, "1-3", argc, x); }
+                                            string colSlicesStr = GetArgument(args, 1, ":");
+                                            string rowSlicesStr = GetArgument(args, 2, ":");
+                                            lock (store.Dict)
+                                            {
+                                                VariableTable vt = GetTableVariable(store, gname, false);
+                                                List<int> colIndices = GetSliceIndices(colSlicesStr, vt.Width, x, startIndex: 1);
+                                                List<int> rowIndices = GetSliceIndices(rowSlicesStr, vt.Height, x, startIndex: 1);
+                                                val = (colIndices.Any(col => rowIndices.Any(
+                                                    row => vt.Rows[row].Values[col].ToString() == args[0])
+                                                )) ? "1" : "0";
+                                                found = true;
+                                            }
+                                        }
+                                        break;
+                                    case "ifcontain":
+                                        if (argc != 3) { ArgCountError(gprop, "3", argc, x); }
+                                        lock (store.Table)
+                                        {
+                                            VariableTable vt = GetTableVariable(store, gname, false);
+                                            val = vt.Rows.SelectMany(row => row.Values).Any(cell => cell.ToString() == args[0])
+                                                ? args[1] : args[2];
+                                            found = true;
+                                        }
+                                        break;
                                 }
                             }
                             else
                             {
-                                mx = rextidx.Match(varname);
-                                if (mx.Success == true)
+                                mx = rexTableIdx.Match(varname);
+                                if (mx.Success)
                                 {
                                     string gname = mx.Groups["name"].Value;
                                     string gcol = mx.Groups["column"].Value;
                                     string grow = mx.Groups["row"].Value;
+                                    gcol = (gcol == "last") ? "-1" : gcol;
+                                    grow = (grow == "last") ? "-1" : grow;
+
+                                    if (x.StartsWith("?"))
+                                    {   // build temp var
+                                        store.Table["?tvar"] = VariableTable.BuildTemp(gname);
+                                        gname = "?tvar";
+                                    }
+                                    if (!Int32.TryParse(gcol, NSFloat, InvClt, out int xindex))
+                                    {
+                                        ParseTypeError(I18n.TrlIndex(), gcol, I18n.TrlInt(), x);
+                                    }
+                                    if (!Int32.TryParse(grow, NSFloat, InvClt, out int yindex))
+                                    {
+                                        ParseTypeError(I18n.TrlIndex(), grow, I18n.TrlInt(), x);
+                                    }
                                     lock (store.Table)
                                     {
                                         VariableTable vt = GetTableVariable(store, gname, false);
-                                        if (gcol == "last")
-                                        {
-                                            gcol = vt.Width.ToString();
-                                        }
-                                        if (grow == "last")
-                                        {
-                                            grow = vt.Height.ToString();
-                                        }
-                                        int xindex, yindex;
-                                        if (Int32.TryParse(gcol, out xindex) == true)
-                                        {
-                                            if (Int32.TryParse(grow, out yindex) == true)
-                                            {
-                                                val = vt.Peek(xindex, yindex).ToString();
-                                            }
-                                        }
-                                        found = true;
+                                        val = vt.Peek(xindex, yindex).ToString();
                                     }
                                     found = true;
                                 }
                             }
                         }
                         // row-based table lookup
-                        else if ((x.IndexOf("tvarrl:") == 0) || (x.IndexOf("ptvarrl:") == 0))
+                        else if (x.StartsWith("tvarrl:") || x.StartsWith("ptvarrl:") || x.StartsWith("trl:") || x.StartsWith("ptrl:"))
                         {
-                            Variables.VariableStore store;
-                            string varname;
-                            if (x.IndexOf("tvarrl:") == 0)
-                            {
-                                store = plug.sessionvars;
-                                varname = x.Substring(7);
-                            }
-                            else
-                            {
-                                store = plug.cfg.PersistentVariables;
-                                varname = x.Substring(8);
-                            }
-                            mx = rexlprp.Match(varname);
-                            if (mx.Success == true)
+                            VariableStore store = x.StartsWith("p") ? plug.cfg.PersistentVariables : plug.sessionvars;
+                            string varname = x.Substring(x.IndexOf(":") + 1);
+                            mx = rexTableIdx.Match(varname);
+                            if (mx.Success)
                             {
                                 string gname = mx.Groups["name"].Value;
-                                string gprop = mx.Groups["prop"].Value;
-                                switch (gprop)
+                                string gheader = mx.Groups["column"].Value;
+                                string gindex = mx.Groups["row"].Value;
+                                gindex = (gindex == "last") ? "-1" : gindex;
+
+                                if (!Int32.TryParse(gindex, NSFloat, InvClt, out int xindex))
                                 {
-                                    case "w":
-                                    case "width":
-                                        {
-                                            lock (store.Table)
-                                            {
-                                                VariableTable vt = GetTableVariable(store, gname, false);
-                                                val = (vt.Width > 0 ? vt.Width - 1 :0).ToString();
-                                                found = true;
-                                            }
-                                        }
-                                        break;
-                                    case "h":
-                                    case "height":
-                                        {
-                                            lock (store.Table)
-                                            {
-                                                VariableTable vt = GetTableVariable(store, gname, false);
-                                                val = vt.Height.ToString();
-                                                found = true;
-                                            }
-                                        }
-                                        break;
+                                    ParseTypeError(I18n.TrlIndex(), gindex, I18n.TrlInt(), x);
                                 }
-                            }
-                            else
-                            {
-                                mx = rextidx.Match(varname);
-                                if (mx.Success == true)
+                                lock (store.Table)
                                 {
-                                    string gname = mx.Groups["name"].Value;
-                                    string gheader = mx.Groups["column"].Value;
-                                    string gindex = mx.Groups["row"].Value;
-                                    lock (store.Table)
+                                    VariableTable vt = GetTableVariable(store, gname, false);
+                                    int yindex = vt.SeekRow(gheader);
+                                    if (yindex > 0)
                                     {
-                                        VariableTable vt = GetTableVariable(store, gname, false);
-                                        if (gindex == "last")
-                                        {
-                                            gindex = (vt.Width > 0 ? vt.Width - 1 : 0).ToString();
-                                        }
-                                        int xindex;
-                                        if (Int32.TryParse(gindex, out xindex) == true)
-                                        {
-                                            int yindex = vt.SeekRow(gheader);
-                                            if (yindex > 0)
-                                            {
-                                                val = vt.Peek(xindex + 1, yindex).ToString();
-                                            }
-                                        }
-                                        found = true;
+                                        val = vt.Peek(xindex + (xindex >= 0 ? 1 : 0), yindex).ToString();
                                     }
-                                    found = true;
                                 }
+                                found = true;
                             }
                         }
                         // column-based table lookup
-                        else if ((x.IndexOf("tvarcl:") == 0) || (x.IndexOf("ptvarcl:") == 0))
+                        else if (x.StartsWith("tvarcl:") || x.StartsWith("ptvarcl:") || x.StartsWith("tcl:") || x.StartsWith("ptcl:"))
                         {
-                            Variables.VariableStore store;
-                            string varname;
-                            if (x.IndexOf("tvarcl:") == 0)
-                            {
-                                store = plug.sessionvars;
-                                varname = x.Substring(7);
-                            }
-                            else
-                            {
-                                store = plug.cfg.PersistentVariables;
-                                varname = x.Substring(8);
-                            }
-                            mx = rexlprp.Match(varname);
-                            if (mx.Success == true)
+                            VariableStore store = x.StartsWith("p") ? plug.cfg.PersistentVariables : plug.sessionvars;
+                            string varname = x.Substring(x.IndexOf(":") + 1);
+                            mx = rexTableIdx.Match(varname);
+                            if (mx.Success)
                             {
                                 string gname = mx.Groups["name"].Value;
-                                string gprop = mx.Groups["prop"].Value;
-                                switch (gprop)
+                                string gheader = mx.Groups["column"].Value;
+                                string gindex = mx.Groups["row"].Value;
+                                gindex = (gindex == "last") ? "-1" : gindex;
+                                if (!Int32.TryParse(gindex, NSFloat, InvClt, out int yindex))
                                 {
-                                    case "w":
-                                    case "width":
-                                        {
-                                            lock (store.Table)
-                                            {
-                                                VariableTable vt = GetTableVariable(store, gname, false);
-                                                val = vt.Width.ToString();
-                                                found = true;
-                                            }
-                                        }
-                                        break;
-                                    case "h":
-                                    case "height":
-                                        {
-                                            lock (store.Table)
-                                            {
-                                                VariableTable vt = GetTableVariable(store, gname, false);
-                                                val = (vt.Height > 0 ? vt.Height - 1 : 0).ToString();
-                                                found = true;
-                                            }
-                                        }
-                                        break;
+                                    ParseTypeError(I18n.TrlIndex(), gindex, I18n.TrlInt(), x);
                                 }
-                            }
-                            else
-                            {
-                                mx = rextidx.Match(varname);
-                                if (mx.Success == true)
+                                lock (store.Table)
                                 {
-                                    string gname = mx.Groups["name"].Value;
-                                    string gheader = mx.Groups["column"].Value;
-                                    string gindex = mx.Groups["row"].Value;
-                                    lock (store.Table)
+                                    VariableTable vt = GetTableVariable(store, gname, false);
+                                    // index starts from 1; 0 if not found
+                                    int xindex = vt.SeekColumn(gheader);
+                                    if (xindex > 0)
                                     {
-                                        VariableTable vt = GetTableVariable(store, gname, false);
-                                        if (gindex == "last")
-                                        {
-                                            gindex = (vt.Height > 0 ? vt.Height - 1 : 0).ToString();
-                                        }
-                                        int yindex;
-                                        if (Int32.TryParse(gindex, out yindex) == true)
-                                        {
-                                            int xindex = vt.SeekColumn(gheader);
-                                            if (xindex > 0)
-                                            {
-                                                val = vt.Peek(xindex, yindex + 1).ToString();
-                                            }
-                                        }
-                                        found = true;
+                                        val = vt.Peek(xindex, yindex + (yindex >= 0 ? 1 : 0)).ToString();
                                     }
-                                    found = true;
                                 }
+                                found = true;
                             }
                         }
-                        else if (x.IndexOf("numeric:") == 0)
+                        // double-based lookup based on col/row names
+                        else if (x.StartsWith("tvardl:") || x.StartsWith("ptvardl:") || x.StartsWith("tdl:") || x.StartsWith("ptdl:"))
                         {
-                            string numexpr = x.Substring(8);
+                            VariableStore store = x.StartsWith("p") ? plug.cfg.PersistentVariables : plug.sessionvars;
+                            string varname = x.Substring(x.IndexOf(":") + 1);
+                            mx = rexTableIdx.Match(varname);
+                            if (mx.Success)
+                            {
+                                string gname = mx.Groups["name"].Value;
+                                string colHeader = mx.Groups["column"].Value;
+                                string rowHeader = mx.Groups["row"].Value;
+
+                                lock (store.Table)
+                                {
+                                    VariableTable vt = GetTableVariable(store, gname, false);
+
+                                    // index starts from 1; 0 if not found
+                                    int xindex = vt.SeekColumn(colHeader);
+                                    int yindex = vt.SeekRow(rowHeader);
+
+                                    if (xindex > 0 && yindex > 0)
+                                    {
+                                        val = vt.Peek(xindex, yindex).ToString();
+                                    }
+                                }
+                                found = true;
+                            }
+                        }
+                        else if (x.StartsWith("numeric:") || x.StartsWith("n:"))
+                        {
+                            string numexpr = (x.StartsWith("numeric:")) ? x.Substring(8) : x.Substring(2);
                             val = I18n.ThingToString(EvaluateNumericExpression(logger, o, numexpr));
                             found = true;
                         }
-                        else if (x.IndexOf("string:") == 0)
+                        else if (x.StartsWith("string:") || x.StartsWith("s:"))
                         {
-                            string numexpr = x.Substring(7);
-                            val = EvaluateStringExpression(logger, o, numexpr);
+                            string strexpr = (x.StartsWith("string:")) ? x.Substring(7) : x.Substring(2);
+                            val = EvaluateStringExpression(logger, o, strexpr);
                             found = true;
                         }
-                        else if (x.IndexOf("func:") == 0)
+                        else if (x.StartsWith("func:") || x.StartsWith("f:"))
                         {
                             val = "";
                             found = true;
-                            string funcexpr = x.Substring(5);
-                            Match rxm = rexfunc.Match(funcexpr);
-                            if (rxm.Success == true)
+                            string funcexpr = (x.StartsWith("func:")) ? x.Substring(5) : x.Substring(2);
+                            Match rxm = rexFunc.Match(funcexpr);
+                            if (rxm.Success)
                             {
                                 string funcname = rxm.Groups["name"].Value.ToLower();
                                 string funcarg = rxm.Groups["arg"].Value;
-                                string funcval = "";
-                                int splitter = funcname.IndexOf(":");
-                                if (splitter > 0 && funcarg == "")
-                                {
-                                    funcname = funcexpr.Substring(0, splitter);
-                                    funcval = funcexpr.Substring(splitter + 1);
-                                }
-                                else
-                                {
-                                    funcval = funcexpr.Substring(rxm.Groups["arg"].Index + rxm.Groups["arg"].Length + 2);
-                                }
+                                string funcval = rxm.Groups["val"].Value;
                                 string[] args = SplitArguments(funcarg);
                                 int argc = args.Count();
                                 switch (funcname)
@@ -884,277 +1548,430 @@ namespace Triggernometry
                                     case "length": // length()
                                         val = funcval.Length.ToString();
                                         break;
-                                    case "hex2dec": // hex2dec()
-                                        val = "" + int.Parse(funcval, System.Globalization.NumberStyles.HexNumber);
-                                        break;
-                                    case "hex2float": // hex2float()
-                                        {
-                                            Int32 bytesArray = Int32.Parse(funcval, System.Globalization.NumberStyles.HexNumber);
-                                            val = "" + BitConverter.ToSingle(BitConverter.GetBytes(bytesArray), 0);
-                                        }
-                                        break;
+                                    case "hex2dec":    // hex2dec()
+                                    case "hex2float":  // hex2float()
                                     case "hex2double": // hex2double()
                                         {
-                                            Int64 bytesArray = Int64.Parse(funcval, System.Globalization.NumberStyles.HexNumber);
-                                            val = "" + BitConverter.ToDouble(BitConverter.GetBytes(bytesArray), 0);
+                                            funcval = funcval.Trim();
+                                            if (!new Regex("^[0-9A-Fa-f]+$").IsMatch(funcval))
+                                            {
+                                                InvalidValueError(funcname, "funcval", funcval, x);
+                                            }
+                                            switch (funcname)
+                                            {
+                                                case "hex2dec":
+                                                    val = "" + Int64.Parse(funcval, NumberStyles.HexNumber, InvClt);
+                                                    break;
+                                                case "hex2float":
+                                                    Int32 bytesArrayFloat = Int32.Parse(funcval, NumberStyles.HexNumber, InvClt);
+                                                    val = "" + BitConverter.ToSingle(BitConverter.GetBytes(bytesArrayFloat), 0);
+                                                    break;
+                                                case "hex2double":
+                                                    Int64 bytesArrayDouble = Int64.Parse(funcval, NumberStyles.HexNumber, InvClt);
+                                                    val = "" + BitConverter.ToDouble(BitConverter.GetBytes(bytesArrayDouble), 0);
+                                                    break;
+                                            }
+                                        }
+                                        break;
+                                    case "parsedmg": // parse the hex damage in ACT loglines to dec value
+                                        {
+                                            funcval = funcval.Trim();
+                                            if (!reHex8.IsMatch(funcval))
+                                            {
+                                                InvalidValueError(funcname, "funcval", funcval, x);
+                                            }
+                                            val = MathParser.ParseDamage(funcval).ToString(InvClt);
                                         }
                                         break;
                                     case "float2hex":
                                         {
-                                            byte[] bytesArray = BitConverter.GetBytes(float.Parse(funcval));
+                                            if (!float.TryParse(funcval, NSFloat, InvClt, out float floatValue))
+                                            {
+                                                ParseTypeError(I18n.TrlString(), funcval, I18n.TrlFloat(), x);
+                                            }
+                                            byte[] bytesArray = BitConverter.GetBytes(floatValue);
                                             Array.Reverse(bytesArray, 0, bytesArray.Length);
                                             val = BitConverter.ToString(bytesArray).Replace("-", "");
                                         }
                                         break;
                                     case "double2hex":
                                         {
-                                            Int64 bytesArray = BitConverter.DoubleToInt64Bits(double.Parse(funcval));
+                                            if (!double.TryParse(funcval, NSFloat, InvClt, out double doubleValue))
+                                            {
+                                                ParseTypeError(I18n.TrlString(), funcval, I18n.TrlDouble(), x);
+                                            }
+                                            Int64 bytesArray = BitConverter.DoubleToInt64Bits(doubleValue);
                                             val = bytesArray.ToString("X");
                                         }
                                         break;
                                     case "dec2hex": // dec2hex()
-                                        val = int.Parse(funcval).ToString("X");
-                                        break;
                                     case "dec2hex2": // dec2hex2()
-                                        val = int.Parse(funcval).ToString("X2");
-                                        break;
                                     case "dec2hex4": // dec2hex4()
-                                        val = int.Parse(funcval).ToString("X4");
-                                        break;
                                     case "dec2hex8": // dec2hex8()
-                                        val = int.Parse(funcval).ToString("X8");
-                                        break;
-                                    case "padleft": // padleft(charcode,length)
-                                        if (argc != 2)
                                         {
-                                            throw new ArgumentException(I18n.Translate("internal/Context/padleftargerror", "Padleft function requires two arguments, {0} were given", argc));
-                                        }
-                                        else
-                                        {
-                                            val = funcval.PadLeft(Int32.Parse(args[1]), (char)Int32.Parse(args[0]));
+                                            if (!Int64.TryParse(funcval, NSFloat, InvClt, out Int64 intValue))
+                                            {
+                                                ParseTypeError(I18n.TrlString(), funcval, I18n.TrlInt(), x);
+                                            }
+                                            string format = funcname.Substring(6).ToUpper(); // "X" "X2" "X4" "X8"
+                                            val = intValue.ToString(format);
                                         }
                                         break;
-                                    case "padright": // padright(charcode,length)
-                                        if (argc != 2)
+                                    case "padleft":
+                                    case "padright":
                                         {
-                                            throw new ArgumentException(I18n.Translate("internal/Context/padrightargerror", "Padright function requires two arguments, {0} were given", argc));
+                                            if (argc != 2) { ArgCountError(funcname, "2", argc, x); }
+                                            char paddingChar = (args[0].Length == 1) ? args[0][0] : GetReplacedChar(Int32.Parse(args[0], InvClt));
+                                            int length = Int32.Parse(args[1], InvClt);
+
+                                            if (funcname == "padleft")
+                                                val = funcval.PadLeft(length, paddingChar);
+                                            else
+                                                val = funcval.PadRight(length, paddingChar);
                                         }
-                                        else
+                                        break;
+                                    case "repeat": // repeat(times, joiner = "")
                                         {
-                                            val = funcval.PadRight(Int32.Parse(args[1]), (char)Int32.Parse(args[0]));
+                                            if (argc != 1 && argc != 2) { ArgCountError(funcname, "1-2", argc, x); }
+                                            if (!Int32.TryParse(args[0], NSFloat, InvClt, out int times))
+                                            {
+                                                ParseTypeError(I18n.TrlTimes(), args[0], I18n.TrlInt(), x);
+                                            }
+                                            string joiner = GetArgument(args, 1, "");
+                                            if (times == 0)
+                                            {
+                                                val = "";
+                                            }
+                                            else
+                                            {
+                                                if (times < 0)
+                                                {
+                                                    times = -times;
+                                                    funcval = new string(funcval.Reverse().ToArray());
+                                                }
+                                                StringBuilder sb = new StringBuilder(funcval);
+                                                string repeatedUnit = joiner + funcval;
+                                                for (int repeatCount = 1; repeatCount < times; repeatCount++)
+                                                {
+                                                    sb.Append(repeatedUnit);
+                                                }
+                                                val = $"{sb}";
+                                            }
+                                        }
+                                        break;
+                                    case "replace": // replace(oldStr, newStr = "", isLooped = false)
+                                        {
+                                            if (argc == 0 || argc > 3) { ArgCountError(funcname, "1-3", argc, x); }
+
+                                            string oldStr = args[0];
+                                            if (oldStr == "") { InvalidValueError(funcname, "oldString", oldStr, x); }
+
+                                            string newStr = GetArgument(args, 1, "");
+                                            if (newStr == oldStr) { break; }
+
+                                            string isLoopedStr = GetArgument(args, 2, "false");
+                                            if (!bool.TryParse(isLoopedStr, out bool isLooped))
+                                            {
+                                                ParseTypeError("isLooped", isLoopedStr, I18n.TrlBool(), x);
+                                            }
+                                            if (newStr.Contains(oldStr) && isLooped)
+                                            {
+                                                InfiniteRepeatError(newStr, oldStr, x);
+                                            }
+
+                                            val = funcval.Replace(oldStr, newStr);
+                                            while (val.Contains(oldStr) && isLooped)
+                                            {
+                                                val = val.Replace(oldStr, newStr);
+                                            }
                                         }
                                         break;
                                     case "substring": // substring(startindex, length) or substring(startindex)
-                                        if (argc != 1 && argc != 2)
                                         {
-                                            throw new ArgumentException(I18n.Translate("internal/Context/substringargerror", "Substring function requires one or two arguments, {0} were given", argc));
-                                        }
-                                        else
-                                        {
+                                            if (argc != 1 && argc != 2) { ArgCountError(funcname, "1-2", argc, x); }
+                                            if (!int.TryParse(args[0], NSFloat, InvClt, out int startIndex))
+                                            {
+                                                ParseTypeError(I18n.TrlStartIndex(), args[0], I18n.TrlInt(), x);
+                                            }
+                                            if (startIndex < 0)
+                                            {
+                                                startIndex += funcval.Length;
+                                            }
                                             switch (argc)
                                             {
                                                 case 1:
-                                                    val = funcval.Substring(Int32.Parse(args[0]));
+                                                    val = funcval.Substring(startIndex);
                                                     break;
                                                 case 2:
-                                                    val = funcval.Substring(Int32.Parse(args[0]), Int32.Parse(args[1]));
+                                                    if (!int.TryParse(args[1], NSFloat, InvClt, out int length))
+                                                    {
+                                                        ParseTypeError(I18n.TrlLength(), args[1], I18n.TrlInt(), x);
+                                                    }
+                                                    val = funcval.Substring(startIndex, length);
                                                     break;
                                             }
+                                            break;
                                         }
-                                        break;
-                                    case "indexof": // indexof(stringtosearch)
-                                        if (argc != 1)
-                                        {                                          
-                                            throw new ArgumentException(I18n.Translate("internal/Context/indexofargerror", "Indexof function requires one argument, {0} were given", argc));
-                                        }
-                                        else
+                                    case "slice":  // slice(slices = ":") 
                                         {
-                                            val = "" + funcval.IndexOf(args[0]);
+                                            if (argc > 1) { ArgCountError(funcname, "0-1", argc, x); }
+                                            string slicesStr = GetArgument(args, 0, ":");
+                                            var indices = GetSliceIndices(slicesStr, funcval.Length, x, startIndex: 0);
+                                            StringBuilder sb = new StringBuilder();
+                                            foreach (int index in indices)
+                                            {
+                                                sb.Append(funcval[index]);
+                                            }
+                                            val = $"{sb}";
+                                            break;
+                                        }
+                                    case "pick": // pick(index, splitter = ",")
+                                        {
+                                            if (argc != 1 && argc != 2) { ArgCountError(funcname, "1-2", argc, x); }
+                                            string separator = GetArgument(args, 1, ",");
+                                            string[] strArray = SplitArguments(funcval, separator: separator);
+                                            if (!int.TryParse(args[0], NSFloat, InvClt, out int index))
+                                            { ParseTypeError(I18n.TrlIndex(), args[0], I18n.TrlInt(), x); }
+
+                                            int normIndex = (index < 0) ? (index + strArray.Length) : index;
+                                            val = (normIndex >= 0 && normIndex < strArray.Length)
+                                                ? strArray[normIndex] : "";
                                         }
                                         break;
+                                    case "args":
+                                        val = "(" + string.Join(")\n(", args) + ")";
+                                        break;
+                                    case "i":
+                                    case "indexof":      // indexof(stringtosearch)
+                                    case "lastindexof":  // lastindexof(stringtosearch)
+                                        {
+                                            if (argc != 1) { ArgCountError(funcname, "1", argc, x); }
+                                            int index = (funcname.StartsWith("i")) ? funcval.IndexOf(args[0]) : funcval.LastIndexOf(args[0]);
+                                            val = I18n.ThingToString(index);
+                                        }
+                                        break;
+                                    case "indicesof":
+                                        {
+                                            if (argc == 0 || argc > 3) { ArgCountError(funcname, "1-3", argc, x); }
+                                            string targetStr = args[0];
+                                            int subLength = targetStr.Length;
+                                            int totalLength = funcval.Length;
+                                            string joiner = GetArgument(args, 1, defaultValue: ",");
+                                            string slicesStr = GetArgument(args, 2, defaultValue: ":");
+                                            List<int> indices = GetSliceIndices(slicesStr, totalLength - subLength + 1, x, startIndex: 0);
+                                            StringBuilder sb = new StringBuilder();
+                                            foreach (int idx in indices)
+                                            {
+                                                if (funcval.Substring(idx, subLength) == targetStr)
+                                                {
+                                                    if (sb.Length > 0)
+                                                        sb.Append(joiner);
+                                                    sb.Append(idx);
+                                                }
+                                            }
+                                            val = $"{sb}";
+                                            break;
+                                        }
                                     case "compare": // compare(stringtocompare) or compare(stringtocompare, ignorecase)
-                                        if (argc != 1 && argc != 2)
+                                        if (argc != 1 && argc != 2) { ArgCountError(funcname, "1-2", argc, x); }
+                                        string ignoreCaseStr = GetArgument(args, 1, "true");
+                                        if (!bool.TryParse(ignoreCaseStr, out bool ignoreCase))
                                         {
-                                            throw new ArgumentException(I18n.Translate("internal/Context/compareargerror", "Compare function requires one or two arguments, {0} were given", argc));
+                                            ParseTypeError("ignoreCase", ignoreCaseStr, I18n.TrlBool(), x);
                                         }
-                                        else
+                                        val = "" + String.Compare(funcval, args[0], ignoreCase);
+                                        break;
+                                    case "contain":
+                                    case "startwith":
+                                    case "endwith":
+                                    case "equal":
                                         {
-                                            switch (argc)
+                                            if (argc != 1) { ArgCountError(funcname, "1", argc, x); }
+                                            switch (funcname)
                                             {
-                                                case 1:
-                                                    val = "" + String.Compare(funcval, args[0], true);
+                                                case "contain": val = (funcval.Contains(args[0])) ? "1" : "0"; break;
+                                                case "startwith": val = (funcval.StartsWith(args[0])) ? "1" : "0"; break;
+                                                case "endwith": val = (funcval.EndsWith(args[0])) ? "1" : "0"; break;
+                                                case "equal": val = (args[0] == funcval) ? "1" : "0"; break;
+                                            }
+                                        }
+                                        break;
+                                    case "ifcontain":
+                                    case "ifstartwith":
+                                    case "ifendwith":
+                                    case "ifequal":
+                                        {
+                                            if (argc != 3) { ArgCountError(funcname, "3", argc, x); }
+                                            switch (funcname)
+                                            {
+                                                case "ifcontain": val = (funcval.Contains(args[0])) ? args[1] : args[2]; break;
+                                                case "ifstartwith": val = (funcval.StartsWith(args[0])) ? args[1] : args[2]; break;
+                                                case "ifendwith": val = (funcval.EndsWith(args[0])) ? args[1] : args[2]; break;
+                                                case "ifequal": val = (args[0] == funcval) ? args[1] : args[2]; break;
+                                            }
+                                        }
+                                        break;
+                                    case "match": // func:match(str):regex
+                                        {
+                                            if (argc != 1) { ArgCountError(funcname, "1", argc, x); }
+                                            Match match = new Regex(UnescapeCustomExpr(funcval)).Match(args[0]);
+                                            val = (match.Success) ? "1" : "0";
+                                        }
+                                        break;
+                                    case "capture": // func:capture(str, group):regex
+                                        {
+                                            if (argc != 2) { ArgCountError(funcname, "2", argc, x); }
+                                            Match match = new Regex(UnescapeCustomExpr(funcval)).Match(args[0]);
+                                            if (int.TryParse(args[1], NSFloat, InvClt, out int groupNumber))
+                                            {
+                                                if (groupNumber >= 0 && groupNumber < match.Groups.Count)
+                                                {
+                                                    val = (match.Success) ? match.Groups[groupNumber].Value : "";
                                                     break;
-                                                case 2:
-                                                    bool ignoreCase = bool.Parse(args[1]);
-                                                    val = "" + String.Compare(funcval, args[0], ignoreCase);
-                                                    break;
-                                            }                                                                                                
-                                        }
-                                        break;
-                                    case "lastindexof": // lastindexof(stringtosearch)
-                                        if (argc != 1)
-                                        {
-                                            throw new ArgumentException(I18n.Translate("internal/Context/lastindexofargerror", "Lastindexof function requires one argument, {0} were given", argc));
-                                        }
-                                        else
-                                        {
-                                            val = "" + funcval.LastIndexOf(args[0]);
-                                        }
-                                        break;
-                                    case "trim": // trim() or trim(charcode,charcode,charcode,...)
-                                        if (argc == 0 || args[0] == "")
-                                        {
-                                            val = funcval.Trim();
-                                        }
-                                        else
-                                        {
-                                            string xx = "";
-                                            foreach (string xyz in args)
-                                            {
-                                                xx += (char)Int32.Parse(xyz);
+                                                }
                                             }
-                                            val = funcval.Trim(xx.ToCharArray());
+                                            val = (match.Success) ? match.Groups[args[1]].Value : "";
                                         }
                                         break;
-                                    case "trimleft": // trimleft() or trimleft(charcode,charcode,charcode,...)
-                                        if (argc == 0 || args[0] == "")
+                                    case "ifmatch": // func:ifmatch(str, successStr, failStr):regex
                                         {
-                                            val = funcval.TrimStart();
-                                        }
-                                        else
-                                        {
-                                            string xx = "";
-                                            foreach (string xyz in args)
-                                            {
-                                                xx += (char)Int32.Parse(xyz);
-                                            }
-                                            val = funcval.TrimStart(xx.ToCharArray());
+                                            if (argc != 3) { ArgCountError(funcname, "3", argc, x); }
+                                            Match match = new Regex(UnescapeCustomExpr(funcval)).Match(args[0]);
+                                            val = (match.Success) ? args[1] : args[2];
                                         }
                                         break;
-                                    case "trimright": // trimright() or trimright(charcode,charcode,charcode,...)
-                                        if (argc == 0 || args[0] == "")
+                                    case "trim":        // trim() or trim(charcode/char, charcode/char, ...)
+                                    case "trimleft":    // trimleft() or trimleft(charcode/char, charcode/char, ...)
+                                    case "trimright":   // trimright() or trimright(charcode/char, charcode/char, ...)
+                                        string trimChars = "";
+                                        if (argc > 0)
                                         {
-                                            val = funcval.TrimEnd();
-                                        }
-                                        else
-                                        {
-                                            string xx = "";
-                                            foreach (string xyz in args)
+                                            foreach (string arg in args)
                                             {
-                                                xx += (char)Int32.Parse(xyz);
+                                                // length == 1: char    length != 1: charcode
+                                                if (arg.Length == 1)
+                                                {
+                                                    trimChars += arg;
+                                                }
+                                                else if (arg.Length == 0)
+                                                {
+                                                    InvalidValueError(funcname, I18n.TrlChar() + "/" + I18n.TrlCharcode(), funcval, x);
+                                                }
+                                                else if (arg.Length > 1)
+                                                {
+                                                    if (!int.TryParse(arg, NSFloat, InvClt, out int charcode))
+                                                    {
+                                                        ParseTypeError(I18n.TrlCharcode(), arg, I18n.TrlInt(), x);
+                                                    }
+                                                    trimChars += GetReplacedChar(charcode).ToString();
+                                                }
                                             }
-                                            val = funcval.TrimEnd(xx.ToCharArray());
+                                        }
+                                        char[] trimCharsArray = trimChars.ToCharArray();
+
+                                        switch (funcname)
+                                        {
+                                            case "trim":
+                                                val = argc == 0 ? funcval.Trim() : funcval.Trim(trimCharsArray);
+                                                break;
+                                            case "trimleft":
+                                                val = argc == 0 ? funcval.TrimStart() : funcval.TrimStart(trimCharsArray);
+                                                break;
+                                            case "trimright":
+                                                val = argc == 0 ? funcval.TrimEnd() : funcval.TrimEnd(trimCharsArray);
+                                                break;
                                         }
                                         break;
                                     case "format": // format(type,formatstring)
-                                        if (argc != 2)
-                                        {
-                                            throw new ArgumentException(I18n.Translate("internal/Context/formatargerror", "Format function requires two arguments, {0} were given", argc));
-                                        }
+                                        if (argc != 2) { ArgCountError(funcname, "2", argc, x); }
                                         else
                                         {
                                             Type type = Type.GetType(args[0]);
-                                            object converted = Convert.ChangeType(funcval, type, CultureInfo.InvariantCulture);
+                                            object converted = Convert.ChangeType(funcval, type, InvClt);
                                             val = String.Format("{0:" + args[1] + "}", converted);
                                         }
                                         break;
                                     case "utctime": // utctime(formatstring)
-                                        {
-                                            Int64 ts = Int64.Parse(funcval);
-                                            DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-                                            dt = dt.AddSeconds(ts);
-                                            if (argc == 0 || args[0] == "")
-                                            {
-                                                val = dt.ToString();
-                                            }
-                                            else
-                                            {
-                                                val = dt.ToString(args[0]);
-                                            }
-                                        }
-                                        break;
                                     case "localtime": // localtime(formatstring)
                                         {
-                                            Int64 ts = Int64.Parse(funcval);
+                                            if (argc > 1) { ArgCountError(funcname, "0-1", argc, x); }
+                                            Int64 ts = Int64.Parse(funcval, InvClt);
                                             DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                                             dt = dt.AddSeconds(ts);
-                                            dt = dt.ToLocalTime();
-                                            if (argc == 0 || args[0] == "")
+                                            if (funcname == "localtime")
                                             {
-                                                val = dt.ToString();
+                                                dt = dt.ToLocalTime();
                                             }
-                                            else
-                                            {
-                                                val = dt.ToString(args[0]);
-                                            }
+                                            string format = GetArgument(args, 0, "");
+                                            val = dt.ToString(format);
                                         }
                                         break;
                                 }
                             }
                         }
-                        else if (x.IndexOf("_ffxivparty") == 0)
+                        else if (x.StartsWith("_ffxivparty[")  || x.StartsWith("_party[") ||
+                                 x.StartsWith("_ffxiventity[") || x.StartsWith("_entity["))
                         {
-                            mx = rexnump.Match(x);
-                            if (mx.Success == true)
+                            mx = rexListProp.Match(x);
+                            if (mx.Success)
                             {
-                                string gindex = mx.Groups["index"].Value;
-                                string gprop = mx.Groups["prop"].Value;
-                                int iindex = 0;
-                                Int64 honk;
-                                VariableDictionary vc = null;
-                                bool foundid = false;
-                                if (Int64.TryParse(gindex, System.Globalization.NumberStyles.HexNumber, CultureInfo.InvariantCulture, out honk) == true)
-                                {
-                                    vc = PluginBridges.BridgeFFXIV.GetIdPartyMember(gindex, out foundid);
-                                }                                
-                                if (foundid == false)
-                                {
-                                    if (Int32.TryParse(gindex, out iindex) == true)
-                                    {
-                                        vc = PluginBridges.BridgeFFXIV.GetPartyMember(iindex);
-                                    }
-                                    else
-                                    {
-                                        vc = PluginBridges.BridgeFFXIV.GetNamedPartyMember(gindex);
-                                    }
+                                bool isParty = x.Contains("party[");
+                                string key = mx.Groups["index"].Value.Trim();
+                                string prop = mx.Groups["prop"].Value.Trim();
+                                VariableDictionary entity = new VariableDictionary();
+
+                                if (isParty && key.Length == 1 && char.IsDigit(key[0]))
+                                {   // ffxivparty[1]
+                                    entity = PluginBridges.BridgeFFXIV.GetPartyMember(int.Parse(key));
                                 }
-                                if (vc != null)
-                                {
-                                    val = vc.GetValue(gprop).ToString();
+                                else if (reHex8.Match(key).Success)
+                                {   // [10ABCDEF]
+                                    entity = isParty ? PluginBridges.BridgeFFXIV.GetIdPartyMember(key)
+                                                     : PluginBridges.BridgeFFXIV.GetIdEntity(key);
                                 }
+                                if (entity.GetValue("id").ToString() == "")
+                                {   // [name]
+                                    entity = isParty ? PluginBridges.BridgeFFXIV.GetNamedPartyMember(key)
+                                                     : PluginBridges.BridgeFFXIV.GetNamedEntity(key);
+                                }
+                                val = entity.GetValue(prop).ToString();
                             }
                             found = true;
                         }
-                        else if (x.IndexOf("_ffxiventity") == 0)
+                        else if (x.StartsWith("_me.")) // ${_me.prop}
                         {
-                            mx = rexnump.Match(x);
-                            if (mx.Success == true)
+                            string prop = x.Substring(4).Trim();
+                            if (PluginBridges.BridgeFFXIV.PlayerHexId == "")
                             {
-                                string gindex = mx.Groups["index"].Value;
-                                string gprop = mx.Groups["prop"].Value;
-                                Int64 honk;
-                                VariableDictionary vc = null;
-                                bool foundid = false;
-                                if (Int64.TryParse(gindex, System.Globalization.NumberStyles.HexNumber, CultureInfo.InvariantCulture, out honk) == true)
-                                {
-                                    vc = PluginBridges.BridgeFFXIV.GetIdEntity(gindex, out foundid);
-                                }
-                                if (foundid == false)
-                                {
-                                    vc = PluginBridges.BridgeFFXIV.GetNamedEntity(gindex);
-                                }
-                                if (vc != null)
-                                {
-                                    val = vc.GetValue(gprop).ToString();
-                                }
+                                PluginBridges.BridgeFFXIV.UpdateState();
+                            }
+                            VariableDictionary me = PluginBridges.BridgeFFXIV.GetIdEntity(PluginBridges.BridgeFFXIV.PlayerHexId);
+                            val = me.GetValue(prop).ToString();
+                            found = true;
+                        }
+                        else if (x == "_clipboard")
+                        {
+                            Thread staThread = new Thread(() => val = Clipboard.GetText());
+                            staThread.SetApartmentState(ApartmentState.STA);
+                            staThread.Start();
+                            staThread.Join();
+                            if (val.Contains("${_clipboard}"))
+                            {
+                                InfiniteClipboardError();
                             }
                             found = true;
                         }
-                        else if (x == "_ffxivtime")
+                        else if (x == "_ffxivtime" || x == "_ET")
                         {
                             TimeSpan ez = GetEorzeanTime();
                             int mins = (int)Math.Floor(ez.TotalMinutes);
                             val = mins.ToString();
+                            found = true;
+                        }
+                        else if (x == "_ETprecise")
+                        {
+                            TimeSpan ez = GetEorzeanTime();
+                            val = ez.TotalMinutes.ToString();
                             found = true;
                         }
                         else if (x == "_lastencounter")
@@ -1167,10 +1984,10 @@ namespace Triggernometry
                             val = plug != null ? plug.ActiveEncounterHook() : "";
                             found = true;
                         }
-                        else if (x.IndexOf("_textaura") == 0)
+                        else if (x.StartsWith("_textaura"))
                         {
-                            mx = rexnump.Match(x);
-                            if (mx.Success == true)
+                            mx = rexListProp.Match(x);
+                            if (mx.Success)
                             {
                                 string gindex = mx.Groups["index"].Value;
                                 string gprop = mx.Groups["prop"].Value.ToLower();
@@ -1185,21 +2002,21 @@ namespace Triggernometry
                                             switch (gprop)
                                             {
                                                 case "x":
-                                                    val = item.Left.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(item.Left);
                                                     break;
                                                 case "y":
-                                                    val = item.Top.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(item.Top);
                                                     break;
                                                 case "w":
                                                 case "width":
-                                                    val = item.Width.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(item.Width);
                                                     break;
                                                 case "h":
                                                 case "height":
-                                                    val = item.Height.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(item.Height);
                                                     break;
                                                 case "opacity":
-                                                    val = item.Opacity.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(item.Opacity);
                                                     break;
                                                 case "text":
                                                     val = item.Text;
@@ -1212,27 +2029,27 @@ namespace Triggernometry
                                 {
                                     lock (plug.textauras)
                                     {
-                                        if (plug.textauras.ContainsKey(gindex) == true)
+                                        if (plug.textauras.ContainsKey(gindex))
                                         {
                                             Forms.AuraContainerForm acf = plug.textauras[gindex];
                                             switch (gprop)
                                             {
                                                 case "x":
-                                                    val = acf.Left.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(acf.Left);
                                                     break;
                                                 case "y":
-                                                    val = acf.Top.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(acf.Top);
                                                     break;
                                                 case "w":
                                                 case "width":
-                                                    val = acf.Width.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(acf.Width);
                                                     break;
                                                 case "h":
                                                 case "height":
-                                                    val = acf.Height.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(acf.Height);
                                                     break;
                                                 case "opacity":
-                                                    val = acf.PresentableOpacity.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(acf.PresentableOpacity);
                                                     break;
                                                 case "text":
                                                     val = acf.CurrentText;
@@ -1244,10 +2061,10 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
-                        else if (x.IndexOf("_imageaura") == 0)
+                        else if (x.StartsWith("_imageaura"))
                         {
-                            mx = rexnump.Match(x);
-                            if (mx.Success == true)
+                            mx = rexListProp.Match(x);
+                            if (mx.Success)
                             {
                                 string gindex = mx.Groups["index"].Value;
                                 string gprop = mx.Groups["prop"].Value.ToLower();
@@ -1262,21 +2079,21 @@ namespace Triggernometry
                                             switch (gprop)
                                             {
                                                 case "x":
-                                                    val = item.Left.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(item.Left);
                                                     break;
                                                 case "y":
-                                                    val = item.Top.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(item.Top);
                                                     break;
                                                 case "w":
                                                 case "width":
-                                                    val = item.Width.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(item.Width);
                                                     break;
                                                 case "h":
                                                 case "height":
-                                                    val = item.Height.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(item.Height);
                                                     break;
                                                 case "opacity":
-                                                    val = item.Opacity.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(item.Opacity);
                                                     break;
                                             }
                                         }
@@ -1286,27 +2103,27 @@ namespace Triggernometry
                                 {
                                     lock (plug.imageauras)
                                     {
-                                        if (plug.imageauras.ContainsKey(gindex) == true)
+                                        if (plug.imageauras.ContainsKey(gindex))
                                         {
                                             Forms.AuraContainerForm acf = plug.imageauras[gindex];
                                             switch (gprop)
                                             {
                                                 case "x":
-                                                    val = acf.Left.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(acf.Left);
                                                     break;
                                                 case "y":
-                                                    val = acf.Top.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(acf.Top);
                                                     break;
                                                 case "w":
                                                 case "width":
-                                                    val = acf.Width.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(acf.Width);
                                                     break;
                                                 case "h":
                                                 case "height":
-                                                    val = acf.Height.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(acf.Height);
                                                     break;
                                                 case "opacity":
-                                                    val = acf.PresentableOpacity.ToString(CultureInfo.InvariantCulture);
+                                                    val = I18n.ThingToString(acf.PresentableOpacity);
                                                     break;
                                             }
                                         }
@@ -1318,49 +2135,56 @@ namespace Triggernometry
                         else if (x == "_screenwidth")
                         {
                             System.Windows.Forms.Screen scr = System.Windows.Forms.Screen.PrimaryScreen;
-                            val = scr.WorkingArea.Width.ToString(CultureInfo.InvariantCulture);
+                            val = I18n.ThingToString(scr.WorkingArea.Width);
                             found = true;
                         }
                         else if (x == "_screenheight")
                         {
                             System.Windows.Forms.Screen scr = System.Windows.Forms.Screen.PrimaryScreen;
-                            val = scr.WorkingArea.Height.ToString(CultureInfo.InvariantCulture);
+                            val = I18n.ThingToString(scr.WorkingArea.Height);
                             found = true;
                         }
                         else if (x == "_screenminx")
-                        {                            
-                            val = plug.MinX.ToString(CultureInfo.InvariantCulture);
+                        {
+                            val = I18n.ThingToString(plug.MinX);
                             found = true;
                         }
                         else if (x == "_screenminy")
                         {
-                            val = plug.MinY.ToString(CultureInfo.InvariantCulture);
+                            val = I18n.ThingToString(plug.MinY);
                             found = true;
                         }
                         else if (x == "_screenmaxx")
                         {
-                            val = plug.MaxX.ToString(CultureInfo.InvariantCulture);
+                            val = I18n.ThingToString(plug.MaxX);
                             found = true;
                         }
                         else if (x == "_screenmaxy")
                         {
-                            val = plug.MaxY.ToString(CultureInfo.InvariantCulture);
+                            val = I18n.ThingToString(plug.MaxY);
                             found = true;
                         }
                     }
                 }
                 newexpr = newexpr.Substring(0, m.Index) + val + newexpr.Substring(m.Index + m.Length);
-                /*
-                if (logger != null)
-                {
-                    logger(o, I18n.Translate("internal/Context/expansionstep", "Expansion step {0} from '{1}' to '{2}' ({3}) = '{4}'", i, expr, newexpr, val, found));
-                }
-                else if (plug != null)
-                {
-                    plug.FilteredAddToLog(Plugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Context/expansionstep", "Expansion step {0} from '{1}' to '{2}' ({3}) = '{4}'", i, expr, newexpr, val, found));
-                }*/
                 i++;
             };
+            while (true)
+            {
+                m = rox.Match(newexpr);
+                if (m.Success)
+                {
+                    newexpr = newexpr.Substring(0, m.Index) + "$" + newexpr.Substring(m.Index + 1);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            // replace back linebreaks
+            newexpr = newexpr.Replace(LINEBREAK_PLACEHOLDER, "\n");
+
             if (trig != null)
             {
                 if (trig._DebugLevel == RealPlugin.DebugLevelEnum.Inherit)
@@ -1400,6 +2224,53 @@ namespace Triggernometry
                 }
             }
             return newexpr;
+        }
+
+        internal static void ArgCountError(string functionName, string requiredArgCount, int givenArgCount, string totalExpression)
+        {
+            throw new ArgumentException(I18n.Translate("internal/Context/argCountError",
+                "({0}) requires {1} arguments, {2} were given. Expr: ({3})",
+                functionName, requiredArgCount, givenArgCount, totalExpression));
+        }
+
+        internal static void InvalidValueError(string functionName, string exprDesc, string exprValue, string totalExpression)
+        {
+            throw new ArgumentException(I18n.Translate("internal/Context/invalidValueError",
+                "In ({0}), {1} ({2}) is invalid. Expr: ({3})",
+                functionName, exprDesc, exprValue, totalExpression));
+        }
+
+        internal static void ParseTypeError(string exprDesc, string exprValue, string parseFormat, string totalExpression)
+        {
+            throw new ArgumentException(I18n.Translate("internal/Context/parseTypeError",
+                "{0} ({1}) could not be parsed into {2}. Expr: ({3})",
+                exprDesc, exprValue, parseFormat, totalExpression));
+        }
+        internal static void ExtremumListZeroElementError(string varName, string totalExpression)
+        {
+            throw new ArgumentException(I18n.Translate("internal/Context/extremumlistzeroelementerror",
+                    "The variable ({0}) selected zero elements to get its extremum value. Expr: ({1})",
+                    varName, totalExpression));
+        }        
+        
+        internal static void ExtremumParseTypeError(string funcName, string parseFormat, string totalExpression)
+        {
+            throw new ArgumentException(I18n.Translate("internal/Context/extremumparsetypeerror",
+                    "In the function ({0}), not all selected values could be parsed into {1}. Expr: ({2})",
+                    funcName, parseFormat, totalExpression));
+        }
+
+        internal static void InfiniteRepeatError(string newStr, string oldStr, string totalExpression)
+        {
+            throw new ArgumentException(I18n.Translate("internal/Context/infiniteRepeatError",
+                "In the repeat function, new string ({0}) cannot contain old string ({1}) in loop mode. Expr: ({2})", 
+                newStr, oldStr, totalExpression));
+        }
+
+        internal static void InfiniteClipboardError()
+        {
+            throw new ArgumentException(I18n.Translate("internal/Context/infiniteClipboardError",
+                "The current clipboard contains the expression ${{_clipboard}}, which would cause infinite loop"));
         }
 
     }

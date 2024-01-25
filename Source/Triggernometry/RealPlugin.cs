@@ -29,6 +29,8 @@ namespace Triggernometry
             None,
             Error,
             Warning,
+            Custom,
+            Custom2,
             Info,
             Verbose,
             Inherit
@@ -125,23 +127,23 @@ namespace Triggernometry
 
             internal MutexTicket QueueForAcquisition(Context ctx)
             {
-                //System.Diagnostics.Debug.WriteLine("### {0} - Queuing acquisition for context: {1}", this.name, ctx.ToString());
+                System.Diagnostics.Debug.WriteLine("### {0} - Queuing acquisition for context: {1}", this.name, ctx.ToString());
                 MutexTicket m = new MutexTicket(ctx);
                 lock (this)
                 {                    
                     acquireQueue.Add(m);
                 }
-                //System.Diagnostics.Debug.WriteLine("### {0} - Queued acquisition {1} for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
+                System.Diagnostics.Debug.WriteLine("### {0} - Queued acquisition {1} for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
                 return m;
             }
 
             internal void Acquire(Context ctx)
             {
-                //System.Diagnostics.Debug.WriteLine("### {0} - Acquiring for context: {1}", this.name, ctx.ToString());
+                System.Diagnostics.Debug.WriteLine("### {0} - Acquiring for context: {1}", this.name, ctx.ToString());
                 using (MutexTicket m = QueueForAcquisition(ctx))
                 {
                     Acquire(ctx, m);
-                    //System.Diagnostics.Debug.WriteLine("### {0} - Acquired {1} for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
+                    System.Diagnostics.Debug.WriteLine("### {0} - Acquired {1} for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
                 }
             }
 
@@ -150,7 +152,7 @@ namespace Triggernometry
                 DateTime start = DateTime.Now;
                 string ownername = "";
                 bool autoget = false;
-                //System.Diagnostics.Debug.WriteLine("### {0} - Acquisition {1} pending stage 1 for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
+                System.Diagnostics.Debug.WriteLine("### {0} - Acquisition {1} pending stage 1 for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
                 lock (this)
                 {
                     if (heldBy == null)
@@ -164,11 +166,14 @@ namespace Triggernometry
                             autoget = true;
                         }
                     }
-                    else if (heldBy == ctx)
+                    else if (heldBy.id == ctx.id)
                     {
                         m.ev.Set();
                         refCount++;
                         autoget = true;
+                    }
+                    else
+                    {
                     }
                     if (autoget == false)
                     {
@@ -182,10 +187,10 @@ namespace Triggernometry
                         ctx.plug.FilteredAddToLog(DebugLevelEnum.Warning, I18n.Translate("internal/Plugin/mutexdelayed", "Context '{0}' has been waiting for mutex '{1}' on {2} for {3} ms, current owner is '{4}'", ctx.ToString(), name, m.GetHashCode(), (DateTime.Now - start).TotalMilliseconds, ownername));
                     }
                 }
-                //System.Diagnostics.Debug.WriteLine("### {0} - Acquisition {1} pending stage 2 for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
+                System.Diagnostics.Debug.WriteLine("### {0} - Acquisition {1} pending stage 2 for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
                 lock (this)
                 {
-                    //System.Diagnostics.Debug.WriteLine("### {0} - Acquisition {1} pending stage 3 for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
+                    System.Diagnostics.Debug.WriteLine("### {0} - Acquisition {1} pending stage 3 for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
                     acquireQueue.Remove(m);
                     if (autoget == false)
                     {
@@ -195,46 +200,46 @@ namespace Triggernometry
                         }
                         heldBy = ctx;
                         refCount++;
-                        //System.Diagnostics.Debug.WriteLine("### {0} - New acquisition {1} for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
+                        System.Diagnostics.Debug.WriteLine("### {0} - New acquisition {1} for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
                     }
                     else
                     {
-                        //System.Diagnostics.Debug.WriteLine("### {0} - Autoget acquisition {1} for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
+                        System.Diagnostics.Debug.WriteLine("### {0} - Autoget acquisition {1} for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
                     }
                 }
-                //System.Diagnostics.Debug.WriteLine("### {0} - Acquisition {1} pending stage 4 for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
+                System.Diagnostics.Debug.WriteLine("### {0} - Acquisition {1} pending stage 4 for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
             }
 
             internal void Release(Context ctx)
             {
-                //System.Diagnostics.Debug.WriteLine("### {0} - Releasing for context: {1}", this.name, ctx.ToString());
+                System.Diagnostics.Debug.WriteLine("### {0} - Releasing for context: {1}", this.name, ctx.ToString());
                 lock (this)
                 {
-                    if (heldBy != ctx)
+                    if (heldBy == null || heldBy.id != ctx.id)
                     {
                         throw new InvalidOperationException(I18n.Translate("internal/Plugin/releaseunownedmutex", "Tried to release unowned mutex '{0}' from context '{1}'", name, ctx.ToString()));
                     }
                     refCount--;
                     if (refCount == 0)
                     {
-                        //System.Diagnostics.Debug.WriteLine("### {0} - Fully released by context: {1}", this.name, ctx.ToString());
+                        System.Diagnostics.Debug.WriteLine("### {0} - Fully released by context: {1}", this.name, ctx.ToString());
                         heldBy = null;
                         WakeupNext();
                     }
                 }
-                //System.Diagnostics.Debug.WriteLine("### {0} - Released for context: {1}", this.name, ctx.ToString());
+                System.Diagnostics.Debug.WriteLine("### {0} - Released for context: {1}", this.name, ctx.ToString());
             }
 
             internal void ForceRelease()
             {
-                //System.Diagnostics.Debug.WriteLine("### {0} - Releasing by force", this.name);
+                System.Diagnostics.Debug.WriteLine("### {0} - Releasing by force", this.name);
                 lock (this)
                 {
                     refCount = 0;
                     heldBy = null;
                     WakeupNext();
                 }
-                //System.Diagnostics.Debug.WriteLine("### {0} - Released by force", this.name);
+                System.Diagnostics.Debug.WriteLine("### {0} - Released by force", this.name);
             }
 
             private void WakeupNext()
@@ -242,7 +247,7 @@ namespace Triggernometry
                 if (acquireQueue.Count > 0)
                 {
                     MutexTicket m = acquireQueue.ElementAt(0);
-                    //System.Diagnostics.Debug.WriteLine("### {0} - Waking up next context in queue : {1}", this.name, m.ctx.ToString());
+                    System.Diagnostics.Debug.WriteLine("### {0} - Waking up next context in queue : {1}", this.name, m.ctx.ToString());
                     m.ev.Set();
                 }
             }
@@ -514,6 +519,7 @@ namespace Triggernometry
         private string updateDownloadUrl;
         public string pluginName { get; set; }
         public string pluginPath { get; set; }
+        internal Endpoint _ep = null;
         private bool firstevent = true;
         internal bool runningAsAdmin;
         internal string currentZone = null;
@@ -527,6 +533,7 @@ namespace Triggernometry
         internal List<Trigger> ActiveTextTriggers;
         internal List<Trigger> ActiveFFXIVNetworkTriggers;
         internal List<Trigger> ActiveACTTriggers;
+        internal List<Trigger> ActiveEndpointTriggers;
         internal VariableStore sessionvars;
         internal Dictionary<string, Forms.AuraContainerForm> imageauras;
         internal Dictionary<string, Forms.AuraContainerForm> textauras;
@@ -558,6 +565,7 @@ namespace Triggernometry
         public SimpleVoidDelegate CornerHideHook { get; set; }
         public TabPageDelegate TabLocateHook { get; set; }
         public SimpleVoidDelegate CheckUpdateHook { get; set; }
+        public SimpleBoolDelegate ActInitedHook { get; set; }
 
         private bool _HideAllAuras = false;
         internal bool HideAllAuras
@@ -1190,18 +1198,16 @@ namespace Triggernometry
             internal MutexInformation mutex { get; set; }
             internal Action act { get; set; }
             internal Context ctx { get; set; }
+            internal bool releaseMutex { get; set; } = false;
 
-            public QueuedAction(DateTime when, Int64 ordinal, MutexInformation mtx, Action act, Context ctx)
+            public QueuedAction(DateTime when, Int64 ordinal, MutexInformation mtx, Action act, Context ctx, bool releaseMutex)
             {
                 this.when = when;
                 this.ordinal = ordinal;
                 this.mutex = mtx;
                 this.act = act;
                 this.ctx = ctx;
-                if (mtx != null)
-                {
-                    mtx.Acquire(ctx);
-                }
+                this.releaseMutex = releaseMutex;
             }
 
             public int CompareTo(object o)
@@ -1217,7 +1223,7 @@ namespace Triggernometry
 
             public void ActionFinished()
             {
-                if (mutex != null)
+                if (mutex != null && releaseMutex == true)
                 {
                     mutex.Release(ctx);
                 }
@@ -1259,11 +1265,20 @@ namespace Triggernometry
             ActiveTextTriggers = new List<Trigger>();
             ActiveFFXIVNetworkTriggers = new List<Trigger>();
             ActiveACTTriggers = new List<Trigger>();
+            ActiveEndpointTriggers = new List<Trigger>();
             sessionvars = new VariableStore();
             imageauras = new Dictionary<string, Forms.AuraContainerForm>();
             textauras = new Dictionary<string, Forms.AuraContainerForm>();
             ThreadPool.SetMinThreads(10, 10);
             PluginBridges.BridgeFFXIV.OnLogEvent += BridgeFFXIV_OnLogEvent;
+            _ep = new Endpoint();
+            _ep.plug = this;
+            _ep.OnStatusChange += _ep_OnStatusChange;
+        }
+
+        private void _ep_OnStatusChange(Endpoint.StatusEnum newStatus, string statusDesc)
+        {
+            FilteredAddToLog(DebugLevelEnum.Verbose, String.Format("Endpoint ({0}) {1}", newStatus, statusDesc));
         }
 
         private void BridgeFFXIV_OnLogEvent(DebugLevelEnum level, string text)
@@ -1298,6 +1313,12 @@ namespace Triggernometry
                                 ActiveACTTriggers.Add(t);
                             }
                             break;
+                        case Trigger.TriggerSourceEnum.Endpoint:
+                            lock (ActiveEndpointTriggers)
+                            {
+                                ActiveEndpointTriggers.Add(t);
+                            }
+                            break;
                         case Trigger.TriggerSourceEnum.None:
                             break;
                     }
@@ -1329,6 +1350,12 @@ namespace Triggernometry
                             ActiveACTTriggers.Remove(t);
                         }
                         break;
+                    case Trigger.TriggerSourceEnum.Endpoint:
+                        lock (ActiveEndpointTriggers)
+                        {
+                            ActiveEndpointTriggers.Remove(t);
+                        }
+                        break;
                     case Trigger.TriggerSourceEnum.None:
                         break;
                 }
@@ -1350,6 +1377,12 @@ namespace Triggernometry
                         lock (ActiveACTTriggers)
                         {
                             ActiveACTTriggers.Add(t);
+                        }
+                        break;
+                    case Trigger.TriggerSourceEnum.Endpoint:
+                        lock (ActiveEndpointTriggers)
+                        {
+                            ActiveEndpointTriggers.Add(t);
                         }
                         break;
                     case Trigger.TriggerSourceEnum.None:
@@ -1388,6 +1421,15 @@ namespace Triggernometry
                             if (ActiveACTTriggers.Contains(t) == true)
                             {
                                 ActiveACTTriggers.Remove(t);
+                            }
+                        }
+                        break;
+                    case Trigger.TriggerSourceEnum.Endpoint:
+                        lock (ActiveEndpointTriggers)
+                        {
+                            if (ActiveEndpointTriggers.Contains(t) == true)
+                            {
+                                ActiveEndpointTriggers.Remove(t);
                             }
                         }
                         break;
@@ -1431,6 +1473,17 @@ namespace Triggernometry
                         {
                             FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigaddbook", "Trigger '{0}' added to bookkeeping", t.LogName));
                             ActiveACTTriggers.Add(t);
+                            return;
+                        }
+                    }
+                    break;
+                case Trigger.TriggerSourceEnum.Endpoint:
+                    lock (ActiveEndpointTriggers)
+                    {
+                        if (ActiveEndpointTriggers.Contains(t) == false)
+                        {
+                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigaddbook", "Trigger '{0}' added to bookkeeping", t.LogName));
+                            ActiveEndpointTriggers.Add(t);
                             return;
                         }
                     }
@@ -1487,6 +1540,18 @@ namespace Triggernometry
                             FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigrembook", "Trigger '{0}' removed from bookkeeping", t.LogName));
                             RemoveAurasFromTrigger(t);
                             ActiveACTTriggers.Remove(t);
+                            return;
+                        }
+                    }
+                    break;
+                case Trigger.TriggerSourceEnum.Endpoint:
+                    lock (ActiveEndpointTriggers)
+                    {
+                        if (ActiveEndpointTriggers.Contains(t) == true)
+                        {
+                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/trigrembook", "Trigger '{0}' removed from bookkeeping", t.LogName));
+                            RemoveAurasFromTrigger(t);
+                            ActiveEndpointTriggers.Remove(t);
                             return;
                         }
                     }
@@ -2255,6 +2320,10 @@ namespace Triggernometry
                     AllRepositoryUpdates(true);
                 });
                 tx.Start();
+                if (cfg.StartEndpointOnLaunch == true)
+                {
+                    _ep.Start();
+                }
                 isInitialized = true;
             }
             catch (Exception ex)
@@ -2489,9 +2558,9 @@ namespace Triggernometry
             f.Repo = r;
         }
 
-        private bool ApplyRepositoryRestrictions(Trigger t, Repository r)
+        private bool ApplyActionSpecificRestrictions(IEnumerable<Action> actions, Repository r)
         {
-            foreach (Action a in t.Actions)
+            foreach (Action a in actions)
             {
                 if (a.ActionType == Action.ActionTypeEnum.ExecuteScript && r.AllowScriptExecution == false)
                 {
@@ -2513,6 +2582,24 @@ namespace Triggernometry
                 {
                     return false;
                 }
+                if (a.ActionType == Action.ActionTypeEnum.Loop)
+                {
+                    bool ret = ApplyActionSpecificRestrictions(a.LoopActions, r);
+                    if (ret == false)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        private bool ApplyRepositoryRestrictions(Trigger t, Repository r)
+        {
+            bool ret = ApplyActionSpecificRestrictions(t.Actions, r);
+            if (ret == false)
+            {
+                return false;
             }
             var ix = from tx in r.TriggerStates where tx.Id == t.Id select tx;
             if (ix.Count() == 0)
@@ -2856,6 +2943,12 @@ namespace Triggernometry
                 ui.CloseForms();
             }
             PluginBridges.BridgeFFXIV.UnsubscribeFromNetworkEvents(this);
+            if (_ep != null)
+            {
+                _ep.Stop();
+                _ep.Dispose();
+                _ep = null;
+            }
             if (_obs != null)
             {
                 _obs.Dispose();
@@ -2989,7 +3082,7 @@ namespace Triggernometry
                 }
                 if ((force & Action.TriggerForceTypeEnum.SkipParent) == 0)
                 {
-                    Folder.FilterFailReason reason = t.Parent.PassesFilter(le.ZoneName, le.ZoneId, le.Text);
+                    Folder.FilterFailReason reason = t.Parent.PassesFilter(le);
                     if (reason != Folder.FilterFailReason.Passed)
                     {
                         if (reason != Folder.FilterFailReason.NotEnabled)
@@ -3026,14 +3119,70 @@ namespace Triggernometry
                         t.AddToLog(this, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/debugnamedgroup", "Trigger '{0}' named group '{1}': {2}", t.LogName, sdx, m.Groups[sdx].Value));
                     }
                 }
-                ctx.namedgroups["_zone"] = le.ZoneName;                
+                ctx.namedgroups["_zone"] = le.ZoneName;
                 ctx.namedgroups["_event"] = le.Text;
+                if (le.TestMode == true && le.ZoneId != "")
+                {
+                    ctx.zoneIdOverride = le.ZoneId;
+                }
                 ctx.triggered = DateTime.UtcNow;
                 ctx.namedgroups["_timestamp"] = "" + (long)(ctx.triggered - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
                 ctx.namedgroups["_timestampms"] = "" + (long)(ctx.triggered - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds;
                 ctx.force = force;
                 t.Fire(this, ctx, null);
             }
+        }
+
+        internal Action QueueActions(Context ctx, DateTime startingFrom, IEnumerable<Action> acts, bool sequential, RealPlugin.MutexInformation mtx, Context.LoggerDelegate logger)
+        {
+            Action lastAction = null;
+            var finalAction = (from tx in acts orderby tx.OrderNumber descending select tx).FirstOrDefault();
+            if (sequential == false)
+            {
+                var ix = from tx in acts
+                         orderby tx.OrderNumber ascending
+                         select tx;
+                foreach (Action a in ix)
+                {
+                    if (a._Enabled == true)
+                    {
+                        startingFrom = startingFrom.AddMilliseconds(ctx.EvaluateNumericExpression(logger, this, a._ExecutionDelayExpression));
+                        QueueAction(ctx, ctx.trig, mtx, a, startingFrom, finalAction == a);
+                        lastAction = a;
+                    }
+                }
+            }
+            else
+            {
+                Action prev = null;
+                Action first = null;
+                var ix = from tx in acts
+                         orderby tx.OrderNumber ascending
+                         select tx;
+                foreach (Action a in ix)
+                {
+                    if (a._Enabled == false)
+                    {
+                        continue;
+                    }
+                    lastAction = a;
+                    if (prev != null)
+                    {
+                        prev.NextAction = a;
+                    }
+                    else
+                    {
+                        first = a;
+                        startingFrom = startingFrom.AddMilliseconds(ctx.EvaluateNumericExpression(logger, this, a._ExecutionDelayExpression));
+                    }
+                    prev = a;
+                }
+                if (first != null)
+                {
+                    QueueAction(ctx, ctx.trig, mtx, first, startingFrom, false);
+                }
+            }
+            return lastAction;
         }
 
         internal void LogLineQueuer(string text, string zone, LogEvent.SourceEnum src)
@@ -3085,13 +3234,14 @@ namespace Triggernometry
             WaitHandle[] wh = new WaitHandle[2];
             wh[0] = ExitEvent;
             wh[1] = QueueWakeupEvent;
-            if (mainform.IsHandleCreated == false)
+            if (ReadyForOperation() == false)
             {                
                 do
                 {
                     Thread.Sleep(100);
-                } while (mainform.IsHandleCreated == false);
+                } while (ReadyForOperation() == false);
             }
+            EventQueue.Clear();
             while (true)
             {
                 switch (WaitHandle.WaitAny(wh, Timeout.Infinite))
@@ -3256,6 +3406,19 @@ namespace Triggernometry
                         }
                     }
                     break;
+                case LogEvent.SourceEnum.Endpoint:
+                    lock (ActiveEndpointTriggers) // verified
+                    {
+                        foreach (Trigger t in ActiveEndpointTriggers)
+                        {
+                            if (t.ZoneBlocked == true && le.TestMode == false)
+                            {
+                                continue;
+                            }
+                            TestTrigger(t, le, Action.TriggerForceTypeEnum.NoSkip);
+                        }
+                    }
+                    break;
             }
             double del = (DateTime.Now - le.Timestamp).TotalMilliseconds;
             if (del > 100.0)
@@ -3298,6 +3461,38 @@ namespace Triggernometry
                 case "OnCombatEnd":
                     LogLineQueuer(data[0], currentZone != null ? currentZone : "", LogEvent.SourceEnum.ACT);
                     break;
+            }
+        }
+
+        public void EndpointReceive(string data)
+        {
+            string detectedZone = currentZone != null ? currentZone : "";
+            try
+            {
+                if (cfg.EventSeparator.Length > 0)
+                {
+                    string[] lines = data.Split(new string[] { cfg.EventSeparator }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string line in lines)
+                    {
+                        if (cfg.LogEndpoint == true)
+                        {
+                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/endpointsplitline", "Split endpoint data: ({0})", line));
+                        }
+                        LogLineQueuer(line, detectedZone, LogEvent.SourceEnum.Endpoint);
+                    }
+                }
+                else
+                {
+                    if (cfg.LogEndpoint == true)
+                    {
+                        FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/endpointline", "Endpoint data: ({0})", data));
+                    }
+                    LogLineQueuer(data, detectedZone, LogEvent.SourceEnum.Endpoint);
+                }
+            }
+            catch (Exception ex)
+            {
+                FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/Plugin/endpointlineprocex", "Exception ({0}) when processing endpoint data ({1}) in zone ({2})", ex.Message, data, detectedZone));
             }
         }
 
@@ -3410,12 +3605,20 @@ namespace Triggernometry
                     return c;
                 }
                 bool corruptFallback = false;
-                if (fi.Length == 0)
+                string lastLine = File.ReadLines(filename).LastOrDefault();
+                if (lastLine == null || lastLine.Trim() != "</Configuration>")
                 {
                     // configuration has been corrupted, try loading previous config file instead
                     string newfilename = filename + ".previous";
                     fi = new FileInfo(newfilename);
-                    cre = I18n.Translate("internal/Plugin/cfgcorrupted", "Configuration file '{0}' appears to have been corrupted, loading previous configuration file '{1}'", filename, newfilename);
+                    // translation file is loaded after this, so the I18n won't work
+                    cre = I18n.Translate("internal/Plugin/cfgcorrupted", 
+                        "Configuration file has been corrupted: \n" +
+                        "'{0}' \n\n" +
+                        "Loading previous configuration file: \n" +
+                        "'{1}'", 
+                        filename, newfilename);
+                    MessageBox.Show(cre, "Triggernometry", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     if (fi.Exists == true)
                     {
                         filename = newfilename;
@@ -3566,6 +3769,11 @@ namespace Triggernometry
                         sw.Flush();
                     }
                 }
+                string lastLine = File.ReadLines(filename + ".temp").LastOrDefault();
+                if (lastLine == null || lastLine.Trim() != "</Configuration>")
+                {
+                    throw new Exception(I18n.Translate("internal/Plugin/cfgsaveincomplete", "The saving process was interrupted.") + "\n");
+                }
                 if (switchprevious == true)
                 {
                     if (File.Exists(filename + ".previous") == true)
@@ -3590,7 +3798,7 @@ namespace Triggernometry
             }
         }
 
-        public void QueueAction(Context ctx, Trigger t, MutexInformation m, Action a, DateTime when)
+        public void QueueAction(Context ctx, Trigger t, MutexInformation m, Action a, DateTime when, bool releaseMutex)
         {
             lock (ActionQueue) // verified
             {                                
@@ -3619,6 +3827,10 @@ namespace Triggernometry
                         if (a._RefireRequeue == false)
                         {
                             a.AddToLog(ctx, DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/actionqueuefail", "Trigger '{0}' action '{1}' not queued, refire requeue disabled", t.LogName, a.GetDescription(ctx)));
+                            if (releaseMutex == true && m != null)
+                            {
+                                m.Release(ctx);
+                            }
                             return;
                         }
                     }
@@ -3630,10 +3842,15 @@ namespace Triggernometry
                     curOrdinal++;
                 }
                 a.AddToLog(ctx, DebugLevelEnum.Info, I18n.Translate("internal/Plugin/actionqueued", "Queuing trigger '{0}' action '{1}' to {2} slot {3}", t.LogName, a.GetDescription(ctx), FormatDateTime(when), newOrdinal));
-                ActionQueue.Add(new QueuedAction(when, newOrdinal, m, a, ctx));
+                ActionQueue.Add(new QueuedAction(when, newOrdinal, m, a, ctx, releaseMutex));
                 ActionQueue.Sort();
                 ActionUpdateEvent.Set();
             }
+        }
+
+        internal bool ReadyForOperation()
+        {
+            return mainform?.IsHandleCreated == true && ActInitedHook?.Invoke() == true;
         }
 
         internal void ActionThreadProc()
@@ -3642,13 +3859,13 @@ namespace Triggernometry
             WaitHandle[] wh = new WaitHandle[2];
             wh[0] = ExitEvent;
             wh[1] = ActionUpdateEvent;
-            if (mainform.IsHandleCreated == false)
+            if (ReadyForOperation() == false)
             {
-                FilteredAddToLog(DebugLevelEnum.Warning, I18n.Translate("internal/Plugin/invalidwindowhandle", "No valid window handle yet, waiting for it to be created"));
+                //FilteredAddToLog(DebugLevelEnum.Warning, I18n.Translate("internal/Plugin/invalidwindowhandle", "No valid window handle yet, waiting for it to be created"));
                 do
                 {
                     Thread.Sleep(100);
-                } while (mainform.IsHandleCreated == false);
+                } while (ReadyForOperation() == false);
             }
             if (cfg.StartupTriggerId != Guid.Empty)
             {
@@ -3826,7 +4043,6 @@ namespace Triggernometry
 
         public void RegisterNamedCallback(int id, string name, Delegate del, object o)
         {
-            
             NamedCallback nc = new NamedCallback();
             nc.Id = id;
             nc.Callback = del;
@@ -3841,6 +4057,23 @@ namespace Triggernometry
                 }
                 callbacksByName[name].Add(nc);
             }
+        }
+
+        public int RegisterNamedCallback(string name, Delegate callback, object o, bool allowDuplicatedName = false)
+        {   // used in scripts to register callbacks manually
+            if (!allowDuplicatedName)
+            {
+                UnregisterNamedCallback(name);
+            }
+
+            int id;
+            lock (callbacksById)
+            {
+                id = (callbacksById.Count == 0) ? 1 : callbacksById.Keys.Max() + 1;
+            }
+
+            RegisterNamedCallback(id, name, callback, o);
+            return id;
         }
 
         public void UnregisterNamedCallback(int id)
@@ -3862,6 +4095,21 @@ namespace Triggernometry
             }
         }
 
+        public void UnregisterNamedCallback(string name)
+        {   // unregister all callbacks with the given name
+            lock (callbacksById)
+            {
+                if (!callbacksByName.ContainsKey(name))
+                {
+                    return;
+                }
+                foreach (NamedCallback nc in callbacksByName[name])
+                {
+                    callbacksById.Remove(nc.Id);
+                }
+                callbacksByName.Remove(name);
+            }
+        }
     }
 
 }

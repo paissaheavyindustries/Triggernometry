@@ -134,20 +134,28 @@
             this.txtCacheImageCount = new System.Windows.Forms.TextBox();
             this.btnCacheImageClear = new System.Windows.Forms.Button();
             this.tabEndpoint = new System.Windows.Forms.TabPage();
+            this.grpEndpointHistory = new System.Windows.Forms.GroupBox();
+            this.panel21 = new System.Windows.Forms.Panel();
+            this.dgvEndpointHistory = new Triggernometry.CustomControls.DataGridViewEx();
+            this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.btnEndpointHistUpdate = new System.Windows.Forms.ToolStripButton();
+            this.tslEndpointHistoryRecv = new System.Windows.Forms.ToolStripLabel();
+            this.tslEndpointHistoryCount = new System.Windows.Forms.ToolStripLabel();
+            this.panel20 = new System.Windows.Forms.Panel();
             this.grpEndpointSettings = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
-            this.lblEndpointStartup = new System.Windows.Forms.Label();
             this.chkEndpointStartup = new System.Windows.Forms.CheckBox();
-            this.lblEndpointPort = new System.Windows.Forms.Label();
-            this.txtEndpointPassword = new System.Windows.Forms.TextBox();
-            this.lblEndpointPassword = new System.Windows.Forms.Label();
-            this.nudEndpointPort = new System.Windows.Forms.NumericUpDown();
+            this.chkEndpointLog = new System.Windows.Forms.CheckBox();
+            this.txtEndpoint = new System.Windows.Forms.TextBox();
+            this.lblEndpoint = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
             this.grpEndpointState = new System.Windows.Forms.GroupBox();
-            this.panel8 = new System.Windows.Forms.Panel();
-            this.lblEndpointState = new System.Windows.Forms.Label();
+            this.tableLayoutPanel18 = new System.Windows.Forms.TableLayoutPanel();
             this.btnEndpointStart = new System.Windows.Forms.Button();
             this.btnEndpointStop = new System.Windows.Forms.Button();
+            this.txtEndpointStatus = new System.Windows.Forms.TextBox();
             this.tabFFXIV = new System.Windows.Forms.TabPage();
             this.grpPartyListOrder = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
@@ -186,6 +194,12 @@
             this.btnConstRemove = new System.Windows.Forms.ToolStripButton();
             this.tabSecurity = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.dgvAdditionalFeatures = new Triggernometry.CustomControls.DataGridViewEx();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewCheckBoxColumn1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.dataGridViewCheckBoxColumn2 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.dataGridViewCheckBoxColumn3 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.panel8 = new System.Windows.Forms.Panel();
             this.dgvApiAccess = new Triggernometry.CustomControls.DataGridViewEx();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column5 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -202,11 +216,13 @@
             this.panel12 = new System.Windows.Forms.Panel();
             this.grpUserInterface = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+            this.cbxActionAsync = new System.Windows.Forms.CheckBox();
             this.chkClipboard = new System.Windows.Forms.CheckBox();
             this.lblAutosaveInterval = new System.Windows.Forms.Label();
             this.cbxAutosaveConfig = new System.Windows.Forms.CheckBox();
             this.cbxDevMode = new System.Windows.Forms.CheckBox();
             this.cbxTestLive = new System.Windows.Forms.CheckBox();
+            this.cbxTestIgnoreConditions = new System.Windows.Forms.CheckBox();
             this.nudAutosaveMinutes = new System.Windows.Forms.NumericUpDown();
             this.panel6 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
@@ -216,7 +232,6 @@
             this.btnTriggerTemplate = new System.Windows.Forms.Button();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
-            this.cbxActionAsync = new System.Windows.Forms.CheckBox();
             this.panel4.SuspendLayout();
             this.grpVolAdjustment.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -254,11 +269,14 @@
             this.tableLayoutPanel12.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudCacheImageExpiry)).BeginInit();
             this.tabEndpoint.SuspendLayout();
+            this.grpEndpointHistory.SuspendLayout();
+            this.panel21.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvEndpointHistory)).BeginInit();
+            this.toolStrip2.SuspendLayout();
             this.grpEndpointSettings.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEndpointPort)).BeginInit();
             this.grpEndpointState.SuspendLayout();
-            this.panel8.SuspendLayout();
+            this.tableLayoutPanel18.SuspendLayout();
             this.tabFFXIV.SuspendLayout();
             this.grpPartyListOrder.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
@@ -275,6 +293,7 @@
             this.tlsScalar.SuspendLayout();
             this.tabSecurity.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAdditionalFeatures)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvApiAccess)).BeginInit();
             this.tabMisc.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -520,6 +539,8 @@
             "Nothing",
             "Errors only",
             "Errors and warnings",
+            "Above custom",
+            "Above custom 2",
             "All informational messages",
             "Verbose debug"});
             this.cbxLoggingLevel.Location = new System.Drawing.Point(364, 3);
@@ -1686,6 +1707,8 @@
             // 
             // tabEndpoint
             // 
+            this.tabEndpoint.Controls.Add(this.grpEndpointHistory);
+            this.tabEndpoint.Controls.Add(this.panel20);
             this.tabEndpoint.Controls.Add(this.grpEndpointSettings);
             this.tabEndpoint.Controls.Add(this.panel7);
             this.tabEndpoint.Controls.Add(this.grpEndpointState);
@@ -1697,16 +1720,118 @@
             this.tabEndpoint.Text = "Endpoint";
             this.tabEndpoint.UseVisualStyleBackColor = true;
             // 
+            // grpEndpointHistory
+            // 
+            this.grpEndpointHistory.AutoSize = true;
+            this.grpEndpointHistory.Controls.Add(this.panel21);
+            this.grpEndpointHistory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpEndpointHistory.Location = new System.Drawing.Point(7, 242);
+            this.grpEndpointHistory.Name = "grpEndpointHistory";
+            this.grpEndpointHistory.Padding = new System.Windows.Forms.Padding(10);
+            this.grpEndpointHistory.Size = new System.Drawing.Size(742, 321);
+            this.grpEndpointHistory.TabIndex = 26;
+            this.grpEndpointHistory.TabStop = false;
+            this.grpEndpointHistory.Text = " Endpoint history ";
+            // 
+            // panel21
+            // 
+            this.panel21.Controls.Add(this.dgvEndpointHistory);
+            this.panel21.Controls.Add(this.toolStrip2);
+            this.panel21.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel21.Location = new System.Drawing.Point(10, 23);
+            this.panel21.Name = "panel21";
+            this.panel21.Size = new System.Drawing.Size(722, 288);
+            this.panel21.TabIndex = 0;
+            // 
+            // dgvEndpointHistory
+            // 
+            this.dgvEndpointHistory.AllowUserToAddRows = false;
+            this.dgvEndpointHistory.AllowUserToDeleteRows = false;
+            this.dgvEndpointHistory.AllowUserToResizeColumns = false;
+            this.dgvEndpointHistory.AllowUserToResizeRows = false;
+            this.dgvEndpointHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvEndpointHistory.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column8,
+            this.Column9});
+            this.dgvEndpointHistory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvEndpointHistory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dgvEndpointHistory.Location = new System.Drawing.Point(0, 25);
+            this.dgvEndpointHistory.Name = "dgvEndpointHistory";
+            this.dgvEndpointHistory.RowHeadersVisible = false;
+            this.dgvEndpointHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvEndpointHistory.Size = new System.Drawing.Size(722, 263);
+            this.dgvEndpointHistory.TabIndex = 1;
+            this.dgvEndpointHistory.VirtualMode = true;
+            this.dgvEndpointHistory.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvEndpointHistory_CellValueNeeded);
+            // 
+            // Column8
+            // 
+            this.Column8.Frozen = true;
+            this.Column8.HeaderText = "Timestamp";
+            this.Column8.Name = "Column8";
+            this.Column8.ReadOnly = true;
+            this.Column8.Width = 150;
+            // 
+            // Column9
+            // 
+            this.Column9.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column9.HeaderText = "Data";
+            this.Column9.Name = "Column9";
+            this.Column9.ReadOnly = true;
+            // 
+            // toolStrip2
+            // 
+            this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnEndpointHistUpdate,
+            this.tslEndpointHistoryRecv,
+            this.tslEndpointHistoryCount});
+            this.toolStrip2.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Size = new System.Drawing.Size(722, 25);
+            this.toolStrip2.TabIndex = 0;
+            this.toolStrip2.Text = "toolStrip2";
+            // 
+            // btnEndpointHistUpdate
+            // 
+            this.btnEndpointHistUpdate.Image = ((System.Drawing.Image)(resources.GetObject("btnEndpointHistUpdate.Image")));
+            this.btnEndpointHistUpdate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnEndpointHistUpdate.Name = "btnEndpointHistUpdate";
+            this.btnEndpointHistUpdate.Size = new System.Drawing.Size(65, 22);
+            this.btnEndpointHistUpdate.Text = "Update";
+            this.btnEndpointHistUpdate.Click += new System.EventHandler(this.btnEndpointHistUpdate_Click);
+            // 
+            // tslEndpointHistoryRecv
+            // 
+            this.tslEndpointHistoryRecv.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.tslEndpointHistoryRecv.Name = "tslEndpointHistoryRecv";
+            this.tslEndpointHistoryRecv.Size = new System.Drawing.Size(114, 22);
+            this.tslEndpointHistoryRecv.Text = "telegram(s) received";
+            // 
+            // tslEndpointHistoryCount
+            // 
+            this.tslEndpointHistoryCount.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.tslEndpointHistoryCount.Name = "tslEndpointHistoryCount";
+            this.tslEndpointHistoryCount.Size = new System.Drawing.Size(13, 22);
+            this.tslEndpointHistoryCount.Text = "0";
+            // 
+            // panel20
+            // 
+            this.panel20.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel20.Location = new System.Drawing.Point(7, 232);
+            this.panel20.Name = "panel20";
+            this.panel20.Size = new System.Drawing.Size(742, 10);
+            this.panel20.TabIndex = 25;
+            // 
             // grpEndpointSettings
             // 
             this.grpEndpointSettings.AutoSize = true;
             this.grpEndpointSettings.Controls.Add(this.tableLayoutPanel8);
             this.grpEndpointSettings.Dock = System.Windows.Forms.DockStyle.Top;
-            this.grpEndpointSettings.Enabled = false;
-            this.grpEndpointSettings.Location = new System.Drawing.Point(7, 80);
+            this.grpEndpointSettings.Location = new System.Drawing.Point(7, 127);
             this.grpEndpointSettings.Name = "grpEndpointSettings";
             this.grpEndpointSettings.Padding = new System.Windows.Forms.Padding(10);
-            this.grpEndpointSettings.Size = new System.Drawing.Size(742, 108);
+            this.grpEndpointSettings.Size = new System.Drawing.Size(742, 105);
             this.grpEndpointSettings.TabIndex = 22;
             this.grpEndpointSettings.TabStop = false;
             this.grpEndpointSettings.Text = " Endpoint settings ";
@@ -1717,12 +1842,10 @@
             this.tableLayoutPanel8.ColumnCount = 2;
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel8.Controls.Add(this.lblEndpointStartup, 0, 2);
-            this.tableLayoutPanel8.Controls.Add(this.chkEndpointStartup, 1, 2);
-            this.tableLayoutPanel8.Controls.Add(this.lblEndpointPort, 0, 1);
-            this.tableLayoutPanel8.Controls.Add(this.txtEndpointPassword, 1, 0);
-            this.tableLayoutPanel8.Controls.Add(this.lblEndpointPassword, 0, 0);
-            this.tableLayoutPanel8.Controls.Add(this.nudEndpointPort, 1, 1);
+            this.tableLayoutPanel8.Controls.Add(this.chkEndpointStartup, 0, 1);
+            this.tableLayoutPanel8.Controls.Add(this.chkEndpointLog, 0, 2);
+            this.tableLayoutPanel8.Controls.Add(this.txtEndpoint, 1, 0);
+            this.tableLayoutPanel8.Controls.Add(this.lblEndpoint, 0, 0);
             this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel8.Location = new System.Drawing.Point(10, 23);
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
@@ -1730,93 +1853,60 @@
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(722, 75);
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(722, 72);
             this.tableLayoutPanel8.TabIndex = 0;
-            // 
-            // lblEndpointStartup
-            // 
-            this.lblEndpointStartup.AutoEllipsis = true;
-            this.lblEndpointStartup.AutoSize = true;
-            this.lblEndpointStartup.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblEndpointStartup.Location = new System.Drawing.Point(3, 52);
-            this.lblEndpointStartup.Name = "lblEndpointStartup";
-            this.lblEndpointStartup.Size = new System.Drawing.Size(123, 23);
-            this.lblEndpointStartup.TabIndex = 11;
-            this.lblEndpointStartup.Text = "Start endpoint on startup";
-            this.lblEndpointStartup.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // chkEndpointStartup
             // 
             this.chkEndpointStartup.AutoSize = true;
             this.chkEndpointStartup.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel8.SetColumnSpan(this.chkEndpointStartup, 3);
             this.chkEndpointStartup.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chkEndpointStartup.Location = new System.Drawing.Point(132, 55);
+            this.chkEndpointStartup.Location = new System.Drawing.Point(3, 29);
             this.chkEndpointStartup.Name = "chkEndpointStartup";
-            this.chkEndpointStartup.Size = new System.Drawing.Size(587, 17);
-            this.chkEndpointStartup.TabIndex = 10;
-            this.chkEndpointStartup.Text = "  ";
+            this.chkEndpointStartup.Size = new System.Drawing.Size(716, 17);
+            this.chkEndpointStartup.TabIndex = 28;
+            this.chkEndpointStartup.Text = "Start endpoint on launch";
             this.chkEndpointStartup.UseVisualStyleBackColor = true;
             // 
-            // lblEndpointPort
+            // chkEndpointLog
             // 
-            this.lblEndpointPort.AutoEllipsis = true;
-            this.lblEndpointPort.AutoSize = true;
-            this.lblEndpointPort.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblEndpointPort.Location = new System.Drawing.Point(3, 26);
-            this.lblEndpointPort.Name = "lblEndpointPort";
-            this.lblEndpointPort.Size = new System.Drawing.Size(123, 26);
-            this.lblEndpointPort.TabIndex = 8;
-            this.lblEndpointPort.Text = "Port";
-            this.lblEndpointPort.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.chkEndpointLog.AutoSize = true;
+            this.chkEndpointLog.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel8.SetColumnSpan(this.chkEndpointLog, 3);
+            this.chkEndpointLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkEndpointLog.Location = new System.Drawing.Point(3, 52);
+            this.chkEndpointLog.Name = "chkEndpointLog";
+            this.chkEndpointLog.Size = new System.Drawing.Size(716, 17);
+            this.chkEndpointLog.TabIndex = 27;
+            this.chkEndpointLog.Text = "Log received data";
+            this.chkEndpointLog.UseVisualStyleBackColor = true;
             // 
-            // txtEndpointPassword
+            // txtEndpoint
             // 
-            this.txtEndpointPassword.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtEndpointPassword.Location = new System.Drawing.Point(132, 3);
-            this.txtEndpointPassword.Name = "txtEndpointPassword";
-            this.txtEndpointPassword.Size = new System.Drawing.Size(587, 20);
-            this.txtEndpointPassword.TabIndex = 7;
+            this.txtEndpoint.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtEndpoint.Location = new System.Drawing.Point(89, 3);
+            this.txtEndpoint.Name = "txtEndpoint";
+            this.txtEndpoint.Size = new System.Drawing.Size(630, 20);
+            this.txtEndpoint.TabIndex = 7;
             // 
-            // lblEndpointPassword
+            // lblEndpoint
             // 
-            this.lblEndpointPassword.AutoEllipsis = true;
-            this.lblEndpointPassword.AutoSize = true;
-            this.lblEndpointPassword.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblEndpointPassword.Location = new System.Drawing.Point(3, 0);
-            this.lblEndpointPassword.Name = "lblEndpointPassword";
-            this.lblEndpointPassword.Size = new System.Drawing.Size(123, 26);
-            this.lblEndpointPassword.TabIndex = 6;
-            this.lblEndpointPassword.Text = "Password";
-            this.lblEndpointPassword.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // nudEndpointPort
-            // 
-            this.nudEndpointPort.Dock = System.Windows.Forms.DockStyle.Right;
-            this.nudEndpointPort.Location = new System.Drawing.Point(599, 29);
-            this.nudEndpointPort.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.nudEndpointPort.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudEndpointPort.Name = "nudEndpointPort";
-            this.nudEndpointPort.Size = new System.Drawing.Size(120, 20);
-            this.nudEndpointPort.TabIndex = 9;
-            this.nudEndpointPort.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.nudEndpointPort.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            this.lblEndpoint.AutoEllipsis = true;
+            this.lblEndpoint.AutoSize = true;
+            this.lblEndpoint.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblEndpoint.Location = new System.Drawing.Point(3, 0);
+            this.lblEndpoint.Name = "lblEndpoint";
+            this.lblEndpoint.Size = new System.Drawing.Size(80, 26);
+            this.lblEndpoint.TabIndex = 6;
+            this.lblEndpoint.Text = "HTTP endpoint";
+            this.lblEndpoint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panel7
             // 
             this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel7.Location = new System.Drawing.Point(7, 70);
+            this.panel7.Location = new System.Drawing.Point(7, 117);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(742, 10);
             this.panel7.TabIndex = 24;
@@ -1824,66 +1914,71 @@
             // grpEndpointState
             // 
             this.grpEndpointState.AutoSize = true;
-            this.grpEndpointState.Controls.Add(this.panel8);
+            this.grpEndpointState.Controls.Add(this.tableLayoutPanel18);
             this.grpEndpointState.Dock = System.Windows.Forms.DockStyle.Top;
-            this.grpEndpointState.Enabled = false;
             this.grpEndpointState.Location = new System.Drawing.Point(7, 7);
             this.grpEndpointState.Name = "grpEndpointState";
             this.grpEndpointState.Padding = new System.Windows.Forms.Padding(10);
-            this.grpEndpointState.Size = new System.Drawing.Size(742, 63);
+            this.grpEndpointState.Size = new System.Drawing.Size(742, 110);
             this.grpEndpointState.TabIndex = 23;
             this.grpEndpointState.TabStop = false;
             this.grpEndpointState.Text = " Status ";
             // 
-            // panel8
+            // tableLayoutPanel18
             // 
-            this.panel8.AutoSize = true;
-            this.panel8.Controls.Add(this.lblEndpointState);
-            this.panel8.Controls.Add(this.btnEndpointStart);
-            this.panel8.Controls.Add(this.btnEndpointStop);
-            this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel8.Location = new System.Drawing.Point(10, 23);
-            this.panel8.MinimumSize = new System.Drawing.Size(0, 30);
-            this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(722, 30);
-            this.panel8.TabIndex = 1;
-            // 
-            // lblEndpointState
-            // 
-            this.lblEndpointState.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblEndpointState.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblEndpointState.Location = new System.Drawing.Point(0, 0);
-            this.lblEndpointState.Name = "lblEndpointState";
-            this.lblEndpointState.Size = new System.Drawing.Size(562, 30);
-            this.lblEndpointState.TabIndex = 2;
-            this.lblEndpointState.Text = "Endpoint is not running.";
-            this.lblEndpointState.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.tableLayoutPanel18.ColumnCount = 2;
+            this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel18.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel18.Controls.Add(this.btnEndpointStart, 1, 0);
+            this.tableLayoutPanel18.Controls.Add(this.btnEndpointStop, 1, 1);
+            this.tableLayoutPanel18.Controls.Add(this.txtEndpointStatus, 0, 0);
+            this.tableLayoutPanel18.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel18.Location = new System.Drawing.Point(10, 23);
+            this.tableLayoutPanel18.Name = "tableLayoutPanel18";
+            this.tableLayoutPanel18.RowCount = 2;
+            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel18.Size = new System.Drawing.Size(722, 77);
+            this.tableLayoutPanel18.TabIndex = 2;
             // 
             // btnEndpointStart
             // 
             this.btnEndpointStart.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnEndpointStart.Image = ((System.Drawing.Image)(resources.GetObject("btnEndpointStart.Image")));
             this.btnEndpointStart.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnEndpointStart.Location = new System.Drawing.Point(562, 0);
+            this.btnEndpointStart.Location = new System.Drawing.Point(639, 3);
             this.btnEndpointStart.Name = "btnEndpointStart";
-            this.btnEndpointStart.Size = new System.Drawing.Size(80, 30);
+            this.btnEndpointStart.Size = new System.Drawing.Size(80, 32);
             this.btnEndpointStart.TabIndex = 0;
             this.btnEndpointStart.Text = "Start";
             this.btnEndpointStart.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnEndpointStart.UseVisualStyleBackColor = true;
+            this.btnEndpointStart.Click += new System.EventHandler(this.btnEndpointStart_Click);
             // 
             // btnEndpointStop
             // 
             this.btnEndpointStop.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnEndpointStop.Image = ((System.Drawing.Image)(resources.GetObject("btnEndpointStop.Image")));
             this.btnEndpointStop.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnEndpointStop.Location = new System.Drawing.Point(642, 0);
+            this.btnEndpointStop.Location = new System.Drawing.Point(639, 41);
             this.btnEndpointStop.Name = "btnEndpointStop";
-            this.btnEndpointStop.Size = new System.Drawing.Size(80, 30);
+            this.btnEndpointStop.Size = new System.Drawing.Size(80, 33);
             this.btnEndpointStop.TabIndex = 1;
             this.btnEndpointStop.Text = "Stop";
             this.btnEndpointStop.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnEndpointStop.UseVisualStyleBackColor = true;
+            this.btnEndpointStop.Click += new System.EventHandler(this.btnEndpointStop_Click);
+            // 
+            // txtEndpointStatus
+            // 
+            this.txtEndpointStatus.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtEndpointStatus.Location = new System.Drawing.Point(3, 3);
+            this.txtEndpointStatus.Multiline = true;
+            this.txtEndpointStatus.Name = "txtEndpointStatus";
+            this.txtEndpointStatus.ReadOnly = true;
+            this.tableLayoutPanel18.SetRowSpan(this.txtEndpointStatus, 2);
+            this.txtEndpointStatus.Size = new System.Drawing.Size(630, 71);
+            this.txtEndpointStatus.TabIndex = 2;
             // 
             // tabFFXIV
             // 
@@ -2318,6 +2413,8 @@
             // groupBox2
             // 
             this.groupBox2.AutoSize = true;
+            this.groupBox2.Controls.Add(this.dgvAdditionalFeatures);
+            this.groupBox2.Controls.Add(this.panel8);
             this.groupBox2.Controls.Add(this.dgvApiAccess);
             this.groupBox2.Controls.Add(this.panel18);
             this.groupBox2.Controls.Add(this.btnUnlockSecurity);
@@ -2329,6 +2426,73 @@
             this.groupBox2.TabIndex = 20;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = " Scripting API access ";
+            // 
+            // dgvAdditionalFeatures
+            // 
+            this.dgvAdditionalFeatures.AllowUserToAddRows = false;
+            this.dgvAdditionalFeatures.AllowUserToDeleteRows = false;
+            this.dgvAdditionalFeatures.AllowUserToResizeColumns = false;
+            this.dgvAdditionalFeatures.AllowUserToResizeRows = false;
+            this.dgvAdditionalFeatures.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvAdditionalFeatures.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewCheckBoxColumn1,
+            this.dataGridViewCheckBoxColumn2,
+            this.dataGridViewCheckBoxColumn3});
+            this.dgvAdditionalFeatures.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvAdditionalFeatures.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dgvAdditionalFeatures.Enabled = false;
+            this.dgvAdditionalFeatures.Location = new System.Drawing.Point(10, 357);
+            this.dgvAdditionalFeatures.Name = "dgvAdditionalFeatures";
+            this.dgvAdditionalFeatures.ReadOnly = true;
+            this.dgvAdditionalFeatures.RowHeadersVisible = false;
+            this.dgvAdditionalFeatures.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvAdditionalFeatures.ShowCellErrors = false;
+            this.dgvAdditionalFeatures.ShowEditingIcon = false;
+            this.dgvAdditionalFeatures.ShowRowErrors = false;
+            this.dgvAdditionalFeatures.Size = new System.Drawing.Size(722, 189);
+            this.dgvAdditionalFeatures.TabIndex = 28;
+            this.dgvAdditionalFeatures.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAdditionalFeatures_CellContentClick);
+            this.dgvAdditionalFeatures.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAdditionalFeatures_CellContentDoubleClick);
+            this.dgvAdditionalFeatures.SelectionChanged += new System.EventHandler(this.dgvAdditionalFeatures_SelectionChanged);
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn1.HeaderText = "Additional features";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // dataGridViewCheckBoxColumn1
+            // 
+            this.dataGridViewCheckBoxColumn1.HeaderText = "Allow for local triggers";
+            this.dataGridViewCheckBoxColumn1.Name = "dataGridViewCheckBoxColumn1";
+            this.dataGridViewCheckBoxColumn1.ReadOnly = true;
+            this.dataGridViewCheckBoxColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // dataGridViewCheckBoxColumn2
+            // 
+            this.dataGridViewCheckBoxColumn2.HeaderText = "Allow for remote triggers";
+            this.dataGridViewCheckBoxColumn2.Name = "dataGridViewCheckBoxColumn2";
+            this.dataGridViewCheckBoxColumn2.ReadOnly = true;
+            this.dataGridViewCheckBoxColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // dataGridViewCheckBoxColumn3
+            // 
+            this.dataGridViewCheckBoxColumn3.HeaderText = "Allow if running as admin";
+            this.dataGridViewCheckBoxColumn3.Name = "dataGridViewCheckBoxColumn3";
+            this.dataGridViewCheckBoxColumn3.ReadOnly = true;
+            this.dataGridViewCheckBoxColumn3.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // panel8
+            // 
+            this.panel8.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel8.Location = new System.Drawing.Point(10, 347);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(722, 10);
+            this.panel8.TabIndex = 27;
             // 
             // dgvApiAccess
             // 
@@ -2342,7 +2506,7 @@
             this.Column5,
             this.Column6,
             this.Column7});
-            this.dgvApiAccess.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvApiAccess.Dock = System.Windows.Forms.DockStyle.Top;
             this.dgvApiAccess.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvApiAccess.Enabled = false;
             this.dgvApiAccess.Location = new System.Drawing.Point(10, 63);
@@ -2353,7 +2517,7 @@
             this.dgvApiAccess.ShowCellErrors = false;
             this.dgvApiAccess.ShowEditingIcon = false;
             this.dgvApiAccess.ShowRowErrors = false;
-            this.dgvApiAccess.Size = new System.Drawing.Size(722, 483);
+            this.dgvApiAccess.Size = new System.Drawing.Size(722, 284);
             this.dgvApiAccess.TabIndex = 0;
             this.dgvApiAccess.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApiAccess_CellContentClick);
             this.dgvApiAccess.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApiAccess_CellContentDoubleClick);
@@ -2495,7 +2659,7 @@
             // panel12
             // 
             this.panel12.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel12.Location = new System.Drawing.Point(7, 322);
+            this.panel12.Location = new System.Drawing.Point(7, 345);
             this.panel12.Name = "panel12";
             this.panel12.Size = new System.Drawing.Size(742, 10);
             this.panel12.TabIndex = 26;
@@ -2508,7 +2672,7 @@
             this.grpUserInterface.Location = new System.Drawing.Point(7, 148);
             this.grpUserInterface.Name = "grpUserInterface";
             this.grpUserInterface.Padding = new System.Windows.Forms.Padding(10);
-            this.grpUserInterface.Size = new System.Drawing.Size(742, 174);
+            this.grpUserInterface.Size = new System.Drawing.Size(742, 197);
             this.grpUserInterface.TabIndex = 25;
             this.grpUserInterface.TabStop = false;
             this.grpUserInterface.Text = " User interface ";
@@ -2519,13 +2683,14 @@
             this.tableLayoutPanel10.ColumnCount = 2;
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tableLayoutPanel10.Controls.Add(this.cbxActionAsync, 0, 2);
+            this.tableLayoutPanel10.Controls.Add(this.cbxActionAsync, 0, 3);
             this.tableLayoutPanel10.Controls.Add(this.chkClipboard, 0, 0);
-            this.tableLayoutPanel10.Controls.Add(this.lblAutosaveInterval, 0, 5);
-            this.tableLayoutPanel10.Controls.Add(this.cbxAutosaveConfig, 0, 4);
-            this.tableLayoutPanel10.Controls.Add(this.cbxDevMode, 0, 3);
+            this.tableLayoutPanel10.Controls.Add(this.lblAutosaveInterval, 0, 6);
+            this.tableLayoutPanel10.Controls.Add(this.cbxAutosaveConfig, 0, 5);
+            this.tableLayoutPanel10.Controls.Add(this.cbxDevMode, 0, 4);
             this.tableLayoutPanel10.Controls.Add(this.cbxTestLive, 0, 1);
-            this.tableLayoutPanel10.Controls.Add(this.nudAutosaveMinutes, 1, 5);
+            this.tableLayoutPanel10.Controls.Add(this.cbxTestIgnoreConditions, 0, 2);
+            this.tableLayoutPanel10.Controls.Add(this.nudAutosaveMinutes, 1, 6);
             this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel10.Location = new System.Drawing.Point(10, 23);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
@@ -2536,8 +2701,22 @@
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(722, 141);
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(722, 164);
             this.tableLayoutPanel10.TabIndex = 2;
+            // 
+            // cbxActionAsync
+            // 
+            this.cbxActionAsync.AutoSize = true;
+            this.cbxActionAsync.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel10.SetColumnSpan(this.cbxActionAsync, 2);
+            this.cbxActionAsync.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbxActionAsync.Location = new System.Drawing.Point(3, 72);
+            this.cbxActionAsync.Name = "cbxActionAsync";
+            this.cbxActionAsync.Size = new System.Drawing.Size(716, 17);
+            this.cbxActionAsync.TabIndex = 11;
+            this.cbxActionAsync.Text = "New actions asynchronous by default";
+            this.cbxActionAsync.UseVisualStyleBackColor = true;
             // 
             // chkClipboard
             // 
@@ -2557,7 +2736,7 @@
             this.lblAutosaveInterval.AutoEllipsis = true;
             this.lblAutosaveInterval.AutoSize = true;
             this.lblAutosaveInterval.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAutosaveInterval.Location = new System.Drawing.Point(3, 115);
+            this.lblAutosaveInterval.Location = new System.Drawing.Point(3, 138);
             this.lblAutosaveInterval.Name = "lblAutosaveInterval";
             this.lblAutosaveInterval.Size = new System.Drawing.Size(616, 26);
             this.lblAutosaveInterval.TabIndex = 9;
@@ -2570,7 +2749,7 @@
             this.cbxAutosaveConfig.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tableLayoutPanel10.SetColumnSpan(this.cbxAutosaveConfig, 2);
             this.cbxAutosaveConfig.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxAutosaveConfig.Location = new System.Drawing.Point(3, 95);
+            this.cbxAutosaveConfig.Location = new System.Drawing.Point(3, 118);
             this.cbxAutosaveConfig.Name = "cbxAutosaveConfig";
             this.cbxAutosaveConfig.Size = new System.Drawing.Size(716, 17);
             this.cbxAutosaveConfig.TabIndex = 8;
@@ -2584,7 +2763,7 @@
             this.cbxDevMode.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tableLayoutPanel10.SetColumnSpan(this.cbxDevMode, 2);
             this.cbxDevMode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxDevMode.Location = new System.Drawing.Point(3, 72);
+            this.cbxDevMode.Location = new System.Drawing.Point(3, 95);
             this.cbxDevMode.Name = "cbxDevMode";
             this.cbxDevMode.Size = new System.Drawing.Size(716, 17);
             this.cbxDevMode.TabIndex = 7;
@@ -2604,9 +2783,21 @@
             this.cbxTestLive.Text = "Set testing with live values as the default action test method";
             this.cbxTestLive.UseVisualStyleBackColor = true;
             // 
+            // cbxTestIgnoreConditions
+            // 
+            this.cbxTestIgnoreConditions.AutoSize = true;
+            this.cbxTestIgnoreConditions.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel10.SetColumnSpan(this.cbxTestIgnoreConditions, 2);
+            this.cbxTestIgnoreConditions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbxTestIgnoreConditions.Location = new System.Drawing.Point(3, 49);
+            this.cbxTestIgnoreConditions.Name = "cbxTestIgnoreConditions";
+            this.cbxTestIgnoreConditions.Size = new System.Drawing.Size(716, 17);
+            this.cbxTestIgnoreConditions.Text = "Ignore conditions as default when testing actions";
+            this.cbxTestIgnoreConditions.UseVisualStyleBackColor = true;
+            // 
             // nudAutosaveMinutes
             // 
-            this.nudAutosaveMinutes.Location = new System.Drawing.Point(625, 118);
+            this.nudAutosaveMinutes.Location = new System.Drawing.Point(625, 141);
             this.nudAutosaveMinutes.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -2630,7 +2821,7 @@
             // panel6
             // 
             this.panel6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel6.Location = new System.Drawing.Point(7, 138);
+            this.panel6.Location = new System.Drawing.Point(7, 161);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(742, 10);
             this.panel6.TabIndex = 24;
@@ -2715,19 +2906,6 @@
             // 
             this.fontDialog1.AllowScriptChange = false;
             // 
-            // cbxActionAsync
-            // 
-            this.cbxActionAsync.AutoSize = true;
-            this.cbxActionAsync.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.tableLayoutPanel10.SetColumnSpan(this.cbxActionAsync, 2);
-            this.cbxActionAsync.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxActionAsync.Location = new System.Drawing.Point(3, 49);
-            this.cbxActionAsync.Name = "cbxActionAsync";
-            this.cbxActionAsync.Size = new System.Drawing.Size(716, 17);
-            this.cbxActionAsync.TabIndex = 11;
-            this.cbxActionAsync.Text = "New actions asynchronous by default";
-            this.cbxActionAsync.UseVisualStyleBackColor = true;
-            // 
             // ConfigurationForm
             // 
             this.AcceptButton = this.btnOk;
@@ -2809,14 +2987,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudCacheImageExpiry)).EndInit();
             this.tabEndpoint.ResumeLayout(false);
             this.tabEndpoint.PerformLayout();
+            this.grpEndpointHistory.ResumeLayout(false);
+            this.panel21.ResumeLayout(false);
+            this.panel21.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvEndpointHistory)).EndInit();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
             this.grpEndpointSettings.ResumeLayout(false);
             this.grpEndpointSettings.PerformLayout();
             this.tableLayoutPanel8.ResumeLayout(false);
             this.tableLayoutPanel8.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEndpointPort)).EndInit();
             this.grpEndpointState.ResumeLayout(false);
-            this.grpEndpointState.PerformLayout();
-            this.panel8.ResumeLayout(false);
+            this.tableLayoutPanel18.ResumeLayout(false);
+            this.tableLayoutPanel18.PerformLayout();
             this.tabFFXIV.ResumeLayout(false);
             this.tabFFXIV.PerformLayout();
             this.grpPartyListOrder.ResumeLayout(false);
@@ -2845,6 +3028,7 @@
             this.tabSecurity.ResumeLayout(false);
             this.tabSecurity.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAdditionalFeatures)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvApiAccess)).EndInit();
             this.tabMisc.ResumeLayout(false);
             this.tabMisc.PerformLayout();
@@ -2923,18 +3107,12 @@
         private System.Windows.Forms.TabPage tabEndpoint;
         private System.Windows.Forms.GroupBox grpEndpointSettings;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
-        private System.Windows.Forms.Label lblEndpointPort;
-        private System.Windows.Forms.TextBox txtEndpointPassword;
-        private System.Windows.Forms.Label lblEndpointPassword;
-        private System.Windows.Forms.Label lblEndpointStartup;
-        private System.Windows.Forms.CheckBox chkEndpointStartup;
-        private System.Windows.Forms.NumericUpDown nudEndpointPort;
+        private System.Windows.Forms.TextBox txtEndpoint;
+        private System.Windows.Forms.Label lblEndpoint;
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.GroupBox grpEndpointState;
-        private System.Windows.Forms.Panel panel8;
         private System.Windows.Forms.Button btnEndpointStop;
         private System.Windows.Forms.Button btnEndpointStart;
-        private System.Windows.Forms.Label lblEndpointState;
         private System.Windows.Forms.GroupBox grpFfxivEventLogging;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
         private System.Windows.Forms.CheckBox chkFfxivLogNetwork;
@@ -2950,6 +3128,7 @@
         private System.Windows.Forms.GroupBox grpUserInterface;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
         private System.Windows.Forms.CheckBox cbxTestLive;
+        private System.Windows.Forms.CheckBox cbxTestIgnoreConditions;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
         private System.Windows.Forms.CheckBox cbxEnableHwAccel;
@@ -3052,5 +3231,25 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colScalarValue;
         private System.Windows.Forms.FontDialog fontDialog1;
         private System.Windows.Forms.CheckBox cbxActionAsync;
+        private System.Windows.Forms.CheckBox chkEndpointLog;
+        private System.Windows.Forms.CheckBox chkEndpointStartup;
+        private System.Windows.Forms.GroupBox grpEndpointHistory;
+        private System.Windows.Forms.Panel panel21;
+        private System.Windows.Forms.ToolStrip toolStrip2;
+        private System.Windows.Forms.ToolStripButton btnEndpointHistUpdate;
+        private System.Windows.Forms.ToolStripLabel tslEndpointHistoryRecv;
+        private System.Windows.Forms.Panel panel20;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel18;
+        private System.Windows.Forms.TextBox txtEndpointStatus;
+        private System.Windows.Forms.ToolStripLabel tslEndpointHistoryCount;
+        private CustomControls.DataGridViewEx dgvEndpointHistory;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column9;
+        private CustomControls.DataGridViewEx dgvAdditionalFeatures;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn1;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn2;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn3;
+        private System.Windows.Forms.Panel panel8;
     }
 }

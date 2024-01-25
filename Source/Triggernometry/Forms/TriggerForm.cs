@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Speech.Synthesis;
 using System.Xml.Serialization;
 using System.IO;
+using static Triggernometry.ConditionGroup;
 
 namespace Triggernometry.Forms
 {
@@ -108,13 +109,34 @@ namespace Triggernometry.Forms
 
         internal bool AllowAnonymousTrigger { get; set; } = false;
 
+        internal string initialDescriptions;
+        private string closeReason;
+
         public TriggerForm() : base()
         {
             InitializeComponent();
+            initialDescriptions = "";
+            this.KeyPreview = true;
+            this.FormClosing += TriggerForm_FormClosing;
+            CancelDgvSelectionAttachToAll(this);
+            btnOk.Click += btnOk_Click;
+            closeReason = "";
             Actions = new List<Action>();
             actionViewer1.Actions = Actions;
             fakectx = new Context();
             actionViewer1.fakectx = fakectx;
+            actionViewer1.ActionsUpdated += actionViewer1_ActionsUpdated;
+            cndCondition.ConditionsUpdated += cndCondition_ConditionsUpdated;
+            cbxTriggerSource.SelectedIndexChanged += UpdateTriggerDescription;
+            cbxRefireOption1.SelectedIndexChanged += interrupt_Changed;
+            cbxRefireOption2.SelectedIndexChanged += interrupt_Changed;
+            cbxRefireWithinPeriod.SelectedIndexChanged += cooldown_Changed;
+            expRefirePeriod.textBox1.TextChanged += cooldown_Changed;
+            cbxScheduleFrom.SelectedIndexChanged += UpdateTriggerDescription;
+            expMutexName.textBox1.TextChanged += UpdateTriggerDescription;
+            cbxSequential.CheckedChanged += UpdateTriggerDescription;
+            cbxEditAutofire.CheckedChanged += cbxEditAutofire_CheckedChanged;
+            cbxEditAutofireAllowCondition.CheckedChanged += cbxEditAutofireAllowCondition_CheckedChanged;
             RestoredSavedDimensions();
         }
 
@@ -138,6 +160,8 @@ namespace Triggernometry.Forms
             txtRegexp.ReadOnly = true;
             btnOk.Enabled = false;
             btnOk.Visible = false;
+            lblTriggerDesc.Enabled = false;
+            lblTriggerDesc.Visible = false;
             btnCancel.Dock = DockStyle.Fill;
             cbxLoggingLevel.Enabled = false;
             txtDescription.ReadOnly = true;
@@ -149,25 +173,13 @@ namespace Triggernometry.Forms
             cbxRefireWithinPeriod.Enabled = false;
             expRefirePeriod.Enabled = false;
             cbxEditAutofire.Enabled = false;
+            cbxEditAutofireAllowCondition.Enabled = false;
             cbxSequential.Enabled = false;
             cndCondition.Enabled = false;
             panel5.Visible = true;
             expMutexName.Enabled = false;
             chkReadmeTrigger.Enabled = false;
             actionViewer1.SetReadOnly();
-        }
-
-        private void txtRegexp_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                Regex rex = new Regex(txtRegexp.Text);
-                txtRegexp.BackColor = Color.FromArgb(200, 255, 200);
-            }
-            catch (Exception)
-            {
-                txtRegexp.BackColor = Color.FromArgb(255, 200, 200);
-            }
         }
 
         internal void SettingsFromTrigger(Trigger t)
@@ -183,8 +195,9 @@ namespace Triggernometry.Forms
                 cbxRefireWithinPeriod.SelectedIndex = 0;
                 expRefirePeriod.Expression = "0";
                 cbxEditAutofire.Checked = false;
+                cbxEditAutofireAllowCondition.Checked = false;
                 cbxSequential.Checked = false;
-                cbxLoggingLevel.SelectedIndex = 5;
+                cbxLoggingLevel.SelectedIndex = (int)RealPlugin.DebugLevelEnum.Inherit;
                 txtDescription.Text = "";
                 txtEvent.Text = "";
                 cndCondition.ConditionToEdit = new ConditionGroup() { Enabled = false };
@@ -250,9 +263,13 @@ namespace Triggernometry.Forms
                     case Trigger.TriggerSourceEnum.ACT:
                         cbxTriggerSource.SelectedIndex = 3;
                         break;
+                    case Trigger.TriggerSourceEnum.Endpoint:
+                        cbxTriggerSource.SelectedIndex = 4;
+                        break;
                 }
                 expRefirePeriod.Expression = t._RefirePeriodExpression;
                 cbxEditAutofire.Checked = t._EditAutofire;
+                cbxEditAutofireAllowCondition.Checked = t._EditAutofireAllowCondition;
                 cbxSequential.Checked = t._Sequential;
                 cbxLoggingLevel.SelectedIndex = (int)t._DebugLevel;
                 var ix = from tx in t.Actions
@@ -288,6 +305,7 @@ namespace Triggernometry.Forms
             t._Description = txtDescription.Text;
             t._TestInput = txtEvent.Text;
             t._EditAutofire = cbxEditAutofire.Checked;
+            t._EditAutofireAllowCondition = cbxEditAutofireAllowCondition.Checked;
             t._Sequential = cbxSequential.Checked;
             switch (cbxRefireOption1.SelectedIndex)
             {
@@ -342,6 +360,9 @@ namespace Triggernometry.Forms
                 case 3:
                     t._Source = Trigger.TriggerSourceEnum.ACT;
                     break;
+                case 4:
+                    t._Source = Trigger.TriggerSourceEnum.Endpoint;
+                    break;
             }
             t._RefirePeriodExpression = expRefirePeriod.Expression;
             t._DebugLevel = (RealPlugin.DebugLevelEnum)cbxLoggingLevel.SelectedIndex;
@@ -357,7 +378,7 @@ namespace Triggernometry.Forms
 
         private void txtName_TextChanged(object sender, EventArgs e)
         {
-            btnOk.Enabled = (AllowAnonymousTrigger == true) || (txtName.TextLength > 0);
+            btnOk.Enabled = true; // (AllowAnonymousTrigger == true) || (txtName.TextLength > 0);
         }
 
         private void TriggerForm_Shown(object sender, EventArgs e)
@@ -403,6 +424,241 @@ namespace Triggernometry.Forms
             return false;
         }
 
+        internal string GetAllDescriptionsStr()
+        {   // record all textboxes and action descriptions
+            // roughly check if it is changed when closing the trigger form
+            return string.Join(",", actionViewer1.GetActionDescriptions()) + ","
+                 + string.Join(",", GetAllTextBoxText(this));
+        }
+
+        private List<string> GetAllTextBoxText(Control parent)
+        {   // get a list of the text of all text boxes in the form
+            List<string> texts = new List<string>();
+            foreach (Control control in parent.Controls)
+            {
+                if (control is TextBox txt)
+                {
+                    texts.Add(txt.Text);
+                }
+                texts.AddRange(GetAllTextBoxText(control));
+            }
+            return texts;
+        }
+
+        private bool ConfirmDiscardChanges()
+        {
+            if (initialDescriptions != GetAllDescriptionsStr())
+            {
+                DialogResult result = MessageBox.Show(this,
+                    I18n.Translate("internal/TriggerForm/triggerexitconfirm", "Are you sure you want to exit without saving?"),
+                    I18n.Translate("internal/TriggerForm/triggerexitconfirmtitle", "Discard Changes"),
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.No)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void TriggerForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (closeReason != "Ok")
+            {
+                closeReason = "";
+                if (!ConfirmDiscardChanges())
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
+
+        private void btnOk_Click(object sender, EventArgs e)
+        {
+            closeReason = "Ok";
+            Close();
+        }
+
+        internal void BtnOkSetText()
+        {
+            btnOk.Text = (!cbxEditAutofire.Checked) ? I18n.Translate("internal/TriggerForm/btnOk", "Save Changes")
+                       : (cbxEditAutofireAllowCondition.Checked) ? I18n.Translate("internal/TriggerForm/btnOkAutofire", "Save and Fire")
+                       : I18n.Translate("internal/TriggerForm/btnOkAutofireForce", "Save and Fire (Force)");
+        }
+
+        private void cbxEditAutofire_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.Text != I18n.Translate("ConfigurationForm/btnTriggerTemplate", "Edit template trigger"))
+                BtnOkSetText();
+        }
+
+        private void cbxEditAutofireAllowCondition_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.Text != I18n.Translate("ConfigurationForm/btnTriggerTemplate", "Edit template trigger"))
+                BtnOkSetText();
+        }
+
+        internal double totalDelay;
+        internal int rootConditionCount;
+        internal CndGroupingEnum rootConditionType;
+        internal bool interrupt;
+        internal double cooldown;
+
+        internal void GetDescInterrupt()
+        {
+            interrupt = (cbxRefireOption1.SelectedIndex != 1 || cbxRefireOption2.SelectedIndex != 0) ;
+        }
+
+        internal void GetDescCooldown()
+        {
+            try 
+            { 
+                cooldown = (cbxRefireWithinPeriod.SelectedIndex == 0) ? 0
+                         : Math.Round(fakectx.EvaluateNumericExpression(null, null, expRefirePeriod.Text)); 
+            }
+            catch { cooldown = double.NaN; }
+        }
+
+        private void actionViewer1_ActionsUpdated(object sender, EventArgs e)
+        {
+            totalDelay = actionViewer1.GetActionTotalDelay();
+            SetTriggerDescription();
+        }
+
+        private void cndCondition_ConditionsUpdated(object sender, EventArgs e)
+        {
+            rootConditionCount = cndCondition.CountRootConditions();
+            rootConditionType = cndCondition.RootConditionType();
+            SetTriggerDescription();
+        }
+
+        private void interrupt_Changed(object sender, EventArgs e)
+        {
+            GetDescInterrupt();
+            SetTriggerDescription();
+        }
+        private void cooldown_Changed(object sender, EventArgs e)
+        {
+            GetDescCooldown();
+            SetTriggerDescription();
+        }
+
+        private void UpdateTriggerDescription(object sender, EventArgs e)
+        {
+            SetTriggerDescription();
+        }
+
+        internal void GetTriggerDescription()
+        {
+            totalDelay = actionViewer1.GetActionTotalDelay();
+            rootConditionCount = cndCondition.CountRootConditions();
+            rootConditionType = cndCondition.RootConditionType();
+            GetDescInterrupt();
+            GetDescCooldown();
+        }
+
+        internal void SetTriggerDescription()
+        {
+            lblTriggerDesc.Text = "";
+            string desc = "";
+
+            // Line 1:
+            // [Actions: 3]
+            if (actionViewer1.Actions.Count != 0)
+            {
+                desc += I18n.Translate("internal/TriggerForm/descActionCnt", "[Actions: {0}]  ", actionViewer1.Actions.Count);
+            }
+
+            // [Delay 8.5 s]
+            if (totalDelay != 0)
+            {
+                desc += (totalDelay > 0)
+                      ? I18n.Translate("internal/TriggerForm/descDelayNum", "[Delay {0}]  ", I18n.TrlTriggerDescTime(totalDelay))  // > 0: all numeric
+                      : I18n.Translate("internal/TriggerForm/descDelay", "[Delay: active]  ");                                     // NaN: contains expressions
+            }
+
+            // [Conditions: 2 (OR)]
+            if (rootConditionCount != 0)
+            {
+                string count = (rootConditionCount > 0) 
+                             ? rootConditionCount.ToString()                             // > 0: active nodes are all triggers
+                             : I18n.Translate("internal/TriggerForm/descCndGrouped", "Grouped");  // -1: contains active group folder
+                if (rootConditionCount > 1)
+                {
+                    string type = "";
+                    switch (rootConditionType)
+                    {
+                        case CndGroupingEnum.And: type = I18n.Translate("internal/TriggerForm/descCndTypeAnd", "AND"); break;
+                        case CndGroupingEnum.Not: type = I18n.Translate("internal/TriggerForm/descCndTypeNot", "NOT"); break;
+                        case CndGroupingEnum.Or: type = I18n.Translate("internal/TriggerForm/descCndTypeOr", "OR"); break;
+                        case CndGroupingEnum.Xor: type = I18n.Translate("internal/TriggerForm/descCndTypeXor", "XOR"); break;
+                    }
+                    desc += I18n.Translate("internal/TriggerForm/descCndCntLogic", "[Conditions: {0} ({1})]  ", count, type);
+                }
+                else 
+                {
+                    desc += I18n.Translate("internal/TriggerForm/descCndCnt", "[Conditions: {0}]  ", count);
+                }
+            }
+
+            desc = desc.Trim(' ', ';', '；', ',', '，', '、', '　'); // Common I18n separators
+            desc += Environment.NewLine + Environment.NewLine;       // will be trimmed next time if the first line is empty
+
+            // Line 2:
+            // [Network Event]
+            switch (cbxTriggerSource.SelectedIndex)
+            {
+                case 3: desc += I18n.Translate("internal/TriggerForm/descSrcTypeActEvent", "[ACT Event]  "); break;
+                case 4: desc += I18n.Translate("internal/TriggerForm/descSrcTypeEndpoint", "[Endpoint]  "); break;
+                case 1: desc += I18n.Translate("internal/TriggerForm/descSrcTypeNetwork", "[Network Event]  "); break;
+                case 2: desc += I18n.Translate("internal/TriggerForm/descSrcTypeNone", "[Inactive]  "); break;
+                case 0: desc += I18n.Translate("internal/TriggerForm/descSrcTypeNormalLog", "[Normal Log]  "); break;
+            }
+
+            // [Interrupt]
+            if (interrupt)
+                desc += I18n.Translate("internal/TriggerForm/descInterrupt", "[Interrupt] ");
+
+            // [Schedule]
+            if (cbxScheduleFrom.SelectedIndex != 0)
+                desc += I18n.Translate("internal/TriggerForm/descSchedule", "[Schedule] ");
+
+            // [Cooldown 50 s]
+            if (cooldown != 0)
+                desc += (cooldown > 0)
+                      ? I18n.Translate("internal/TriggerForm/descCooldownNum", "[Cooldown {0}] ", I18n.TrlTriggerDescTime(cooldown))
+                      : I18n.Translate("internal/TriggerForm/descCooldown", "[Cooldown] ");
+
+            // [Mutex]
+            if (expMutexName.Text != "") 
+                desc += I18n.Translate("internal/TriggerForm/descMutex", "[Mutex] ");
+
+            // [Sequential]
+            if (cbxSequential.Checked)
+                desc += I18n.Translate("internal/TriggerForm/descSequential", "[Sequential] ");
+
+            desc = desc.Trim().Trim(';', '；', ',', '，', '、', '　');
+            lblTriggerDesc.Text = desc;
+        }
+
+        private void CancelDgvSelectionAttachToAll(Control parent)
+        {
+            parent.MouseDown += CancelDgvSelection;
+            foreach (Control control in parent.Controls)
+            {
+                if (control is DataGridView)
+                {
+                    continue;
+                }
+                
+                CancelDgvSelectionAttachToAll(control);
+            }
+        }
+
+        private void CancelDgvSelection(object sender, MouseEventArgs e)
+        {
+            actionViewer1.dgvActions.ClearSelection();
+        }
     }
 
 }

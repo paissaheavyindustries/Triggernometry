@@ -138,6 +138,7 @@ namespace TriggernometryProxy
             FailsafeRegisterHook("TabLocateHook", "LocateTab");
             FailsafeRegisterHook("InstanceHook", "GetInstance");
             FailsafeRegisterHook("CheckUpdateHook", "CheckForUpdates");
+            FailsafeRegisterHook("ActInitedHook", "ActInited");
             GetPluginNameAndPath();
             ActGlobals.oFormActMain.BeforeLogLineRead += OFormActMain_BeforeLogLineRead;
             ActGlobals.oFormActMain.OnLogLineRead += OFormActMain_OnLogLineRead;
@@ -299,6 +300,11 @@ namespace TriggernometryProxy
         public string GetCurrentZone()
         {
             return ActGlobals.oFormActMain.CurrentZone;
+        }
+
+        public bool ActInited()
+        {
+            return ActGlobals.oFormActMain.InitActDone;
         }
 
         public string ExportLastEncounter()

@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Triggernometry.CustomControls;
 using Triggernometry.Variables;
 
 namespace Triggernometry.Forms
@@ -24,6 +25,7 @@ namespace Triggernometry.Forms
         private List<Configuration.Substitution> subs = new List<Configuration.Substitution>();
         private Trigger template = new Trigger();
         private Dictionary<string, VariableScalar> consts = new Dictionary<string, VariableScalar>();
+        private List<Tuple<DateTime, string>> teleHistory = new List<Tuple<DateTime, string>>();
 
         public ConfigurationForm()
         {
@@ -33,7 +35,44 @@ namespace Triggernometry.Forms
             label5.Tag = I18n.DoNotTranslate;
             label6.Tag = I18n.DoNotTranslate;
             RestoredSavedDimensions();
-            tbcMain.TabPages.Remove(tabEndpoint);
+            FormClosing += ConfigurationForm_FormClosing;
+        }
+
+        private void ConfigurationForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            plug._ep.OnStatusChange -= _ep_OnStatusChange;
+        }
+
+        private void _ep_OnStatusChange(Endpoint.StatusEnum newStatus, string statusDesc)
+        {
+            if (txtEndpointStatus.InvokeRequired == true)
+            {
+                txtEndpointStatus.Invoke(new Endpoint.StatusChangeDelegate(_ep_OnStatusChange), newStatus, statusDesc);
+                return;
+            }
+            txtEndpointStatus.Text = "(" + newStatus + ") " + statusDesc;
+            switch (newStatus)
+            {
+                case Endpoint.StatusEnum.Stopping:
+                case Endpoint.StatusEnum.Starting:
+                    btnEndpointStart.Enabled = false;
+                    btnEndpointStop.Enabled = false;
+                    lblEndpoint.Enabled = false;
+                    txtEndpoint.Enabled = false;
+                    break;
+                case Endpoint.StatusEnum.Stopped:
+                    btnEndpointStart.Enabled = true;
+                    btnEndpointStop.Enabled = false;
+                    lblEndpoint.Enabled = true;
+                    txtEndpoint.Enabled = true;
+                    break;
+                case Endpoint.StatusEnum.Started:
+                    btnEndpointStart.Enabled = false;
+                    btnEndpointStop.Enabled = true;
+                    lblEndpoint.Enabled = false;
+                    txtEndpoint.Enabled = false;
+                    break;
+            }
         }
 
         internal void SecuritySettingsFromConfiguration(Configuration cfg)
@@ -47,6 +86,13 @@ namespace Triggernometry.Forms
             {
                 dgvApiAccess.Rows.Add(new object[] { ap.Name, ap.AllowLocal, ap.AllowRemote, ap.AllowAdmin });
             }
+            Configuration.UnsafeUsageEnum us = cfg.UnsafeUsage;
+            dgvAdditionalFeatures.Rows.Add(new object[] {
+                "Unsafe",
+                (us & Configuration.UnsafeUsageEnum.AllowLocal) != 0,
+                (us & Configuration.UnsafeUsageEnum.AllowRemote) != 0,
+                (us & Configuration.UnsafeUsageEnum.AllowAdmin) != 0 }
+            );
         }
 
         internal void SettingsFromConfiguration(Configuration a)
@@ -56,7 +102,7 @@ namespace Triggernometry.Forms
                 Configuration c = new Configuration();
                 trbSoundVolume.Value = 100;
                 trbTtsVolume.Value = 100;
-                cbxLoggingLevel.SelectedIndex = 2;
+                cbxLoggingLevel.SelectedIndex = (int)RealPlugin.DebugLevelEnum.Custom2;
                 chkActTts.Checked = false;
                 chkActSoundFiles.Checked = false;
                 chkClipboard.Checked = false;
@@ -68,6 +114,7 @@ namespace Triggernometry.Forms
                 cbxUpdateMethod.SelectedIndex = 1;
                 chkWarnAdmin.Checked = true;
                 cbxTestLive.Checked = false;
+                cbxTestIgnoreConditions.Checked = false;
                 cbxActionAsync.Checked = true;
                 chkLogNormalEvents.Checked = true;
                 chkLogVariableExpansions.Checked = false;
@@ -82,6 +129,9 @@ namespace Triggernometry.Forms
                 dgvSubstitutions.RowCount = 0;
                 cbxAutosaveConfig.Checked = false;
                 nudAutosaveMinutes.Value = 5;
+                txtEndpoint.Text = "http://localhost:51423/";
+                chkEndpointStartup.Checked = true;
+                chkEndpointLog.Checked = true;
                 SecuritySettingsFromConfiguration(null);
                 SetupConsts(null);
             }
@@ -99,12 +149,13 @@ namespace Triggernometry.Forms
                 chkWelcome.Checked = a.ShowWelcome;
                 chkWarnAdmin.Checked = a.WarnAdmin;
                 cbxTestLive.Checked = a.TestLiveByDefault;
+                cbxTestIgnoreConditions.Checked = a.TestIgnoreConditionsByDefault;
                 cbxActionAsync.Checked = a.ActionAsyncByDefault;
                 chkUpdates.Checked = (a.UpdateNotifications == Configuration.UpdateNotificationsEnum.Yes);
                 cbxUpdateMethod.SelectedIndex = (int)a.UpdateCheckMethod;
                 chkLogNormalEvents.Checked = a.LogNormalEvents;
                 chkLogVariableExpansions.Checked = a.LogVariableExpansions;
-                chkFfxivLogNetwork.Checked = a.FfxivLogNetwork;
+                chkFfxivLogNetwork.Checked = a.FfxivLogNetwork;                
                 cbxEnableHwAccel.Checked = a.UseScarborough;
                 txtMonitorWindow.Text = a.WindowToMonitor;
                 nudCacheImageExpiry.Value = a.CacheImageExpiry;
@@ -117,6 +168,9 @@ namespace Triggernometry.Forms
                 dgvSubstitutions.RowCount = a.Substitutions.Count;
                 cbxAutosaveConfig.Checked = a.AutosaveEnabled;
                 nudAutosaveMinutes.Value = a.AutosaveInterval;
+                txtEndpoint.Text = a.HttpEndpoint;
+                chkEndpointStartup.Checked = a.StartEndpointOnLaunch;
+                chkEndpointLog.Checked = a.LogEndpoint;
                 cbxTriggerTemplate.Checked = a.UseTemplateTrigger;
                 a.TemplateTrigger.CopySettingsTo(template);
                 SetupJobOrder(a);
@@ -157,6 +211,7 @@ namespace Triggernometry.Forms
             a.ShowWelcome = chkWelcome.Checked;
             a.WarnAdmin = chkWarnAdmin.Checked;
             a.TestLiveByDefault = cbxTestLive.Checked;
+            a.TestIgnoreConditionsByDefault = cbxTestIgnoreConditions.Checked;
             a.ActionAsyncByDefault = cbxActionAsync.Checked;
             a.LogNormalEvents = chkLogNormalEvents.Checked;
             a.LogVariableExpansions = chkLogVariableExpansions.Checked;
@@ -171,6 +226,9 @@ namespace Triggernometry.Forms
             a.CacheFileExpiry = (int)nudCacheFileExpiry.Value;
             a.AutosaveEnabled = cbxAutosaveConfig.Checked;
             a.AutosaveInterval = (int)nudAutosaveMinutes.Value;
+            a.HttpEndpoint = txtEndpoint.Text;
+            a.StartEndpointOnLaunch = chkEndpointStartup.Checked;
+            a.LogEndpoint = chkEndpointLog.Checked;
             a.UseTemplateTrigger = cbxTriggerTemplate.Checked;
             template.CopySettingsTo(a.TemplateTrigger);
             a.FfxivPartyOrdering = (Configuration.FfxivPartyOrderingEnum)cbxFfxivJobMethod.SelectedIndex;
@@ -224,6 +282,24 @@ namespace Triggernometry.Forms
                 };
                 setter.Invoke(a, new object[] { au, true });
             }
+            foreach (DataGridViewRow r in dgvAdditionalFeatures.Rows)
+            {
+                string Name = (string)r.Cells[0].Value;
+                bool AllowLocal = (bool)r.Cells[1].Value;
+                bool AllowRemote = (bool)r.Cells[2].Value;
+                bool AllowAdmin = (bool)r.Cells[3].Value;
+                switch (Name.ToLower())
+                {
+                    case "unsafe":
+                        Configuration.UnsafeUsageEnum us = Configuration.UnsafeUsageEnum.None;
+                        if (AllowLocal == true) us |= Configuration.UnsafeUsageEnum.AllowLocal;
+                        if (AllowRemote == true) us |= Configuration.UnsafeUsageEnum.AllowRemote;
+                        if (AllowAdmin == true) us |= Configuration.UnsafeUsageEnum.AllowAdmin;
+                        setter = a.GetType().GetMethod("SetUnsafeUsage", BindingFlags.NonPublic | BindingFlags.Instance);
+                        setter.Invoke(a, new object[] { us });
+                        break;
+                }                
+            };                            
             lock (plug.cfg.Constants)
             {
                 plug.cfg.Constants.Clear();
@@ -271,6 +347,9 @@ namespace Triggernometry.Forms
             cancomplain = true;
             cbxAutosaveConfig_CheckedChanged(null, null);
             RefreshCacheStates();
+            plug._ep.OnStatusChange += _ep_OnStatusChange;
+            _ep_OnStatusChange(plug._ep.Status, plug._ep.StatusDescription);
+            btnEndpointHistUpdate_Click(null, null);
         }
 
         private void trvTrigger_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
@@ -824,6 +903,8 @@ namespace Triggernometry.Forms
                 case DialogResult.Yes:
                     dgvApiAccess.Enabled = true;
                     dgvApiAccess.ReadOnly = false;
+                    dgvAdditionalFeatures.Enabled = true;
+                    dgvAdditionalFeatures.ReadOnly = false;
                     btnUnlockSecurity.Visible = false;
                     panel18.Visible = false;
                     break;
@@ -832,6 +913,10 @@ namespace Triggernometry.Forms
 
         private void dgvApiAccess_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex == -1)
+            {
+                return;
+            }
             DataGridViewRow r = dgvApiAccess.Rows[e.RowIndex];
             DataGridViewCell c = r.Cells[e.ColumnIndex];
             c.Value = ((bool)c.Value == false);
@@ -856,13 +941,18 @@ namespace Triggernometry.Forms
                 Trigger.TriggerSourceEnum oldSource = t._Source;
                 tf.AllowAnonymousTrigger = true;
                 tf.plug = plug;
+                ExpressionTextBox.SetPlugForTextBoxes(tf, plug);
+                ExpressionTextBox.CurrentTriggerRegexStr = t.RegularExpression;
                 tf.fakectx.trig = t;
                 tf.fakectx.plug = plug;
                 tf.SettingsFromTrigger(t);
+                tf.initialDescriptions = tf.GetAllDescriptionsStr();
                 tf.imgs = plug.ui.imageList1;
                 tf.trv = plug.ui.treeView1;
                 tf.Text = I18n.Translate("internal/UserInterface/edittemplatetrigger", "Edit template trigger");
-                tf.btnOk.Text = I18n.Translate("internal/UserInterface/savechanges", "Save changes");
+                tf.btnOk.Text = I18n.Translate("TriggerForm/btnOk", "Save Changes");
+                tf.GetTriggerDescription();
+                tf.SetTriggerDescription();
                 tf.wmp = plug.wmp;
                 tf.tts = plug.tts;
                 if (tf.ShowDialog() == DialogResult.OK)
@@ -1037,6 +1127,75 @@ namespace Triggernometry.Forms
                     e.Value = kp.Value.Value;
                     break;
             }
+        }
+
+        private void btnEndpointStart_Click(object sender, EventArgs e)
+        {
+            plug._ep.Start();
+        }
+
+        private void btnEndpointStop_Click(object sender, EventArgs e)
+        {
+            plug._ep.Stop();
+        }
+
+        private void btnEndpointHistUpdate_Click(object sender, EventArgs e)
+        {
+            tslEndpointHistoryCount.Text = plug._ep.ReceivedTelegrams.ToString();
+            lock (teleHistory)
+            {
+                teleHistory.Clear();
+                lock (plug._ep.teleHistory)
+                {
+                    teleHistory.AddRange(plug._ep.teleHistory);
+                }
+                dgvEndpointHistory.RowCount = teleHistory.Count;
+            }
+            dgvEndpointHistory.Invalidate();
+        }
+
+        private void dgvEndpointHistory_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
+        {
+            Tuple<DateTime, string> t;
+            lock (teleHistory)
+            {
+                if (e.RowIndex >= teleHistory.Count)
+                {
+                    e.Value = "";
+                    return;
+                }
+                t = teleHistory[teleHistory.Count - 1 - e.RowIndex];
+            }
+            switch (e.ColumnIndex)
+            {
+                case 0:             
+                    e.Value = t.Item1;
+                    break;
+                case 1:
+                    e.Value = t.Item2;
+                    break;
+            }
+        }
+
+        private void dgvAdditionalFeatures_SelectionChanged(object sender, EventArgs e)
+        {
+            dgvAdditionalFeatures.ClearSelection();
+        }
+
+        private void dgvAdditionalFeatures_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex == -1)
+            {
+                return;
+            }
+            DataGridViewRow r = dgvAdditionalFeatures.Rows[e.RowIndex];
+            DataGridViewCell c = r.Cells[e.ColumnIndex];
+            c.Value = ((bool)c.Value == false);
+        }
+
+        private void dgvAdditionalFeatures_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            dgvAdditionalFeatures_CellContentClick(sender, e);
         }
 
     }

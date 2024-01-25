@@ -171,6 +171,7 @@
     <Compile Include="CustomControls\Toast.Designer.cs">
       <DependentUpon>Toast.cs</DependentUpon>
     </Compile>
+    <Compile Include="Endpoint.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -308,6 +309,7 @@
     <Compile Include="I18n.cs" />
     <Compile Include="InternalLog.cs" />
     <Compile Include="Interpreter.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="JsonPath\JsonPath.cs" />
     <Compile Include="JsonPath\Public.cs" />
     <Compile Include="Language.cs" />
@@ -508,6 +510,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ActionForm.resx">
       <DependentUpon>ActionForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AuraContainerForm.resx">
       <DependentUpon>AuraContainerForm.cs</DependentUpon>

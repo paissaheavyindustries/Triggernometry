@@ -11,6 +11,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Windows.Forms;
 using System.IO;
+using static Triggernometry.ConditionGroup;
 
 namespace Triggernometry.CustomControls
 {
@@ -69,6 +70,7 @@ namespace Triggernometry.CustomControls
                 if (_ConditionToEdit != null)
                 {
                     UpdateEditorToCondition(_ConditionToEdit);
+                    trvNodes.ExpandAll();
                 }
             }
         }
@@ -134,12 +136,19 @@ namespace Triggernometry.CustomControls
             _PanelStateFromOption = btnProperties.Checked;
         }
 
+        internal event EventHandler ConditionsUpdated;
+
+        internal void OnConditionsUpdated()
+        {
+            ConditionsUpdated?.Invoke(this, EventArgs.Empty);
+        }
         private void expLeft_TextChanged(object sender, EventArgs e)
         {
             TreeNode tn = trvNodes.SelectedNode;
             ConditionSingle re = (ConditionSingle)tn.Tag;
             re.ExpressionL = expLeft.Expression;
             TreeSort();
+
         }
 
         private void expRight_TextChanged(object sender, EventArgs e)
@@ -148,6 +157,16 @@ namespace Triggernometry.CustomControls
             ConditionSingle re = (ConditionSingle)tn.Tag;
             re.ExpressionR = expRight.Expression;
             TreeSort();
+        }
+
+        private void expLeft_LostFocus(object sender, EventArgs e)
+        {
+            OnConditionsUpdated();
+        }
+
+        private void expRight_LostFocus(object sender, EventArgs e)
+        {
+            OnConditionsUpdated();
         }
 
         private void ResizeCombobox(ComboBox cbx)
@@ -221,6 +240,7 @@ namespace Triggernometry.CustomControls
         internal void trvNodes_DragEnter(object sender, DragEventArgs e)
         {
             e.Effect = e.AllowedEffect;
+            OnConditionsUpdated();
         }
 
         internal void FocusTree()
@@ -249,6 +269,7 @@ namespace Triggernometry.CustomControls
                 }
                 targetNode.Expand();
             }
+            OnConditionsUpdated();
         }
 
         internal void trvNodes_ItemDrag(object sender, ItemDragEventArgs e)
@@ -441,6 +462,38 @@ namespace Triggernometry.CustomControls
             return tn;
         }
 
+        internal int CountRootConditions()
+        {   // Count the enabled conditions under root folder.
+            // -1 if contains enabled subfolder.
+            TreeNodeCollection nodes = trvNodes.Nodes;
+            TreeNode rootNode = nodes[0];
+            if (rootNode.Tag is ConditionGroup rootGroup)
+            {
+                if (!rootGroup.Enabled) { return 0; }
+
+                int conditionCount = 0;
+                foreach (TreeNode node in rootNode.Nodes)
+                {
+                    if (node.Tag is ConditionGroup group && group.Enabled)
+                    {
+                        return -1;
+                    }
+                    else if (node.Tag is ConditionSingle condition && condition.Enabled)
+                    {
+                        conditionCount++;
+                    }
+                }
+                return conditionCount;
+            }
+            return 0;
+        }
+
+        internal CndGroupingEnum RootConditionType()
+        {
+            var root = (ConditionGroup)trvNodes.Nodes[0].Tag;
+            return root.Grouping;
+        }
+
         private void btnAddGroup_Click(object sender, EventArgs e)
         {
             ConditionGroup re = new ConditionGroup();
@@ -467,6 +520,7 @@ namespace Triggernometry.CustomControls
             {
                 tx.Expand();
             }
+            OnConditionsUpdated();
         }
 
         private void btnAddCondition_Click(object sender, EventArgs e)
@@ -497,6 +551,7 @@ namespace Triggernometry.CustomControls
                 tx.Expand();
             }
             expLeft.Focus();
+            OnConditionsUpdated();
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
@@ -543,6 +598,7 @@ namespace Triggernometry.CustomControls
                     tn.Parent.Nodes.Remove(tn);
                 }
             }
+            OnConditionsUpdated();
         }
 
         private void DeleteGroup(ConditionGroup rge)
@@ -564,6 +620,7 @@ namespace Triggernometry.CustomControls
                     DeleteGroup((ConditionGroup)re);
                 }
             }
+            OnConditionsUpdated();
         }
 
         internal void CountItems(ConditionGroup rge, ref int numgroups, ref int numrules)
@@ -638,6 +695,7 @@ namespace Triggernometry.CustomControls
                     break;
             }
             TreeSort();
+            OnConditionsUpdated();
         }
 
         private void cbxExpLType_SelectedIndexChanged(object sender, EventArgs e)
@@ -656,6 +714,7 @@ namespace Triggernometry.CustomControls
                     break;
             }
             TreeSort();
+            OnConditionsUpdated();
         }
 
         private void trvNodes_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -669,6 +728,7 @@ namespace Triggernometry.CustomControls
         private void trvNodes_AfterCheck(object sender, TreeViewEventArgs e)
         {
             RecolorStartingFromNode(e.Node, e.Node.Checked);
+            OnConditionsUpdated();
         }
 
         private void RecolorStartingFromNode(TreeNode tn, bool pstate)
@@ -704,6 +764,9 @@ namespace Triggernometry.CustomControls
                 (plug.cfg.UseOsClipboard == true && System.Windows.Forms.Clipboard.ContainsText() == true)
             );
             ctxPasteOver.Enabled = ctxPaste.Enabled;
+            TreeNode selectedNode = trvNodes.SelectedNode;
+            ctxExpandAll.Enabled = selectedNode != null && selectedNode.Tag is ConditionGroup;
+            ctxCollapseAll.Enabled = ctxExpandAll.Enabled;
         }
 
         private void ctxBtnConditionGroup_Click(object sender, EventArgs e)
@@ -744,6 +807,7 @@ namespace Triggernometry.CustomControls
                 {
                     plug.ui.Clipboard = data;
                 }
+                OnConditionsUpdated();
             }
             catch (Exception ex)
             {
@@ -850,6 +914,7 @@ namespace Triggernometry.CustomControls
                         ex.ExpandAll();
                     }
                 }
+                OnConditionsUpdated();
             }
             catch (Exception ex)
             {
@@ -878,6 +943,7 @@ namespace Triggernometry.CustomControls
             }
             UpdateNodeIcon(tn);
             TreeSort();
+            OnConditionsUpdated();
         }
 
         private void cbxOpType_SelectedIndexChanged(object sender, EventArgs e)
@@ -886,6 +952,7 @@ namespace Triggernometry.CustomControls
             ConditionSingle re = (ConditionSingle)tn.Tag;
             re.ConditionType = (ConditionSingle.CndTypeEnum)cbxOpType.SelectedIndex;
             TreeSort();
+            OnConditionsUpdated();
         }
 
         private string ExportSelection()
@@ -916,6 +983,24 @@ namespace Triggernometry.CustomControls
         private void btnProperties_CheckedChanged(object sender, EventArgs e)
         {
             PanelStateFromOption = btnProperties.Checked;
+        }
+
+        private void expandAllStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = trvNodes.SelectedNode;
+            if (selectedNode != null)
+            {
+                selectedNode.ExpandAll();
+            }
+        }
+
+        private void collapseAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = trvNodes.SelectedNode;
+            if (selectedNode != null)
+            {
+                selectedNode.Collapse(false);
+            }
         }
 
     }

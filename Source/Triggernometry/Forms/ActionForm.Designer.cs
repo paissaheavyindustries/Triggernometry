@@ -1,4 +1,4 @@
-﻿namespace Triggernometry.Forms
+namespace Triggernometry.Forms
 {
     partial class ActionForm
     {
@@ -92,12 +92,8 @@
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.btnKeycodesListen = new System.Windows.Forms.Button();
             this.btnSendKeysListen = new System.Windows.Forms.Button();
-            this.lblKeypressProcInfo = new System.Windows.Forms.Label();
             this.expKeypressProcId = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblKeypressProcId = new System.Windows.Forms.Label();
-            this.btnKeycodesLink = new System.Windows.Forms.Button();
-            this.txtKeyCodesLink = new System.Windows.Forms.TextBox();
-            this.lblKeypressInfo = new System.Windows.Forms.Label();
             this.expKeypress = new Triggernometry.CustomControls.ExpressionTextBox();
             this.expWindowTitle = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblKeypress = new System.Windows.Forms.Label();
@@ -107,7 +103,6 @@
             this.btnSendKeysLink = new System.Windows.Forms.Button();
             this.lblKeypresses = new System.Windows.Forms.Label();
             this.expKeypresses = new Triggernometry.CustomControls.ExpressionTextBox();
-            this.lblKeypressesInfo = new System.Windows.Forms.Label();
             this.txtSendKeysLink = new System.Windows.Forms.TextBox();
             this.tabScript = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
@@ -279,7 +274,6 @@
             this.cbxJsonType = new System.Windows.Forms.ComboBox();
             this.lblJsonType = new System.Windows.Forms.Label();
             this.cbxJsonCache = new System.Windows.Forms.CheckBox();
-            this.lblJsonInstructions = new System.Windows.Forms.Label();
             this.expJsonFiring = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblJsonFiring = new System.Windows.Forms.Label();
             this.expJsonPayload = new Triggernometry.CustomControls.ExpressionTextBox();
@@ -288,7 +282,6 @@
             this.expJsonEndpoint = new Triggernometry.CustomControls.ExpressionTextBox();
             this.tabWindowMessage = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel19 = new System.Windows.Forms.TableLayoutPanel();
-            this.lblWmsgProcInfo = new System.Windows.Forms.Label();
             this.expWmsgProcid = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblWmsgProcid = new System.Windows.Forms.Label();
             this.expWmsgLparam = new Triggernometry.CustomControls.ExpressionTextBox();
@@ -331,6 +324,26 @@
             this.lblTvarName = new System.Windows.Forms.Label();
             this.lblTvarOpType = new System.Windows.Forms.Label();
             this.cbxTvarOpType = new System.Windows.Forms.ComboBox();
+            this.tabDictVariable = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanelDict = new System.Windows.Forms.TableLayoutPanel();
+            this.lblDictOpType = new System.Windows.Forms.Label();
+            this.cbxDictOpType = new System.Windows.Forms.ComboBox();
+            this.lblDictName = new System.Windows.Forms.Label();
+            this.expDictName = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.prsDictSource = new Triggernometry.CustomControls.PersistenceSwitch();
+            this.lblDictLength = new System.Windows.Forms.Label();
+            this.expDictLength = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.lblDictKeyType = new System.Windows.Forms.Label();
+            this.cbxDictKeyType = new System.Windows.Forms.ComboBox();
+            this.lblDictKey = new System.Windows.Forms.Label();
+            this.expDictKey = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.lblDictValueType = new System.Windows.Forms.Label();
+            this.cbxDictValueType = new System.Windows.Forms.ComboBox();
+            this.lblDictValue = new System.Windows.Forms.Label();
+            this.expDictValue = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.lblDictTarget = new System.Windows.Forms.Label();
+            this.expDictTarget = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.prsDictTarget = new Triggernometry.CustomControls.PersistenceSwitch();
             this.tabMutex = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel22 = new System.Windows.Forms.TableLayoutPanel();
             this.expMutexName = new Triggernometry.CustomControls.ExpressionTextBox();
@@ -404,6 +417,10 @@
             this.tabDescription = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel23 = new System.Windows.Forms.TableLayoutPanel();
             this.chkOverrideDesc = new System.Windows.Forms.CheckBox();
+            this.lblDescBgColor = new System.Windows.Forms.Label();
+            this.lblDescTextColor = new System.Windows.Forms.Label();
+            this.expDescBgColor = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.expDescTextColor = new Triggernometry.CustomControls.ExpressionTextBox();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
             this.panel8 = new System.Windows.Forms.Panel();
@@ -461,6 +478,8 @@
             this.panel9.SuspendLayout();
             this.tabTableVariable.SuspendLayout();
             this.tableLayoutPanel21.SuspendLayout();
+            this.tabDictVariable.SuspendLayout();
+            this.tableLayoutPanelDict.SuspendLayout();
             this.tabMutex.SuspendLayout();
             this.tableLayoutPanel22.SuspendLayout();
             this.tabPlaceholder.SuspendLayout();
@@ -506,7 +525,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(744, 27);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this.tableLayoutPanel1.TabStop = false;
             // 
             // lblActionType
             // 
@@ -515,7 +534,7 @@
             this.lblActionType.Location = new System.Drawing.Point(3, 0);
             this.lblActionType.Name = "lblActionType";
             this.lblActionType.Size = new System.Drawing.Size(60, 27);
-            this.lblActionType.TabIndex = 0;
+            this.lblActionType.TabStop = false;
             this.lblActionType.Text = "Action type";
             this.lblActionType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -526,38 +545,39 @@
             this.cbxActionType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxActionType.FormattingEnabled = true;
             this.cbxActionType.Items.AddRange(new object[] {
-            "System beep",
-            "Play sound file",
-            "Use text-to-speech",
-            "Launch process",
-            "Trigger operation",
-            "Send keypresses to active window",
-            "Execute script",
-            "Show message box",
-            "Scalar variable operation",
-            "Image aura operation",
-            "Folder operation",
-            "End encounter",
-            "Discord webhook",
-            "Text aura operation",
-            "Log message",
-            "List variable operation",
-            "OBS remote control operation",
-            "LiveSplit remote control operation",
-            "Generic JSON operation",
-            "Send window message",
-            "File operation",
-            "Table variable operation",
-            "Mutex operation",
-            "Placeholder",
-            "Named callback operation",
-            "Mouse operation",
-            "Loop",
-            "Repository operation"});
+                "System beep",
+                "Play sound file",
+                "Use text-to-speech",
+                "Scalar variable operation",
+                "List variable operation",
+                "Table variable operation",
+                "Dict variable operation",
+                "Show message box",
+                "Log message",
+                "Text aura operation",
+                "Image aura operation",
+                "Mouse operation",
+                "Send keypresses to active window",
+                "Named callback operation",
+                "Send window message",
+                "File operation",
+                "Launch process",
+                "Execute script",
+                "Mutex operation",
+                "Loop",
+                "Generic JSON operation",
+                "Discord webhook",
+                "LiveSplit remote control operation",
+                "OBS remote control operation",
+                "End encounter",
+                "Trigger operation",
+                "Folder operation",
+                "Repository operation",
+                "Placeholder"});
             this.cbxActionType.Location = new System.Drawing.Point(69, 3);
             this.cbxActionType.Name = "cbxActionType";
             this.cbxActionType.Size = new System.Drawing.Size(672, 21);
-            this.cbxActionType.TabIndex = 1;
+            this.cbxActionType.TabStop = false;
             this.cbxActionType.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // grpGeneralSettings
@@ -587,38 +607,39 @@
             this.tbcActionSettings.Controls.Add(this.tabSystemBeep);
             this.tbcActionSettings.Controls.Add(this.tabPlaySoundFile);
             this.tbcActionSettings.Controls.Add(this.tabTextToSpeech);
-            this.tbcActionSettings.Controls.Add(this.tabLaunchProcess);
-            this.tbcActionSettings.Controls.Add(this.tabTriggerOperation);
-            this.tbcActionSettings.Controls.Add(this.tabKeypress);
-            this.tbcActionSettings.Controls.Add(this.tabScript);
-            this.tbcActionSettings.Controls.Add(this.tabMessageBox);
             this.tbcActionSettings.Controls.Add(this.tabVariable);
-            this.tbcActionSettings.Controls.Add(this.tabImageAura);
-            this.tbcActionSettings.Controls.Add(this.tabFolderOperation);
-            this.tbcActionSettings.Controls.Add(this.tabEndEncounter);
-            this.tbcActionSettings.Controls.Add(this.tabDiscordWebhook);
-            this.tbcActionSettings.Controls.Add(this.tabTextAura);
-            this.tbcActionSettings.Controls.Add(this.tabLogMessage);
             this.tbcActionSettings.Controls.Add(this.tabListVariable);
-            this.tbcActionSettings.Controls.Add(this.tabObsControl);
-            this.tbcActionSettings.Controls.Add(this.tabLiveSplitControl);
-            this.tbcActionSettings.Controls.Add(this.tabGenericJson);
+            this.tbcActionSettings.Controls.Add(this.tabTableVariable);
+            this.tbcActionSettings.Controls.Add(this.tabDictVariable);
+            this.tbcActionSettings.Controls.Add(this.tabMessageBox);
+            this.tbcActionSettings.Controls.Add(this.tabLogMessage);
+            this.tbcActionSettings.Controls.Add(this.tabTextAura);
+            this.tbcActionSettings.Controls.Add(this.tabImageAura);
+            this.tbcActionSettings.Controls.Add(this.tabMouse);
+            this.tbcActionSettings.Controls.Add(this.tabKeypress);
+            this.tbcActionSettings.Controls.Add(this.tabNamedCallback);
             this.tbcActionSettings.Controls.Add(this.tabWindowMessage);
             this.tbcActionSettings.Controls.Add(this.tabFile);
-            this.tbcActionSettings.Controls.Add(this.tabTableVariable);
+            this.tbcActionSettings.Controls.Add(this.tabLaunchProcess);
+            this.tbcActionSettings.Controls.Add(this.tabScript);
             this.tbcActionSettings.Controls.Add(this.tabMutex);
-            this.tbcActionSettings.Controls.Add(this.tabPlaceholder);
-            this.tbcActionSettings.Controls.Add(this.tabNamedCallback);
-            this.tbcActionSettings.Controls.Add(this.tabMouse);
             this.tbcActionSettings.Controls.Add(this.tabLoop);
+            this.tbcActionSettings.Controls.Add(this.tabGenericJson);
+            this.tbcActionSettings.Controls.Add(this.tabDiscordWebhook);
+            this.tbcActionSettings.Controls.Add(this.tabLiveSplitControl);
+            this.tbcActionSettings.Controls.Add(this.tabObsControl);
+            this.tbcActionSettings.Controls.Add(this.tabEndEncounter);
+            this.tbcActionSettings.Controls.Add(this.tabTriggerOperation);
+            this.tbcActionSettings.Controls.Add(this.tabFolderOperation);
             this.tbcActionSettings.Controls.Add(this.tabRepo);
+            this.tbcActionSettings.Controls.Add(this.tabPlaceholder);
             this.tbcActionSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbcActionSettings.Location = new System.Drawing.Point(3, 3);
             this.tbcActionSettings.Margin = new System.Windows.Forms.Padding(0);
             this.tbcActionSettings.Name = "tbcActionSettings";
             this.tbcActionSettings.SelectedIndex = 0;
             this.tbcActionSettings.Size = new System.Drawing.Size(750, 443);
-            this.tbcActionSettings.TabIndex = 0;
+            this.tbcActionSettings.TabStop = false;
             // 
             // tabSystemBeep
             // 
@@ -628,7 +649,7 @@
             this.tabSystemBeep.Margin = new System.Windows.Forms.Padding(0);
             this.tabSystemBeep.Name = "tabSystemBeep";
             this.tabSystemBeep.Size = new System.Drawing.Size(742, 414);
-            this.tabSystemBeep.TabIndex = 0;
+            this.tabSystemBeep.TabStop = false;
             this.tabSystemBeep.Text = "System beep";
             this.tabSystemBeep.UseVisualStyleBackColor = true;
             // 
@@ -649,7 +670,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.Size = new System.Drawing.Size(742, 52);
-            this.tableLayoutPanel2.TabIndex = 0;
+            this.tableLayoutPanel2.TabStop = false;
             // 
             // expBeepLength
             // 
@@ -684,7 +705,7 @@
             this.lblBeepLength.Location = new System.Drawing.Point(3, 26);
             this.lblBeepLength.Name = "lblBeepLength";
             this.lblBeepLength.Size = new System.Drawing.Size(102, 26);
-            this.lblBeepLength.TabIndex = 9;
+            this.lblBeepLength.TabStop = false;
             this.lblBeepLength.Text = "Beep length (ms)";
             this.lblBeepLength.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -695,7 +716,7 @@
             this.lblBeepFrequency.Location = new System.Drawing.Point(3, 0);
             this.lblBeepFrequency.Name = "lblBeepFrequency";
             this.lblBeepFrequency.Size = new System.Drawing.Size(102, 26);
-            this.lblBeepFrequency.TabIndex = 7;
+            this.lblBeepFrequency.TabStop = false;
             this.lblBeepFrequency.Text = "Beep frequency (hz)";
             this.lblBeepFrequency.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -707,7 +728,7 @@
             this.tabPlaySoundFile.Margin = new System.Windows.Forms.Padding(0);
             this.tabPlaySoundFile.Name = "tabPlaySoundFile";
             this.tabPlaySoundFile.Size = new System.Drawing.Size(742, 414);
-            this.tabPlaySoundFile.TabIndex = 1;
+            this.tabPlaySoundFile.TabStop = false;
             this.tabPlaySoundFile.Text = "Play sound file";
             this.tabPlaySoundFile.UseVisualStyleBackColor = true;
             // 
@@ -734,7 +755,7 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.Size = new System.Drawing.Size(742, 106);
-            this.tableLayoutPanel3.TabIndex = 1;
+            this.tableLayoutPanel3.TabStop = false;
             // 
             // chkSoundMyOutput
             // 
@@ -746,7 +767,7 @@
             this.chkSoundMyOutput.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.chkSoundMyOutput.Name = "chkSoundMyOutput";
             this.chkSoundMyOutput.Size = new System.Drawing.Size(737, 17);
-            this.chkSoundMyOutput.TabIndex = 20;
+            this.chkSoundMyOutput.TabStop = false;
             this.chkSoundMyOutput.Text = "Use Triggernometry for output regardless of ACT hook configuration";
             this.chkSoundMyOutput.UseVisualStyleBackColor = true;
             // 
@@ -760,7 +781,7 @@
             this.chkSoundExclusive.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.chkSoundExclusive.Name = "chkSoundExclusive";
             this.chkSoundExclusive.Size = new System.Drawing.Size(737, 17);
-            this.chkSoundExclusive.TabIndex = 17;
+            this.chkSoundExclusive.TabStop = false;
             this.chkSoundExclusive.Text = "Use exclusive sound player to prevent conflicts with other sounds";
             this.chkSoundExclusive.UseVisualStyleBackColor = true;
             // 
@@ -785,7 +806,7 @@
             this.lblSoundVolume.Location = new System.Drawing.Point(3, 26);
             this.lblSoundVolume.Name = "lblSoundVolume";
             this.lblSoundVolume.Size = new System.Drawing.Size(134, 26);
-            this.lblSoundVolume.TabIndex = 15;
+            this.lblSoundVolume.TabStop = false;
             this.lblSoundVolume.Text = "Sound volume (0 ... 100 %)";
             this.lblSoundVolume.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -796,7 +817,7 @@
             this.lblSoundFile.Location = new System.Drawing.Point(3, 0);
             this.lblSoundFile.Name = "lblSoundFile";
             this.lblSoundFile.Size = new System.Drawing.Size(134, 26);
-            this.lblSoundFile.TabIndex = 7;
+            this.lblSoundFile.TabStop = false;
             this.lblSoundFile.Text = "Sound file to play";
             this.lblSoundFile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -808,7 +829,7 @@
             this.button3.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(37, 26);
-            this.button3.TabIndex = 13;
+            this.button3.TabStop = false;
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -832,7 +853,7 @@
             this.tabTextToSpeech.Location = new System.Drawing.Point(4, 25);
             this.tabTextToSpeech.Name = "tabTextToSpeech";
             this.tabTextToSpeech.Size = new System.Drawing.Size(742, 414);
-            this.tabTextToSpeech.TabIndex = 2;
+            this.tabTextToSpeech.TabStop = false;
             this.tabTextToSpeech.Text = "Use text-to-speech";
             this.tabTextToSpeech.UseVisualStyleBackColor = true;
             // 
@@ -860,7 +881,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.Size = new System.Drawing.Size(742, 132);
-            this.tableLayoutPanel4.TabIndex = 2;
+            this.tableLayoutPanel4.TabStop = false;
             // 
             // chkSpeechMyOutput
             // 
@@ -872,7 +893,7 @@
             this.chkSpeechMyOutput.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.chkSpeechMyOutput.Name = "chkSpeechMyOutput";
             this.chkSpeechMyOutput.Size = new System.Drawing.Size(737, 17);
-            this.chkSpeechMyOutput.TabIndex = 19;
+            this.chkSpeechMyOutput.TabStop = false;
             this.chkSpeechMyOutput.Text = "Use Triggernometry for output regardless of ACT hook configuration";
             this.chkSpeechMyOutput.UseVisualStyleBackColor = true;
             // 
@@ -886,7 +907,7 @@
             this.chkSpeechExclusive.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.chkSpeechExclusive.Name = "chkSpeechExclusive";
             this.chkSpeechExclusive.Size = new System.Drawing.Size(737, 17);
-            this.chkSpeechExclusive.TabIndex = 18;
+            this.chkSpeechExclusive.TabStop = false;
             this.chkSpeechExclusive.Text = "Use exclusive speech synthesizer to prevent conflicts with other speech";
             this.chkSpeechExclusive.UseVisualStyleBackColor = true;
             // 
@@ -910,7 +931,7 @@
             this.lblSpeechRate.Location = new System.Drawing.Point(3, 52);
             this.lblSpeechRate.Name = "lblSpeechRate";
             this.lblSpeechRate.Size = new System.Drawing.Size(154, 26);
-            this.lblSpeechRate.TabIndex = 15;
+            this.lblSpeechRate.TabStop = false;
             this.lblSpeechRate.Text = "Speech speed rate (-10 ... +10)";
             this.lblSpeechRate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -934,7 +955,7 @@
             this.lblSpeechVolume.Location = new System.Drawing.Point(3, 26);
             this.lblSpeechVolume.Name = "lblSpeechVolume";
             this.lblSpeechVolume.Size = new System.Drawing.Size(154, 26);
-            this.lblSpeechVolume.TabIndex = 13;
+            this.lblSpeechVolume.TabStop = false;
             this.lblSpeechVolume.Text = "Speech volume (0 ... 100 %)";
             this.lblSpeechVolume.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -945,7 +966,7 @@
             this.lblTextToSay.Location = new System.Drawing.Point(3, 0);
             this.lblTextToSay.Name = "lblTextToSay";
             this.lblTextToSay.Size = new System.Drawing.Size(154, 26);
-            this.lblTextToSay.TabIndex = 7;
+            this.lblTextToSay.TabStop = false;
             this.lblTextToSay.Text = "Text to say";
             this.lblTextToSay.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -970,7 +991,7 @@
             this.tabLaunchProcess.Location = new System.Drawing.Point(4, 25);
             this.tabLaunchProcess.Name = "tabLaunchProcess";
             this.tabLaunchProcess.Size = new System.Drawing.Size(742, 414);
-            this.tabLaunchProcess.TabIndex = 3;
+            this.tabLaunchProcess.TabStop = false;
             this.tabLaunchProcess.Text = "Launch process";
             this.tabLaunchProcess.UseVisualStyleBackColor = true;
             // 
@@ -1000,7 +1021,7 @@
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel5.Size = new System.Drawing.Size(742, 105);
-            this.tableLayoutPanel5.TabIndex = 2;
+            this.tableLayoutPanel5.TabStop = false;
             // 
             // cbxProcessWindowStyle
             // 
@@ -1016,7 +1037,7 @@
             this.cbxProcessWindowStyle.Location = new System.Drawing.Point(137, 81);
             this.cbxProcessWindowStyle.Name = "cbxProcessWindowStyle";
             this.cbxProcessWindowStyle.Size = new System.Drawing.Size(602, 21);
-            this.cbxProcessWindowStyle.TabIndex = 20;
+            this.cbxProcessWindowStyle.TabStop = false;
             // 
             // lblProcessWindowStyle
             // 
@@ -1025,7 +1046,7 @@
             this.lblProcessWindowStyle.Location = new System.Drawing.Point(3, 78);
             this.lblProcessWindowStyle.Name = "lblProcessWindowStyle";
             this.lblProcessWindowStyle.Size = new System.Drawing.Size(128, 27);
-            this.lblProcessWindowStyle.TabIndex = 19;
+            this.lblProcessWindowStyle.TabStop = false;
             this.lblProcessWindowStyle.Text = "Process window";
             this.lblProcessWindowStyle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1050,7 +1071,7 @@
             this.lblProcessWorkingDir.Location = new System.Drawing.Point(3, 52);
             this.lblProcessWorkingDir.Name = "lblProcessWorkingDir";
             this.lblProcessWorkingDir.Size = new System.Drawing.Size(128, 26);
-            this.lblProcessWorkingDir.TabIndex = 17;
+            this.lblProcessWorkingDir.TabStop = false;
             this.lblProcessWorkingDir.Text = "Working directory";
             this.lblProcessWorkingDir.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1075,7 +1096,7 @@
             this.lblProcessParameters.Location = new System.Drawing.Point(3, 26);
             this.lblProcessParameters.Name = "lblProcessParameters";
             this.lblProcessParameters.Size = new System.Drawing.Size(128, 26);
-            this.lblProcessParameters.TabIndex = 15;
+            this.lblProcessParameters.TabStop = false;
             this.lblProcessParameters.Text = "Command line parameters";
             this.lblProcessParameters.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1086,7 +1107,7 @@
             this.lblProcessName.Location = new System.Drawing.Point(3, 0);
             this.lblProcessName.Name = "lblProcessName";
             this.lblProcessName.Size = new System.Drawing.Size(128, 26);
-            this.lblProcessName.TabIndex = 7;
+            this.lblProcessName.TabStop = false;
             this.lblProcessName.Text = "Process to launch";
             this.lblProcessName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1098,7 +1119,7 @@
             this.button6.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(37, 26);
-            this.button6.TabIndex = 13;
+            this.button6.TabStop = false;
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
@@ -1135,7 +1156,7 @@
             this.lblProcessWarning.Location = new System.Drawing.Point(0, 0);
             this.lblProcessWarning.Name = "lblProcessWarning";
             this.lblProcessWarning.Size = new System.Drawing.Size(742, 41);
-            this.lblProcessWarning.TabIndex = 0;
+            this.lblProcessWarning.TabStop = false;
             this.lblProcessWarning.Text = "Actions of this type may be potentially dangerous and cause damage if, for exampl" +
     "e, the trigger is fired with parameters that fall outside of the expected values" +
     ". Please be aware of the risk.";
@@ -1148,7 +1169,7 @@
             this.tabTriggerOperation.Location = new System.Drawing.Point(4, 25);
             this.tabTriggerOperation.Name = "tabTriggerOperation";
             this.tabTriggerOperation.Size = new System.Drawing.Size(742, 414);
-            this.tabTriggerOperation.TabIndex = 4;
+            this.tabTriggerOperation.TabStop = false;
             this.tabTriggerOperation.Text = "Trigger operation";
             this.tabTriggerOperation.UseVisualStyleBackColor = true;
             // 
@@ -1183,7 +1204,7 @@
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel10.Size = new System.Drawing.Size(742, 414);
-            this.tableLayoutPanel10.TabIndex = 7;
+            this.tableLayoutPanel10.TabStop = false;
             // 
             // lblTriggerZoneType
             // 
@@ -1192,7 +1213,7 @@
             this.lblTriggerZoneType.Location = new System.Drawing.Point(3, 53);
             this.lblTriggerZoneType.Name = "lblTriggerZoneType";
             this.lblTriggerZoneType.Size = new System.Drawing.Size(95, 27);
-            this.lblTriggerZoneType.TabIndex = 29;
+            this.lblTriggerZoneType.TabStop = false;
             this.lblTriggerZoneType.Text = "Zone type";
             this.lblTriggerZoneType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1207,7 +1228,7 @@
             this.cbxTriggerZoneType.Location = new System.Drawing.Point(104, 56);
             this.cbxTriggerZoneType.Name = "cbxTriggerZoneType";
             this.cbxTriggerZoneType.Size = new System.Drawing.Size(635, 21);
-            this.cbxTriggerZoneType.TabIndex = 28;
+            this.cbxTriggerZoneType.TabStop = false;
             this.cbxTriggerZoneType.SelectedIndexChanged += new System.EventHandler(this.cbxZoneType_SelectedIndexChanged);
             // 
             // lblFiringOptions
@@ -1219,7 +1240,7 @@
             this.lblFiringOptions.Name = "lblFiringOptions";
             this.lblFiringOptions.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.lblFiringOptions.Size = new System.Drawing.Size(95, 17);
-            this.lblFiringOptions.TabIndex = 26;
+            this.lblFiringOptions.TabStop = false;
             this.lblFiringOptions.Text = "Firing options";
             this.lblFiringOptions.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1244,7 +1265,7 @@
             this.lblTriggerZone.Location = new System.Drawing.Point(3, 80);
             this.lblTriggerZone.Name = "lblTriggerZone";
             this.lblTriggerZone.Size = new System.Drawing.Size(95, 26);
-            this.lblTriggerZone.TabIndex = 24;
+            this.lblTriggerZone.TabStop = false;
             this.lblTriggerZone.Text = "Zone name";
             this.lblTriggerZone.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1257,7 +1278,7 @@
             this.lblTrigger.Name = "lblTrigger";
             this.lblTrigger.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.lblTrigger.Size = new System.Drawing.Size(95, 17);
-            this.lblTrigger.TabIndex = 23;
+            this.lblTrigger.TabStop = false;
             this.lblTrigger.Text = "Trigger";
             this.lblTrigger.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1282,7 +1303,7 @@
             this.lblTriggerText.Location = new System.Drawing.Point(3, 27);
             this.lblTriggerText.Name = "lblTriggerText";
             this.lblTriggerText.Size = new System.Drawing.Size(95, 26);
-            this.lblTriggerText.TabIndex = 15;
+            this.lblTriggerText.TabStop = false;
             this.lblTriggerText.Text = "Event text for firing";
             this.lblTriggerText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1293,7 +1314,7 @@
             this.lblTriggerOp.Location = new System.Drawing.Point(3, 0);
             this.lblTriggerOp.Name = "lblTriggerOp";
             this.lblTriggerOp.Size = new System.Drawing.Size(95, 27);
-            this.lblTriggerOp.TabIndex = 7;
+            this.lblTriggerOp.TabStop = false;
             this.lblTriggerOp.Text = "Operation";
             this.lblTriggerOp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1311,7 +1332,7 @@
             this.cbxTriggerOp.Location = new System.Drawing.Point(104, 3);
             this.cbxTriggerOp.Name = "cbxTriggerOp";
             this.cbxTriggerOp.Size = new System.Drawing.Size(635, 21);
-            this.cbxTriggerOp.TabIndex = 21;
+            this.cbxTriggerOp.TabStop = false;
             this.cbxTriggerOp.SelectedIndexChanged += new System.EventHandler(this.cbxTriggerOp_SelectedIndexChanged);
             // 
             // trvTrigger
@@ -1324,7 +1345,7 @@
             this.tableLayoutPanel10.SetRowSpan(this.trvTrigger, 2);
             this.trvTrigger.ShowNodeToolTips = true;
             this.trvTrigger.Size = new System.Drawing.Size(635, 247);
-            this.trvTrigger.TabIndex = 22;
+            this.trvTrigger.TabStop = false;
             this.trvTrigger.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvTrigger_BeforeCollapse);
             this.trvTrigger.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvTrigger_BeforeExpand);
             this.trvTrigger.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvTrigger_BeforeSelect);
@@ -1345,7 +1366,7 @@
             this.cbxFiringOptions.Name = "cbxFiringOptions";
             this.tableLayoutPanel10.SetRowSpan(this.cbxFiringOptions, 2);
             this.cbxFiringOptions.Size = new System.Drawing.Size(635, 49);
-            this.cbxFiringOptions.TabIndex = 27;
+            this.cbxFiringOptions.TabStop = false;
             this.cbxFiringOptions.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.cbxFiringOptions_ItemCheck);
             this.cbxFiringOptions.EnabledChanged += new System.EventHandler(this.cbxFiringOptions_EnabledChanged);
             // 
@@ -1356,7 +1377,7 @@
             this.tabKeypress.Location = new System.Drawing.Point(4, 25);
             this.tabKeypress.Name = "tabKeypress";
             this.tabKeypress.Size = new System.Drawing.Size(742, 414);
-            this.tabKeypress.TabIndex = 5;
+            this.tabKeypress.TabStop = false;
             this.tabKeypress.Text = "Keypress";
             this.tabKeypress.UseVisualStyleBackColor = true;
             // 
@@ -1367,42 +1388,33 @@
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel6.Controls.Add(this.btnKeycodesListen, 2, 7);
-            this.tableLayoutPanel6.Controls.Add(this.btnSendKeysListen, 2, 3);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypressProcInfo, 1, 2);
-            this.tableLayoutPanel6.Controls.Add(this.expKeypressProcId, 1, 1);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypressProcId, 0, 1);
-            this.tableLayoutPanel6.Controls.Add(this.btnKeycodesLink, 3, 9);
-            this.tableLayoutPanel6.Controls.Add(this.txtKeyCodesLink, 1, 9);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypressInfo, 1, 8);
-            this.tableLayoutPanel6.Controls.Add(this.expKeypress, 1, 7);
-            this.tableLayoutPanel6.Controls.Add(this.expWindowTitle, 1, 6);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypress, 0, 7);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypressWindow, 0, 6);
-            this.tableLayoutPanel6.Controls.Add(this.cbxKeypressMethod, 1, 0);
             this.tableLayoutPanel6.Controls.Add(this.lblKeypressMethod, 0, 0);
-            this.tableLayoutPanel6.Controls.Add(this.btnSendKeysLink, 2, 5);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypresses, 0, 3);
-            this.tableLayoutPanel6.Controls.Add(this.expKeypresses, 1, 3);
-            this.tableLayoutPanel6.Controls.Add(this.lblKeypressesInfo, 1, 4);
+            this.tableLayoutPanel6.Controls.Add(this.cbxKeypressMethod, 1, 0);
+            this.tableLayoutPanel6.Controls.Add(this.lblKeypressProcId, 0, 1);
+            this.tableLayoutPanel6.Controls.Add(this.expKeypressProcId, 1, 1);
+            this.tableLayoutPanel6.Controls.Add(this.lblKeypresses, 0, 2);
+            this.tableLayoutPanel6.Controls.Add(this.expKeypresses, 1, 2);
+            this.tableLayoutPanel6.Controls.Add(this.btnSendKeysListen, 2, 2);
+            this.tableLayoutPanel6.Controls.Add(this.lblKeypressWindow, 0, 3);
+            this.tableLayoutPanel6.Controls.Add(this.expWindowTitle, 1, 3);
+            this.tableLayoutPanel6.Controls.Add(this.lblKeypress, 0, 4);
+            this.tableLayoutPanel6.Controls.Add(this.expKeypress, 1, 4);
+            this.tableLayoutPanel6.Controls.Add(this.btnKeycodesListen, 2, 4);
             this.tableLayoutPanel6.Controls.Add(this.txtSendKeysLink, 1, 5);
+            this.tableLayoutPanel6.Controls.Add(this.btnSendKeysLink, 2, 5);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-            this.tableLayoutPanel6.RowCount = 10;
+            this.tableLayoutPanel6.RowCount = 6;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+
             this.tableLayoutPanel6.Size = new System.Drawing.Size(742, 321);
-            this.tableLayoutPanel6.TabIndex = 2;
+            this.tableLayoutPanel6.TabStop = false;
             // 
             // btnKeycodesListen
             // 
@@ -1412,7 +1424,7 @@
             this.btnKeycodesListen.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnKeycodesListen.Name = "btnKeycodesListen";
             this.btnKeycodesListen.Size = new System.Drawing.Size(37, 26);
-            this.btnKeycodesListen.TabIndex = 36;
+            this.btnKeycodesListen.TabStop = false;
             this.btnKeycodesListen.UseVisualStyleBackColor = true;
             this.btnKeycodesListen.Click += new System.EventHandler(this.btnKeycodesListen_Click);
             // 
@@ -1424,20 +1436,9 @@
             this.btnSendKeysListen.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnSendKeysListen.Name = "btnSendKeysListen";
             this.btnSendKeysListen.Size = new System.Drawing.Size(37, 26);
-            this.btnSendKeysListen.TabIndex = 35;
+            this.btnSendKeysListen.TabStop = false;
             this.btnSendKeysListen.UseVisualStyleBackColor = true;
             this.btnSendKeysListen.Click += new System.EventHandler(this.btnSendKeysListen_Click);
-            // 
-            // lblKeypressProcInfo
-            // 
-            this.lblKeypressProcInfo.AutoSize = true;
-            this.tableLayoutPanel6.SetColumnSpan(this.lblKeypressProcInfo, 2);
-            this.lblKeypressProcInfo.Location = new System.Drawing.Point(123, 53);
-            this.lblKeypressProcInfo.Name = "lblKeypressProcInfo";
-            this.lblKeypressProcInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
-            this.lblKeypressProcInfo.Size = new System.Drawing.Size(609, 46);
-            this.lblKeypressProcInfo.TabIndex = 34;
-            this.lblKeypressProcInfo.Text = resources.GetString("lblKeypressProcInfo.Text");
             // 
             // expKeypressProcId
             // 
@@ -1460,42 +1461,9 @@
             this.lblKeypressProcId.Location = new System.Drawing.Point(3, 27);
             this.lblKeypressProcId.Name = "lblKeypressProcId";
             this.lblKeypressProcId.Size = new System.Drawing.Size(114, 26);
-            this.lblKeypressProcId.TabIndex = 30;
+            this.lblKeypressProcId.TabStop = false;
             this.lblKeypressProcId.Text = "Process ID";
             this.lblKeypressProcId.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // btnKeycodesLink
-            // 
-            this.btnKeycodesLink.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnKeycodesLink.Image = ((System.Drawing.Image)(resources.GetObject("btnKeycodesLink.Image")));
-            this.btnKeycodesLink.Location = new System.Drawing.Point(702, 295);
-            this.btnKeycodesLink.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.btnKeycodesLink.Name = "btnKeycodesLink";
-            this.btnKeycodesLink.Size = new System.Drawing.Size(37, 26);
-            this.btnKeycodesLink.TabIndex = 29;
-            this.btnKeycodesLink.UseVisualStyleBackColor = true;
-            this.btnKeycodesLink.Click += new System.EventHandler(this.btnKeycodesLink_Click);
-            // 
-            // txtKeyCodesLink
-            // 
-            this.txtKeyCodesLink.Dock = System.Windows.Forms.DockStyle.Top;
-            this.txtKeyCodesLink.Location = new System.Drawing.Point(123, 298);
-            this.txtKeyCodesLink.Name = "txtKeyCodesLink";
-            this.txtKeyCodesLink.ReadOnly = true;
-            this.txtKeyCodesLink.Size = new System.Drawing.Size(576, 20);
-            this.txtKeyCodesLink.TabIndex = 28;
-            this.txtKeyCodesLink.Text = "https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.keys";
-            // 
-            // lblKeypressInfo
-            // 
-            this.lblKeypressInfo.AutoSize = true;
-            this.tableLayoutPanel6.SetColumnSpan(this.lblKeypressInfo, 2);
-            this.lblKeypressInfo.Location = new System.Drawing.Point(123, 236);
-            this.lblKeypressInfo.Name = "lblKeypressInfo";
-            this.lblKeypressInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
-            this.lblKeypressInfo.Size = new System.Drawing.Size(602, 59);
-            this.lblKeypressInfo.TabIndex = 27;
-            this.lblKeypressInfo.Text = resources.GetString("lblKeypressInfo.Text");
             // 
             // expKeypress
             // 
@@ -1531,7 +1499,7 @@
             this.lblKeypress.Location = new System.Drawing.Point(3, 210);
             this.lblKeypress.Name = "lblKeypress";
             this.lblKeypress.Size = new System.Drawing.Size(114, 26);
-            this.lblKeypress.TabIndex = 24;
+            this.lblKeypress.TabStop = false;
             this.lblKeypress.Text = "Keycode to send";
             this.lblKeypress.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1542,7 +1510,7 @@
             this.lblKeypressWindow.Location = new System.Drawing.Point(3, 184);
             this.lblKeypressWindow.Name = "lblKeypressWindow";
             this.lblKeypressWindow.Size = new System.Drawing.Size(114, 26);
-            this.lblKeypressWindow.TabIndex = 23;
+            this.lblKeypressWindow.TabStop = false;
             this.lblKeypressWindow.Text = "Window title";
             this.lblKeypressWindow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1559,7 +1527,7 @@
             this.cbxKeypressMethod.Location = new System.Drawing.Point(123, 3);
             this.cbxKeypressMethod.Name = "cbxKeypressMethod";
             this.cbxKeypressMethod.Size = new System.Drawing.Size(616, 21);
-            this.cbxKeypressMethod.TabIndex = 22;
+            this.cbxKeypressMethod.TabStop = false;
             this.cbxKeypressMethod.SelectedIndexChanged += new System.EventHandler(this.cbxKeypressMethod_SelectedIndexChanged);
             // 
             // lblKeypressMethod
@@ -1569,7 +1537,7 @@
             this.lblKeypressMethod.Location = new System.Drawing.Point(3, 0);
             this.lblKeypressMethod.Name = "lblKeypressMethod";
             this.lblKeypressMethod.Size = new System.Drawing.Size(114, 27);
-            this.lblKeypressMethod.TabIndex = 18;
+            this.lblKeypressMethod.TabStop = false;
             this.lblKeypressMethod.Text = "Keypress send method";
             this.lblKeypressMethod.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1581,9 +1549,9 @@
             this.btnSendKeysLink.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnSendKeysLink.Name = "btnSendKeysLink";
             this.btnSendKeysLink.Size = new System.Drawing.Size(37, 26);
-            this.btnSendKeysLink.TabIndex = 17;
+            this.btnSendKeysLink.TabStop = false;
             this.btnSendKeysLink.UseVisualStyleBackColor = true;
-            this.btnSendKeysLink.Click += new System.EventHandler(this.button1_Click);
+            this.btnSendKeysLink.Click += new System.EventHandler(this.btnSendKeysLink_Click);
             // 
             // lblKeypresses
             // 
@@ -1592,7 +1560,7 @@
             this.lblKeypresses.Location = new System.Drawing.Point(3, 99);
             this.lblKeypresses.Name = "lblKeypresses";
             this.lblKeypresses.Size = new System.Drawing.Size(114, 26);
-            this.lblKeypresses.TabIndex = 7;
+            this.lblKeypresses.TabStop = false;
             this.lblKeypresses.Text = "Keypresses to send";
             this.lblKeypresses.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1609,18 +1577,6 @@
             this.expKeypresses.Size = new System.Drawing.Size(576, 20);
             this.expKeypresses.TabIndex = 14;
             // 
-            // lblKeypressesInfo
-            // 
-            this.lblKeypressesInfo.AutoSize = true;
-            this.tableLayoutPanel6.SetColumnSpan(this.lblKeypressesInfo, 2);
-            this.lblKeypressesInfo.Location = new System.Drawing.Point(123, 125);
-            this.lblKeypressesInfo.Name = "lblKeypressesInfo";
-            this.lblKeypressesInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
-            this.lblKeypressesInfo.Size = new System.Drawing.Size(558, 33);
-            this.lblKeypressesInfo.TabIndex = 15;
-            this.lblKeypressesInfo.Text = "The SendKeys keypress format, including how to represent modifier keys such as Sh" +
-    "ift, is described on this webpage:";
-            // 
             // txtSendKeysLink
             // 
             this.txtSendKeysLink.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1628,7 +1584,7 @@
             this.txtSendKeysLink.Name = "txtSendKeysLink";
             this.txtSendKeysLink.ReadOnly = true;
             this.txtSendKeysLink.Size = new System.Drawing.Size(576, 20);
-            this.txtSendKeysLink.TabIndex = 16;
+            this.txtSendKeysLink.TabStop = false;
             this.txtSendKeysLink.Text = "https://msdn.microsoft.com/en-us/library/system.windows.forms.sendkeys.send.aspx";
             // 
             // tabScript
@@ -1639,7 +1595,7 @@
             this.tabScript.Location = new System.Drawing.Point(4, 25);
             this.tabScript.Name = "tabScript";
             this.tabScript.Size = new System.Drawing.Size(742, 414);
-            this.tabScript.TabIndex = 6;
+            this.tabScript.TabStop = false;
             this.tabScript.Text = "Script";
             this.tabScript.UseVisualStyleBackColor = true;
             // 
@@ -1664,7 +1620,7 @@
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel7.Size = new System.Drawing.Size(742, 125);
-            this.tableLayoutPanel7.TabIndex = 5;
+            this.tableLayoutPanel7.TabStop = false;
             // 
             // lblScriptExtEditor
             // 
@@ -1675,7 +1631,7 @@
             this.lblScriptExtEditor.Location = new System.Drawing.Point(158, 26);
             this.lblScriptExtEditor.Name = "lblScriptExtEditor";
             this.lblScriptExtEditor.Size = new System.Drawing.Size(581, 41);
-            this.lblScriptExtEditor.TabIndex = 25;
+            this.lblScriptExtEditor.TabStop = false;
             this.lblScriptExtEditor.Text = "External editor has been launched - script contents will be read back from the di" +
     "sk and refreshed when you close the external editor.";
             this.lblScriptExtEditor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1701,7 +1657,7 @@
             this.lblExecScriptAssemblies.Location = new System.Drawing.Point(3, 99);
             this.lblExecScriptAssemblies.Name = "lblExecScriptAssemblies";
             this.lblExecScriptAssemblies.Size = new System.Drawing.Size(149, 26);
-            this.lblExecScriptAssemblies.TabIndex = 22;
+            this.lblExecScriptAssemblies.TabStop = false;
             this.lblExecScriptAssemblies.Text = "List of assemblies to reference";
             this.lblExecScriptAssemblies.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1725,7 +1681,7 @@
             this.lblExecScriptCode.Location = new System.Drawing.Point(3, 0);
             this.lblExecScriptCode.Name = "lblExecScriptCode";
             this.lblExecScriptCode.Size = new System.Drawing.Size(149, 26);
-            this.lblExecScriptCode.TabIndex = 15;
+            this.lblExecScriptCode.TabStop = false;
             this.lblExecScriptCode.Text = "Script code";
             this.lblExecScriptCode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1735,7 +1691,7 @@
             this.btnScriptExternalEditor.Location = new System.Drawing.Point(158, 70);
             this.btnScriptExternalEditor.Name = "btnScriptExternalEditor";
             this.btnScriptExternalEditor.Size = new System.Drawing.Size(581, 26);
-            this.btnScriptExternalEditor.TabIndex = 24;
+            this.btnScriptExternalEditor.TabStop = false;
             this.btnScriptExternalEditor.Text = "Open in external editor";
             this.btnScriptExternalEditor.UseVisualStyleBackColor = true;
             this.btnScriptExternalEditor.Click += new System.EventHandler(this.btnScriptExternalEditor_Click);
@@ -1760,7 +1716,7 @@
             this.lblScriptWarning.Location = new System.Drawing.Point(0, 0);
             this.lblScriptWarning.Name = "lblScriptWarning";
             this.lblScriptWarning.Size = new System.Drawing.Size(742, 41);
-            this.lblScriptWarning.TabIndex = 0;
+            this.lblScriptWarning.TabStop = false;
             this.lblScriptWarning.Text = "Actions of this type may be potentially dangerous and cause damage if, for exampl" +
     "e, the trigger is fired with parameters that fall outside of the expected values" +
     ". Please be aware of the risk.";
@@ -1773,7 +1729,7 @@
             this.tabMessageBox.Location = new System.Drawing.Point(4, 25);
             this.tabMessageBox.Name = "tabMessageBox";
             this.tabMessageBox.Size = new System.Drawing.Size(742, 414);
-            this.tabMessageBox.TabIndex = 7;
+            this.tabMessageBox.TabStop = false;
             this.tabMessageBox.Text = "MessageBox";
             this.tabMessageBox.UseVisualStyleBackColor = true;
             // 
@@ -1795,7 +1751,7 @@
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel8.Size = new System.Drawing.Size(742, 53);
-            this.tableLayoutPanel8.TabIndex = 6;
+            this.tableLayoutPanel8.TabStop = false;
             // 
             // expMessageBoxText
             // 
@@ -1817,7 +1773,7 @@
             this.lblMessageBoxText.Location = new System.Drawing.Point(3, 27);
             this.lblMessageBoxText.Name = "lblMessageBoxText";
             this.lblMessageBoxText.Size = new System.Drawing.Size(93, 26);
-            this.lblMessageBoxText.TabIndex = 15;
+            this.lblMessageBoxText.TabStop = false;
             this.lblMessageBoxText.Text = "Text to display";
             this.lblMessageBoxText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1828,7 +1784,7 @@
             this.lblMessageBoxIcon.Location = new System.Drawing.Point(3, 0);
             this.lblMessageBoxIcon.Name = "lblMessageBoxIcon";
             this.lblMessageBoxIcon.Size = new System.Drawing.Size(93, 27);
-            this.lblMessageBoxIcon.TabIndex = 7;
+            this.lblMessageBoxIcon.TabStop = false;
             this.lblMessageBoxIcon.Text = "Message box icon";
             this.lblMessageBoxIcon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1846,7 +1802,7 @@
             this.cbxMessageBoxIcon.Location = new System.Drawing.Point(102, 3);
             this.cbxMessageBoxIcon.Name = "cbxMessageBoxIcon";
             this.cbxMessageBoxIcon.Size = new System.Drawing.Size(637, 21);
-            this.cbxMessageBoxIcon.TabIndex = 21;
+            this.cbxMessageBoxIcon.TabStop = false;
             // 
             // tabVariable
             // 
@@ -1854,7 +1810,7 @@
             this.tabVariable.Location = new System.Drawing.Point(4, 25);
             this.tabVariable.Name = "tabVariable";
             this.tabVariable.Size = new System.Drawing.Size(742, 414);
-            this.tabVariable.TabIndex = 8;
+            this.tabVariable.TabStop = false;
             this.tabVariable.Text = "Variable";
             this.tabVariable.UseVisualStyleBackColor = true;
             // 
@@ -1884,7 +1840,7 @@
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel9.Size = new System.Drawing.Size(742, 105);
-            this.tableLayoutPanel9.TabIndex = 6;
+            this.tableLayoutPanel9.TabStop = false;
             // 
             // prsScalarTarget
             // 
@@ -1896,7 +1852,7 @@
             this.prsScalarTarget.Location = new System.Drawing.Point(715, 82);
             this.prsScalarTarget.Name = "prsScalarTarget";
             this.prsScalarTarget.Size = new System.Drawing.Size(24, 20);
-            this.prsScalarTarget.TabIndex = 27;
+            this.prsScalarTarget.TabStop = false;
             this.prsScalarTarget.Tag = ((object)(resources.GetObject("prsScalarTarget.Tag")));
             // 
             // expVariableTarget
@@ -1945,7 +1901,7 @@
             this.lblVariableExpression.Location = new System.Drawing.Point(3, 53);
             this.lblVariableExpression.Name = "lblVariableExpression";
             this.lblVariableExpression.Size = new System.Drawing.Size(107, 26);
-            this.lblVariableExpression.TabIndex = 22;
+            this.lblVariableExpression.TabStop = false;
             this.lblVariableExpression.Text = "Expression";
             this.lblVariableExpression.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1970,7 +1926,7 @@
             this.lblVariableName.Location = new System.Drawing.Point(3, 27);
             this.lblVariableName.Name = "lblVariableName";
             this.lblVariableName.Size = new System.Drawing.Size(107, 26);
-            this.lblVariableName.TabIndex = 15;
+            this.lblVariableName.TabStop = false;
             this.lblVariableName.Text = "Scalar variable name";
             this.lblVariableName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1981,7 +1937,7 @@
             this.lblVariableOp.Location = new System.Drawing.Point(3, 0);
             this.lblVariableOp.Name = "lblVariableOp";
             this.lblVariableOp.Size = new System.Drawing.Size(107, 27);
-            this.lblVariableOp.TabIndex = 7;
+            this.lblVariableOp.TabStop = false;
             this.lblVariableOp.Text = "Operation type";
             this.lblVariableOp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1995,14 +1951,16 @@
             "Unset scalar variable",
             "Set scalar variable value with string expression",
             "Set scalar variable value with numeric expression",
+            "Copy scalar variable or expression to the clipboard",
             "Unset all scalar variables",
             "Unset scalar variables matching regular expression",
+            "Unset all types of variables matching regular expression",
             "Query variable with JSONPath and store scalar value",
             "Query variable with JSONPath and store list value"});
             this.cbxVariableOp.Location = new System.Drawing.Point(116, 3);
             this.cbxVariableOp.Name = "cbxVariableOp";
             this.cbxVariableOp.Size = new System.Drawing.Size(623, 21);
-            this.cbxVariableOp.TabIndex = 21;
+            this.cbxVariableOp.TabStop = false;
             this.cbxVariableOp.SelectedIndexChanged += new System.EventHandler(this.cbxVariableOp_SelectedIndexChanged);
             // 
             // prsScalarName
@@ -2015,7 +1973,7 @@
             this.prsScalarName.Location = new System.Drawing.Point(715, 30);
             this.prsScalarName.Name = "prsScalarName";
             this.prsScalarName.Size = new System.Drawing.Size(24, 20);
-            this.prsScalarName.TabIndex = 24;
+            this.prsScalarName.TabStop = false;
             this.prsScalarName.Tag = ((object)(resources.GetObject("prsScalarName.Tag")));
             // 
             // tabImageAura
@@ -2025,7 +1983,7 @@
             this.tabImageAura.Location = new System.Drawing.Point(4, 25);
             this.tabImageAura.Name = "tabImageAura";
             this.tabImageAura.Size = new System.Drawing.Size(742, 414);
-            this.tabImageAura.TabIndex = 9;
+            this.tabImageAura.TabStop = false;
             this.tabImageAura.Text = "Aura";
             this.tabImageAura.UseVisualStyleBackColor = true;
             // 
@@ -2085,7 +2043,7 @@
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel11.Size = new System.Drawing.Size(742, 311);
-            this.tableLayoutPanel11.TabIndex = 8;
+            this.tableLayoutPanel11.TabStop = false;
             // 
             // btnHide
             // 
@@ -2094,7 +2052,7 @@
             this.btnHide.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnHide.Name = "btnHide";
             this.btnHide.Size = new System.Drawing.Size(89, 26);
-            this.btnHide.TabIndex = 50;
+            this.btnHide.TabStop = false;
             this.btnHide.Text = "Hide";
             this.btnHide.UseVisualStyleBackColor = true;
             this.btnHide.Click += new System.EventHandler(this.btnHide_Click);
@@ -2113,7 +2071,7 @@
             this.cbxAuraDisplay.Location = new System.Drawing.Point(123, 82);
             this.cbxAuraDisplay.Name = "cbxAuraDisplay";
             this.cbxAuraDisplay.Size = new System.Drawing.Size(616, 21);
-            this.cbxAuraDisplay.TabIndex = 13;
+            this.cbxAuraDisplay.TabStop = false;
             this.cbxAuraDisplay.EnabledChanged += new System.EventHandler(this.cbxAuraDisplay_EnabledChanged);
             // 
             // lblAuraDisplay
@@ -2123,7 +2081,7 @@
             this.lblAuraDisplay.Location = new System.Drawing.Point(3, 79);
             this.lblAuraDisplay.Name = "lblAuraDisplay";
             this.lblAuraDisplay.Size = new System.Drawing.Size(114, 27);
-            this.lblAuraDisplay.TabIndex = 49;
+            this.lblAuraDisplay.TabStop = false;
             this.lblAuraDisplay.Text = "Display method";
             this.lblAuraDisplay.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2169,7 +2127,7 @@
             this.expAuraHTick.Name = "expAuraHTick";
             this.expAuraHTick.ReadOnly = false;
             this.expAuraHTick.Size = new System.Drawing.Size(457, 20);
-            this.expAuraHTick.TabIndex = 21;
+            this.expAuraHTick.TabIndex = 22;
             this.expAuraHTick.EnabledChanged += new System.EventHandler(this.expAuraHTick_EnabledChanged);
             // 
             // expAuraWTick
@@ -2184,7 +2142,7 @@
             this.expAuraWTick.Name = "expAuraWTick";
             this.expAuraWTick.ReadOnly = false;
             this.expAuraWTick.Size = new System.Drawing.Size(457, 20);
-            this.expAuraWTick.TabIndex = 19;
+            this.expAuraWTick.TabIndex = 21;
             this.expAuraWTick.EnabledChanged += new System.EventHandler(this.expAuraWTick_EnabledChanged);
             // 
             // expAuraYTick
@@ -2199,7 +2157,7 @@
             this.expAuraYTick.Name = "expAuraYTick";
             this.expAuraYTick.ReadOnly = false;
             this.expAuraYTick.Size = new System.Drawing.Size(457, 20);
-            this.expAuraYTick.TabIndex = 17;
+            this.expAuraYTick.TabIndex = 20;
             this.expAuraYTick.EnabledChanged += new System.EventHandler(this.expAuraYTick_EnabledChanged);
             // 
             // expAuraXTick
@@ -2214,7 +2172,7 @@
             this.expAuraXTick.Name = "expAuraXTick";
             this.expAuraXTick.ReadOnly = false;
             this.expAuraXTick.Size = new System.Drawing.Size(457, 20);
-            this.expAuraXTick.TabIndex = 15;
+            this.expAuraXTick.TabIndex = 19;
             this.expAuraXTick.EnabledChanged += new System.EventHandler(this.expAuraXTick_EnabledChanged);
             // 
             // lblUpdateTickExp
@@ -2227,7 +2185,7 @@
             this.lblUpdateTickExp.Location = new System.Drawing.Point(282, 106);
             this.lblUpdateTickExp.Name = "lblUpdateTickExp";
             this.lblUpdateTickExp.Size = new System.Drawing.Size(457, 20);
-            this.lblUpdateTickExp.TabIndex = 41;
+            this.lblUpdateTickExp.TabStop = false;
             this.lblUpdateTickExp.Text = "Update tick (20 ms) expressions";
             this.lblUpdateTickExp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -2242,7 +2200,7 @@
             this.expAuraOIni.Name = "expAuraOIni";
             this.expAuraOIni.ReadOnly = false;
             this.expAuraOIni.Size = new System.Drawing.Size(153, 20);
-            this.expAuraOIni.TabIndex = 22;
+            this.expAuraOIni.TabIndex = 18;
             // 
             // expAuraHIni
             // 
@@ -2255,7 +2213,7 @@
             this.expAuraHIni.Name = "expAuraHIni";
             this.expAuraHIni.ReadOnly = false;
             this.expAuraHIni.Size = new System.Drawing.Size(153, 20);
-            this.expAuraHIni.TabIndex = 20;
+            this.expAuraHIni.TabIndex = 17;
             // 
             // expAuraWIni
             // 
@@ -2268,7 +2226,7 @@
             this.expAuraWIni.Name = "expAuraWIni";
             this.expAuraWIni.ReadOnly = false;
             this.expAuraWIni.Size = new System.Drawing.Size(153, 20);
-            this.expAuraWIni.TabIndex = 18;
+            this.expAuraWIni.TabIndex = 16;
             // 
             // lblAuraTtl
             // 
@@ -2277,7 +2235,7 @@
             this.lblAuraTtl.Location = new System.Drawing.Point(3, 256);
             this.lblAuraTtl.Name = "lblAuraTtl";
             this.lblAuraTtl.Size = new System.Drawing.Size(114, 26);
-            this.lblAuraTtl.TabIndex = 35;
+            this.lblAuraTtl.TabStop = false;
             this.lblAuraTtl.Text = "Time-to-live expression";
             this.lblAuraTtl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2288,7 +2246,7 @@
             this.lblAuraOpacity.Location = new System.Drawing.Point(3, 230);
             this.lblAuraOpacity.Name = "lblAuraOpacity";
             this.lblAuraOpacity.Size = new System.Drawing.Size(114, 26);
-            this.lblAuraOpacity.TabIndex = 34;
+            this.lblAuraOpacity.TabStop = false;
             this.lblAuraOpacity.Text = "Opacity expression";
             this.lblAuraOpacity.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2299,7 +2257,7 @@
             this.lblAuraWidth.Location = new System.Drawing.Point(3, 178);
             this.lblAuraWidth.Name = "lblAuraWidth";
             this.lblAuraWidth.Size = new System.Drawing.Size(114, 26);
-            this.lblAuraWidth.TabIndex = 33;
+            this.lblAuraWidth.TabStop = false;
             this.lblAuraWidth.Text = "Width expression";
             this.lblAuraWidth.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2310,7 +2268,7 @@
             this.lblAuraHeight.Location = new System.Drawing.Point(3, 204);
             this.lblAuraHeight.Name = "lblAuraHeight";
             this.lblAuraHeight.Size = new System.Drawing.Size(114, 26);
-            this.lblAuraHeight.TabIndex = 32;
+            this.lblAuraHeight.TabStop = false;
             this.lblAuraHeight.Text = "Height expression";
             this.lblAuraHeight.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2322,7 +2280,7 @@
             this.btnBrowseAura.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnBrowseAura.Name = "btnBrowseAura";
             this.btnBrowseAura.Size = new System.Drawing.Size(89, 26);
-            this.btnBrowseAura.TabIndex = 12;
+            this.btnBrowseAura.TabStop = false;
             this.btnBrowseAura.UseVisualStyleBackColor = true;
             this.btnBrowseAura.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -2348,7 +2306,7 @@
             this.lblAuraImage.Location = new System.Drawing.Point(3, 53);
             this.lblAuraImage.Name = "lblAuraImage";
             this.lblAuraImage.Size = new System.Drawing.Size(114, 26);
-            this.lblAuraImage.TabIndex = 28;
+            this.lblAuraImage.TabStop = false;
             this.lblAuraImage.Text = "Image to display";
             this.lblAuraImage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2363,7 +2321,7 @@
             this.expAuraYIni.Name = "expAuraYIni";
             this.expAuraYIni.ReadOnly = false;
             this.expAuraYIni.Size = new System.Drawing.Size(153, 20);
-            this.expAuraYIni.TabIndex = 16;
+            this.expAuraYIni.TabIndex = 15;
             // 
             // lblAuraY
             // 
@@ -2372,7 +2330,7 @@
             this.lblAuraY.Location = new System.Drawing.Point(3, 152);
             this.lblAuraY.Name = "lblAuraY";
             this.lblAuraY.Size = new System.Drawing.Size(114, 26);
-            this.lblAuraY.TabIndex = 26;
+            this.lblAuraY.TabStop = false;
             this.lblAuraY.Text = "Y location expression";
             this.lblAuraY.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2396,7 +2354,7 @@
             this.lblAuraX.Location = new System.Drawing.Point(3, 126);
             this.lblAuraX.Name = "lblAuraX";
             this.lblAuraX.Size = new System.Drawing.Size(114, 26);
-            this.lblAuraX.TabIndex = 24;
+            this.lblAuraX.TabStop = false;
             this.lblAuraX.Text = "X location expression";
             this.lblAuraX.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2422,7 +2380,7 @@
             this.lblAuraName.Location = new System.Drawing.Point(3, 27);
             this.lblAuraName.Name = "lblAuraName";
             this.lblAuraName.Size = new System.Drawing.Size(114, 26);
-            this.lblAuraName.TabIndex = 15;
+            this.lblAuraName.TabStop = false;
             this.lblAuraName.Text = "Unique identifier";
             this.lblAuraName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2433,7 +2391,7 @@
             this.lblAuraOp.Location = new System.Drawing.Point(3, 0);
             this.lblAuraOp.Name = "lblAuraOp";
             this.lblAuraOp.Size = new System.Drawing.Size(114, 27);
-            this.lblAuraOp.TabIndex = 7;
+            this.lblAuraOp.TabStop = false;
             this.lblAuraOp.Text = "Operation";
             this.lblAuraOp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2451,7 +2409,7 @@
             this.cbxAuraOp.Location = new System.Drawing.Point(123, 3);
             this.cbxAuraOp.Name = "cbxAuraOp";
             this.cbxAuraOp.Size = new System.Drawing.Size(616, 21);
-            this.cbxAuraOp.TabIndex = 9;
+            this.cbxAuraOp.TabStop = false;
             this.cbxAuraOp.SelectedIndexChanged += new System.EventHandler(this.cbxAuraOp_SelectedIndexChanged);
             // 
             // lblInitialValues
@@ -2463,7 +2421,7 @@
             this.lblInitialValues.Location = new System.Drawing.Point(123, 106);
             this.lblInitialValues.Name = "lblInitialValues";
             this.lblInitialValues.Size = new System.Drawing.Size(153, 20);
-            this.lblInitialValues.TabIndex = 40;
+            this.lblInitialValues.TabStop = false;
             this.lblInitialValues.Text = "Initial values";
             this.lblInitialValues.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -2475,7 +2433,7 @@
             this.btnAuraGuide.Location = new System.Drawing.Point(123, 285);
             this.btnAuraGuide.Name = "btnAuraGuide";
             this.btnAuraGuide.Size = new System.Drawing.Size(616, 23);
-            this.btnAuraGuide.TabIndex = 25;
+            this.btnAuraGuide.TabStop = false;
             this.btnAuraGuide.Text = "Use visual guide for placement (right-click for more options)";
             this.btnAuraGuide.UseVisualStyleBackColor = true;
             this.btnAuraGuide.Click += new System.EventHandler(this.button4_Click);
@@ -2486,7 +2444,7 @@
             this.tabFolderOperation.Location = new System.Drawing.Point(4, 25);
             this.tabFolderOperation.Name = "tabFolderOperation";
             this.tabFolderOperation.Size = new System.Drawing.Size(742, 414);
-            this.tabFolderOperation.TabIndex = 10;
+            this.tabFolderOperation.TabStop = false;
             this.tabFolderOperation.Text = "Folder";
             this.tabFolderOperation.UseVisualStyleBackColor = true;
             // 
@@ -2511,7 +2469,7 @@
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel12.Size = new System.Drawing.Size(742, 414);
-            this.tableLayoutPanel12.TabIndex = 8;
+            this.tableLayoutPanel12.TabStop = false;
             // 
             // lblFolder
             // 
@@ -2522,7 +2480,7 @@
             this.lblFolder.Name = "lblFolder";
             this.lblFolder.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.lblFolder.Size = new System.Drawing.Size(53, 17);
-            this.lblFolder.TabIndex = 23;
+            this.lblFolder.TabStop = false;
             this.lblFolder.Text = "Folder";
             this.lblFolder.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2533,7 +2491,7 @@
             this.lblFolderOp.Location = new System.Drawing.Point(3, 0);
             this.lblFolderOp.Name = "lblFolderOp";
             this.lblFolderOp.Size = new System.Drawing.Size(53, 27);
-            this.lblFolderOp.TabIndex = 7;
+            this.lblFolderOp.TabStop = false;
             this.lblFolderOp.Text = "Operation";
             this.lblFolderOp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2544,11 +2502,12 @@
             this.cbxFolderOp.FormattingEnabled = true;
             this.cbxFolderOp.Items.AddRange(new object[] {
             "Enable the specified folder",
-            "Disable the specified folder"});
+            "Disable the specified folder",
+            "Cancel all actions in the specified folder"});
             this.cbxFolderOp.Location = new System.Drawing.Point(62, 3);
             this.cbxFolderOp.Name = "cbxFolderOp";
             this.cbxFolderOp.Size = new System.Drawing.Size(677, 21);
-            this.cbxFolderOp.TabIndex = 21;
+            this.cbxFolderOp.TabStop = false;
             this.cbxFolderOp.SelectedIndexChanged += new System.EventHandler(this.cbxFolderOp_SelectedIndexChanged);
             // 
             // trvFolder
@@ -2572,7 +2531,7 @@
             this.tabEndEncounter.Location = new System.Drawing.Point(4, 25);
             this.tabEndEncounter.Name = "tabEndEncounter";
             this.tabEndEncounter.Size = new System.Drawing.Size(742, 414);
-            this.tabEndEncounter.TabIndex = 11;
+            this.tabEndEncounter.TabStop = false;
             this.tabEndEncounter.Text = "End";
             this.tabEndEncounter.UseVisualStyleBackColor = true;
             // 
@@ -2583,7 +2542,7 @@
             this.lblEndEncNoParams.Name = "lblEndEncNoParams";
             this.lblEndEncNoParams.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
             this.lblEndEncNoParams.Size = new System.Drawing.Size(742, 414);
-            this.lblEndEncNoParams.TabIndex = 16;
+            this.lblEndEncNoParams.TabStop = false;
             this.lblEndEncNoParams.Text = "This action has no configurable parameters.";
             this.lblEndEncNoParams.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -2593,7 +2552,7 @@
             this.tabDiscordWebhook.Location = new System.Drawing.Point(4, 25);
             this.tabDiscordWebhook.Name = "tabDiscordWebhook";
             this.tabDiscordWebhook.Size = new System.Drawing.Size(742, 414);
-            this.tabDiscordWebhook.TabIndex = 13;
+            this.tabDiscordWebhook.TabStop = false;
             this.tabDiscordWebhook.Text = "Discord";
             this.tabDiscordWebhook.UseVisualStyleBackColor = true;
             // 
@@ -2628,7 +2587,7 @@
             this.cbxDiscordTts.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.cbxDiscordTts.Name = "cbxDiscordTts";
             this.cbxDiscordTts.Size = new System.Drawing.Size(737, 17);
-            this.cbxDiscordTts.TabIndex = 18;
+            this.cbxDiscordTts.TabStop = false;
             this.cbxDiscordTts.Text = "Send as a text-to-speech message";
             this.cbxDiscordTts.UseVisualStyleBackColor = true;
             // 
@@ -2652,7 +2611,7 @@
             this.lblDiscordMessage.Location = new System.Drawing.Point(3, 26);
             this.lblDiscordMessage.Name = "lblDiscordMessage";
             this.lblDiscordMessage.Size = new System.Drawing.Size(88, 26);
-            this.lblDiscordMessage.TabIndex = 15;
+            this.lblDiscordMessage.TabStop = false;
             this.lblDiscordMessage.Text = "Message to send";
             this.lblDiscordMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2663,7 +2622,7 @@
             this.lblDiscordUrl.Location = new System.Drawing.Point(3, 0);
             this.lblDiscordUrl.Name = "lblDiscordUrl";
             this.lblDiscordUrl.Size = new System.Drawing.Size(88, 26);
-            this.lblDiscordUrl.TabIndex = 7;
+            this.lblDiscordUrl.TabStop = false;
             this.lblDiscordUrl.Text = "Webhook URL";
             this.lblDiscordUrl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2687,7 +2646,7 @@
             this.tabTextAura.Location = new System.Drawing.Point(4, 25);
             this.tabTextAura.Name = "tabTextAura";
             this.tabTextAura.Size = new System.Drawing.Size(742, 414);
-            this.tabTextAura.TabIndex = 12;
+            this.tabTextAura.TabStop = false;
             this.tabTextAura.Text = "TextAura";
             this.tabTextAura.UseVisualStyleBackColor = true;
             // 
@@ -2753,7 +2712,7 @@
             this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel13.Size = new System.Drawing.Size(742, 364);
-            this.tableLayoutPanel13.TabIndex = 9;
+            this.tableLayoutPanel13.TabStop = false;
             // 
             // lblTextAuraOutline
             // 
@@ -2762,7 +2721,7 @@
             this.lblTextAuraOutline.Location = new System.Drawing.Point(3, 132);
             this.lblTextAuraOutline.Name = "lblTextAuraOutline";
             this.lblTextAuraOutline.Size = new System.Drawing.Size(114, 27);
-            this.lblTextAuraOutline.TabIndex = 55;
+            this.lblTextAuraOutline.TabStop = false;
             this.lblTextAuraOutline.Text = "Display outline";
             this.lblTextAuraOutline.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2773,7 +2732,7 @@
             this.btnTextAuraFont.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnTextAuraFont.Name = "btnTextAuraFont";
             this.btnTextAuraFont.Size = new System.Drawing.Size(79, 26);
-            this.btnTextAuraFont.TabIndex = 52;
+            this.btnTextAuraFont.TabStop = false;
             this.btnTextAuraFont.Text = "...";
             this.btnTextAuraFont.UseVisualStyleBackColor = true;
             this.btnTextAuraFont.Click += new System.EventHandler(this.btnTextAuraFont_Click);
@@ -2785,7 +2744,7 @@
             this.lblTextAuraFont.Location = new System.Drawing.Point(3, 79);
             this.lblTextAuraFont.Name = "lblTextAuraFont";
             this.lblTextAuraFont.Size = new System.Drawing.Size(114, 26);
-            this.lblTextAuraFont.TabIndex = 51;
+            this.lblTextAuraFont.TabStop = false;
             this.lblTextAuraFont.Text = "Font";
             this.lblTextAuraFont.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2796,7 +2755,7 @@
             this.btnTextAuraHide.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnTextAuraHide.Name = "btnTextAuraHide";
             this.btnTextAuraHide.Size = new System.Drawing.Size(79, 26);
-            this.btnTextAuraHide.TabIndex = 50;
+            this.btnTextAuraHide.TabStop = false;
             this.btnTextAuraHide.Text = "Hide";
             this.btnTextAuraHide.UseVisualStyleBackColor = true;
             this.btnTextAuraHide.Click += new System.EventHandler(this.btnTextAuraHide_Click);
@@ -2820,7 +2779,7 @@
             this.cbxTextAuraAlignment.Location = new System.Drawing.Point(123, 108);
             this.cbxTextAuraAlignment.Name = "cbxTextAuraAlignment";
             this.cbxTextAuraAlignment.Size = new System.Drawing.Size(616, 21);
-            this.cbxTextAuraAlignment.TabIndex = 13;
+            this.cbxTextAuraAlignment.TabStop = false;
             this.cbxTextAuraAlignment.EnabledChanged += new System.EventHandler(this.cbxTextAuraAlignment_EnabledChanged);
             // 
             // lblTextAuraAlignment
@@ -2830,7 +2789,7 @@
             this.lblTextAuraAlignment.Location = new System.Drawing.Point(3, 105);
             this.lblTextAuraAlignment.Name = "lblTextAuraAlignment";
             this.lblTextAuraAlignment.Size = new System.Drawing.Size(114, 27);
-            this.lblTextAuraAlignment.TabIndex = 49;
+            this.lblTextAuraAlignment.TabStop = false;
             this.lblTextAuraAlignment.Text = "Text alignment";
             this.lblTextAuraAlignment.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2876,7 +2835,7 @@
             this.expTextAuraHTick.Name = "expTextAuraHTick";
             this.expTextAuraHTick.ReadOnly = false;
             this.expTextAuraHTick.Size = new System.Drawing.Size(454, 20);
-            this.expTextAuraHTick.TabIndex = 21;
+            this.expTextAuraHTick.TabIndex = 22;
             this.expTextAuraHTick.EnabledChanged += new System.EventHandler(this.expTextAuraHTick_EnabledChanged);
             // 
             // expTextAuraWTick
@@ -2891,7 +2850,7 @@
             this.expTextAuraWTick.Name = "expTextAuraWTick";
             this.expTextAuraWTick.ReadOnly = false;
             this.expTextAuraWTick.Size = new System.Drawing.Size(454, 20);
-            this.expTextAuraWTick.TabIndex = 19;
+            this.expTextAuraWTick.TabIndex = 21;
             this.expTextAuraWTick.EnabledChanged += new System.EventHandler(this.expTextAuraWTick_EnabledChanged);
             // 
             // expTextAuraYTick
@@ -2906,7 +2865,7 @@
             this.expTextAuraYTick.Name = "expTextAuraYTick";
             this.expTextAuraYTick.ReadOnly = false;
             this.expTextAuraYTick.Size = new System.Drawing.Size(454, 20);
-            this.expTextAuraYTick.TabIndex = 17;
+            this.expTextAuraYTick.TabIndex = 20;
             this.expTextAuraYTick.EnabledChanged += new System.EventHandler(this.expTextAuraYTick_EnabledChanged);
             // 
             // expTextAuraXTick
@@ -2921,7 +2880,7 @@
             this.expTextAuraXTick.Name = "expTextAuraXTick";
             this.expTextAuraXTick.ReadOnly = false;
             this.expTextAuraXTick.Size = new System.Drawing.Size(454, 20);
-            this.expTextAuraXTick.TabIndex = 15;
+            this.expTextAuraXTick.TabIndex = 19;
             this.expTextAuraXTick.EnabledChanged += new System.EventHandler(this.expTextAuraXTick_EnabledChanged);
             // 
             // lblTextAuraUpdValues
@@ -2934,7 +2893,7 @@
             this.lblTextAuraUpdValues.Location = new System.Drawing.Point(285, 159);
             this.lblTextAuraUpdValues.Name = "lblTextAuraUpdValues";
             this.lblTextAuraUpdValues.Size = new System.Drawing.Size(454, 20);
-            this.lblTextAuraUpdValues.TabIndex = 41;
+            this.lblTextAuraUpdValues.TabStop = false;
             this.lblTextAuraUpdValues.Text = "Update tick (20 ms) expressions";
             this.lblTextAuraUpdValues.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -2949,7 +2908,7 @@
             this.expTextAuraOIni.Name = "expTextAuraOIni";
             this.expTextAuraOIni.ReadOnly = false;
             this.expTextAuraOIni.Size = new System.Drawing.Size(156, 20);
-            this.expTextAuraOIni.TabIndex = 22;
+            this.expTextAuraOIni.TabIndex = 18;
             // 
             // expTextAuraHIni
             // 
@@ -2962,7 +2921,7 @@
             this.expTextAuraHIni.Name = "expTextAuraHIni";
             this.expTextAuraHIni.ReadOnly = false;
             this.expTextAuraHIni.Size = new System.Drawing.Size(156, 20);
-            this.expTextAuraHIni.TabIndex = 20;
+            this.expTextAuraHIni.TabIndex = 17;
             // 
             // expTextAuraWIni
             // 
@@ -2975,7 +2934,7 @@
             this.expTextAuraWIni.Name = "expTextAuraWIni";
             this.expTextAuraWIni.ReadOnly = false;
             this.expTextAuraWIni.Size = new System.Drawing.Size(156, 20);
-            this.expTextAuraWIni.TabIndex = 18;
+            this.expTextAuraWIni.TabIndex = 16;
             // 
             // lblTextAuraTtlExp
             // 
@@ -2984,7 +2943,7 @@
             this.lblTextAuraTtlExp.Location = new System.Drawing.Point(3, 309);
             this.lblTextAuraTtlExp.Name = "lblTextAuraTtlExp";
             this.lblTextAuraTtlExp.Size = new System.Drawing.Size(114, 26);
-            this.lblTextAuraTtlExp.TabIndex = 35;
+            this.lblTextAuraTtlExp.TabStop = false;
             this.lblTextAuraTtlExp.Text = "Time-to-live expression";
             this.lblTextAuraTtlExp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2995,7 +2954,7 @@
             this.lblTextAuraOpacity.Location = new System.Drawing.Point(3, 283);
             this.lblTextAuraOpacity.Name = "lblTextAuraOpacity";
             this.lblTextAuraOpacity.Size = new System.Drawing.Size(114, 26);
-            this.lblTextAuraOpacity.TabIndex = 34;
+            this.lblTextAuraOpacity.TabStop = false;
             this.lblTextAuraOpacity.Text = "Opacity expression";
             this.lblTextAuraOpacity.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3006,7 +2965,7 @@
             this.lblTextAuraWidth.Location = new System.Drawing.Point(3, 231);
             this.lblTextAuraWidth.Name = "lblTextAuraWidth";
             this.lblTextAuraWidth.Size = new System.Drawing.Size(114, 26);
-            this.lblTextAuraWidth.TabIndex = 33;
+            this.lblTextAuraWidth.TabStop = false;
             this.lblTextAuraWidth.Text = "Width expression";
             this.lblTextAuraWidth.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3017,7 +2976,7 @@
             this.lblTextAuraHeight.Location = new System.Drawing.Point(3, 257);
             this.lblTextAuraHeight.Name = "lblTextAuraHeight";
             this.lblTextAuraHeight.Size = new System.Drawing.Size(114, 26);
-            this.lblTextAuraHeight.TabIndex = 32;
+            this.lblTextAuraHeight.TabStop = false;
             this.lblTextAuraHeight.Text = "Height expression";
             this.lblTextAuraHeight.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3043,7 +3002,7 @@
             this.lblTextAuraText.Location = new System.Drawing.Point(3, 53);
             this.lblTextAuraText.Name = "lblTextAuraText";
             this.lblTextAuraText.Size = new System.Drawing.Size(114, 26);
-            this.lblTextAuraText.TabIndex = 28;
+            this.lblTextAuraText.TabStop = false;
             this.lblTextAuraText.Text = "Text to display";
             this.lblTextAuraText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3058,7 +3017,7 @@
             this.expTextAuraYIni.Name = "expTextAuraYIni";
             this.expTextAuraYIni.ReadOnly = false;
             this.expTextAuraYIni.Size = new System.Drawing.Size(156, 20);
-            this.expTextAuraYIni.TabIndex = 16;
+            this.expTextAuraYIni.TabIndex = 15;
             // 
             // lblTextAuraY
             // 
@@ -3067,7 +3026,7 @@
             this.lblTextAuraY.Location = new System.Drawing.Point(3, 205);
             this.lblTextAuraY.Name = "lblTextAuraY";
             this.lblTextAuraY.Size = new System.Drawing.Size(114, 26);
-            this.lblTextAuraY.TabIndex = 26;
+            this.lblTextAuraY.TabStop = false;
             this.lblTextAuraY.Text = "Y location expression";
             this.lblTextAuraY.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3091,7 +3050,7 @@
             this.lblTextAuraX.Location = new System.Drawing.Point(3, 179);
             this.lblTextAuraX.Name = "lblTextAuraX";
             this.lblTextAuraX.Size = new System.Drawing.Size(114, 26);
-            this.lblTextAuraX.TabIndex = 24;
+            this.lblTextAuraX.TabStop = false;
             this.lblTextAuraX.Text = "X location expression";
             this.lblTextAuraX.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3117,7 +3076,7 @@
             this.lblTextAuraName.Location = new System.Drawing.Point(3, 27);
             this.lblTextAuraName.Name = "lblTextAuraName";
             this.lblTextAuraName.Size = new System.Drawing.Size(114, 26);
-            this.lblTextAuraName.TabIndex = 15;
+            this.lblTextAuraName.TabStop = false;
             this.lblTextAuraName.Text = "Unique identifier";
             this.lblTextAuraName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3128,7 +3087,7 @@
             this.lblTextAuraOp.Location = new System.Drawing.Point(3, 0);
             this.lblTextAuraOp.Name = "lblTextAuraOp";
             this.lblTextAuraOp.Size = new System.Drawing.Size(114, 27);
-            this.lblTextAuraOp.TabIndex = 7;
+            this.lblTextAuraOp.TabStop = false;
             this.lblTextAuraOp.Text = "Operation";
             this.lblTextAuraOp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3146,7 +3105,7 @@
             this.cbxTextAuraOp.Location = new System.Drawing.Point(123, 3);
             this.cbxTextAuraOp.Name = "cbxTextAuraOp";
             this.cbxTextAuraOp.Size = new System.Drawing.Size(616, 21);
-            this.cbxTextAuraOp.TabIndex = 9;
+            this.cbxTextAuraOp.TabStop = false;
             this.cbxTextAuraOp.SelectedIndexChanged += new System.EventHandler(this.cbxTextAuraOp_SelectedIndexChanged);
             // 
             // lblTextAuraIniValues
@@ -3158,7 +3117,7 @@
             this.lblTextAuraIniValues.Location = new System.Drawing.Point(123, 159);
             this.lblTextAuraIniValues.Name = "lblTextAuraIniValues";
             this.lblTextAuraIniValues.Size = new System.Drawing.Size(156, 20);
-            this.lblTextAuraIniValues.TabIndex = 40;
+            this.lblTextAuraIniValues.TabStop = false;
             this.lblTextAuraIniValues.Text = "Initial values";
             this.lblTextAuraIniValues.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -3170,7 +3129,7 @@
             this.btnTextAuraGuide.Location = new System.Drawing.Point(123, 338);
             this.btnTextAuraGuide.Name = "btnTextAuraGuide";
             this.btnTextAuraGuide.Size = new System.Drawing.Size(616, 23);
-            this.btnTextAuraGuide.TabIndex = 25;
+            this.btnTextAuraGuide.TabStop = false;
             this.btnTextAuraGuide.Text = "Use visual guide for placement (right-click for more options)";
             this.btnTextAuraGuide.UseVisualStyleBackColor = true;
             this.btnTextAuraGuide.Click += new System.EventHandler(this.button8_Click);
@@ -3182,7 +3141,7 @@
             this.txtTextAuraFont.Name = "txtTextAuraFont";
             this.txtTextAuraFont.ReadOnly = true;
             this.txtTextAuraFont.Size = new System.Drawing.Size(372, 20);
-            this.txtTextAuraFont.TabIndex = 53;
+            this.txtTextAuraFont.TabStop = false;
             // 
             // colorSelector1
             // 
@@ -3196,7 +3155,7 @@
             this.colorSelector1.Location = new System.Drawing.Point(123, 82);
             this.colorSelector1.Name = "colorSelector1";
             this.colorSelector1.Size = new System.Drawing.Size(156, 20);
-            this.colorSelector1.TabIndex = 54;
+            this.colorSelector1.TabStop = false;
             this.colorSelector1.TextColor = System.Drawing.Color.Empty;
             this.colorSelector1.TextOutlineColor = System.Drawing.Color.Empty;
             this.colorSelector1.EnabledChanged += new System.EventHandler(this.colorSelector1_EnabledChanged);
@@ -3211,7 +3170,7 @@
             this.cbxTextAuraOutline.Name = "cbxTextAuraOutline";
             this.cbxTextAuraOutline.Padding = new System.Windows.Forms.Padding(0, 3, 0, 4);
             this.cbxTextAuraOutline.Size = new System.Drawing.Size(616, 21);
-            this.cbxTextAuraOutline.TabIndex = 56;
+            this.cbxTextAuraOutline.TabStop = false;
             this.cbxTextAuraOutline.UseVisualStyleBackColor = true;
             this.cbxTextAuraOutline.EnabledChanged += new System.EventHandler(this.cbxTextAuraOutline_EnabledChanged);
             // 
@@ -3221,7 +3180,7 @@
             this.tabLogMessage.Location = new System.Drawing.Point(4, 25);
             this.tabLogMessage.Name = "tabLogMessage";
             this.tabLogMessage.Size = new System.Drawing.Size(742, 414);
-            this.tabLogMessage.TabIndex = 14;
+            this.tabLogMessage.TabStop = false;
             this.tabLogMessage.Text = "LogMessage";
             this.tabLogMessage.UseVisualStyleBackColor = true;
             // 
@@ -3248,7 +3207,7 @@
             this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel14.Size = new System.Drawing.Size(742, 107);
-            this.tableLayoutPanel14.TabIndex = 2;
+            this.tableLayoutPanel14.TabStop = false;
             // 
             // cbxLogMessageTarget
             // 
@@ -3262,7 +3221,7 @@
             this.cbxLogMessageTarget.Location = new System.Drawing.Point(131, 83);
             this.cbxLogMessageTarget.Name = "cbxLogMessageTarget";
             this.cbxLogMessageTarget.Size = new System.Drawing.Size(608, 21);
-            this.cbxLogMessageTarget.TabIndex = 28;
+            this.cbxLogMessageTarget.TabStop = false;
             // 
             // lblLogMessageTarget
             // 
@@ -3271,7 +3230,7 @@
             this.lblLogMessageTarget.Location = new System.Drawing.Point(3, 80);
             this.lblLogMessageTarget.Name = "lblLogMessageTarget";
             this.lblLogMessageTarget.Size = new System.Drawing.Size(122, 27);
-            this.lblLogMessageTarget.TabIndex = 27;
+            this.lblLogMessageTarget.TabStop = false;
             this.lblLogMessageTarget.Text = "Target event source";
             this.lblLogMessageTarget.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3283,12 +3242,14 @@
             this.cbxLogMessageLevel.Items.AddRange(new object[] {
             "Error",
             "Warning",
+            "Custom",
+            "Custom 2",
             "Info",
             "Verbose"});
             this.cbxLogMessageLevel.Location = new System.Drawing.Point(131, 56);
             this.cbxLogMessageLevel.Name = "cbxLogMessageLevel";
             this.cbxLogMessageLevel.Size = new System.Drawing.Size(608, 21);
-            this.cbxLogMessageLevel.TabIndex = 26;
+            this.cbxLogMessageLevel.TabStop = false;
             // 
             // lblLogMessageLevel
             // 
@@ -3297,7 +3258,7 @@
             this.lblLogMessageLevel.Location = new System.Drawing.Point(3, 53);
             this.lblLogMessageLevel.Name = "lblLogMessageLevel";
             this.lblLogMessageLevel.Size = new System.Drawing.Size(122, 27);
-            this.lblLogMessageLevel.TabIndex = 20;
+            this.lblLogMessageLevel.TabStop = false;
             this.lblLogMessageLevel.Text = "Level to log message on";
             this.lblLogMessageLevel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3311,7 +3272,7 @@
             this.cbxProcessLog.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.cbxProcessLog.Name = "cbxProcessLog";
             this.cbxProcessLog.Size = new System.Drawing.Size(737, 17);
-            this.cbxProcessLog.TabIndex = 19;
+            this.cbxProcessLog.TabStop = false;
             this.cbxProcessLog.Text = "Process message as log line";
             this.cbxProcessLog.UseVisualStyleBackColor = true;
             this.cbxProcessLog.CheckedChanged += new System.EventHandler(this.cbxProcessLog_CheckedChanged);
@@ -3323,7 +3284,7 @@
             this.lblLogMessageText.Location = new System.Drawing.Point(3, 0);
             this.lblLogMessageText.Name = "lblLogMessageText";
             this.lblLogMessageText.Size = new System.Drawing.Size(122, 26);
-            this.lblLogMessageText.TabIndex = 7;
+            this.lblLogMessageText.TabStop = false;
             this.lblLogMessageText.Text = "Message to log";
             this.lblLogMessageText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3346,7 +3307,7 @@
             this.tabListVariable.Location = new System.Drawing.Point(4, 25);
             this.tabListVariable.Name = "tabListVariable";
             this.tabListVariable.Size = new System.Drawing.Size(742, 414);
-            this.tabListVariable.TabIndex = 15;
+            this.tabListVariable.TabStop = false;
             this.tabListVariable.Text = "ListVariable";
             this.tabListVariable.UseVisualStyleBackColor = true;
             // 
@@ -3382,7 +3343,7 @@
             this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel17.Size = new System.Drawing.Size(742, 158);
-            this.tableLayoutPanel17.TabIndex = 7;
+            this.tableLayoutPanel17.TabStop = false;
             // 
             // prsListTarget
             // 
@@ -3394,7 +3355,7 @@
             this.prsListTarget.Location = new System.Drawing.Point(715, 135);
             this.prsListTarget.Name = "prsListTarget";
             this.prsListTarget.Size = new System.Drawing.Size(24, 20);
-            this.prsListTarget.TabIndex = 31;
+            this.prsListTarget.TabStop = false;
             this.prsListTarget.Tag = ((object)(resources.GetObject("prsListTarget.Tag")));
             // 
             // prsListSource
@@ -3407,7 +3368,7 @@
             this.prsListSource.Location = new System.Drawing.Point(715, 30);
             this.prsListSource.Name = "prsListSource";
             this.prsListSource.Size = new System.Drawing.Size(24, 20);
-            this.prsListSource.TabIndex = 30;
+            this.prsListSource.TabStop = false;
             this.prsListSource.Tag = ((object)(resources.GetObject("prsListSource.Tag")));
             // 
             // cbxLvarExpType
@@ -3422,7 +3383,7 @@
             this.cbxLvarExpType.Location = new System.Drawing.Point(119, 56);
             this.cbxLvarExpType.Name = "cbxLvarExpType";
             this.cbxLvarExpType.Size = new System.Drawing.Size(620, 21);
-            this.cbxLvarExpType.TabIndex = 29;
+            this.cbxLvarExpType.TabStop = false;
             this.cbxLvarExpType.SelectedIndexChanged += new System.EventHandler(this.cbxLvarExpType_SelectedIndexChanged);
             this.cbxLvarExpType.EnabledChanged += new System.EventHandler(this.cbxLvarExpType_EnabledChanged);
             // 
@@ -3433,7 +3394,7 @@
             this.lblLvarExpType.Location = new System.Drawing.Point(3, 53);
             this.lblLvarExpType.Name = "lblLvarExpType";
             this.lblLvarExpType.Size = new System.Drawing.Size(110, 27);
-            this.lblLvarExpType.TabIndex = 28;
+            this.lblLvarExpType.TabStop = false;
             this.lblLvarExpType.Text = "Expression type";
             this.lblLvarExpType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3458,7 +3419,7 @@
             this.lblLvarTarget.Location = new System.Drawing.Point(3, 132);
             this.lblLvarTarget.Name = "lblLvarTarget";
             this.lblLvarTarget.Size = new System.Drawing.Size(110, 26);
-            this.lblLvarTarget.TabIndex = 26;
+            this.lblLvarTarget.TabStop = false;
             this.lblLvarTarget.Text = "Target variable name";
             this.lblLvarTarget.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3484,7 +3445,7 @@
             this.lblLvarIndex.Location = new System.Drawing.Point(3, 106);
             this.lblLvarIndex.Name = "lblLvarIndex";
             this.lblLvarIndex.Size = new System.Drawing.Size(110, 26);
-            this.lblLvarIndex.TabIndex = 24;
+            this.lblLvarIndex.TabStop = false;
             this.lblLvarIndex.Text = "List index number";
             this.lblLvarIndex.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3510,7 +3471,7 @@
             this.lblLvarValue.Location = new System.Drawing.Point(3, 80);
             this.lblLvarValue.Name = "lblLvarValue";
             this.lblLvarValue.Size = new System.Drawing.Size(110, 26);
-            this.lblLvarValue.TabIndex = 22;
+            this.lblLvarValue.TabStop = false;
             this.lblLvarValue.Text = "Expression";
             this.lblLvarValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3535,7 +3496,7 @@
             this.lblLvarName.Location = new System.Drawing.Point(3, 27);
             this.lblLvarName.Name = "lblLvarName";
             this.lblLvarName.Size = new System.Drawing.Size(110, 26);
-            this.lblLvarName.TabIndex = 15;
+            this.lblLvarName.TabStop = false;
             this.lblLvarName.Text = "Source variable name";
             this.lblLvarName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3546,7 +3507,7 @@
             this.lblLvarOperation.Location = new System.Drawing.Point(3, 0);
             this.lblLvarOperation.Name = "lblLvarOperation";
             this.lblLvarOperation.Size = new System.Drawing.Size(110, 27);
-            this.lblLvarOperation.TabIndex = 7;
+            this.lblLvarOperation.TabStop = false;
             this.lblLvarOperation.Text = "Operation type";
             this.lblLvarOperation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3561,26 +3522,31 @@
             "Push value to the end of the list variable",
             "Insert value to the given index of the list variable",
             "Set value at the given index of the list variable",
+            "Set all values on the list variable to the expression",
             "Remove value at the given index of the list variable",
-            "Pop last value from list variable into a scalar variable (stack)",
-            "Pop first value from list variable into a scalar variable (queue)",
+            "Pop the given index from list variable into a scalar variable",
+            "Pop and insert a value from a list into another list",
+            "Pop and set a value from a list into another list",
+            "Pop last value from list variable into a scalar variable (old action)",
+            "Build a list variable from the expression separated by its first character",
+            "Filter elements into another list",
+            "Join all values in the list variable into a scalar variable (separator in expression)",
+            "Split a scalar variable into a list variable (separator in expression)",
+            "Copy whole list variable to another list variable",
+            "Insert list variable into another list variable at the given index",
+            "Sort list in a numerically ascending order",
+            "Sort list in a numerically descending order",
             "Sort list in an alphabetically ascending order",
             "Sort list in an alphabetically descending order",
             "Sort list in an ascending order based on FFXIV party job order",
             "Sort list in a descending order based on FFXIV party job order",
-            "Copy whole list variable to another list variable",
-            "Insert list variable into another list variable at the given index",
-            "Join all values in the list variable into a scalar variable (separator in express" +
-                "ion)",
-            "Split a scalar variable into a list variable (separator in expression)",
+            "Sort list by the key functions",
             "Unset all list variables",
-            "Unset list variables matching regular expression",
-            "Sort list in an numerically ascending order",
-            "Sort list in an numerically descending order"});
+            "Unset list variables matching regular expression"});
             this.cbxLvarOperation.Location = new System.Drawing.Point(119, 3);
             this.cbxLvarOperation.Name = "cbxLvarOperation";
             this.cbxLvarOperation.Size = new System.Drawing.Size(620, 21);
-            this.cbxLvarOperation.TabIndex = 21;
+            this.cbxLvarOperation.TabStop = false;
             this.cbxLvarOperation.SelectedIndexChanged += new System.EventHandler(this.cbxLvarOperation_SelectedIndexChanged);
             // 
             // tabObsControl
@@ -3589,7 +3555,7 @@
             this.tabObsControl.Location = new System.Drawing.Point(4, 25);
             this.tabObsControl.Name = "tabObsControl";
             this.tabObsControl.Size = new System.Drawing.Size(742, 414);
-            this.tabObsControl.TabIndex = 16;
+            this.tabObsControl.TabStop = false;
             this.tabObsControl.Text = "OBS";
             this.tabObsControl.UseVisualStyleBackColor = true;
             // 
@@ -3628,7 +3594,7 @@
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel18.Size = new System.Drawing.Size(742, 223);
-            this.tableLayoutPanel18.TabIndex = 3;
+            this.tableLayoutPanel18.TabStop = false;
             // 
             // expObsPassword
             // 
@@ -3651,7 +3617,7 @@
             this.lblObsPassword.Location = new System.Drawing.Point(3, 26);
             this.lblObsPassword.Name = "lblObsPassword";
             this.lblObsPassword.Size = new System.Drawing.Size(76, 26);
-            this.lblObsPassword.TabIndex = 29;
+            this.lblObsPassword.TabStop = false;
             this.lblObsPassword.Text = "Password";
             this.lblObsPassword.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3676,7 +3642,7 @@
             this.lblObsEndpoint.Location = new System.Drawing.Point(3, 0);
             this.lblObsEndpoint.Name = "lblObsEndpoint";
             this.lblObsEndpoint.Size = new System.Drawing.Size(76, 26);
-            this.lblObsEndpoint.TabIndex = 27;
+            this.lblObsEndpoint.TabStop = false;
             this.lblObsEndpoint.Text = "Endpoint URL";
             this.lblObsEndpoint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3687,7 +3653,7 @@
             this.lblObsJSONPayload.Location = new System.Drawing.Point(3, 131);
             this.lblObsJSONPayload.Name = "lblObsJSONPayload";
             this.lblObsJSONPayload.Size = new System.Drawing.Size(76, 26);
-            this.lblObsJSONPayload.TabIndex = 26;
+            this.lblObsJSONPayload.TabStop = false;
             this.lblObsJSONPayload.Text = "JSON payload";
             this.lblObsJSONPayload.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3728,7 +3694,7 @@
             this.lblObsSourceName.Location = new System.Drawing.Point(3, 105);
             this.lblObsSourceName.Name = "lblObsSourceName";
             this.lblObsSourceName.Size = new System.Drawing.Size(76, 26);
-            this.lblObsSourceName.TabIndex = 23;
+            this.lblObsSourceName.TabStop = false;
             this.lblObsSourceName.Text = "Source name";
             this.lblObsSourceName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3761,7 +3727,7 @@
             this.cbxObsOpType.Location = new System.Drawing.Point(85, 55);
             this.cbxObsOpType.Name = "cbxObsOpType";
             this.cbxObsOpType.Size = new System.Drawing.Size(654, 21);
-            this.cbxObsOpType.TabIndex = 22;
+            this.cbxObsOpType.TabStop = false;
             this.cbxObsOpType.SelectedIndexChanged += new System.EventHandler(this.cbxObsOpType_SelectedIndexChanged);
             // 
             // lblObsOpType
@@ -3771,7 +3737,7 @@
             this.lblObsOpType.Location = new System.Drawing.Point(3, 52);
             this.lblObsOpType.Name = "lblObsOpType";
             this.lblObsOpType.Size = new System.Drawing.Size(76, 27);
-            this.lblObsOpType.TabIndex = 18;
+            this.lblObsOpType.TabStop = false;
             this.lblObsOpType.Text = "Operation type";
             this.lblObsOpType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3783,7 +3749,7 @@
             this.btnObsWebsocketLink.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnObsWebsocketLink.Name = "btnObsWebsocketLink";
             this.btnObsWebsocketLink.Size = new System.Drawing.Size(37, 20);
-            this.btnObsWebsocketLink.TabIndex = 17;
+            this.btnObsWebsocketLink.TabStop = false;
             this.btnObsWebsocketLink.UseVisualStyleBackColor = true;
             this.btnObsWebsocketLink.Click += new System.EventHandler(this.button5_Click);
             // 
@@ -3794,7 +3760,7 @@
             this.lblObsSceneName.Location = new System.Drawing.Point(3, 79);
             this.lblObsSceneName.Name = "lblObsSceneName";
             this.lblObsSceneName.Size = new System.Drawing.Size(76, 26);
-            this.lblObsSceneName.TabIndex = 7;
+            this.lblObsSceneName.TabStop = false;
             this.lblObsSceneName.Text = "Scene name";
             this.lblObsSceneName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3821,7 +3787,7 @@
             this.lblObsWebsocketInfo.Name = "lblObsWebsocketInfo";
             this.lblObsWebsocketInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
             this.lblObsWebsocketInfo.Size = new System.Drawing.Size(629, 46);
-            this.lblObsWebsocketInfo.TabIndex = 15;
+            this.lblObsWebsocketInfo.TabStop = false;
             this.lblObsWebsocketInfo.Text = "If you are using OBS v27 or older, you will have to install the OBS WebSocket plu" +
     "gin to use OBS remote control features. There is a simple installer available at" +
     ":";
@@ -3833,7 +3799,7 @@
             this.txtObsWebsocketLink.Name = "txtObsWebsocketLink";
             this.txtObsWebsocketLink.ReadOnly = true;
             this.txtObsWebsocketLink.Size = new System.Drawing.Size(614, 20);
-            this.txtObsWebsocketLink.TabIndex = 16;
+            this.txtObsWebsocketLink.TabStop = false;
             this.txtObsWebsocketLink.Text = "https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio" +
     "-made-easy.466/";
             // 
@@ -3843,7 +3809,7 @@
             this.tabLiveSplitControl.Location = new System.Drawing.Point(4, 25);
             this.tabLiveSplitControl.Name = "tabLiveSplitControl";
             this.tabLiveSplitControl.Size = new System.Drawing.Size(742, 414);
-            this.tabLiveSplitControl.TabIndex = 27;
+            this.tabLiveSplitControl.TabStop = false;
             this.tabLiveSplitControl.Text = "LiveSplit";
             this.tabLiveSplitControl.UseVisualStyleBackColor = true;
             // 
@@ -3868,7 +3834,7 @@
             this.tableLayoutPanelLs.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelLs.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanelLs.Size = new System.Drawing.Size(742, 53);
-            this.tableLayoutPanelLs.TabIndex = 4;
+            this.tableLayoutPanelLs.TabStop = false;
             // 
             // lblLsCustPayload
             // 
@@ -3877,7 +3843,7 @@
             this.lblLsCustPayload.Location = new System.Drawing.Point(3, 27);
             this.lblLsCustPayload.Name = "lblLsCustPayload";
             this.lblLsCustPayload.Size = new System.Drawing.Size(82, 26);
-            this.lblLsCustPayload.TabIndex = 26;
+            this.lblLsCustPayload.TabStop = false;
             this.lblLsCustPayload.Text = "Custom payload";
             this.lblLsCustPayload.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3914,7 +3880,7 @@
             this.cbxLsOpType.Location = new System.Drawing.Point(91, 3);
             this.cbxLsOpType.Name = "cbxLsOpType";
             this.cbxLsOpType.Size = new System.Drawing.Size(648, 21);
-            this.cbxLsOpType.TabIndex = 22;
+            this.cbxLsOpType.TabStop = false;
             this.cbxLsOpType.SelectedIndexChanged += new System.EventHandler(this.cbxLsOpType_SelectedIndexChanged);
             // 
             // lblLsOpType
@@ -3924,7 +3890,7 @@
             this.lblLsOpType.Location = new System.Drawing.Point(3, 0);
             this.lblLsOpType.Name = "lblLsOpType";
             this.lblLsOpType.Size = new System.Drawing.Size(82, 27);
-            this.lblLsOpType.TabIndex = 18;
+            this.lblLsOpType.TabStop = false;
             this.lblLsOpType.Text = "Operation type";
             this.lblLsOpType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -3934,7 +3900,7 @@
             this.tabGenericJson.Location = new System.Drawing.Point(4, 25);
             this.tabGenericJson.Name = "tabGenericJson";
             this.tabGenericJson.Size = new System.Drawing.Size(742, 414);
-            this.tabGenericJson.TabIndex = 17;
+            this.tabGenericJson.TabStop = false;
             this.tabGenericJson.Text = "JSON";
             this.tabGenericJson.UseVisualStyleBackColor = true;
             // 
@@ -3953,7 +3919,6 @@
             this.jsonTableLayout.Controls.Add(this.cbxJsonType, 1, 1);
             this.jsonTableLayout.Controls.Add(this.lblJsonType, 0, 1);
             this.jsonTableLayout.Controls.Add(this.cbxJsonCache, 0, 6);
-            this.jsonTableLayout.Controls.Add(this.lblJsonInstructions, 1, 7);
             this.jsonTableLayout.Controls.Add(this.expJsonFiring, 1, 5);
             this.jsonTableLayout.Controls.Add(this.lblJsonFiring, 0, 5);
             this.jsonTableLayout.Controls.Add(this.expJsonPayload, 1, 2);
@@ -3963,7 +3928,7 @@
             this.jsonTableLayout.Dock = System.Windows.Forms.DockStyle.Top;
             this.jsonTableLayout.Location = new System.Drawing.Point(0, 0);
             this.jsonTableLayout.Name = "jsonTableLayout";
-            this.jsonTableLayout.RowCount = 8;
+            this.jsonTableLayout.RowCount = 7;
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -3971,10 +3936,8 @@
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.jsonTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.jsonTableLayout.Size = new System.Drawing.Size(742, 282);
-            this.jsonTableLayout.TabIndex = 3;
+            this.jsonTableLayout.TabStop = false;
             // 
             // prsJsonVariable
             // 
@@ -3986,7 +3949,7 @@
             this.prsJsonVariable.Location = new System.Drawing.Point(715, 108);
             this.prsJsonVariable.Name = "prsJsonVariable";
             this.prsJsonVariable.Size = new System.Drawing.Size(24, 20);
-            this.prsJsonVariable.TabIndex = 29;
+            this.prsJsonVariable.TabStop = false;
             this.prsJsonVariable.Tag = ((object)(resources.GetObject("prsJsonVariable.Tag")));
             // 
             // expJsonVariable
@@ -4009,7 +3972,7 @@
             this.lblJsonVariable.Location = new System.Drawing.Point(3, 105);
             this.lblJsonVariable.Name = "lblJsonVariable";
             this.lblJsonVariable.Size = new System.Drawing.Size(141, 26);
-            this.lblJsonVariable.TabIndex = 27;
+            this.lblJsonVariable.TabStop = false;
             this.lblJsonVariable.Text = "Variable to store response to";
             this.lblJsonVariable.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4034,7 +3997,7 @@
             this.lblJsonHeaders.Location = new System.Drawing.Point(3, 79);
             this.lblJsonHeaders.Name = "lblJsonHeaders";
             this.lblJsonHeaders.Size = new System.Drawing.Size(141, 26);
-            this.lblJsonHeaders.TabIndex = 25;
+            this.lblJsonHeaders.TabStop = false;
             this.lblJsonHeaders.Text = "Headers to send";
             this.lblJsonHeaders.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4050,7 +4013,7 @@
             this.cbxJsonType.Location = new System.Drawing.Point(150, 29);
             this.cbxJsonType.Name = "cbxJsonType";
             this.cbxJsonType.Size = new System.Drawing.Size(589, 21);
-            this.cbxJsonType.TabIndex = 24;
+            this.cbxJsonType.TabStop = false;
             this.cbxJsonType.SelectedIndexChanged += new System.EventHandler(this.cbxJsonType_SelectedIndexChanged);
             // 
             // lblJsonType
@@ -4060,7 +4023,7 @@
             this.lblJsonType.Location = new System.Drawing.Point(3, 26);
             this.lblJsonType.Name = "lblJsonType";
             this.lblJsonType.Size = new System.Drawing.Size(141, 27);
-            this.lblJsonType.TabIndex = 23;
+            this.lblJsonType.TabStop = false;
             this.lblJsonType.Text = "HTTP method";
             this.lblJsonType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4074,20 +4037,9 @@
             this.cbxJsonCache.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.cbxJsonCache.Name = "cbxJsonCache";
             this.cbxJsonCache.Size = new System.Drawing.Size(737, 17);
-            this.cbxJsonCache.TabIndex = 22;
+            this.cbxJsonCache.TabStop = false;
             this.cbxJsonCache.Text = "Cache response on disk";
             this.cbxJsonCache.UseVisualStyleBackColor = true;
-            // 
-            // lblJsonInstructions
-            // 
-            this.lblJsonInstructions.AutoSize = true;
-            this.jsonTableLayout.SetColumnSpan(this.lblJsonInstructions, 2);
-            this.lblJsonInstructions.Location = new System.Drawing.Point(150, 184);
-            this.lblJsonInstructions.Name = "lblJsonInstructions";
-            this.lblJsonInstructions.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
-            this.lblJsonInstructions.Size = new System.Drawing.Size(583, 98);
-            this.lblJsonInstructions.TabIndex = 21;
-            this.lblJsonInstructions.Text = resources.GetString("lblJsonInstructions.Text");
             // 
             // expJsonFiring
             // 
@@ -4101,7 +4053,7 @@
             this.expJsonFiring.Name = "expJsonFiring";
             this.expJsonFiring.ReadOnly = false;
             this.expJsonFiring.Size = new System.Drawing.Size(589, 20);
-            this.expJsonFiring.TabIndex = 20;
+            this.expJsonFiring.TabIndex = 29;
             // 
             // lblJsonFiring
             // 
@@ -4110,7 +4062,7 @@
             this.lblJsonFiring.Location = new System.Drawing.Point(3, 131);
             this.lblJsonFiring.Name = "lblJsonFiring";
             this.lblJsonFiring.Size = new System.Drawing.Size(141, 26);
-            this.lblJsonFiring.TabIndex = 19;
+            this.lblJsonFiring.TabStop = false;
             this.lblJsonFiring.Text = "Response firing expression";
             this.lblJsonFiring.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4135,7 +4087,7 @@
             this.lblJsonPayload.Location = new System.Drawing.Point(3, 53);
             this.lblJsonPayload.Name = "lblJsonPayload";
             this.lblJsonPayload.Size = new System.Drawing.Size(141, 26);
-            this.lblJsonPayload.TabIndex = 15;
+            this.lblJsonPayload.TabStop = false;
             this.lblJsonPayload.Text = "Payload to send";
             this.lblJsonPayload.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4146,7 +4098,7 @@
             this.lblJsonEndpoint.Location = new System.Drawing.Point(3, 0);
             this.lblJsonEndpoint.Name = "lblJsonEndpoint";
             this.lblJsonEndpoint.Size = new System.Drawing.Size(141, 26);
-            this.lblJsonEndpoint.TabIndex = 7;
+            this.lblJsonEndpoint.TabStop = false;
             this.lblJsonEndpoint.Text = "Endpoint URL";
             this.lblJsonEndpoint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4171,7 +4123,7 @@
             this.tabWindowMessage.Location = new System.Drawing.Point(4, 25);
             this.tabWindowMessage.Name = "tabWindowMessage";
             this.tabWindowMessage.Size = new System.Drawing.Size(742, 414);
-            this.tabWindowMessage.TabIndex = 18;
+            this.tabWindowMessage.TabStop = false;
             this.tabWindowMessage.Text = "Wmsg";
             this.tabWindowMessage.UseVisualStyleBackColor = true;
             // 
@@ -4182,41 +4134,27 @@
             this.tableLayoutPanel19.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel19.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel19.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel19.Controls.Add(this.lblWmsgProcInfo, 1, 1);
             this.tableLayoutPanel19.Controls.Add(this.expWmsgProcid, 1, 0);
             this.tableLayoutPanel19.Controls.Add(this.lblWmsgProcid, 0, 0);
-            this.tableLayoutPanel19.Controls.Add(this.expWmsgLparam, 1, 5);
-            this.tableLayoutPanel19.Controls.Add(this.lblWmsgLparam, 0, 5);
-            this.tableLayoutPanel19.Controls.Add(this.expWmsgWparam, 1, 4);
-            this.tableLayoutPanel19.Controls.Add(this.lblWmsgWparam, 0, 4);
-            this.tableLayoutPanel19.Controls.Add(this.expWmsgCode, 1, 3);
-            this.tableLayoutPanel19.Controls.Add(this.expWmsgTitle, 1, 2);
-            this.tableLayoutPanel19.Controls.Add(this.lblWmsgCode, 0, 3);
-            this.tableLayoutPanel19.Controls.Add(this.lblWmsgTitle, 0, 2);
+            this.tableLayoutPanel19.Controls.Add(this.expWmsgLparam, 1, 4);
+            this.tableLayoutPanel19.Controls.Add(this.lblWmsgLparam, 0, 4);
+            this.tableLayoutPanel19.Controls.Add(this.expWmsgWparam, 1, 3);
+            this.tableLayoutPanel19.Controls.Add(this.lblWmsgWparam, 0, 3);
+            this.tableLayoutPanel19.Controls.Add(this.expWmsgCode, 1, 2);
+            this.tableLayoutPanel19.Controls.Add(this.expWmsgTitle, 1, 1);
+            this.tableLayoutPanel19.Controls.Add(this.lblWmsgCode, 0, 2);
+            this.tableLayoutPanel19.Controls.Add(this.lblWmsgTitle, 0, 1);
             this.tableLayoutPanel19.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel19.Location = new System.Drawing.Point(0, 51);
             this.tableLayoutPanel19.Name = "tableLayoutPanel19";
-            this.tableLayoutPanel19.RowCount = 6;
+            this.tableLayoutPanel19.RowCount = 5;
             this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel19.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel19.Size = new System.Drawing.Size(742, 176);
-            this.tableLayoutPanel19.TabIndex = 3;
-            // 
-            // lblWmsgProcInfo
-            // 
-            this.lblWmsgProcInfo.AutoSize = true;
-            this.tableLayoutPanel19.SetColumnSpan(this.lblWmsgProcInfo, 2);
-            this.lblWmsgProcInfo.Location = new System.Drawing.Point(86, 26);
-            this.lblWmsgProcInfo.Name = "lblWmsgProcInfo";
-            this.lblWmsgProcInfo.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
-            this.lblWmsgProcInfo.Size = new System.Drawing.Size(652, 46);
-            this.lblWmsgProcInfo.TabIndex = 33;
-            this.lblWmsgProcInfo.Text = resources.GetString("lblWmsgProcInfo.Text");
+            this.tableLayoutPanel19.TabStop = false;
             // 
             // expWmsgProcid
             // 
@@ -4239,7 +4177,7 @@
             this.lblWmsgProcid.Location = new System.Drawing.Point(3, 0);
             this.lblWmsgProcid.Name = "lblWmsgProcid";
             this.lblWmsgProcid.Size = new System.Drawing.Size(77, 26);
-            this.lblWmsgProcid.TabIndex = 31;
+            this.lblWmsgProcid.TabStop = false;
             this.lblWmsgProcid.Text = "Process ID";
             this.lblWmsgProcid.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4264,7 +4202,7 @@
             this.lblWmsgLparam.Location = new System.Drawing.Point(3, 150);
             this.lblWmsgLparam.Name = "lblWmsgLparam";
             this.lblWmsgLparam.Size = new System.Drawing.Size(77, 26);
-            this.lblWmsgLparam.TabIndex = 29;
+            this.lblWmsgLparam.TabStop = false;
             this.lblWmsgLparam.Text = "LParam";
             this.lblWmsgLparam.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4289,7 +4227,7 @@
             this.lblWmsgWparam.Location = new System.Drawing.Point(3, 124);
             this.lblWmsgWparam.Name = "lblWmsgWparam";
             this.lblWmsgWparam.Size = new System.Drawing.Size(77, 26);
-            this.lblWmsgWparam.TabIndex = 27;
+            this.lblWmsgWparam.TabStop = false;
             this.lblWmsgWparam.Text = "WParam";
             this.lblWmsgWparam.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4328,7 +4266,7 @@
             this.lblWmsgCode.Location = new System.Drawing.Point(3, 98);
             this.lblWmsgCode.Name = "lblWmsgCode";
             this.lblWmsgCode.Size = new System.Drawing.Size(77, 26);
-            this.lblWmsgCode.TabIndex = 24;
+            this.lblWmsgCode.TabStop = false;
             this.lblWmsgCode.Text = "Message code";
             this.lblWmsgCode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4339,7 +4277,7 @@
             this.lblWmsgTitle.Location = new System.Drawing.Point(3, 72);
             this.lblWmsgTitle.Name = "lblWmsgTitle";
             this.lblWmsgTitle.Size = new System.Drawing.Size(77, 26);
-            this.lblWmsgTitle.TabIndex = 23;
+            this.lblWmsgTitle.TabStop = false;
             this.lblWmsgTitle.Text = "Window title";
             this.lblWmsgTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4363,7 +4301,7 @@
             this.lblWmsgWarning.Location = new System.Drawing.Point(0, 0);
             this.lblWmsgWarning.Name = "lblWmsgWarning";
             this.lblWmsgWarning.Size = new System.Drawing.Size(742, 41);
-            this.lblWmsgWarning.TabIndex = 0;
+            this.lblWmsgWarning.TabStop = false;
             this.lblWmsgWarning.Text = "Actions of this type may be potentially dangerous and cause damage if, for exampl" +
     "e, the trigger is fired with parameters that fall outside of the expected values" +
     ". Please be aware of the risk.";
@@ -4376,7 +4314,7 @@
             this.tabFile.Location = new System.Drawing.Point(4, 25);
             this.tabFile.Name = "tabFile";
             this.tabFile.Size = new System.Drawing.Size(742, 414);
-            this.tabFile.TabIndex = 19;
+            this.tabFile.TabStop = false;
             this.tabFile.Text = "File";
             this.tabFile.UseVisualStyleBackColor = true;
             // 
@@ -4404,7 +4342,7 @@
             this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel20.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel20.Size = new System.Drawing.Size(742, 106);
-            this.tableLayoutPanel20.TabIndex = 4;
+            this.tableLayoutPanel20.TabStop = false;
             // 
             // prsFileVariable
             // 
@@ -4416,7 +4354,7 @@
             this.prsFileVariable.Location = new System.Drawing.Point(715, 56);
             this.prsFileVariable.Name = "prsFileVariable";
             this.prsFileVariable.Size = new System.Drawing.Size(24, 20);
-            this.prsFileVariable.TabIndex = 31;
+            this.prsFileVariable.TabStop = false;
             this.prsFileVariable.Tag = ((object)(resources.GetObject("prsFileVariable.Tag")));
             // 
             // cbxFileOpCache
@@ -4429,7 +4367,7 @@
             this.cbxFileOpCache.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.cbxFileOpCache.Name = "cbxFileOpCache";
             this.cbxFileOpCache.Size = new System.Drawing.Size(737, 17);
-            this.cbxFileOpCache.TabIndex = 25;
+            this.cbxFileOpCache.TabStop = false;
             this.cbxFileOpCache.Text = "Cache file on disk";
             this.cbxFileOpCache.UseVisualStyleBackColor = true;
             // 
@@ -4453,7 +4391,7 @@
             this.lblFileOpVariable.Location = new System.Drawing.Point(3, 53);
             this.lblFileOpVariable.Name = "lblFileOpVariable";
             this.lblFileOpVariable.Size = new System.Drawing.Size(76, 26);
-            this.lblFileOpVariable.TabIndex = 23;
+            this.lblFileOpVariable.TabStop = false;
             this.lblFileOpVariable.Text = "Variable name";
             this.lblFileOpVariable.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4470,7 +4408,7 @@
             this.cbxFileOpType.Location = new System.Drawing.Point(85, 3);
             this.cbxFileOpType.Name = "cbxFileOpType";
             this.cbxFileOpType.Size = new System.Drawing.Size(654, 21);
-            this.cbxFileOpType.TabIndex = 22;
+            this.cbxFileOpType.TabStop = false;
             // 
             // lblFileOpType
             // 
@@ -4479,7 +4417,7 @@
             this.lblFileOpType.Location = new System.Drawing.Point(3, 0);
             this.lblFileOpType.Name = "lblFileOpType";
             this.lblFileOpType.Size = new System.Drawing.Size(76, 27);
-            this.lblFileOpType.TabIndex = 18;
+            this.lblFileOpType.TabStop = false;
             this.lblFileOpType.Text = "Operation type";
             this.lblFileOpType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4490,7 +4428,7 @@
             this.lblFileOpName.Location = new System.Drawing.Point(3, 27);
             this.lblFileOpName.Name = "lblFileOpName";
             this.lblFileOpName.Size = new System.Drawing.Size(76, 26);
-            this.lblFileOpName.TabIndex = 7;
+            this.lblFileOpName.TabStop = false;
             this.lblFileOpName.Text = "File name";
             this.lblFileOpName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4528,7 +4466,7 @@
             this.lblFileWarning.Location = new System.Drawing.Point(0, 0);
             this.lblFileWarning.Name = "lblFileWarning";
             this.lblFileWarning.Size = new System.Drawing.Size(742, 41);
-            this.lblFileWarning.TabIndex = 0;
+            this.lblFileWarning.TabStop = false;
             this.lblFileWarning.Text = "Actions of this type may be potentially dangerous and cause damage if, for exampl" +
     "e, the trigger is fired with parameters that fall outside of the expected values" +
     ". Please be aware of the risk.";
@@ -4540,7 +4478,7 @@
             this.tabTableVariable.Location = new System.Drawing.Point(4, 25);
             this.tabTableVariable.Name = "tabTableVariable";
             this.tabTableVariable.Size = new System.Drawing.Size(742, 414);
-            this.tabTableVariable.TabIndex = 20;
+            this.tabTableVariable.TabStop = false;
             this.tabTableVariable.Text = "TableVariable";
             this.tabTableVariable.UseVisualStyleBackColor = true;
             // 
@@ -4578,8 +4516,8 @@
             this.tableLayoutPanel21.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel21.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel21.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel21.Size = new System.Drawing.Size(742, 184);
-            this.tableLayoutPanel21.TabIndex = 8;
+            this.tableLayoutPanel21.Size = new System.Drawing.Size(742, 220);
+            this.tableLayoutPanel21.TabStop = false;
             // 
             // prsTableTarget
             // 
@@ -4591,7 +4529,7 @@
             this.prsTableTarget.Location = new System.Drawing.Point(715, 161);
             this.prsTableTarget.Name = "prsTableTarget";
             this.prsTableTarget.Size = new System.Drawing.Size(24, 20);
-            this.prsTableTarget.TabIndex = 33;
+            this.prsTableTarget.TabStop = false;
             this.prsTableTarget.Tag = ((object)(resources.GetObject("prsTableTarget.Tag")));
             // 
             // prsTableSource
@@ -4604,7 +4542,7 @@
             this.prsTableSource.Location = new System.Drawing.Point(715, 30);
             this.prsTableSource.Name = "prsTableSource";
             this.prsTableSource.Size = new System.Drawing.Size(24, 20);
-            this.prsTableSource.TabIndex = 32;
+            this.prsTableSource.TabStop = false;
             this.prsTableSource.Tag = ((object)(resources.GetObject("prsTableSource.Tag")));
             // 
             // expTvarRow
@@ -4619,7 +4557,7 @@
             this.expTvarRow.Name = "expTvarRow";
             this.expTvarRow.ReadOnly = false;
             this.expTvarRow.Size = new System.Drawing.Size(620, 20);
-            this.expTvarRow.TabIndex = 31;
+            this.expTvarRow.TabIndex = 26;
             this.expTvarRow.EnabledChanged += new System.EventHandler(this.expTvarRow_EnabledChanged);
             // 
             // lblTvarRow
@@ -4629,7 +4567,7 @@
             this.lblTvarRow.Location = new System.Drawing.Point(3, 132);
             this.lblTvarRow.Name = "lblTvarRow";
             this.lblTvarRow.Size = new System.Drawing.Size(110, 26);
-            this.lblTvarRow.TabIndex = 30;
+            this.lblTvarRow.TabStop = false;
             this.lblTvarRow.Text = "Row definition";
             this.lblTvarRow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4645,7 +4583,7 @@
             this.cbxTvarExpType.Location = new System.Drawing.Point(119, 56);
             this.cbxTvarExpType.Name = "cbxTvarExpType";
             this.cbxTvarExpType.Size = new System.Drawing.Size(620, 21);
-            this.cbxTvarExpType.TabIndex = 29;
+            this.cbxTvarExpType.TabStop = false;
             this.cbxTvarExpType.SelectedIndexChanged += new System.EventHandler(this.cbxTvarExpType_SelectedIndexChanged);
             this.cbxTvarExpType.EnabledChanged += new System.EventHandler(this.cbxTvarExpType_EnabledChanged);
             // 
@@ -4656,7 +4594,7 @@
             this.lblTvarExpType.Location = new System.Drawing.Point(3, 53);
             this.lblTvarExpType.Name = "lblTvarExpType";
             this.lblTvarExpType.Size = new System.Drawing.Size(110, 27);
-            this.lblTvarExpType.TabIndex = 28;
+            this.lblTvarExpType.TabStop = false;
             this.lblTvarExpType.Text = "Expression type";
             this.lblTvarExpType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4681,7 +4619,7 @@
             this.lblTvarTarget.Location = new System.Drawing.Point(3, 158);
             this.lblTvarTarget.Name = "lblTvarTarget";
             this.lblTvarTarget.Size = new System.Drawing.Size(110, 26);
-            this.lblTvarTarget.TabIndex = 26;
+            this.lblTvarTarget.TabStop = false;
             this.lblTvarTarget.Text = "Target variable name";
             this.lblTvarTarget.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4707,7 +4645,7 @@
             this.lblTvarColumn.Location = new System.Drawing.Point(3, 106);
             this.lblTvarColumn.Name = "lblTvarColumn";
             this.lblTvarColumn.Size = new System.Drawing.Size(110, 26);
-            this.lblTvarColumn.TabIndex = 24;
+            this.lblTvarColumn.TabStop = false;
             this.lblTvarColumn.Text = "Column definition";
             this.lblTvarColumn.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4733,7 +4671,7 @@
             this.lblTvarValue.Location = new System.Drawing.Point(3, 80);
             this.lblTvarValue.Name = "lblTvarValue";
             this.lblTvarValue.Size = new System.Drawing.Size(110, 26);
-            this.lblTvarValue.TabIndex = 22;
+            this.lblTvarValue.TabStop = false;
             this.lblTvarValue.Text = "Expression";
             this.lblTvarValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4758,7 +4696,7 @@
             this.lblTvarName.Location = new System.Drawing.Point(3, 27);
             this.lblTvarName.Name = "lblTvarName";
             this.lblTvarName.Size = new System.Drawing.Size(110, 26);
-            this.lblTvarName.TabIndex = 15;
+            this.lblTvarName.TabStop = false;
             this.lblTvarName.Text = "Source variable name";
             this.lblTvarName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4769,7 +4707,7 @@
             this.lblTvarOpType.Location = new System.Drawing.Point(3, 0);
             this.lblTvarOpType.Name = "lblTvarOpType";
             this.lblTvarOpType.Size = new System.Drawing.Size(110, 27);
-            this.lblTvarOpType.TabIndex = 7;
+            this.lblTvarOpType.TabStop = false;
             this.lblTvarOpType.Text = "Operation type";
             this.lblTvarOpType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4781,17 +4719,321 @@
             this.cbxTvarOpType.FormattingEnabled = true;
             this.cbxTvarOpType.Items.AddRange(new object[] {
             "Unset table variable",
+            "Set value to the given row and column on the table variable",
+            "Set all values in the table variable",
+            "Set all values in the selected rows and columns",
             "Resize table variable",
-            "Set value to the given row and column on the table variable ",
-            "Unset all table variables",
-            "Unset table variables matching regular expression",
+            "Build from the expression",
+            "Set values to the given col or row",
+            "Insert values at the given col or row",
+            "Remove the given column or row",
+            "Filter elements into another list",
+            "Filter rows/cols into another table",
             "Copy whole table variable to another table variable",
-            "Append whole table variable to another table variable"});
+            "Append whole table variable to another table variable",
+            "Sort the rows/cols by the key functions",
+            "Get complete data for all FFXIV entities",
+            "Unset all table variables",
+            "Unset table variables matching regular expression"});
             this.cbxTvarOpType.Location = new System.Drawing.Point(119, 3);
             this.cbxTvarOpType.Name = "cbxTvarOpType";
             this.cbxTvarOpType.Size = new System.Drawing.Size(620, 21);
-            this.cbxTvarOpType.TabIndex = 21;
+            this.cbxTvarOpType.TabStop = false;
             this.cbxTvarOpType.SelectedIndexChanged += new System.EventHandler(this.cbxTvarOpType_SelectedIndexChanged);
+            // 
+            // tabDictVariable
+            // 
+            this.tabDictVariable.Controls.Add(this.tableLayoutPanelDict);
+            this.tabDictVariable.Location = new System.Drawing.Point(4, 25);
+            this.tabDictVariable.Name = "tabDictVariable";
+            this.tabDictVariable.Size = new System.Drawing.Size(742, 414);
+            this.tabDictVariable.TabStop = false;
+            this.tabDictVariable.Text = "DictVariable";
+            this.tabDictVariable.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanelDict
+            // 
+            this.tableLayoutPanelDict.AutoSize = true;
+            this.tableLayoutPanelDict.ColumnCount = 3;
+            this.tableLayoutPanelDict.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanelDict.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelDict.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanelDict.Controls.Add(this.lblDictOpType, 0, 0);
+            this.tableLayoutPanelDict.Controls.Add(this.cbxDictOpType, 1, 0);
+            this.tableLayoutPanelDict.Controls.Add(this.lblDictName, 0, 1);
+            this.tableLayoutPanelDict.Controls.Add(this.expDictName, 1, 1);
+            this.tableLayoutPanelDict.Controls.Add(this.prsDictSource, 2, 1);
+            this.tableLayoutPanelDict.Controls.Add(this.lblDictLength, 0, 2);
+            this.tableLayoutPanelDict.Controls.Add(this.expDictLength, 1, 2);
+            this.tableLayoutPanelDict.Controls.Add(this.lblDictKeyType, 0, 3);
+            this.tableLayoutPanelDict.Controls.Add(this.cbxDictKeyType, 1, 3);
+            this.tableLayoutPanelDict.Controls.Add(this.lblDictKey, 0, 4);
+            this.tableLayoutPanelDict.Controls.Add(this.expDictKey, 1, 4);
+            this.tableLayoutPanelDict.Controls.Add(this.lblDictValueType, 0, 5);
+            this.tableLayoutPanelDict.Controls.Add(this.cbxDictValueType, 1, 5);
+            this.tableLayoutPanelDict.Controls.Add(this.lblDictValue, 0, 6);
+            this.tableLayoutPanelDict.Controls.Add(this.expDictValue, 1, 6);
+            this.tableLayoutPanelDict.Controls.Add(this.lblDictTarget, 0, 7);
+            this.tableLayoutPanelDict.Controls.Add(this.expDictTarget, 1, 7);
+            this.tableLayoutPanelDict.Controls.Add(this.prsDictTarget, 2, 7);
+            this.tableLayoutPanelDict.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanelDict.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanelDict.Name = "tableLayoutPanelDict";
+            this.tableLayoutPanelDict.RowCount = 8;
+            this.tableLayoutPanelDict.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelDict.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelDict.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelDict.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelDict.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelDict.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelDict.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelDict.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelDict.Size = new System.Drawing.Size(742, 250);
+            this.tableLayoutPanelDict.TabStop = false;
+            // 
+            // lblDictOpType
+            // 
+            this.lblDictOpType.AutoSize = true;
+            this.lblDictOpType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDictOpType.Location = new System.Drawing.Point(3, 0);
+            this.lblDictOpType.Name = "lblDictOpType";
+            this.lblDictOpType.Size = new System.Drawing.Size(110, 27);
+            this.lblDictOpType.TabStop = false;
+            this.lblDictOpType.Text = "Operation type";
+            this.lblDictOpType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbxDictOpType
+            // 
+            this.tableLayoutPanelDict.SetColumnSpan(this.cbxDictOpType, 2);
+            this.cbxDictOpType.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxDictOpType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxDictOpType.FormattingEnabled = true;
+            this.cbxDictOpType.Items.AddRange(new object[] {
+            "Unset dictionary variable",
+            "Set value of the given key",
+            "Remove the given key",
+            "Set all keys and values",
+            "Build from the expression",
+            "Filter into another dictionary",
+            "Merge two dictionaries (keep)",
+            "Merge two dictionaries (overwrite)",
+            "Get entity data by name",
+            "Get entity data by hex ID",
+            "Unset all dictionary variables",
+            "Unset dictionary variables matching regular expression"});
+            this.cbxDictOpType.Location = new System.Drawing.Point(119, 0);
+            this.cbxDictOpType.Name = "cbxDictOpType";
+            this.cbxDictOpType.Size = new System.Drawing.Size(620, 21);
+            this.cbxDictOpType.TabStop = false;
+            this.cbxDictOpType.SelectedIndexChanged += new System.EventHandler(this.cbxDictOpType_SelectedIndexChanged);
+            // 
+            // lblDictName
+            // 
+            this.lblDictName.AutoSize = true;
+            this.lblDictName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDictName.Location = new System.Drawing.Point(3, 30);
+            this.lblDictName.Name = "lblDictName";
+            this.lblDictName.Size = new System.Drawing.Size(110, 26);
+            this.lblDictName.TabStop = false;
+            this.lblDictName.Text = "Source variable name";
+            this.lblDictName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // expDictName
+            // 
+            this.expDictName.AutocompleteAvailable = true;
+            this.expDictName.AutoSize = true;
+            this.expDictName.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expDictName.Expression = "";
+            this.expDictName.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            this.expDictName.Location = new System.Drawing.Point(119, 30);
+            this.expDictName.Name = "expDictName";
+            this.expDictName.ReadOnly = false;
+            this.expDictName.Size = new System.Drawing.Size(590, 20);
+            this.expDictName.TabIndex = 16;
+            this.expDictName.EnabledChanged += new System.EventHandler(this.expDictName_EnabledChanged);
+            // 
+            // prsDictSource
+            // 
+            this.prsDictSource.AutoSize = true;
+            this.prsDictSource.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("prsDictSource.BackgroundImage")));
+            this.prsDictSource.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.prsDictSource.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.prsDictSource.IsPersistent = false;
+            this.prsDictSource.Location = new System.Drawing.Point(715, 30);
+            this.prsDictSource.Name = "prsDictSource";
+            this.prsDictSource.Size = new System.Drawing.Size(24, 20);
+            this.prsDictSource.TabStop = false;
+            this.prsDictSource.Tag = ((object)(resources.GetObject("prsDictSource.Tag")));
+            // 
+            // lblDictLength
+            // 
+            this.lblDictLength.AutoSize = true;
+            this.lblDictLength.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDictLength.Location = new System.Drawing.Point(3, 60);
+            this.lblDictLength.Name = "lblDictLength";
+            this.lblDictLength.Size = new System.Drawing.Size(110, 26);
+            this.lblDictLength.TabStop = false;
+            this.lblDictLength.Text = "Length";
+            this.lblDictLength.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // expDictLength
+            // 
+            this.expDictLength.AutocompleteAvailable = true;
+            this.expDictLength.AutoSize = true;
+            this.tableLayoutPanelDict.SetColumnSpan(this.expDictLength, 2);
+            this.expDictLength.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expDictLength.Expression = "";
+            this.expDictLength.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
+            this.expDictLength.Location = new System.Drawing.Point(119, 60);
+            this.expDictLength.Name = "expDictLength";
+            this.expDictLength.ReadOnly = false;
+            this.expDictLength.Size = new System.Drawing.Size(620, 20);
+            this.expDictLength.TabIndex = 23;
+            this.expDictLength.EnabledChanged += new System.EventHandler(this.expDictLength_EnabledChanged);
+            // 
+            // lblDictKeyType
+            // 
+            this.lblDictKeyType.AutoSize = true;
+            this.lblDictKeyType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDictKeyType.Location = new System.Drawing.Point(3, 90);
+            this.lblDictKeyType.Name = "lblDictKeyType";
+            this.lblDictKeyType.Size = new System.Drawing.Size(110, 27);
+            this.lblDictKeyType.TabStop = false;
+            this.lblDictKeyType.Text = "Key Expr type";
+            this.lblDictKeyType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbxDictKeyType
+            // 
+            this.tableLayoutPanelDict.SetColumnSpan(this.cbxDictKeyType, 2);
+            this.cbxDictKeyType.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxDictKeyType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxDictKeyType.FormattingEnabled = true;
+            this.cbxDictKeyType.Items.AddRange(new object[] {
+            "String",
+            "Numeric"});
+            this.cbxDictKeyType.Location = new System.Drawing.Point(119, 90);
+            this.cbxDictKeyType.Name = "cbxDictKeyType";
+            this.cbxDictKeyType.Size = new System.Drawing.Size(620, 21);
+            this.cbxDictKeyType.TabStop = false;
+            this.cbxDictKeyType.SelectedIndexChanged += new System.EventHandler(this.cbxDictKeyType_SelectedIndexChanged);
+            this.cbxDictKeyType.EnabledChanged += new System.EventHandler(this.cbxDictKeyType_EnabledChanged);
+            // 
+            // lblDictKey
+            // 
+            this.lblDictKey.AutoSize = true;
+            this.lblDictKey.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDictKey.Location = new System.Drawing.Point(3, 120);
+            this.lblDictKey.Name = "lblDictKey";
+            this.lblDictKey.Size = new System.Drawing.Size(110, 26);
+            this.lblDictKey.TabStop = false;
+            this.lblDictKey.Text = "Key";
+            this.lblDictKey.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // expDictKey
+            // 
+            this.expDictKey.AutocompleteAvailable = true;
+            this.expDictKey.AutoSize = true;
+            this.tableLayoutPanelDict.SetColumnSpan(this.expDictKey, 2);
+            this.expDictKey.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expDictKey.Expression = "";
+            this.expDictKey.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
+            this.expDictKey.Location = new System.Drawing.Point(119, 120);
+            this.expDictKey.Name = "expDictKey";
+            this.expDictKey.ReadOnly = false;
+            this.expDictKey.Size = new System.Drawing.Size(620, 20);
+            this.expDictKey.TabIndex = 23;
+            this.expDictKey.EnabledChanged += new System.EventHandler(this.expDictKey_EnabledChanged);
+            // 
+            // lblDictValueType
+            // 
+            this.lblDictValueType.AutoSize = true;
+            this.lblDictValueType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDictValueType.Location = new System.Drawing.Point(3, 150);
+            this.lblDictValueType.Name = "lblDictValueType";
+            this.lblDictValueType.Size = new System.Drawing.Size(110, 27);
+            this.lblDictValueType.TabStop = false;
+            this.lblDictValueType.Text = "Value Expr type";
+            this.lblDictValueType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbxDictValueType
+            // 
+            this.tableLayoutPanelDict.SetColumnSpan(this.cbxDictValueType, 2);
+            this.cbxDictValueType.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxDictValueType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxDictValueType.FormattingEnabled = true;
+            this.cbxDictValueType.Items.AddRange(new object[] {
+            "String",
+            "Numeric"});
+            this.cbxDictValueType.Location = new System.Drawing.Point(119, 150);
+            this.cbxDictValueType.Name = "cbxDictValueType";
+            this.cbxDictValueType.Size = new System.Drawing.Size(620, 21);
+            this.cbxDictValueType.TabStop = false;
+            this.cbxDictValueType.SelectedIndexChanged += new System.EventHandler(this.cbxDictValueType_SelectedIndexChanged);
+            this.cbxDictValueType.EnabledChanged += new System.EventHandler(this.cbxDictValueType_EnabledChanged);
+            // 
+            // lblDictValue
+            // 
+            this.lblDictValue.AutoSize = true;
+            this.lblDictValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDictValue.Location = new System.Drawing.Point(3, 180);
+            this.lblDictValue.Name = "lblDictValue";
+            this.lblDictValue.Size = new System.Drawing.Size(110, 26);
+            this.lblDictValue.TabStop = false;
+            this.lblDictValue.Text = "Value";
+            this.lblDictValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // expDictValue
+            // 
+            this.expDictValue.AutocompleteAvailable = true;
+            this.expDictValue.AutoSize = true;
+            this.tableLayoutPanelDict.SetColumnSpan(this.expDictValue, 2);
+            this.expDictValue.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expDictValue.Expression = "";
+            this.expDictValue.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
+            this.expDictValue.Location = new System.Drawing.Point(119, 180);
+            this.expDictValue.Name = "expDictValue";
+            this.expDictValue.ReadOnly = false;
+            this.expDictValue.Size = new System.Drawing.Size(620, 20);
+            this.expDictValue.TabIndex = 23;
+            this.expDictValue.EnabledChanged += new System.EventHandler(this.expDictValue_EnabledChanged);
+            // 
+            // lblDictTarget
+            // 
+            this.lblDictTarget.AutoSize = true;
+            this.lblDictTarget.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDictTarget.Location = new System.Drawing.Point(3, 210);
+            this.lblDictTarget.Name = "lblDictTarget";
+            this.lblDictTarget.Size = new System.Drawing.Size(110, 26);
+            this.lblDictTarget.TabStop = false;
+            this.lblDictTarget.Text = "Target variable name";
+            this.lblDictTarget.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // expDictTarget
+            // 
+            this.expDictTarget.AutocompleteAvailable = true;
+            this.expDictTarget.AutoSize = true;
+            this.expDictTarget.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expDictTarget.Expression = "";
+            this.expDictTarget.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            this.expDictTarget.Location = new System.Drawing.Point(119, 210);
+            this.expDictTarget.Name = "expDictTarget";
+            this.expDictTarget.ReadOnly = false;
+            this.expDictTarget.Size = new System.Drawing.Size(590, 20);
+            this.expDictTarget.TabIndex = 27;
+            this.expDictTarget.EnabledChanged += new System.EventHandler(this.expDictTarget_EnabledChanged);
+            // 
+            // prsDictTarget
+            // 
+            this.prsDictTarget.AutoSize = true;
+            this.prsDictTarget.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("prsDictTarget.BackgroundImage")));
+            this.prsDictTarget.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.prsDictTarget.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.prsDictTarget.IsPersistent = false;
+            this.prsDictTarget.Location = new System.Drawing.Point(715, 210);
+            this.prsDictTarget.Name = "prsDictTarget";
+            this.prsDictTarget.Size = new System.Drawing.Size(24, 20);
+            this.prsDictTarget.TabStop = false;
+            this.prsDictTarget.Tag = ((object)(resources.GetObject("prsDictTarget.Tag")));
             // 
             // tabMutex
             // 
@@ -4799,7 +5041,7 @@
             this.tabMutex.Location = new System.Drawing.Point(4, 25);
             this.tabMutex.Name = "tabMutex";
             this.tabMutex.Size = new System.Drawing.Size(742, 414);
-            this.tabMutex.TabIndex = 21;
+            this.tabMutex.TabStop = false;
             this.tabMutex.Text = "Mutex";
             this.tabMutex.UseVisualStyleBackColor = true;
             // 
@@ -4821,7 +5063,7 @@
             this.tableLayoutPanel22.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel22.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel22.Size = new System.Drawing.Size(742, 53);
-            this.tableLayoutPanel22.TabIndex = 6;
+            this.tableLayoutPanel22.TabStop = false;
             // 
             // expMutexName
             // 
@@ -4869,7 +5111,7 @@
             this.cbxMutexOp.Location = new System.Drawing.Point(85, 3);
             this.cbxMutexOp.Name = "cbxMutexOp";
             this.cbxMutexOp.Size = new System.Drawing.Size(654, 21);
-            this.cbxMutexOp.TabIndex = 21;
+            this.cbxMutexOp.TabStop = false;
             // 
             // tabPlaceholder
             // 
@@ -4877,7 +5119,7 @@
             this.tabPlaceholder.Location = new System.Drawing.Point(4, 25);
             this.tabPlaceholder.Name = "tabPlaceholder";
             this.tabPlaceholder.Size = new System.Drawing.Size(742, 414);
-            this.tabPlaceholder.TabIndex = 22;
+            this.tabPlaceholder.TabStop = false;
             this.tabPlaceholder.Text = "Placeholder";
             this.tabPlaceholder.UseVisualStyleBackColor = true;
             // 
@@ -4888,7 +5130,7 @@
             this.lblPlaceholderNoParams.Name = "lblPlaceholderNoParams";
             this.lblPlaceholderNoParams.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
             this.lblPlaceholderNoParams.Size = new System.Drawing.Size(742, 414);
-            this.lblPlaceholderNoParams.TabIndex = 17;
+            this.lblPlaceholderNoParams.TabStop = false;
             this.lblPlaceholderNoParams.Text = "This action has no configurable parameters.";
             this.lblPlaceholderNoParams.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -4898,7 +5140,7 @@
             this.tabNamedCallback.Location = new System.Drawing.Point(4, 25);
             this.tabNamedCallback.Name = "tabNamedCallback";
             this.tabNamedCallback.Size = new System.Drawing.Size(742, 414);
-            this.tabNamedCallback.TabIndex = 23;
+            this.tabNamedCallback.TabStop = false;
             this.tabNamedCallback.Text = "Callback";
             this.tabNamedCallback.UseVisualStyleBackColor = true;
             // 
@@ -4919,7 +5161,7 @@
             this.tableLayoutPanel24.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel24.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel24.Size = new System.Drawing.Size(742, 52);
-            this.tableLayoutPanel24.TabIndex = 3;
+            this.tableLayoutPanel24.TabStop = false;
             // 
             // expCallbackParam
             // 
@@ -4941,7 +5183,7 @@
             this.lblCallbackParam.Location = new System.Drawing.Point(3, 26);
             this.lblCallbackParam.Name = "lblCallbackParam";
             this.lblCallbackParam.Size = new System.Drawing.Size(98, 26);
-            this.lblCallbackParam.TabIndex = 15;
+            this.lblCallbackParam.TabStop = false;
             this.lblCallbackParam.Text = "Callback parameter";
             this.lblCallbackParam.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4952,7 +5194,7 @@
             this.lblCallbackName.Location = new System.Drawing.Point(3, 0);
             this.lblCallbackName.Name = "lblCallbackName";
             this.lblCallbackName.Size = new System.Drawing.Size(98, 26);
-            this.lblCallbackName.TabIndex = 7;
+            this.lblCallbackName.TabStop = false;
             this.lblCallbackName.Text = "Callback name";
             this.lblCallbackName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -4975,7 +5217,7 @@
             this.tabMouse.Location = new System.Drawing.Point(4, 25);
             this.tabMouse.Name = "tabMouse";
             this.tabMouse.Size = new System.Drawing.Size(742, 414);
-            this.tabMouse.TabIndex = 24;
+            this.tabMouse.TabStop = false;
             this.tabMouse.Text = "Mouse";
             this.tabMouse.UseVisualStyleBackColor = true;
             // 
@@ -5002,7 +5244,7 @@
             this.tableLayoutPanel25.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel25.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel25.Size = new System.Drawing.Size(742, 106);
-            this.tableLayoutPanel25.TabIndex = 7;
+            this.tableLayoutPanel25.TabStop = false;
             // 
             // cbxMouseCoord
             // 
@@ -5015,7 +5257,7 @@
             this.cbxMouseCoord.Location = new System.Drawing.Point(102, 30);
             this.cbxMouseCoord.Name = "cbxMouseCoord";
             this.cbxMouseCoord.Size = new System.Drawing.Size(637, 21);
-            this.cbxMouseCoord.TabIndex = 25;
+            this.cbxMouseCoord.TabStop = false;
             // 
             // expMouseY
             // 
@@ -5037,7 +5279,7 @@
             this.lblMouseY.Location = new System.Drawing.Point(3, 80);
             this.lblMouseY.Name = "lblMouseY";
             this.lblMouseY.Size = new System.Drawing.Size(93, 26);
-            this.lblMouseY.TabIndex = 23;
+            this.lblMouseY.TabStop = false;
             this.lblMouseY.Text = "Y coordinate";
             this.lblMouseY.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -5048,7 +5290,7 @@
             this.lblMouseX.Location = new System.Drawing.Point(3, 54);
             this.lblMouseX.Name = "lblMouseX";
             this.lblMouseX.Size = new System.Drawing.Size(93, 26);
-            this.lblMouseX.TabIndex = 22;
+            this.lblMouseX.TabStop = false;
             this.lblMouseX.Text = "X coordinate";
             this.lblMouseX.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -5072,7 +5314,7 @@
             this.lblMouseCoord.Location = new System.Drawing.Point(3, 27);
             this.lblMouseCoord.Name = "lblMouseCoord";
             this.lblMouseCoord.Size = new System.Drawing.Size(93, 27);
-            this.lblMouseCoord.TabIndex = 15;
+            this.lblMouseCoord.TabStop = false;
             this.lblMouseCoord.Text = "Coordinate system";
             this.lblMouseCoord.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -5083,7 +5325,7 @@
             this.lblMouseOp.Location = new System.Drawing.Point(3, 0);
             this.lblMouseOp.Name = "lblMouseOp";
             this.lblMouseOp.Size = new System.Drawing.Size(93, 27);
-            this.lblMouseOp.TabIndex = 7;
+            this.lblMouseOp.TabStop = false;
             this.lblMouseOp.Text = "Operation";
             this.lblMouseOp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -5100,9 +5342,9 @@
             this.cbxMouseOp.Location = new System.Drawing.Point(102, 3);
             this.cbxMouseOp.Name = "cbxMouseOp";
             this.cbxMouseOp.Size = new System.Drawing.Size(637, 21);
-            this.cbxMouseOp.TabIndex = 21;
+            this.cbxMouseOp.TabStop = false;
             // 
-            // tabLoop
+            // tabLoopLoop
             // 
             this.tabLoop.AutoScroll = true;
             this.tabLoop.Controls.Add(this.actionViewer1);
@@ -5111,7 +5353,7 @@
             this.tabLoop.Name = "tabLoop";
             this.tabLoop.Padding = new System.Windows.Forms.Padding(3);
             this.tabLoop.Size = new System.Drawing.Size(742, 414);
-            this.tabLoop.TabIndex = 25;
+            this.tabLoop.TabStop = false;
             this.tabLoop.Text = "Loop";
             this.tabLoop.UseVisualStyleBackColor = true;
             // 
@@ -5123,7 +5365,7 @@
             this.actionViewer1.MinimumSize = new System.Drawing.Size(0, 200);
             this.actionViewer1.Name = "actionViewer1";
             this.actionViewer1.Size = new System.Drawing.Size(736, 200);
-            this.actionViewer1.TabIndex = 46;
+            this.actionViewer1.TabStop = false;
             // 
             // tableLayoutPanel26
             // 
@@ -5154,7 +5396,7 @@
             this.tableLayoutPanel26.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.tableLayoutPanel26.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel26.Size = new System.Drawing.Size(736, 312);
-            this.tableLayoutPanel26.TabIndex = 8;
+            this.tableLayoutPanel26.TabStop = false;
             // 
             // expLoopIncr
             // 
@@ -5189,7 +5431,7 @@
             this.lblLoopIncr.Location = new System.Drawing.Point(393, 0);
             this.lblLoopIncr.Name = "lblLoopIncr";
             this.lblLoopIncr.Size = new System.Drawing.Size(54, 26);
-            this.lblLoopIncr.TabIndex = 47;
+            this.lblLoopIncr.TabStop = false;
             this.lblLoopIncr.Text = "Increment";
             this.lblLoopIncr.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -5200,7 +5442,7 @@
             this.lblLoopInit.Location = new System.Drawing.Point(3, 0);
             this.lblLoopInit.Name = "lblLoopInit";
             this.lblLoopInit.Size = new System.Drawing.Size(99, 26);
-            this.lblLoopInit.TabIndex = 46;
+            this.lblLoopInit.TabStop = false;
             this.lblLoopInit.Text = "Initial iterator";
             this.lblLoopInit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -5214,7 +5456,7 @@
             this.label5.Location = new System.Drawing.Point(3, 292);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(730, 20);
-            this.label5.TabIndex = 45;
+            this.label5.TabStop = false;
             this.label5.Text = "Loop actions";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -5228,7 +5470,7 @@
             this.label4.Location = new System.Drawing.Point(3, 62);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(730, 20);
-            this.label4.TabIndex = 43;
+            this.label4.TabStop = false;
             this.label4.Text = "Loop condition (must be true to iterate)";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -5244,7 +5486,7 @@
             this.expLoopIterationDelay.Name = "expLoopIterationDelay";
             this.expLoopIterationDelay.ReadOnly = false;
             this.expLoopIterationDelay.Size = new System.Drawing.Size(625, 20);
-            this.expLoopIterationDelay.TabIndex = 24;
+            this.expLoopIterationDelay.TabIndex = 50;
             // 
             // lblLoopDelay
             // 
@@ -5253,7 +5495,7 @@
             this.lblLoopDelay.Location = new System.Drawing.Point(3, 26);
             this.lblLoopDelay.Name = "lblLoopDelay";
             this.lblLoopDelay.Size = new System.Drawing.Size(99, 26);
-            this.lblLoopDelay.TabIndex = 23;
+            this.lblLoopDelay.TabStop = false;
             this.lblLoopDelay.Text = "Loop iteration delay";
             this.lblLoopDelay.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -5265,7 +5507,7 @@
             this.cndLoopCondition.Location = new System.Drawing.Point(3, 85);
             this.cndLoopCondition.Name = "cndLoopCondition";
             this.cndLoopCondition.Size = new System.Drawing.Size(730, 194);
-            this.cndLoopCondition.TabIndex = 44;
+            this.cndLoopCondition.TabStop = false;
             // 
             // tabRepo
             // 
@@ -5274,7 +5516,7 @@
             this.tabRepo.Name = "tabRepo";
             this.tabRepo.Padding = new System.Windows.Forms.Padding(3);
             this.tabRepo.Size = new System.Drawing.Size(742, 414);
-            this.tabRepo.TabIndex = 26;
+            this.tabRepo.TabStop = false;
             this.tabRepo.Text = "Repo";
             this.tabRepo.UseVisualStyleBackColor = true;
             // 
@@ -5300,7 +5542,7 @@
             this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel27.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel27.Size = new System.Drawing.Size(736, 408);
-            this.tableLayoutPanel27.TabIndex = 8;
+            this.tableLayoutPanel27.TabStop = false;
             // 
             // lblRepositoryLink
             // 
@@ -5311,7 +5553,7 @@
             this.lblRepositoryLink.Name = "lblRepositoryLink";
             this.lblRepositoryLink.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.lblRepositoryLink.Size = new System.Drawing.Size(57, 17);
-            this.lblRepositoryLink.TabIndex = 23;
+            this.lblRepositoryLink.TabStop = false;
             this.lblRepositoryLink.Text = "Repository";
             this.lblRepositoryLink.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -5322,7 +5564,7 @@
             this.lblRepositoryOp.Location = new System.Drawing.Point(3, 0);
             this.lblRepositoryOp.Name = "lblRepositoryOp";
             this.lblRepositoryOp.Size = new System.Drawing.Size(57, 27);
-            this.lblRepositoryOp.TabIndex = 7;
+            this.lblRepositoryOp.TabStop = false;
             this.lblRepositoryOp.Text = "Operation";
             this.lblRepositoryOp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -5338,7 +5580,7 @@
             this.cbxRepositoryOp.Location = new System.Drawing.Point(66, 3);
             this.cbxRepositoryOp.Name = "cbxRepositoryOp";
             this.cbxRepositoryOp.Size = new System.Drawing.Size(667, 21);
-            this.cbxRepositoryOp.TabIndex = 21;
+            this.cbxRepositoryOp.TabStop = false;
             this.cbxRepositoryOp.SelectedIndexChanged += new System.EventHandler(this.cbxRepositoryOp_SelectedIndexChanged);
             // 
             // trvRepositoryLink
@@ -5393,7 +5635,7 @@
             this.btnTest.Location = new System.Drawing.Point(10, 0);
             this.btnTest.Name = "btnTest";
             this.btnTest.Size = new System.Drawing.Size(444, 35);
-            this.btnTest.TabIndex = 102;
+            this.btnTest.TabStop = false;
             this.btnTest.Text = "Test action";
             this.btnTest.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnTest.UseVisualStyleBackColor = true;
@@ -5406,7 +5648,7 @@
             this.btnCancel.Location = new System.Drawing.Point(614, 0);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(150, 35);
-            this.btnCancel.TabIndex = 102;
+            this.btnCancel.TabStop = false;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
@@ -5417,7 +5659,7 @@
             this.btnOk.Location = new System.Drawing.Point(0, 0);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(150, 35);
-            this.btnOk.TabIndex = 100;
+            this.btnOk.TabStop = false;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
@@ -5457,7 +5699,7 @@
             this.tbcAction.Name = "tbcAction";
             this.tbcAction.SelectedIndex = 0;
             this.tbcAction.Size = new System.Drawing.Size(764, 475);
-            this.tbcAction.TabIndex = 7;
+            this.tbcAction.TabStop = false;
             // 
             // tabActionSettings
             // 
@@ -5467,7 +5709,7 @@
             this.tabActionSettings.Name = "tabActionSettings";
             this.tabActionSettings.Padding = new System.Windows.Forms.Padding(3);
             this.tabActionSettings.Size = new System.Drawing.Size(756, 449);
-            this.tabActionSettings.TabIndex = 0;
+            this.tabActionSettings.TabStop = false;
             this.tabActionSettings.Text = "Action-specific settings";
             this.tabActionSettings.UseVisualStyleBackColor = true;
             // 
@@ -5479,7 +5721,7 @@
             this.stsMouseHelp.Name = "stsMouseHelp";
             this.stsMouseHelp.Size = new System.Drawing.Size(650, 22);
             this.stsMouseHelp.SizingGrip = false;
-            this.stsMouseHelp.TabIndex = 1;
+            this.stsMouseHelp.TabStop = false;
             this.stsMouseHelp.Text = "statusStrip1";
             this.stsMouseHelp.Visible = false;
             // 
@@ -5497,7 +5739,7 @@
             this.tabActionCondition.Name = "tabActionCondition";
             this.tabActionCondition.Padding = new System.Windows.Forms.Padding(3);
             this.tabActionCondition.Size = new System.Drawing.Size(756, 449);
-            this.tabActionCondition.TabIndex = 4;
+            this.tabActionCondition.TabStop = false;
             this.tabActionCondition.Text = "Action condition";
             this.tabActionCondition.UseVisualStyleBackColor = true;
             // 
@@ -5508,7 +5750,7 @@
             this.cndCondition.Location = new System.Drawing.Point(3, 3);
             this.cndCondition.Name = "cndCondition";
             this.cndCondition.Size = new System.Drawing.Size(750, 443);
-            this.cndCondition.TabIndex = 0;
+            this.cndCondition.TabStop = false;
             // 
             // tabScheduling
             // 
@@ -5517,7 +5759,7 @@
             this.tabScheduling.Name = "tabScheduling";
             this.tabScheduling.Padding = new System.Windows.Forms.Padding(7);
             this.tabScheduling.Size = new System.Drawing.Size(756, 449);
-            this.tabScheduling.TabIndex = 2;
+            this.tabScheduling.TabStop = false;
             this.tabScheduling.Text = "Scheduling";
             this.tabScheduling.UseVisualStyleBackColor = true;
             // 
@@ -5543,7 +5785,7 @@
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.Size = new System.Drawing.Size(742, 107);
-            this.tableLayoutPanel15.TabIndex = 1;
+            this.tableLayoutPanel15.TabStop = false;
             // 
             // chkExecuteAsync
             // 
@@ -5555,7 +5797,7 @@
             this.chkExecuteAsync.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.chkExecuteAsync.Name = "chkExecuteAsync";
             this.chkExecuteAsync.Size = new System.Drawing.Size(737, 17);
-            this.chkExecuteAsync.TabIndex = 8;
+            this.chkExecuteAsync.TabStop = false;
             this.chkExecuteAsync.Text = "Execute asynchronously without blocking other actions from executing";
             this.chkExecuteAsync.UseVisualStyleBackColor = true;
             // 
@@ -5566,7 +5808,7 @@
             this.lblExecutionDelay.Location = new System.Drawing.Point(3, 54);
             this.lblExecutionDelay.Name = "lblExecutionDelay";
             this.lblExecutionDelay.Size = new System.Drawing.Size(263, 26);
-            this.lblExecutionDelay.TabIndex = 6;
+            this.lblExecutionDelay.TabStop = false;
             this.lblExecutionDelay.Text = "Execution delay from last action (ms)";
             this.lblExecutionDelay.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -5581,7 +5823,7 @@
             this.cbxRefireOption2.Location = new System.Drawing.Point(272, 30);
             this.cbxRefireOption2.Name = "cbxRefireOption2";
             this.cbxRefireOption2.Size = new System.Drawing.Size(467, 21);
-            this.cbxRefireOption2.TabIndex = 4;
+            this.cbxRefireOption2.TabStop = false;
             // 
             // cbxRefireOption1
             // 
@@ -5594,7 +5836,7 @@
             this.cbxRefireOption1.Location = new System.Drawing.Point(272, 3);
             this.cbxRefireOption1.Name = "cbxRefireOption1";
             this.cbxRefireOption1.Size = new System.Drawing.Size(467, 21);
-            this.cbxRefireOption1.TabIndex = 3;
+            this.cbxRefireOption1.TabStop = false;
             // 
             // lblRefireOption1
             // 
@@ -5603,7 +5845,7 @@
             this.lblRefireOption1.Location = new System.Drawing.Point(3, 0);
             this.lblRefireOption1.Name = "lblRefireOption1";
             this.lblRefireOption1.Size = new System.Drawing.Size(263, 27);
-            this.lblRefireOption1.TabIndex = 2;
+            this.lblRefireOption1.TabStop = false;
             this.lblRefireOption1.Text = "If the trigger fires again while this action is still in queue";
             this.lblRefireOption1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -5627,7 +5869,7 @@
             this.tabDebugging.Name = "tabDebugging";
             this.tabDebugging.Padding = new System.Windows.Forms.Padding(7);
             this.tabDebugging.Size = new System.Drawing.Size(756, 449);
-            this.tabDebugging.TabIndex = 3;
+            this.tabDebugging.TabStop = false;
             this.tabDebugging.Text = "Debugging";
             this.tabDebugging.UseVisualStyleBackColor = true;
             // 
@@ -5648,7 +5890,7 @@
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.tableLayoutPanel16.Size = new System.Drawing.Size(742, 27);
-            this.tableLayoutPanel16.TabIndex = 2;
+            this.tableLayoutPanel16.TabStop = false;
             // 
             // cbxLoggingLevel
             // 
@@ -5659,13 +5901,15 @@
             "Nothing",
             "Errors only",
             "Errors and warnings",
+            "Above custom",
+            "Above custom 2",
             "All informational messages",
             "Verbose debug",
             "(inherit from trigger)"});
             this.cbxLoggingLevel.Location = new System.Drawing.Point(115, 3);
             this.cbxLoggingLevel.Name = "cbxLoggingLevel";
             this.cbxLoggingLevel.Size = new System.Drawing.Size(624, 21);
-            this.cbxLoggingLevel.TabIndex = 3;
+            this.cbxLoggingLevel.TabStop = false;
             // 
             // lblLoggingLevel
             // 
@@ -5674,7 +5918,7 @@
             this.lblLoggingLevel.Location = new System.Drawing.Point(3, 0);
             this.lblLoggingLevel.Name = "lblLoggingLevel";
             this.lblLoggingLevel.Size = new System.Drawing.Size(106, 27);
-            this.lblLoggingLevel.TabIndex = 2;
+            this.lblLoggingLevel.TabStop = false;
             this.lblLoggingLevel.Text = "Logging filtering level";
             this.lblLoggingLevel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -5685,36 +5929,45 @@
             this.tabDescription.Name = "tabDescription";
             this.tabDescription.Padding = new System.Windows.Forms.Padding(7);
             this.tabDescription.Size = new System.Drawing.Size(756, 449);
-            this.tabDescription.TabIndex = 5;
+            this.tabDescription.TabStop = false;
             this.tabDescription.Text = "Description";
             this.tabDescription.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel23
             // 
             this.tableLayoutPanel23.AutoSize = true;
-            this.tableLayoutPanel23.ColumnCount = 1;
-            this.tableLayoutPanel23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel23.Controls.Add(this.chkOverrideDesc, 0, 1);
+            this.tableLayoutPanel23.ColumnCount = 4;
+            this.tableLayoutPanel23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel23.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel23.Controls.Add(this.chkOverrideDesc, 0, 2);
             this.tableLayoutPanel23.Controls.Add(this.txtDescription, 0, 0);
+            this.tableLayoutPanel23.Controls.Add(this.lblDescBgColor, 0, 1);
+            this.tableLayoutPanel23.Controls.Add(this.expDescBgColor, 1, 1);
+            this.tableLayoutPanel23.Controls.Add(this.lblDescTextColor, 2, 1);
+            this.tableLayoutPanel23.Controls.Add(this.expDescTextColor, 3, 1);
             this.tableLayoutPanel23.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel23.Location = new System.Drawing.Point(7, 7);
             this.tableLayoutPanel23.Name = "tableLayoutPanel23";
-            this.tableLayoutPanel23.RowCount = 2;
+            this.tableLayoutPanel23.RowCount = 3;
             this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel23.Size = new System.Drawing.Size(742, 435);
-            this.tableLayoutPanel23.TabIndex = 2;
+            this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel23.Size = new System.Drawing.Size(742, 470);
+            this.tableLayoutPanel23.TabStop = false;
             // 
             // chkOverrideDesc
             // 
             this.chkOverrideDesc.AutoSize = true;
             this.chkOverrideDesc.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel23.SetColumnSpan(this.chkOverrideDesc, 4);
             this.chkOverrideDesc.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkOverrideDesc.Location = new System.Drawing.Point(3, 413);
+            this.chkOverrideDesc.Location = new System.Drawing.Point(3, 448);
             this.chkOverrideDesc.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.chkOverrideDesc.Name = "chkOverrideDesc";
             this.chkOverrideDesc.Size = new System.Drawing.Size(737, 17);
-            this.chkOverrideDesc.TabIndex = 8;
+            this.chkOverrideDesc.TabStop = false;
             this.chkOverrideDesc.Text = "Override autogenerated action description";
             this.chkOverrideDesc.UseVisualStyleBackColor = true;
             // 
@@ -5722,6 +5975,7 @@
             // 
             this.txtDescription.AcceptsReturn = true;
             this.txtDescription.AcceptsTab = true;
+            this.tableLayoutPanel23.SetColumnSpan(this.txtDescription, 4);
             this.txtDescription.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtDescription.Location = new System.Drawing.Point(3, 3);
             this.txtDescription.Multiline = true;
@@ -5730,6 +5984,54 @@
             this.txtDescription.Size = new System.Drawing.Size(736, 402);
             this.txtDescription.TabIndex = 1;
             this.txtDescription.WordWrap = false;
+            // 
+            // lblDescBgColor
+            // 
+            this.lblDescBgColor.AutoSize = true;
+            this.lblDescBgColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDescBgColor.Location = new System.Drawing.Point(3, 413);
+            this.lblDescBgColor.Name = "lblDescBgColor";
+            this.lblDescBgColor.Size = new System.Drawing.Size(142, 26);
+            this.lblDescBgColor.TabStop = false;
+            this.lblDescBgColor.Text = "Background Color";
+            this.lblDescBgColor.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // expDescBgColor
+            // 
+            this.expDescBgColor.AutocompleteAvailable = true;
+            this.expDescBgColor.AutoSize = true;
+            this.expDescBgColor.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expDescBgColor.Expression = "";
+            this.expDescBgColor.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Color;
+            this.expDescBgColor.Location = new System.Drawing.Point(154, 416);
+            this.expDescBgColor.Name = "expDescBgColor";
+            this.expDescBgColor.ReadOnly = false;
+            this.expDescBgColor.Size = new System.Drawing.Size(213, 20);
+            this.expDescBgColor.TabIndex = 4;
+            // 
+            // lblDescTextColor
+            // 
+            this.lblDescTextColor.AutoSize = true;
+            this.lblDescTextColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDescTextColor.Location = new System.Drawing.Point(376, 413);
+            this.lblDescTextColor.Name = "lblDescTextColor";
+            this.lblDescTextColor.Size = new System.Drawing.Size(142, 26);
+            this.lblDescTextColor.TabStop = false;
+            this.lblDescTextColor.Text = "Text Color";
+            this.lblDescTextColor.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // expDescTextColor
+            // 
+            this.expDescTextColor.AutocompleteAvailable = true;
+            this.expDescTextColor.AutoSize = true;
+            this.expDescTextColor.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expDescTextColor.Expression = "";
+            this.expDescTextColor.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Color;
+            this.expDescTextColor.Location = new System.Drawing.Point(527, 416);
+            this.expDescTextColor.Name = "expDescTextColor";
+            this.expDescTextColor.ReadOnly = false;
+            this.expDescTextColor.Size = new System.Drawing.Size(213, 20);
+            this.expDescTextColor.TabIndex = 6;
             // 
             // fontDialog1
             // 
@@ -5756,7 +6058,7 @@
             this.lblReadOnly.Location = new System.Drawing.Point(0, 0);
             this.lblReadOnly.Name = "lblReadOnly";
             this.lblReadOnly.Size = new System.Drawing.Size(764, 41);
-            this.lblReadOnly.TabIndex = 0;
+            this.lblReadOnly.TabStop = false;
             this.lblReadOnly.Text = "You are in read-only mode, as the configuration of remote triggers can\'t be edite" +
     "d locally. If you wish to edit the action, you will need to make a local copy of" +
     " the trigger.";
@@ -5905,6 +6207,10 @@
             this.tabTableVariable.PerformLayout();
             this.tableLayoutPanel21.ResumeLayout(false);
             this.tableLayoutPanel21.PerformLayout();
+            this.tabDictVariable.ResumeLayout(false);
+            this.tabDictVariable.PerformLayout();
+            this.tableLayoutPanelDict.ResumeLayout(false);
+            this.tableLayoutPanelDict.PerformLayout();
             this.tabMutex.ResumeLayout(false);
             this.tabMutex.PerformLayout();
             this.tableLayoutPanel22.ResumeLayout(false);
@@ -6042,7 +6348,6 @@
         private System.Windows.Forms.Label lblTriggerZone;
         internal System.Windows.Forms.TreeView trvTrigger;
         private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.Label lblKeypressesInfo;
         private System.Windows.Forms.Button btnSendKeysLink;
         private System.Windows.Forms.TextBox txtSendKeysLink;
         private System.Windows.Forms.TabPage tabImageAura;
@@ -6181,7 +6486,6 @@
         private System.Windows.Forms.CheckBox chkSpeechMyOutput;
         private System.Windows.Forms.TabPage tabGenericJson;
         private System.Windows.Forms.TableLayoutPanel jsonTableLayout;
-        private System.Windows.Forms.Label lblJsonInstructions;
         private CustomControls.ExpressionTextBox expJsonFiring;
         private System.Windows.Forms.Label lblJsonFiring;
         private CustomControls.ExpressionTextBox expJsonPayload;
@@ -6192,9 +6496,6 @@
         private CustomControls.ConditionViewer cndCondition;
         private System.Windows.Forms.ComboBox cbxKeypressMethod;
         private System.Windows.Forms.Label lblKeypressMethod;
-        private System.Windows.Forms.Button btnKeycodesLink;
-        private System.Windows.Forms.TextBox txtKeyCodesLink;
-        private System.Windows.Forms.Label lblKeypressInfo;
         private CustomControls.ExpressionTextBox expKeypress;
         private CustomControls.ExpressionTextBox expWindowTitle;
         private System.Windows.Forms.Label lblKeypress;
@@ -6246,6 +6547,26 @@
         private CustomControls.ExpressionTextBox expTvarRow;
         private System.Windows.Forms.Label lblTvarRow;
         private System.Windows.Forms.CheckBox cbxFileOpCache;
+        private System.Windows.Forms.TabPage tabDictVariable;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelDict;
+        private System.Windows.Forms.Label lblDictOpType;
+        private System.Windows.Forms.ComboBox cbxDictOpType;
+        private System.Windows.Forms.Label lblDictName;
+        private CustomControls.ExpressionTextBox expDictName;
+        private CustomControls.PersistenceSwitch prsDictSource;
+        private System.Windows.Forms.Label lblDictLength;
+        private CustomControls.ExpressionTextBox expDictLength;
+        private System.Windows.Forms.Label lblDictKeyType;
+        private System.Windows.Forms.ComboBox cbxDictKeyType;
+        private System.Windows.Forms.Label lblDictKey;
+        private CustomControls.ExpressionTextBox expDictKey;
+        private System.Windows.Forms.Label lblDictValueType;
+        private System.Windows.Forms.ComboBox cbxDictValueType;
+        private System.Windows.Forms.Label lblDictValue;
+        private CustomControls.ExpressionTextBox expDictValue;
+        private System.Windows.Forms.Label lblDictTarget;
+        private CustomControls.ExpressionTextBox expDictTarget;
+        private CustomControls.PersistenceSwitch prsDictTarget;
         private System.Windows.Forms.TabPage tabMutex;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel22;
         private CustomControls.ExpressionTextBox expMutexName;
@@ -6256,6 +6577,10 @@
         private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel23;
         private System.Windows.Forms.CheckBox chkOverrideDesc;
+        private System.Windows.Forms.Label lblDescBgColor;
+        private System.Windows.Forms.Label lblDescTextColor;
+        private CustomControls.ExpressionTextBox expDescBgColor;
+        private CustomControls.ExpressionTextBox expDescTextColor;
         private System.Windows.Forms.Label lblLogMessageLevel;
         private System.Windows.Forms.ComboBox cbxLogMessageLevel;
         private System.Windows.Forms.TabPage tabPlaceholder;
@@ -6317,10 +6642,8 @@
         private CustomControls.ExpressionTextBox expVariableTarget;
         private System.Windows.Forms.Label label6;
         private CustomControls.PersistenceSwitch prsJsonVariable;
-        private System.Windows.Forms.Label lblWmsgProcInfo;
         private CustomControls.ExpressionTextBox expWmsgProcid;
         private System.Windows.Forms.Label lblWmsgProcid;
-        private System.Windows.Forms.Label lblKeypressProcInfo;
         private CustomControls.ExpressionTextBox expKeypressProcId;
         private System.Windows.Forms.Label lblKeypressProcId;
         private System.Windows.Forms.Label label5;
