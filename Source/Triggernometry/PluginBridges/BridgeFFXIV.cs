@@ -87,7 +87,8 @@ namespace Triggernometry.PluginBridges
                 object plug = GetInstance();
                 if (plug == null)
                 {
-                    throw new ArgumentException("No plugin instance available");
+                    LogMessage(RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/ffxiv/ffxivzonechangedexception", "Could not subscribe to FFXIV zone change (no plugin instance available)."));
+                    return;
                 }
                 PropertyInfo pi = plug.GetType().GetProperty("DataSubscription", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 if (pi == null)
