@@ -3,6 +3,13 @@
 	<Categories>
 		<Category Name="Final Fantasy XIV" Description="Triggers for Final Fantasy XIV">
 			<Categories>
+				<Category Name="Shared triggers" Description="Automatically updated repository of triggers, straight from the Triggernometry Discord sharing channel.">
+					<Categories>
+					</Categories>
+					<Repositories>
+						<Repository Name="Sharing channel" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry-Triggers/main/Repositories/ffxiv_sharingchannel.xml" Description="Sharing channel triggers" />
+					</Repositories>
+				</Category>				
 				<Category Name="Raiding" Description="Triggers related to high end raiding">
 					<Categories>
 					</Categories>
