@@ -51,6 +51,7 @@ namespace Triggernometry
             Unset,
             SetString,
             SetNumeric,
+            Increment,
             Clipboard,
             UnsetAll,
             UnsetRegex,
@@ -74,6 +75,7 @@ namespace Triggernometry
             FilterLine,
             Copy,
             Append,
+            AppendH,
             SortLine,
             GetAllEntities,
             UnsetAll,
@@ -1549,6 +1551,24 @@ namespace Triggernometry
             set
             {
                 _LogProcess = Boolean.Parse(value);
+            }
+        }
+
+        internal bool _LogProcessACT { get; set; } = false;
+        [XmlAttribute]
+        public string LogProcessACT
+        {
+            get
+            {
+                if (_LogProcessACT == false)
+                {
+                    return null;
+                }
+                return _LogProcessACT.ToString();
+            }
+            set
+            {
+                _LogProcessACT = Boolean.Parse(value);
             }
         }
 

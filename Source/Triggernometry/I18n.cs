@@ -6,7 +6,7 @@ using System.Windows.Forms;
 namespace Triggernometry
 {
 
-    internal static class I18n
+    public static class I18n
     {
 
         internal static Dictionary<string, Language> RegisteredLanguages = new Dictionary<string, Language>();
@@ -76,7 +76,7 @@ namespace Triggernometry
             return defValue;
         }
 
-        internal static string Translate(string key, string text, params object[] args)
+        public static string Translate(string key, string text, params object[] args)
         {
             if (BuiltInLanguage != null)
             {
@@ -267,22 +267,19 @@ namespace Triggernometry
             }
         }
 
-        internal static string TrlBool() => Translate("internal/I18n/bool", "bool");
-        internal static string TrlChar() => Translate("internal/I18n/char", "char");
-        internal static string TrlCharcode() => Translate("internal/I18n/charcode", "charcode");
-        internal static string TrlDouble() => Translate("internal/I18n/double", "double");
-        internal static string TrlFloat() => Translate("internal/I18n/float", "float");
-        internal static string TrlHex() => Translate("internal/I18n/hex", "hex");
-        internal static string TrlIndex() => Translate("internal/I18n/index", "index");
-        internal static string TrlInt() => Translate("internal/I18n/int", "int");
-        internal static string TrlKey() => Translate("internal/I18n/key", "key");
-        internal static string TrlLength() => Translate("internal/I18n/length", "length");
-        internal static string TrlSlice() => Translate("internal/I18n/slice", "slice");
-        internal static string TrlStartIndex() => Translate("internal/I18n/startindex", "startindex");
-        internal static string TrlString() => Translate("internal/I18n/string", "string");
-        internal static string TrlTime() => Translate("internal/I18n/time", "time");
-        internal static string TrlTimes() => Translate("internal/I18n/times", "times");
-        internal static string TrlType() => Translate("internal/I18n/type", "type");
+
+        private static HashSet<string> TrlHashSet = new HashSet<string>
+        {
+            "bool", "char", "charcode", "double", "float", "hex", "index", "int", "key", "length",
+            "slice", "startindex", "string", "time", "times", "type",
+        };
+        internal static string Trl(string key)
+        {
+            if (TrlHashSet.Contains(key))
+                return Translate($"internal/I18n/{key}", key);
+            else
+                throw new ArgumentException($"Invalid string for translation: {key}");
+        }
 
         internal static string TrlVarPersist(bool isPersist)
         {
@@ -319,7 +316,7 @@ namespace Triggernometry
                            : Translate("internal/I18n/descasyncfalse", "[Sync] ");
         }
 
-        internal static string TrlTriggerDescTime(double ms)
+        public static string TrlTriggerDescTime(double ms)
         {
             ms = Math.Round(ms);
             double s = ms / 1000;

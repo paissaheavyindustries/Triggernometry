@@ -483,6 +483,27 @@ namespace Triggernometry
             return false;
         }
 
+        private string GetTargetWindowsDescription(string procid, string titleRegex)
+        {
+            procid = procid.Trim();
+            if (titleRegex.Trim().Length == 0) // the same condition check as in RealPlugin.WindowsUtils.FindWindows
+            {
+                return I18n.Translate("internal/Action/descwindowtargetnone", "(unspecified window name)");
+            }
+            if (procid == "" || procid == "0")
+            {
+                return I18n.Translate("internal/Action/descwindowtargetsingle", "the first window whose title match ({0})", titleRegex);
+            }
+            else if (procid == "-1")
+            {
+                return I18n.Translate("internal/Action/descwindowtargetall", "all windows whose titles match ({0})", titleRegex);
+            }
+            else
+            {
+                return I18n.Translate("internal/Action/descwindowtargetid", "windows in the process id ({0}) whose titles match ({1})", procid, titleRegex);
+            }
+        }
+
         internal string GetDescription(Context ctx)
         {
             string temp = "";
@@ -505,7 +526,7 @@ namespace Triggernometry
             {
                 case ActionTypeEnum.Trigger:
                     {
-                        Trigger t = ctx.plug.GetTriggerById(_TriggerId, ctx.trig != null ? ctx.trig.Repo : null);
+                        Trigger t = RealPlugin.plug.GetTriggerById(_TriggerId, ctx.trig != null ? ctx.trig.Repo : null);
                         if (t != null)
                         {
                             switch (_TriggerOp)
@@ -583,7 +604,7 @@ namespace Triggernometry
                     break;
                 case ActionTypeEnum.Folder:
                     {
-                        Folder f = ctx.plug.GetFolderById(_FolderId, ctx.trig != null ? ctx.trig.Repo : null);
+                        Folder f = RealPlugin.plug.GetFolderById(_FolderId, ctx.trig != null ? ctx.trig.Repo : null);
                         if (f != null)
                         {
                             switch (_FolderOp)
@@ -613,20 +634,7 @@ namespace Triggernometry
                             break;
                         case KeypressTypeEnum.WindowMessage:
                         case KeypressTypeEnum.WindowMessageCombo:
-                            string target;
-                            string procid = _KeyPressProcId.Trim();
-                            if (procid == "" || procid == "0")
-                            {
-                                target = I18n.Translate("internal/Action/desckeypresstgtwindow", "window ({0})", _KeyPressWindow);
-                            }
-                            else if (procid == "-1")
-                            {
-                                target = I18n.Translate("internal/Action/desckeypresstgtwindows", "all windows named ({0})", _KeyPressWindow);
-                            }
-                            else
-                            { 
-                                target = I18n.Translate("internal/Action/desckeypresstgtid", "process id ({0})", procid);
-                            }
+                            string target = GetTargetWindowsDescription(_KeyPressProcId, _KeyPressWindow);
 
                             if (_KeypressType == KeypressTypeEnum.WindowMessage)
                             {
@@ -956,6 +964,12 @@ namespace Triggernometry
                                 "set {1}scalar variable ({0}) value with {3} expression ({2})",
                                 _VariableName, sPersist, _VariableExpression, exprType);
                             break;
+                        case VariableOpEnum.Increment:
+                            string value = string.IsNullOrWhiteSpace(_VariableExpression) ? "1" : _VariableExpression;
+                            temp += I18n.Translate("internal/Action/descscalarincrement",
+                                "increment the value of {1}scalar variable ({0}) by ({2})",
+                                _VariableName, sPersist, value);
+                            break;
                         case VariableOpEnum.Clipboard:
                             bool isName = !string.IsNullOrWhiteSpace(_VariableName);
                             if (isName)
@@ -963,7 +977,7 @@ namespace Triggernometry
                                     "Copy {1}scalar variable ({0}) value to clipboard", _VariableName, sPersist);
                             else
                                 temp += I18n.Translate("internal/Action/descscalarclipboardexpr",
-                                    "Copy {1} expression ({0}) to clipboard", _VariableExpression, I18n.TrlString());
+                                    "Copy {1} expression ({0}) to clipboard", _VariableExpression, I18n.Trl("string"));
 
                             break;
                         case VariableOpEnum.Unset:
@@ -1078,7 +1092,12 @@ namespace Triggernometry
                             break;
                         case TableVariableOpEnum.Append:
                             temp += I18n.Translate("internal/Action/desctableappend",
-                                "append {2}table variable ({0}) to {3}table variable ({1})",
+                                "append {2}table variable ({0}) to {3}table variable ({1}) vertically",
+                                _TableVariableName, _TableVariableTarget, sPersistT, tPersistT);
+                            break;
+                        case TableVariableOpEnum.AppendH:
+                            temp += I18n.Translate("internal/Action/desctableappendh",
+                                "append {2}table variable ({0}) to {3}table variable ({1}) horizontally",
                                 _TableVariableName, _TableVariableTarget, sPersistT, tPersistT);
                             break;
                         case TableVariableOpEnum.Build:
@@ -1343,20 +1362,7 @@ namespace Triggernometry
                     break;
                 case ActionTypeEnum.WindowMessage:
                     {
-                        string target;
-                        string procid = _WmsgProcId.Trim();
-                        if (procid == "" || procid == "0")
-                        {
-                            target = I18n.Translate("internal/Action/desckeypresstgtwindow", "window ({0})", _WmsgTitle);
-                        }
-                        else if (procid == "-1")
-                        {
-                            target = I18n.Translate("internal/Action/desckeypresstgtwindows", "all windows named ({0})", _WmsgTitle);
-                        }
-                        else
-                        {
-                            target = I18n.Translate("internal/Action/desckeypresstgtid", "process id ({0})", procid);
-                        }
+                        string target = GetTargetWindowsDescription(_WmsgProcId, _WmsgTitle);
                         temp += I18n.Translate("internal/Action/descwmsg", "send message ({0}) wparam ({1}) lparam ({2}) to {3}", _WmsgCode, _WmsgWparam, _WmsgLparam, target);
                         break;
                     }
@@ -1433,7 +1439,7 @@ namespace Triggernometry
                                 break;
                             case RepositoryOpEnum.UpdateRepo:
                                 {
-                                    Repository r = ctx.plug.GetRepositoryById(_RepositoryId);
+                                    Repository r = RealPlugin.plug.GetRepositoryById(_RepositoryId);
                                     if (r != null)
                                     {
                                         temp += I18n.Translate("internal/Action/repoupdatespecific", "Update repository ({0})", r.Name);
@@ -1652,7 +1658,7 @@ namespace Triggernometry
         {
             try
             {
-                if ((ctx.force & Action.TriggerForceTypeEnum.SkipConditions) == 0 && ctx.testmode == false)
+                if ((ctx.force & Action.TriggerForceTypeEnum.SkipConditions) == 0 && ctx.testByPlaceholder == false)
                 {
                     if (Condition != null && Condition.Enabled == true)
                     {
@@ -1709,7 +1715,6 @@ namespace Triggernometry
                                     return ctx.EvaluateStringExpression(ActionContextLogger, ctx, _DictVariableKey);
                                 else
                                     return I18n.ThingToString(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _DictVariableKey));
-                                
                             }
                             string ParseValue()
                             {
@@ -2127,7 +2132,7 @@ namespace Triggernometry
                     #region Implementation - Folder operation
                     case ActionTypeEnum.Folder:
                         {
-                            Folder f = ctx.plug.GetFolderById(_FolderId, ctx.trig != null ? ctx.trig.Repo : null);
+                            Folder f = ctx.plug.GetFolderById(_FolderId, ctx.trig?.Repo);
                             if (f != null)
                             {
                                 switch (_FolderOp)
@@ -2297,10 +2302,6 @@ namespace Triggernometry
                             {
                                 case KeypressTypeEnum.SendKeys:
                                     {
-                                        if (ctx.testmode == true)
-                                        {
-                                            Thread.Sleep(2000);
-                                        }
                                         string ks = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressExpression);
                                         SendKeys.SendWait(ks);
                                     }
@@ -2853,7 +2854,12 @@ namespace Triggernometry
                         {
                             if (_LogProcess == true)
                             {
-                                ctx.plug.LogLineQueuer(ctx.EvaluateStringExpression(ActionContextLogger, ctx, _LogMessageText), ctx.EvaluateStringExpression(ActionContextLogger, ctx, ctx.plug.currentZone), _LogMessageTarget);
+                                string message = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _LogMessageText);
+                                if (_LogProcessACT)
+                                {
+                                    RealPlugin.plug.ACTEncounterLogHook(message);
+                                }
+                                ctx.plug.LogLineQueuer(message, ctx.EvaluateStringExpression(ActionContextLogger, ctx, ctx.plug.currentZone), _LogMessageTarget);
                             }
                             else
                             {
@@ -3187,6 +3193,29 @@ namespace Triggernometry
                                             "{2}Scalar variable ({0}) value set to ({1})", varname, newval, sPersist));
                                         break;
                                     }
+                                case VariableOpEnum.Increment:
+                                    {
+                                        double original = 0;
+                                        double increment = string.IsNullOrWhiteSpace(_VariableExpression) 
+                                            ? 1 : ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _VariableExpression);
+                                        VariableScalar x = new VariableScalar { LastChanger = changer, LastChanged = DateTime.Now };
+                                        lock (vs.Scalar)
+                                        {
+                                            if (vs.Scalar.ContainsKey(varname))
+                                            {
+                                                string originalString = vs.Scalar[varname].ToString();
+                                                if (!string.IsNullOrWhiteSpace(originalString))
+                                                {
+                                                    original = ctx.EvaluateNumericExpression(ActionContextLogger, ctx, originalString);
+                                                }
+                                            }
+                                            x.Value = I18n.ThingToString(original + increment);
+                                            vs.Scalar[varname] = x;
+                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarset",
+                                                "{2}Scalar variable ({0}) value set to ({1})", varname, x.Value, sPersist));
+                                        }
+                                        break;
+                                    }
                                 case VariableOpEnum.Clipboard:
                                     {
                                         bool isName = !string.IsNullOrWhiteSpace(_VariableName);
@@ -3355,6 +3384,8 @@ namespace Triggernometry
                                             w = (w == int.MinValue) ? vt.Width : w;
                                             h = (h == int.MinValue) ? vt.Height : h;
                                             vt.Resize(w, h);
+                                            vt.LastChanger = vtchanger;
+                                            vt.LastChanged = DateTime.Now;
                                         }
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tableresize",
                                             "{3}Table variable ({0}) resized to ({1},{2})", sourcename, w, h, sPersist));
@@ -3378,6 +3409,8 @@ namespace Triggernometry
                                             if (svs.Table.ContainsKey(sourcename) == true)
                                             {
                                                 vt = (VariableTable)svs.Table[sourcename].Duplicate();
+                                                vt.LastChanger = vtchanger;
+                                                vt.LastChanged = DateTime.Now;
                                             }
                                         }
                                         if (vt != null)
@@ -3399,6 +3432,7 @@ namespace Triggernometry
                                         break;
                                     }
                                 case TableVariableOpEnum.Append:
+                                case TableVariableOpEnum.AppendH:
                                     {
                                         VariableTable vt = null;
                                         lock (svs.Table) // verified
@@ -3416,12 +3450,17 @@ namespace Triggernometry
                                                 if (tvs.Table.ContainsKey(targetname) == true)
                                                 {
                                                     tgt = tvs.Table[targetname];
-                                                    tgt.Append(vt, vtchanger);
+                                                    if (_TableVariableOp == TableVariableOpEnum.Append)
+                                                        tgt.VerticalAppend(vt, vtchanger);
+                                                    else
+                                                        tgt.HorizontalAppend(vt, vtchanger);
                                                 }
                                                 else
                                                 {
                                                     tvs.Table[targetname] = vt;
                                                 }
+                                                tvs.Table[targetname].LastChanger = vtchanger;
+                                                tvs.Table[targetname].LastChanged = DateTime.Now;
                                             }
                                             AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tableappend",
                                                 "{2}Table variable ({0}) appended to {3} table ({1})",
@@ -3469,7 +3508,7 @@ namespace Triggernometry
                                         CheckInvalidDymanicExpr(_TableVariableExpression, invalidExprs);
                                         int newWidth = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableX);
                                         int newHeight = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableY);
-                                        VariableTable vtNew = new VariableTable();
+                                        VariableTable vtNew = new VariableTable { LastChanger = vtchanger, LastChanged = DateTime.Now };
                                         lock (svs.Table)
                                         {
                                             VariableTable vt = GetTableVariable(svs, sourcename, false);
@@ -3484,7 +3523,7 @@ namespace Triggernometry
                                                 {   
                                                     ctx.tableColIndex = x;      // for ${_col}
                                                     expr = ParseExpr();         // evaluate the expression for every grid
-                                                    vtNew.Rows[y - 1].Values.Add(new VariableScalar() { Value = expr });
+                                                    vtNew.Rows[y - 1].Values.Add(new VariableScalar() { Value = expr, LastChanger = vtchanger, LastChanged = DateTime.Now });
                                                 }
                                             }
                                             svs.Table[sourcename] = vtNew;
@@ -3516,9 +3555,11 @@ namespace Triggernometry
                                                 {
                                                     ctx.tableColIndex = colIndex + 1;   // for ${_col}
                                                     expr = ParseExpr();                 // evaluate the expression for every grid
-                                                    vtNew.Rows[rowIndex].Values[colIndex] = new VariableScalar() { Value = expr };
+                                                    vtNew.Rows[rowIndex].Values[colIndex] = new VariableScalar() { Value = expr, LastChanger = vtchanger, LastChanged = DateTime.Now };
                                                 }
                                             }
+                                            vtNew.LastChanger = vtchanger;
+                                            vtNew.LastChanged = DateTime.Now;
                                             svs.Table[sourcename] = vtNew;
                                         }
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tableslicessetall",
@@ -3799,9 +3840,9 @@ namespace Triggernometry
                                 case TableVariableOpEnum.GetAllEntities:
                                     {
                                         List<VariableDictionary> entities = PluginBridges.BridgeFFXIV.GetAllEntities();
-                                        VariableTable vt = new VariableTable();
+                                        VariableTable vt = new VariableTable { LastChanger = vtchanger, LastChanged = DateTime.Now };
 
-                                        var keys = PluginBridges.BridgeFFXIV.NullCombatant.Values.Keys.OrderBy(k => k).ToList();
+                                        var keys = PluginBridges.BridgeFFXIV._nullCombatant.Values.Keys.OrderBy(k => k).ToList();
                                         var specialKeys = new List<string> { "id", "name", "x", "y", "z", "h" };
                                         keys = specialKeys.Concat(keys.Except(specialKeys)).ToList();
 
@@ -3843,7 +3884,7 @@ namespace Triggernometry
                     #region Implementation - Trigger operation
                     case ActionTypeEnum.Trigger:
                         {
-                            Trigger t = ctx.plug.GetTriggerById(_TriggerId, ctx.trig != null ? ctx.trig.Repo : null);
+                            Trigger t = ctx.plug.GetTriggerById(_TriggerId, ctx.trig?.Repo);
                             if (t != null)
                             {
                                 switch (_TriggerOp)
@@ -4049,7 +4090,13 @@ namespace Triggernometry
             }
             catch (Exception ex)
             {
-                AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/exception", "Exception: {0}", ex.Message));
+                string triggerPath = qa?.ctx?.trig == null ? "(null)" : qa.ctx.trig.FullPath;
+                string actionDesc = "";
+                try { actionDesc = GetDescription(ctx); } catch { }
+                actionDesc = (actionDesc.Length > 100) ? (actionDesc.Substring(0, 97) + "...") : actionDesc;
+                AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/exception",
+                    "Exception: {0}  \nIn action: {1}  \nIn trigger: {2}", 
+                    ex.Message, actionDesc, triggerPath));
             }
         ContinueChain:
             if (LoopAction != null)
@@ -4147,7 +4194,7 @@ namespace Triggernometry
             }
         }
 
-        internal void CopySettingsTo(Action a)
+        public void CopySettingsTo(Action a)
         {
             a.Id = Id;
             a.ActionType = ActionType;
@@ -4245,6 +4292,7 @@ namespace Triggernometry
             a._LSControlType = _LSControlType;
             a._LSCustomPayload = _LSCustomPayload;
             a._LogProcess = _LogProcess;
+            a._LogProcessACT = _LogProcessACT;
             a._LogMessageTarget = _LogMessageTarget;
             a._JsonOperationType = _JsonOperationType;
             a._JsonCacheRequest = _JsonCacheRequest;

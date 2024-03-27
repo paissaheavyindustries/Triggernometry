@@ -941,7 +941,6 @@ namespace Triggernometry.Forms
                 Trigger.TriggerSourceEnum oldSource = t._Source;
                 tf.AllowAnonymousTrigger = true;
                 tf.plug = plug;
-                ExpressionTextBox.SetPlugForTextBoxes(tf, plug);
                 ExpressionTextBox.CurrentTriggerRegexStr = t.RegularExpression;
                 tf.fakectx.trig = t;
                 tf.fakectx.plug = plug;
@@ -950,7 +949,7 @@ namespace Triggernometry.Forms
                 tf.imgs = plug.ui.imageList1;
                 tf.trv = plug.ui.treeView1;
                 tf.Text = I18n.Translate("internal/UserInterface/edittemplatetrigger", "Edit template trigger");
-                tf.btnOk.Text = I18n.Translate("TriggerForm/btnOk", "Save Changes");
+                tf.btnOk.Text = I18n.Translate("internal/TriggerForm/btnOk", "Save Changes");
                 tf.GetTriggerDescription();
                 tf.SetTriggerDescription();
                 tf.wmp = plug.wmp;

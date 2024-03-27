@@ -210,7 +210,7 @@ namespace Triggernometry.Variables
             return v != null ? v : new VariableScalar();
         }
 
-        public void Append(VariableTable vt, string changer)
+        public void VerticalAppend(VariableTable vt, string changer)
         {
             if (vt.Height == 0)
             {
@@ -226,6 +226,24 @@ namespace Triggernometry.Variables
                     Rows[my].Values[x] = vt.Rows[y].Values[x];
                 }
                 my++;
+            }
+            LastChanger = changer;
+            LastChanged = DateTime.Now;
+        }
+
+        public void HorizontalAppend(VariableTable vt, string changer)
+        {
+            if (vt.Width == 0) return;
+            int mx = Width; 
+            int my = Math.Max(Height, vt.Height);
+            Resize(Width + vt.Width, my);
+            for (int x = 0; x < vt.Width; x++)
+            {
+                for (int y = 0; y < vt.Height; y++)
+                {
+                    Rows[y].Values[mx] = vt.Rows[y].Values[x];
+                }
+                mx++;
             }
             LastChanger = changer;
             LastChanged = DateTime.Now;
@@ -316,6 +334,11 @@ namespace Triggernometry.Variables
                 }
             }
             return 0;
+        }
+
+        public override string ToString()
+        {
+            return String.Join("|", Rows.Select(row => string.Join(",", row.Values)));
         }
 
         public string ToCSVString(string colJoiner = ",")

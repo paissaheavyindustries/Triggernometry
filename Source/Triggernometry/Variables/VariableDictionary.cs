@@ -53,7 +53,7 @@ namespace Triggernometry.Variables
 
         public override string ToString()
         {
-            return String.Join(",", Values);
+            return String.Join(",", Values.Select(pair => $"{pair.Key}={pair.Value}"));
         }
 
         public override int CompareTo(object o)

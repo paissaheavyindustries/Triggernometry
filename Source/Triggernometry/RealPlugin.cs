@@ -421,7 +421,7 @@ namespace Triggernometry
                 List<IntPtr> wins = FindWindows(windowtitle);
                 if (wins.Count > 0)
                 {
-                    switch (procid)
+                    switch (procid.Trim())
                     {
                         case "-1":
                             {
@@ -488,6 +488,7 @@ namespace Triggernometry
         public delegate void SoundDelegate(string filename, int volume);
         public delegate List<CustomTriggerCategoryProxy> CustomTriggerDelegate();
         public delegate PluginWrapper InstanceDelegate(string ActPluginName, string ActPluginType);
+        public delegate void ACTEncounterLogDelegate(string message);
 
         internal Scarborough.Scarborough sc;
         private Queue<LogEvent> EventQueue;
@@ -566,6 +567,7 @@ namespace Triggernometry
         public TabPageDelegate TabLocateHook { get; set; }
         public SimpleVoidDelegate CheckUpdateHook { get; set; }
         public SimpleBoolDelegate ActInitedHook { get; set; }
+        public ACTEncounterLogDelegate ACTEncounterLogHook { get; set; }
 
         private bool _HideAllAuras = false;
         internal bool HideAllAuras
@@ -1231,7 +1233,8 @@ namespace Triggernometry
 
         }
 
-        public RealPlugin()
+        public static RealPlugin plug = new RealPlugin();  // changed to singleton since the ctor is only invoked once
+        private RealPlugin()
         {
             DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "Microsoft.CodeAnalysis", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
             DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "Microsoft.Win32", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
@@ -2149,7 +2152,7 @@ namespace Triggernometry
             {
                 cfg.ShowWelcome = false;
             }
-            Version v = new Version(cfg.PluginVersion);
+            Version v = Assembly.GetExecutingAssembly().GetName().Version;
             if (v < new Version("1.1.6.0"))
             {
                 if (cfg.FfxivPartyOrdering == Configuration.FfxivPartyOrderingEnum.Legacy)
@@ -2312,7 +2315,7 @@ namespace Triggernometry
                 _obs = new ObsController();
                 _livesplit = new LiveSplitController();
                 exwhere = I18n.Translate("internal/Plugin/iniscripting", "setting up scripting - try changing the plugin load order in ACT");
-                scripting = new Interpreter(this);
+                scripting = new Interpreter();
                 pluginStatusText.Text = I18n.Translate("internal/Plugin/iniready", "Ready");
                 FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/inited", "Initialized"));
                 Task tx = new Task(() =>
@@ -3843,7 +3846,7 @@ namespace Triggernometry
                 }
                 a.AddToLog(ctx, DebugLevelEnum.Info, I18n.Translate("internal/Plugin/actionqueued", "Queuing trigger '{0}' action '{1}' to {2} slot {3}", t.LogName, a.GetDescription(ctx), FormatDateTime(when), newOrdinal));
                 ActionQueue.Add(new QueuedAction(when, newOrdinal, m, a, ctx, releaseMutex));
-                ActionQueue.Sort();
+                ActionQueue.Sort(); 
                 ActionUpdateEvent.Set();
             }
         }
@@ -4018,7 +4021,7 @@ namespace Triggernometry
             return 0;
         }
 
-        internal void InvokeNamedCallback(string name, string val)
+        public void InvokeNamedCallback(string name, string val)
         {
             List<NamedCallback> cbs = new List<NamedCallback>();
             lock (callbacksByName)
@@ -4036,7 +4039,13 @@ namespace Triggernometry
                 }
                 catch (Exception ex)
                 {
-                    FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/NamedCallback/exception", "Exception occurred when invoking named callback {0}: {1}", name, ex.Message));
+                    Exception inner = ex;
+                    while (inner.InnerException != null)
+                    {
+                        inner = inner.InnerException;
+                    }
+                    FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/NamedCallback/exception", 
+                        "Exception occurred when invoking named callback {0}:\n {1}", name, inner.ToString()));
                 }
             }
         }

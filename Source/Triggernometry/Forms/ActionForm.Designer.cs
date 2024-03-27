@@ -222,7 +222,8 @@ namespace Triggernometry.Forms
             this.lblLogMessageTarget = new System.Windows.Forms.Label();
             this.cbxLogMessageLevel = new System.Windows.Forms.ComboBox();
             this.lblLogMessageLevel = new System.Windows.Forms.Label();
-            this.cbxProcessLog = new System.Windows.Forms.CheckBox();
+            this.chkProcessLog = new System.Windows.Forms.CheckBox();
+            this.chkProcessLogACT = new System.Windows.Forms.CheckBox();
             this.lblLogMessageText = new System.Windows.Forms.Label();
             this.expLogMessageText = new Triggernometry.CustomControls.ExpressionTextBox();
             this.tabListVariable = new System.Windows.Forms.TabPage();
@@ -1951,6 +1952,7 @@ namespace Triggernometry.Forms
             "Unset scalar variable",
             "Set scalar variable value with string expression",
             "Set scalar variable value with numeric expression",
+            "Increment scalar variable value",
             "Copy scalar variable or expression to the clipboard",
             "Unset all scalar variables",
             "Unset scalar variables matching regular expression",
@@ -3190,13 +3192,14 @@ namespace Triggernometry.Forms
             this.tableLayoutPanel14.ColumnCount = 2;
             this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel14.Controls.Add(this.cbxLogMessageTarget, 1, 3);
-            this.tableLayoutPanel14.Controls.Add(this.lblLogMessageTarget, 0, 3);
-            this.tableLayoutPanel14.Controls.Add(this.cbxLogMessageLevel, 1, 2);
-            this.tableLayoutPanel14.Controls.Add(this.lblLogMessageLevel, 0, 2);
-            this.tableLayoutPanel14.Controls.Add(this.cbxProcessLog, 0, 1);
             this.tableLayoutPanel14.Controls.Add(this.lblLogMessageText, 0, 0);
             this.tableLayoutPanel14.Controls.Add(this.expLogMessageText, 1, 0);
+            this.tableLayoutPanel14.Controls.Add(this.chkProcessLog, 0, 1);
+            this.tableLayoutPanel14.Controls.Add(this.chkProcessLogACT, 0, 2);
+            this.tableLayoutPanel14.Controls.Add(this.lblLogMessageLevel, 0, 3);
+            this.tableLayoutPanel14.Controls.Add(this.cbxLogMessageLevel, 1, 3);
+            this.tableLayoutPanel14.Controls.Add(this.lblLogMessageTarget, 0, 4);
+            this.tableLayoutPanel14.Controls.Add(this.cbxLogMessageTarget, 1, 4);
             this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel14.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel14.Name = "tableLayoutPanel14";
@@ -3262,20 +3265,34 @@ namespace Triggernometry.Forms
             this.lblLogMessageLevel.Text = "Level to log message on";
             this.lblLogMessageLevel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // cbxProcessLog
+            // chkProcessLog
             // 
-            this.cbxProcessLog.AutoSize = true;
-            this.cbxProcessLog.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.tableLayoutPanel14.SetColumnSpan(this.cbxProcessLog, 3);
-            this.cbxProcessLog.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cbxProcessLog.Location = new System.Drawing.Point(3, 31);
-            this.cbxProcessLog.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
-            this.cbxProcessLog.Name = "cbxProcessLog";
-            this.cbxProcessLog.Size = new System.Drawing.Size(737, 17);
-            this.cbxProcessLog.TabStop = false;
-            this.cbxProcessLog.Text = "Process message as log line";
-            this.cbxProcessLog.UseVisualStyleBackColor = true;
-            this.cbxProcessLog.CheckedChanged += new System.EventHandler(this.cbxProcessLog_CheckedChanged);
+            this.chkProcessLog.AutoSize = true;
+            this.chkProcessLog.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel14.SetColumnSpan(this.chkProcessLog, 2);
+            this.chkProcessLog.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkProcessLog.Location = new System.Drawing.Point(3, 31);
+            this.chkProcessLog.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
+            this.chkProcessLog.Name = "chkProcessLog";
+            this.chkProcessLog.Size = new System.Drawing.Size(737, 17);
+            this.chkProcessLog.TabStop = false;
+            this.chkProcessLog.Text = "Process message as log line";
+            this.chkProcessLog.UseVisualStyleBackColor = true;
+            this.chkProcessLog.CheckedChanged += new System.EventHandler(this.chkProcessLog_CheckedChanged);
+            // 
+            // chkProcessLogACT
+            // 
+            this.chkProcessLogACT.AutoSize = true;
+            this.chkProcessLogACT.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel14.SetColumnSpan(this.chkProcessLogACT, 2);
+            this.chkProcessLogACT.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkProcessLogACT.Location = new System.Drawing.Point(3, 31);
+            this.chkProcessLogACT.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
+            this.chkProcessLogACT.Name = "chkProcessLogACT";
+            this.chkProcessLogACT.Size = new System.Drawing.Size(737, 17);
+            this.chkProcessLogACT.TabStop = false;
+            this.chkProcessLogACT.Text = "Add the log message to ACT combat log";
+            this.chkProcessLogACT.UseVisualStyleBackColor = true;
             // 
             // lblLogMessageText
             // 
@@ -4730,7 +4747,8 @@ namespace Triggernometry.Forms
             "Filter elements into another list",
             "Filter rows/cols into another table",
             "Copy whole table variable to another table variable",
-            "Append whole table variable to another table variable",
+            "Append whole table variable to another table vertically",
+            "Append whole table variable to another table horizontally",
             "Sort the rows/cols by the key functions",
             "Get complete data for all FFXIV entities",
             "Unset all table variables",
@@ -6481,7 +6499,8 @@ namespace Triggernometry.Forms
         private CustomControls.ExpressionTextBox expObsSceneName;
         private System.Windows.Forms.Label lblObsWebsocketInfo;
         private System.Windows.Forms.TextBox txtObsWebsocketLink;
-        private System.Windows.Forms.CheckBox cbxProcessLog;
+        private System.Windows.Forms.CheckBox chkProcessLog;
+        private System.Windows.Forms.CheckBox chkProcessLogACT;
         private System.Windows.Forms.CheckBox chkSoundMyOutput;
         private System.Windows.Forms.CheckBox chkSpeechMyOutput;
         private System.Windows.Forms.TabPage tabGenericJson;

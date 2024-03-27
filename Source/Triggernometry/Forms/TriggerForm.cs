@@ -105,7 +105,7 @@ namespace Triggernometry.Forms
             }
         }
 
-        internal List<Action> Actions;
+        internal List<Action> Actions => actionViewer1.Actions;
 
         internal bool AllowAnonymousTrigger { get; set; } = false;
 
@@ -121,8 +121,6 @@ namespace Triggernometry.Forms
             CancelDgvSelectionAttachToAll(this);
             btnOk.Click += btnOk_Click;
             closeReason = "";
-            Actions = new List<Action>();
-            actionViewer1.Actions = Actions;
             fakectx = new Context();
             actionViewer1.fakectx = fakectx;
             actionViewer1.ActionsUpdated += actionViewer1_ActionsUpdated;

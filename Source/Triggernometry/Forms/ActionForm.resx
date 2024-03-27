@@ -454,7 +454,7 @@ For an exact match, you can specify the beginning and end, like `^(1|2|3)$`.</va
   </data>
   <data name="rtbHelperTvarAppend.Text" xml:space="preserve">
     <value>Append the source list to the row below the last row of the target list.
-If their widths differ, the wider width will be taken, and the row of the narrower list will be filled with empty values.</value>
+If their widths differ, the greater width will be taken, and the remaining columns of the narrower list will be filled with empty values.</value>
   </data>
   <data name="rtbHelperTvarBuild.Text" xml:space="preserve">
     <value>Use the first character of the parsed expression as the cell separator and the second character as the row separator, then build the rest of the expression into a table.
@@ -665,7 +665,9 @@ For instance, `1|2|3` can match variables named `1`, `2`, `3`, but also `ab1cd`.
 For an exact match, you can specify the start and end, such as `^(1|2|3)$`.</value>
   </data>
   <data name="rtbHelperSendKeysWindowMessage.Text" xml:space="preserve">
-    <value>If the process ID is left empty or is zero, the message will be sent to the first window with the given title. If it's set to -1, the message is sent to all found windows. For all other values, the message will be sent to the window with the matching process ID.
+    <value>If the process ID is left empty or is zero, the message will be sent to the first window with the given title. If it's set to -1, the message is sent to all found windows. For all other values, the message will be sent to the window with the matching process ID and title name.
+
+Title name can be a regular expression.
 
 Modifier keys such as Shift can be represented as additions to the original keycode, or sent separately. Keycode constants are described on the webpage above.
 
@@ -894,7 +896,9 @@ The window message sends one key at a time in this mode.</value>
 To add the response from the endpoint to this expression, special variable "_response" is available, as well as the variable you may have defined. The special variable will only be valid in the context of this action's execution. Special variable _responsecode is also available for retrieving the HTTP status code of the request.</value>
   </data>
   <data name="rtbHelperWmsg.Text" xml:space="preserve">
-    <value>If the process ID is left empty or is zero, the message will be sent to the first window with the given title. If it's set to -1, the message is sent to all found windows. For all other values, the message will be sent to the window with the matching process ID.</value>
+    <value>If the process ID is left empty or is zero, the message will be sent to the first window with the given title. If it's set to -1, the message is sent to all found windows. For all other values, the message will be sent to the window with the matching process ID and title name.
+
+Title name can be a regular expression.</value>
   </data>
   <data name="prsFileVariable.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1089,7 +1093,9 @@ For an exact match, you can specify the start and end, such as `^(1|2|3)$`.</val
     <value>Allows you to register your code as callbacks into Triggernometry, and then have callbacks executed as Triggernometry actions</value>
   </data>
   <data name="rtbHelperSendKeysWindowMessageCombo.Text" xml:space="preserve">
-    <value>If the process ID is left empty or is zero, the message will be sent to the first window with the given title. If it's set to -1, the message is sent to all found windows. For all other values, the message will be sent to the window with the matching process ID.
+    <value>If the process ID is left empty or is zero, the message will be sent to the first window with the given title. If it's set to -1, the message is sent to all found windows. For all other values, the message will be sent to the window with the matching process ID and title name.
+
+Title name can be a regular expression.
 
 Modifier keys such as Shift can be represented as additions to the original keycode, or sent separately. Keycode constants are described on the webpage above.
 
@@ -1116,5 +1122,18 @@ If the entity is not found, it returns an empty dictionary and generates a warni
 The first row of the table contains entity information such as name, ID, etc., with each subsequent row containing data for a single entity.
 
 The table can be combined with filtering, sorting, and other table actions to retrieve multiple entities of interest.</value>
+  </data>
+  <data name="rtbHelperTvarAppendH.Text" xml:space="preserve">
+    <value>Append the source list horizontally to the column right after the last column of the target list. 
+If their heights differ, the greater height will be used, and the remaining rows of the shorter list will be filled with empty values.</value>
+  </data>
+  <data name="rtbHelperVarIncrement.Text" xml:space="preserve">
+    <value>Add the value of a variable to an expression and reassign it back to the variable.
+
+If no expression is provided, default to incrementing by `1`;
+If the variable does not exist or has a blank value, its initial value is considered as `0`;
+Any other value must be interpretable as a numeric expression.
+
+This action is equivalent to setting the variable `name` to the numeric expression `${{var:name}} + i`”.</value>
   </data>
 </root>

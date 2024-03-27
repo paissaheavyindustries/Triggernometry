@@ -42,6 +42,7 @@ namespace Triggernometry.CustomControls
             "radtodeg(rad)", "degtorad(deg)",
             "angle(x1, y1, x2, y2)", "θ(x1, y1, x2, y2)", "relangle(θ1, θ2)", "relθ(θ1, θ2)",
             "roundir(θ, ±n)", "roundir(θ, ±n, digits)", "roundvec(dx, dy, ±n)", "roundvec(dx, dy, ±n, digits)",
+            "isanglebetween(θ, θ1, θ2)", "isθbetween(θ, θ1, θ2)",
 
             // numeric string func
             "hex2dec(hex)", "hex2float(hex)", "hex2double(hex)", "X8float(hex)", "parsedmg(hex)", "len(alphanumstr)",
@@ -57,10 +58,10 @@ namespace Triggernometry.CustomControls
             "dvar:", "pdvar:", "edvar:", "epdvar:", "d:", "pd:", "ed:", "epd:",
             "tvarcl:", "ptvarcl:", "tvarrl:", "ptvarrl:", "tvardl:", "ptvardl:",
             "?l:", "?lvar:", "?t:", "?tvar:", "?d:", "?dvar:",
-            "etext:", "eimage:", "ecallback:",
+            "etext:", "eimage:", "ecallback:", "estorage:",
 
             // special variables
-            "_incombat", "_lastencounter", "_activeencounter",
+            "_incombat", "_lastencounter", "_activeencounter", "_configpath", "_pluginpath",
             "_duration", "_event", "_since", "_sincems", "_triggerid", "_triggername", "_zone",
             "_response", "_responsecode", "_jsonresponse[x]",
             "_timestamp", "_timestampms", "_systemtime", "_systemtimems", "_clipboard",
@@ -69,7 +70,9 @@ namespace Triggernometry.CustomControls
             "_ffxivparty[x]", "_party[x]", "_ffxiventity[x]", "_entity[x]", "_ffxivplayer", "_me",
             "_job[jobid]", "_job[jobName]", "_job[jobAbbrev]",
             "_ffxivtime", "_ET", "_ETprecise", "_ffxivpartyorder", "_ffxivprocid", "_ffxivprocname", "_ffxivzoneid",
-            "_env[x]", "_const[x]", "_config[x]", "_loopiterator", "_i", "_this", "_idx", "_col", "_row", "_col[i]", "_row[i]", "_key", "_val",
+            "_env[x]", "_const[x]", "_config[x]", "_storage[x]",
+            "_this", "_idx", "_col", "_row", "_col[i]", "_row[i]", "_colrl[...]", "_rowcl[...]", "_key", "_val",
+            "_loopiterator", "_i",
         };
 
         public static List<string> funcs = new List<string>()
@@ -139,12 +142,12 @@ namespace Triggernometry.CustomControls
 
         public static List<string> ffxivProps = new List<string>()
         {
-            "name", "job", "jobid", "role", "id", "ownerid", "bnpcid", "bnpcnameid", "type", "partytype", "address",
+            "name", "job", "jobid", "role", "subrole", "roleid", "id", "ownerid", "bnpcid", "bnpcnameid", "type", "partytype", "address",
             "currenthp", "currentmp", "currentcp", "currentgp", "maxhp", "maxmp", "maxcp", "maxgp", "level",
             "x", "y", "z", "heading", "h", "distance", "iscasting", "casttime", "maxcasttime", "castid",
             "inparty", "order", "worldid", "worldname", "currentworldid", "targetid", "casttargetid",
             "isT", "isH", "isD", "isM", "isR", "isC", "isG", "isTH", "isCG", "isTM", "isHR",
-            "jobCN", "jobDE", "jobEN", "jobFR", "jobJP", "jobKR", "jobCN1", "jobCN2", "jobEN3", "jobJP1"
+            "jobCN", "jobDE", "jobEN", "jobFR", "jobJP", "jobKR", "jobCN1", "jobCN2", "jobEN3", "jobJP1", 
         };
 
         public static List<string> jobProps = new List<string>()
@@ -158,6 +161,7 @@ namespace Triggernometry.CustomControls
             "DebugLevel", "UseACTForSound", "UseACTForTTS", "FfxivLogNetwork", "UseOsClipboard", "DeveloperMode", "Autosave", "Language", 
             "Microsoft.CodeAnalysis", "Microsoft.Win32", "System.CodeDom.Compiler", "System.Diagnostics", 
             "System.IO", "System.Net", "System.Reflection", "System.Runtime", "System.Security", "System.Web",
+            "UnsafeUsage",
         };
 
         #endregion
@@ -285,7 +289,7 @@ namespace Triggernometry.CustomControls
 
         private static List<string> CurrentRegexGroupsAndPrefixes = new List<string>();
         private static HashSet<string> CurrentRegexGroupsAndPrefixesHashset = new HashSet<string>();
-        private string suffix = "";
+        private string suffix = ""; // to do
 
         public delegate void EnterDelegate();
         public event EnterDelegate OnEnterKeyHit;
@@ -297,7 +301,7 @@ namespace Triggernometry.CustomControls
         public static readonly Regex rexFunc
             = new Regex(@"\$\{f(?:unc)?:(?<funcid>[^(:]*)$");
         public static readonly Regex rexVarName
-            = new Regex(@"\$\{(?<e>e?)(?<persist>p?)(?<type>[vltd]|text|image|callback)(?:v?ar)?(?:[cdr]l)?:(?<name>[^$¤.[]*)$");
+            = new Regex(@"\$\{(?<e>e?)(?<persist>p?)(?<type>[vltd]|text|image|callback|storage)(?:v?ar)?(?:[cdr]l)?:(?<name>[^$¤.[]*)$");
         public static readonly Regex rexColHeader
             = new Regex(@"\$\{(?<persist>p?)t(?:var)?[cd]l:(?<name>[^$¤[]+)\[(?<key>[^$¤\]]*)$");
         public static readonly Regex rexRowHeader
@@ -305,7 +309,7 @@ namespace Triggernometry.CustomControls
         public static readonly Regex rexDictKey
             = new Regex(@"\$\{(?<persist>p?)d(?:var)?:(?<name>[^$¤[]+)\[(?<key>[^$¤\]]*)$");
         public static readonly Regex rexStructKey
-            = new Regex(@"\$\{_(?<struct>const|textaura|imageaura|config)\[(?<key>[^$¤\]]*)$");
+            = new Regex(@"\$\{_(?<struct>const|textaura|imageaura|config|storage)\[(?<key>[^$¤\]]*)$");
         // The regexes "rex...Prop" and "rexMath" are matched after looking for the previous unclosed '{'
         public static readonly Regex rexVarProp
             = new Regex(@"^[p?]?(?<type>[ltd])(?:var)?:.*\.(?<prop>[^.(]*)$");
@@ -326,7 +330,7 @@ namespace Triggernometry.CustomControls
             InitializeComponent();
             ctx = new Context();
             fakectx = new Context();
-            fakectx.testmode = true;
+            fakectx.testByPlaceholder = true;
             ResetTooltip();
             textBox1.TextChanged += TextBox1_TextChanged;
             textBox1.KeyPress += TextBox1_KeyPress;
@@ -337,21 +341,6 @@ namespace Triggernometry.CustomControls
             LostFocus += ExpressionTextBox_LostFocus;
             acfDebounceTimer.Interval = 100; // debounce timer for autocomplete
             acfDebounceTimer.Tick += (sender, e) => ProcessAutocomplete();
-        }
-
-        public static void SetPlugForTextBoxes(Control parent, RealPlugin plug)
-        {
-            foreach (Control control in parent.Controls)
-            {
-                if (control is ExpressionTextBox expressionTextBox)
-                {
-                    expressionTextBox.ctx.plug = plug;
-                }
-                else
-                {
-                    SetPlugForTextBoxes(control, plug);
-                }
-            }
         }
 
         private void ExpressionTextBox_LostFocus(object sender, EventArgs e)
@@ -777,7 +766,7 @@ namespace Triggernometry.CustomControls
             m = rexVarName.Match(temp);
             if (m.Success)
             {
-                VariableStore vs = (m.Groups["persist"].Value == "p") ? ctx.plug.cfg.PersistentVariables : ctx.plug.sessionvars;
+                VariableStore vs = (m.Groups["persist"].Value == "p") ? RealPlugin.plug.cfg.PersistentVariables : RealPlugin.plug.sessionvars;
                 List<string> varNames = null;
 
                 switch (m.Groups["type"].Value)
@@ -787,18 +776,19 @@ namespace Triggernometry.CustomControls
                     case "t": varNames = vs.Table.Keys.ToList(); break;
                     case "d": varNames = vs.Dict.Keys.ToList(); break;
                     case "text":
-                        if (ctx.plug.sc != null)
-                            varNames = ctx.plug.sc.textitems.Keys.ToList();
+                        if (RealPlugin.plug.sc != null)
+                            varNames = RealPlugin.plug.sc.textitems.Keys.ToList();
                         else
-                            varNames = ctx.plug.textauras.Keys.ToList();
+                            varNames = RealPlugin.plug.textauras.Keys.ToList();
                         break;
                     case "image":
-                        if (ctx.plug.sc != null)
-                            varNames = ctx.plug.sc.imageitems.Keys.ToList();
+                        if (RealPlugin.plug.sc != null)
+                            varNames = RealPlugin.plug.sc.imageitems.Keys.ToList();
                         else
-                            varNames = ctx.plug.imageauras.Keys.ToList();
+                            varNames = RealPlugin.plug.imageauras.Keys.ToList();
                         break;
-                    case "callback": varNames = ctx.plug.callbacksByName.Keys.ToList(); break;
+                    case "callback": varNames = RealPlugin.plug.callbacksByName.Keys.ToList(); break;
+                    case "storage": varNames = RealPlugin.plug.scriptingStorage.Keys.ToList(); break;
                 }
                 matchedStrings = GetAutocompleteSuggestions(varNames, m.Groups["name"].Value);
                 if (matchedStrings.Count() > 0)
@@ -821,7 +811,7 @@ namespace Triggernometry.CustomControls
             m = rexRowHeader.Match(temp);
             if (m.Success)
             {
-                VariableStore vs = m.Groups["persist"].Value == "p" ? ctx.plug.cfg.PersistentVariables : ctx.plug.sessionvars;
+                VariableStore vs = m.Groups["persist"].Value == "p" ? RealPlugin.plug.cfg.PersistentVariables : RealPlugin.plug.sessionvars;
                 VariableTable vt;
                 string varName = m.Groups["name1"].Value + m.Groups["name2"].Value;
                 if (vs.Table.ContainsKey(varName) && vs.Table[varName].Height > 0)
@@ -858,7 +848,7 @@ namespace Triggernometry.CustomControls
             m = rexColHeader.Match(temp);
             if (m.Success)
             {
-                VariableStore vs = m.Groups["persist"].Value == "p" ? ctx.plug.cfg.PersistentVariables : ctx.plug.sessionvars;
+                VariableStore vs = m.Groups["persist"].Value == "p" ? RealPlugin.plug.cfg.PersistentVariables : RealPlugin.plug.sessionvars;
                 VariableTable vt;
                 string varName = m.Groups["name"].Value;
                 if (vs.Table.ContainsKey(varName) && vs.Table[varName].Width > 0)
@@ -894,7 +884,7 @@ namespace Triggernometry.CustomControls
             m = rexDictKey.Match(temp);
             if (m.Success)
             {
-                VariableStore vs = m.Groups["persist"].Value == "p" ? ctx.plug.cfg.PersistentVariables : ctx.plug.sessionvars;
+                VariableStore vs = m.Groups["persist"].Value == "p" ? RealPlugin.plug.cfg.PersistentVariables : RealPlugin.plug.sessionvars;
                 VariableDictionary vd;
                 string varName = m.Groups["name"].Value;
                 if (vs.Dict.ContainsKey(varName) && vs.Dict[varName].Size > 0)
@@ -929,10 +919,11 @@ namespace Triggernometry.CustomControls
                 List<string> keys = null;
                 switch (m.Groups["struct"].Value)
                 {
-                    case "const": keys = ctx.plug.cfg.Constants.Keys.ToList(); break;
-                    case "textaura": keys = ctx.plug.sc.textitems.Keys.ToList(); break;
-                    case "imageaura": keys = ctx.plug.sc.imageitems.Keys.ToList(); break;
+                    case "const": keys = RealPlugin.plug.cfg.Constants.Keys.ToList(); break;
+                    case "textaura": keys = RealPlugin.plug.sc.textitems.Keys.ToList(); break;
+                    case "imageaura": keys = RealPlugin.plug.sc.imageitems.Keys.ToList(); break;
                     case "config": keys = configurations; break;
+                    case "storage": keys = RealPlugin.plug.scriptingStorage.Keys.ToList(); break;
                 }
                 matchedStrings = GetAutocompleteSuggestions(keys, m.Groups["key"].Value);
                 if (matchedStrings.Count() > 0)

@@ -20,7 +20,7 @@ namespace Triggernometry.CustomControls
 
         private bool IsReadonly { get; set; } = false;
 
-        internal List<Action> Actions { get; set; } = null;
+        internal List<Action> Actions { get; set; } = new List<Action>();
 
         internal WMPLib.WindowsMediaPlayer wmp;
         internal SpeechSynthesizer tts;
@@ -32,6 +32,7 @@ namespace Triggernometry.CustomControls
         internal string ClipboardAction = "";
         internal List<Action> PrevActions;
         internal List<int> PrevSelectedIndices;
+        private static ConditionGroup copiedCondition;
 
         public ActionViewer()
         {
@@ -174,7 +175,6 @@ namespace Triggernometry.CustomControls
             using (Forms.ActionForm af = new Forms.ActionForm())
             {
                 af.plug = plug;
-                ExpressionTextBox.SetPlugForTextBoxes(af, plug);
                 af.wmp = wmp;
                 af.tts = tts;
                 af.trv = trv;
@@ -227,7 +227,6 @@ namespace Triggernometry.CustomControls
             {
                 Action a = Actions[rowIndex];
                 af.plug = plug;
-                ExpressionTextBox.SetPlugForTextBoxes(af, plug);
                 af.wmp = wmp;
                 af.trv = trv;
                 af.fakectx = fakectx;
@@ -794,6 +793,62 @@ namespace Triggernometry.CustomControls
             btnUndo_Click(sender, e);
         }
 
+        private void ctxTest_Click(object sender, EventArgs e)
+        {
+            Action selectedAction = SelectedActions().FirstOrDefault();
+            if (selectedAction == null)
+                return;
+            Action a = new Action();
+            selectedAction.CopySettingsTo(a);
+            Context ctx = new Context();
+            ctx.plug = RealPlugin.plug;
+            ctx.trig = null;
+            ctx.soundhook = RealPlugin.plug.SoundPlaybackSmart;
+            ctx.ttshook = RealPlugin.plug.TtsPlaybackSmart;
+            ctx.triggered = DateTime.UtcNow;
+
+            var item = (ToolStripMenuItem)sender;
+            switch (item.Name)
+            {
+                case "ctxTest":
+                    ctx.testByPlaceholder = RealPlugin.plug.cfg.TestLiveByDefault == false;
+                    if (plug.cfg.TestIgnoreConditionsByDefault)
+                        a.Condition = new ConditionGroup();
+                    ctxAction.Close();
+                    break;
+                case "ctxTestPlaceholder":
+                    ctx.testByPlaceholder = true;
+                    break;
+                case "ctxTestLive":
+                    ctx.testByPlaceholder = false;
+                    break;
+                case "ctxTestLiveIgnoreCnd":
+                    ctx.testByPlaceholder = false;
+                    if (plug.cfg.TestIgnoreConditionsByDefault)
+                        a.Condition = new ConditionGroup();
+                    break;
+            }
+            
+            a.Execute(null, ctx);
+        }
+
+        private void ctxEditPropCopyCnd_Click(object sender, EventArgs e)
+        {
+            ActionViewer.copiedCondition = (ConditionGroup)SelectedActions().FirstOrDefault()?.Condition.Duplicate();
+        }
+
+        private void ctxEditPropPasteCnd_Click(object sender, EventArgs e)
+        {
+            if (ActionViewer.copiedCondition == null) 
+                return;
+            foreach (Action a in SelectedActions())
+            {
+                a.Condition = (ConditionGroup)ActionViewer.copiedCondition.Duplicate();
+            }
+            dgvActions.Refresh();
+            OnActionsUpdated();
+        }
+
         private void ctxEditPropRemoveCnd_Click(object sender, EventArgs e)
         {
             foreach (Action a in SelectedActions())
@@ -969,8 +1024,12 @@ namespace Triggernometry.CustomControls
 
         private void ctxAction_Opening(object sender, CancelEventArgs e)
         {
-            ctxAddAction.Enabled = btnAddAction.Enabled;
-            ctxEditAction.Enabled = btnEditAction.Enabled;
+            bool isSingleActionSelected = dgvActions.SelectedRows.Count == 1;
+            ctxAddAction.Enabled = isSingleActionSelected;
+            ctxEditAction.Enabled = isSingleActionSelected;
+            ctxEditPropCopyCnd.Enabled = isSingleActionSelected;
+            ctxEditPropPasteCnd.Enabled = ActionViewer.copiedCondition != null;
+            ctxTest.Enabled = isSingleActionSelected && SelectedActions()[0].ActionType != Action.ActionTypeEnum.Placeholder;
             bool allowMoveAndRemove = IsReadonly == false && (dgvActions.SelectedRows.Count > 0);
             ctxCopyAction.Enabled = allowMoveAndRemove;
             ctxMoveUp.Enabled = allowMoveAndRemove;

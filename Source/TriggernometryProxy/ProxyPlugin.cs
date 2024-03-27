@@ -109,7 +109,7 @@ namespace TriggernometryProxy
         {
             lock (this)
             {
-                Instance = new Triggernometry.RealPlugin();
+                Instance = Triggernometry.RealPlugin.plug;
                 foreach (Tuple<int, string, CustomCallbackDelegate, object> t in queuedRegs)
                 {
                     Instance.RegisterNamedCallback(t.Item1, t.Item2, t.Item3, t.Item4);
@@ -139,6 +139,7 @@ namespace TriggernometryProxy
             FailsafeRegisterHook("InstanceHook", "GetInstance");
             FailsafeRegisterHook("CheckUpdateHook", "CheckForUpdates");
             FailsafeRegisterHook("ActInitedHook", "ActInited");
+            FailsafeRegisterHook("ACTEncounterLogHook", "ACTEncounterLog");
             GetPluginNameAndPath();
             ActGlobals.oFormActMain.BeforeLogLineRead += OFormActMain_BeforeLogLineRead;
             ActGlobals.oFormActMain.OnLogLineRead += OFormActMain_OnLogLineRead;
@@ -504,6 +505,22 @@ namespace TriggernometryProxy
             catch (Exception ex)
             {
                 mainform.WriteExceptionLog(ex, Instance.Translate("internal/Plugin/updatefailed", "Triggernometry update failed"));
+            }
+        }
+
+        /// <summary>
+        /// If there is a current active ACT encounter, log the message into the encounter log. <br />
+        /// This would only generate a logline in the encounter and would not trigger anything.
+        /// </summary>
+        /// <param name="message">The message to be logged.</param>
+        public void ACTEncounterLog(string message)
+        {
+            FormActMain mainform = ActGlobals.oFormActMain;
+            // var text = $"00|{DateTime.Now:O}|0|{type}:{message}|";
+            // ActGlobals.oFormActMain.ParseRawLogLine(false, DateTime.Now, $"{text}");
+            if (mainform.InCombat)
+            {
+                mainform.ActiveZone.ActiveEncounter.LogLines.Add(new LogLineEntry(DateTime.Now, message, 0xFFF, mainform.GlobalTimeSorter));
             }
         }
 
