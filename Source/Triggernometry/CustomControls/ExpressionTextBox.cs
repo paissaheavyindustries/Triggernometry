@@ -42,6 +42,7 @@ namespace Triggernometry.CustomControls
             "radtodeg(rad)", "degtorad(deg)",
             "angle(x1, y1, x2, y2)", "θ(x1, y1, x2, y2)", "relangle(θ1, θ2)", "relθ(θ1, θ2)",
             "roundir(θ, ±n)", "roundir(θ, ±n, digits)", "roundvec(dx, dy, ±n)", "roundvec(dx, dy, ±n, digits)",
+            "isanglebetween(θ, θ1, θ2)", "isθbetween(θ, θ1, θ2)",
 
             // numeric string func
             "hex2dec(hex)", "hex2float(hex)", "hex2double(hex)", "X8float(hex)", "parsedmg(hex)", "len(alphanumstr)",
@@ -141,12 +142,12 @@ namespace Triggernometry.CustomControls
 
         public static List<string> ffxivProps = new List<string>()
         {
-            "name", "job", "jobid", "role", "id", "ownerid", "bnpcid", "bnpcnameid", "type", "partytype", "address",
+            "name", "job", "jobid", "role", "subrole", "roleid", "id", "ownerid", "bnpcid", "bnpcnameid", "type", "partytype", "address",
             "currenthp", "currentmp", "currentcp", "currentgp", "maxhp", "maxmp", "maxcp", "maxgp", "level",
             "x", "y", "z", "heading", "h", "distance", "iscasting", "casttime", "maxcasttime", "castid",
             "inparty", "order", "worldid", "worldname", "currentworldid", "targetid", "casttargetid",
             "isT", "isH", "isD", "isM", "isR", "isC", "isG", "isTH", "isCG", "isTM", "isHR",
-            "jobCN", "jobDE", "jobEN", "jobFR", "jobJP", "jobKR", "jobCN1", "jobCN2", "jobEN3", "jobJP1"
+            "jobCN", "jobDE", "jobEN", "jobFR", "jobJP", "jobKR", "jobCN1", "jobCN2", "jobEN3", "jobJP1", 
         };
 
         public static List<string> jobProps = new List<string>()
@@ -329,7 +330,7 @@ namespace Triggernometry.CustomControls
             InitializeComponent();
             ctx = new Context();
             fakectx = new Context();
-            fakectx.testmode = true;
+            fakectx.testByPlaceholder = true;
             ResetTooltip();
             textBox1.TextChanged += TextBox1_TextChanged;
             textBox1.KeyPress += TextBox1_KeyPress;
@@ -340,22 +341,6 @@ namespace Triggernometry.CustomControls
             LostFocus += ExpressionTextBox_LostFocus;
             acfDebounceTimer.Interval = 100; // debounce timer for autocomplete
             acfDebounceTimer.Tick += (sender, e) => ProcessAutocomplete();
-        }
-
-        public static void SetPlugForTextBoxes(Control parent, RealPlugin plug)
-        {
-            return; // would delete this function
-            foreach (Control control in parent.Controls)
-            {
-                if (control is ExpressionTextBox expressionTextBox)
-                {
-                    expressionTextBox.ctx.plug = plug;
-                }
-                else
-                {
-                    SetPlugForTextBoxes(control, plug);
-                }
-            }
         }
 
         private void ExpressionTextBox_LostFocus(object sender, EventArgs e)

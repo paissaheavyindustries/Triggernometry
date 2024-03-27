@@ -1554,6 +1554,24 @@ namespace Triggernometry
             }
         }
 
+        internal bool _LogProcessACT { get; set; } = false;
+        [XmlAttribute]
+        public string LogProcessACT
+        {
+            get
+            {
+                if (_LogProcessACT == false)
+                {
+                    return null;
+                }
+                return _LogProcessACT.ToString();
+            }
+            set
+            {
+                _LogProcessACT = Boolean.Parse(value);
+            }
+        }
+
         internal LogMessageEnum _LogLevel { get; set; } = LogMessageEnum.Error;
         [XmlAttribute]
         public string LogLevel

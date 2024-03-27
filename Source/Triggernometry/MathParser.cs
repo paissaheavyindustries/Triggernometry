@@ -107,6 +107,8 @@ namespace Triggernometry
             LocalFunctions.Add("θ", x => Math.Atan2(x[2] - x[0], x[3] - x[1]));
             LocalFunctions.Add("relangle", x => ModFunction(x[1] - x[0] + Math.PI, 2 * Math.PI) - Math.PI);
             LocalFunctions.Add("relθ", x => ModFunction(x[1] - x[0] + Math.PI, 2 * Math.PI) - Math.PI);
+            LocalFunctions.Add("isanglebetween", IsAngleBetweenFunction);
+            LocalFunctions.Add("isθbetween", IsAngleBetweenFunction);
             LocalFunctions.Add("roundir", RoundirFunction);
             LocalFunctions.Add("roundvec", RoundvecFunction);
             LocalFunctions.Add("random", x => RandomNumber(x[0], x[1]));
@@ -306,6 +308,28 @@ namespace Triggernometry
                     return ProcessRoundir(Math.Atan2(input[0], input[1]), input[2]);
                 case 4: // roundir(dx, dy, segments, digits)
                     return ProcessRoundir(Math.Atan2(input[0], input[1]), input[2], (int)input[3]);
+                default:
+                    return 0;
+            }
+        }
+
+        /// <summary>
+        /// Determine whether a given angle θ is within the range from θ1 to θ2 
+        /// in the direction of increasing angles (counterclockwise in the game coordinate system). <br />
+        /// The angles do not need to be in the range of -pi to pi.
+        /// </summary>
+        /// <param name="input">An array of { θ, θ1, θ2 }.</param>
+        /// <returns>1 if between, else 0</returns>
+        public static double IsAngleBetweenFunction(double[] input)
+        {
+            switch (input.Length)
+            {
+                case 3:
+                    var θ  = ModFunction(input[0] + Math.PI, 2 * Math.PI) /*- Math.PI*/;
+                    var θ1 = ModFunction(input[1] + Math.PI, 2 * Math.PI) /*- Math.PI*/;
+                    var θ2 = ModFunction(input[2] + Math.PI, 2 * Math.PI) /*- Math.PI*/;
+                    bool inRange = (θ1 <= θ2) ? (θ1 <= θ && θ <= θ2) : (θ1 <= θ || θ <= θ2);
+                    return inRange ? 1 : 0;
                 default:
                     return 0;
             }
@@ -574,6 +598,9 @@ namespace Triggernometry
 
             // delete all spaces to avoid the splitting error of +/- when parsing strings like "1 + -1".
             expr = expr.Replace(" ", "");
+
+            // degree → rad
+            expr = expr.Replace("°", "*0.01745329251994329576923690768488612");
 
             // replace continuous +/- to a single +/- base on the count of "-"
             expr = MultiplePlusMinus.Replace(expr, match => match.Value.Replace("+", "").Length % 2 == 0 ? "+" : "-");

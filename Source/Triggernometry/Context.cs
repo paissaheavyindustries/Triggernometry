@@ -17,7 +17,7 @@ namespace Triggernometry
     {
 
         internal Guid id = Guid.NewGuid();
-        internal bool testmode;
+        internal bool testByPlaceholder;
         internal RealPlugin plug;
         public Trigger trig { get; set; }
         internal Action.TriggerForceTypeEnum force;
@@ -133,7 +133,7 @@ namespace Triggernometry
 
         public double EvaluateNumericExpression(LoggerDelegate logger, object o, string expr)
         {
-            string exp = ExpandVariables(logger, o, true, expr == null ? "" : expr);
+            string exp = ExpandVariables(logger, o, true, expr ?? "");
             if (plug != null)
             {
                 exp = plug.cfg.PerformSubstitution(exp, Configuration.Substitution.SubstitutionScopeEnum.NumericExpression);
@@ -143,7 +143,7 @@ namespace Triggernometry
 
         public string EvaluateStringExpression(LoggerDelegate logger, object o, string expr)
         {
-            string exp = ExpandVariables(logger, o, false, expr == null ? "" : expr);
+            string exp = ExpandVariables(logger, o, false, expr ?? "");
             if (plug != null)
             {
                 exp = plug.cfg.PerformSubstitution(exp, Configuration.Substitution.SubstitutionScopeEnum.StringExpression);
@@ -501,7 +501,7 @@ namespace Triggernometry
                 string x = m.Groups["id"].Value;
                 string val = "";
                 bool found = false;
-                if (testmode == true)
+                if (testByPlaceholder == true)
                 {
                     if (x == "_since")
                     {
@@ -1945,19 +1945,37 @@ namespace Triggernometry
                                 VariableDictionary entity = new VariableDictionary();
 
                                 if (isParty && key.Length == 1 && char.IsDigit(key[0]))
-                                {   // ffxivparty[1]
+                                {   // ffxivparty[n]
                                     entity = PluginBridges.BridgeFFXIV.GetPartyMember(int.Parse(key));
                                 }
-                                else if (reHex8.Match(key).Success)
-                                {   // [10ABCDEF]
-                                    entity = isParty ? PluginBridges.BridgeFFXIV.GetIdPartyMember(key)
-                                                     : PluginBridges.BridgeFFXIV.GetIdEntity(key);
+                                else
+                                {
+                                    int idx = key.IndexOf("=");
+                                    string key2 = null;
+                                    if (!isParty && idx > 0)
+                                    {
+                                        key2 = key.Substring(0, idx).Trim();
+                                    }
+
+                                    if (key2 != null && PluginBridges.BridgeFFXIV._nullCombatant.ContainsKey(key2))
+                                    {   // _entity[bnpcid=13681]
+                                        string value2 = key.Substring(idx + 1).Trim();
+                                        var entities = PluginBridges.BridgeFFXIV.GetAllEntities();
+                                        entity = entities.FirstOrDefault(vd => vd.GetValue(key2).ToString() == value2) 
+                                            ?? PluginBridges.BridgeFFXIV._nullCombatant;
+                                    }
+                                    else if (reHex8.Match(key).Success)
+                                    {   // [10ABCDEF]
+                                        entity = isParty ? PluginBridges.BridgeFFXIV.GetIdPartyMember(key)
+                                                         : PluginBridges.BridgeFFXIV.GetIdEntity(key);
+                                    }
+                                    if (entity.GetValue("id").ToString() == "")
+                                    {   // [name]
+                                        entity = isParty ? PluginBridges.BridgeFFXIV.GetNamedPartyMember(key)
+                                                         : PluginBridges.BridgeFFXIV.GetNamedEntity(key);
+                                    }
                                 }
-                                if (entity.GetValue("id").ToString() == "")
-                                {   // [name]
-                                    entity = isParty ? PluginBridges.BridgeFFXIV.GetNamedPartyMember(key)
-                                                     : PluginBridges.BridgeFFXIV.GetNamedEntity(key);
-                                }
+
                                 val = entity.GetValue(prop).ToString();
                             }
                             found = true;

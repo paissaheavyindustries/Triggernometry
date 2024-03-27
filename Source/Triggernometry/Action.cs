@@ -483,6 +483,27 @@ namespace Triggernometry
             return false;
         }
 
+        private string GetTargetWindowsDescription(string procid, string titleRegex)
+        {
+            procid = procid.Trim();
+            if (titleRegex.Trim().Length == 0) // the same condition check as in RealPlugin.WindowsUtils.FindWindows
+            {
+                return I18n.Translate("internal/Action/descwindowtargetnone", "(unspecified window name)");
+            }
+            if (procid == "" || procid == "0")
+            {
+                return I18n.Translate("internal/Action/descwindowtargetsingle", "the first window whose title match ({0})", titleRegex);
+            }
+            else if (procid == "-1")
+            {
+                return I18n.Translate("internal/Action/descwindowtargetall", "all windows whose titles match ({0})", titleRegex);
+            }
+            else
+            {
+                return I18n.Translate("internal/Action/descwindowtargetid", "windows in the process id ({0}) whose titles match ({1})", procid, titleRegex);
+            }
+        }
+
         internal string GetDescription(Context ctx)
         {
             string temp = "";
@@ -613,20 +634,7 @@ namespace Triggernometry
                             break;
                         case KeypressTypeEnum.WindowMessage:
                         case KeypressTypeEnum.WindowMessageCombo:
-                            string target;
-                            string procid = _KeyPressProcId.Trim();
-                            if (procid == "" || procid == "0")
-                            {
-                                target = I18n.Translate("internal/Action/desckeypresstgtwindow", "window ({0})", _KeyPressWindow);
-                            }
-                            else if (procid == "-1")
-                            {
-                                target = I18n.Translate("internal/Action/desckeypresstgtwindows", "all windows named ({0})", _KeyPressWindow);
-                            }
-                            else
-                            { 
-                                target = I18n.Translate("internal/Action/desckeypresstgtid", "process id ({0})", procid);
-                            }
+                            string target = GetTargetWindowsDescription(_KeyPressProcId, _KeyPressWindow);
 
                             if (_KeypressType == KeypressTypeEnum.WindowMessage)
                             {
@@ -1354,20 +1362,7 @@ namespace Triggernometry
                     break;
                 case ActionTypeEnum.WindowMessage:
                     {
-                        string target;
-                        string procid = _WmsgProcId.Trim();
-                        if (procid == "" || procid == "0")
-                        {
-                            target = I18n.Translate("internal/Action/desckeypresstgtwindow", "window ({0})", _WmsgTitle);
-                        }
-                        else if (procid == "-1")
-                        {
-                            target = I18n.Translate("internal/Action/desckeypresstgtwindows", "all windows named ({0})", _WmsgTitle);
-                        }
-                        else
-                        {
-                            target = I18n.Translate("internal/Action/desckeypresstgtid", "process id ({0})", procid);
-                        }
+                        string target = GetTargetWindowsDescription(_WmsgProcId, _WmsgTitle);
                         temp += I18n.Translate("internal/Action/descwmsg", "send message ({0}) wparam ({1}) lparam ({2}) to {3}", _WmsgCode, _WmsgWparam, _WmsgLparam, target);
                         break;
                     }
@@ -1663,7 +1658,7 @@ namespace Triggernometry
         {
             try
             {
-                if ((ctx.force & Action.TriggerForceTypeEnum.SkipConditions) == 0 && ctx.testmode == false)
+                if ((ctx.force & Action.TriggerForceTypeEnum.SkipConditions) == 0 && ctx.testByPlaceholder == false)
                 {
                     if (Condition != null && Condition.Enabled == true)
                     {
@@ -2137,7 +2132,7 @@ namespace Triggernometry
                     #region Implementation - Folder operation
                     case ActionTypeEnum.Folder:
                         {
-                            Folder f = ctx.plug.GetFolderById(_FolderId, ctx.trig != null ? ctx.trig.Repo : null);
+                            Folder f = ctx.plug.GetFolderById(_FolderId, ctx.trig?.Repo);
                             if (f != null)
                             {
                                 switch (_FolderOp)
@@ -2307,10 +2302,6 @@ namespace Triggernometry
                             {
                                 case KeypressTypeEnum.SendKeys:
                                     {
-                                        if (ctx.testmode == true)
-                                        {
-                                            Thread.Sleep(2000);
-                                        }
                                         string ks = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressExpression);
                                         SendKeys.SendWait(ks);
                                     }
@@ -2863,7 +2854,12 @@ namespace Triggernometry
                         {
                             if (_LogProcess == true)
                             {
-                                ctx.plug.LogLineQueuer(ctx.EvaluateStringExpression(ActionContextLogger, ctx, _LogMessageText), ctx.EvaluateStringExpression(ActionContextLogger, ctx, ctx.plug.currentZone), _LogMessageTarget);
+                                string message = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _LogMessageText);
+                                if (_LogProcessACT)
+                                {
+                                    RealPlugin.plug.ACTEncounterLogHook(message);
+                                }
+                                ctx.plug.LogLineQueuer(message, ctx.EvaluateStringExpression(ActionContextLogger, ctx, ctx.plug.currentZone), _LogMessageTarget);
                             }
                             else
                             {
@@ -3846,7 +3842,7 @@ namespace Triggernometry
                                         List<VariableDictionary> entities = PluginBridges.BridgeFFXIV.GetAllEntities();
                                         VariableTable vt = new VariableTable { LastChanger = vtchanger, LastChanged = DateTime.Now };
 
-                                        var keys = PluginBridges.BridgeFFXIV.NullCombatant.Values.Keys.OrderBy(k => k).ToList();
+                                        var keys = PluginBridges.BridgeFFXIV._nullCombatant.Values.Keys.OrderBy(k => k).ToList();
                                         var specialKeys = new List<string> { "id", "name", "x", "y", "z", "h" };
                                         keys = specialKeys.Concat(keys.Except(specialKeys)).ToList();
 
@@ -3888,7 +3884,7 @@ namespace Triggernometry
                     #region Implementation - Trigger operation
                     case ActionTypeEnum.Trigger:
                         {
-                            Trigger t = ctx.plug.GetTriggerById(_TriggerId, ctx.trig != null ? ctx.trig.Repo : null);
+                            Trigger t = ctx.plug.GetTriggerById(_TriggerId, ctx.trig?.Repo);
                             if (t != null)
                             {
                                 switch (_TriggerOp)
@@ -4296,6 +4292,7 @@ namespace Triggernometry
             a._LSControlType = _LSControlType;
             a._LSCustomPayload = _LSCustomPayload;
             a._LogProcess = _LogProcess;
+            a._LogProcessACT = _LogProcessACT;
             a._LogMessageTarget = _LogMessageTarget;
             a._JsonOperationType = _JsonOperationType;
             a._JsonCacheRequest = _JsonCacheRequest;

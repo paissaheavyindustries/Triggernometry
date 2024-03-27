@@ -213,7 +213,6 @@
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop streaming]" Translation="配信の停止" />
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop then start recording]" Translation="Stop then start recording" />
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop then start recording (if currently recording)]" Translation="Stop then start recording (if currently recording)" />
-    <TranslationEntry Key="ActionForm/cbxProcessLog" Translation="一行のログとしてメッセージを処理" />
     <TranslationEntry Key="ActionForm/cbxProcessWindowStyle[Hidden from view]" Translation="非表示" />
     <TranslationEntry Key="ActionForm/cbxProcessWindowStyle[Maximized to fullscreen]" Translation="最大化してフルスクリーン表示" />
     <TranslationEntry Key="ActionForm/cbxProcessWindowStyle[Minimized to taskbar]" Translation="最小化してタスクバーに入れる" />
@@ -277,6 +276,8 @@
     <TranslationEntry Key="ActionForm/cbxVariableOp[Unset scalar variables matching regular expression]" Translation="正規表現にマッチするスカラ変数を初期化" />
     <TranslationEntry Key="ActionForm/chkExecuteAsync" Translation="他のアクションの実行をブロックせず非同期で実行" />
     <TranslationEntry Key="ActionForm/chkOverrideDesc" Translation="自動生成されたアクションの説明を上書きする" />
+    <TranslationEntry Key="ActionForm/cbxProcessLog" Translation="一行のログとしてメッセージを処理" />
+    <TranslationEntry Key="ActionForm/cbxProcessLogACT" Translation="Add the log message to ACT combat log" />
     <TranslationEntry Key="ActionForm/chkSoundExclusive" Translation="専用のサウンドプレーヤーを使用（他のサウンドとの競合の防止）" />
     <TranslationEntry Key="ActionForm/chkSoundMyOutput" Translation="ACTのサウンド出力設定に依存せず、Triggernometryとして音声を出力する" />
     <TranslationEntry Key="ActionForm/chkSpeechExclusive" Translation="専用の音声合成エンジンを使用（他のTTS読み上げとの競合の防止）" />
@@ -933,9 +934,6 @@
     <TranslationEntry Key="internal/Action/desckeypress" Translation="send keycode ({0}) to {1}" />
     <TranslationEntry Key="internal/Action/desckeypresscombo" Translation="send keycodes ({0}) to {1}" />
     <TranslationEntry Key="internal/Action/desckeypresses" Translation="キープレス ({0}) をアクティブウィンドウに送る" />
-    <TranslationEntry Key="internal/Action/desckeypresstgtid" Translation="process id ({0})" />
-    <TranslationEntry Key="internal/Action/desckeypresstgtwindow" Translation="window ({0})" />
-    <TranslationEntry Key="internal/Action/desckeypresstgtwindows" Translation="all windows named ({0})" />
     <TranslationEntry Key="internal/Action/desclaunchprocess" Translation="プロセス ({0}) 引数：({2})を ({1}) として実行" />
     <TranslationEntry Key="internal/Action/desclistbuild" Translation="build {1}list variable ({0}) from string ({2}) separated by ({3})" />
     <TranslationEntry Key="internal/Action/desclistbuildraw" Translation="build {1}list variable ({0}) from {3} expression ({2}) separated by its first character" />
@@ -1065,6 +1063,10 @@
     <TranslationEntry Key="internal/Action/desctriginvalidref" Translation="trigger action with an invalid trigger reference ({0})" />
     <TranslationEntry Key="internal/Action/desctts" Translation="({0}) と読み上げる (ボリューム {1} %, 速度 {2})" />
     <TranslationEntry Key="internal/Action/descunknown" Translation="不明なアクションタイプ" />
+    <TranslationEntry Key="internal/Action/descwindowtargetall" Translation="all windows whose titles match ({0})" />
+    <TranslationEntry Key="internal/Action/descwindowtargetid" Translation="windows in the process id ({0}) whose titles match ({1})" />
+    <TranslationEntry Key="internal/Action/descwindowtargetnone" Translation="(unspecified window name)" />
+    <TranslationEntry Key="internal/Action/descwindowtargetsingle" Translation="the first window whose title match ({0})" />
     <TranslationEntry Key="internal/Action/descwmsg" Translation="{3}にメッセージ送信 ({0}, wparam = {1}, lparam = {2})" />
     <TranslationEntry Key="internal/Action/dictbuild" Translation="{1}Dictionary ({0}) built from expression ({2}) splitted by ({3}) ({4})" />
     <TranslationEntry Key="internal/Action/dictbuildfail" Translation="{1}Dictionary ({0}) cannot be built since expression ({2}) length < 2" />

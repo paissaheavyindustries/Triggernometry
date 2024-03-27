@@ -20,7 +20,7 @@ namespace Triggernometry.CustomControls
 
         private bool IsReadonly { get; set; } = false;
 
-        internal List<Action> Actions { get; set; } = null;
+        internal List<Action> Actions { get; set; } = new List<Action>();
 
         internal WMPLib.WindowsMediaPlayer wmp;
         internal SpeechSynthesizer tts;
@@ -175,7 +175,6 @@ namespace Triggernometry.CustomControls
             using (Forms.ActionForm af = new Forms.ActionForm())
             {
                 af.plug = plug;
-                ExpressionTextBox.SetPlugForTextBoxes(af, plug);
                 af.wmp = wmp;
                 af.tts = tts;
                 af.trv = trv;
@@ -228,7 +227,6 @@ namespace Triggernometry.CustomControls
             {
                 Action a = Actions[rowIndex];
                 af.plug = plug;
-                ExpressionTextBox.SetPlugForTextBoxes(af, plug);
                 af.wmp = wmp;
                 af.trv = trv;
                 af.fakectx = fakectx;
@@ -813,19 +811,19 @@ namespace Triggernometry.CustomControls
             switch (item.Name)
             {
                 case "ctxTest":
-                    ctx.testmode = RealPlugin.plug.cfg.TestLiveByDefault == false;
+                    ctx.testByPlaceholder = RealPlugin.plug.cfg.TestLiveByDefault == false;
                     if (plug.cfg.TestIgnoreConditionsByDefault)
                         a.Condition = new ConditionGroup();
                     ctxAction.Close();
                     break;
                 case "ctxTestPlaceholder":
-                    ctx.testmode = true;
+                    ctx.testByPlaceholder = true;
                     break;
                 case "ctxTestLive":
-                    ctx.testmode = false;
+                    ctx.testByPlaceholder = false;
                     break;
                 case "ctxTestLiveIgnoreCnd":
-                    ctx.testmode = false;
+                    ctx.testByPlaceholder = false;
                     if (plug.cfg.TestIgnoreConditionsByDefault)
                         a.Condition = new ConditionGroup();
                     break;

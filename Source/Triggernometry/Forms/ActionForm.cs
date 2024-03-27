@@ -423,7 +423,8 @@ namespace Triggernometry.Forms
                 expTextAuraText.Expression = "";
                 expTextAuraXIni.Expression = "";
                 expTextAuraYIni.Expression = "";
-                cbxProcessLog.Checked = false;
+                chkProcessLog.Checked = false;
+                chkProcessLogACT.Checked = false;
                 cbxLogMessageTarget.SelectedIndex = 0;
                 expTextAuraWIni.Expression = "";
                 expTextAuraHIni.Expression = "";
@@ -691,7 +692,8 @@ namespace Triggernometry.Forms
                 expTextAuraWTick.Expression = a._TextAuraWTickExpression;
                 expTextAuraHTick.Expression = a._TextAuraHTickExpression;
                 expTextAuraOTick.Expression = a._TextAuraOTickExpression;
-                cbxProcessLog.Checked = a._LogProcess;
+                chkProcessLog.Checked = a._LogProcess;
+                chkProcessLogACT.Checked = a._LogProcessACT;
                 cbxLogMessageTarget.SelectedIndex = (int)a._LogMessageTarget;
                 expTextAuraTTLTick.Expression = a._TextAuraTTLTickExpression;
                 expLogMessageText.Expression = a._LogMessageText;
@@ -811,7 +813,7 @@ namespace Triggernometry.Forms
                 cbxTriggerZoneType.SelectedIndex = (int)a._TriggerZoneType;
                 expJsonVariable.Expression = a._JsonResultVariable;
             }
-            cbxProcessLog_CheckedChanged(null, null);
+            chkProcessLog_CheckedChanged(null, null);
         }
 
         internal void SettingsToAction(Action a)
@@ -828,7 +830,8 @@ namespace Triggernometry.Forms
             a._PlaySoundExclusive = chkSoundExclusive.Checked;
             a._PlaySoundMyself = chkSoundMyOutput.Checked;
             a._UseTTSTextExpression = expTextToSay.Expression;
-            a._LogProcess = cbxProcessLog.Checked;
+            a._LogProcess = chkProcessLog.Checked;
+            a._LogProcessACT = chkProcessLogACT.Checked;
             a._LogMessageTarget = (LogEvent.SourceEnum)cbxLogMessageTarget.SelectedIndex;
             a._UseTTSVolumeExpression = expSpeechVolume.Expression;
             a._UseTTSRateExpression = expSpeechRate.Expression;
@@ -1077,7 +1080,7 @@ namespace Triggernometry.Forms
             Action a = new Action();
             Context ctx = new Context();
             ctx.plug = plug;
-            ctx.testmode = (liveValues == false);
+            ctx.testByPlaceholder = (liveValues == false);
             ctx.trig = null;
             ctx.soundhook = plug.SoundPlaybackSmart;
             ctx.ttshook = plug.TtsPlaybackSmart;
@@ -1295,7 +1298,7 @@ namespace Triggernometry.Forms
         {
             Context ctx = new Context();
             ctx.plug = plug;
-            ctx.testmode = false;
+            ctx.testByPlaceholder = false;
             ctx.trig = null;
             ctx.triggered = DateTime.UtcNow;
             string fn = ctx.EvaluateStringExpression(null, null, expAuraImage.Expression);
@@ -1388,7 +1391,7 @@ namespace Triggernometry.Forms
         {
             Context ctx = new Context();
             ctx.plug = plug;
-            ctx.testmode = true;
+            ctx.testByPlaceholder = true;
             ctx.trig = null;
             ctx.triggered = DateTime.UtcNow;
             using (AuraDesignForm adf = new AuraDesignForm(AuraContainerForm.AuraTypeEnum.Text))
@@ -1524,7 +1527,7 @@ namespace Triggernometry.Forms
             Action a = new Action();
             Context ctx = new Context();
             ctx.plug = plug;
-            ctx.testmode = true;
+            ctx.testByPlaceholder = true;
             ctx.trig = null;
             SettingsToAction(a);
             a.ActionType = Action.ActionTypeEnum.Aura;
@@ -1538,7 +1541,7 @@ namespace Triggernometry.Forms
             Action a = new Action();
             Context ctx = new Context();
             ctx.plug = plug;
-            ctx.testmode = true;
+            ctx.testByPlaceholder = true;
             ctx.trig = null;
             SettingsToAction(a);
             a.ActionType = Action.ActionTypeEnum.TextAura;
@@ -2514,7 +2517,8 @@ namespace Triggernometry.Forms
                     expDictLength.Enabled = false;
                     cbxDictKeyType.Enabled = false;
                     expDictKey.Enabled = false;
-                    cbxDictValueType.Enabled = true;
+                    cbxDictValueType.Enabled = false;
+                    cbxDictValueType.SelectedIndex = 0; // string
                     expDictValue.Enabled = true;
                     expDictTarget.Enabled = false;
                     break;
@@ -2586,9 +2590,10 @@ namespace Triggernometry.Forms
             expJsonPayload.Enabled = (cbxJsonType.SelectedIndex == 0);
         }
 
-        private void cbxProcessLog_CheckedChanged(object sender, EventArgs e)
+        private void chkProcessLog_CheckedChanged(object sender, EventArgs e)
         {
-            cbxLogMessageTarget.Enabled = cbxProcessLog.Checked;
+            chkProcessLogACT.Enabled = chkProcessLog.Checked;
+            cbxLogMessageTarget.Enabled = chkProcessLog.Checked;
             lblLogMessageTarget.Enabled = cbxLogMessageTarget.Enabled;
             cbxLogMessageLevel.Enabled = (cbxLogMessageTarget.Enabled == false);
             lblLogMessageLevel.Enabled = cbxLogMessageLevel.Enabled;
@@ -2698,7 +2703,7 @@ namespace Triggernometry.Forms
 
         private static Dictionary<string, string> SendKeysMap = new Dictionary<string, string>
         {
-            {"Back", "{BS}"}, {"Escape", "{ESC}"}, {"Enter", "{ENTER}"}, {"Tab", "{TAB}"},
+            {"Back", "{BS}"}, {"Escape", "{ESC}"}, {"Enter", "{ENTER}"}, {"Tab", "{TAB}"}, {"Space", " "},
             {"Scroll", "{SCROLLLOCK}"}, {"CapsLock", "{CAPSLOCK}"}, {"NumLock", "{NUMLOCK}"}, 
             {"Insert", "{INS}"}, {"Delete", "{DEL}"}, {"Home", "{HOME}"}, {"End", "{END}"}, {"PageUp", "{PGUP}"}, {"PageDown", "{PGDN}"},
             {"Up", "{UP}"}, {"Down", "{DOWN}"}, {"Left", "{LEFT}"}, {"Right", "{RIGHT}"},

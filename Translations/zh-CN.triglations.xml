@@ -213,7 +213,6 @@
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop streaming]" Translation="停止直播" />
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop then start recording]" Translation="停止后开始录制" />
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop then start recording (if currently recording)]" Translation="停止后开始录制（若正在录制）" />
-    <TranslationEntry Key="ActionForm/cbxProcessLog" Translation="处理为待解析的日志行" />
     <TranslationEntry Key="ActionForm/cbxProcessWindowStyle[Hidden from view]" Translation="从视图中隐藏" />
     <TranslationEntry Key="ActionForm/cbxProcessWindowStyle[Maximized to fullscreen]" Translation="最大化到全屏" />
     <TranslationEntry Key="ActionForm/cbxProcessWindowStyle[Minimized to taskbar]" Translation="最小化到任务栏" />
@@ -277,6 +276,8 @@
     <TranslationEntry Key="ActionForm/cbxVariableOp[Unset scalar variables matching regular expression]" Translation="销毁标量（正则）" />
     <TranslationEntry Key="ActionForm/chkExecuteAsync" Translation="异步执行（否则阻塞全部来源的动作直至动作结束）" />
     <TranslationEntry Key="ActionForm/chkOverrideDesc" Translation="覆盖此动作描述" />
+    <TranslationEntry Key="ActionForm/chkProcessLog" Translation="处理为待解析的日志行" />
+    <TranslationEntry Key="ActionForm/cbxProcessLogACT" Translation="将日志添加至 ACT 战斗记录" />
     <TranslationEntry Key="ActionForm/chkSoundExclusive" Translation="使用专用声音播放器，防止与其他声音冲突" />
     <TranslationEntry Key="ActionForm/chkSoundMyOutput" Translation="使用触发器插件输出，忽略 ACT 接口配置" />
     <TranslationEntry Key="ActionForm/chkSpeechExclusive" Translation="使用专用 TTS 语音合成器，防止 TTS 之间冲突" />
@@ -933,9 +934,6 @@
     <TranslationEntry Key="internal/Action/desckeypress" Translation="向{1}发送键码 ({0})" />
     <TranslationEntry Key="internal/Action/desckeypresscombo" Translation="向{1}发送一组键码 ({0})" />
     <TranslationEntry Key="internal/Action/desckeypresses" Translation="发送按键 ({0}) 到当前窗口" />
-    <TranslationEntry Key="internal/Action/desckeypresstgtid" Translation="进程 ID ({0}) " />
-    <TranslationEntry Key="internal/Action/desckeypresstgtwindow" Translation="窗口 ({0}) " />
-    <TranslationEntry Key="internal/Action/desckeypresstgtwindows" Translation="所有名为 ({0}) 的窗口" />
     <TranslationEntry Key="internal/Action/desclaunchprocess" Translation="启用进程 ({0}) 模式 ({1}) 使用命令行参数 ({2})" />
     <TranslationEntry Key="internal/Action/desclistbuild" Translation="将文本 ({2}) 以 ({3}) 分隔拆分，构筑为{1}列表 ({0})" />
     <TranslationEntry Key="internal/Action/desclistbuildraw" Translation="将{3}表达式 ({2}) 以首字符分隔拆分，构筑为{1}列表 ({0})" />
@@ -1065,6 +1063,10 @@
     <TranslationEntry Key="internal/Action/desctriginvalidref" Translation="触发器动作使用无效的触发器引用 ({0})" />
     <TranslationEntry Key="internal/Action/desctts" Translation="播读 ({0})，音量 {1} %, 语速 {2}" />
     <TranslationEntry Key="internal/Action/descunknown" Translation="位置动作类型" />
+    <TranslationEntry Key="internal/Action/descwindowtargetall" Translation="标题匹配正则 ({0}) 的所有窗口" />
+    <TranslationEntry Key="internal/Action/descwindowtargetid" Translation="进程 ID ({0}) 中标题匹配正则 ({1}) 的窗口" />
+    <TranslationEntry Key="internal/Action/descwindowtargetnone" Translation="（未指定窗口名）" />
+    <TranslationEntry Key="internal/Action/descwindowtargetsingle" Translation="标题匹配正则 ({0}) 的首个窗口" />
     <TranslationEntry Key="internal/Action/descwmsg" Translation="向{3}发送消息 ({0})，wparam = ({1})，lparam = ({2})" />
     <TranslationEntry Key="internal/Action/dictbuild" Translation="已将表达式 ({2}) 以 ({3}) ({4}) 拆分，构筑为{1}字典 ({0})" />
     <TranslationEntry Key="internal/Action/dictbuildfail" Translation="表达式 ({2}) 长度小于 2，无法构筑为{1}字典 ({0})" />

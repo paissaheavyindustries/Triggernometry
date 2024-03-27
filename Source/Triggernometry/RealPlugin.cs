@@ -421,7 +421,7 @@ namespace Triggernometry
                 List<IntPtr> wins = FindWindows(windowtitle);
                 if (wins.Count > 0)
                 {
-                    switch (procid)
+                    switch (procid.Trim())
                     {
                         case "-1":
                             {
@@ -488,6 +488,7 @@ namespace Triggernometry
         public delegate void SoundDelegate(string filename, int volume);
         public delegate List<CustomTriggerCategoryProxy> CustomTriggerDelegate();
         public delegate PluginWrapper InstanceDelegate(string ActPluginName, string ActPluginType);
+        public delegate void ACTEncounterLogDelegate(string message);
 
         internal Scarborough.Scarborough sc;
         private Queue<LogEvent> EventQueue;
@@ -566,6 +567,7 @@ namespace Triggernometry
         public TabPageDelegate TabLocateHook { get; set; }
         public SimpleVoidDelegate CheckUpdateHook { get; set; }
         public SimpleBoolDelegate ActInitedHook { get; set; }
+        public ACTEncounterLogDelegate ACTEncounterLogHook { get; set; }
 
         private bool _HideAllAuras = false;
         internal bool HideAllAuras
@@ -2313,7 +2315,7 @@ namespace Triggernometry
                 _obs = new ObsController();
                 _livesplit = new LiveSplitController();
                 exwhere = I18n.Translate("internal/Plugin/iniscripting", "setting up scripting - try changing the plugin load order in ACT");
-                scripting = new Interpreter(this);
+                scripting = new Interpreter();
                 pluginStatusText.Text = I18n.Translate("internal/Plugin/iniready", "Ready");
                 FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/inited", "Initialized"));
                 Task tx = new Task(() =>
@@ -3844,7 +3846,7 @@ namespace Triggernometry
                 }
                 a.AddToLog(ctx, DebugLevelEnum.Info, I18n.Translate("internal/Plugin/actionqueued", "Queuing trigger '{0}' action '{1}' to {2} slot {3}", t.LogName, a.GetDescription(ctx), FormatDateTime(when), newOrdinal));
                 ActionQueue.Add(new QueuedAction(when, newOrdinal, m, a, ctx, releaseMutex));
-                ActionQueue.Sort();
+                ActionQueue.Sort(); 
                 ActionUpdateEvent.Set();
             }
         }

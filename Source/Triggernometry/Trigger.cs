@@ -793,7 +793,7 @@ namespace Triggernometry
             }
             catch (Exception ex)
             {
-                AddToLog(p, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Trigger/firingexception", "Trigger '{0}' didn't fire due to exception: {1}", LogName, ex.Message));
+                AddToLog(p, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Trigger/firingexception", "Trigger '{0}' didn't fire due to exception: {1}", LogName, ex.ToString()));
             }
             return false;
         }
