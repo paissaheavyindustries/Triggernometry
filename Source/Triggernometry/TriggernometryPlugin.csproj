@@ -25,7 +25,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <StartAction>Program</StartAction>
-    <StartProgram>C:\Program Files (x86)\Advanced Combat Tracker\Advanced Combat Tracker.exe</StartProgram>
+    <StartProgram>$(MSBuildProgramFiles32)\Advanced Combat Tracker\Advanced Combat Tracker.exe</StartProgram>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -36,7 +36,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <StartAction>Program</StartAction>
-    <StartProgram>C:\Program Files (x86)\Advanced Combat Tracker\Advanced Combat Tracker.exe</StartProgram>
+    <StartProgram>$(MSBuildProgramFiles32)\Advanced Combat Tracker\Advanced Combat Tracker.exe</StartProgram>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -131,9 +131,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="websocket-sharp, Version=1.0.1.0, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebSocketSharp-netstandard.1.0.1\lib\net45\websocket-sharp.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionProps.cs" />
@@ -317,10 +314,10 @@
     <Compile Include="JsonPath\Public.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="LogLine.cs" />
+    <Compile Include="MathParser.cs" />
     <Compile Include="Forms\MemoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MathParser.cs" />
     <Compile Include="ObsController.cs" />
     <Compile Include="LiveSplitController.cs" />
     <Compile Include="Parser.cs" />
@@ -413,6 +410,83 @@
     <Compile Include="Variables\VariableList.cs" />
     <Compile Include="Variables\VariableStore.cs" />
     <Compile Include="Variables\VariableTable.cs" />
+    <Compile Include="WebsocketSharp\ByteOrder.cs" />
+    <Compile Include="WebsocketSharp\CloseEventArgs.cs" />
+    <Compile Include="WebsocketSharp\CloseStatusCode.cs" />
+    <Compile Include="WebsocketSharp\CompressionMethod.cs" />
+    <Compile Include="WebsocketSharp\ErrorEventArgs.cs" />
+    <Compile Include="WebsocketSharp\Ext.cs" />
+    <Compile Include="WebsocketSharp\Fin.cs" />
+    <Compile Include="WebsocketSharp\HttpBase.cs" />
+    <Compile Include="WebsocketSharp\HttpRequest.cs" />
+    <Compile Include="WebsocketSharp\HttpResponse.cs" />
+    <Compile Include="WebsocketSharp\LogData.cs" />
+    <Compile Include="WebsocketSharp\Logger.cs" />
+    <Compile Include="WebsocketSharp\LogLevel.cs" />
+    <Compile Include="WebsocketSharp\Mask.cs" />
+    <Compile Include="WebsocketSharp\MessageEventArgs.cs" />
+    <Compile Include="WebsocketSharp\Net\AuthenticationBase.cs" />
+    <Compile Include="WebsocketSharp\Net\AuthenticationChallenge.cs" />
+    <Compile Include="WebsocketSharp\Net\AuthenticationResponse.cs" />
+    <Compile Include="WebsocketSharp\Net\AuthenticationSchemes.cs" />
+    <Compile Include="WebsocketSharp\Net\Chunk.cs" />
+    <Compile Include="WebsocketSharp\Net\ChunkedRequestStream.cs" />
+    <Compile Include="WebsocketSharp\Net\ChunkStream.cs" />
+    <Compile Include="WebsocketSharp\Net\ClientSslConfiguration.cs" />
+    <Compile Include="WebsocketSharp\Net\Cookie.cs" />
+    <Compile Include="WebsocketSharp\Net\CookieCollection.cs" />
+    <Compile Include="WebsocketSharp\Net\CookieException.cs" />
+    <Compile Include="WebsocketSharp\Net\EndPointListener.cs" />
+    <Compile Include="WebsocketSharp\Net\EndPointManager.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpBasicIdentity.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpConnection.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpDigestIdentity.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpHeaderInfo.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpHeaderType.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpListener.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpListenerAsyncResult.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpListenerContext.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpListenerException.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpListenerPrefix.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpListenerPrefixCollection.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpListenerRequest.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpListenerResponse.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpRequestHeader.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpResponseHeader.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpStatusCode.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpStreamAsyncResult.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpUtility.cs" />
+    <Compile Include="WebsocketSharp\Net\HttpVersion.cs" />
+    <Compile Include="WebsocketSharp\Net\InputChunkState.cs" />
+    <Compile Include="WebsocketSharp\Net\InputState.cs" />
+    <Compile Include="WebsocketSharp\Net\LineState.cs" />
+    <Compile Include="WebsocketSharp\Net\NetworkCredential.cs" />
+    <Compile Include="WebsocketSharp\Net\QueryStringCollection.cs" />
+    <Compile Include="WebsocketSharp\Net\ReadBufferState.cs" />
+    <Compile Include="WebsocketSharp\Net\RequestStream.cs" />
+    <Compile Include="WebsocketSharp\Net\ResponseStream.cs" />
+    <Compile Include="WebsocketSharp\Net\ServerSslConfiguration.cs" />
+    <Compile Include="WebsocketSharp\Net\WebHeaderCollection.cs" />
+    <Compile Include="WebsocketSharp\Net\Websockets\HttpListenerWebSocketContext.cs" />
+    <Compile Include="WebsocketSharp\Net\Websockets\TcpListenerWebSocketContext.cs" />
+    <Compile Include="WebsocketSharp\Net\Websockets\WebSocketContext.cs" />
+    <Compile Include="WebsocketSharp\Opcode.cs" />
+    <Compile Include="WebsocketSharp\PayloadData.cs" />
+    <Compile Include="WebsocketSharp\Rsv.cs" />
+    <Compile Include="WebsocketSharp\Server\HttpRequestEventArgs.cs" />
+    <Compile Include="WebsocketSharp\Server\HttpServer.cs" />
+    <Compile Include="WebsocketSharp\Server\IWebSocketSession.cs" />
+    <Compile Include="WebsocketSharp\Server\ServerState.cs" />
+    <Compile Include="WebsocketSharp\Server\WebSocketBehavior.cs" />
+    <Compile Include="WebsocketSharp\Server\WebSocketServer.cs" />
+    <Compile Include="WebsocketSharp\Server\WebSocketServiceHost.cs" />
+    <Compile Include="WebsocketSharp\Server\WebSocketServiceHost`1.cs" />
+    <Compile Include="WebsocketSharp\Server\WebSocketServiceManager.cs" />
+    <Compile Include="WebsocketSharp\Server\WebSocketSessionManager.cs" />
+    <Compile Include="WebsocketSharp\WebSocket.cs" />
+    <Compile Include="WebsocketSharp\WebSocketException.cs" />
+    <Compile Include="WebsocketSharp\WebSocketFrame.cs" />
+    <Compile Include="WebsocketSharp\WebSocketState.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CustomControls\ActionViewer.resx">
