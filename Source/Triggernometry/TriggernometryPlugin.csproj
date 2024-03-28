@@ -49,9 +49,6 @@
     <Reference Include="CsvHelper, Version=27.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.27.2.1\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="MathParser, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MathosParser.2.0.0\lib\net462\MathParser.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.6.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -323,6 +320,7 @@
     <Compile Include="Forms\MemoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="MathParser.cs" />
     <Compile Include="ObsController.cs" />
     <Compile Include="LiveSplitController.cs" />
     <Compile Include="Parser.cs" />
