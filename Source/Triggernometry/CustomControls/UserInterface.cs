@@ -1658,6 +1658,10 @@ namespace Triggernometry.CustomControls
 
         internal void ClearAllVariables()
         {
+            var result = MessageBox.Show(I18n.Translate("internal/UserInterface/clearvar", "Are you sure you want to clear the session variables?"), "", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result != DialogResult.Yes) return;
+
             lock (plug.sessionvars.Scalar)
             {
                 plug.sessionvars.Scalar.Clear();
@@ -1665,6 +1669,14 @@ namespace Triggernometry.CustomControls
             lock (plug.sessionvars.List)
             {
                 plug.sessionvars.List.Clear();
+            }
+            lock (plug.sessionvars.Table)
+            {
+                plug.sessionvars.Table.Clear();
+            }
+            lock (plug.sessionvars.Dict)
+            {
+                plug.sessionvars.Dict.Clear();
             }
         }
 

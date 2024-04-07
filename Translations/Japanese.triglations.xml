@@ -1569,6 +1569,7 @@
     <TranslationEntry Key="internal/UserInterface/areyousurefolder" Translation="フォルダ '{0}' を削除します" />
     <TranslationEntry Key="internal/UserInterface/areyousurerepo" Translation="リポジトリ '{0}' を削除します" />
     <TranslationEntry Key="internal/UserInterface/areyousuretrigger" Translation="トリガー '{0}' を削除します" />
+	<TranslationEntry Key="internal/UserInterface/clearvar" Translation="Are you sure you want to clear the session variables?" />
     <TranslationEntry Key="internal/UserInterface/confirm" Translation="削除の確認" />
     <TranslationEntry Key="internal/UserInterface/copyfail" Translation="Tree copy failed due to exception: {0}" />
     <TranslationEntry Key="internal/UserInterface/editfolder" Translation="フォルダの編集 '{0}'" />

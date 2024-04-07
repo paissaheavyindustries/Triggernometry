@@ -1569,6 +1569,7 @@
     <TranslationEntry Key="internal/UserInterface/areyousurefolder" Translation="您确定要移除分组 '{0}' 吗？" />
     <TranslationEntry Key="internal/UserInterface/areyousurerepo" Translation="您确定要移除仓库 '{0}' 吗？" />
     <TranslationEntry Key="internal/UserInterface/areyousuretrigger" Translation="您确定要移除触发器 '{0}' 吗？" />
+	<TranslationEntry Key="internal/UserInterface/clearvar" Translation="你确认要清除临时变量吗？" />
     <TranslationEntry Key="internal/UserInterface/confirm" Translation="移除确认" />
     <TranslationEntry Key="internal/UserInterface/copyfail" Translation="由于异常，树复制失败：{0}" />
     <TranslationEntry Key="internal/UserInterface/editfolder" Translation="编辑分组 '{0}'" />

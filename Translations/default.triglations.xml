@@ -1569,6 +1569,7 @@
     <TranslationEntry Key="internal/UserInterface/areyousurefolder" Translation="Are you sure you want to remove folder '{0}'?" />
     <TranslationEntry Key="internal/UserInterface/areyousurerepo" Translation="Are you sure you want to remove repository '{0}'?" />
     <TranslationEntry Key="internal/UserInterface/areyousuretrigger" Translation="Are you sure you want to remove trigger '{0}'?" />
+	<TranslationEntry Key="internal/UserInterface/clearvar" Translation="Are you sure you want to clear the session variables?" />
     <TranslationEntry Key="internal/UserInterface/confirm" Translation="Confirm removal" />
     <TranslationEntry Key="internal/UserInterface/copyfail" Translation="Tree copy failed due to exception: {0}" />
     <TranslationEntry Key="internal/UserInterface/editfolder" Translation="Edit folder '{0}'" />
