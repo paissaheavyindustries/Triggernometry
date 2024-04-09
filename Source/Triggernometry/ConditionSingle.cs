@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using System.Linq.Expressions;
 
 namespace Triggernometry
 {
@@ -145,6 +146,8 @@ namespace Triggernometry
         public override string ToString()
         {
             string desc = "";
+            string descL = (ExpressionL != null && ExpressionL.Length > 256) ? (ExpressionL.Substring(0, 256) + "...") : ExpressionL;
+            string descR = (ExpressionR != null && ExpressionR.Length > 256) ? (ExpressionR.Substring(0, 256) + "...") : ExpressionR;
             if (ConditionType == CndTypeEnum.ListContains || ConditionType == CndTypeEnum.ListDoesNotContain)
             {
                 desc = I18n.Translate("internal/ConditionSingle/listvar", "List variable specified by");
@@ -152,10 +155,10 @@ namespace Triggernometry
                 switch (ExpressionTypeL)
                 {
                     case ExprTypeEnum.Numeric:
-                        desc += I18n.Translate("internal/ConditionSingle/numericexpression", "numeric expression ({0})", ExpressionL);
+                        desc += I18n.Translate("internal/ConditionSingle/numericexpression", "numeric expression ({0})", descL);
                         break;
                     case ExprTypeEnum.String:
-                        desc += I18n.Translate("internal/ConditionSingle/stringexpression", "string expression ({0})", ExpressionL);
+                        desc += I18n.Translate("internal/ConditionSingle/stringexpression", "string expression ({0})", descL);
                         break;
                 }
                 desc += " ";
@@ -174,10 +177,10 @@ namespace Triggernometry
                 switch (ExpressionTypeL)
                 {
                     case ExprTypeEnum.Numeric:
-                        desc = Capitalize(I18n.Translate("internal/ConditionSingle/numericexpression", "numeric expression ({0})", ExpressionL));
+                        desc = Capitalize(I18n.Translate("internal/ConditionSingle/numericexpression", "numeric expression ({0})", descL));
                         break;
                     case ExprTypeEnum.String:
-                        desc = Capitalize(I18n.Translate("internal/ConditionSingle/stringexpression", "string expression ({0})", ExpressionL));
+                        desc = Capitalize(I18n.Translate("internal/ConditionSingle/stringexpression", "string expression ({0})", descL));
                         break;
                 }
                 desc += " ";
@@ -224,10 +227,10 @@ namespace Triggernometry
             switch (ExpressionTypeR)
             {
                 case ExprTypeEnum.Numeric:
-                    desc += " " + I18n.Translate("internal/ConditionSingle/numericexpression", "numeric expression ({0})", ExpressionR);
+                    desc += " " + I18n.Translate("internal/ConditionSingle/numericexpression", "numeric expression ({0})", descR);
                     break;
                 case ExprTypeEnum.String:
-                    desc += " " + I18n.Translate("internal/ConditionSingle/stringexpression", "string expression ({0})", ExpressionR);
+                    desc += " " + I18n.Translate("internal/ConditionSingle/stringexpression", "string expression ({0})", descR);
                     break;
             }            
             return Capitalize(desc);
@@ -279,37 +282,37 @@ namespace Triggernometry
                         {
                             double ld = double.Parse(lval, CultureInfo.InvariantCulture);
                             double rd = double.Parse(rval, CultureInfo.InvariantCulture);
-                            return Math.Abs(ld - rd) < double.Epsilon ? true : false;
+                            return MathParser.IsZero(ld - rd) ? true : false;
                         }
                     case CndTypeEnum.NumericNotEqual:
                         {
                             double ld = double.Parse(lval, CultureInfo.InvariantCulture);
                             double rd = double.Parse(rval, CultureInfo.InvariantCulture);
-                            return Math.Abs(ld - rd) < double.Epsilon ? false : true;
+                            return MathParser.IsZero(ld - rd) ? false : true;
                         }
                     case CndTypeEnum.NumericGreater:
                         {
                             double ld = double.Parse(lval, CultureInfo.InvariantCulture);
                             double rd = double.Parse(rval, CultureInfo.InvariantCulture);
-                            return ld > rd;
+                            return ld > rd + MathParser.TOLERANCE;
                         }
                     case CndTypeEnum.NumericGreaterEqual:
                         {
                             double ld = double.Parse(lval, CultureInfo.InvariantCulture);
                             double rd = double.Parse(rval, CultureInfo.InvariantCulture);
-                            return ld >= rd;
+                            return ld + MathParser.TOLERANCE >= rd;
                         }
                     case CndTypeEnum.NumericLess:
                         {
                             double ld = double.Parse(lval, CultureInfo.InvariantCulture);
                             double rd = double.Parse(rval, CultureInfo.InvariantCulture);
-                            return ld < rd;
+                            return ld + MathParser.TOLERANCE < rd;
                         }
                     case CndTypeEnum.NumericLessEqual:
                         {
                             double ld = double.Parse(lval, CultureInfo.InvariantCulture);
                             double rd = double.Parse(rval, CultureInfo.InvariantCulture);
-                            return ld <= rd;
+                            return ld <= rd + MathParser.TOLERANCE;
                         }
                     case CndTypeEnum.StringEqualCase:
                         {

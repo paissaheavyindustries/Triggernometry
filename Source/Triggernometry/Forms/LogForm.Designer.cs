@@ -46,9 +46,14 @@
             this.rexSearch = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblRegularExpression = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.cbxLevelMethod = new System.Windows.Forms.ComboBox();
-            this.cbxLevel = new System.Windows.Forms.ComboBox();
-            this.lblEventLevel = new System.Windows.Forms.Label();
+            this.chkAll = new System.Windows.Forms.CheckBox();
+            this.chkError = new System.Windows.Forms.CheckBox();
+            this.chkWarning = new System.Windows.Forms.CheckBox();
+            this.chkInfo = new System.Windows.Forms.CheckBox();
+            this.chkVerbose = new System.Windows.Forms.CheckBox();
+            this.chkCustom = new System.Windows.Forms.CheckBox();
+            this.chkCustom2 = new System.Windows.Forms.CheckBox();
+            this.panelBar = new System.Windows.Forms.Panel();
             this.capSearch = new Triggernometry.CustomControls.PrettyCaption();
             this.tlsMain = new System.Windows.Forms.ToolStrip();
             this.btnCopy = new System.Windows.Forms.ToolStripDropDownButton();
@@ -241,6 +246,7 @@
             this.rexSearch.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
             this.rexSearch.Location = new System.Drawing.Point(3, 32);
             this.rexSearch.Name = "rexSearch";
+            this.rexSearch.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.rexSearch.ReadOnly = false;
             this.rexSearch.Size = new System.Drawing.Size(194, 20);
             this.rexSearch.TabIndex = 8;
@@ -251,7 +257,7 @@
             this.lblRegularExpression.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblRegularExpression.Location = new System.Drawing.Point(3, 0);
             this.lblRegularExpression.Name = "lblRegularExpression";
-            this.lblRegularExpression.Padding = new System.Windows.Forms.Padding(0, 15, 0, 1);
+            this.lblRegularExpression.Padding = new System.Windows.Forms.Padding(5, 15, 5, 8);
             this.lblRegularExpression.Size = new System.Drawing.Size(194, 29);
             this.lblRegularExpression.TabIndex = 0;
             this.lblRegularExpression.Text = "Regular expression";
@@ -260,57 +266,128 @@
             // 
             this.tableLayoutPanel2.AutoSize = true;
             this.tableLayoutPanel2.ColumnCount = 1;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Controls.Add(this.cbxLevelMethod, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.cbxLevel, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.lblEventLevel, 0, 0);
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.Controls.Add(this.chkError, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.chkWarning, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.chkCustom, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.chkCustom2, 0, 3);
+            this.tableLayoutPanel2.Controls.Add(this.chkInfo, 0, 4);
+            this.tableLayoutPanel2.Controls.Add(this.chkVerbose, 0, 5);
+            this.tableLayoutPanel2.Controls.Add(this.panelBar, 0, 6);
+            this.tableLayoutPanel2.Controls.Add(this.chkAll, 0, 7);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 30);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 3;
+            this.tableLayoutPanel2.RowCount = 8;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 4));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.Size = new System.Drawing.Size(200, 83);
             this.tableLayoutPanel2.TabIndex = 6;
             // 
-            // cbxLevelMethod
+            // chkError
             // 
-            this.cbxLevelMethod.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cbxLevelMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxLevelMethod.FormattingEnabled = true;
-            this.cbxLevelMethod.Items.AddRange(new object[] {
-            "Level must be lower than (<)",
-            "Level must be lower or equal to (≤)",
-            "Level must be equal to (=)",
-            "Level must be higher or equal to (≥)",
-            "Level must be higher than (>)",
-            "Level must not be equal to (≠)"});
-            this.cbxLevelMethod.Location = new System.Drawing.Point(3, 32);
-            this.cbxLevelMethod.Name = "cbxLevelMethod";
-            this.cbxLevelMethod.Size = new System.Drawing.Size(194, 21);
-            this.cbxLevelMethod.TabIndex = 5;
+            this.chkError.AutoSize = true;
+            this.chkError.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkError.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkError.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(156)))), ((int)(((byte)(24)))), ((int)(((byte)(24)))));
+            this.chkError.Margin = new System.Windows.Forms.Padding(20, 17, 20, 3);
+            this.chkError.Name = "chkError";
+            this.chkError.Text = "Error";
+            this.chkError.UseVisualStyleBackColor = true;
+            this.chkError.CheckedChanged += new System.EventHandler(this.ChkOther_CheckedChanged);
+            this.chkError.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ChkOther_RightClick);
             // 
-            // cbxLevel
+            // chkWarning
             // 
-            this.cbxLevel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cbxLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxLevel.FormattingEnabled = true;
-            this.cbxLevel.Location = new System.Drawing.Point(3, 59);
-            this.cbxLevel.Name = "cbxLevel";
-            this.cbxLevel.Size = new System.Drawing.Size(194, 21);
-            this.cbxLevel.TabIndex = 4;
+            this.chkWarning.AutoSize = true;
+            this.chkWarning.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkWarning.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkWarning.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(128)))), ((int)(((byte)(24)))));
+            this.chkWarning.Margin = new System.Windows.Forms.Padding(20, 7, 20, 3);
+            this.chkWarning.Name = "chkWarning";
+            this.chkWarning.Text = "Warning";
+            this.chkWarning.UseVisualStyleBackColor = true;
+            this.chkWarning.CheckedChanged += new System.EventHandler(this.ChkOther_CheckedChanged);
+            this.chkWarning.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ChkOther_RightClick);
             // 
-            // lblEventLevel
+            // chkCustom
             // 
-            this.lblEventLevel.AutoSize = true;
-            this.lblEventLevel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblEventLevel.Location = new System.Drawing.Point(3, 0);
-            this.lblEventLevel.Name = "lblEventLevel";
-            this.lblEventLevel.Padding = new System.Windows.Forms.Padding(0, 15, 0, 1);
-            this.lblEventLevel.Size = new System.Drawing.Size(194, 29);
-            this.lblEventLevel.TabIndex = 1;
-            this.lblEventLevel.Text = "Event level";
+            this.chkCustom.AutoSize = true;
+            this.chkCustom.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkCustom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkCustom.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(144)))), ((int)(((byte)(72)))));
+            this.chkCustom.Margin = new System.Windows.Forms.Padding(20, 7, 20, 3);
+            this.chkCustom.Name = "chkCustom";
+            this.chkCustom.Text = "Custom";
+            this.chkCustom.UseVisualStyleBackColor = true;
+            this.chkCustom.CheckedChanged += new System.EventHandler(this.ChkOther_CheckedChanged);
+            this.chkCustom.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ChkOther_RightClick);
+            // 
+            // chkCustom2
+            // 
+            this.chkCustom2.AutoSize = true;
+            this.chkCustom2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkCustom2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkCustom2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(72)))), ((int)(((byte)(144)))));
+            this.chkCustom2.Margin = new System.Windows.Forms.Padding(20, 7, 20, 3);
+            this.chkCustom2.Name = "chkCustom2";
+            this.chkCustom2.Text = "Custom 2";
+            this.chkCustom2.UseVisualStyleBackColor = true;
+            this.chkCustom2.CheckedChanged += new System.EventHandler(this.ChkOther_CheckedChanged);
+            this.chkCustom2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ChkOther_RightClick);
+            // 
+            // chkInfo
+            // 
+            this.chkInfo.AutoSize = true;
+            this.chkInfo.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
+            this.chkInfo.Margin = new System.Windows.Forms.Padding(20, 7, 20, 3);
+            this.chkInfo.Name = "chkInfo";
+            this.chkInfo.Text = "Info";
+            this.chkInfo.UseVisualStyleBackColor = true;
+            this.chkInfo.CheckedChanged += new System.EventHandler(this.ChkOther_CheckedChanged);
+            this.chkInfo.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ChkOther_RightClick);
+            // 
+            // chkVerbose
+            // 
+            this.chkVerbose.AutoSize = true;
+            this.chkVerbose.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkVerbose.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkVerbose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
+            this.chkVerbose.Margin = new System.Windows.Forms.Padding(20, 7, 20, 3);
+            this.chkVerbose.Name = "chkVerbose";
+            this.chkVerbose.Text = "Verbose";
+            this.chkVerbose.UseVisualStyleBackColor = true;
+            this.chkVerbose.CheckedChanged += new System.EventHandler(this.ChkOther_CheckedChanged);
+            this.chkVerbose.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ChkOther_RightClick);
+            // 
+            // panelBar
+            // 
+            this.panelBar.AutoSize = true;
+            this.panelBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.panelBar.Margin = new System.Windows.Forms.Padding(5, 10, 5, 10);
+            this.panelBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelBar.Name = "panelBar";
+            // 
+            // chkAll
+            // 
+            this.chkAll.AutoSize = true;
+            this.chkAll.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkAll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkAll.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
+            this.chkAll.Margin = new System.Windows.Forms.Padding(20, 17, 20, 3);
+            this.chkAll.Name = "chkAll";
+            this.chkAll.Text = "Select All";
+            this.chkAll.UseVisualStyleBackColor = true;
+            this.chkAll.CheckedChanged += new System.EventHandler(this.ChkAll_CheckedChanged);
+            this.chkAll.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ChkAll_RightClick);
             // 
             // capSearch
             // 
@@ -473,14 +550,19 @@
         private System.Windows.Forms.ToolStripButton btnSearchOptions;
         private CustomControls.PrettyCaption capSearch;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.ComboBox cbxLevel;
-        private System.Windows.Forms.Label lblEventLevel;
+        private System.Windows.Forms.CheckBox chkAll;
+        private System.Windows.Forms.CheckBox chkError;
+        private System.Windows.Forms.CheckBox chkWarning;
+        private System.Windows.Forms.CheckBox chkInfo;
+        private System.Windows.Forms.CheckBox chkVerbose;
+        private System.Windows.Forms.CheckBox chkCustom;
+        private System.Windows.Forms.CheckBox chkCustom2;
+        private System.Windows.Forms.Panel panelBar;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private CustomControls.ExpressionTextBox rexSearch;
         private System.Windows.Forms.Label lblRegularExpression;
-        private System.Windows.Forms.ComboBox cbxLevelMethod;
         private System.Windows.Forms.ToolStripLabel lblStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTimestamp;
         private System.Windows.Forms.DataGridViewTextBoxColumn colLevel;

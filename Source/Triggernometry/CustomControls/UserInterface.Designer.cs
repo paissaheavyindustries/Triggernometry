@@ -33,6 +33,7 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctxFire = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxFireAllowCondition = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.ctxAdd = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxAddFolder = new System.Windows.Forms.ToolStripMenuItem();
@@ -149,6 +150,7 @@
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ctxFire,
+            this.ctxFireAllowCondition,
             this.toolStripSeparator12,
             this.ctxAdd,
             this.ctxUpdate,
@@ -174,8 +176,18 @@
             this.ctxFire.Image = ((System.Drawing.Image)(resources.GetObject("ctxFire.Image")));
             this.ctxFire.Name = "ctxFire";
             this.ctxFire.Size = new System.Drawing.Size(168, 22);
-            this.ctxFire.Text = "Fire";
+            this.ctxFire.Text = "Fire (Ignore Conditions)";
+            this.ctxFire.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
             this.ctxFire.Click += new System.EventHandler(this.ctxFire_Click);
+            // 
+            // ctxFireAllowCondition
+            // 
+            this.ctxFireAllowCondition.Image = ((System.Drawing.Image)(resources.GetObject("ctxFire.Image")));
+            this.ctxFireAllowCondition.Name = "ctxFireAllowCondition";
+            this.ctxFireAllowCondition.Size = new System.Drawing.Size(168, 22);
+            this.ctxFireAllowCondition.Text = "Fire (Allow Conditions)";
+            this.ctxFireAllowCondition.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
+            this.ctxFireAllowCondition.Click += new System.EventHandler(this.ctxFireAllowCondition_Click);
             // 
             // toolStripSeparator12
             // 
@@ -492,6 +504,7 @@
             this.btnTestInput.Size = new System.Drawing.Size(248, 22);
             this.btnTestInput.Text = "Test input";
             this.btnTestInput.Click += new System.EventHandler(this.testInputToolStripMenuItem_Click);
+            this.btnTestInput.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
             // 
             // btnActionQueueProcessing
             // 
@@ -526,6 +539,8 @@
             this.btnDeactivateAllAuras.Size = new System.Drawing.Size(248, 22);
             this.btnDeactivateAllAuras.Text = "Deactivate all auras";
             this.btnDeactivateAllAuras.Click += new System.EventHandler(this.deactivateAllAurasToolStripMenuItem_Click);
+            this.btnDeactivateAllAuras.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.OemPipe)));
+            this.btnDeactivateAllAuras.ShortcutKeyDisplayString = "Ctrl+\\";
             // 
             // btnTryInterrupt
             // 
@@ -534,6 +549,8 @@
             this.btnTryInterrupt.Size = new System.Drawing.Size(248, 22);
             this.btnTryInterrupt.Text = "Try to interrupt executing actions";
             this.btnTryInterrupt.Click += new System.EventHandler(this.killExecutingActionsToolStripMenuItem_Click);
+            this.btnTryInterrupt.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.OemOpenBrackets)));
+            this.btnTryInterrupt.ShortcutKeyDisplayString = "Ctrl+[";
             // 
             // btnClearVars
             // 
@@ -550,6 +567,8 @@
             this.btnClearActionQueue.Size = new System.Drawing.Size(248, 22);
             this.btnClearActionQueue.Text = "Clear action queue";
             this.btnClearActionQueue.Click += new System.EventHandler(this.clearActionQueueToolStripMenuItem_Click);
+            this.btnClearActionQueue.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.OemCloseBrackets)));
+            this.btnClearActionQueue.ShortcutKeyDisplayString = "Ctrl+]";
             // 
             // toolStripSeparator5
             // 
@@ -563,6 +582,7 @@
             this.btnEditConfig.Size = new System.Drawing.Size(248, 22);
             this.btnEditConfig.Text = "Edit configuration";
             this.btnEditConfig.Click += new System.EventHandler(this.configurationToolStripMenuItem_Click);
+            this.btnEditConfig.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
             // 
             // btnSaveConfig
             // 
@@ -571,6 +591,7 @@
             this.btnSaveConfig.Size = new System.Drawing.Size(248, 22);
             this.btnSaveConfig.Text = "Save configuration";
             this.btnSaveConfig.Click += new System.EventHandler(this.saveConfigurationManuallyToolStripMenuItem_Click);
+            this.btnSaveConfig.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             // 
             // btnGotoConfig
             // 
@@ -600,6 +621,7 @@
             this.btnViewVariables.Size = new System.Drawing.Size(248, 22);
             this.btnViewVariables.Text = "View state";
             this.btnViewVariables.Click += new System.EventHandler(this.viewVariablesToolStripMenuItem_Click);
+            this.btnViewVariables.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
             // 
             // btnViewLog
             // 
@@ -608,6 +630,8 @@
             this.btnViewLog.Size = new System.Drawing.Size(248, 22);
             this.btnViewLog.Text = "View log";
             this.btnViewLog.Click += new System.EventHandler(this.viewLogToolStripMenuItem_Click);
+            this.btnViewLog.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Oemtilde)));
+            this.btnViewLog.ShortcutKeyDisplayString = "Ctrl+`";
             // 
             // btnSearch
             // 
@@ -616,6 +640,7 @@
             this.btnSearch.Size = new System.Drawing.Size(248, 22);
             this.btnSearch.Text = "Search";
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            this.btnSearch.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
             // 
             // toolStripSeparator6
             // 
@@ -1128,6 +1153,7 @@
         private System.Windows.Forms.ToolStripMenuItem ctxCollapse;
         private System.Windows.Forms.ToolStripMenuItem ctxExpand;
         private System.Windows.Forms.ToolStripMenuItem ctxFire;
+        private System.Windows.Forms.ToolStripMenuItem ctxFireAllowCondition;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
         public System.Windows.Forms.Button btnCornerPopup;
         private System.Windows.Forms.ToolStripMenuItem btnSearch;

@@ -63,6 +63,9 @@
             this.ctxPaste = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxPasteOver = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.ctxExpandAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxCollapseAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.ctxRemove = new System.Windows.Forms.ToolStripMenuItem();
             this.panel3 = new System.Windows.Forms.Panel();
             this.capProperties = new Triggernometry.CustomControls.PrettyCaption();
@@ -411,6 +414,9 @@
             this.ctxPaste,
             this.ctxPasteOver,
             this.toolStripSeparator2,
+            this.ctxExpandAll,
+            this.ctxCollapseAll,
+            this.toolStripSeparator3,
             this.ctxRemove});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(202, 126);
@@ -479,6 +485,27 @@
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(198, 6);
+            // 
+            // ctxExpandAll
+            // 
+            this.ctxExpandAll.Image = ((System.Drawing.Image)(resources.GetObject("ctxExpandAll.Image")));
+            this.ctxExpandAll.Name = "ctxExpandAll";
+            this.ctxExpandAll.Size = new System.Drawing.Size(201, 22);
+            this.ctxExpandAll.Text = "Expand All";
+            this.ctxExpandAll.Click += new System.EventHandler(this.expandAllStripMenuItem_Click);
+            // 
+            // ctxCollapseAll
+            // 
+            this.ctxCollapseAll.Image = ((System.Drawing.Image)(resources.GetObject("ctxCollapseAll.Image")));
+            this.ctxCollapseAll.Name = "ctxCollapseAll";
+            this.ctxCollapseAll.Size = new System.Drawing.Size(201, 22);
+            this.ctxCollapseAll.Text = "Collapse All";
+            this.ctxCollapseAll.Click += new System.EventHandler(this.collapseAllToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(198, 6);
             // 
             // ctxRemove
             // 
@@ -572,11 +599,14 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripMenuItem ctxCopy;
         private System.Windows.Forms.ToolStripMenuItem ctxPaste;
+        private System.Windows.Forms.ToolStripMenuItem ctxPasteOver;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem ctxExpandAll;
+        private System.Windows.Forms.ToolStripMenuItem ctxCollapseAll;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem ctxRemove;
         private System.Windows.Forms.Panel panel3;
         private PrettyCaption capProperties;
-        private System.Windows.Forms.ToolStripMenuItem ctxPasteOver;
         private System.Windows.Forms.ToolStripButton btnProperties;
     }
 }

@@ -13,6 +13,8 @@ using System.Windows.Forms;
 using System.IO;
 using System.Speech.Synthesis;
 using System.Net;
+using Triggernometry.CustomControls;
+using System.Text.RegularExpressions;
 
 namespace Triggernometry.Forms
 {
@@ -720,7 +722,7 @@ namespace Triggernometry.Forms
                     {
                         Action a = new Action();
                         a.ActionType = Action.ActionTypeEnum.SystemBeep;
-                        a._SystemBeepFreqExpression = "1000";
+                        a._SystemBeepFreqExpression = "1046.5"; // C6
                         a._SystemBeepLengthExpression = "100";
                         a.OrderNumber = 1;
                         t.Actions.Add(a);
@@ -834,10 +836,14 @@ namespace Triggernometry.Forms
                     tf.trv = trv;
                     tf.imgs = imgs;
                     tf.SettingsFromTrigger(t);
+                    tf.initialDescriptions = tf.GetAllDescriptionsStr();
                     tf.plug = plug;
+                    ExpressionTextBox.CurrentTriggerRegexStr = t.RegularExpression;
                     tf.fakectx.plug = plug;
                     tf.Text = I18n.Translate("internal/ImportForm/editimportedtrigger", "Edit imported trigger '{0}'", t.Name);
-                    tf.btnOk.Text = I18n.Translate("internal/ImportForm/savechanges", "Save changes");
+                    tf.BtnOkSetText();
+                    tf.GetTriggerDescription();
+                    tf.SetTriggerDescription();
                     tf.wmp = wmp;
                     tf.tts = tts;
                     if (tf.ShowDialog() == DialogResult.OK)

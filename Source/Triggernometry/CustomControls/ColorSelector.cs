@@ -13,15 +13,57 @@ namespace Triggernometry.CustomControls
 
     public partial class ColorSelector : UserControl
     {
-
         public bool ChangeTextColor { get; set; }
-        public Color TextColor { get; set; }
+
+        internal Color _textColor;
+        public Color TextColor
+        {
+            get => _textColor;
+            set
+            {
+                if (_textColor != value)
+                {
+                    _textColor = value;
+                    Invalidate();
+                    OnColorChanged(new ColorChangedEventArgs(value, ColorChangedType.TextColor));
+                }
+            }
+        }
 
         public bool ChangeTextOutlineColor { get; set; }
-        public Color TextOutlineColor { get; set; }
+
+        internal Color _textOutlineColor;
+        public Color TextOutlineColor
+        {
+            get => _textOutlineColor;
+            set
+            {
+                if (_textOutlineColor != value)
+                {
+                    _textOutlineColor = value;
+                    Invalidate();
+                    OnColorChanged(new ColorChangedEventArgs(value, ColorChangedType.TextOutlineColor));
+                }
+            }
+        }
 
         public bool ChangeBackgroundColor { get; set; }
-        public Color BackgroundColor { get; set; }
+
+        internal Color _backgroundColor;
+        public Color BackgroundColor
+        {
+            get => _backgroundColor;
+            set
+            {
+                if (_backgroundColor != value)
+                {
+                    _backgroundColor = value;
+                    BackColor = value;
+                    Invalidate();
+                    OnColorChanged(new ColorChangedEventArgs(value, ColorChangedType.BackgroundColor));
+                }
+            }
+        }
 
         private StringFormat sf = null;
         private SolidBrush Brush = null;
@@ -85,7 +127,6 @@ namespace Triggernometry.CustomControls
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
                 TextColor = colorDialog1.Color;
-                Invalidate();
             }
         }
 
@@ -95,7 +136,6 @@ namespace Triggernometry.CustomControls
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
                 TextOutlineColor = colorDialog1.Color;
-                Invalidate();
             }
         }
 
@@ -105,8 +145,6 @@ namespace Triggernometry.CustomControls
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
                 BackgroundColor = colorDialog1.Color;
-                BackColor = colorDialog1.Color;
-                Invalidate();
             }
         }
 
@@ -127,8 +165,32 @@ namespace Triggernometry.CustomControls
         private void setBackgroundAsTransparentToolStripMenuItem_Click(object sender, EventArgs e)
         {
             BackgroundColor = Color.Transparent;
-            BackColor = Color.Transparent;
-            Invalidate();
+        }
+
+        public enum ColorChangedType
+        {
+            TextColor,
+            TextOutlineColor,
+            BackgroundColor
+        }
+
+        public class ColorChangedEventArgs : EventArgs
+        {
+            public Color NewColor { get; private set; }
+            public ColorChangedType ChangedType { get; private set; }
+
+            public ColorChangedEventArgs(Color newColor, ColorChangedType changedType)
+            {
+                NewColor = newColor;
+                ChangedType = changedType;
+            }
+        }
+
+        public event EventHandler<ColorChangedEventArgs> ColorChanged;
+
+        protected virtual void OnColorChanged(ColorChangedEventArgs e)
+        {
+            ColorChanged?.Invoke(this, e);
         }
 
     }

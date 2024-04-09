@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Xml.Serialization;
 
 namespace Triggernometry.Variables
@@ -10,6 +11,12 @@ namespace Triggernometry.Variables
 
         public string Value { get; set; } = "";
 
+        public VariableScalar() { }
+
+        public VariableScalar(string value) { Value = value; }
+
+        public VariableScalar(double value) { Value = value.ToString(CultureInfo.InvariantCulture); }
+        
         public override string ToString()
         {
             return Value;

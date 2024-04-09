@@ -99,7 +99,7 @@ namespace Triggernometry.CustomControls
             linkLabel1.Tag = I18n.DoNotTranslate;
             numLoadedTriggers = 0;
             numLoadedFolders = 0;
-            disabledNodeColor = Color.Red;
+            disabledNodeColor = Color.FromArgb(240, 96, 96);
             treeView1.TreeViewNodeSorter = new NodeSorter();
             DoubleBuffered = true;
             treeView1.ItemDrag += TreeView1_ItemDrag;
@@ -137,7 +137,7 @@ namespace Triggernometry.CustomControls
         {
             Point targetPoint = treeView1.PointToClient(new Point(e.X, e.Y));
             treeView1.SelectedNode = treeView1.GetNodeAt(targetPoint);
-            if (treeView1.SelectedNode == null || treeView1.SelectedNode.Tag is Trigger || IsPartOfRemote(treeView1.SelectedNode))
+            if (treeView1.SelectedNode == null || IsPartOfRemote(treeView1.SelectedNode))
             {
                 e.Effect = DragDropEffects.None;
             }
@@ -211,7 +211,13 @@ namespace Triggernometry.CustomControls
             Point targetPoint = treeView1.PointToClient(new Point(e.X, e.Y));
             TreeNode targetNode = treeView1.GetNodeAt(targetPoint);
             TreeNode draggedNode = (TreeNode)e.Data.GetData(typeof(TreeNode));
-            if (!draggedNode.Equals(targetNode) && !ContainsNode(draggedNode, targetNode) && !(targetNode.Tag is Trigger))
+
+            if (targetNode.Tag is Trigger)
+            {
+                targetNode = targetNode.Parent;
+            }
+
+            if (!draggedNode.Equals(targetNode) && !ContainsNode(draggedNode, targetNode))
             {
                 if (e.Effect == DragDropEffects.Move)
                 {
@@ -235,6 +241,7 @@ namespace Triggernometry.CustomControls
                     RecolorStartingFromNode(targetNode, targetNode.Checked, true);
                 }
                 targetNode.Expand();
+                treeView1.SelectedNode = draggedNode;
             }
         }
 
@@ -450,9 +457,14 @@ namespace Triggernometry.CustomControls
                     tn.Checked = f.Enabled;
                     tn.ImageIndex = (int)GetImageIndexForClosedFolder(f);
                     tn.SelectedImageIndex = tn.ImageIndex;
-                    treeView1.SelectedNode.Nodes.Add(tn);
-                    treeView1.SelectedNode.Expand();
-                    f.Parent = (Folder)treeView1.SelectedNode.Tag;
+                    TreeNode parent = treeView1.SelectedNode;
+                    if (parent.Tag is Trigger)
+                    {
+                        parent = parent.Parent;
+                    }
+                    parent.Nodes.Add(tn);
+                    parent.Expand();
+                    f.Parent = (Folder)parent.Tag;
                     f.Parent.Folders.Add(f);
                     RecolorStartingFromNode(tn.Parent, tn.Parent.Checked, true);
                     treeView1.Sort();
@@ -475,10 +487,13 @@ namespace Triggernometry.CustomControls
                 {
                     tf.SettingsFromTrigger(null);
                 }
+                tf.initialDescriptions = tf.GetAllDescriptionsStr();
                 tf.plug = plug;
                 tf.fakectx.plug = plug;
                 tf.Text = I18n.Translate("internal/UserInterface/addtrigger", "Add new trigger");
-                tf.btnOk.Text = I18n.Translate("internal/UserInterface/add", "Add");
+                tf.BtnOkSetText();
+                tf.GetTriggerDescription();
+                tf.SetTriggerDescription();
                 tf.imgs = imageList1;
                 tf.trv = treeView1;
                 tf.wmp = wmp;
@@ -494,9 +509,14 @@ namespace Triggernometry.CustomControls
                     tn.Checked = t.Enabled;
                     tn.ImageIndex = (int)ImageIndices.Bolt;
                     tn.SelectedImageIndex = tn.ImageIndex;
-                    treeView1.SelectedNode.Nodes.Add(tn);
-                    treeView1.SelectedNode.Expand();
-                    t.Parent = (Folder)treeView1.SelectedNode.Tag;
+                    TreeNode parent = treeView1.SelectedNode;
+                    if (parent.Tag is Trigger)
+                    {
+                        parent = parent.Parent;
+                    }
+                    parent.Nodes.Add(tn);
+                    parent.Expand();
+                    t.Parent = (Folder)parent.Tag;
                     t.Parent.Triggers.Add(t);
                     treeView1.Sort();
                     treeView1.SelectedNode = tn;
@@ -505,7 +525,10 @@ namespace Triggernometry.CustomControls
                     RecolorStartingFromNode(tn.Parent, tn.Parent.Checked, true);
                     if (t._EditAutofire == true)
                     {
-                        ForceFireTrigger(t);
+                        if (t._EditAutofireAllowCondition)
+                            ForceFireTrigger(t, Action.TriggerForceTypeEnum.SkipExceptConditions);
+                        else
+                            ForceFireTrigger(t, Action.TriggerForceTypeEnum.SkipAll);
                     }
                 }
             }
@@ -555,9 +578,18 @@ namespace Triggernometry.CustomControls
                     }
                     else if (treeView1.SelectedNode.Tag is Trigger)
                     {
-                        btnAdd.Enabled = false;
+                        bool isLocal = !IsPartOfRemote(treeView1.SelectedNode); 
+                        btnAdd.Enabled = isLocal;
+                        btnAddTrigger.Visible = isLocal;
+                        btnAddTriggerFolder.Visible = isLocal;
+                        btnAddRepo.Visible = false;
+                        btnAddRepoList.Visible = false;
+                        btnAddTrigger.Enabled = isLocal;
+                        btnAddTriggerFolder.Enabled = isLocal;
+                        btnAddRepo.Enabled = false;
+                        btnAddRepoList.Enabled = false;
                         btnUpdate.Enabled = false;
-                        btnRemoveTrigger.Enabled = (IsPartOfRemote(treeView1.SelectedNode) == false);
+                        btnRemoveTrigger.Enabled = isLocal;
                         btnEdit.Enabled = true;
                         btnImportTrigger.Enabled = false;
                         btnExportTrigger.Enabled = (treeView1.SelectedNode.ImageIndex != (int)ImageIndices.Readme);
@@ -592,9 +624,11 @@ namespace Triggernometry.CustomControls
                     Trigger t = (Trigger)treeView1.SelectedNode.Tag;
                     Trigger.TriggerSourceEnum oldSource = t._Source;
                     tf.plug = plug;
+                    ExpressionTextBox.CurrentTriggerRegexStr = t.RegularExpression;
                     tf.fakectx.trig = t;
                     tf.fakectx.plug = plug;
                     tf.SettingsFromTrigger(t);
+                    tf.initialDescriptions = tf.GetAllDescriptionsStr();
                     if (IsPartOfRemote(treeView1.SelectedNode) == true)
                     {
                         tf.SetReadOnly();
@@ -609,7 +643,9 @@ namespace Triggernometry.CustomControls
                     else
                     {
                         tf.Text = I18n.Translate("internal/UserInterface/edittrigger", "Edit trigger '{0}'", t.Name);
-                        tf.btnOk.Text = I18n.Translate("internal/UserInterface/savechanges", "Save changes");
+                        tf.BtnOkSetText();
+                        tf.GetTriggerDescription();
+                        tf.SetTriggerDescription();
                     }
                     tf.wmp = wmp;
                     tf.tts = tts;
@@ -625,7 +661,10 @@ namespace Triggernometry.CustomControls
                         }
                         if (t._EditAutofire == true)
                         {
-                            ForceFireTrigger(t);
+                            if (t._EditAutofireAllowCondition)
+                                ForceFireTrigger(t, Action.TriggerForceTypeEnum.SkipExceptConditions);
+                            else
+                                ForceFireTrigger(t, Action.TriggerForceTypeEnum.SkipAll);
                         }
                         TreeNode tn = treeView1.SelectedNode;
                         tn.Text = t.Name;
@@ -726,6 +765,7 @@ namespace Triggernometry.CustomControls
                 ctxUpdate.Visible = false;
                 ctxEdit.Visible = false;
                 ctxFire.Visible = false;
+                ctxFireAllowCondition.Visible = false;
                 ctxCollapse.Visible = false;
                 ctxExpand.Visible = false;
                 ctxImport.Visible = false;
@@ -746,6 +786,7 @@ namespace Triggernometry.CustomControls
                 ctxUpdate.Visible = true;
                 ctxEdit.Visible = true;
                 ctxFire.Visible = true;
+                ctxFireAllowCondition.Visible = true;
                 ctxCollapse.Visible = true;
                 ctxExpand.Visible = true;
                 ctxImport.Visible = true;
@@ -774,6 +815,7 @@ namespace Triggernometry.CustomControls
                 ctxImport.Enabled = btnImportTrigger.Enabled;
                 ctxExport.Enabled = btnExportTrigger.Enabled;
                 ctxFire.Visible = cfg.DeveloperMode;
+                ctxFireAllowCondition.Visible = cfg.DeveloperMode;
                 toolStripSeparator12.Visible = cfg.DeveloperMode;
                 ctxCopy.Enabled = (treeView1.SelectedNode != null);
                 ctxPaste.Enabled = ctxAddTrigger.Enabled == true && (
@@ -786,12 +828,14 @@ namespace Triggernometry.CustomControls
                     ctxCollapse.Enabled = (treeView1.SelectedNode.Nodes.Count > 0);
                     ctxExpand.Enabled = ctxCollapse.Enabled;
                     ctxFire.Enabled = (treeView1.SelectedNode.Tag is Trigger);
+                    ctxFireAllowCondition.Enabled = (treeView1.SelectedNode.Tag is Trigger);
                 }
                 else
                 {
                     ctxCollapse.Enabled = true;
                     ctxExpand.Enabled = true;
                     ctxFire.Enabled = false;
+                    ctxFireAllowCondition.Enabled = false;
                 }
             }
         }
@@ -985,7 +1029,8 @@ namespace Triggernometry.CustomControls
             treeView1.Sort();
             RecolorStartingFromNode(tmp, tmp.Checked, false);
             treeView1.SelectedNode = tnx;
-            tnx.ExpandAll();
+            tnx.Collapse(false); 
+            tnx.Expand();           // collapse all subfolders and only expand the imported folder
             List<Trigger> newTrigs = new List<Trigger>();
             Dictionary<Guid, Guid> renamedTriggers = new Dictionary<Guid, Guid>();
             if (f != null)
@@ -1613,6 +1658,10 @@ namespace Triggernometry.CustomControls
 
         internal void ClearAllVariables()
         {
+            var result = MessageBox.Show(I18n.Translate("internal/UserInterface/clearvar", "Are you sure you want to clear the session variables?"), "", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result != DialogResult.Yes) return;
+
             lock (plug.sessionvars.Scalar)
             {
                 plug.sessionvars.Scalar.Clear();
@@ -1620,6 +1669,14 @@ namespace Triggernometry.CustomControls
             lock (plug.sessionvars.List)
             {
                 plug.sessionvars.List.Clear();
+            }
+            lock (plug.sessionvars.Table)
+            {
+                plug.sessionvars.Table.Clear();
+            }
+            lock (plug.sessionvars.Dict)
+            {
+                plug.sessionvars.Dict.Clear();
             }
         }
 
@@ -2002,29 +2059,42 @@ namespace Triggernometry.CustomControls
                 if (tn.Tag is Trigger)
                 {
                     Trigger t = (Trigger)tn.Tag;
-                    ForceFireTrigger(t);
+                    ForceFireTrigger(t, Action.TriggerForceTypeEnum.SkipAll);
                 }
             }
         }
 
-        private void ForceFireTrigger(Trigger t)
+        private void ctxFireAllowCondition_Click(object sender, EventArgs e)
+        {
+            if (treeView1.SelectedNode != null)
+            {
+                TreeNode tn = treeView1.SelectedNode;
+                if (tn.Tag is Trigger)
+                {
+                    Trigger t = (Trigger)tn.Tag;
+                    ForceFireTrigger(t, Action.TriggerForceTypeEnum.SkipExceptConditions);
+                }
+            }
+        }
+
+        private void ForceFireTrigger(Trigger t, Action.TriggerForceTypeEnum force)
         {
             Context ctx = new Context();
             ctx.plug = plug;
-            ctx.testmode = false;
+            ctx.testByPlaceholder = false;
             ctx.trig = t;
             ctx.soundhook = plug.SoundPlaybackSmart;
             ctx.ttshook = plug.TtsPlaybackSmart;
             ctx.triggered = DateTime.UtcNow;
-            ctx.force = Action.TriggerForceTypeEnum.SkipAll;
-            if (!(t._TestInput?.Length > 0))
+            ctx.force = force;
+            if ((t._TestInput?.Length ?? 0) == 0)
             {
                 t.Fire(plug, ctx, null);
             }
             else
             {
                 string[] lines = ctx.EvaluateStringExpression(t.TriggerContextLogger, plug, t._TestInput).Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-                Action.TriggerForceTypeEnum force = Action.TriggerForceTypeEnum.SkipActive | Action.TriggerForceTypeEnum.SkipRefire | Action.TriggerForceTypeEnum.SkipParent;
+                force = Action.TriggerForceTypeEnum.SkipActive | Action.TriggerForceTypeEnum.SkipRefire | Action.TriggerForceTypeEnum.SkipParent;
                 LogEvent.SourceEnum source;
                 switch (t._Source)
                 {
@@ -2051,7 +2121,7 @@ namespace Triggernometry.CustomControls
                     LogEvent le = new LogEvent() { Text = line, Timestamp = DateTime.Now, TestMode = true, ZoneName = "", ZoneId = null, Source = source };
                     plug.TestTrigger(t, le, force);
                 }
-            }            
+            }
         }
 
         private void btnCornerPopup_Click(object sender, EventArgs e)

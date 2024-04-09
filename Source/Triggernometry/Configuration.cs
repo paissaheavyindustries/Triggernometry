@@ -328,6 +328,9 @@ namespace Triggernometry
         public bool TestLiveByDefault { get; set; } = false;
 
         [XmlAttribute]
+        public bool TestIgnoreConditionsByDefault { get; set; } = false;
+
+        [XmlAttribute]
         public bool ActionAsyncByDefault { get; set; } = true;
 
         [XmlAttribute]

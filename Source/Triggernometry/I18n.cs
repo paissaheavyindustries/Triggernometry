@@ -6,7 +6,7 @@ using System.Windows.Forms;
 namespace Triggernometry
 {
 
-    internal static class I18n
+    public static class I18n
     {
 
         internal static Dictionary<string, Language> RegisteredLanguages = new Dictionary<string, Language>();
@@ -16,6 +16,11 @@ namespace Triggernometry
         internal static Language CurrentLanguage = null;
 
         internal static object DoNotTranslate = new object();
+
+        internal static string ThingToString(int d)
+        {   // minus signs could be different: "-" or "−"
+            return d.ToString(CultureInfo.InvariantCulture);
+        }
 
         internal static string ThingToString(float d)
         {
@@ -71,7 +76,7 @@ namespace Triggernometry
             return defValue;
         }
 
-        internal static string Translate(string key, string text, params object[] args)
+        public static string Translate(string key, string text, params object[] args)
         {
             if (BuiltInLanguage != null)
             {
@@ -259,6 +264,82 @@ namespace Triggernometry
             foreach (Control c in f.Controls)
             {
                 I18n.TranslateControl(basePath, c);
+            }
+        }
+
+        private static HashSet<string> wordsToTranslate = new HashSet<string>
+        {
+            "bool", "char", "charcode", "double", "float", "hex", "index", "int", "key",
+            "length", "slice", "startindex", "string", "time", "times", "type"
+        };
+
+        internal static string TranslateWord(string key)
+        {
+            if (wordsToTranslate.Contains(key))
+            {
+                string path = $"internal/I18n/{key}";
+                return Translate(path, key);
+            }
+            else
+            {
+                throw new Exception($"The key \"{key}\" is not in I18n.wordsToTranslate.");
+            }
+        }
+
+        internal static string TrlVarPersist(bool isPersist)
+        {
+            return isPersist ? Translate("internal/I18n/descpersistent", "persistent ") 
+                             : "";
+        }
+
+        internal static string TrlExprType(bool isStringExpr)
+        {
+            return isStringExpr ? Translate("internal/I18n/descexprtypestring", "string")
+                                : Translate("internal/I18n/descexprtypenumeric", "numeric");
+        }
+
+        internal static string TrlTableColOrRow(bool isCol)
+        {
+            return isCol ? Translate("internal/I18n/desctablelineopcol", "column")
+                         : Translate("internal/I18n/desctablelineoprow", "row");
+        }
+
+        internal static string TrlCacheFile(bool cache)
+        {
+            return cache ? Translate("internal/I18n/desccachefile", ", caching the file on disk") : "";
+        }
+
+        internal static string TrlSortAscOrDesc(bool isAsc)
+        {
+            return isAsc ? Translate("internal/I18n/descsortasc", "ascending")
+                         : Translate("internal/I18n/descsortdesc", "descending");
+        }
+
+        internal static string TrlAsync(bool isAsync)
+        {
+            return isAsync ? Translate("internal/I18n/descasynctrue", "")
+                           : Translate("internal/I18n/descasyncfalse", "[Sync] ");
+        }
+
+        public static string TrlTriggerDescTime(double ms)
+        {
+            ms = Math.Round(ms);
+            double s = ms / 1000;
+            if (Math.Abs(s) >= 300 || s == Math.Round(s)) // > 5 min   or is integer
+            {
+                return I18n.Translate("internal/I18n/desctimesec", "{0} s", (int)s);
+            }
+            else if (Math.Abs(s) >= 10 || s == Math.Round(s, 1)) // > 10 s   or 1-digit decimal
+            {
+                return I18n.Translate("internal/I18n/desctimesec", "{0} s", s.ToString("F1", CultureInfo.InvariantCulture));
+            }
+            else if (Math.Abs(s) >= 0.1 || s == Math.Round(s, 2)) // > 0.1 s   or 2-digit decimal
+            {
+                return I18n.Translate("internal/I18n/desctimesec", "{0} s", s.ToString("F2", CultureInfo.InvariantCulture));
+            }
+            else    // < 0.1 s
+            {
+                return I18n.Translate("internal/I18n/desctimems", "{0} ms", ms);
             }
         }
 

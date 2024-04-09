@@ -48,6 +48,9 @@
             this.btnColumnAdd = new System.Windows.Forms.ToolStripButton();
             this.btnColumnInsert = new System.Windows.Forms.ToolStripButton();
             this.btnColumnRemove = new System.Windows.Forms.ToolStripButton();
+            this.tlsOptionsDict = new System.Windows.Forms.ToolStrip();
+            this.btnKeyAdd = new System.Windows.Forms.ToolStripButton();
+            this.btnKeyRemove = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnRowAdd = new System.Windows.Forms.ToolStripButton();
             this.btnRowInsert = new System.Windows.Forms.ToolStripButton();
@@ -61,6 +64,7 @@
             this.grpGeneral.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tlsOptionsTable.SuspendLayout();
+            this.tlsOptionsDict.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel3
@@ -318,6 +322,35 @@
             this.btnSaveAsCsv.Text = "Save as CSV";
             this.btnSaveAsCsv.Click += new System.EventHandler(this.btnSaveAsCsv_Click);
             // 
+            // tlsOptionsDict
+            // 
+            this.tlsOptionsDict.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.tlsOptionsDict.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnKeyAdd,
+            this.btnKeyRemove});
+            this.tlsOptionsDict.Location = new System.Drawing.Point(10, 104);
+            this.tlsOptionsDict.Name = "tlsOptionsDict";
+            this.tlsOptionsDict.Size = new System.Drawing.Size(669, 25);
+            this.tlsOptionsDict.TabIndex = 18;
+            // 
+            // btnKeyAdd
+            // 
+            this.btnKeyAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnKeyAdd.Image")));
+            this.btnKeyAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnKeyAdd.Name = "btnKeyAdd";
+            this.btnKeyAdd.Size = new System.Drawing.Size(76, 22);
+            this.btnKeyAdd.Text = "Add key";
+            this.btnKeyAdd.Click += new System.EventHandler(this.btnKeyAdd_Click);
+            // 
+            // btnKeyRemove
+            // 
+            this.btnKeyRemove.Image = ((System.Drawing.Image)(resources.GetObject("btnKeyRemove.Image")));
+            this.btnKeyRemove.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnKeyRemove.Name = "btnKeyRemove";
+            this.btnKeyRemove.Size = new System.Drawing.Size(97, 22);
+            this.btnKeyRemove.Text = "Remove key";
+            this.btnKeyRemove.Click += new System.EventHandler(this.btnKeyRemove_Click);
+            // 
             // saveFileDialog1
             // 
             this.saveFileDialog1.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
@@ -337,6 +370,7 @@
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.tlsOptionsTable);
             this.Controls.Add(this.panel10);
+            this.Controls.Add(this.tlsOptionsDict);
             this.Controls.Add(this.grpGeneral);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.MinimumSize = new System.Drawing.Size(500, 400);
@@ -355,6 +389,8 @@
             this.tableLayoutPanel1.PerformLayout();
             this.tlsOptionsTable.ResumeLayout(false);
             this.tlsOptionsTable.PerformLayout();
+            this.tlsOptionsDict.ResumeLayout(false);
+            this.tlsOptionsDict.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -386,6 +422,9 @@
         private System.Windows.Forms.ToolStripButton btnRowRemove;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton btnSaveAsCsv;
+        private System.Windows.Forms.ToolStrip tlsOptionsDict;
+        private System.Windows.Forms.ToolStripButton btnKeyAdd;
+        private System.Windows.Forms.ToolStripButton btnKeyRemove;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
