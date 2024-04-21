@@ -27,11 +27,6 @@ namespace Triggernometry.Variables
             get { return Values.Count; }
         }
 
-        public int Size
-        {
-            get { return Values.Count; }
-        }
-
         public VariableList(IEnumerable<object> objs)
         {
             foreach (object obj in objs)
