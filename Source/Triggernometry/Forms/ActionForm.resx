@@ -665,7 +665,9 @@ For instance, `1|2|3` can match variables named `1`, `2`, `3`, but also `ab1cd`.
 For an exact match, you can specify the start and end, such as `^(1|2|3)$`.</value>
   </data>
   <data name="rtbHelperSendKeysWindowMessage.Text" xml:space="preserve">
-    <value>If the process ID is left empty or is zero, the message will be sent to the first window with the given title. If it's set to -1, the message is sent to all found windows. For all other values, the message will be sent to the window with the matching process ID.
+    <value>If the process ID is left empty or is zero, the message will be sent to the first window with the given title. If it's set to -1, the message is sent to all found windows. For all other values, the message will be sent to the window with the matching process ID and title name.
+
+Title name can be a regular expression.
 
 Modifier keys such as Shift can be represented as additions to the original keycode, or sent separately. Keycode constants are described on the webpage above.
 
@@ -894,7 +896,9 @@ The window message sends one key at a time in this mode.</value>
 To add the response from the endpoint to this expression, special variable "_response" is available, as well as the variable you may have defined. The special variable will only be valid in the context of this action's execution. Special variable _responsecode is also available for retrieving the HTTP status code of the request.</value>
   </data>
   <data name="rtbHelperWmsg.Text" xml:space="preserve">
-    <value>If the process ID is left empty or is zero, the message will be sent to the first window with the given title. If it's set to -1, the message is sent to all found windows. For all other values, the message will be sent to the window with the matching process ID.</value>
+    <value>If the process ID is left empty or is zero, the message will be sent to the first window with the given title. If it's set to -1, the message is sent to all found windows. For all other values, the message will be sent to the window with the matching process ID and title name.
+
+Title name can be a regular expression.</value>
   </data>
   <data name="prsFileVariable.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1086,10 +1090,12 @@ For instance, `1|2|3` can match variables named `1`, `2`, `3`, but also `ab1cd`.
 For an exact match, you can specify the start and end, such as `^(1|2|3)$`.</value>
   </data>
   <data name="rtbHelperCallback.Text" xml:space="preserve">
-    <value>Allows you to register your code as callbacks into Triggernometry, and then have callbacks executed as Triggernometry actions</value>
+    <value>Allows you to register your code as callbacks into Triggernometry, and then have callbacks executed as Triggernometry actions.</value>
   </data>
   <data name="rtbHelperSendKeysWindowMessageCombo.Text" xml:space="preserve">
-    <value>If the process ID is left empty or is zero, the message will be sent to the first window with the given title. If it's set to -1, the message is sent to all found windows. For all other values, the message will be sent to the window with the matching process ID.
+    <value>If the process ID is left empty or is zero, the message will be sent to the first window with the given title. If it's set to -1, the message is sent to all found windows. For all other values, the message will be sent to the window with the matching process ID and title name.
+
+Title name can be a regular expression.
 
 Modifier keys such as Shift can be represented as additions to the original keycode, or sent separately. Keycode constants are described on the webpage above.
 

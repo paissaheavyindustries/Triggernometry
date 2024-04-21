@@ -47,9 +47,15 @@ namespace Triggernometry.CustomControls
             this.Column1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.colDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ctxAction = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ctxTestAction = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxTestPlaceholder = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxTestLive = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxTestLiveIgnoreCnd = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxAddAction = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxEditAction = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxEditProp = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxEditPropCopyCnd = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxEditPropPasteCnd = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxEditPropRemoveCnd = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxEditPropCndGroupingType = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxEditPropCndGroupingAnd = new System.Windows.Forms.ToolStripMenuItem();
@@ -244,6 +250,7 @@ namespace Triggernometry.CustomControls
             // ctxAction
             // 
             this.ctxAction.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ctxTestAction,
             this.ctxAddAction,
             this.ctxEditAction,
             this.ctxEditProp,
@@ -261,6 +268,42 @@ namespace Triggernometry.CustomControls
             this.ctxAction.Name = "contextMenuStrip1";
             this.ctxAction.Size = new System.Drawing.Size(181, 198);
             this.ctxAction.Opening += new System.ComponentModel.CancelEventHandler(this.ctxAction_Opening);
+            // 
+            // ctxTestAction
+            // 
+            this.ctxTestAction.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                this.ctxTestPlaceholder,
+                this.ctxTestLive,
+                this.ctxTestLiveIgnoreCnd,
+            });
+            this.ctxTestAction.Image = ((System.Drawing.Image)(resources.GetObject("ctxTestAction.Image")));
+            this.ctxTestAction.Name = "ctxTestAction";
+            this.ctxTestAction.Size = new System.Drawing.Size(180, 22);
+            this.ctxTestAction.Text = "Test Action";
+            this.ctxTestAction.Click += new System.EventHandler(this.ctxTest_Click);
+            // 
+            // ctxTestPlaceholder
+            // 
+            this.ctxTestPlaceholder.Name = "ctxTestPlaceholder";
+            this.ctxTestPlaceholder.Size = new System.Drawing.Size(180, 22);
+            this.ctxTestPlaceholder.Text = "By Placeholder Values";
+            this.ctxTestPlaceholder.Click += new System.EventHandler(this.ctxTest_Click);
+            // 
+            // ctxTestLive
+            // 
+            this.ctxTestLive.Name = "ctxTestLive";
+            this.ctxTestLive.Size = new System.Drawing.Size(180, 22);
+            this.ctxTestLive.Text = "By Live Values";
+            this.ctxTestLive.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
+            this.ctxTestLive.Click += new System.EventHandler(this.ctxTest_Click);
+            // 
+            // ctxTestPlaceholder
+            // 
+            this.ctxTestLiveIgnoreCnd.Name = "ctxTestLiveIgnoreCnd";
+            this.ctxTestLiveIgnoreCnd.Size = new System.Drawing.Size(180, 22);
+            this.ctxTestLiveIgnoreCnd.Text = "By Live Values (Ignore Conditions)";
+            this.ctxTestLiveIgnoreCnd.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
+            this.ctxTestLiveIgnoreCnd.Click += new System.EventHandler(this.ctxTest_Click);
             // 
             // ctxAddAction
             // 
@@ -281,6 +324,8 @@ namespace Triggernometry.CustomControls
             // ctxEditProp
             // 
             this.ctxEditProp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                this.ctxEditPropCopyCnd,
+                this.ctxEditPropPasteCnd,
                 this.ctxEditPropRemoveCnd,
                 this.ctxEditPropCndGroupingType,
                 this.toolStripSeparatorProp1,
@@ -292,10 +337,25 @@ namespace Triggernometry.CustomControls
                 this.ctxEditPropBgColor,
                 this.ctxEditPropTextColor,
             });
+
             this.ctxEditProp.Image = ((System.Drawing.Image)(resources.GetObject("ctxEditAction.Image")));
             this.ctxEditProp.Name = "ctxEditProp";
             this.ctxEditProp.Size = new System.Drawing.Size(180, 22);
             this.ctxEditProp.Text = "Edit Properties";
+            // 
+            // ctxEditPropCopyCnd
+            // 
+            this.ctxEditPropCopyCnd.Name = "ctxEditPropCopyCnd";
+            this.ctxEditPropCopyCnd.Size = new System.Drawing.Size(180, 22);
+            this.ctxEditPropCopyCnd.Text = "Copy Conditions";
+            this.ctxEditPropCopyCnd.Click += new System.EventHandler(this.ctxEditPropCopyCnd_Click);
+            // 
+            // ctxEditPropPasteCnd
+            // 
+            this.ctxEditPropPasteCnd.Name = "ctxEditPropPasteCnd";
+            this.ctxEditPropPasteCnd.Size = new System.Drawing.Size(180, 22);
+            this.ctxEditPropPasteCnd.Text = "Paste Conditions";
+            this.ctxEditPropPasteCnd.Click += new System.EventHandler(this.ctxEditPropPasteCnd_Click);
             // 
             // ctxEditPropRemoveCnd
             // 
@@ -512,9 +572,15 @@ namespace Triggernometry.CustomControls
         private System.Windows.Forms.DataGridViewCheckBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDescription;
         private System.Windows.Forms.ContextMenuStrip ctxAction;
+        private System.Windows.Forms.ToolStripMenuItem ctxTestAction;
+        private System.Windows.Forms.ToolStripMenuItem ctxTestPlaceholder;
+        private System.Windows.Forms.ToolStripMenuItem ctxTestLive;
+        private System.Windows.Forms.ToolStripMenuItem ctxTestLiveIgnoreCnd;
         private System.Windows.Forms.ToolStripMenuItem ctxAddAction;
         private System.Windows.Forms.ToolStripMenuItem ctxEditAction;
         private System.Windows.Forms.ToolStripMenuItem ctxEditProp;
+        private System.Windows.Forms.ToolStripMenuItem ctxEditPropCopyCnd;
+        private System.Windows.Forms.ToolStripMenuItem ctxEditPropPasteCnd;
         private System.Windows.Forms.ToolStripMenuItem ctxEditPropRemoveCnd;
         private System.Windows.Forms.ToolStripMenuItem ctxEditPropCndGroupingType;
         private System.Windows.Forms.ToolStripMenuItem ctxEditPropCndGroupingAnd;

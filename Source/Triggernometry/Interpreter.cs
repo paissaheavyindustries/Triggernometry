@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -117,9 +118,9 @@ namespace Triggernometry
         public class Helpers
         {
 
-            public Dictionary<string, object> Storage { get; set; }
+            public Dictionary<string, object> Storage => RealPlugin.plug.scriptingStorage;
 
-            public RealPlugin Plugin { get; set; }
+            public RealPlugin Plugin => RealPlugin.plug;
 
             public Context CurrentContext { get; set; }
 
@@ -162,126 +163,16 @@ namespace Triggernometry
                 return CurrentContext.EvaluateNumericExpression(null, CurrentContext, expr);
             }
 
-            public string GetScalarVariable(bool persistent, string varname, string defValue = "")
-            {
-                VariableStore vs = persistent == true ? CurrentContext.plug.cfg.PersistentVariables : CurrentContext.plug.sessionvars;
-                lock (vs.Scalar)
-                {
-                    if (vs.Scalar.ContainsKey(varname) == false)
-                    {
-                        return defValue;
-                    }
-                    return vs.Scalar[varname].Value;
-                }
-            }
+            public string GetScalarVariable(bool persistent, string varname, string defValue = "") => StaticHelpers.GetScalarVariable(persistent, varname) ?? defValue;
+            public VariableList GetListVariable(bool persistent, string varname) => StaticHelpers.GetListVariable(persistent, varname);
+            public VariableTable GetTableVariable(bool persistent, string varname) => StaticHelpers.GetTableVariable(persistent, varname);
+            public VariableDictionary GetDictVariable(bool persistent, string varname) => StaticHelpers.GetDictVariable(persistent, varname);
 
-            public void SetScalarVariable(bool persistent, string varname, string data)
-            {
-                VariableStore vs = persistent == true ? CurrentContext.plug.cfg.PersistentVariables : CurrentContext.plug.sessionvars;
-                lock (vs.Scalar)
-                {
-                    if (vs.Scalar.ContainsKey(varname) == false)
-                    {
-                        vs.Scalar[varname] = new VariableScalar();
-                    }
-                    if (data == null)
-                    {
-                        vs.Scalar.Remove(varname);
-                    }
-                    else
-                    {
-                        VariableScalar x = vs.Scalar[varname];
-                        x.Value = data;
-                    }
-                }
-            }
+            public void SetScalarVariable(bool persistent, string varname, object data) => StaticHelpers.SetScalarVariable(persistent, varname, data);
+            public void SetListVariable(bool persistent, string varname, VariableList data) => StaticHelpers.SetListVariable(persistent, varname, data);
+            public void SetTableVariable(bool persistent, string varname, VariableTable data) => StaticHelpers.SetTableVariable(persistent, varname, data);
+            public void SetDictVariable(bool persistent, string varname, VariableDictionary data) => StaticHelpers.SetDictVariable(persistent, varname, data);
 
-            public VariableList GetListVariable(bool persistent, string varname)
-            {
-                VariableStore vs = persistent == true ? CurrentContext.plug.cfg.PersistentVariables : CurrentContext.plug.sessionvars;
-                lock (vs.List)
-                {
-                    if (vs.List.ContainsKey(varname) == false)
-                    {
-                        return null;
-                    }
-                    return vs.List[varname];
-                }
-            }
-
-            public void SetListVariable(bool persistent, string varname, VariableList data)
-            {
-                VariableStore vs = persistent == true ? CurrentContext.plug.cfg.PersistentVariables : CurrentContext.plug.sessionvars;
-                lock (vs.List)
-                {
-                    if (data == null)
-                    {
-                        vs.List.Remove(varname);
-                    }
-                    else
-                    {
-                        vs.List[varname] = data;
-                    }
-                }
-            }
-
-            public VariableTable GetTableVariable(bool persistent, string varname)
-            {
-                VariableStore vs = persistent == true ? CurrentContext.plug.cfg.PersistentVariables : CurrentContext.plug.sessionvars;
-                lock (vs.Table)
-                {
-                    if (vs.Table.ContainsKey(varname) == false)
-                    {
-                        return null;
-                    }
-                    return vs.Table[varname];
-                }
-            }
-
-            public void SetTableVariable(bool persistent, string varname, VariableTable data)
-            {
-                VariableStore vs = persistent == true ? CurrentContext.plug.cfg.PersistentVariables : CurrentContext.plug.sessionvars;
-                lock (vs.Table)
-                {
-                    if (data == null)
-                    {
-                        vs.Table.Remove(varname);
-                    }
-                    else
-                    {
-                        vs.Table[varname] = data;
-                    }
-                }
-            }
-
-            public VariableDictionary GetDictVariable(bool persistent, string varname)
-            {
-                VariableStore vs = persistent == true ? CurrentContext.plug.cfg.PersistentVariables : CurrentContext.plug.sessionvars;
-                lock (vs.Dict)
-                {
-                    if (vs.Dict.ContainsKey(varname) == false)
-                    {
-                        return null;
-                    }
-                    return vs.Dict[varname];
-                }
-            }
-
-            public void SetDictVariable(bool persistent, string varname, VariableDictionary data)
-            {
-                VariableStore vs = persistent == true ? CurrentContext.plug.cfg.PersistentVariables : CurrentContext.plug.sessionvars;
-                lock (vs.Dict)
-                {
-                    if (data == null)
-                    {
-                        vs.Dict.Remove(varname);
-                    }
-                    else
-                    {
-                        vs.Dict[varname] = data;
-                    }
-                }
-            }
 
             public string GetRegexMatch(int idx, string defValue = "")
             {
@@ -313,8 +204,116 @@ namespace Triggernometry
 
         }
 
+
+        public static class StaticHelpers
+        {
+            public static Dictionary<string, object> Storage => RealPlugin.plug.scriptingStorage;
+            public static Context fakectx = new Context { plug = RealPlugin.plug };
+
+            public static void Log(int level, string message)
+                => RealPlugin.plug.FilteredAddToLog((RealPlugin.DebugLevelEnum)level, message);
+
+            public static void Log(RealPlugin.DebugLevelEnum level, string message)
+                => RealPlugin.plug.FilteredAddToLog(level, message);
+
+            public static string EvaluateStringExpression(string expr)
+                => fakectx.EvaluateStringExpression(null, fakectx, expr);
+
+            public static double EvaluateNumericExpression(string expr)
+                => fakectx.EvaluateNumericExpression(null, fakectx, expr);
+
+            public static string GetScalarVariable(bool isPersistent, string varname)
+            {
+                VariableStore vs = isPersistent ? RealPlugin.plug.cfg.PersistentVariables : RealPlugin.plug.sessionvars;
+                lock (vs.Scalar)
+                {
+                    return vs.Scalar.TryGetValue(varname, out var variable) ? variable.Value : null;
+                }
+            }
+
+            public static VariableList GetListVariable(bool isPersistent, string varname)
+            {
+                VariableStore vs = isPersistent ? RealPlugin.plug.cfg.PersistentVariables : RealPlugin.plug.sessionvars;
+                lock (vs.List)
+                {
+                    return vs.List.TryGetValue(varname, out var variable) ? variable : null;
+                }
+            }
+
+            public static VariableTable GetTableVariable(bool isPersistent, string varname)
+            {
+                VariableStore vs = isPersistent ? RealPlugin.plug.cfg.PersistentVariables : RealPlugin.plug.sessionvars;
+                lock (vs.Table)
+                {
+                    return vs.Table.TryGetValue(varname, out var variable) ? variable : null;
+                }
+            }
+
+            public static VariableDictionary GetDictVariable(bool isPersistent, string varname)
+            {
+                VariableStore vs = isPersistent ? RealPlugin.plug.cfg.PersistentVariables : RealPlugin.plug.sessionvars;
+                lock (vs.Dict)
+                {
+                    return vs.Dict.TryGetValue(varname, out var variable) ? variable : null;
+                }
+            }
+
+            public static void SetScalarVariable(bool isPersistent, string varname, object data)
+            {
+                VariableStore vs = isPersistent ? RealPlugin.plug.cfg.PersistentVariables : RealPlugin.plug.sessionvars;
+                lock (vs.Scalar)
+                {
+                    if (data == null)
+                        vs.Scalar.Remove(varname);
+                    else if (data is VariableScalar variable)
+                        vs.Scalar[varname] = variable;
+                    else
+                        vs.Scalar[varname] = new VariableScalar { Value = data.ToString() };
+                }
+            }
+
+            public static void SetListVariable(bool isPersistent, string varname, VariableList data)
+            {
+                VariableStore vs = isPersistent ? RealPlugin.plug.cfg.PersistentVariables : RealPlugin.plug.sessionvars;
+                lock (vs.List)
+                {
+                    if (data == null)
+                        vs.List.Remove(varname);
+                    else
+                        vs.List[varname] = data;
+                }
+            }
+
+            public static void SetTableVariable(bool isPersistent, string varname, VariableTable data)
+            {
+                VariableStore vs = isPersistent ? RealPlugin.plug.cfg.PersistentVariables : RealPlugin.plug.sessionvars;
+                lock (vs.Table)
+                {
+                    if (data == null)
+                        vs.Table.Remove(varname);
+                    else
+                        vs.Table[varname] = data;
+                }
+            }
+
+            public static void SetDictVariable(bool isPersistent, string varname, VariableDictionary data)
+            {
+                VariableStore vs = isPersistent ? RealPlugin.plug.cfg.PersistentVariables : RealPlugin.plug.sessionvars;
+                lock (vs.Dict)
+                {
+                    if (data == null)
+                        vs.Dict.Remove(varname);
+                    else
+                        vs.Dict[varname] = data;
+                }
+            }
+
+            public static string Serialize(object o, bool indent = true) => JsonSerializer.Serialize(o, new JsonSerializerOptions { WriteIndented = indent });
+            public static T Deserialize<T>(string s) => JsonSerializer.Deserialize<T>(s);
+
+        }
+
         public ScriptOptions _so { get; set; }
-        private RealPlugin _plug;
 
         public class Globs
         {
@@ -323,9 +322,8 @@ namespace Triggernometry
 
         }
 
-        public Interpreter(RealPlugin plug)
+        public Interpreter()
         {
-            _plug = plug;
             _so = ScriptOptions.Default;            
             var asms = AppDomain.CurrentDomain.GetAssemblies();
             foreach (Assembly asm in asms)
@@ -353,7 +351,7 @@ namespace Triggernometry
                 }
             }
             _so = _so.AddImports("System");            
-            Evaluate("int whee;", null, new Context() { plug = plug });
+            Evaluate("int whee;", null, new Context() { plug = RealPlugin.plug });
         }
 
         public bool GetUnsafeUsage(Context ctx)
@@ -404,14 +402,13 @@ namespace Triggernometry
 
         public void Evaluate(string command, string assy, Context ctx)
         {
-            Globs g = new Globs() { TriggernometryHelpers = new Helpers() { Plugin = ctx != null ? ctx.plug : null, CurrentContext = ctx } };
-            g.TriggernometryHelpers.Storage = g.TriggernometryHelpers.Plugin != null ? g.TriggernometryHelpers.Plugin.scriptingStorage : null;
+            Globs g = new Globs() { TriggernometryHelpers = new Helpers() { CurrentContext = ctx } };
             ScriptOptions _myso = _so.WithAllowUnsafe(GetUnsafeUsage(ctx));
             if (assy != null)
             {
                 string[] assys = assy.Split(',');
                 _myso = _myso.AddReferences(assys.Select(x => x.Trim()));
-            }            
+            }
             string[] badApis = GetBadApis(ctx);
             if (badApis != null && badApis.Length > 0)
             {

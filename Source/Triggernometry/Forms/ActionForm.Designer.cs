@@ -181,7 +181,14 @@ namespace Triggernometry.Forms
             this.expDiscordUrl = new Triggernometry.CustomControls.ExpressionTextBox();
             this.tabTextAura = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel13 = new System.Windows.Forms.TableLayoutPanel();
-            this.lblTextAuraOutline = new System.Windows.Forms.Label();
+            this.lblTextColor = new System.Windows.Forms.Label();
+            this.tableTextColor = new System.Windows.Forms.TableLayoutPanel();
+            this.lblTextForeColor = new System.Windows.Forms.Label();
+            this.lblTextBackColor = new System.Windows.Forms.Label();
+            this.lblTextOutlineColor = new System.Windows.Forms.Label();
+            this.expTextForeColor = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.expTextBackColor = new Triggernometry.CustomControls.ExpressionTextBox();
+            this.expTextOutlineColor = new Triggernometry.CustomControls.ExpressionTextBox();
             this.btnTextAuraFont = new System.Windows.Forms.Button();
             this.lblTextAuraFont = new System.Windows.Forms.Label();
             this.btnTextAuraHide = new System.Windows.Forms.Button();
@@ -215,14 +222,14 @@ namespace Triggernometry.Forms
             this.btnTextAuraGuide = new System.Windows.Forms.Button();
             this.txtTextAuraFont = new System.Windows.Forms.TextBox();
             this.colorSelector1 = new Triggernometry.CustomControls.ColorSelector();
-            this.cbxTextAuraOutline = new System.Windows.Forms.CheckBox();
             this.tabLogMessage = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
             this.cbxLogMessageTarget = new System.Windows.Forms.ComboBox();
             this.lblLogMessageTarget = new System.Windows.Forms.Label();
             this.cbxLogMessageLevel = new System.Windows.Forms.ComboBox();
             this.lblLogMessageLevel = new System.Windows.Forms.Label();
-            this.cbxProcessLog = new System.Windows.Forms.CheckBox();
+            this.chkProcessLog = new System.Windows.Forms.CheckBox();
+            this.chkProcessLogACT = new System.Windows.Forms.CheckBox();
             this.lblLogMessageText = new System.Windows.Forms.Label();
             this.expLogMessageText = new Triggernometry.CustomControls.ExpressionTextBox();
             this.tabListVariable = new System.Windows.Forms.TabPage();
@@ -1951,6 +1958,7 @@ namespace Triggernometry.Forms
             "Unset scalar variable",
             "Set scalar variable value with string expression",
             "Set scalar variable value with numeric expression",
+            "Increment scalar variable value",
             "Copy scalar variable or expression to the clipboard",
             "Unset all scalar variables",
             "Unset scalar variables matching regular expression",
@@ -2658,41 +2666,41 @@ namespace Triggernometry.Forms
             this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.tableLayoutPanel13.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
-            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraOutline, 0, 5);
-            this.tableLayoutPanel13.Controls.Add(this.btnTextAuraFont, 3, 3);
-            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraFont, 0, 3);
-            this.tableLayoutPanel13.Controls.Add(this.btnTextAuraHide, 3, 1);
-            this.tableLayoutPanel13.Controls.Add(this.cbxTextAuraAlignment, 1, 4);
-            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraAlignment, 0, 4);
-            this.tableLayoutPanel13.Controls.Add(this.expTextAuraTTLTick, 2, 12);
-            this.tableLayoutPanel13.Controls.Add(this.expTextAuraOTick, 2, 11);
-            this.tableLayoutPanel13.Controls.Add(this.expTextAuraHTick, 2, 10);
-            this.tableLayoutPanel13.Controls.Add(this.expTextAuraWTick, 2, 9);
-            this.tableLayoutPanel13.Controls.Add(this.expTextAuraYTick, 2, 8);
-            this.tableLayoutPanel13.Controls.Add(this.expTextAuraXTick, 2, 7);
-            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraUpdValues, 2, 6);
-            this.tableLayoutPanel13.Controls.Add(this.expTextAuraOIni, 1, 11);
-            this.tableLayoutPanel13.Controls.Add(this.expTextAuraHIni, 1, 10);
-            this.tableLayoutPanel13.Controls.Add(this.expTextAuraWIni, 1, 9);
-            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraTtlExp, 0, 12);
-            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraOpacity, 0, 11);
-            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraWidth, 0, 9);
-            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraHeight, 0, 10);
-            this.tableLayoutPanel13.Controls.Add(this.expTextAuraText, 1, 2);
-            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraText, 0, 2);
-            this.tableLayoutPanel13.Controls.Add(this.expTextAuraYIni, 1, 8);
-            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraY, 0, 8);
-            this.tableLayoutPanel13.Controls.Add(this.expTextAuraXIni, 1, 7);
-            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraX, 0, 7);
-            this.tableLayoutPanel13.Controls.Add(this.expTextAuraName, 1, 1);
-            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraName, 0, 1);
             this.tableLayoutPanel13.Controls.Add(this.lblTextAuraOp, 0, 0);
             this.tableLayoutPanel13.Controls.Add(this.cbxTextAuraOp, 1, 0);
-            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraIniValues, 1, 6);
-            this.tableLayoutPanel13.Controls.Add(this.btnTextAuraGuide, 1, 13);
-            this.tableLayoutPanel13.Controls.Add(this.txtTextAuraFont, 2, 3);
+            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraName, 0, 1);
+            this.tableLayoutPanel13.Controls.Add(this.expTextAuraName, 1, 1);
+            this.tableLayoutPanel13.Controls.Add(this.btnTextAuraHide, 3, 1);
+            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraText, 0, 2);
+            this.tableLayoutPanel13.Controls.Add(this.expTextAuraText, 1, 2);
+            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraFont, 0, 3);
             this.tableLayoutPanel13.Controls.Add(this.colorSelector1, 1, 3);
-            this.tableLayoutPanel13.Controls.Add(this.cbxTextAuraOutline, 1, 5);
+            this.tableLayoutPanel13.Controls.Add(this.txtTextAuraFont, 2, 3);
+            this.tableLayoutPanel13.Controls.Add(this.btnTextAuraFont, 3, 3);
+            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraAlignment, 0, 4);
+            this.tableLayoutPanel13.Controls.Add(this.cbxTextAuraAlignment, 1, 4);
+            this.tableLayoutPanel13.Controls.Add(this.lblTextColor, 0, 5);
+            this.tableLayoutPanel13.Controls.Add(this.tableTextColor, 1, 5);
+            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraIniValues, 1, 6);
+            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraUpdValues, 2, 6);
+            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraX, 0, 7);
+            this.tableLayoutPanel13.Controls.Add(this.expTextAuraXIni, 1, 7);
+            this.tableLayoutPanel13.Controls.Add(this.expTextAuraXTick, 2, 7);
+            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraY, 0, 8);
+            this.tableLayoutPanel13.Controls.Add(this.expTextAuraYIni, 1, 8);
+            this.tableLayoutPanel13.Controls.Add(this.expTextAuraYTick, 2, 8);
+            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraWidth, 0, 9);
+            this.tableLayoutPanel13.Controls.Add(this.expTextAuraWIni, 1, 9);
+            this.tableLayoutPanel13.Controls.Add(this.expTextAuraWTick, 2, 9);
+            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraHeight, 0, 10);
+            this.tableLayoutPanel13.Controls.Add(this.expTextAuraHIni, 1, 10);
+            this.tableLayoutPanel13.Controls.Add(this.expTextAuraHTick, 2, 10);
+            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraOpacity, 0, 11);
+            this.tableLayoutPanel13.Controls.Add(this.expTextAuraOIni, 1, 11);
+            this.tableLayoutPanel13.Controls.Add(this.expTextAuraOTick, 2, 11);
+            this.tableLayoutPanel13.Controls.Add(this.lblTextAuraTtlExp, 0, 12);
+            this.tableLayoutPanel13.Controls.Add(this.expTextAuraTTLTick, 2, 12);
+            this.tableLayoutPanel13.Controls.Add(this.btnTextAuraGuide, 1, 13);
             this.tableLayoutPanel13.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel13.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel13.Name = "tableLayoutPanel13";
@@ -2714,16 +2722,16 @@ namespace Triggernometry.Forms
             this.tableLayoutPanel13.Size = new System.Drawing.Size(742, 364);
             this.tableLayoutPanel13.TabStop = false;
             // 
-            // lblTextAuraOutline
+            // lblTextColor
             // 
-            this.lblTextAuraOutline.AutoSize = true;
-            this.lblTextAuraOutline.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTextAuraOutline.Location = new System.Drawing.Point(3, 132);
-            this.lblTextAuraOutline.Name = "lblTextAuraOutline";
-            this.lblTextAuraOutline.Size = new System.Drawing.Size(114, 27);
-            this.lblTextAuraOutline.TabStop = false;
-            this.lblTextAuraOutline.Text = "Display outline";
-            this.lblTextAuraOutline.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblTextColor.AutoSize = true;
+            this.lblTextColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTextColor.Location = new System.Drawing.Point(3, 132);
+            this.lblTextColor.Name = "lblTextColor";
+            this.lblTextColor.Size = new System.Drawing.Size(114, 27);
+            this.lblTextColor.TabStop = false;
+            this.lblTextColor.Text = "Colors";
+            this.lblTextColor.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btnTextAuraFont
             // 
@@ -2798,7 +2806,7 @@ namespace Triggernometry.Forms
             this.expTextAuraTTLTick.AutocompleteAvailable = true;
             this.expTextAuraTTLTick.AutoSize = true;
             this.tableLayoutPanel13.SetColumnSpan(this.expTextAuraTTLTick, 2);
-            this.expTextAuraTTLTick.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expTextAuraTTLTick.Dock = System.Windows.Forms.DockStyle.Fill;
             this.expTextAuraTTLTick.Expression = "";
             this.expTextAuraTTLTick.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
             this.expTextAuraTTLTick.Location = new System.Drawing.Point(285, 312);
@@ -2813,7 +2821,7 @@ namespace Triggernometry.Forms
             this.expTextAuraOTick.AutocompleteAvailable = true;
             this.expTextAuraOTick.AutoSize = true;
             this.tableLayoutPanel13.SetColumnSpan(this.expTextAuraOTick, 2);
-            this.expTextAuraOTick.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expTextAuraOTick.Dock = System.Windows.Forms.DockStyle.Fill;
             this.expTextAuraOTick.Expression = "";
             this.expTextAuraOTick.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
             this.expTextAuraOTick.Location = new System.Drawing.Point(285, 286);
@@ -2828,7 +2836,7 @@ namespace Triggernometry.Forms
             this.expTextAuraHTick.AutocompleteAvailable = true;
             this.expTextAuraHTick.AutoSize = true;
             this.tableLayoutPanel13.SetColumnSpan(this.expTextAuraHTick, 2);
-            this.expTextAuraHTick.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expTextAuraHTick.Dock = System.Windows.Forms.DockStyle.Fill;
             this.expTextAuraHTick.Expression = "";
             this.expTextAuraHTick.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
             this.expTextAuraHTick.Location = new System.Drawing.Point(285, 260);
@@ -2992,7 +3000,7 @@ namespace Triggernometry.Forms
             this.expTextAuraText.Name = "expTextAuraText";
             this.expTextAuraText.ReadOnly = false;
             this.expTextAuraText.Size = new System.Drawing.Size(616, 20);
-            this.expTextAuraText.TabIndex = 11;
+            this.expTextAuraText.TabIndex = 9;
             this.expTextAuraText.EnabledChanged += new System.EventHandler(this.expTextAuraText_EnabledChanged);
             // 
             // lblTextAuraText
@@ -3066,7 +3074,7 @@ namespace Triggernometry.Forms
             this.expTextAuraName.Name = "expTextAuraName";
             this.expTextAuraName.ReadOnly = false;
             this.expTextAuraName.Size = new System.Drawing.Size(534, 20);
-            this.expTextAuraName.TabIndex = 10;
+            this.expTextAuraName.TabIndex = 8;
             this.expTextAuraName.EnabledChanged += new System.EventHandler(this.expTextAuraName_EnabledChanged);
             // 
             // lblTextAuraName
@@ -3160,19 +3168,105 @@ namespace Triggernometry.Forms
             this.colorSelector1.TextOutlineColor = System.Drawing.Color.Empty;
             this.colorSelector1.EnabledChanged += new System.EventHandler(this.colorSelector1_EnabledChanged);
             // 
-            // cbxTextAuraOutline
+            // tableTextColor
             // 
-            this.cbxTextAuraOutline.AutoSize = true;
-            this.cbxTextAuraOutline.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.tableLayoutPanel13.SetColumnSpan(this.cbxTextAuraOutline, 3);
-            this.cbxTextAuraOutline.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxTextAuraOutline.Location = new System.Drawing.Point(123, 135);
-            this.cbxTextAuraOutline.Name = "cbxTextAuraOutline";
-            this.cbxTextAuraOutline.Padding = new System.Windows.Forms.Padding(0, 3, 0, 4);
-            this.cbxTextAuraOutline.Size = new System.Drawing.Size(616, 21);
-            this.cbxTextAuraOutline.TabStop = false;
-            this.cbxTextAuraOutline.UseVisualStyleBackColor = true;
-            this.cbxTextAuraOutline.EnabledChanged += new System.EventHandler(this.cbxTextAuraOutline_EnabledChanged);
+            this.tableLayoutPanel13.SetColumnSpan(this.tableTextColor, 3);
+            this.tableTextColor.AutoSize = true;
+            this.tableTextColor.ColumnCount = 6;
+            this.tableTextColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.tableTextColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
+            this.tableTextColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.tableTextColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
+            this.tableTextColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.tableTextColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
+            this.tableTextColor.Controls.Add(this.lblTextForeColor, 0, 0);
+            this.tableTextColor.Controls.Add(this.expTextForeColor, 1, 0);
+            this.tableTextColor.Controls.Add(this.lblTextBackColor, 2, 0);
+            this.tableTextColor.Controls.Add(this.expTextBackColor, 3, 0);
+            this.tableTextColor.Controls.Add(this.lblTextOutlineColor, 4, 0);
+            this.tableTextColor.Controls.Add(this.expTextOutlineColor, 5, 0);
+            this.tableTextColor.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableTextColor.Location = new System.Drawing.Point(0, 0);
+            this.tableTextColor.Name = "tableTextColor";
+            this.tableTextColor.RowCount = 1;
+            this.tableTextColor.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableTextColor.Size = new System.Drawing.Size(742, 40);
+            this.tableTextColor.TabStop = false;
+            // 
+            // lblTextForeColor
+            // 
+            this.lblTextForeColor.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblTextForeColor.AutoSize = true;
+            this.lblTextForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTextForeColor.Location = new System.Drawing.Point(3, 132);
+            this.lblTextForeColor.Name = "lblTextForeColor";
+            this.lblTextForeColor.Size = new System.Drawing.Size(114, 27);
+            this.lblTextForeColor.TabStop = false;
+            this.lblTextForeColor.Text = "Text";
+            this.lblTextForeColor.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblTextBackColor
+            // 
+            this.lblTextBackColor.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblTextBackColor.AutoSize = true;
+            this.lblTextBackColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTextBackColor.Location = new System.Drawing.Point(3, 132);
+            this.lblTextBackColor.Name = "lblTextBackColor";
+            this.lblTextBackColor.Size = new System.Drawing.Size(114, 27);
+            this.lblTextBackColor.TabStop = false;
+            this.lblTextBackColor.Text = "Back";
+            this.lblTextBackColor.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblTextOutlineColor
+            // 
+            this.lblTextOutlineColor.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblTextOutlineColor.AutoSize = true;
+            this.lblTextOutlineColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTextOutlineColor.Location = new System.Drawing.Point(3, 132);
+            this.lblTextOutlineColor.Name = "lblTextOutlineColor";
+            this.lblTextOutlineColor.Size = new System.Drawing.Size(114, 27);
+            this.lblTextOutlineColor.TabStop = false;
+            this.lblTextOutlineColor.Text = "Outline";
+            this.lblTextOutlineColor.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // expTextForeColor
+            // 
+            this.expTextForeColor.AutocompleteAvailable = true;
+            this.expTextForeColor.AutoSize = true;
+            this.expTextForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.expTextForeColor.Expression = "";
+            this.expTextForeColor.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Color;
+            this.expTextForeColor.Location = new System.Drawing.Point(154, 416);
+            this.expTextForeColor.Name = "expTextForeColor";
+            this.expTextForeColor.ReadOnly = false;
+            this.expTextForeColor.Size = new System.Drawing.Size(213, 20);
+            this.expTextForeColor.TabIndex = 10;
+            // 
+            // expTextBackColor
+            // 
+            this.expTextBackColor.AutocompleteAvailable = true;
+            this.expTextBackColor.AutoSize = true;
+            this.expTextBackColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.expTextBackColor.Expression = "";
+            this.expTextBackColor.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Color;
+            this.expTextBackColor.Location = new System.Drawing.Point(154, 416);
+            this.expTextBackColor.Name = "expTextBackColor";
+            this.expTextBackColor.ReadOnly = false;
+            this.expTextBackColor.Size = new System.Drawing.Size(213, 20);
+            this.expTextBackColor.TabIndex = 11;
+            // 
+            // expTextOutlineColor
+            // 
+            this.expTextOutlineColor.AutocompleteAvailable = true;
+            this.expTextOutlineColor.AutoSize = true;
+            this.expTextOutlineColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.expTextOutlineColor.Expression = "";
+            this.expTextOutlineColor.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Color;
+            this.expTextOutlineColor.Location = new System.Drawing.Point(154, 416);
+            this.expTextOutlineColor.Name = "expTextOutlineColor";
+            this.expTextOutlineColor.ReadOnly = false;
+            this.expTextOutlineColor.Size = new System.Drawing.Size(213, 20);
+            this.expTextOutlineColor.TabIndex = 12;
             // 
             // tabLogMessage
             // 
@@ -3190,13 +3284,14 @@ namespace Triggernometry.Forms
             this.tableLayoutPanel14.ColumnCount = 2;
             this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel14.Controls.Add(this.cbxLogMessageTarget, 1, 3);
-            this.tableLayoutPanel14.Controls.Add(this.lblLogMessageTarget, 0, 3);
-            this.tableLayoutPanel14.Controls.Add(this.cbxLogMessageLevel, 1, 2);
-            this.tableLayoutPanel14.Controls.Add(this.lblLogMessageLevel, 0, 2);
-            this.tableLayoutPanel14.Controls.Add(this.cbxProcessLog, 0, 1);
             this.tableLayoutPanel14.Controls.Add(this.lblLogMessageText, 0, 0);
             this.tableLayoutPanel14.Controls.Add(this.expLogMessageText, 1, 0);
+            this.tableLayoutPanel14.Controls.Add(this.chkProcessLog, 0, 1);
+            this.tableLayoutPanel14.Controls.Add(this.chkProcessLogACT, 0, 2);
+            this.tableLayoutPanel14.Controls.Add(this.lblLogMessageLevel, 0, 3);
+            this.tableLayoutPanel14.Controls.Add(this.cbxLogMessageLevel, 1, 3);
+            this.tableLayoutPanel14.Controls.Add(this.lblLogMessageTarget, 0, 4);
+            this.tableLayoutPanel14.Controls.Add(this.cbxLogMessageTarget, 1, 4);
             this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel14.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel14.Name = "tableLayoutPanel14";
@@ -3262,20 +3357,34 @@ namespace Triggernometry.Forms
             this.lblLogMessageLevel.Text = "Level to log message on";
             this.lblLogMessageLevel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // cbxProcessLog
+            // chkProcessLog
             // 
-            this.cbxProcessLog.AutoSize = true;
-            this.cbxProcessLog.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.tableLayoutPanel14.SetColumnSpan(this.cbxProcessLog, 3);
-            this.cbxProcessLog.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cbxProcessLog.Location = new System.Drawing.Point(3, 31);
-            this.cbxProcessLog.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
-            this.cbxProcessLog.Name = "cbxProcessLog";
-            this.cbxProcessLog.Size = new System.Drawing.Size(737, 17);
-            this.cbxProcessLog.TabStop = false;
-            this.cbxProcessLog.Text = "Process message as log line";
-            this.cbxProcessLog.UseVisualStyleBackColor = true;
-            this.cbxProcessLog.CheckedChanged += new System.EventHandler(this.cbxProcessLog_CheckedChanged);
+            this.chkProcessLog.AutoSize = true;
+            this.chkProcessLog.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel14.SetColumnSpan(this.chkProcessLog, 2);
+            this.chkProcessLog.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkProcessLog.Location = new System.Drawing.Point(3, 31);
+            this.chkProcessLog.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
+            this.chkProcessLog.Name = "chkProcessLog";
+            this.chkProcessLog.Size = new System.Drawing.Size(737, 17);
+            this.chkProcessLog.TabStop = false;
+            this.chkProcessLog.Text = "Process message as log line";
+            this.chkProcessLog.UseVisualStyleBackColor = true;
+            this.chkProcessLog.CheckedChanged += new System.EventHandler(this.chkProcessLog_CheckedChanged);
+            // 
+            // chkProcessLogACT
+            // 
+            this.chkProcessLogACT.AutoSize = true;
+            this.chkProcessLogACT.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel14.SetColumnSpan(this.chkProcessLogACT, 2);
+            this.chkProcessLogACT.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkProcessLogACT.Location = new System.Drawing.Point(3, 31);
+            this.chkProcessLogACT.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
+            this.chkProcessLogACT.Name = "chkProcessLogACT";
+            this.chkProcessLogACT.Size = new System.Drawing.Size(737, 17);
+            this.chkProcessLogACT.TabStop = false;
+            this.chkProcessLogACT.Text = "Add the log message to ACT combat log";
+            this.chkProcessLogACT.UseVisualStyleBackColor = true;
             // 
             // lblLogMessageText
             // 
@@ -4730,7 +4839,8 @@ namespace Triggernometry.Forms
             "Filter elements into another list",
             "Filter rows/cols into another table",
             "Copy whole table variable to another table variable",
-            "Append whole table variable to another table variable",
+            "Append whole table variable to another table vertically",
+            "Append whole table variable to another table horizontally",
             "Sort the rows/cols by the key functions",
             "Get complete data for all FFXIV entities",
             "Unset all table variables",
@@ -6096,7 +6206,6 @@ namespace Triggernometry.Forms
             // 
             // ActionForm
             // 
-            this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
@@ -6439,8 +6548,14 @@ namespace Triggernometry.Forms
         private System.Windows.Forms.TextBox txtTextAuraFont;
         private System.Windows.Forms.FontDialog fontDialog1;
         private CustomControls.ColorSelector colorSelector1;
-        private System.Windows.Forms.Label lblTextAuraOutline;
-        private System.Windows.Forms.CheckBox cbxTextAuraOutline;
+        private System.Windows.Forms.Label lblTextColor;
+        private System.Windows.Forms.TableLayoutPanel tableTextColor;
+        private System.Windows.Forms.Label lblTextForeColor;
+        private System.Windows.Forms.Label lblTextBackColor;
+        private System.Windows.Forms.Label lblTextOutlineColor;
+        private CustomControls.ExpressionTextBox expTextForeColor;
+        private CustomControls.ExpressionTextBox expTextBackColor;
+        private CustomControls.ExpressionTextBox expTextOutlineColor;
         private System.Windows.Forms.TabPage tabLogMessage;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel14;
         private System.Windows.Forms.Label lblLogMessageText;
@@ -6481,7 +6596,8 @@ namespace Triggernometry.Forms
         private CustomControls.ExpressionTextBox expObsSceneName;
         private System.Windows.Forms.Label lblObsWebsocketInfo;
         private System.Windows.Forms.TextBox txtObsWebsocketLink;
-        private System.Windows.Forms.CheckBox cbxProcessLog;
+        private System.Windows.Forms.CheckBox chkProcessLog;
+        private System.Windows.Forms.CheckBox chkProcessLogACT;
         private System.Windows.Forms.CheckBox chkSoundMyOutput;
         private System.Windows.Forms.CheckBox chkSpeechMyOutput;
         private System.Windows.Forms.TabPage tabGenericJson;

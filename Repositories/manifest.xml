@@ -9,7 +9,7 @@
 					<Repositories>
 						<Repository Name="Sharing channel" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry-Triggers/main/Repositories/ffxiv_sharingchannel.xml" Description="Sharing channel triggers" />
 					</Repositories>
-				</Category>				
+				</Category>
 				<Category Name="Raiding" Description="Triggers related to high end raiding">
 					<Categories>
 					</Categories>

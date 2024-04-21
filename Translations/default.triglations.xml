@@ -29,7 +29,9 @@
     <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropCndGroupingOr" Translation="OR" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropCndGroupingType" Translation="Conditions Grouping" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropCndGroupingXor" Translation="XOR" />
+	  <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropCopyCnd" Translation="Copy Conditions" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropDelay" Translation="Edit Delay" />
+    <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropPasteCnd" Translation="Paste Conditions" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropRemoveCnd" Translation="Remove Conditions" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropRemoveDesc" Translation="Remove Descriptions" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropTextColor" Translation="Text Color" />
@@ -39,13 +41,16 @@
     <TranslationEntry Key="ActionForm/actionViewer1/ctxMoveUp" Translation="Move up" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxPasteAction" Translation="Paste" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxRemoveAction" Translation="Remove action" />
+    <TranslationEntry Key="ActionForm/actionViewer1/ctxTestAction" Translation="Test Action" />
+    <TranslationEntry Key="ActionForm/actionViewer1/ctxTestLive" Translation="By Live Values" />
+    <TranslationEntry Key="ActionForm/actionViewer1/ctxTestLiveIgnoreCnd" Translation="By Live Values (Ignore Conditions)" />
+    <TranslationEntry Key="ActionForm/actionViewer1/ctxTestPlaceholder" Translation="By Placeholder Values" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxUndo" Translation="Undo" />
     <TranslationEntry Key="ActionForm/btnAuraGuide" Translation="Use visual guide for placement (right-click for more options)" />
     <TranslationEntry Key="ActionForm/btnCancel" Translation="Cancel" />
     <TranslationEntry Key="ActionForm/btnHide" Translation="Hide" />
     <TranslationEntry Key="ActionForm/btnOk" Translation="OK" />
     <TranslationEntry Key="ActionForm/btnScriptExternalEditor" Translation="Open in external editor" />
-    <TranslationEntry Key="ActionForm/btnTest" Translation="Test Action" />
     <TranslationEntry Key="ActionForm/btnTextAuraFont" Translation="..." />
     <TranslationEntry Key="ActionForm/btnTextAuraGuide" Translation="Use visual guide for placement (right-click for more options)" />
     <TranslationEntry Key="ActionForm/btnTextAuraHide" Translation="Hide" />
@@ -208,7 +213,6 @@
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop streaming]" Translation="Stop streaming" />
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop then start recording]" Translation="Stop then start recording" />
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop then start recording (if currently recording)]" Translation="Stop then start recording (if currently recording)" />
-    <TranslationEntry Key="ActionForm/cbxProcessLog" Translation="Process message as log line" />
     <TranslationEntry Key="ActionForm/cbxProcessWindowStyle[Hidden from view]" Translation="Hidden from view" />
     <TranslationEntry Key="ActionForm/cbxProcessWindowStyle[Maximized to fullscreen]" Translation="Maximized to fullscreen" />
     <TranslationEntry Key="ActionForm/cbxProcessWindowStyle[Minimized to taskbar]" Translation="Minimized to taskbar" />
@@ -242,7 +246,8 @@
     <TranslationEntry Key="ActionForm/cbxTriggerZoneType[Zone name]" Translation="Zone name" />
     <TranslationEntry Key="ActionForm/cbxTvarExpType[Numeric]" Translation="Numeric" />
     <TranslationEntry Key="ActionForm/cbxTvarExpType[String]" Translation="String" />
-    <TranslationEntry Key="ActionForm/cbxTvarOpType[Append whole table variable to another table variable]" Translation="Append whole table variable to another table variable" />
+    <TranslationEntry Key="ActionForm/cbxTvarOpType[Append whole table variable to another table horizontally]" Translation="Append whole table variable to another table horizontally" />
+    <TranslationEntry Key="ActionForm/cbxTvarOpType[Append whole table variable to another table vertically]" Translation="Append whole table variable to another table vertically" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Build from the expression]" Translation="Build from the expression" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Copy whole table variable to another table variable]" Translation="Copy whole table variable to another table variable" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Filter elements into another list]" Translation="Filter elements into another list" />
@@ -260,6 +265,7 @@
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Unset table variable]" Translation="Unset table variable" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Unset table variables matching regular expression]" Translation="Unset table variables matching regular expression" />
     <TranslationEntry Key="ActionForm/cbxVariableOp[Copy scalar variable or expression to the clipboard]" Translation="Copy scalar variable or expression to the clipboard" />
+    <TranslationEntry Key="ActionForm/cbxVariableOp[Increment scalar variable value]" Translation="Increment scalar variable value" />
     <TranslationEntry Key="ActionForm/cbxVariableOp[Query variable with JSONPath and store list value]" Translation="Query variable with JSONPath and store list value" />
     <TranslationEntry Key="ActionForm/cbxVariableOp[Query variable with JSONPath and store scalar value]" Translation="Query variable with JSONPath and store scalar value" />
     <TranslationEntry Key="ActionForm/cbxVariableOp[Set scalar variable value with numeric expression]" Translation="Set scalar variable value with numeric expression" />
@@ -270,6 +276,8 @@
     <TranslationEntry Key="ActionForm/cbxVariableOp[Unset scalar variables matching regular expression]" Translation="Unset scalar variables matching regular expression" />
     <TranslationEntry Key="ActionForm/chkExecuteAsync" Translation="Execute asynchronously without blocking other actions from executing" />
     <TranslationEntry Key="ActionForm/chkOverrideDesc" Translation="Override autogenerated action description" />
+    <TranslationEntry Key="ActionForm/cbxProcessLog" Translation="Process message as log line" />
+    <TranslationEntry Key="ActionForm/cbxProcessLogACT" Translation="Add the log message to ACT combat log" />
     <TranslationEntry Key="ActionForm/chkSoundExclusive" Translation="Use exclusive sound player to prevent conflicts with other sounds" />
     <TranslationEntry Key="ActionForm/chkSoundMyOutput" Translation="Use Triggernometry for output regardless of ACT hook configuration" />
     <TranslationEntry Key="ActionForm/chkSpeechExclusive" Translation="Use exclusive speech synthesizer to prevent conflicts with other speech" />
@@ -469,13 +477,16 @@
     <TranslationEntry Key="ActionForm/lblTextAuraName" Translation="Unique identifier" />
     <TranslationEntry Key="ActionForm/lblTextAuraOp" Translation="Operation" />
     <TranslationEntry Key="ActionForm/lblTextAuraOpacity" Translation="Opacity expression" />
-    <TranslationEntry Key="ActionForm/lblTextAuraOutline" Translation="Display outline" />
     <TranslationEntry Key="ActionForm/lblTextAuraText" Translation="Text to display" />
     <TranslationEntry Key="ActionForm/lblTextAuraTtlExp" Translation="Time-to-live expression" />
     <TranslationEntry Key="ActionForm/lblTextAuraUpdValues" Translation="Update tick (20 ms) expressions" />
     <TranslationEntry Key="ActionForm/lblTextAuraWidth" Translation="Width expression" />
     <TranslationEntry Key="ActionForm/lblTextAuraX" Translation="X location expression" />
     <TranslationEntry Key="ActionForm/lblTextAuraY" Translation="Y location expression" />
+    <TranslationEntry Key="ActionForm/lblTextBackColor" Translation="Back" />
+    <TranslationEntry Key="ActionForm/lblTextColor" Translation="Colors" />
+    <TranslationEntry Key="ActionForm/lblTextForeColor" Translation="Text" />
+    <TranslationEntry Key="ActionForm/lblTextOutlineColor" Translation="Outline" />
     <TranslationEntry Key="ActionForm/lblTextToSay" Translation="Text to say" />
     <TranslationEntry Key="ActionForm/lblTrigger" Translation="Trigger" />
     <TranslationEntry Key="ActionForm/lblTriggerOp" Translation="Operation" />
@@ -548,6 +559,7 @@
     <TranslationEntry Key="ActionForm/███rtbHelperSendKeysWindowMessage" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperSendKeysWindowMessageCombo" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperTvarAppend" Translation="" />
+    <TranslationEntry Key="ActionForm/███rtbHelperTvarAppendH" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperTvarBuild" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperTvarCopy" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperTvarFilter" Translation="" />
@@ -565,6 +577,7 @@
     <TranslationEntry Key="ActionForm/███rtbHelperTvarUnsetAll" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperTvarUnsetRegex" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperVarClipboard" Translation="" />
+    <TranslationEntry Key="ActionForm/███rtbHelperVarIncrement" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperVarQueryJsonPath" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperVarQueryJsonPathList" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperVarSetNumeric" Translation="" />
@@ -684,6 +697,10 @@
     <TranslationEntry Key="ConfigurationForm/Column8" Translation="Timestamp" />
     <TranslationEntry Key="ConfigurationForm/Column9" Translation="Data" />
     <TranslationEntry Key="ConfigurationForm/ctxClearSelection" Translation="Clear selection" />
+    <TranslationEntry Key="ConfigurationForm/dataGridViewCheckBoxColumn1" Translation="Allow for local triggers" />
+    <TranslationEntry Key="ConfigurationForm/dataGridViewCheckBoxColumn2" Translation="Allow for remote triggers" />
+    <TranslationEntry Key="ConfigurationForm/dataGridViewCheckBoxColumn3" Translation="Allow if running as admin" />
+    <TranslationEntry Key="ConfigurationForm/dataGridViewTextBoxColumn1" Translation="Additional features" />
     <TranslationEntry Key="ConfigurationForm/groupBox1" Translation=" Aura control " />
     <TranslationEntry Key="ConfigurationForm/groupBox2" Translation=" Scripting API access " />
     <TranslationEntry Key="ConfigurationForm/grpActHooks" Translation=" ACT hooks " />
@@ -920,9 +937,6 @@
     <TranslationEntry Key="internal/Action/desckeypress" Translation="send keycode ({0}) to {1}" />
     <TranslationEntry Key="internal/Action/desckeypresscombo" Translation="send keycodes ({0}) to {1}" />
     <TranslationEntry Key="internal/Action/desckeypresses" Translation="send keypresses ({0}) to the active window" />
-    <TranslationEntry Key="internal/Action/desckeypresstgtid" Translation="process id ({0})" />
-    <TranslationEntry Key="internal/Action/desckeypresstgtwindow" Translation="window ({0})" />
-    <TranslationEntry Key="internal/Action/desckeypresstgtwindows" Translation="all windows named ({0})" />
     <TranslationEntry Key="internal/Action/desclaunchprocess" Translation="launch process ({0}) as ({1}) using command line parameters ({2})" />
     <TranslationEntry Key="internal/Action/desclistbuild" Translation="build {1}list variable ({0}) from string ({2}) separated by ({3})" />
     <TranslationEntry Key="internal/Action/desclistbuildraw" Translation="build {1}list variable ({0}) from {3} expression ({2}) separated by its first character" />
@@ -994,8 +1008,9 @@
     <TranslationEntry Key="internal/Action/descplaysound" Translation="play sound file ({0}) at volume ({1}) %" />
     <TranslationEntry Key="internal/Action/descprocessmessage" Translation="process message ({0}) as {1}" />
     <TranslationEntry Key="internal/Action/descrepoinvalidref" Translation="repository action with an invalid repository reference ({0})" />
-    <TranslationEntry Key="internal/Action/descscalarclipboardexpr" Translation="Copy {1} expression ({0}) to clipboard" />
+    <TranslationEntry Key="internal/Action/descscalarclipboardexpr" Translation="Copy string expression ({0}) to clipboard" />
     <TranslationEntry Key="internal/Action/descscalarclipboardvar" Translation="Copy {1}scalar variable ({0}) value to clipboard" />
+    <TranslationEntry Key="internal/Action/descscalarincrement" Translation="increment the value of {1}scalar variable ({0}) by ({2})" />
     <TranslationEntry Key="internal/Action/descscalarqueryjson" Translation="query {1} variable ({0}) with JSON path ({2}) and store result to {4}scalar variable ({3})" />
     <TranslationEntry Key="internal/Action/descscalarqueryjsonlist" Translation="query {1} variable ({0}) with JSON path ({2}) and store result to {4}list variable ({3})" />
     <TranslationEntry Key="internal/Action/descscalarset" Translation="set {1}scalar variable ({0}) value with {3} expression ({2})" />
@@ -1003,7 +1018,8 @@
     <TranslationEntry Key="internal/Action/descscalarunsetall" Translation="unset all {0}scalar variables" />
     <TranslationEntry Key="internal/Action/descscalarunsetregex" Translation="unset {1}scalar variables matching regular expression ({0})" />
     <TranslationEntry Key="internal/Action/descscalarunsetregexuniversal" Translation="unset all types of {1}variables matching regular expression ({0})" />
-    <TranslationEntry Key="internal/Action/desctableappend" Translation="append {2}table variable ({0}) to {3}table variable ({1})" />
+    <TranslationEntry Key="internal/Action/desctableappend" Translation="vertically append {2}table variable ({0}) to {3}table variable ({1})" />
+    <TranslationEntry Key="internal/Action/desctableappendh" Translation="horizontally append {2}table variable ({0}) to {3}table variable ({1})" />
     <TranslationEntry Key="internal/Action/desctablebuild" Translation="build {1}table variable ({0}) from string ({2}) separated by ({3}) ({4})" />
     <TranslationEntry Key="internal/Action/desctablebuildraw" Translation="build {1}table variable ({0}) from {3} expression ({2}) separated by its first 2 characters" />
     <TranslationEntry Key="internal/Action/desctablecopy" Translation="copy {2}table variable ({0}) to {3}table variable ({1})" />
@@ -1050,6 +1066,10 @@
     <TranslationEntry Key="internal/Action/desctriginvalidref" Translation="trigger action with an invalid trigger reference ({0})" />
     <TranslationEntry Key="internal/Action/desctts" Translation="say ({0}) at volume ({1}) %, using speed ({2})" />
     <TranslationEntry Key="internal/Action/descunknown" Translation="unknown action type" />
+    <TranslationEntry Key="internal/Action/descwindowtargetall" Translation="all windows whose titles match ({0})" />
+    <TranslationEntry Key="internal/Action/descwindowtargetid" Translation="windows in the process id ({0}) whose titles match ({1})" />
+    <TranslationEntry Key="internal/Action/descwindowtargetnone" Translation="(unspecified window name)" />
+    <TranslationEntry Key="internal/Action/descwindowtargetsingle" Translation="the first window whose title match ({0})" />
     <TranslationEntry Key="internal/Action/descwmsg" Translation="send message ({0}) wparam ({1}) lparam ({2}) to {3}" />
     <TranslationEntry Key="internal/Action/dictbuild" Translation="{1}Dictionary ({0}) built from expression ({2}) splitted by ({3}) ({4})" />
     <TranslationEntry Key="internal/Action/dictbuildfail" Translation="{1}Dictionary ({0}) cannot be built since expression ({2}) length < 2" />
@@ -1068,7 +1088,7 @@
     <TranslationEntry Key="internal/Action/disabledfolderwithid" Translation="Disabled folder ({0}) with id ({1})" />
     <TranslationEntry Key="internal/Action/dynamicexprerror" Translation="The dynamic expression ({0}) is invalid in the current action. Expression: ({1})" />
     <TranslationEntry Key="internal/Action/enabledfolderwithid" Translation="Enabled folder ({0}) with id ({1})" />
-    <TranslationEntry Key="internal/Action/exception" Translation="Exception: {0}" />
+    <TranslationEntry Key="internal/Action/exception" Translation="Action exception: {0} \nIn action: {1} \nIn trigger: {2}" />
     <TranslationEntry Key="internal/Action/executingaction" Translation="Executing action '{0}' in thread {1}" />
     <TranslationEntry Key="internal/Action/filelistset" Translation="{2}List variable ({0}) value read from file ({1})" />
     <TranslationEntry Key="internal/Action/filescalarset" Translation="{2}Scalar variable ({0}) value read from file ({1})" />
@@ -1134,7 +1154,6 @@
     <TranslationEntry Key="internal/Action/shortscripterror" Translation="{0} @ line {1}" />
     <TranslationEntry Key="internal/Action/sortkeyexprerror" Translation="The sorting key functions ({0}) could not be parsed." />
     <TranslationEntry Key="internal/Action/tableappend" Translation="{2}Table ({0}) appended to {3}table ({1})" />
-    <TranslationEntry Key="internal/Action/tableappendnotexist" Translation="{2}Table ({0}) couldn't be appended to {3}table ({1}) since it doesn't exist" />
     <TranslationEntry Key="internal/Action/tablebuild" Translation="{1}Table variable ({0}) built from expression ({2}) splitted by ({3}) ({4})" />
     <TranslationEntry Key="internal/Action/tablebuildfail" Translation="{1}Table variable ({0}) cannot be built since expression ({2}) length &lt; 2" />
     <TranslationEntry Key="internal/Action/tablecopy" Translation="{2}Table ({0}) copied to {3}table ({1})" />
@@ -1157,9 +1176,6 @@
     <TranslationEntry Key="internal/Action/trigenable" Translation="Trigger '{0}' enabled" />
     <TranslationEntry Key="internal/Action/waitingprocexit" Translation="Waiting for process to exit" />
     <TranslationEntry Key="internal/Action/warndiscordtrunc" Translation="Discord message too long, capping to {0}" />
-    <TranslationEntry Key="internal/ActionForm/acttestlive" Translation="Test action with live values" />
-    <TranslationEntry Key="internal/ActionForm/acttestliveignoreconditions" Translation="Test action with live values (ignore conditions)" />
-    <TranslationEntry Key="internal/ActionForm/acttestplaceholder" Translation="Test action with placeholder values" />
     <TranslationEntry Key="internal/ActionForm/confirmkeypress" Translation="The keypresses you defined will be sent in two seconds after you hit OK, to allow you to change to the window you want to send the keypresses to." />
     <TranslationEntry Key="internal/ActionForm/confirmkeypressdelay" Translation="Confirm" />
     <TranslationEntry Key="internal/ActionForm/error" Translation="Error" />
@@ -1168,6 +1184,8 @@
     <TranslationEntry Key="internal/ActionForm/imageloaderror" Translation="The specific image file could not be loaded, please verify the path and filename." />
     <TranslationEntry Key="internal/ActionForm/sendkeyinvalid" Translation="This key is not supported in the SendKeys method." />
     <TranslationEntry Key="internal/ActionForm/tempfiledeletefailed" Translation="Couldn't process temporary file {0} due to exception: {1}" />
+    <TranslationEntry Key="internal/ActionForm/urlSendKey" Translation="https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.sendkeys.send" />
+    <TranslationEntry Key="internal/ActionForm/urlWinMessage" Translation="https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.keys" />
     <TranslationEntry Key="internal/ActionForm/textbold" Translation="bold" />
     <TranslationEntry Key="internal/ActionForm/textitalic" Translation="italic" />
     <TranslationEntry Key="internal/ActionForm/textptunit" Translation="pt" />
@@ -1251,6 +1269,7 @@
     <TranslationEntry Key="internal/ExpressionTextBox/string" Translation="This field supports string expressions; references to named regular expression groups will be expanded." />
     <TranslationEntry Key="internal/ffxiv/allentitiesexception" Translation="Exception in FFXIV all entities retrieve: {0}" />
     <TranslationEntry Key="internal/ffxiv/allentitiesexceptionsingle" Translation="Failed to get entity data: name = {0}, id = {1}. Exception: {2}" />
+	  <TranslationEntry Key="internal/ffxiv/ffxivzonechangednoinstance" Translation="Could not subscribe to FFXIV zone change (no plugin instance available)" />
     <TranslationEntry Key="internal/ffxiv/idexception" Translation="Exception in FFXIV ID entity retrieve: {0}" />
     <TranslationEntry Key="internal/ffxiv/missingactplugin" Translation="FFXIV ACT plugin with filename ({0}) or type ({1}) could not be located, some functions may not work as expected" />
     <TranslationEntry Key="internal/ffxiv/namedexception" Translation="Exception in FFXIV named entity retrieve: {0}" />
@@ -1262,7 +1281,6 @@
     <TranslationEntry Key="internal/ffxiv/partytoobig" Translation="Party structure has more than {0} members" />
     <TranslationEntry Key="internal/ffxiv/procexception" Translation="Exception in FFXIV process retrieve: {0}" />
     <TranslationEntry Key="internal/ffxiv/updateexception" Translation="Exception in FFXIV state update: {0} at stage {1}" />
-    <TranslationEntry Key="internal/ffxiv/ffxivzonechangednoinstance" Translation="Could not subscribe to FFXIV zone change (no plugin instance available)" />
     <TranslationEntry Key="internal/I18n/bool" Translation="bool" />
     <TranslationEntry Key="internal/I18n/char" Translation="char" />
     <TranslationEntry Key="internal/I18n/charcode" Translation="charcode" />
@@ -1332,7 +1350,7 @@
     <TranslationEntry Key="internal/MathParser/basicMathExprError" Translation="The basic math expression: '{0}' could not be parsed. Original expression: '{1}'" />
     <TranslationEntry Key="internal/MathParser/basicMathExprOpError" Translation="The operation '{0}' from the basic math expression: '{1}' could not be applied. Original expression: '{2}'" />
     <TranslationEntry Key="internal/MathParser/noclosure" Translation="Parenthesis not closed in math expression: '{0}'. Original expression: ({1})" />
-    <TranslationEntry Key="internal/NamedCallback/exception" Translation="Exception occurred when invoking named callback {0}: {1}" />
+    <TranslationEntry Key="internal/NamedCallback/exception" Translation="Exception occurred when invoking named callback {0}: &#xD;&#xA;{1}" />
     <TranslationEntry Key="internal/PersistenceSwitch/string" Translation="Determines if the variable to be modified is persistent, as in, will be saved to disk on exit and loaded back in when Triggernometry starts. Persistent variables live in a different namespace from regular variables." />
     <TranslationEntry Key="internal/Plugin/actimageaura" Translation="Activating image aura '{0}'" />
     <TranslationEntry Key="internal/Plugin/actionqueued" Translation="Queuing trigger '{0}' action '{1}' to {2} slot {3}" />
@@ -1551,6 +1569,7 @@
     <TranslationEntry Key="internal/UserInterface/areyousurefolder" Translation="Are you sure you want to remove folder '{0}'?" />
     <TranslationEntry Key="internal/UserInterface/areyousurerepo" Translation="Are you sure you want to remove repository '{0}'?" />
     <TranslationEntry Key="internal/UserInterface/areyousuretrigger" Translation="Are you sure you want to remove trigger '{0}'?" />
+	<TranslationEntry Key="internal/UserInterface/clearvar" Translation="Are you sure you want to clear the session variables?" />
     <TranslationEntry Key="internal/UserInterface/confirm" Translation="Confirm removal" />
     <TranslationEntry Key="internal/UserInterface/copyfail" Translation="Tree copy failed due to exception: {0}" />
     <TranslationEntry Key="internal/UserInterface/editfolder" Translation="Edit folder '{0}'" />
@@ -1587,10 +1606,10 @@
     <TranslationEntry Key="internal/VariableForm/areyousuresingular" Translation="Are you sure you want to remove the selected variable?" />
     <TranslationEntry Key="internal/VariableForm/confirmremoval" Translation="Confirm removal" />
     <TranslationEntry Key="internal/VariableForm/keyexists" Translation="The key {0} already exists (row {1})." />
+    <TranslationEntry Key="KeyListenForm" Translation="Listening to keypresses" />
     <TranslationEntry Key="internal/VariableForm/variableeditortag" Translation="Variable editor" />
     <TranslationEntry Key="KeyListenForm/btnCancel" Translation="Cancel" />
     <TranslationEntry Key="KeyListenForm/btnOk" Translation="Ok" />
-    <TranslationEntry Key="KeyListenForm/KeyListenForm" Translation="Listening to keypresses" />
     <TranslationEntry Key="KeyListenForm/lblKeypress" Translation="(no keypress recorded)" />
     <TranslationEntry Key="KeyListenForm/lblKeypressInfo" Translation="Press a key or a combination of keys, and press OK when you are satisfied with the result." />
     <TranslationEntry Key="LogForm" Translation="Triggernometry log" />
@@ -1925,7 +1944,9 @@
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropCndGroupingOr" Translation="OR" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropCndGroupingType" Translation="Conditions Grouping" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropCndGroupingXor" Translation="XOR" />
+    <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropCopyCnd" Translation="Copy Conditions" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropDelay" Translation="Edit Delay" />
+    <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropPasteCnd" Translation="Paste Conditions" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropRemoveCnd" Translation="Remove Conditions" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropRemoveDesc" Translation="Remove Descriptions" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropTextColor" Translation="Text Color" />
@@ -1935,6 +1956,10 @@
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxMoveUp" Translation="Move up" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxPasteAction" Translation="Paste" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxRemoveAction" Translation="Remove action" />
+    <TranslationEntry Key="TriggerForm/actionViewer1/ctxTestAction" Translation="Test Action" />
+    <TranslationEntry Key="TriggerForm/actionViewer1/ctxTestLive" Translation="By Live Values" />
+    <TranslationEntry Key="TriggerForm/actionViewer1/ctxTestLiveIgnoreCnd" Translation="By Live Values (Ignore Conditions)" />
+    <TranslationEntry Key="TriggerForm/actionViewer1/ctxTestPlaceholder" Translation="By Placeholder Values" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxUndo" Translation="Undo" />
     <TranslationEntry Key="TriggerForm/btnCancel" Translation="Cancel" />
     <TranslationEntry Key="TriggerForm/cbxEditAutofire" Translation="Autofire trigger after it has been edited" />

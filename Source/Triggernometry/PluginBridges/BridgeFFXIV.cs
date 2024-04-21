@@ -18,7 +18,8 @@ namespace Triggernometry.PluginBridges
         private static string ActPluginName = "FFXIV_ACT_Plugin.dll";
         private static string ActPluginType = "FFXIV_ACT_Plugin";
 
-        internal static VariableDictionary NullCombatant = new VariableDictionary();
+        internal static VariableDictionary _nullCombatant = new VariableDictionary();
+        public static VariableDictionary NullCombatant => (VariableDictionary)_nullCombatant.Duplicate(); // for scripts
 
         internal delegate void LoggingDelegate(RealPlugin.DebugLevelEnum level, string text);
         internal static event LoggingDelegate OnLogEvent;
@@ -100,7 +101,7 @@ namespace Triggernometry.PluginBridges
 
         public static void SetupNullCombatant()
         {
-            ClearCombatant(NullCombatant);
+            ClearCombatant(_nullCombatant);
         }
 
         public static void SubscribeToZoneChanged(RealPlugin p)
@@ -110,8 +111,7 @@ namespace Triggernometry.PluginBridges
                 object plug = GetInstance();
                 if (plug == null)
                 {
-                    LogMessage(RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/ffxiv/ffxivzonechangednoinstance", "Could not subscribe to FFXIV zone change (no plugin instance available)"));
-                    return;
+                    throw new ArgumentException("No plugin instance available");
                 }
                 PropertyInfo pi = plug.GetType().GetProperty("DataSubscription", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 if (pi == null)
@@ -510,7 +510,7 @@ namespace Triggernometry.PluginBridges
                 plug = GetInstance();
                 if (plug == null)
                 {
-                    return NullCombatant;
+                    return _nullCombatant;
                 }
                 PropertyInfo pi = GetDataRepository(plug);
                 CombatantData cd = GetCombatants(plug, pi);
@@ -539,7 +539,7 @@ namespace Triggernometry.PluginBridges
             {
                 LogMessage(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/namedexception", "Exception in FFXIV named entity retrieve: {0}", ex.Message));
             }
-            return NullCombatant;
+            return _nullCombatant;
         }
 
         public static VariableDictionary GetIdEntity(string id)
@@ -550,7 +550,7 @@ namespace Triggernometry.PluginBridges
                 plug = GetInstance();
                 if (plug == null)
                 {
-                    return NullCombatant;
+                    return _nullCombatant;
                 }
                 PropertyInfo pi = GetDataRepository(plug);
                 CombatantData cd = GetCombatants(plug, pi);
@@ -579,7 +579,7 @@ namespace Triggernometry.PluginBridges
             {
                 LogMessage(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/idexception", "Exception in FFXIV ID entity retrieve: {0}", ex.Message));
             }
-            return NullCombatant;
+            return _nullCombatant;
         }
 
         public static List<VariableDictionary> GetAllEntities()
@@ -634,7 +634,7 @@ namespace Triggernometry.PluginBridges
             UpdateState();
             if (index < 1 || index > NumPartyMembers)
             {
-                return NullCombatant;
+                return _nullCombatant;
             }
             return PartyMembers[index - 1];
         }
@@ -655,7 +655,7 @@ namespace Triggernometry.PluginBridges
                     return vc;
                 }
             }
-            return NullCombatant;
+            return _nullCombatant;
         }
 
         public static VariableDictionary GetIdPartyMember(string id)
@@ -668,7 +668,7 @@ namespace Triggernometry.PluginBridges
                     return vc;
                 }
             }
-            return NullCombatant;
+            return _nullCombatant;
         }
 
         public static Process GetProcess()

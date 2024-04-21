@@ -12,6 +12,7 @@ using System.Speech.Synthesis;
 using System.Xml.Serialization;
 using System.IO;
 using static Triggernometry.ConditionGroup;
+using Triggernometry.CustomControls;
 
 namespace Triggernometry.Forms
 {
@@ -105,7 +106,7 @@ namespace Triggernometry.Forms
             }
         }
 
-        internal List<Action> Actions;
+        internal List<Action> Actions => actionViewer1.Actions;
 
         internal bool AllowAnonymousTrigger { get; set; } = false;
 
@@ -121,8 +122,6 @@ namespace Triggernometry.Forms
             CancelDgvSelectionAttachToAll(this);
             btnOk.Click += btnOk_Click;
             closeReason = "";
-            Actions = new List<Action>();
-            actionViewer1.Actions = Actions;
             fakectx = new Context();
             actionViewer1.fakectx = fakectx;
             actionViewer1.ActionsUpdated += actionViewer1_ActionsUpdated;
@@ -137,6 +136,9 @@ namespace Triggernometry.Forms
             cbxSequential.CheckedChanged += UpdateTriggerDescription;
             cbxEditAutofire.CheckedChanged += cbxEditAutofire_CheckedChanged;
             cbxEditAutofireAllowCondition.CheckedChanged += cbxEditAutofireAllowCondition_CheckedChanged;
+            txtDescription.GotFocus += ExpressionTextBox.ReplaceIncompleteLineBreaksInClipboard;
+            txtEvent.GotFocus += ExpressionTextBox.ReplaceIncompleteLineBreaksInClipboard;
+            txtName.GotFocus += ExpressionTextBox.ReplaceIncompleteLineBreaksInClipboard;
             RestoredSavedDimensions();
         }
 

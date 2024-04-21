@@ -29,7 +29,9 @@
     <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropCndGroupingOr" Translation="OR" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropCndGroupingType" Translation="Conditions Grouping" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropCndGroupingXor" Translation="XOR" />
+	  <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropCopyCnd" Translation="Copy Conditions" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropDelay" Translation="Edit Delay" />
+    <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropPasteCnd" Translation="Paste Conditions" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropRemoveCnd" Translation="Remove Conditions" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropRemoveDesc" Translation="Remove Descriptions" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxEditPropTextColor" Translation="Text Color" />
@@ -39,13 +41,16 @@
     <TranslationEntry Key="ActionForm/actionViewer1/ctxMoveUp" Translation="上へ移動" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxPasteAction" Translation="コピー" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxRemoveAction" Translation="アクションの削除" />
+    <TranslationEntry Key="ActionForm/actionViewer1/ctxTestAction" Translation="Test Action" />
+    <TranslationEntry Key="ActionForm/actionViewer1/ctxTestLive" Translation="By Live Values" />
+    <TranslationEntry Key="ActionForm/actionViewer1/ctxTestLiveIgnoreCnd" Translation="By Live Values (Ignore Conditions)" />
+    <TranslationEntry Key="ActionForm/actionViewer1/ctxTestPlaceholder" Translation="By Placeholder Values" />
     <TranslationEntry Key="ActionForm/actionViewer1/ctxUndo" Translation="Undo" />
     <TranslationEntry Key="ActionForm/btnAuraGuide" Translation="配置ガイドを使用（右クリックで詳細オプションを開く）" />
     <TranslationEntry Key="ActionForm/btnCancel" Translation="キャンセル" />
     <TranslationEntry Key="ActionForm/btnHide" Translation="隠す" />
     <TranslationEntry Key="ActionForm/btnOk" Translation="OK" />
     <TranslationEntry Key="ActionForm/btnScriptExternalEditor" Translation="Open in external editor" />
-    <TranslationEntry Key="ActionForm/btnTest" Translation="Test Action" />
     <TranslationEntry Key="ActionForm/btnTextAuraFont" Translation="..." />
     <TranslationEntry Key="ActionForm/btnTextAuraGuide" Translation="配置ガイドを使用（右クリックで詳細オプションを開く）" />
     <TranslationEntry Key="ActionForm/btnTextAuraHide" Translation="隠す" />
@@ -208,7 +213,6 @@
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop streaming]" Translation="配信の停止" />
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop then start recording]" Translation="Stop then start recording" />
     <TranslationEntry Key="ActionForm/cbxObsOpType[Stop then start recording (if currently recording)]" Translation="Stop then start recording (if currently recording)" />
-    <TranslationEntry Key="ActionForm/cbxProcessLog" Translation="一行のログとしてメッセージを処理" />
     <TranslationEntry Key="ActionForm/cbxProcessWindowStyle[Hidden from view]" Translation="非表示" />
     <TranslationEntry Key="ActionForm/cbxProcessWindowStyle[Maximized to fullscreen]" Translation="最大化してフルスクリーン表示" />
     <TranslationEntry Key="ActionForm/cbxProcessWindowStyle[Minimized to taskbar]" Translation="最小化してタスクバーに入れる" />
@@ -242,7 +246,8 @@
     <TranslationEntry Key="ActionForm/cbxTriggerZoneType[Zone name]" Translation="Zone name" />
     <TranslationEntry Key="ActionForm/cbxTvarExpType[Numeric]" Translation="数値" />
     <TranslationEntry Key="ActionForm/cbxTvarExpType[String]" Translation="文字列" />
-    <TranslationEntry Key="ActionForm/cbxTvarOpType[Append whole table variable to another table variable]" Translation="テーブル変数全体を別のテーブル変数に追加" />
+    <TranslationEntry Key="ActionForm/cbxTvarOpType[Append whole table variable to another table horizontally]" Translation="Append whole table variable to another table horizontally" />
+    <TranslationEntry Key="ActionForm/cbxTvarOpType[Append whole table variable to another table vertically]" Translation="Append whole table variable to another table vertically" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Build from the expression]" Translation="Build from the expression" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Copy whole table variable to another table variable]" Translation="テーブル変数全体を別のテーブル変数にコピー" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Filter elements into another list]" Translation="Filter elements into another list" />
@@ -260,6 +265,7 @@
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Unset table variable]" Translation="指定したテーブル変数を初期化" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Unset table variables matching regular expression]" Translation="正規表現にマッチするテーブル変数を初期化" />
     <TranslationEntry Key="ActionForm/cbxVariableOp[Copy scalar variable or expression to the clipboard]" Translation="Copy scalar variable or expression to the clipboard" />
+    <TranslationEntry Key="ActionForm/cbxVariableOp[Increment scalar variable value]" Translation="Increment scalar variable value" />
     <TranslationEntry Key="ActionForm/cbxVariableOp[Query variable with JSONPath and store list value]" Translation="Query variable with JSONPath and store list value" />
     <TranslationEntry Key="ActionForm/cbxVariableOp[Query variable with JSONPath and store scalar value]" Translation="Query variable with JSONPath and store scalar value" />
     <TranslationEntry Key="ActionForm/cbxVariableOp[Set scalar variable value with numeric expression]" Translation="数値式でスカラ変数を設定" />
@@ -270,6 +276,8 @@
     <TranslationEntry Key="ActionForm/cbxVariableOp[Unset scalar variables matching regular expression]" Translation="正規表現にマッチするスカラ変数を初期化" />
     <TranslationEntry Key="ActionForm/chkExecuteAsync" Translation="他のアクションの実行をブロックせず非同期で実行" />
     <TranslationEntry Key="ActionForm/chkOverrideDesc" Translation="自動生成されたアクションの説明を上書きする" />
+    <TranslationEntry Key="ActionForm/cbxProcessLog" Translation="一行のログとしてメッセージを処理" />
+    <TranslationEntry Key="ActionForm/cbxProcessLogACT" Translation="Add the log message to ACT combat log" />
     <TranslationEntry Key="ActionForm/chkSoundExclusive" Translation="専用のサウンドプレーヤーを使用（他のサウンドとの競合の防止）" />
     <TranslationEntry Key="ActionForm/chkSoundMyOutput" Translation="ACTのサウンド出力設定に依存せず、Triggernometryとして音声を出力する" />
     <TranslationEntry Key="ActionForm/chkSpeechExclusive" Translation="専用の音声合成エンジンを使用（他のTTS読み上げとの競合の防止）" />
@@ -469,13 +477,16 @@
     <TranslationEntry Key="ActionForm/lblTextAuraName" Translation="ユニークID" />
     <TranslationEntry Key="ActionForm/lblTextAuraOp" Translation="操作" />
     <TranslationEntry Key="ActionForm/lblTextAuraOpacity" Translation="透明度" />
-    <TranslationEntry Key="ActionForm/lblTextAuraOutline" Translation="アウトラインの表示" />
     <TranslationEntry Key="ActionForm/lblTextAuraText" Translation="表示するテキスト" />
     <TranslationEntry Key="ActionForm/lblTextAuraTtlExp" Translation="TTL（非表示までの時間）" />
     <TranslationEntry Key="ActionForm/lblTextAuraUpdValues" Translation="更新Tick式 (20 ms)" />
     <TranslationEntry Key="ActionForm/lblTextAuraWidth" Translation="幅" />
     <TranslationEntry Key="ActionForm/lblTextAuraX" Translation="X軸の表示位置" />
     <TranslationEntry Key="ActionForm/lblTextAuraY" Translation="Y軸の表示位置" />
+    <TranslationEntry Key="ActionForm/lblTextBackColor" Translation="Back" />
+    <TranslationEntry Key="ActionForm/lblTextColor" Translation="Colors" />
+    <TranslationEntry Key="ActionForm/lblTextForeColor" Translation="Text" />
+    <TranslationEntry Key="ActionForm/lblTextOutlineColor" Translation="Outline" />
     <TranslationEntry Key="ActionForm/lblTextToSay" Translation="読み上げるテキスト" />
     <TranslationEntry Key="ActionForm/lblTrigger" Translation="トリガー" />
     <TranslationEntry Key="ActionForm/lblTriggerOp" Translation="操作" />
@@ -518,7 +529,7 @@
     <TranslationEntry Key="ActionForm/███rtbHelperDictUnset" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperDictUnsetAll" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperDictUnsetRegex" Translation="" />
-    <TranslationEntry Key="ActionForm/rtbHelperJson" Translation="レスポンス式が定義されている場合、評価された文字列式の結果からログが生成されます。生成されたログはACTが生成する他のログと同様に処理されます。&#xD;&#xA;&#xD;&#xA;エンドポイントからの応答をレスポンス式で評価するために、特殊変数「_response」を使用できます。特殊変数は、このアクションの実行のコンテキストでのみ有効です。&#xD;&#xA;" />
+    <TranslationEntry Key="ActionForm/rtbHelperJson" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarBuild" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarCopy" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarFilter" Translation="" />
@@ -544,10 +555,11 @@
     <TranslationEntry Key="ActionForm/███rtbHelperLvarUnset" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarUnsetAll" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarUnsetRegex" Translation="" />
-    <TranslationEntry Key="ActionForm/rtbHelperSendKeysSendKeys" Translation="ShiftやCtrlなどの修飾キーを表す方法を含め、SendKeysにおけるキープレス形式については以上のWebページの説明を参照してください" />
+    <TranslationEntry Key="ActionForm/rtbHelperSendKeysSendKeys" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperSendKeysWindowMessage" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperSendKeysWindowMessageCombo" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperTvarAppend" Translation="" />
+    <TranslationEntry Key="ActionForm/███rtbHelperTvarAppendH" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperTvarBuild" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperTvarCopy" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperTvarFilter" Translation="" />
@@ -565,6 +577,7 @@
     <TranslationEntry Key="ActionForm/███rtbHelperTvarUnsetAll" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperTvarUnsetRegex" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperVarClipboard" Translation="" />
+    <TranslationEntry Key="ActionForm/███rtbHelperVarIncrement" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperVarQueryJsonPath" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperVarQueryJsonPathList" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperVarSetNumeric" Translation="" />
@@ -684,6 +697,10 @@
     <TranslationEntry Key="ConfigurationForm/Column8" Translation="Timestamp" />
     <TranslationEntry Key="ConfigurationForm/Column9" Translation="Data" />
     <TranslationEntry Key="ConfigurationForm/ctxClearSelection" Translation="選択を解除" />
+    <TranslationEntry Key="ConfigurationForm/dataGridViewCheckBoxColumn1" Translation="Allow for local triggers" />
+    <TranslationEntry Key="ConfigurationForm/dataGridViewCheckBoxColumn2" Translation="Allow for remote triggers" />
+    <TranslationEntry Key="ConfigurationForm/dataGridViewCheckBoxColumn3" Translation="Allow if running as admin" />
+    <TranslationEntry Key="ConfigurationForm/dataGridViewTextBoxColumn1" Translation="Additional features" />
     <TranslationEntry Key="ConfigurationForm/groupBox1" Translation=" オーバーレイのコントロール " />
     <TranslationEntry Key="ConfigurationForm/groupBox2" Translation=" Scripting API access " />
     <TranslationEntry Key="ConfigurationForm/grpActHooks" Translation=" ACTとの連携 " />
@@ -920,9 +937,6 @@
     <TranslationEntry Key="internal/Action/desckeypress" Translation="send keycode ({0}) to {1}" />
     <TranslationEntry Key="internal/Action/desckeypresscombo" Translation="send keycodes ({0}) to {1}" />
     <TranslationEntry Key="internal/Action/desckeypresses" Translation="キープレス ({0}) をアクティブウィンドウに送る" />
-    <TranslationEntry Key="internal/Action/desckeypresstgtid" Translation="process id ({0})" />
-    <TranslationEntry Key="internal/Action/desckeypresstgtwindow" Translation="window ({0})" />
-    <TranslationEntry Key="internal/Action/desckeypresstgtwindows" Translation="all windows named ({0})" />
     <TranslationEntry Key="internal/Action/desclaunchprocess" Translation="プロセス ({0}) 引数：({2})を ({1}) として実行" />
     <TranslationEntry Key="internal/Action/desclistbuild" Translation="build {1}list variable ({0}) from string ({2}) separated by ({3})" />
     <TranslationEntry Key="internal/Action/desclistbuildraw" Translation="build {1}list variable ({0}) from {3} expression ({2}) separated by its first character" />
@@ -994,8 +1008,9 @@
     <TranslationEntry Key="internal/Action/descplaysound" Translation="サウンド ({0}) をボリューム ({1}) % で再生" />
     <TranslationEntry Key="internal/Action/descprocessmessage" Translation="process message ({0}) as {1}" />
     <TranslationEntry Key="internal/Action/descrepoinvalidref" Translation="repository action with an invalid repository reference ({0})" />
-    <TranslationEntry Key="internal/Action/descscalarclipboardexpr" Translation="Copy {1} expression ({0}) to clipboard" />
+    <TranslationEntry Key="internal/Action/descscalarclipboardexpr" Translation="Copy string expression ({0}) to clipboard" />
     <TranslationEntry Key="internal/Action/descscalarclipboardvar" Translation="Copy {1}scalar variable ({0}) value to clipboard" />
+    <TranslationEntry Key="internal/Action/descscalarincrement" Translation="increment the value of {1}scalar variable ({0}) by ({2})" />
     <TranslationEntry Key="internal/Action/descscalarqueryjson" Translation="query {1} variable ({0}) with JSON path ({2}) and store result to {4}scalar variable ({3})" />
     <TranslationEntry Key="internal/Action/descscalarqueryjsonlist" Translation="query {1} variable ({0}) with JSON path ({2}) and store result to {4}list variable ({3})" />
     <TranslationEntry Key="internal/Action/descscalarset" Translation="set {1}scalar variable ({0}) value with {3} expression ({2})" />
@@ -1003,7 +1018,8 @@
     <TranslationEntry Key="internal/Action/descscalarunsetall" Translation="すべての{0}スカラ変数を初期化" />
     <TranslationEntry Key="internal/Action/descscalarunsetregex" Translation="正規表現 ({0}) にマッチする{1}スカラ変数を初期化" />
     <TranslationEntry Key="internal/Action/descscalarunsetregexuniversal" Translation="unset all types of {1}variables matching regular expression ({0})" />
-    <TranslationEntry Key="internal/Action/desctableappend" Translation="append {2}table variable ({0}) to {3}table variable ({1})" />
+    <TranslationEntry Key="internal/Action/desctableappend" Translation="vertically append {2}table variable ({0}) to {3}table variable ({1})" />
+    <TranslationEntry Key="internal/Action/desctableappendh" Translation="horizontally append {2}table variable ({0}) to {3}table variable ({1})" />
     <TranslationEntry Key="internal/Action/desctablebuild" Translation="build {1}table variable ({0}) from string ({2}) separated by ({3}) ({4})" />
     <TranslationEntry Key="internal/Action/desctablebuildraw" Translation="build {1}table variable ({0}) from {3} expression ({2}) separated by its first 2 characters" />
     <TranslationEntry Key="internal/Action/desctablecopy" Translation="copy {2}table variable ({0}) to {3}table variable ({1})" />
@@ -1050,6 +1066,10 @@
     <TranslationEntry Key="internal/Action/desctriginvalidref" Translation="trigger action with an invalid trigger reference ({0})" />
     <TranslationEntry Key="internal/Action/desctts" Translation="({0}) と読み上げる (ボリューム {1} %, 速度 {2})" />
     <TranslationEntry Key="internal/Action/descunknown" Translation="不明なアクションタイプ" />
+    <TranslationEntry Key="internal/Action/descwindowtargetall" Translation="all windows whose titles match ({0})" />
+    <TranslationEntry Key="internal/Action/descwindowtargetid" Translation="windows in the process id ({0}) whose titles match ({1})" />
+    <TranslationEntry Key="internal/Action/descwindowtargetnone" Translation="(unspecified window name)" />
+    <TranslationEntry Key="internal/Action/descwindowtargetsingle" Translation="the first window whose title match ({0})" />
     <TranslationEntry Key="internal/Action/descwmsg" Translation="{3}にメッセージ送信 ({0}, wparam = {1}, lparam = {2})" />
     <TranslationEntry Key="internal/Action/dictbuild" Translation="{1}Dictionary ({0}) built from expression ({2}) splitted by ({3}) ({4})" />
     <TranslationEntry Key="internal/Action/dictbuildfail" Translation="{1}Dictionary ({0}) cannot be built since expression ({2}) length < 2" />
@@ -1068,7 +1088,7 @@
     <TranslationEntry Key="internal/Action/disabledfolderwithid" Translation="Disabled folder ({0}) with id ({1})" />
     <TranslationEntry Key="internal/Action/dynamicexprerror" Translation="The dynamic expression ({0}) is invalid in the current action. Expression: ({1})" />
     <TranslationEntry Key="internal/Action/enabledfolderwithid" Translation="Enabled folder ({0}) with id ({1})" />
-    <TranslationEntry Key="internal/Action/exception" Translation="Exception: {0}" />
+    <TranslationEntry Key="internal/Action/exception" Translation="Action exception: {0} \nIn action: {1} \nIn trigger: {2}" />
     <TranslationEntry Key="internal/Action/executingaction" Translation="Executing action '{0}' in thread {1}" />
     <TranslationEntry Key="internal/Action/filelistset" Translation="{2}リスト変数 ({0}) にファイル ({1}) を読み込む" />
     <TranslationEntry Key="internal/Action/filescalarset" Translation="{2}スカラ変数 ({0}) にファイル ({1}) を読み込む" />
@@ -1134,7 +1154,6 @@
     <TranslationEntry Key="internal/Action/shortscripterror" Translation="{0}, {1}行目" />
     <TranslationEntry Key="internal/Action/sortkeyexprerror" Translation="The sorting key functions ({0}) could not be parsed." />
     <TranslationEntry Key="internal/Action/tableappend" Translation="{2}Table ({0}) appended to {3}table ({1})" />
-    <TranslationEntry Key="internal/Action/tableappendnotexist" Translation="{2}Table ({0}) couldn't be appended to {3}table ({1}) since it doesn't exist" />
     <TranslationEntry Key="internal/Action/tablebuild" Translation="{1}Table variable ({0}) built from expression ({2}) splitted by ({3}) ({4})" />
     <TranslationEntry Key="internal/Action/tablebuildfail" Translation="{1}Table variable ({0}) cannot be built since expression ({2}) length &lt; 2" />
     <TranslationEntry Key="internal/Action/tablecopy" Translation="{2}Table ({0}) copied to {3}table ({1})" />
@@ -1157,9 +1176,6 @@
     <TranslationEntry Key="internal/Action/trigenable" Translation="トリガー '{0}' を有効化しました" />
     <TranslationEntry Key="internal/Action/waitingprocexit" Translation="プロセスの終了を待っています" />
     <TranslationEntry Key="internal/Action/warndiscordtrunc" Translation="Discordのメッセージが長すぎるため、{0} 文字にキャップしました" />
-    <TranslationEntry Key="internal/ActionForm/acttestlive" Translation="現在の値でテスト" />
-    <TranslationEntry Key="internal/ActionForm/acttestliveignoreconditions" Translation="Test action with live values (ignore conditions)" />
-    <TranslationEntry Key="internal/ActionForm/acttestplaceholder" Translation="プレースホルダの値でテスト" />
     <TranslationEntry Key="internal/ActionForm/confirmkeypress" Translation="定義したキープレスは、OKを押してから2秒後に送信され、キープレスの送信先のウィンドウに変更できるようになります。" />
     <TranslationEntry Key="internal/ActionForm/confirmkeypressdelay" Translation="確認" />
     <TranslationEntry Key="internal/ActionForm/error" Translation="エラー" />
@@ -1168,6 +1184,8 @@
     <TranslationEntry Key="internal/ActionForm/imageloaderror" Translation="特定の画像ファイルをロードできませんでした。パスとファイル名を確認してください。" />
     <TranslationEntry Key="internal/ActionForm/sendkeyinvalid" Translation="This key is not supported in the SendKeys method." />
     <TranslationEntry Key="internal/ActionForm/tempfiledeletefailed" Translation="Couldn't process temporary file {0} due to exception: {1}" />
+    <TranslationEntry Key="internal/ActionForm/urlSendKey" Translation="https://learn.microsoft.com/ja-jp/dotnet/api/system.windows.forms.sendkeys.send" />
+    <TranslationEntry Key="internal/ActionForm/urlWinMessage" Translation="https://learn.microsoft.com/ja-jp/dotnet/api/system.windows.forms.keys" />
     <TranslationEntry Key="internal/ActionForm/textbold" Translation="太字" />
     <TranslationEntry Key="internal/ActionForm/textitalic" Translation="斜体" />
     <TranslationEntry Key="internal/ActionForm/textptunit" Translation="pt" />
@@ -1251,6 +1269,7 @@
     <TranslationEntry Key="internal/ExpressionTextBox/string" Translation="このフィールドに文字列式を入力します。名前付き正規表現グループへの参照は展開された後、数学表現として評価されます。" />
     <TranslationEntry Key="internal/ffxiv/allentitiesexception" Translation="Exception in FFXIV all entities retrieve: {0}" />
     <TranslationEntry Key="internal/ffxiv/allentitiesexceptionsingle" Translation="Failed to get entity data: name = {0}, id = {1}. Exception: {2}" />
+	  <TranslationEntry Key="internal/ffxiv/ffxivzonechangednoinstance" Translation="Could not subscribe to FFXIV zone change (no plugin instance available)" />
     <TranslationEntry Key="internal/ffxiv/idexception" Translation="Exception in FFXIV ID entity retrieve: {0}" />
     <TranslationEntry Key="internal/ffxiv/missingactplugin" Translation="FFXIV ACT plugin with filename ({0}) or type ({1}) could not be located, some functions may not work as expected" />
     <TranslationEntry Key="internal/ffxiv/namedexception" Translation="Exception in FFXIV named entity retrieve: {0}" />
@@ -1331,7 +1350,7 @@
     <TranslationEntry Key="internal/MathParser/basicMathExprError" Translation="The basic math expression: '{0}' could not be parsed. Original expression: '{1}'" />
     <TranslationEntry Key="internal/MathParser/basicMathExprOpError" Translation="The operation '{0}' from the basic math expression: '{1}' could not be applied. Original expression: '{2}'" />
     <TranslationEntry Key="internal/MathParser/noclosure" Translation="Parenthesis not closed in math expression: '{0}'. Original expression: ({1})" />
-    <TranslationEntry Key="internal/NamedCallback/exception" Translation="Exception occurred when invoking named callback {0}: {1}" />
+    <TranslationEntry Key="internal/NamedCallback/exception" Translation="Exception occurred when invoking named callback {0}: &#xD;&#xA;{1}" />
     <TranslationEntry Key="internal/PersistenceSwitch/string" Translation="Determines if the variable to be modified is persistent, as in, will be saved to disk on exit and loaded back in when Triggernometry starts. Persistent variables live in a different namespace from regular variables." />
     <TranslationEntry Key="internal/Plugin/actimageaura" Translation="画像オーバーレイ '{0}' を有効化しています" />
     <TranslationEntry Key="internal/Plugin/actionqueued" Translation="Queuing trigger '{0}' action '{1}' to {2} slot {3}" />
@@ -1550,6 +1569,7 @@
     <TranslationEntry Key="internal/UserInterface/areyousurefolder" Translation="フォルダ '{0}' を削除します" />
     <TranslationEntry Key="internal/UserInterface/areyousurerepo" Translation="リポジトリ '{0}' を削除します" />
     <TranslationEntry Key="internal/UserInterface/areyousuretrigger" Translation="トリガー '{0}' を削除します" />
+	<TranslationEntry Key="internal/UserInterface/clearvar" Translation="Are you sure you want to clear the session variables?" />
     <TranslationEntry Key="internal/UserInterface/confirm" Translation="削除の確認" />
     <TranslationEntry Key="internal/UserInterface/copyfail" Translation="Tree copy failed due to exception: {0}" />
     <TranslationEntry Key="internal/UserInterface/editfolder" Translation="フォルダの編集 '{0}'" />
@@ -1586,9 +1606,9 @@
     <TranslationEntry Key="internal/VariableForm/areyousuresingular" Translation="選択した変数を削除してもよろしいですか？" />
     <TranslationEntry Key="internal/VariableForm/confirmremoval" Translation="削除の確認" />
     <TranslationEntry Key="internal/VariableForm/keyexists" Translation="The key {0} already exists (row {1})." />
+    <TranslationEntry Key="KeyListenForm" Translation="Listening to keypresses" />
     <TranslationEntry Key="KeyListenForm/btnCancel" Translation="Cancel" />
     <TranslationEntry Key="KeyListenForm/btnOk" Translation="Ok" />
-    <TranslationEntry Key="KeyListenForm/KeyListenForm" Translation="Listening to keypresses" />
     <TranslationEntry Key="KeyListenForm/lblKeypress" Translation="(no keypress recorded)" />
     <TranslationEntry Key="KeyListenForm/lblKeypressInfo" Translation="Press a key or a combination of keys, and press OK when you are satisfied with the result." />
     <TranslationEntry Key="internal/VariableForm/variableeditortag" Translation="変数エディタ" />
@@ -1924,7 +1944,9 @@
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropCndGroupingOr" Translation="OR" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropCndGroupingType" Translation="Conditions Grouping" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropCndGroupingXor" Translation="XOR" />
+    <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropCopyCnd" Translation="Copy Conditions" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropDelay" Translation="Edit Delay" />
+    <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropPasteCnd" Translation="Paste Conditions" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropRemoveCnd" Translation="Remove Conditions" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropRemoveDesc" Translation="Remove Descriptions" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxEditPropTextColor" Translation="Text Color" />
@@ -1934,6 +1956,10 @@
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxMoveUp" Translation="上へ移動" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxPasteAction" Translation="コピー" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxRemoveAction" Translation="アクションの削除" />
+    <TranslationEntry Key="TriggerForm/actionViewer1/ctxTestAction" Translation="Test Action" />
+    <TranslationEntry Key="TriggerForm/actionViewer1/ctxTestLive" Translation="By Live Values" />
+    <TranslationEntry Key="TriggerForm/actionViewer1/ctxTestLiveIgnoreCnd" Translation="By Live Values (Ignore Conditions)" />
+    <TranslationEntry Key="TriggerForm/actionViewer1/ctxTestPlaceholder" Translation="By Placeholder Values" />
     <TranslationEntry Key="TriggerForm/actionViewer1/ctxUndo" Translation="Undo" />
     <TranslationEntry Key="TriggerForm/btnCancel" Translation="キャンセル" />
     <TranslationEntry Key="TriggerForm/cbxEditAutofire" Translation="編集後にトリガーを自動起動する" />
