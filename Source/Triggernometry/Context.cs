@@ -450,6 +450,83 @@ namespace Triggernometry
             return result;
         }
 
+        public static string ToFullWidth(string input)
+        {
+            char[] array = input.ToCharArray();
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i] == 32) // ' '
+                {
+                    array[i] = (char)0x3000; // '　'
+                }
+                else if (array[i] > 32 && array[i] < 127)
+                {
+                    array[i] = (char)(array[i] + 0xFEE0);
+                }
+            }
+            return new string(array);
+        }
+
+        public static string ToHalfWidth(string input)
+        {
+            char[] array = input.ToCharArray();
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i] == 0x3000)
+                {
+                    array[i] = (char)32;
+                }
+                else if (array[i] > 0xFF00 && array[i] < 0xFF5F) 
+                {
+                    array[i] = (char)(array[i] - 0xFEE0);
+                }
+            }
+            return new string(array);
+        }
+
+        /// <summary> Convert the letters and numbers in a string to the XIV-defined black box character.</summary>
+        /// <param name="combineDigits">True if you want the numbers 10-31 in the string to be combined as a single XIV character.</param>
+        public static string ToXIVChar(string input, bool combineDigits)
+        {
+            StringBuilder result = new StringBuilder();
+            char[] array = input.ToCharArray();
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i] >= 'a' && array[i] <= 'z')
+                {
+                    // Convert lowercase letters to special XIV capital characters
+                    result.Append((char)(array[i] + 57360));
+                }
+                else if (array[i] >= 'A' && array[i] <= 'Z')
+                {
+                    // Convert uppercase letters to special XIV capital characters
+                    result.Append((char)(array[i] + 57392));
+                }
+                else if (array[i] >= '0' && array[i] <= '9')
+                {
+                    // Convert digits to special XIV capital characters 10-31
+                    if (combineDigits && i + 1 < array.Length && array[i + 1] >= '0' && array[i + 1] <= '9')
+                    {
+                        int num = 10 * (array[i] - '0') + (array[i + 1] - '0');
+                        if (num >= 10 && num <= 31)
+                        {
+                            result.Append((char)(num + 57487));
+                            i++;
+                            continue;
+                        }
+                    }
+                    // Convert digits to special XIV capital characters 0-9
+                    result.Append((char)(array[i] + 57439));
+                }
+                else
+                {
+                    result.Append(array[i]);
+                }
+            }
+            return result.ToString();
+        }
+
         /// <summary> use "⏎" as a single-digit placeholder for linebreaks
         /// to parse linebreaks as regular characters.</summary>
         public static string ReplaceLineBreak(string str, string placeholder = LINEBREAK_PLACEHOLDER)
@@ -645,6 +722,11 @@ namespace Triggernometry
                         else if (x == "_triggerid")
                         {
                             val = trig != null ? trig.Id.ToString() : "(null)";
+                            found = true;
+                        }
+                        else if (x == "_triggerpath")
+                        {
+                            val = trig?.FullPath ?? "";
                             found = true;
                         }
                         else if (x == "_loopiterator" || x == "_i")
@@ -1566,22 +1648,27 @@ namespace Triggernometry
                             Match rxm = rexFunc.Match(funcexpr);
                             if (rxm.Success)
                             {
-                                string funcname = rxm.Groups["name"].Value.ToLower();
+                                string funcname = rxm.Groups["name"].Value.ToLower().Trim();
                                 string funcarg = rxm.Groups["arg"].Value;
                                 string funcval = rxm.Groups["val"].Value;
                                 string[] args = SplitArguments(funcarg);
                                 int argc = args.Count();
                                 switch (funcname)
                                 {
-                                    case "toupper": // toupper()
-                                        val = funcval.ToUpper();
+                                    case "toupper": val = funcval.ToUpper(); break;
+                                    case "tolower": val = funcval.ToLower(); break;
+                                    case "tofullwidth": val = ToFullWidth(funcval); break;
+                                    case "tohalfwidth": val = ToHalfWidth(funcval); break;
+                                    case "toxivchar":
+                                        {
+                                            if (!bool.TryParse(GetArgument(args, 0, "false"), out bool combineDigits))
+                                            {
+                                                throw ParseTypeError(I18n.TranslateWord("string"), args[0], I18n.TranslateWord("bool"), x);
+                                            }
+                                            val = ToXIVChar(funcval, combineDigits);
+                                        }
                                         break;
-                                    case "tolower": // tolower()
-                                        val = funcval.ToLower();
-                                        break;
-                                    case "length": // length()
-                                        val = funcval.Length.ToString();
-                                        break;
+                                    case "length": val = funcval.Length.ToString(); break;
                                     case "hex2dec":    // hex2dec()
                                     case "hex2float":  // hex2float()
                                     case "hex2double": // hex2double()
@@ -1649,6 +1736,45 @@ namespace Triggernometry
                                             }
                                             string format = funcname.Substring(6).ToUpper(); // "X" "X2" "X4" "X8"
                                             val = intValue.ToString(format);
+                                        }
+                                        break;
+                                    case "ord": // chars => charcodes separated by separator
+                                        {
+                                            if (argc > 1) { throw ArgCountError(funcname, "0-1", argc, x); }
+                                            string separator = GetArgument(args, 0, ",");
+                                            List<int> charcodes = new List<int>();
+                                            for (int idx = 0; idx < funcval.Length; idx++)
+                                            {
+                                                if (char.IsHighSurrogate(funcval[idx]) && idx + 1 < funcval.Length && char.IsLowSurrogate(funcval[idx + 1]))
+                                                {
+                                                    charcodes.Add(char.ConvertToUtf32(funcval[idx++], funcval[idx]));
+                                                }
+                                                else
+                                                {
+                                                    charcodes.Add(funcval[idx]);
+                                                }
+                                            }
+                                            val = string.Join(separator, charcodes);
+                                        }
+                                        break;
+                                    case "chr": // charcodes separated by separator => chars
+                                        {
+                                            if (argc > 1) { throw ArgCountError(funcname, "0-1", argc, x); }
+                                            string separator = GetArgument(args, 0, ",");
+                                            string[] rawCharcodes = SplitArguments(funcval, separator: separator);
+                                            List<string> chars = new List<string>();
+                                            for (int idx = 0; idx < rawCharcodes.Length; idx++)
+                                            {
+                                                if (int.TryParse(rawCharcodes[idx], out int charcode))
+                                                {
+                                                    chars.Add(char.ConvertFromUtf32(charcode));
+                                                }
+                                                else
+                                                {
+                                                    throw ParseTypeError($"#{idx}" + I18n.TranslateWord("string"), rawCharcodes[idx], I18n.TranslateWord("int"), x);
+                                                }
+                                            }
+                                            val = string.Join("", chars);
                                         }
                                         break;
                                     case "padleft":

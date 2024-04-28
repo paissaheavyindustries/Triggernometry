@@ -23,9 +23,9 @@ namespace Triggernometry.CustomControls
             "phi", "major", "minor", "ETmin2sec", "semitone", "cent",
 
             // numeric func: basic
-            "sqrt(x)", "pow(x, y)", "root(x, y)", "exp(x)", "log(x)", "log(x, base)",
+            "sqrt(x)", "pow(x, y)", "root(x, y)", "exp(x)", "log(x, base=e)",
             "abs(x)", "sign(x)", "rem(x, y)", "mod(x, y)", "random(start, end)",
-            "truncate(x)", "floor(x)", "ceiling(x)", "round(x)", "round(x, digits)",
+            "truncate(x)", "floor(x)", "ceiling(x)", "round(x, digits=0)",
             "max(...)", "min(...)", "or(...)", "and(...)", "if(condition, trueVal, falseVal)",
 
             // numeric func: trigonometric 
@@ -42,12 +42,12 @@ namespace Triggernometry.CustomControls
             // numeric func: angle
             "radtodeg(rad)", "degtorad(deg)",
             "angle(x1, y1, x2, y2)", "θ(x1, y1, x2, y2)", "relangle(θ1, θ2)", "relθ(θ1, θ2)",
-            "roundir(θ, ±n)", "roundir(θ, ±n, digits)", "roundvec(dx, dy, ±n)", "roundvec(dx, dy, ±n, digits)",
+            "roundir(θ, ±n, digits=0)", "roundvec(dx, dy, ±n, digits=0)",
             "isanglebetween(θ, θ1, θ2)", "isθbetween(θ, θ1, θ2)",
 
             // numeric string func
             "hex2dec(hex)", "hex2float(hex)", "hex2double(hex)", "X8float(hex)", "parsedmg(hex)", "len(alphanumstr)",
-            "freq(note)", "freq(note, semitones)", "nextETms(XX:XX)", "nextETms(ETmin)",
+            "freq(note, semitones=0)", "nextETms(XX:XX)", "nextETms(ETmin)",
         };
 
         public static List<string> prefixes = new List<string>() // right after "${"
@@ -63,7 +63,7 @@ namespace Triggernometry.CustomControls
 
             // special variables
             "_incombat", "_lastencounter", "_activeencounter", "_configpath", "_pluginpath",
-            "_duration", "_event", "_since", "_sincems", "_triggerid", "_triggername", "_zone",
+            "_duration", "_event", "_since", "_sincems", "_triggerid", "_triggername", "_triggerpath", "_zone",
             "_response", "_responsecode", "_jsonresponse[x]",
             "_timestamp", "_timestampms", "_systemtime", "_systemtimems", "_clipboard",
             "_screenwidth", "_screenheight", "_textaura[x]", "_imageaura[x]",
@@ -78,16 +78,15 @@ namespace Triggernometry.CustomControls
 
         public static List<string> funcs = new List<string>()
         {
-            "toupper", "tolower", "length",
+            "toupper", "tolower", "tofullwidth", "tohalfwidth", "toxivchar(combineDigits=false)", "length",
             "dec2hex", "dec2hex2", "dec2hex4", "dec2hex8", "float2hex", "double2hex",
             "hex2dec", "hex2float", "hex2double", "parsedmg",
-            "substring(index)", "substring(index, len)", "slice(slices)", "pick(index)", "pick(index, separator)",
-            "indexof(str)", "lastindexof(str)", "i(str)", "indicesof(str)", "indicesof(str, joiner, slices)",
-            "padleft(char, len)", "padright(char, len)",
+            "substring(index)", "substring(index, len)", "slice(slices)", "pick(index, separator=',')",
+            "indexof(str)", "lastindexof(str)", "i(str)", "indicesof(str, joiner=',', slices='::')",
+            "padleft(char, len)", "padright(char, len)", "chr(separator=',')", "ord(joiner=',')", 
             "trim()", "trim(char, char, ...)", "trimleft()", "trimleft(char, char, ...)", "trimright()", "trimright(char, char, ...)",
-            "repeat(times)", "repeat(times, joiner)",
-            "replace(oldStr)", "replace(oldStr, newStr)", "replace(oldStr, newStr, isLooped)",
-            "format(x, y)", "compare(str)", "compare(str, ignorecase)",
+            "repeat(times, joiner=',')", "replace(oldStr, newStr='', isLooped=false)",
+            "format(type, format)", "compare(str, ignorecase=true)",
             "contain(str)", "ifcontain(str, t, f)", "equal(str)", "ifequal(str, t, f)",
             "startwith(str)", "ifstartwith(str, t, f)", "endwith(str)", "ifendwith(str, t, f)",
             "match(str)", "ifmatch(str, t, f)", "capture(str, groupName)", "capture(str, groupIndex)",
@@ -97,38 +96,38 @@ namespace Triggernometry.CustomControls
         public static List<string> lvarProps = new List<string>()
         {
             "size", "length", "indexof(str)", "i(str)", "lastindexof(str)", 
-            "indicesof(str)", "indicesof(str, joiner, slices)",
-            "sum()", "sum(slices)", "count(str)", "count(str, slices)",
-            "join()", "join(joiner, slices)",
-            "randjoin()", "randjoin(joiner, slices)",
-            "contain(str)", "contain(str, slices)", "ifcontain(str, t, f)",
-            "max()", "max(type, slices)", "min()", "min(type, slices)",
+            "indicesof(str, joiner=',', slices='::')",
+            "sum(slices='::')", "count(str, slices='::')",
+            "join(joiner=',', slices='::')",
+            "randjoin(joiner=',', slices='::')",
+            "contain(str, slices='::')", "ifcontain(str, t, f)",
+            "max(type='n', slices='::')", "min(type='n', slices='::')",
         };
 
         public static List<string> tvarProps = new List<string>()
         {
             "w", "width", "h", "height",
-            "hjoin()", "hjoin(joiner1, joiner2, colSlices, rowSlices)",
-            "vjoin()", "vjoin(joiner1, joiner2, colSlices, rowSlices)",
-            "hlookup(str, rowIndex)", "hlookup(str, rowIndex, colSlices)",
-            "vlookup(str, colIndex)", "vlookup(str, colIndex, rowSlices)",
-            "hl(str, rowIndex)", "hl(str, rowIndex, colSlices)",
-            "vl(str, colIndex)", "vl(str, colIndex, rowSlices)",
-            "count(str)", "count(str, colSlices, rowSlices)",
-            "sum()", "sum(colSlices, rowSlices)",
-            "max()", "max(type, colSlices, rowSlices)",
-            "min()", "min(type, colSlices, rowSlices)",
-            "contain(str)", "contain(str, colSlices, rowSlices)", "ifcontain(str, t, f)",
+            "hjoin()", "hjoin(joiner1=',', joiner2='⏎', colSlices='::', rowSlices='::')",
+            "vjoin()", "vjoin(joiner1=',', joiner2='⏎', colSlices='::', rowSlices='::')",
+            "hlookup(str, rowIndex, colSlices='::')",
+            "vlookup(str, colIndex, rowSlices='::')",
+            "hl(str, rowIndex, colSlices='::')",
+            "vl(str, colIndex, rowSlices='::')",
+            "count(str, colSlices='::', rowSlices='::')",
+            "sum(colSlices='::', rowSlices='::')",
+            "max()", "max(type='n', colSlices='::', rowSlices='::')",
+            "min()", "min(type='n', colSlices='::', rowSlices='::')",
+            "contain(str, colSlices='::', rowSlices='::')", "ifcontain(str, t, f)",
         };
 
         public static List<string> dvarProps = new List<string>()
         {
             "size", "length", "ekey(key)", "evalue(value)", "ifekey(key, t, f)", "ifevalue(value, t, f)",
-            "keyof(value)", "keysof(value)", "keysof(value, joiner)",
-            "joinall()", "joinall(kvjoiner, pairjoiner)",
-            "joinkeys()", "joinkeys(joiner)", "joinvalues()", "joinvalues(joiner)",
+            "keyof(value)", "keysof(value, joiner=',')",
+            "joinall(kvjoiner='=', pairjoiner=',')",
+            "joinkeys(joiner=',')", "joinvalues(joiner=',')",
             "sumkeys", "sum", "count(value)",
-            "max()", "min()", "maxkey()", "minkey()", "max(type)", "min(type)", "maxkey(type)", "minkey(type)",
+            "max(type='n')", "min(type='n')", "maxkey(type='n')", "minkey(type='n')",
         };
 
         public static List<string> textAuraProps = new List<string>()
@@ -1185,10 +1184,9 @@ namespace Triggernometry.CustomControls
             {
                 string clipboardText = Clipboard.GetText();
                 Regex rexIncompleteLinebreaks = new Regex(@"\r(?!\n)|(?<!\r)\n");
-                string replacedText = rexIncompleteLinebreaks.Replace(clipboardText, "\r\n");
-                if (replacedText.Length != clipboardText.Length)
+                if (rexIncompleteLinebreaks.IsMatch(clipboardText))
                 {
-                    MessageBox.Show($"Before: {clipboardText.Length}\nAfter:{replacedText.Length}");
+                    string replacedText = clipboardText.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n");
                     Clipboard.SetText(replacedText);
                 }
             }
