@@ -6446,7 +6446,7 @@ namespace Triggernometry.Forms
         private CustomControls.ExpressionTextBox expVariableName;
         private System.Windows.Forms.Label lblVariableName;
         private System.Windows.Forms.Label lblVariableOp;
-        private System.Windows.Forms.ComboBox cbxVariableOp;
+        internal System.Windows.Forms.ComboBox cbxVariableOp;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
         private System.Windows.Forms.Label lblTrigger;
         private CustomControls.ExpressionTextBox expTriggerText;
@@ -6586,7 +6586,7 @@ namespace Triggernometry.Forms
         private CustomControls.ExpressionTextBox expLvarName;
         private System.Windows.Forms.Label lblLvarName;
         private System.Windows.Forms.Label lblLvarOperation;
-        private System.Windows.Forms.ComboBox cbxLvarOperation;
+        internal System.Windows.Forms.ComboBox cbxLvarOperation;
         private System.Windows.Forms.TabPage tabObsControl;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel18;
         private System.Windows.Forms.ComboBox cbxObsOpType;
@@ -6610,7 +6610,7 @@ namespace Triggernometry.Forms
         private CustomControls.ExpressionTextBox expJsonEndpoint;
         private System.Windows.Forms.TabPage tabActionCondition;
         private CustomControls.ConditionViewer cndCondition;
-        private System.Windows.Forms.ComboBox cbxKeypressMethod;
+        internal System.Windows.Forms.ComboBox cbxKeypressMethod;
         private System.Windows.Forms.Label lblKeypressMethod;
         private CustomControls.ExpressionTextBox expKeypress;
         private CustomControls.ExpressionTextBox expWindowTitle;
@@ -6659,14 +6659,14 @@ namespace Triggernometry.Forms
         private CustomControls.ExpressionTextBox expTvarName;
         private System.Windows.Forms.Label lblTvarName;
         private System.Windows.Forms.Label lblTvarOpType;
-        private System.Windows.Forms.ComboBox cbxTvarOpType;
+        internal System.Windows.Forms.ComboBox cbxTvarOpType;
         private CustomControls.ExpressionTextBox expTvarRow;
         private System.Windows.Forms.Label lblTvarRow;
         private System.Windows.Forms.CheckBox cbxFileOpCache;
         private System.Windows.Forms.TabPage tabDictVariable;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelDict;
         private System.Windows.Forms.Label lblDictOpType;
-        private System.Windows.Forms.ComboBox cbxDictOpType;
+        internal System.Windows.Forms.ComboBox cbxDictOpType;
         private System.Windows.Forms.Label lblDictName;
         private CustomControls.ExpressionTextBox expDictName;
         private CustomControls.PersistenceSwitch prsDictSource;
