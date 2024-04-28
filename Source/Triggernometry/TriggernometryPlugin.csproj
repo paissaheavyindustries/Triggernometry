@@ -165,6 +165,9 @@
     <Compile Include="CustomControls\PrettyCaption.Designer.cs">
       <DependentUpon>PrettyCaption.cs</DependentUpon>
     </Compile>
+    <Compile Include="CustomControls\ReadonlyRichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CustomControls\Toast.cs">
       <SubType>UserControl</SubType>
     </Compile>

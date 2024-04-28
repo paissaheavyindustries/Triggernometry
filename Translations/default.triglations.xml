@@ -1298,6 +1298,7 @@
     <TranslationEntry Key="internal/I18n/desctimesec" Translation="{0} s" />
     <TranslationEntry Key="internal/I18n/double" Translation="double" />
     <TranslationEntry Key="internal/I18n/float" Translation="float" />
+    <TranslationEntry Key="internal/I18n/formatex" Translation="You might need to update your translation file (your_language_name.triglations.xml). &#xD;&#xA;FormatException occured during translating &quot;{0}&quot;." />
     <TranslationEntry Key="internal/I18n/hex" Translation="hex" />
     <TranslationEntry Key="internal/I18n/index" Translation="index" />
     <TranslationEntry Key="internal/I18n/int" Translation="int" />
@@ -1396,6 +1397,7 @@
     <TranslationEntry Key="internal/Plugin/inifilename" Translation="determining filename" />
     <TranslationEntry Key="internal/Plugin/inilanguages" Translation="loading languages" />
     <TranslationEntry Key="internal/Plugin/iniready" Translation="Ready" />
+    <TranslationEntry Key="internal/Plugin/iniscripting" Translation="setting up scripting - try changing the plugin load order in ACT" />
     <TranslationEntry Key="internal/Plugin/inited" Translation="Initialized" />
     <TranslationEntry Key="internal/Plugin/initing" Translation="Initializing" />
     <TranslationEntry Key="internal/Plugin/initoasts" Translation="setting up toasts" />
@@ -1423,7 +1425,9 @@
     <TranslationEntry Key="internal/Plugin/procex" Translation="Exception ({0}) when processing log line ({1}) in zone ({2})" />
     <TranslationEntry Key="internal/Plugin/queuedactscancelled" Translation="{0} queued action(s) from trigger '{1}' cancelled" />
     <TranslationEntry Key="internal/Plugin/releaseunownedmutex" Translation="Tried to release unowned mutex '{0}' from context '{1}'" />
+    <TranslationEntry Key="internal/Plugin/repodownloading" Translation="Downloading repository {0} from {1}" />
     <TranslationEntry Key="internal/Plugin/repoexportnull" Translation="Data for repository {0} could not be unserialized" />
+    <TranslationEntry Key="internal/Plugin/repofetching" Translation="Repository {0} has changed since {1} (new timestamp {2}), or size has changed from {3} (new size {4}), fetching new version" />
     <TranslationEntry Key="internal/Plugin/repoloadedlocal" Translation="Loaded local backup of repository {0} from {1}" />
     <TranslationEntry Key="internal/Plugin/repoloadinglocal" Translation="Loading local backup of repository {0} in {1}" />
     <TranslationEntry Key="internal/Plugin/repoloadlocalexception" Translation="Couldn't load local backup of repository {0} due to exception: {1}" />
@@ -1569,7 +1573,7 @@
     <TranslationEntry Key="internal/UserInterface/areyousurefolder" Translation="Are you sure you want to remove folder '{0}'?" />
     <TranslationEntry Key="internal/UserInterface/areyousurerepo" Translation="Are you sure you want to remove repository '{0}'?" />
     <TranslationEntry Key="internal/UserInterface/areyousuretrigger" Translation="Are you sure you want to remove trigger '{0}'?" />
-	<TranslationEntry Key="internal/UserInterface/clearvar" Translation="Are you sure you want to clear the session variables?" />
+	  <TranslationEntry Key="internal/UserInterface/clearvar" Translation="Are you sure you want to clear the session variables?" />
     <TranslationEntry Key="internal/UserInterface/confirm" Translation="Confirm removal" />
     <TranslationEntry Key="internal/UserInterface/copyfail" Translation="Tree copy failed due to exception: {0}" />
     <TranslationEntry Key="internal/UserInterface/editfolder" Translation="Edit folder '{0}'" />
@@ -1578,6 +1582,9 @@
     <TranslationEntry Key="internal/UserInterface/edittemplatetrigger" Translation="Edit template trigger" />
     <TranslationEntry Key="internal/UserInterface/edittrigger" Translation="Edit trigger '{0}'" />
     <TranslationEntry Key="internal/UserInterface/edittriggerreadme" Translation="Instructions for repository '{0}'" />
+    <TranslationEntry Key="internal/UserInterface/errorCount0" Translation="No new errors" />
+    <TranslationEntry Key="internal/UserInterface/errorCount1" Translation="1 error" />
+    <TranslationEntry Key="internal/UserInterface/errorCountN" Translation="{0} errors" />
     <TranslationEntry Key="internal/UserInterface/folderidreassign" Translation="Reassigning new id ({0}) for folder ({1}) due to already assigned id ({2}) on folder ({3})" />
     <TranslationEntry Key="internal/UserInterface/folderplural" Translation="{0} folders" />
     <TranslationEntry Key="internal/UserInterface/foldersingular" Translation="{0} folder" />
@@ -1689,7 +1696,6 @@
     <TranslationEntry Key="Plugin/UserInterface/ctxPaste" Translation="Paste" />
     <TranslationEntry Key="Plugin/UserInterface/ctxReadme" Translation="Open instructions" />
     <TranslationEntry Key="Plugin/UserInterface/ctxUpdate" Translation="Update" />
-    <TranslationEntry Key="Plugin/UserInterface/errThing1" Translation="Errors have been encountered" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeImport" Translation="It's very similar to creating a trigger. After this screen, you can select the folder where you want to import all the triggers to (or Root), and then hit the Import button on the top bar.&#xD;&#xA;&#xD;&#xA;This is the button you should be looking out for:" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeImportHeader" Translation="I have this XML file which is supposed to have some triggers. How do I use it?" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeIntro" Translation="Here are some answers to commonly asked questions to get you started:" />

@@ -57,7 +57,7 @@
     <TranslationEntry Key="ActionForm/cbxActionType[Dict variable operation]" Translation="变量操作：字典" />
     <TranslationEntry Key="ActionForm/cbxActionType[Discord webhook]" Translation="Discord 聊天室" />
     <TranslationEntry Key="ActionForm/cbxActionType[End encounter]" Translation="结束战斗" />
-    <TranslationEntry Key="ActionForm/cbxActionType[Execute script]" Translation="执行代码" />
+    <TranslationEntry Key="ActionForm/cbxActionType[Execute script]" Translation="执行 C# 代码" />
     <TranslationEntry Key="ActionForm/cbxActionType[File operation]" Translation="文件操作" />
     <TranslationEntry Key="ActionForm/cbxActionType[Folder operation]" Translation="触发器操作：分组" />
     <TranslationEntry Key="ActionForm/cbxActionType[Generic JSON operation]" Translation="通用 JSON 操作" />
@@ -1298,6 +1298,7 @@
     <TranslationEntry Key="internal/I18n/desctimesec" Translation="{0} s" />
     <TranslationEntry Key="internal/I18n/double" Translation="双精度浮点数" />
     <TranslationEntry Key="internal/I18n/float" Translation="浮点数" />
+    <TranslationEntry Key="internal/I18n/formatex" Translation="你可能需要更新汉化文件（zh_CN.triglations.xml，置于触发器 dll 插件同目录下）。&#xD;&#xA;翻译 &quot;{0}&quot; 时，翻译文本格式异常。" />
     <TranslationEntry Key="internal/I18n/hex" Translation="十六进制数" />
     <TranslationEntry Key="internal/I18n/index" Translation="索引" />
     <TranslationEntry Key="internal/I18n/int" Translation="整数" />
@@ -1394,18 +1395,19 @@
     <TranslationEntry Key="internal/Plugin/inierror" Translation="错误 当 {0} ({1})" />
     <TranslationEntry Key="internal/Plugin/inievents" Translation="创建事件" />
     <TranslationEntry Key="internal/Plugin/inifilename" Translation="确定文件名" />
-    <TranslationEntry Key="internal/Plugin/inilanguages" Translation="读取翻译文件中" />
-    <TranslationEntry Key="internal/Plugin/iniready" Translation="准备" />
+    <TranslationEntry Key="internal/Plugin/inilanguages" Translation="读取翻译文件时" />
+    <TranslationEntry Key="internal/Plugin/iniready" Translation="已成功启动" />
+    <TranslationEntry Key="internal/Plugin/iniscripting" Translation="初始化脚本时出错。&#xD;&#xA;添加或更新插件后需要重启 ACT。如果仍有问题，将触发器插件调整至 FFXIV_ACT_Plugin 和 OverlayPlugin 后面再重启。" />
     <TranslationEntry Key="internal/Plugin/inited" Translation="初始化结束" />
     <TranslationEntry Key="internal/Plugin/initing" Translation="初始化中" />
-    <TranslationEntry Key="internal/Plugin/initoasts" Translation="设置气泡提示" />
-    <TranslationEntry Key="internal/Plugin/initree" Translation="构建内部数据中" />
-    <TranslationEntry Key="internal/Plugin/initseek" Translation="寻找插件中" />
-    <TranslationEntry Key="internal/Plugin/initts" Translation="尝试初始化 TTS" />
-    <TranslationEntry Key="internal/Plugin/iniui" Translation="创建用户主界面中" />
-    <TranslationEntry Key="internal/Plugin/iniupdates" Translation="检查更新" />
-    <TranslationEntry Key="internal/Plugin/iniwelcome" Translation="准备欢迎" />
-    <TranslationEntry Key="internal/Plugin/iniwmp" Translation="尝试初始化 Windows Media Player" />
+    <TranslationEntry Key="internal/Plugin/initoasts" Translation="设置气泡提示时" />
+    <TranslationEntry Key="internal/Plugin/initree" Translation="构建触发器树时" />
+    <TranslationEntry Key="internal/Plugin/initseek" Translation="搜索插件时" />
+    <TranslationEntry Key="internal/Plugin/initts" Translation="尝试初始化 TTS 时" />
+    <TranslationEntry Key="internal/Plugin/iniui" Translation="创建用户主界面时" />
+    <TranslationEntry Key="internal/Plugin/iniupdates" Translation="检查更新时" />
+    <TranslationEntry Key="internal/Plugin/iniwelcome" Translation="准备欢迎界面时" />
+    <TranslationEntry Key="internal/Plugin/iniwmp" Translation="尝试初始化 Windows Media Player 时" />
     <TranslationEntry Key="internal/Plugin/iniwmperror" Translation="发生错误：{0} ({1})，回退以 ACT 接口播放声音文件" />
     <TranslationEntry Key="internal/Plugin/invalidacquiremutex" Translation="尝试在上下文 '{2}' 独占访问目前属于上下文 '{1}' 的互斥锁 '{0}' 失败" />
     <TranslationEntry Key="internal/Plugin/invalidwindowhandle" Translation="还没有有效的窗口句柄，等待它创建" />
@@ -1420,10 +1422,12 @@
     <TranslationEntry Key="internal/Plugin/langloadfail" Translation="加载翻译文件失败，请确保您运行的是最新版本" />
     <TranslationEntry Key="internal/Plugin/mutexdelayed" Translation="上下文 '{0}' 在内部操作 {2} 中已等待独占锁 '{1}' 释放超过 {3} 毫秒，该独占锁目前的所有者是 '{4}'" />
     <TranslationEntry Key="internal/Plugin/notadministrator" Translation="您没有以管理员身份运行 ACT  - 这可能会阻止某些触发器工作。" />
-    <TranslationEntry Key="internal/Plugin/procex" Translation="发生错误 ({0}) 当处理日志行 ({1}) 在区域 ({2})" />
+    <TranslationEntry Key="internal/Plugin/procex" Translation="发生错误：&#xD;&#xA; ({0}) &#xD;&#xA;日志行：({1}) &#xD;&#xA; 区域： ({2})" />
     <TranslationEntry Key="internal/Plugin/queuedactscancelled" Translation="触发器 '{1}' 的 {0} 个队列中的动作已被取消" />
     <TranslationEntry Key="internal/Plugin/releaseunownedmutex" Translation="尝试在上下文 '{1}' 释放非其所有的独占锁 '{0}' 失败" />
+    <TranslationEntry Key="internal/Plugin/repodownloading" Translation="正在从 {1} 下载仓库 {0}。" />
     <TranslationEntry Key="internal/Plugin/repoexportnull" Translation="仓库 {0} 的数据格式无法解析，请确认 Triggernometry 版本为最新版。" />
+    <TranslationEntry Key="internal/Plugin/repofetching" Translation="仓库 {0} 自 {1} 同步后有改动 ({2})，或文件大小从 {3} 改变为 {4}，正在同步新版本。" />
     <TranslationEntry Key="internal/Plugin/repoloadedlocal" Translation="已从下列地址加载仓库 {0} 的本地备份：{1}" />
     <TranslationEntry Key="internal/Plugin/repoloadinglocal" Translation="正从下列地址加载仓库 {0} 的本地备份：{1}" />
     <TranslationEntry Key="internal/Plugin/repoloadlocalexception" Translation="由于下列异常，仓库 {0} 的本地备份无法加载：{1}" />
@@ -1434,7 +1438,7 @@
     <TranslationEntry Key="internal/Plugin/repoupdatecomplete" Translation="仓库更新完成" />
     <TranslationEntry Key="internal/Plugin/repoupdateexception" Translation="由于下列异常，仓库 {0} 无法更新：{1}" />
     <TranslationEntry Key="internal/Plugin/repoupdates" Translation="即将更新 {0} 个仓库" />
-    <TranslationEntry Key="internal/Plugin/repousingbackup" Translation="仓库 {0} 的最后修改日期不晚于 {1} 并且文件大小 {2} 与本地缓存文件大小 {3} 一致，故使用本地缓存" />
+    <TranslationEntry Key="internal/Plugin/repousingbackup" Translation="仓库 {0} 自 {1} 未改动，并且文件大小 {2} 与本地缓存一致，故使用本地缓存" />
     <TranslationEntry Key="internal/Plugin/repousinglocal" Translation="正在加载仓库 {0} 的本地备份" />
     <TranslationEntry Key="internal/Plugin/splitlogline" Translation="拆分日志行：({0})" />
     <TranslationEntry Key="internal/Plugin/trigaddbook" Translation="触发器 '{0}' 已添加到记录中" />
@@ -1450,11 +1454,11 @@
     <TranslationEntry Key="internal/Plugin/warnprocdelay" Translation="行 ({0}) 使用 {1} 毫秒进行处理" />
     <TranslationEntry Key="internal/Plugin/zoneupdate" Translation="当前区域切换至 '{0}'。区域分组限制：{1} 个触发器处于激活状态，{2} 个触发器未激活" />
     <TranslationEntry Key="internal/RegexTextBox" Translation="此字段支持正则表达式。绿色代表输入的正则合法，红色代表不合法。" />
-    <TranslationEntry Key="internal/RepositoryForm/allowdisk" Translation="允许远程触发器操作文件的风险极大。远程触发器可能包含危险或恶意内容，可能会在你不知情时收到更新并添加。你确定允许吗？" />
-    <TranslationEntry Key="internal/RepositoryForm/allowobswarn" Translation="允许远程触发器控制 OBS 的风险极大。远程触发器可能包含危险或恶意内容，可能会在你不知情时收到更新并添加。你确定允许吗？" />
-    <TranslationEntry Key="internal/RepositoryForm/allowprocesswarn" Translation="允许远程触发器启动进程的风险极大。远程触发器可能包含危险或恶意内容，可能会在你不知情时收到更新并添加。你确定允许吗？" />
-    <TranslationEntry Key="internal/RepositoryForm/allowscriptwarn" Translation="允许远程触发器执行代码的风险极大。远程触发器可能包含危险或恶意内容，可能会在你不知情时收到更新并添加。你确定允许吗？" />
-    <TranslationEntry Key="internal/RepositoryForm/allowwmsgwarn" Translation="允许远程触发器发送窗口消息的风险极大。远程触发器可能包含危险或恶意内容，可能会在你不知情时收到更新并添加。你确定允许吗？" />
+    <TranslationEntry Key="internal/RepositoryForm/allowdisk" Translation="允许远程触发器操作文件的风险极大。&#xD;&#xA;远程触发器可能包含危险或恶意内容，可能会在你不知情时收到更新并添加。&#xD;&#xA;请确认你信任远程触发器的提供者。&#xD;&#xA;你确定允许吗？" />
+    <TranslationEntry Key="internal/RepositoryForm/allowobswarn" Translation="允许远程触发器控制 OBS 存在风险。&#xD;&#xA;远程触发器可能包含危险或恶意内容，可能会在你不知情时收到更新并添加。&#xD;&#xA;请确认你信任远程触发器的提供者。&#xD;&#xA;你确定允许吗？" />
+    <TranslationEntry Key="internal/RepositoryForm/allowprocesswarn" Translation="允许远程触发器启动进程的风险极大。&#xD;&#xA;远程触发器可能包含危险或恶意内容，可能会在你不知情时收到更新并添加。&#xD;&#xA;请确认你信任远程触发器的提供者。&#xD;&#xA;你确定允许吗？" />
+    <TranslationEntry Key="internal/RepositoryForm/allowscriptwarn" Translation="允许远程触发器执行代码的风险极大。&#xD;&#xA;远程触发器可能包含危险或恶意内容，可能会在你不知情时收到更新并添加。&#xD;&#xA;请确认你信任远程触发器的提供者。&#xD;&#xA;你确定允许吗？" />
+    <TranslationEntry Key="internal/RepositoryForm/allowwmsgwarn" Translation="允许远程触发器发送窗口消息的风险极大。&#xD;&#xA;远程触发器可能包含危险或恶意内容，可能会在你不知情时收到更新并添加。&#xD;&#xA;请确认你信任远程触发器的提供者。&#xD;&#xA;你确定允许吗？" />
     <TranslationEntry Key="internal/RepositoryForm/exception" Translation="异常" />
     <TranslationEntry Key="internal/RepositoryForm/unavailable" Translation="不可用" />
     <TranslationEntry Key="internal/RepositoryForm/warning" Translation="警告" />
@@ -1569,7 +1573,7 @@
     <TranslationEntry Key="internal/UserInterface/areyousurefolder" Translation="您确定要移除分组 '{0}' 吗？" />
     <TranslationEntry Key="internal/UserInterface/areyousurerepo" Translation="您确定要移除仓库 '{0}' 吗？" />
     <TranslationEntry Key="internal/UserInterface/areyousuretrigger" Translation="您确定要移除触发器 '{0}' 吗？" />
-	<TranslationEntry Key="internal/UserInterface/clearvar" Translation="你确认要清除临时变量吗？" />
+    <TranslationEntry Key="internal/UserInterface/clearvar" Translation="你确定要移除所有临时变量吗？" />
     <TranslationEntry Key="internal/UserInterface/confirm" Translation="移除确认" />
     <TranslationEntry Key="internal/UserInterface/copyfail" Translation="由于异常，树复制失败：{0}" />
     <TranslationEntry Key="internal/UserInterface/editfolder" Translation="编辑分组 '{0}'" />
@@ -1578,6 +1582,9 @@
     <TranslationEntry Key="internal/UserInterface/edittemplatetrigger" Translation="编辑触发器模板" />
     <TranslationEntry Key="internal/UserInterface/edittrigger" Translation="编辑触发器 '{0}'" />
     <TranslationEntry Key="internal/UserInterface/edittriggerreadme" Translation="仓库 '{0}' 的使用说明" />
+    <TranslationEntry Key="internal/UserInterface/errorCount0" Translation="无错误" />
+    <TranslationEntry Key="internal/UserInterface/errorCount1" Translation="1 条错误" />
+    <TranslationEntry Key="internal/UserInterface/errorCountN" Translation="{0} 条错误" />
     <TranslationEntry Key="internal/UserInterface/folderidreassign" Translation="由于分组 ID ({2}) 已被分组 ({3}) 占用，分组 ({1}) 被分配了一个新的分组 ID ({0})" />
     <TranslationEntry Key="internal/UserInterface/folderplural" Translation="{0} 分组" />
     <TranslationEntry Key="internal/UserInterface/foldersingular" Translation="{0} 分组" />
@@ -1689,7 +1696,6 @@
     <TranslationEntry Key="Plugin/UserInterface/ctxPaste" Translation="粘贴" />
     <TranslationEntry Key="Plugin/UserInterface/ctxReadme" Translation="打开使用说明" />
     <TranslationEntry Key="Plugin/UserInterface/ctxUpdate" Translation="更新" />
-    <TranslationEntry Key="Plugin/UserInterface/errThing1" Translation="发生了错误" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeImport" Translation="类似于创建触发器操作：关闭此界面后，点击顶部的导入按钮：" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeImportHeader" Translation="我有一个 XML 配置文件，里面可能包含一些触发器设置。 我该如何使用它？" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeIntro" Translation="以下是一些常见问题的答案，可帮助您入门：" />

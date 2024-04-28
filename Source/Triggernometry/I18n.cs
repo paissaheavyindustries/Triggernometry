@@ -87,7 +87,16 @@ namespace Triggernometry
             }
             if (CurrentLanguage != null)
             {
-                return CurrentLanguage.Translate(key, text, args);
+                try
+                {
+                    return CurrentLanguage.Translate(key, text, args);
+                }
+                catch (FormatException)
+                {
+                    RealPlugin.plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/I18n/formatex", 
+                        "You might need to update your translation file (your_language_name.triglations.xml). \nFormatException occured during translating \"{0}\".",key));
+                    return String.Format(text, args);
+                }
             }
             else
             {
