@@ -131,7 +131,7 @@ namespace Triggernometry
                 System.Diagnostics.Debug.WriteLine("### {0} - Queuing acquisition for context: {1}", this.name, ctx.ToString());
                 MutexTicket m = new MutexTicket(ctx);
                 lock (this)
-                {                    
+                {
                     acquireQueue.Add(m);
                 }
                 System.Diagnostics.Debug.WriteLine("### {0} - Queued acquisition {1} for context: {2}", this.name, m.GetHashCode(), ctx.ToString());
@@ -278,7 +278,7 @@ namespace Triggernometry
                 {
                     if (_xivProcHandle != IntPtr.Zero)
                     {
-                        WindowsUtils.CloseHandle(_xivProcHandle); 
+                        WindowsUtils.CloseHandle(_xivProcHandle);
                         _xivProcHandle = IntPtr.Zero;
                     }
                     _xivProcHandle = WindowsUtils.GetXIVHandle();
@@ -302,8 +302,8 @@ namespace Triggernometry
         internal Scarborough.Scarborough sc;
         private Queue<LogEvent> EventQueue;
         private ManualResetEvent QueueWakeupEvent;
-        internal CustomControls.UserInterface ui;
-        
+        public CustomControls.UserInterface ui;
+
         private Configuration _cfg;
         internal Configuration cfg
         {
@@ -334,7 +334,7 @@ namespace Triggernometry
         internal bool runningAsAdmin;
         internal string currentZone = null;
         internal bool WMPUnavailable;
-        internal Queue<InternalLog> log;
+        internal Dictionary<DebugLevelEnum, Queue<InternalLog>> log = new Dictionary<DebugLevelEnum, Queue<InternalLog>>();
         internal DateTime LastDelayWarning;
         internal object QueueProcessingLock;
         internal bool QueueProcessing;
@@ -471,7 +471,7 @@ namespace Triggernometry
                         string ax = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._AuraName);
                         FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/actimageaura", "Activating image aura '{0}'", ax));
                         try
-                        { 
+                        {
                             Scarborough.ScarboroughImage si = new Scarborough.ScarboroughImage(sc);
                             si.ImageExpression = a._AuraImage;
                             si.InitXExpression = a._AuraXIniExpression;
@@ -522,7 +522,7 @@ namespace Triggernometry
                     }
                     break;
             }
-        } 
+        }
 
         internal void LegacyImageAuraManagement(Context ctx, Action a)
         {
@@ -554,7 +554,7 @@ namespace Triggernometry
                                     acf = new Forms.AuraContainerForm(Forms.AuraContainerForm.AuraTypeEnum.Image);
                                     acf.plug = this;
                                     acf.AuraName = ax;
-                                    newAura = true;                                    
+                                    newAura = true;
                                 }
                                 acf.AuraPrepare();
                                 acf.ctx = ctx;
@@ -586,7 +586,7 @@ namespace Triggernometry
                                 if (i > 100)
                                 {
                                     i = 100;
-                                }                                
+                                }
                                 acf.PresentableOpacity = i;
                                 acf.XExpression = a._AuraXTickExpression;
                                 acf.YExpression = a._AuraYTickExpression;
@@ -822,7 +822,7 @@ namespace Triggernometry
                                 acf.TextExpression = a._TextAuraExpression;
                                 acf.TextAlignment = a._TextAuraAlignment;
                                 acf.TextColor = ExpressionTextBox.ParseColor(
-                                    ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._TextAuraForegroundClInt), 
+                                    ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._TextAuraForegroundClInt),
                                     Color.Black);
                                 acf.OutlineColor = ExpressionTextBox.ParseColor(
                                     ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._TextAuraOutlineClInt),
@@ -855,7 +855,7 @@ namespace Triggernometry
                                     }
                                 }
                                 if (acf.AuraFont == null)
-                                {                                    
+                                {
                                     FontStyle fs = FontStyle.Regular;
                                     if ((a._TextAuraEffect & Action.TextAuraEffectEnum.Bold) != 0)
                                     {
@@ -877,7 +877,7 @@ namespace Triggernometry
                                     if (ex < 1)
                                     {
                                         ex = 1;
-                                    }                                    
+                                    }
                                     acf.AuraFont = new Font(a._TextAuraFontName, ex, fs, GraphicsUnit.Point);
                                 }
                                 acf.BackgroundColor = ExpressionTextBox.ParseColor(
@@ -1073,7 +1073,10 @@ namespace Triggernometry
             DisableLogging = false;
             path = null;
             ActionQueue = new List<QueuedAction>();
-            log = new Queue<InternalLog>();
+            foreach (DebugLevelEnum logLevel in Enum.GetValues(typeof(DebugLevelEnum)))
+            {
+                log[logLevel] = new Queue<InternalLog>();
+            }
             EventQueue = new Queue<LogEvent>();
             QueueWakeupEvent = null;
             configBroken = false;
@@ -1314,7 +1317,8 @@ namespace Triggernometry
                     }
                     break;
                 case Trigger.TriggerSourceEnum.None:
-                    break;            }
+                    break;
+            }
         }
 
         internal void RemoveAurasFromTrigger(Trigger t)
@@ -1330,7 +1334,7 @@ namespace Triggernometry
         }
 
         internal void TriggerDisabled(Trigger t)
-        {            
+        {
             switch (t._Source)
             {
                 case Trigger.TriggerSourceEnum.Log:
@@ -1396,7 +1400,7 @@ namespace Triggernometry
         }
 
         internal Repository GetRepositoryById(Guid id)
-        {            
+        {
             return (from ix in cfg.RepositoryRoot.Repositories where ix.Id == id select ix).FirstOrDefault();
         }
 
@@ -1414,7 +1418,7 @@ namespace Triggernometry
         internal Folder GetFolderById(Guid id, Repository repo)
         {
             if (repo != null)
-            {                
+            {
                 return RecursiveFolderSearch(repo.Root, id, repo);
             }
             else
@@ -1610,13 +1614,13 @@ namespace Triggernometry
             WindowsMediaPlayer mywmp;
             if (a._PlaySoundExclusive == true)
             {
-                mywmp = new WindowsMediaPlayer();                
+                mywmp = new WindowsMediaPlayer();
                 lock (a.players) // verified
                 {
                     a.players.Add(mywmp);
                 }
                 mywmp.MediaError += a.Mywmp_MediaError;
-                mywmp.PlayStateChange += a.Mywmp_PlayStateChange;                
+                mywmp.PlayStateChange += a.Mywmp_PlayStateChange;
             }
             else
             {
@@ -1704,18 +1708,16 @@ namespace Triggernometry
             return dt.ToString("yyyy-MM-dd HH:mm:ss.fff");
         }
 
-        private bool errorWarnState = false;
-
         internal void ClearLog()
         {
             lock (log)
             {
-                log.Clear();
+                foreach (var pair in plug.log)
+                {
+                    pair.Value.Clear();
+                }
             }
-            if (errorWarnState == true)
-            {
-                ui.HideErrorThing(null, null);                
-            }
+            ui.ClearErrorCount();
         }
 
         internal void UnfilteredAddToLog(DebugLevelEnum level, string msg)
@@ -1725,20 +1727,17 @@ namespace Triggernometry
             {
                 System.Diagnostics.Debug.WriteLine(il.ToString());
             }
-            if (level == DebugLevelEnum.Error && errorWarnState == false)
+            if (level == DebugLevelEnum.Error)
             {
-                if (ui != null)
-                {
-                    ui.ShowErrorThing(null, null);
-                }
-                errorWarnState = true;
+                ui.IncrementErrorCount();
             }
-            lock (log) // verified
+            var queue = log[level];
+            lock (queue)
             {
-                log.Enqueue(il);
-                if (log.Count > 100000)
+                queue.Enqueue(il);
+                if (queue.Count > 30000)
                 {
-                    log.Dequeue();
+                    queue.Dequeue();
                 }
             }
         }

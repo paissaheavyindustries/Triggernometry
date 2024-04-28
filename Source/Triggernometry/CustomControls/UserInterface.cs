@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Speech.Synthesis;
+using System.Threading;
 
 namespace Triggernometry.CustomControls
 {
@@ -107,6 +108,7 @@ namespace Triggernometry.CustomControls
             treeView1.DragEnter += TreeView1_DragEnter;
             treeView1.DragOver += TreeView1_DragOver;
             statusStrip1.VisibleChanged += StatusStrip1_VisibleChanged;
+            ClearErrorCount();
         }
 
         private void StatusStrip1_VisibleChanged(object sender, EventArgs e)
@@ -1279,7 +1281,6 @@ namespace Triggernometry.CustomControls
                 if (formlog == null)
                 {
                     formlog = new Forms.LogForm();
-                    formlog.plug = plug;
                     formlog.startWithErrorSearch = errorSearch;
                     formlog.FormClosed += Formlog_FormClosed;
                     formlog.Show(plug.mainform);
@@ -1510,10 +1511,10 @@ namespace Triggernometry.CustomControls
                 switch (ti.ShowDialog())
                 {
                     case DialogResult.OK:
-                        string[] lines = ti.txtEvent.Lines;
+                        string[] lines = ti.txtEvent.Lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
                         testInputHistoryLines = lines;
                         testInputHistoryZone = ti.txtZoneName.Text;
-                        plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeue", "Queueing {0} user log lines", lines.Count()));
+                        plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeue", "Queueing {0} user log lines", lines.Length));
                         LogEvent.SourceEnum src = LogEvent.SourceEnum.Log;
                         cfg.TestInputDestination = ti.cbxEventDestination.SelectedIndex;
                         cfg.TestInputZoneType = ti.cbxZoneType.SelectedIndex;
@@ -1569,26 +1570,68 @@ namespace Triggernometry.CustomControls
             }
         }
 
-        internal void ShowErrorThing(object sender, EventArgs e)
-        {
-            if (this.InvokeRequired == true)
+        private int _newErrorCount = 0;
+        /// <summary> Should only use this property on the main UI thread. </summary>
+        private int NewErrorCount {
+            get => _newErrorCount;
+            set 
             {
-                this.Invoke(new VoidDelegate(ShowErrorThing), sender, e);
-                return;
+                _newErrorCount = value;
+                UpdateErrorCount();
             }
-            errThing2.Visible = true;
-            errThing1.Visible = true;
         }
 
-        internal void HideErrorThing(object sender, EventArgs e)
+        private void UpdateErrorCount()
         {
-            if (this.InvokeRequired == true)
+            if (NewErrorCount == 0)
             {
-                this.Invoke(new VoidDelegate(HideErrorThing), sender, e);
+                errThing1.Text = I18n.Translate("internal/UserInterface/errorCount0", "No new errors");
+                var resources = new ComponentResourceManager(typeof(UserInterface));
+                errThing1.Image = (Image)resources.GetObject("btnViewLog.Image");
+            }
+            else if (NewErrorCount == 1)
+            {
+                errThing1.Text = I18n.Translate("internal/UserInterface/errorCount1", "1 error");
+                var resources = new ComponentResourceManager(typeof(UserInterface));
+                errThing1.Image = (Image)resources.GetObject("errThing1.Image");
+            }
+            else if (NewErrorCount > 10000)
+            {
+                return; // avoid a infinitely looped error continuously invoking this method and freezing the UI
+            }
+            else if (NewErrorCount == 10000)
+            {
+                errThing1.Text = I18n.Translate("internal/UserInterface/errorCountN", "{0} errors", "9999+");
+            }
+            else
+            {
+                errThing1.Text = I18n.Translate("internal/UserInterface/errorCountN", "{0} errors", NewErrorCount);
                 return;
             }
-            errThing1.Visible = false;
-            errThing2.Visible = false;
+        }
+
+        internal void ClearErrorCount()
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new System.Action(ClearErrorCount));
+            }
+            else
+            {
+                NewErrorCount = 0;
+            }
+        }
+
+        internal void IncrementErrorCount()
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new System.Action(IncrementErrorCount));
+            }
+            else
+            {
+                NewErrorCount += 1;
+            }
         }
 
         internal void PasteSelected()
@@ -2011,6 +2054,7 @@ namespace Triggernometry.CustomControls
         private void errThing1_Click(object sender, EventArgs e)
         {
             OpenLogForm(true);
+            NewErrorCount = 0;
         }
 
         private void ctxCollapse_Click(object sender, EventArgs e)

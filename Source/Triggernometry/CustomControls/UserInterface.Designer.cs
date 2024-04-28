@@ -92,7 +92,7 @@
             this.btnLanguages = new System.Windows.Forms.ToolStripDropDownButton();
             this.btnDefaultLanguage = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
-            this.errThing2 = new System.Windows.Forms.ToolStripSeparator();
+            this.errCountSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.errThing1 = new System.Windows.Forms.ToolStripLabel();
             this.pnlUi = new System.Windows.Forms.Panel();
             this.treeView1 = new Triggernometry.CustomControls.TreeViewEx();
@@ -355,7 +355,7 @@
             this.btnOptions,
             this.toolStripSeparator9,
             this.btnLanguages,
-            this.errThing2,
+            this.errCountSeparator,
             this.errThing1});
             this.toolStrip1.Location = new System.Drawing.Point(5, 5);
             this.toolStrip1.Name = "toolStrip1";
@@ -697,12 +697,11 @@
             this.toolStripSeparator10.Size = new System.Drawing.Size(157, 6);
             this.toolStripSeparator10.Visible = false;
             // 
-            // errThing2
+            // errCountSeparator
             // 
-            this.errThing2.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.errThing2.Name = "errThing2";
-            this.errThing2.Size = new System.Drawing.Size(6, 25);
-            this.errThing2.Visible = false;
+            this.errCountSeparator.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.errCountSeparator.Name = "errCountSeparator";
+            this.errCountSeparator.Size = new System.Drawing.Size(6, 25);
             // 
             // errThing1
             // 
@@ -710,8 +709,7 @@
             this.errThing1.Image = ((System.Drawing.Image)(resources.GetObject("errThing1.Image")));
             this.errThing1.Name = "errThing1";
             this.errThing1.Size = new System.Drawing.Size(180, 22);
-            this.errThing1.Text = "Errors have been encountered";
-            this.errThing1.Visible = false;
+            this.errThing1.Text = "No new errors";
             this.errThing1.Click += new System.EventHandler(this.errThing1_Click);
             // 
             // pnlUi
@@ -1098,7 +1096,7 @@
         private System.Windows.Forms.ToolStripMenuItem btnClearActionQueue;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem btnEditConfig;
-        internal TreeViewEx treeView1;
+        public TreeViewEx treeView1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem btnAbout;
         internal System.Windows.Forms.ImageList imageList1;
@@ -1112,7 +1110,7 @@
         private System.Windows.Forms.ToolStripMenuItem ctxCopy;
         private System.Windows.Forms.ToolStripMenuItem ctxPaste;
         private System.Windows.Forms.ToolStripMenuItem btnClearVars;
-        private System.Windows.Forms.ToolStripSeparator errThing2;
+        private System.Windows.Forms.ToolStripSeparator errCountSeparator;
         private System.Windows.Forms.ToolStripLabel errThing1;
         private System.Windows.Forms.ToolStripMenuItem btnSaveConfig;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
