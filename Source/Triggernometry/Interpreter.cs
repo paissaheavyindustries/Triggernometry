@@ -57,7 +57,7 @@ namespace Triggernometry
                             break;
                         case SymbolKind.Local:
                             var localSymbol = ((ILocalSymbol)symbol);
-                            type = localSymbol.Type;                            
+                            type = localSymbol.Type;
                             break;
                         default:
                             continue;
@@ -96,7 +96,7 @@ namespace Triggernometry
                 var props = srn.DescendantNodes().OfType<PropertyDeclarationSyntax>();
                 foreach (var prop in props)
                 {
-                    IPropertySymbol symbol = model.GetDeclaredSymbol(prop) as IPropertySymbol;                    
+                    IPropertySymbol symbol = model.GetDeclaredSymbol(prop) as IPropertySymbol;
                     string name = symbol.Type.ContainingAssembly.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                     if (IsBadApi(name, badApis) == true)
                     {
@@ -150,7 +150,7 @@ namespace Triggernometry
             {
                 Action a = new Action();
                 a._PlaySoundFileExpression = uri;
-                CurrentContext.soundhook(CurrentContext, a);                
+                CurrentContext.soundhook(CurrentContext, a);
             }
 
             public string EvaluateStringExpression(string expr)
@@ -324,7 +324,7 @@ namespace Triggernometry
 
         public Interpreter()
         {
-            _so = ScriptOptions.Default;            
+            _so = ScriptOptions.Default;
             var asms = AppDomain.CurrentDomain.GetAssemblies();
             foreach (Assembly asm in asms)
             {
@@ -350,7 +350,7 @@ namespace Triggernometry
                     }
                 }
             }
-            _so = _so.AddImports("System");            
+            _so = _so.AddImports("System");
             Evaluate("int whee;", null, new Context() { plug = RealPlugin.plug });
         }
 
@@ -416,12 +416,30 @@ namespace Triggernometry
                 if (Validator.Validate(scp, out string badApi, badApis) == true)
                 {
                     Task<ScriptState<object>> ts = scp.RunAsync(g);
-                    Task.Run(async () => { await ts; }).Wait();
+                    try
+                    {
+                        Task.Run(async () => { await ts; }).Wait();
+                    }
+                    catch (AggregateException aex)
+                    {
+                        foreach (var ex in aex.Flatten().InnerExceptions)
+                        {
+                            g.TriggernometryHelpers.Log(RealPlugin.DebugLevelEnum.Error, I18n.Translate(
+                                    "internal/Interpreter/scriptExecutionError",
+                                    "Error occurred during script execution: \n{0}", ex.ToString()));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        g.TriggernometryHelpers.Log(RealPlugin.DebugLevelEnum.Error, I18n.Translate(
+                                    "internal/Interpreter/scriptExecutionError",
+                                    "Error occurred during script execution: \n{0}", ex.ToString()));
+                    }
                 }
                 else
                 {
                     g.TriggernometryHelpers.Log(
-                        RealPlugin.DebugLevelEnum.Error, 
+                        RealPlugin.DebugLevelEnum.Error,
                         I18n.Translate(
                             "internal/Interpreter/scriptblocked", "Script execution on trigger {0} blocked due to restricted API: {1}",
                             ctx?.trig?.LogName ?? "(null)", badApi
@@ -441,9 +459,15 @@ namespace Triggernometry
                     foreach (var ex in aex.Flatten().InnerExceptions)
                     {
                         g.TriggernometryHelpers.Log(RealPlugin.DebugLevelEnum.Error, I18n.Translate(
-                                "internal/Interpreter/scriptExecutionError", 
+                                "internal/Interpreter/scriptExecutionError",
                                 "Error occurred during script execution: \n{0}", ex.ToString()));
                     }
+                }
+                catch (Exception ex)
+                {
+                    g.TriggernometryHelpers.Log(RealPlugin.DebugLevelEnum.Error, I18n.Translate(
+                                "internal/Interpreter/scriptExecutionError",
+                                "Error occurred during script execution: \n{0}", ex.ToString()));
                 }
             }
         }

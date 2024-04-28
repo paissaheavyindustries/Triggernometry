@@ -514,8 +514,8 @@ namespace Triggernometry
             }
             temp += I18n.TrlAsync(_Asynchronous);
             if (!string.IsNullOrWhiteSpace(_ExecutionDelayExpression) && _ExecutionDelayExpression.Trim() != "0")
-            {   
-                string delay = double.TryParse(_ExecutionDelayExpression.Trim(), NSFloat, InvClt, out _) 
+            {
+                string delay = double.TryParse(_ExecutionDelayExpression.Trim(), NSFloat, InvClt, out _)
                     ? _ExecutionDelayExpression : $"({_ExecutionDelayExpression})";
                 temp += I18n.Translate("internal/Action/descafterdelay", "after {0} ms, ", delay);  // included comma in translations (comma symbols are language-dependent)
             }
@@ -756,13 +756,13 @@ namespace Triggernometry
                             else
                                 temp += I18n.Translate("internal/Action/desclistpoptolistinsert",
                                         "pop index ({2}) of {1}list variable ({0}) and insert to index ({5}) of {4}list variable ({3})",
-                                        _ListVariableName, sPersistL, _ListVariableIndex, 
+                                        _ListVariableName, sPersistL, _ListVariableIndex,
                                         _ListVariableTarget, tPersistL, _ListVariableExpression);
                             break;
                         case ListVariableOpEnum.PopToListSet:
                             temp += I18n.Translate("internal/Action/desclistpoptolistset",
                                     "pop index ({2}) of {1}list variable ({0}) and set to index ({5}) of {4}list variable ({3})",
-                                    _ListVariableName, sPersistL, _ListVariableIndex, 
+                                    _ListVariableName, sPersistL, _ListVariableIndex,
                                     _ListVariableTarget, tPersistL, _ListVariableExpression);
                             break;
                         case ListVariableOpEnum.PopLast: // old action
@@ -1154,7 +1154,7 @@ namespace Triggernometry
                             {
                                 string lineType = I18n.TrlTableColOrRow(!string.IsNullOrWhiteSpace(_TableVariableX));
                                 string index = (!string.IsNullOrWhiteSpace(_TableVariableX)) ? _TableVariableX : _TableVariableY;
-                                if (_TableVariableExpressionType == TableVariableExpTypeEnum.String 
+                                if (_TableVariableExpressionType == TableVariableExpTypeEnum.String
                                     && !_TableVariableExpression.StartsWith("$") && !_TableVariableExpression.StartsWith("ก่{"))
                                     temp += I18n.Translate("internal/Action/desctableinsertline",
                                         "at {1}table ({0}) {3} #({2}), insert values from string ({4}) separated by ({5})",
@@ -1339,7 +1339,7 @@ namespace Triggernometry
                                 case LogEvent.SourceEnum.Log: srcType = "Normal log line"; break;
                             }
                             srcType = I18n.Translate($"ActionForm/cbxLogMessageTarget[{srcType}]", srcType);
-                            temp += I18n.Translate("internal/Action/descprocessmessage", 
+                            temp += I18n.Translate("internal/Action/descprocessmessage",
                                 "process message ({0}) as {1}", _LogMessageText, srcType);
                         }
                         else
@@ -1355,7 +1355,7 @@ namespace Triggernometry
                                 case LogMessageEnum.Custom2: level = "Custom 2"; break;
                             }
                             level = I18n.Translate($"ActionForm/cbxLogMessageLevel[{level}]", level);
-                            temp += I18n.Translate("internal/Action/desclogmessage", 
+                            temp += I18n.Translate("internal/Action/desclogmessage",
                                 "log message ({0}) with {1} level", _LogMessageText, level);
                         }
                     }
@@ -1426,7 +1426,7 @@ namespace Triggernometry
                     }
                     break;
                 case ActionTypeEnum.Loop:
-                    temp += I18n.Translate("internal/Action/descloop", "Loop with {0} actions at ({1}) ms intervals", 
+                    temp += I18n.Translate("internal/Action/descloop", "Loop with {0} actions at ({1}) ms intervals",
                         LoopActions?.Count(action => action._Enabled) ?? 0,
                         string.IsNullOrWhiteSpace(_LoopDelayExpression) ? "0" : _LoopDelayExpression);
                     break;
@@ -1715,7 +1715,7 @@ namespace Triggernometry
                                     return ctx.EvaluateStringExpression(ActionContextLogger, ctx, _DictVariableKey);
                                 else
                                     return I18n.ThingToString(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _DictVariableKey));
-                                
+
                             }
                             string ParseValue()
                             {
@@ -2433,10 +2433,10 @@ namespace Triggernometry
                                         lock (svs.List)
                                         {
                                             VariableList vl = GetListVariable(svs, sourcename, false);
-                                            newLength = (newLength <= 0) ? vl.Size : newLength; 
+                                            newLength = (newLength <= 0) ? vl.Size : newLength;
                                             ctx.varName = (_ListSourcePersist ? "plvar:" : "lvar:") + sourcename;   // ${_this}
                                             for (int i = 1; i <= newLength; i++)   // index starts from 1
-                                            {   
+                                            {
                                                 ctx.listIndex = i;  // ${_idx}
                                                 string expr = GetListExpressionValue(ctx, _ListVariableExpressionType, _ListVariableExpression);
                                                 vlNew.Push(new VariableScalar() { Value = expr }, changer);
@@ -2500,7 +2500,7 @@ namespace Triggernometry
                                         string targetname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ListVariableTarget);
                                         bool isInsert = (_ListVariableOp == ListVariableOpEnum.PopToListInsert);
                                         bool popToEnd = isInsert && string.IsNullOrWhiteSpace(_ListVariableExpression);
-                                        
+
                                         int rawSourceIndex = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _ListVariableIndex);
                                         int rawTargetIndex = 0;
                                         if (!popToEnd)
@@ -2517,7 +2517,7 @@ namespace Triggernometry
                                                 "pop value ({3}) from {1}list variable ({0}) index ({2})",
                                                 sourcename, sPersist, rawSourceIndex, targetname, tPersist));
                                         }
-                                        lock (tvs.List) 
+                                        lock (tvs.List)
                                         {
                                             VariableList tvl = GetListVariable(tvs, targetname, true);
                                             if (popToEnd)
@@ -2620,7 +2620,7 @@ namespace Triggernometry
                                     break;
                                 case ListVariableOpEnum.SortByKeys:
                                     {
-                                        string[] invalidExprs = new[] { "${_row", "${_col", "${_key}", "${_val}"};
+                                        string[] invalidExprs = new[] { "${_row", "${_col", "${_key}", "${_val}" };
                                         CheckInvalidDymanicExpr(_ListVariableExpression, invalidExprs);
 
                                         // parsing expressions like "n+:key1, s-:key2, s+:key3, ..."
@@ -2727,7 +2727,7 @@ namespace Triggernometry
                                             VariableList vl = GetListVariable(svs, sourcename, false);
                                             ctx.varName = (_ListSourcePersist ? "plvar:" : "lvar:") + _ListVariableName;    // for ${_this}
                                             for (int i = 0; i < vl.Size; i++)
-                                            {   
+                                            {
                                                 ctx.listIndex = i + 1;  // for ${_idx}
                                                 double result = ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _ListVariableExpression);
                                                 if (!MathParser.IsZero(result))
@@ -3444,7 +3444,7 @@ namespace Triggernometry
                                         lock (tvs.Table)
                                         {
                                             if (!tvs.Table.ContainsKey(targetname))
-                                            { 
+                                            {
                                                 tvs.Table.Add(targetname, new VariableTable());
                                             }
                                             VariableTable tvt = tvs.Table[targetname];
@@ -3469,7 +3469,7 @@ namespace Triggernometry
 
                                         int x = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableX);
                                         int y = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _TableVariableY);
-                                        
+
                                         lock (svs.Table) // verified
                                         {
                                             VariableTable vt = GetTableVariable(svs, sourcename, true);
@@ -3508,7 +3508,7 @@ namespace Triggernometry
                                                 ctx.tableRowIndex = y;          // for ${_row}
                                                 vtNew.Rows.Add(new VariableTable.VariableTableRow());
                                                 for (int x = 1; x <= newWidth; x++)
-                                                {   
+                                                {
                                                     ctx.tableColIndex = x;      // for ${_col}
                                                     expr = ParseExpr();         // evaluate the expression for every grid
                                                     vtNew.Rows[y - 1].Values.Add(new VariableScalar() { Value = expr, LastChanger = vtchanger, LastChanged = DateTime.Now });
@@ -3529,7 +3529,7 @@ namespace Triggernometry
                                         string rowSlicesStr = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TableVariableY);
                                         VariableTable vtNew;
                                         lock (svs.Table)
-                                        {   
+                                        {
                                             VariableTable vt = GetTableVariable(svs, sourcename, false);
                                             vtNew = (VariableTable)vt.Duplicate();
                                             // index starts from 0
@@ -3674,7 +3674,7 @@ namespace Triggernometry
                                             tvs.Table[targetname] = vtResult;
                                             AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/tablefilterline",
                                                 "Filtered {4} {5}s from {1}table ({0}) into {3}table ({2})",
-                                                sourcename, sPersist, targetname, tPersist, 
+                                                sourcename, sPersist, targetname, tPersist,
                                                 (isCol ? vtResult.Width : vtResult.Height), I18n.TrlTableColOrRow(isCol)));
                                         }
                                     }
@@ -3694,7 +3694,7 @@ namespace Triggernometry
                                         {
                                             VariableTable vt = GetTableVariable(svs, sourcename, true);
                                             int tableLength = (isRow) ? vt.Height : vt.Width;
-                                            
+
                                             // index start from 0
                                             int index = (rawIndex < 0) ? (rawIndex + tableLength) : (rawIndex - 1);
                                             if (index < 0)
@@ -3753,8 +3753,8 @@ namespace Triggernometry
                                         bool isCol = !string.IsNullOrWhiteSpace(_TableVariableX);
                                         string lineType = I18n.TrlTableColOrRow(isCol);
                                         string rawExpr = isCol ? _TableVariableX : _TableVariableY;
-                                        string[] invalidExprs = isCol 
-                                            ? new[] { "${_this}", "${_row", "${_idx}", "${_key}", "${_val}"}
+                                        string[] invalidExprs = isCol
+                                            ? new[] { "${_this}", "${_row", "${_idx}", "${_key}", "${_val}" }
                                             : new[] { "${_this}", "${_col", "${_idx}", "${_key}", "${_val}" };
                                         CheckInvalidDymanicExpr(rawExpr, invalidExprs);
 
@@ -3808,7 +3808,7 @@ namespace Triggernometry
                                                 var sortedRows = sortedIndices.Select(i => vt.Rows[i]).ToList();
                                                 vt.Rows = sortedRows;
                                             }
-                                            
+
                                             vt.LastChanger = vtchanger;
                                             vt.LastChanged = DateTime.Now;
                                         }
@@ -3834,7 +3834,7 @@ namespace Triggernometry
 
                                         var headerRow = new VariableTable.VariableTableRow
                                         {
-                                            Values = keys.Select(k => (Variable) new VariableScalar() { Value = k }).ToList()
+                                            Values = keys.Select(k => (Variable)new VariableScalar() { Value = k }).ToList()
                                         };
                                         vt.Rows.Add(headerRow);
 
@@ -3843,7 +3843,7 @@ namespace Triggernometry
                                             if (entity.GetValue("id").ToString() == "") { continue; }
                                             var row = new VariableTable.VariableTableRow
                                             {
-                                                Values = keys.Select(k => (Variable) new VariableScalar() { Value = entity.GetValue(k).ToString() }).ToList()
+                                                Values = keys.Select(k => (Variable)new VariableScalar() { Value = entity.GetValue(k).ToString() }).ToList()
                                             };
                                             vt.Rows.Add(row);
                                         }
@@ -4082,7 +4082,8 @@ namespace Triggernometry
                 actionDesc = (actionDesc.Length > 100) ? (actionDesc.Substring(0, 97) + "...") : actionDesc;
                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/exception",
                     "Action exception: {0}  \nIn action: {1}  \nIn trigger: {2}",
-                    ex.Message, actionDesc, triggerPath));
+                    (ActionType == ActionTypeEnum.ExecuteScript || ActionType == ActionTypeEnum.NamedCallback) ? ex.ToString() : ex.Message,
+                    actionDesc, triggerPath));
             }
         ContinueChain:
             if (LoopAction != null)

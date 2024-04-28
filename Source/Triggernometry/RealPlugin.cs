@@ -1941,7 +1941,7 @@ namespace Triggernometry
 
         public void IfYouSeeThisErrorYouNeedToRestartACT()
         {
-            complainAboutReload = true;            
+            complainAboutReload = true;
         }
 
         internal List<Configuration.APIUsage> GetDefaultAPIUsages()
@@ -1956,10 +1956,10 @@ namespace Triggernometry
 
         private void SetupDefaultSecurity()
         {
-            MethodInfo setter = cfg.GetType().GetMethod("AddAPIUsage", BindingFlags.NonPublic | BindingFlags.Instance);            
+            MethodInfo setter = cfg.GetType().GetMethod("AddAPIUsage", BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (Configuration.APIUsage a in DefaultAPIUsages)
             {
-                setter.Invoke(cfg, new object[] { a, false });                
+                setter.Invoke(cfg, new object[] { a, false });
             }
         }
 
@@ -2284,7 +2284,7 @@ namespace Triggernometry
             }
             catch (Exception ex)
             {
-                trans = I18n.Translate("internal/Plugin/repoupdateexception", "Couldn't update repository {0} due to exception: {1}", r.Name, ex.Message);
+                trans = I18n.Translate("internal/Plugin/repoupdateexception", "Couldn't update repository {0} due to exception: {1}", r.Name, ex.ToString());
                 r.AddToLog(trans);
                 FilteredAddToLog(DebugLevelEnum.Error, trans);
                 useBackup = true;
@@ -2491,7 +2491,7 @@ namespace Triggernometry
         {
             //if (t.Enabled == true && parentenable == true)
             //{
-                AddTrigger(t, parentenable);
+            AddTrigger(t, parentenable);
             //}
             if (t._IsReadme == true && t.Enabled == true)
             {
@@ -2577,7 +2577,7 @@ namespace Triggernometry
             }
             catch (Exception ex)
             {
-                trans = I18n.Translate("internal/Plugin/repoloadlocalexception", "Couldn't load local backup of repository {0} due to exception: {1}", r.Name, ex.Message);
+                trans = I18n.Translate("internal/Plugin/repoloadlocalexception", "Couldn't load local backup of repository {0} due to exception: {1}", r.Name, ex.ToString());
                 FilteredAddToLog(DebugLevelEnum.Error, trans);
                 r.AddToLog(trans);
             }
@@ -2605,7 +2605,7 @@ namespace Triggernometry
             }
             catch (Exception ex)
             {
-                trans = I18n.Translate("internal/Plugin/reposavelocalexception", "Couldn't save local backup of repository {0} due to exception: {1}", r.Name, ex.Message);
+                trans = I18n.Translate("internal/Plugin/reposavelocalexception", "Couldn't save local backup of repository {0} due to exception: {1}", r.Name, ex.ToString());
                 FilteredAddToLog(DebugLevelEnum.Error, trans);
                 r.AddToLog(trans);
             }
@@ -2679,7 +2679,7 @@ namespace Triggernometry
                 }
                 catch (Exception ex)
                 {
-                    FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/Plugin/vercheckfail", "Version update check failed: {0}", ex.Message));
+                    FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/Plugin/vercheckfail", "Version update check failed: {0}", ex.ToString()));
                 }
                 if (newest != curver)
                 {
@@ -2747,7 +2747,7 @@ namespace Triggernometry
             bool ret;
             using (var identity = WindowsIdentity.GetCurrent())
             {
-                var principal = new WindowsPrincipal(identity);                
+                var principal = new WindowsPrincipal(identity);
                 ret = principal.IsInRole(WindowsBuiltInRole.Administrator);
                 if (ret == false && warnIfNotAdmin == true)
                 {
@@ -2784,7 +2784,7 @@ namespace Triggernometry
                 _livesplit = null;
             }
             if (_xivProcHandle != IntPtr.Zero)
-            { 
+            {
                 WindowsUtils.CloseHandle(_xivProcHandle);
                 _xivProcHandle = IntPtr.Zero;
             }
@@ -3025,7 +3025,7 @@ namespace Triggernometry
             {
                 EventQueue.Enqueue(le);
                 QueueWakeupEvent.Set();
-            }            
+            }
         }
 
         internal void LogLineQueuerMass(IEnumerable<string> text, string zone, LogEvent.SourceEnum src, bool testMode, bool testModeZoneId)
@@ -3064,7 +3064,7 @@ namespace Triggernometry
             wh[0] = ExitEvent;
             wh[1] = QueueWakeupEvent;
             if (ReadyForOperation() == false)
-            {                
+            {
                 do
                 {
                     Thread.Sleep(100);
@@ -3321,7 +3321,7 @@ namespace Triggernometry
             }
             catch (Exception ex)
             {
-                FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/Plugin/endpointlineprocex", "Exception ({0}) when processing endpoint data ({1}) in zone ({2})", ex.Message, data, detectedZone));
+                FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/Plugin/endpointlineprocex", "Exception ({0}) when processing endpoint data ({1}) in zone ({2})", ex.ToString(), data, detectedZone));
             }
         }
 
@@ -3441,11 +3441,11 @@ namespace Triggernometry
                     string newfilename = filename + ".previous";
                     fi = new FileInfo(newfilename);
                     // translation file is loaded after this, so the I18n won't work
-                    cre = I18n.Translate("internal/Plugin/cfgcorrupted", 
+                    cre = I18n.Translate("internal/Plugin/cfgcorrupted",
                         "Configuration file has been corrupted: \n" +
                         "'{0}' \n\n" +
                         "Loading previous configuration file: \n" +
-                        "'{1}'", 
+                        "'{1}'",
                         filename, newfilename);
                     MessageBox.Show(cre, "Triggernometry", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     if (fi.Exists == true)
@@ -3630,7 +3630,7 @@ namespace Triggernometry
         public void QueueAction(Context ctx, Trigger t, MutexInformation m, Action a, DateTime when, bool releaseMutex)
         {
             lock (ActionQueue) // verified
-            {                                
+            {
                 if (a._RefireRequeue == false || a._RefireInterrupt == true)
                 {
                     var ix = from ax in ActionQueue
@@ -3672,7 +3672,7 @@ namespace Triggernometry
                 }
                 a.AddToLog(ctx, DebugLevelEnum.Info, I18n.Translate("internal/Plugin/actionqueued", "Queuing trigger '{0}' action '{1}' to {2} slot {3}", t.LogName, a.GetDescription(ctx), FormatDateTime(when), newOrdinal));
                 ActionQueue.Add(new QueuedAction(when, newOrdinal, m, a, ctx, releaseMutex));
-                ActionQueue.Sort(); 
+                ActionQueue.Sort();
                 ActionUpdateEvent.Set();
             }
         }
@@ -3727,7 +3727,7 @@ namespace Triggernometry
                 }
             }
             while (true)
-            { 
+            {
                 switch (WaitHandle.WaitAny(wh, timeout))
                 {
                     case WaitHandle.WaitTimeout:
@@ -3736,7 +3736,7 @@ namespace Triggernometry
                             lock (ActionQueue) // verified
                             {
                                 if (ActionQueue.Count > 0)
-                                { 
+                                {
                                     tp = ActionQueue[0];
                                     ActionQueue.RemoveAt(0);
                                 }
@@ -3750,7 +3750,7 @@ namespace Triggernometry
                             {
                                 timeout = Timeout.Infinite;
                                 continue;
-                            }                            
+                            }
                         }
                     case 0:
                         {
