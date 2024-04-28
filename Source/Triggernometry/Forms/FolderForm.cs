@@ -88,12 +88,12 @@ namespace Triggernometry.Forms
             RestoredSavedDimensions();
         }
 
-        internal void SetReadOnly()
+        internal void SetReadOnly(bool showRemoteBanner = true)
         {
             btnOk.Enabled = false;
             btnOk.Visible = false;
             btnCancel.Dock = DockStyle.Fill;
-            panel5.Visible = true;
+            panel5.Visible = showRemoteBanner;
             txtFolderName.ReadOnly = true;
             chkZoneFilter.Enabled = false;
             btnGetCurZone.Enabled = false;
@@ -174,6 +174,7 @@ namespace Triggernometry.Forms
                 chkFfxivZoneFilter.Checked = f._FFXIVZoneFilterEnabled;
                 JobFilterFromInt(f._FFXIVJobFilter);
                 txtFfxivZoneFilterRegex.Text = f.FfxivZoneFilterRegularExpression;
+                if (f._ReadOnly) SetReadOnly(showRemoteBanner: false); // disables the edit of a local folder
             }
         }
 

@@ -816,9 +816,9 @@ namespace Triggernometry.CustomControls
                 ctxDelete.Enabled = btnRemoveTrigger.Enabled;
                 ctxImport.Enabled = btnImportTrigger.Enabled;
                 ctxExport.Enabled = btnExportTrigger.Enabled;
-                ctxFire.Visible = cfg.DeveloperMode;
-                ctxFireAllowCondition.Visible = cfg.DeveloperMode;
-                toolStripSeparator12.Visible = cfg.DeveloperMode;
+                ctxFire.Visible = true; // cfg.DeveloperMode;
+                ctxFireAllowCondition.Visible = true; // cfg.DeveloperMode;
+                toolStripSeparator12.Visible = true; // cfg.DeveloperMode;
                 ctxCopy.Enabled = (treeView1.SelectedNode != null);
                 ctxPaste.Enabled = ctxAddTrigger.Enabled == true && (
                     (cfg.UseOsClipboard == false && (Clipboard != null && Clipboard.Length > 0))

@@ -139,6 +139,24 @@ namespace Triggernometry
         [XmlAttribute]
         public Guid Id { get; set; }
 
+        internal bool _ReadOnly { get; set; } = false;
+        [XmlAttribute]
+        public string ReadOnly
+        {
+            get
+            {
+                if (_ReadOnly == false)
+                {
+                    return null;
+                }
+                return _ReadOnly.ToString();
+            }
+            set
+            {
+                _ReadOnly = Boolean.Parse(value);
+            }
+        }
+
         [XmlAttribute]
         public string ZoneFilterRegularExpression
 		{
