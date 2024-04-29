@@ -24,7 +24,7 @@ namespace Triggernometry
 
             private static bool IsBadApi(string assy, params string[] badApis)
             {
-                return badApis.Any(x => assy.Contains(x) == true);
+                return assy != null && badApis.Any(x => assy.Contains(x) == true);
             }
 
             public static bool Validate(Script script, out string badApi, params string[] badApis)
@@ -37,8 +37,8 @@ namespace Triggernometry
                 foreach (UsingDirectiveSyntax usingdir in srn.Usings)
                 {
                     ISymbol symbol = model.GetSymbolInfo(usingdir.Name).Symbol;
-                    string name = symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                    if (IsBadApi(name, badApis) == true)
+                    string name = symbol?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                    if (IsBadApi(name, badApis))
                     {
                         badApi = name;
                         return false;
@@ -62,8 +62,8 @@ namespace Triggernometry
                         default:
                             continue;
                     }
-                    string name = type.ContainingNamespace != null ? type.ContainingNamespace.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat) : null;
-                    if (name != null && IsBadApi(name, badApis) == true)
+                    string name = type.ContainingNamespace?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                    if (IsBadApi(name, badApis))
                     {
                         badApi = name;
                         return false;
@@ -73,10 +73,8 @@ namespace Triggernometry
                 foreach (var invoc in invocs)
                 {
                     ISymbol symbol = model.GetSymbolInfo(invoc).Symbol;
-                    IAssemblySymbol ia = symbol.ContainingAssembly;
-                    INamespaceSymbol ns = symbol.ContainingNamespace;
-                    string name = ns.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                    if (IsBadApi(name, badApis) == true)
+                    string name = symbol.ContainingNamespace?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                    if (IsBadApi(name, badApis))
                     {
                         badApi = name;
                         return false;
@@ -86,8 +84,8 @@ namespace Triggernometry
                 foreach (var method in methods)
                 {
                     IMethodSymbol symbol = model.GetDeclaredSymbol(method) as IMethodSymbol;
-                    string name = symbol.ContainingAssembly.Name;
-                    if (IsBadApi(name, badApis) == true)
+                    string name = symbol.ContainingAssembly?.Name;
+                    if (IsBadApi(name, badApis))
                     {
                         badApi = name;
                         return false;
@@ -97,14 +95,14 @@ namespace Triggernometry
                 foreach (var prop in props)
                 {
                     IPropertySymbol symbol = model.GetDeclaredSymbol(prop) as IPropertySymbol;
-                    string name = symbol.Type.ContainingAssembly.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                    if (IsBadApi(name, badApis) == true)
+                    string name = symbol.Type.ContainingAssembly?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                    if (IsBadApi(name, badApis))
                     {
                         badApi = name;
                         return false;
                     }
-                    name = symbol.Type.ContainingNamespace.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                    if (IsBadApi(name, badApis) == true)
+                    name = symbol.Type.ContainingNamespace?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                    if (IsBadApi(name, badApis))
                     {
                         badApi = name;
                         return false;
