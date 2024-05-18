@@ -245,7 +245,7 @@ namespace Triggernometry.CustomControls
                     char ch = Text[start];
                     if (SelectionColor == Color.Black) { continue; } // plain text
                     if (ch == ',' && SelectionColor == stringColor) { continue; }
-                    if (ch == ',' || ch == '|' || ch == '=' || ch == ';' || ch == ':' || ch == Context.LINEBREAK_PLACEHOLDER[0])
+                    if (ch == ',' || ch == '|' || ch == '=' || ch == ';' || ch == ':' || ch == Context.LINEBREAK_PLACEHOLDER)
                     {
                         SelectionColor = separatorColor;
                     }
