@@ -532,13 +532,16 @@ namespace Triggernometry.Forms
                 expLoopIterationDelay.Expression = "";
                 expLoopInit.Expression = "0";
                 expLoopIncr.Expression = "1";
+                cbxActOpType.SelectedIndex = 0;
+                cbxActOpBoolParam.SelectedIndex = 0;
+                expActOpStringParam.Expression = "";
                 cbxRepositoryOp.SelectedIndex = 0;
                 cbxTriggerZoneType.SelectedIndex = 0;
                 expJsonVariable.Expression = "";
             }
             else
             {
-                cbxActionType.SelectedIndex = (int)a.ActionType;
+                cbxActionType.SelectedIndex = (int)a._ActionType;
                 cbxRefireOption1.SelectedIndex = (a._RefireInterrupt == true ? 0 : 1);
                 cbxRefireOption2.SelectedIndex = (a._RefireRequeue == true ? 1 : 0);
                 expExecutionDelay.Expression = a._ExecutionDelayExpression;
@@ -664,36 +667,7 @@ namespace Triggernometry.Forms
                 expWmsgCode.Expression = a._WmsgCode;
                 expWmsgWparam.Expression = a._WmsgWparam;
                 expWmsgLparam.Expression = a._WmsgLparam;
-                switch (a._TextAuraAlignment)
-                {
-                    case Action.TextAuraAlignmentEnum.TopLeft:
-                        cbxTextAuraAlignment.SelectedIndex = 0;
-                        break;
-                    case Action.TextAuraAlignmentEnum.TopCenter:
-                        cbxTextAuraAlignment.SelectedIndex = 1;
-                        break;
-                    case Action.TextAuraAlignmentEnum.TopRight:
-                        cbxTextAuraAlignment.SelectedIndex = 2;
-                        break;
-                    case Action.TextAuraAlignmentEnum.MiddleLeft:
-                        cbxTextAuraAlignment.SelectedIndex = 3;
-                        break;
-                    case Action.TextAuraAlignmentEnum.MiddleCenter:
-                        cbxTextAuraAlignment.SelectedIndex = 4;
-                        break;
-                    case Action.TextAuraAlignmentEnum.MiddleRight:
-                        cbxTextAuraAlignment.SelectedIndex = 5;
-                        break;
-                    case Action.TextAuraAlignmentEnum.BottomLeft:
-                        cbxTextAuraAlignment.SelectedIndex = 6;
-                        break;
-                    case Action.TextAuraAlignmentEnum.BottomCenter:
-                        cbxTextAuraAlignment.SelectedIndex = 7;
-                        break;
-                    case Action.TextAuraAlignmentEnum.BottomRight:
-                        cbxTextAuraAlignment.SelectedIndex = 8;
-                        break;
-                }
+                cbxTextAuraAlignment.SelectedIndex = (int)a._TextAuraAlignment;
                 expTextAuraName.Expression = a._TextAuraName;
                 expTextAuraText.Expression = a._TextAuraExpression;
                 expTextAuraXIni.Expression = a._TextAuraXIniExpression;
@@ -717,9 +691,25 @@ namespace Triggernometry.Forms
                 fic.Size = a._TextAuraFontSize;
                 fic.Effect = a._TextAuraEffect;
                 txtTextAuraFont.Tag = fic;
-                colorSelector1.TextColor = ExpressionTextBox.ParseColor(fakectx.EvaluateStringExpression(null, fakectx, a._TextAuraForegroundClInt), Color.Black);
-                colorSelector1.TextOutlineColor = ExpressionTextBox.ParseColor(fakectx.EvaluateStringExpression(null, fakectx, a._TextAuraOutlineClInt), Color.Empty);
-                colorSelector1.BackgroundColor = ExpressionTextBox.ParseColor(fakectx.EvaluateStringExpression(null, fakectx, a._TextAuraBackgroundClInt), Color.Transparent);
+
+                try
+                {
+                    colorSelector1.TextColor = ExpressionTextBox.ParseColor(fakectx.EvaluateStringExpression(null, fakectx, a._TextAuraForegroundClInt), Color.Black);
+                }
+                catch { colorSelector1.TextColor = Color.Black; }
+
+                try
+                {
+                    colorSelector1.TextOutlineColor = ExpressionTextBox.ParseColor(fakectx.EvaluateStringExpression(null, fakectx, a._TextAuraOutlineClInt), Color.Empty);
+                }
+                catch { colorSelector1.TextOutlineColor = Color.Empty; }
+
+                try
+                {
+                    colorSelector1.BackgroundColor = ExpressionTextBox.ParseColor(fakectx.EvaluateStringExpression(null, fakectx, a._TextAuraBackgroundClInt), Color.Transparent);
+                }
+                catch { colorSelector1.BackgroundColor = Color.Transparent; }
+
                 expTextForeColor.Text = a._TextAuraForegroundClInt;
                 expTextOutlineColor.Text = a._TextAuraOutlineClInt;
                 expTextBackColor.Text = a._TextAuraBackgroundClInt;
@@ -817,6 +807,9 @@ namespace Triggernometry.Forms
                 expLoopIterationDelay.Expression = a._LoopDelayExpression;
                 expLoopIncr.Expression = a._LoopIncrExpression;
                 expLoopInit.Expression = a._LoopInitExpression;
+                cbxActOpType.SelectedIndex = (int)a._ActOpType;
+                cbxActOpBoolParam.SelectedIndex = a._ActOpBoolParam ? 1 : 0;
+                expActOpStringParam.Expression = a._ActOpStringParam;
                 tn = plug.LocateNodeHostingRepositoryId(trvRepositoryLink.Nodes[0], a._RepositoryId);
                 if (tn != null)
                 {
@@ -1075,6 +1068,9 @@ namespace Triggernometry.Forms
             a.LoopDelayExpression = expLoopIterationDelay.Expression;
             a.LoopIncrExpression = expLoopIncr.Expression;
             a.LoopInitExpression = expLoopInit.Expression;
+            a._ActOpType = (ActInteractionTypeEnum)cbxActOpType.SelectedIndex;
+            a._ActOpBoolParam = cbxActOpBoolParam.SelectedIndex == 1;
+            a._ActOpStringParam = expActOpStringParam.Expression;
             tn = trvRepositoryLink.SelectedNode;
             if (tn != null)
             {
@@ -1561,7 +1557,7 @@ namespace Triggernometry.Forms
             ctx.testByPlaceholder = true;
             ctx.trig = null;
             SettingsToAction(a);
-            a.ActionType = Action.ActionTypeEnum.Aura;
+            a._ActionType = Action.ActionTypeEnum.Aura;
             a._AuraOp = Action.AuraOpEnum.DeactivateAura;
             ctx.triggered = DateTime.UtcNow;
             a.Execute(null, ctx);
@@ -1575,7 +1571,7 @@ namespace Triggernometry.Forms
             ctx.testByPlaceholder = true;
             ctx.trig = null;
             SettingsToAction(a);
-            a.ActionType = Action.ActionTypeEnum.TextAura;
+            a._ActionType = Action.ActionTypeEnum.TextAura;
             a._AuraOp = Action.AuraOpEnum.DeactivateAura;
             ctx.triggered = DateTime.UtcNow;
             a.Execute(null, ctx);
@@ -1877,16 +1873,6 @@ namespace Triggernometry.Forms
                     expLvarIndex.Enabled = true;
                     expLvarName.AutofillType = ExpressionTextBox.AutofillTypeEnum.List;
                     expLvarTarget.AutofillType = ExpressionTextBox.AutofillTypeEnum.List;
-                    break;
-                case (int)ListVariableOpEnum.PopLast:
-                    expLvarName.Enabled = true;
-                    expLvarName.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
-                    expLvarValue.Enabled = false;
-                    cbxLvarExpType.Enabled = false;
-                    expLvarTarget.Enabled = true;
-                    expLvarIndex.Enabled = false;
-                    expLvarName.AutofillType = ExpressionTextBox.AutofillTypeEnum.List;
-                    expLvarTarget.AutofillType = ExpressionTextBox.AutofillTypeEnum.Scalar;
                     break;
                 case (int)ListVariableOpEnum.Build:
                     expLvarName.Enabled = false;
@@ -2774,6 +2760,22 @@ namespace Triggernometry.Forms
             lblScriptExtEditor.Visible = false;
             ExtEditor.Dispose();
             ExtEditor = null;
+        }
+
+        private void cbxActOpType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (cbxActionType.SelectedIndex)
+            {
+                case (int)ActInteractionTypeEnum.SetCombatState:
+                    expActOpStringParam.Enabled = true;
+                    break;
+                case (int)ActInteractionTypeEnum.LogAllNetwork:
+                    expActOpStringParam.Enabled = false;
+                    break;
+                case (int)ActInteractionTypeEnum.UseDeucalion:
+                    expActOpStringParam.Enabled = false;
+                    break;
+            }
         }
 
         private void cbxRepositoryOp_SelectedIndexChanged(object sender, EventArgs e)

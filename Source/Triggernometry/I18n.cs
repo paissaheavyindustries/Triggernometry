@@ -330,6 +330,12 @@ namespace Triggernometry
                            : Translate("internal/I18n/descasyncfalse", "[Sync] ");
         }
 
+        internal static string TranslateEnable(bool enable)
+        {
+            return enable ? Translate("internal/I18n/descenabletrue", "enable")
+                          : Translate("internal/I18n/descenablefalse", "disable");
+        }
+
         public static string TrlTriggerDescTime(double ms)
         {
             ms = Math.Round(ms);

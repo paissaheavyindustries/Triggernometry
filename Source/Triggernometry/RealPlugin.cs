@@ -362,7 +362,9 @@ namespace Triggernometry
 
         public SimpleBoolDelegate InCombatHook { get; set; }
         public SimpleBoolDelegate CustomTriggerCheckHook { get; set; }
-        public SimpleVoidDelegate EndCombatHook { get; set; }
+        public BoolDelegate SetCombatStateHook { get; set; }
+        public BoolDelegate LogAllNetworkHook { get; set; }
+        public BoolDelegate UseDeucalionHook { get; set; }
         public SimpleStringDelegate CurrentZoneHook { get; set; }
         public SimpleStringDelegate ActiveEncounterHook { get; set; }
         public SimpleStringDelegate LastEncounterHook { get; set; }

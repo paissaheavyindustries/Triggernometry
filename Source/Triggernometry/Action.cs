@@ -74,6 +74,12 @@ namespace Triggernometry
             set
             {
                 if (Enum.TryParse(value, out _ActionType) || string.IsNullOrEmpty(value)) return;
+                // convert old actions
+                else if (value == "EndEncounter")
+                {
+                    _ActionType = ActionTypeEnum.ActInteraction;
+                    _ActOpBoolParam = false;
+                }
                 else throw InvalidEnumException("ActionTypeEnum", value);
             }
         }
@@ -452,7 +458,6 @@ namespace Triggernometry
         internal bool ObsConnector(Context ctx, string endpoint, string password)
         {
             lock (plug._obs)
-            lock (p._obs)
             {
                 if (plug._obs.IsConnected == true)
                 {
@@ -475,7 +480,6 @@ namespace Triggernometry
         internal bool LiveSplitConnector(Context ctx)
         {
             lock (plug._livesplit)
-            lock (p._livesplit)
             {
                 if (plug._livesplit.IsConnected == true)
                 {
@@ -536,6 +540,23 @@ namespace Triggernometry
             }
             switch (_ActionType)
             {
+                case ActionTypeEnum.ActInteraction:
+                    {
+                        switch (_ActOpType)
+                        {
+                            case ActInteractionTypeEnum.SetCombatState:
+                                temp += !_ActOpBoolParam ? I18n.Translate("internal/Action/descactcombatend", "End ACT encounter")
+                                                         : I18n.Translate("internal/Action/descactcombatstart", "Start ACT encounter");
+                                break;
+                            case ActInteractionTypeEnum.LogAllNetwork:
+                                temp += I18n.Translate("internal/Action/descactlogallnetwork", "{0} option: Log all network data", I18n.TranslateEnable(_ActOpBoolParam));
+                                break;
+                            case ActInteractionTypeEnum.UseDeucalion:
+                                temp += I18n.Translate("internal/Action/descactusedeucalion", "{0} option: Use Deucalion (injection)", I18n.TranslateEnable(_ActOpBoolParam));
+                                break;
+                        }
+                    }
+                    break;
                 case ActionTypeEnum.Trigger:
                     {
                         Trigger t = plug.GetTriggerById(_TriggerId, ctx.trig?.Repo);
@@ -775,11 +796,6 @@ namespace Triggernometry
                                     "pop index ({2}) of {1}list variable ({0}) and set to index ({5}) of {4}list variable ({3})",
                                     _ListVariableName, sPersistL, _ListVariableIndex,
                                     _ListVariableTarget, tPersistL, _ListVariableExpression);
-                            break;
-                        case ListVariableOpEnum.PopLast: // old action
-                            temp += I18n.Translate("internal/Action/desclistpop",
-                                    "pop index ({4}) of {1}list variable ({0}) into {3}scalar variable ({2})",
-                                    _ListVariableName, sPersistL, _ListVariableTarget, tPersistL, -1);
                             break;
                         case ListVariableOpEnum.SortAlphaAsc:
                         case ListVariableOpEnum.SortAlphaDesc:
@@ -1333,11 +1349,6 @@ namespace Triggernometry
                         }
                     }
                     break;
-                case ActionTypeEnum.EndEncounter:
-                    {
-                        temp += I18n.Translate("internal/Action/descendencounter", "end encounter");
-                    }
-                    break;
                 case ActionTypeEnum.LogMessage:
                     {
                         if (_LogProcess == true)
@@ -1686,6 +1697,24 @@ namespace Triggernometry
 
                 switch (_ActionType)
                 {
+                    #region Implementation - ACT Interaction
+                    case ActionTypeEnum.ActInteraction:
+                        {
+                            switch (_ActOpType)
+                            {
+                                case ActInteractionTypeEnum.SetCombatState:
+                                    plug.SetCombatStateHook(_ActOpBoolParam);
+                                    break;
+                                case ActInteractionTypeEnum.LogAllNetwork:
+                                    plug.LogAllNetworkHook(_ActOpBoolParam);
+                                    break;
+                                case ActInteractionTypeEnum.UseDeucalion:
+                                    plug.UseDeucalionHook(_ActOpBoolParam);
+                                    break;
+                            }
+                        }
+                        break;
+                    #endregion
                     #region Implementation - Beep
                     case ActionTypeEnum.SystemBeep:
                         {
@@ -2125,13 +2154,6 @@ namespace Triggernometry
                         }
                         break;
                     #endregion
-                    #region Implementation - End encounter
-                    case ActionTypeEnum.EndEncounter:
-                        {
-                            ctx.plug.EndCombatHook();
-                        }
-                        break;
-                    #endregion
                     #region Implementation - Execute script
                     case ActionTypeEnum.ExecuteScript:
                         {
@@ -2158,15 +2180,15 @@ namespace Triggernometry
                                                 bool isLocal = ctx.trig == null || ctx.trig.Repo == null;
                                                 TreeNode tn = plug.LocateNodeHostingFolder(plug.ui.treeView1.Nodes[isLocal ? 0 : 1], f);
 
-                                            if (tn != null)
-                                            {
-                                                tn.Checked = false;
-                                            }
-                                            else
-                                            {
-                                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodefolderwithid", "Didn't find a tree node for folder ({0}) with id ({1})", f.Name, f.Id));
-                                            }
-                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/disabledfolderwithid", "Disabled folder ({0}) with id ({1})", f.Name, f.Id));
+                                                if (tn != null)
+                                                {
+                                                    tn.Checked = false;
+                                                }
+                                                else
+                                                {
+                                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodefolderwithid", "Didn't find a tree node for folder ({0}) with id ({1})", f.Name, f.Id));
+                                                }
+                                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/disabledfolderwithid", "Disabled folder ({0}) with id ({1})", f.Name, f.Id));
                                             }));
                                         }
                                         break;
@@ -2179,15 +2201,15 @@ namespace Triggernometry
                                                 bool isLocal = ctx.trig == null || ctx.trig.Repo == null;
                                                 TreeNode tn = plug.LocateNodeHostingFolder(plug.ui.treeView1.Nodes[isLocal ? 0 : 1], f);
 
-                                            if (tn != null)
-                                            {
-                                                tn.Checked = true;
-                                            }
-                                            else
-                                            {
-                                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodefolderwithid", "Didn't find a tree node for folder ({0}) with id ({1})", f.Name, f.Id));
-                                            }
-                                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/enabledfolderwithid", "Enabled folder ({0}) with id ({1})", f.Name, f.Id));
+                                                if (tn != null)
+                                                {
+                                                    tn.Checked = true;
+                                                }
+                                                else
+                                                {
+                                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodefolderwithid", "Didn't find a tree node for folder ({0}) with id ({1})", f.Name, f.Id));
+                                                }
+                                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/enabledfolderwithid", "Enabled folder ({0}) with id ({1})", f.Name, f.Id));
                                             }));
                                         }
                                         break;
@@ -2469,18 +2491,9 @@ namespace Triggernometry
                                     }
                                     break;
                                 case ListVariableOpEnum.PopFirst:
-                                case ListVariableOpEnum.PopLast:
                                     {
                                         string targetname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ListVariableTarget);
-                                        int rawIndex;
-                                        if (_ListVariableOp == ListVariableOpEnum.PopLast)
-                                        {
-                                            rawIndex = -1;
-                                        }
-                                        else
-                                        {
-                                            rawIndex = (String.IsNullOrWhiteSpace(_ListVariableIndex)) ? 1 : (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _ListVariableIndex);
-                                        }
+                                        int rawIndex = (string.IsNullOrWhiteSpace(_ListVariableIndex)) ? 1 : (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _ListVariableIndex);
 
                                         string newval = "";
                                         lock (svs.List)
@@ -3914,15 +3927,15 @@ namespace Triggernometry
                                                 bool isLocal = ctx.trig == null || ctx.trig.Repo == null;
                                                 TreeNode tn = plug.LocateNodeHostingTrigger(plug.ui.treeView1.Nodes[isLocal ? 0 : 1], t);
 
-                                            if (tn != null)
-                                            {
-                                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/trigenable", "Trigger '{0}' enabled", t.LogName));
-                                                tn.Checked = true;
-                                            }
-                                            else
-                                            {
-                                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodetrigenable", "Could not find tree node to modify for enabling trigger {0}", t.LogName));
-                                            }
+                                                if (tn != null)
+                                                {
+                                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/trigenable", "Trigger '{0}' enabled", t.LogName));
+                                                    tn.Checked = true;
+                                                }
+                                                else
+                                                {
+                                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodetrigenable", "Could not find tree node to modify for enabling trigger {0}", t.LogName));
+                                                }
                                             }));
                                         }
                                         break;
@@ -3935,15 +3948,15 @@ namespace Triggernometry
                                                 bool isLocal = ctx.trig == null || ctx.trig.Repo == null;
                                                 TreeNode tn = plug.LocateNodeHostingTrigger(plug.ui.treeView1.Nodes[isLocal ? 0 : 1], t);
 
-                                            if (tn != null)
-                                            {
-                                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/trigdisable", "Trigger '{0}' disabled", t.LogName));
-                                                tn.Checked = false;
-                                            }
-                                            else
-                                            {
-                                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodetrigdisable", "Could not find tree node to modify for disabling trigger {0}", t.LogName));
-                                            }
+                                                if (tn != null)
+                                                {
+                                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/trigdisable", "Trigger '{0}' disabled", t.LogName));
+                                                    tn.Checked = false;
+                                                }
+                                                else
+                                                {
+                                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodetrigdisable", "Could not find tree node to modify for disabling trigger {0}", t.LogName));
+                                                }
                                             }));
                                         }
                                         break;
@@ -4075,22 +4088,22 @@ namespace Triggernometry
                         break;
                         #endregion
                 }
-        ContinueChain:
-            if (LoopAction != null)
-            {
-                DateTime dt = DateTime.Now.AddMilliseconds(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, LoopAction._LoopDelayExpression));
+            ContinueChain:
+                if (LoopAction != null)
+                {
+                    DateTime dt = DateTime.Now.AddMilliseconds(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, LoopAction._LoopDelayExpression));
                     plug.QueueAction(ctx, ctx.trig, qa?.mutex, LoopAction, dt, false);
-            }
-            else if (NextAction != null)
-            {
-                DateTime dt = DateTime.Now.AddMilliseconds(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, NextAction._ExecutionDelayExpression));
+                }
+                else if (NextAction != null)
+                {
+                    DateTime dt = DateTime.Now.AddMilliseconds(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, NextAction._ExecutionDelayExpression));
                     plug.QueueAction(ctx, ctx.trig, qa?.mutex, NextAction, dt, false);
-            }
+                }
                 else if (qa?.mutex != null)
-            {
-                qa.mutex.Release(ctx);
-                qa.mutex = null;
-            }
+                {
+                    qa.mutex.Release(ctx);
+                    qa.mutex = null;
+                }
             }
             catch (Exception ex)
             {
@@ -4102,8 +4115,8 @@ namespace Triggernometry
                     "Action exception: {0}  \nIn action: {1}  \nIn trigger: {2}",
                     (_ActionType == ActionTypeEnum.ExecuteScript || _ActionType == ActionTypeEnum.NamedCallback || plug.cfg.DeveloperMode) ? ex.ToString() : ex.Message,
                     actionDesc, triggerPath));
-        }
             }
+        }
 
         internal void Mywmp_PlayStateChange(int NewState)
         {
@@ -4346,6 +4359,9 @@ namespace Triggernometry
             a._LoopDelayExpression = _LoopDelayExpression;
             a._LoopIncrExpression = _LoopIncrExpression;
             a._LoopInitExpression = _LoopInitExpression;
+            a._ActOpBoolParam = _ActOpBoolParam;
+            a._ActOpStringParam = _ActOpStringParam;
+            a._ActOpType = _ActOpType;
             a._RepositoryId = _RepositoryId;
             a._RepositoryOp = _RepositoryOp;
             a._JsonResultVariable = _JsonResultVariable;

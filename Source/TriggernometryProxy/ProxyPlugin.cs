@@ -124,7 +124,9 @@ namespace TriggernometryProxy
                 ComplainAboutReload();
             }
             FailsafeRegisterHook("InCombatHook", "InCombat");
-            FailsafeRegisterHook("EndCombatHook", "EndCombat");
+            FailsafeRegisterHook("SetCombatStateHook", "SetCombatState");
+            FailsafeRegisterHook("UseDeucalionHook", "UseDeucalion");
+            FailsafeRegisterHook("LogAllNetworkHook", "LogAllNetwork");
             FailsafeRegisterHook("CurrentZoneHook", "GetCurrentZone");
             FailsafeRegisterHook("ActiveEncounterHook", "ExportActiveEncounter");
             FailsafeRegisterHook("LastEncounterHook", "ExportLastEncounter");
@@ -249,6 +251,7 @@ namespace TriggernometryProxy
             ActGlobals.oFormActMain.OnLogLineRead -= OFormActMain_OnLogLineRead;
             ActGlobals.oFormActMain.BeforeLogLineRead -= OFormActMain_BeforeLogLineRead;
             Instance.DeInitPlugin();
+            Instance = null;
             HideCornerNotification();
         }
 
@@ -296,6 +299,19 @@ namespace TriggernometryProxy
         public void EndCombat()
         {
             ActGlobals.oFormActMain.EndCombat(false);
+        }
+
+        public void SetCombatState(bool inCombat)
+        {
+            if (inCombat)
+            {
+                string myName = Triggernometry.PluginBridges.BridgeFFXIV.GetMyself()?.GetValue("name").ToString() ?? "Player";
+                ActGlobals.oFormActMain.SetEncounter(DateTime.Now, myName, myName);
+            }
+            else
+            {
+                ActGlobals.oFormActMain.EndCombat(false);
+            }
         }
 
         public string GetCurrentZone()
@@ -522,6 +538,99 @@ namespace TriggernometryProxy
             {
                 mainform.ActiveZone.ActiveEncounter.LogLines.Add(new LogLineEntry(DateTime.Now, message, 0xFFF, mainform.GlobalTimeSorter));
             }
+        }
+
+        public static ActPluginData GetPluginDataByName(string name)
+        {
+            foreach (var plugin in ActGlobals.oFormActMain.ActPlugins)
+            {
+                if (plugin.cbEnabled.Checked && plugin.pluginObj != null)
+                {
+                    if (plugin.lblPluginTitle.Text == name)
+                    {
+                        return plugin;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static List<string> GetMethodsDesc(object obj)
+        {
+            List<string> results = new List<string>();
+            Type type = obj.GetType();
+            MethodInfo[] methods = type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            foreach (MethodInfo method in methods)
+            {
+                if (method.Name.StartsWith("get_") || method.Name.StartsWith("set_") || method.Name.StartsWith("add_") || method.Name.StartsWith("remove_"))
+                    continue;
+                string s = $"{method.ReturnType.Name} {method.Name}({string.Join(", ", method.GetParameters().Select(p => $"{p.ParameterType.Name} {p.Name}"))})";
+                results.Add(s);
+            }
+            return results;
+        }
+
+        public void UseDeucalion(bool enabled) => FfxivActPluginHelper.UseDeucalion(enabled);
+        public void LogAllNetwork(bool enabled) => FfxivActPluginHelper.LogAllNetwork(enabled);
+
+        public static class FfxivActPluginHelper
+        {
+            public static ActPluginData pluginData;
+            public static object pluginObj;
+            public static CheckBox chkLogAllNetwork;
+            public static CheckBox chkUseDeucalion;
+
+            static FfxivActPluginHelper()
+            {
+                pluginData = GetPluginDataByName("FFXIV_ACT_Plugin.dll");
+                pluginObj = pluginData?.pluginObj;
+                if (pluginObj == null) return;
+                ScanControls(pluginData.tpPluginSpace);
+            }
+
+            private static void ScanControls(Control parent)
+            {
+                foreach (Control ctrl in parent.Controls)
+                {
+                    if (ctrl is CheckBox chk)
+                    {
+                        switch (ctrl.Name)
+                        {
+                            case "chkUseDeucalion": chkUseDeucalion = chk; break;
+                            case "chkLogAllNetwork": chkLogAllNetwork = chk; break;
+                        }
+                    }
+                    else if (ctrl.HasChildren)
+                    {
+                        ScanControls(ctrl);
+                    }
+                }
+            }
+
+            public static void UseDeucalion(bool enabled)
+            {
+                if (chkUseDeucalion.InvokeRequired)
+                {
+                    chkUseDeucalion.Invoke(new Action(() => chkUseDeucalion.Checked = enabled));
+                }
+                else
+                {
+                    chkUseDeucalion.Checked = enabled;
+                }
+            }
+
+            public static void LogAllNetwork(bool enabled)
+            {
+                if (chkLogAllNetwork.InvokeRequired)
+                {
+                    chkLogAllNetwork.Invoke(new Action(() => chkLogAllNetwork.Checked = enabled));
+                }
+                else
+                {
+                    chkLogAllNetwork.Checked = enabled;
+                }
+            }
+
         }
 
     }
