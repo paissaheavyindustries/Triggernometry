@@ -16,6 +16,7 @@ using Triggernometry.Variables;
 using CsvHelper;
 using System.Globalization;
 using Triggernometry.Utilities;
+using static Triggernometry.RealPlugin;
 
 namespace Triggernometry
 {
@@ -439,7 +440,7 @@ namespace Triggernometry
         {
             foreach (var trigger in folder.Triggers)
             {
-                ctx.plug.CancelAllQueuedActionsFromTrigger(trigger);
+                plug.CancelAllQueuedActionsFromTrigger(trigger);
             }
 
             foreach (var subFolder in folder.Folders)
@@ -450,16 +451,16 @@ namespace Triggernometry
 
         internal bool ObsConnector(Context ctx, string endpoint, string password)
         {
-            RealPlugin p = ctx.plug;
+            lock (plug._obs)
             lock (p._obs)
             {
-                if (p._obs.IsConnected == true)
+                if (plug._obs.IsConnected == true)
                 {
                     return true;
                 }
                 try
                 {
-                    p._obs.Connect(endpoint, password);
+                    plug._obs.Connect(endpoint, password);
                     AddToLog(ctx, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Action/obsconnectok", "OBS WebSocket connected successfully"));
                     return true;
                 }
@@ -473,16 +474,16 @@ namespace Triggernometry
 
         internal bool LiveSplitConnector(Context ctx)
         {
-            RealPlugin p = ctx.plug;
+            lock (plug._livesplit)
             lock (p._livesplit)
             {
-                if (p._livesplit.IsConnected == true)
+                if (plug._livesplit.IsConnected == true)
                 {
                     return true;
                 }
                 try
                 {
-                    p._livesplit.Connect();
+                    plug._livesplit.Connect();
                     AddToLog(ctx, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Action/lsconnectok", "LiveSplit connected successfully"));
                     return true;
                 }
@@ -537,7 +538,7 @@ namespace Triggernometry
             {
                 case ActionTypeEnum.Trigger:
                     {
-                        Trigger t = RealPlugin.plug.GetTriggerById(_TriggerId, ctx.trig?.Repo);
+                        Trigger t = plug.GetTriggerById(_TriggerId, ctx.trig?.Repo);
                         if (t != null)
                         {
                             switch (_TriggerOp)
@@ -615,7 +616,7 @@ namespace Triggernometry
                     break;
                 case ActionTypeEnum.Folder:
                     {
-                        Folder f = RealPlugin.plug.GetFolderById(_FolderId, ctx.trig?.Repo);
+                        Folder f = plug.GetFolderById(_FolderId, ctx.trig?.Repo);
                         if (f != null)
                         {
                             switch (_FolderOp)
@@ -1449,7 +1450,7 @@ namespace Triggernometry
                                 break;
                             case RepositoryOpEnum.UpdateRepo:
                                 {
-                                    Repository r = RealPlugin.plug.GetRepositoryById(_RepositoryId);
+                                    Repository r = plug.GetRepositoryById(_RepositoryId);
                                     if (r != null)
                                     {
                                         temp += I18n.Translate("internal/Action/repoupdatespecific", "Update repository ({0})", r.Name);
@@ -1488,7 +1489,7 @@ namespace Triggernometry
             {
                 if (ctx.trig != null)
                 {
-                    return ctx.trig.GetDebugLevel(ctx.plug);
+                    return ctx.trig.GetDebugLevel(plug);
                 }
                 else
                 {
@@ -1508,7 +1509,7 @@ namespace Triggernometry
             {
                 return;
             }
-            ctx.plug.UnfilteredAddToLog(level, message);
+            plug.UnfilteredAddToLog(level, message);
         }
 
         private VariableList GetListVariable(VariableStore vs, string varname, bool createNew)
@@ -1714,8 +1715,8 @@ namespace Triggernometry
                         {
                             string sourcename = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _DictVariableName);
                             string targetname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _DictVariableTarget);
-                            VariableStore svs = (_DictSourcePersist) ? ctx.plug.cfg.PersistentVariables : ctx.plug.sessionvars;
-                            VariableStore tvs = (_DictTargetPersist) ? ctx.plug.cfg.PersistentVariables : ctx.plug.sessionvars;
+                            VariableStore svs = (_DictSourcePersist) ? plug.cfg.PersistentVariables : plug.sessionvars;
+                            VariableStore tvs = (_DictTargetPersist) ? plug.cfg.PersistentVariables : plug.sessionvars;
                             string sPersist = I18n.TrlVarPersist(_DictSourcePersist);
                             string tPersist = I18n.TrlVarPersist(_DictTargetPersist);
 
@@ -1982,24 +1983,24 @@ namespace Triggernometry
                             string varname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _DiskFileOpVar);
                             string persist = I18n.TrlVarPersist(_DiskPersist);
                             string cache = I18n.TrlCacheFile(_DiskFileCache);
-                            VariableStore vs = (_DiskPersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
+                            VariableStore vs = (_DiskPersist == false) ? plug.sessionvars : plug.cfg.PersistentVariables;
                             if (_DiskFileOp == DiskFileOpEnum.ReadCSVIntoTableVariable || _DiskFileOp == DiskFileOpEnum.ReadIntoListVariable || _DiskFileOp == DiskFileOpEnum.ReadIntoVariable)
                             {
                                 Uri u = new Uri(filename);
                                 if (u.IsFile == false)
                                 {
-                                    string fn = Path.Combine(ctx.plug.path, "TriggernometryFileCache");
+                                    string fn = Path.Combine(plug.path, "TriggernometryFileCache");
                                     if (Directory.Exists(fn) == false)
                                     {
                                         Directory.CreateDirectory(fn);
                                     }
                                     string ext = Path.GetExtension(u.LocalPath);
-                                    fn = Path.Combine(fn, ctx.plug.GenerateHash(u.AbsoluteUri) + Path.GetExtension(u.LocalPath));
+                                    fn = Path.Combine(fn, plug.GenerateHash(u.AbsoluteUri) + Path.GetExtension(u.LocalPath));
                                     bool fromcache = false;
                                     if (File.Exists(fn) == true && _DiskFileCache == true)
                                     {
                                         FileInfo fi = new FileInfo(fn);
-                                        DateTime dt = DateTime.Now.AddMinutes(0 - ctx.plug.cfg.CacheFileExpiry);
+                                        DateTime dt = DateTime.Now.AddMinutes(0 - plug.cfg.CacheFileExpiry);
                                         if (fi.LastWriteTime > dt)
                                         {
                                             filename = fn;
@@ -2136,14 +2137,14 @@ namespace Triggernometry
                         {
                             string scp = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ExecScriptExpression);
                             string assy = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ExecScriptAssembliesExpression);
-                            ctx.plug.scripting.Evaluate(scp, assy, ctx);
+                            plug.scripting.Evaluate(scp, assy, ctx);
                         }
                         break;
                     #endregion
                     #region Implementation - Folder operation
                     case ActionTypeEnum.Folder:
                         {
-                            Folder f = ctx.plug.GetFolderById(_FolderId, ctx.trig?.Repo);
+                            Folder f = plug.GetFolderById(_FolderId, ctx.trig?.Repo);
                             if (f != null)
                             {
                                 switch (_FolderOp)
@@ -2151,15 +2152,12 @@ namespace Triggernometry
                                     case FolderOpEnum.DisableFolder:
                                         {
                                             f.Enabled = false;
-                                            TreeNode tn;
-                                            if (ctx.trig == null || ctx.trig.Repo == null)
+
+                                            plug.ui.Invoke((System.Action)(() =>
                                             {
-                                                tn = ctx.plug.LocateNodeHostingFolder(ctx.plug.ui.treeView1.Nodes[0], f);
-                                            }
-                                            else
-                                            {
-                                                tn = ctx.plug.LocateNodeHostingFolder(ctx.plug.ui.treeView1.Nodes[1], f);
-                                            }
+                                                bool isLocal = ctx.trig == null || ctx.trig.Repo == null;
+                                                TreeNode tn = plug.LocateNodeHostingFolder(plug.ui.treeView1.Nodes[isLocal ? 0 : 1], f);
+
                                             if (tn != null)
                                             {
                                                 tn.Checked = false;
@@ -2169,20 +2167,18 @@ namespace Triggernometry
                                                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodefolderwithid", "Didn't find a tree node for folder ({0}) with id ({1})", f.Name, f.Id));
                                             }
                                             AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/disabledfolderwithid", "Disabled folder ({0}) with id ({1})", f.Name, f.Id));
+                                            }));
                                         }
                                         break;
                                     case FolderOpEnum.EnableFolder:
                                         {
                                             f.Enabled = true;
-                                            TreeNode tn;
-                                            if (ctx.trig == null || ctx.trig.Repo == null)
+
+                                            plug.ui.Invoke((System.Action)(() =>
                                             {
-                                                tn = ctx.plug.LocateNodeHostingFolder(ctx.plug.ui.treeView1.Nodes[0], f);
-                                            }
-                                            else
-                                            {
-                                                tn = ctx.plug.LocateNodeHostingFolder(ctx.plug.ui.treeView1.Nodes[1], f);
-                                            }
+                                                bool isLocal = ctx.trig == null || ctx.trig.Repo == null;
+                                                TreeNode tn = plug.LocateNodeHostingFolder(plug.ui.treeView1.Nodes[isLocal ? 0 : 1], f);
+
                                             if (tn != null)
                                             {
                                                 tn.Checked = true;
@@ -2192,6 +2188,7 @@ namespace Triggernometry
                                                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodefolderwithid", "Didn't find a tree node for folder ({0}) with id ({1})", f.Name, f.Id));
                                             }
                                             AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/enabledfolderwithid", "Enabled folder ({0}) with id ({1})", f.Name, f.Id));
+                                            }));
                                         }
                                         break;
                                     case FolderOpEnum.CancelFolder:
@@ -2212,7 +2209,7 @@ namespace Triggernometry
                     #region Implementation - Image aura
                     case ActionTypeEnum.Aura:
                         {
-                            ctx.plug.ImageAuraManagement(ctx, this);
+                            plug.ImageAuraManagement(ctx, this);
                         }
                         break;
                     #endregion
@@ -2233,11 +2230,11 @@ namespace Triggernometry
                             }
                             if (_JsonCacheRequest == true)
                             {
-                                string endpointh = ctx.plug.GenerateHash(endpoint);
-                                string payloadh = ctx.plug.GenerateHash(payload);
-                                string headersh = ctx.plug.GenerateHash(headers);
-                                string fh = ctx.plug.GenerateHash(endpointh + payloadh + headers);
-                                string fn = Path.Combine(ctx.plug.path, "TriggernometryJsonCache");
+                                string endpointh = plug.GenerateHash(endpoint);
+                                string payloadh = plug.GenerateHash(payload);
+                                string headersh = plug.GenerateHash(headers);
+                                string fh = plug.GenerateHash(endpointh + payloadh + headers);
+                                string fn = Path.Combine(plug.path, "TriggernometryJsonCache");
                                 if (Directory.Exists(fn) == false)
                                 {
                                     Directory.CreateDirectory(fn);
@@ -2247,7 +2244,7 @@ namespace Triggernometry
                                 if (File.Exists(fn) == true)
                                 {
                                     FileInfo fi = new FileInfo(fn);
-                                    DateTime dt = DateTime.Now.AddMinutes(0 - ctx.plug.cfg.CacheJsonExpiry);
+                                    DateTime dt = DateTime.Now.AddMinutes(0 - plug.cfg.CacheJsonExpiry);
                                     if (fi.LastWriteTime > dt)
                                     {
                                         responseCode = (int)HttpStatusCode.OK;
@@ -2271,7 +2268,7 @@ namespace Triggernometry
                             }
                             if (varname != "")
                             {
-                                VariableStore vs = (_JsonResultVariablePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
+                                VariableStore vs = (_JsonResultVariablePersist == false) ? plug.sessionvars : plug.cfg.PersistentVariables;
                                 lock (vs.Scalar) // verified
                                 {
                                     if (vs.Scalar.ContainsKey(varname) == false)
@@ -2300,7 +2297,7 @@ namespace Triggernometry
                                 string firing = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _JsonFiringExpression);
                                 if (firing.Length > 0)
                                 {
-                                    ctx.plug.LogLineQueuer(firing, "", LogEvent.SourceEnum.Log);
+                                    plug.LogLineQueuer(firing, "", LogEvent.SourceEnum.Log);
                                 }
                             }
                         }
@@ -2362,8 +2359,8 @@ namespace Triggernometry
                     case ActionTypeEnum.ListVariable:
                         {
                             string sourcename = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ListVariableName);
-                            VariableStore svs = (_ListSourcePersist) ? ctx.plug.cfg.PersistentVariables : ctx.plug.sessionvars;
-                            VariableStore tvs = (_ListTargetPersist) ? ctx.plug.cfg.PersistentVariables : ctx.plug.sessionvars;
+                            VariableStore svs = (_ListSourcePersist) ? plug.cfg.PersistentVariables : plug.sessionvars;
+                            VariableStore tvs = (_ListTargetPersist) ? plug.cfg.PersistentVariables : plug.sessionvars;
                             string sPersist = I18n.TrlVarPersist(_ListSourcePersist);
                             string tPersist = I18n.TrlVarPersist(_ListTargetPersist);
                             string changer;
@@ -2610,7 +2607,7 @@ namespace Triggernometry
                                         lock (svs.List)
                                         {
                                             VariableList vl = GetListVariable(svs, sourcename, false);
-                                            vl.SortFfxivPartyAsc(ctx.plug.cfg, changer);
+                                            vl.SortFfxivPartyAsc(plug.cfg, changer);
                                         }
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortffxiv",
                                             "{1}List variable ({0}) sorted in FFXIV party {2} order", sourcename, sPersist, order));
@@ -2622,7 +2619,7 @@ namespace Triggernometry
                                         lock (svs.List)
                                         {
                                             VariableList vl = GetListVariable(svs, sourcename, false);
-                                            vl.SortFfxivPartyDesc(ctx.plug.cfg, changer);
+                                            vl.SortFfxivPartyDesc(plug.cfg, changer);
                                         }
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/listsortffxiv",
                                             "{1}List variable ({0}) sorted in FFXIV party {2} order", sourcename, sPersist, order));
@@ -2867,8 +2864,8 @@ namespace Triggernometry
 
                             if (_LogProcess)
                             {
-                                string zone = ctx.EvaluateStringExpression(ActionContextLogger, ctx, RealPlugin.plug.currentZone);
-                                RealPlugin.plug.LogLineQueuer(message, zone, _LogMessageTarget);
+                                string zone = ctx.EvaluateStringExpression(ActionContextLogger, ctx, plug.currentZone);
+                                plug.LogLineQueuer(message, zone, _LogMessageTarget);
                             }
                             else
                             {
@@ -2886,7 +2883,7 @@ namespace Triggernometry
                             }
                             if (_LogProcessACT)
                             {
-                                RealPlugin.plug.ACTEncounterLogHook(message);
+                                plug.ACTEncounterLogHook(message);
                             }
                         }
                         break;
@@ -2914,13 +2911,13 @@ namespace Triggernometry
                             {
                                 case MutexOpEnum.Acquire:
                                     {
-                                        RealPlugin.MutexInformation mi = ctx.plug.GetMutex(mn);
+                                        RealPlugin.MutexInformation mi = plug.GetMutex(mn);
                                         mi.Acquire(ctx);
                                     }
                                     break;
                                 case MutexOpEnum.Release:
                                     {
-                                        RealPlugin.MutexInformation mi = ctx.plug.GetMutex(mn);
+                                        RealPlugin.MutexInformation mi = plug.GetMutex(mn);
                                         mi.Release(ctx);
                                     }
                                     break;
@@ -2930,11 +2927,12 @@ namespace Triggernometry
                     #endregion
                     #region Implementation - OBS
                     case ActionTypeEnum.ObsControl:
-                        if (ctx.plug._obs != null)
+                        ObsController obsController = plug._obs;
+                        if (obsController != null)
                         {
                             string endpoint = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSEndPoint);
                             string password = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSPassword);
-                            lock (ctx.plug._obs)
+                            lock (obsController)
                             {
                                 if (ObsConnector(ctx, endpoint, password) == true)
                                 {
@@ -2943,74 +2941,74 @@ namespace Triggernometry
                                         switch (_OBSControlType)
                                         {
                                             case ObsControlTypeEnum.StartStreaming:
-                                                ctx.plug._obs.StartStreaming();
+                                                obsController.StartStreaming();
                                                 break;
                                             case ObsControlTypeEnum.StopStreaming:
-                                                ctx.plug._obs.StopStreaming();
+                                                obsController.StopStreaming();
                                                 break;
                                             case ObsControlTypeEnum.ToggleStreaming:
-                                                ctx.plug._obs.ToggleStreaming();
+                                                obsController.ToggleStreaming();
                                                 break;
                                             case ObsControlTypeEnum.StartRecording:
-                                                ctx.plug._obs.StartRecording();
+                                                obsController.StartRecording();
                                                 break;
                                             case ObsControlTypeEnum.StopRecording:
-                                                ctx.plug._obs.StopRecording();
+                                                obsController.StopRecording();
                                                 break;
                                             case ObsControlTypeEnum.ToggleRecording:
-                                                ctx.plug._obs.ToggleRecording();
+                                                obsController.ToggleRecording();
                                                 break;
                                             case ObsControlTypeEnum.RestartRecording:
-                                                ctx.plug._obs.RestartRecording();
+                                                obsController.RestartRecording();
                                                 break;
                                             case ObsControlTypeEnum.RestartRecordingIfActive:
-                                                ctx.plug._obs.RestartRecordingIfActive();
+                                                obsController.RestartRecordingIfActive();
                                                 break;
                                             case ObsControlTypeEnum.ResumeRecording:
-                                                ctx.plug._obs.ResumeRecording();
+                                                obsController.ResumeRecording();
                                                 break;
                                             case ObsControlTypeEnum.PauseRecording:
-                                                ctx.plug._obs.PauseRecording();
+                                                obsController.PauseRecording();
                                                 break;
                                             case ObsControlTypeEnum.ToggleRecordPause:
-                                                ctx.plug._obs.ToggleRecordPause();
+                                                obsController.ToggleRecordPause();
                                                 break;
                                             case ObsControlTypeEnum.StartReplayBuffer:
-                                                ctx.plug._obs.StartReplayBuffer();
+                                                obsController.StartReplayBuffer();
                                                 break;
                                             case ObsControlTypeEnum.StopReplayBuffer:
-                                                ctx.plug._obs.StopReplayBuffer();
+                                                obsController.StopReplayBuffer();
                                                 break;
                                             case ObsControlTypeEnum.ToggleReplayBuffer:
-                                                ctx.plug._obs.ToggleReplayBuffer();
+                                                obsController.ToggleReplayBuffer();
                                                 break;
                                             case ObsControlTypeEnum.SaveReplayBuffer:
-                                                ctx.plug._obs.SaveReplayBuffer();
+                                                obsController.SaveReplayBuffer();
                                                 break;
                                             case ObsControlTypeEnum.SetScene:
                                                 {
                                                     string scn = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSceneName);
-                                                    ctx.plug._obs.SetCurrentScene(scn);
+                                                    obsController.SetCurrentScene(scn);
                                                 }
                                                 break;
                                             case ObsControlTypeEnum.ShowSource:
                                                 {
                                                     string scn = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSceneName);
                                                     string src = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSourceName);
-                                                    ctx.plug._obs.ShowHideSource(scn, src, true);
+                                                    obsController.ShowHideSource(scn, src, true);
                                                 }
                                                 break;
                                             case ObsControlTypeEnum.HideSource:
                                                 {
                                                     string scn = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSceneName);
                                                     string src = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSourceName);
-                                                    ctx.plug._obs.ShowHideSource(scn, src, false);
+                                                    obsController.ShowHideSource(scn, src, false);
                                                 }
                                                 break;
                                             case ObsControlTypeEnum.JSONPayload:
                                                 {
                                                     string json = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSJSONPayload);
-                                                    ctx.plug._obs.JSONPayload(json);
+                                                    obsController.JSONPayload(json);
                                                 }
                                                 break;
                                         }
@@ -3030,9 +3028,10 @@ namespace Triggernometry
                     #endregion
                     #region Implementation - LiveSplit
                     case ActionTypeEnum.LiveSplitControl:
-                        if (ctx.plug._obs != null)
+                        LiveSplitController livesplitController = plug._livesplit;
+                        if (livesplitController != null)
                         {
-                            lock (ctx.plug._livesplit)
+                            lock (livesplitController)
                             {
                                 if (LiveSplitConnector(ctx) == true)
                                 {
@@ -3041,32 +3040,32 @@ namespace Triggernometry
                                         switch (_LSControlType)
                                         {
                                             case LiveSplitControlTypeEnum.StartOrSplit:
-                                                ctx.plug._livesplit.StartOrSplit();
+                                                livesplitController.StartOrSplit();
                                                 break;
                                             case LiveSplitControlTypeEnum.Start:
-                                                ctx.plug._livesplit.Start();
+                                                livesplitController.Start();
                                                 break;
                                             case LiveSplitControlTypeEnum.Split:
-                                                ctx.plug._livesplit.Split();
+                                                livesplitController.Split();
                                                 break;
                                             case LiveSplitControlTypeEnum.UndoSplit:
-                                                ctx.plug._livesplit.UndoSplit();
+                                                livesplitController.UndoSplit();
                                                 break;
                                             case LiveSplitControlTypeEnum.SkipSplit:
-                                                ctx.plug._livesplit.SkipSplit();
+                                                livesplitController.SkipSplit();
                                                 break;
                                             case LiveSplitControlTypeEnum.Reset:
-                                                ctx.plug._livesplit.Reset();
+                                                livesplitController.Reset();
                                                 break;
                                             case LiveSplitControlTypeEnum.Pause:
-                                                ctx.plug._livesplit.Pause();
+                                                livesplitController.Pause();
                                                 break;
                                             case LiveSplitControlTypeEnum.Resume:
-                                                ctx.plug._livesplit.Resume();
+                                                livesplitController.Resume();
                                                 break;
                                             case LiveSplitControlTypeEnum.CustomPayload:
                                                 string lscommand = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _LSCustomPayload);
-                                                ctx.plug._livesplit.SendCommand(lscommand);
+                                                livesplitController.SendCommand(lscommand);
                                                 break;
                                         }
                                     }
@@ -3111,15 +3110,15 @@ namespace Triggernometry
                                     r = ctx.trig != null ? ctx.trig.Repo : null;
                                     break;
                                 case RepositoryOpEnum.UpdateRepo:
-                                    r = ctx.plug.GetRepositoryById(_RepositoryId);
+                                    r = plug.GetRepositoryById(_RepositoryId);
                                     break;
                                 case RepositoryOpEnum.UpdateAll:
-                                    ctx.plug.AllRepositoryUpdates(false);
+                                    plug.AllRepositoryUpdates(false);
                                     break;
                             }
                             if (r != null)
                             {
-                                ctx.plug.RepositoryUpdate(r, true, false);
+                                plug.RepositoryUpdate(r, true, false);
                             }
                         }
                         break;
@@ -3140,7 +3139,7 @@ namespace Triggernometry
                                 changer = I18n.Translate("internal/Action/changetagtestmode", "Action '{0}' test mode", GetDescription(ctx));
                             }
                             string newval;
-                            VariableStore vs = (_VariablePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
+                            VariableStore vs = (_VariablePersist == false) ? plug.sessionvars : plug.cfg.PersistentVariables;
                             switch (_VariableOp)
                             {
                                 case VariableOpEnum.UnsetAll:
@@ -3241,10 +3240,7 @@ namespace Triggernometry
                                         {
                                             text = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _VariableExpression);
                                         }
-                                        Thread staThread = new Thread(() => Clipboard.SetText(text));
-                                        staThread.SetApartmentState(ApartmentState.STA);
-                                        staThread.Start();
-                                        staThread.Join();
+                                        ClipBoardSet(text);
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarclipboard",
                                             "Set text ({0}) to clipboard", text));
                                         break;
@@ -3260,7 +3256,7 @@ namespace Triggernometry
                                             }
                                         }
                                         string tgtname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _VariableJsonTarget);
-                                        VariableStore vs2 = (_VariableTargetPersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
+                                        VariableStore vs2 = (_VariableTargetPersist == false) ? plug.sessionvars : plug.cfg.PersistentVariables;
                                         string query = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _VariableExpression);
                                         JsonPath.JsonPathContext pc = new JsonPath.JsonPathContext();
                                         Dictionary<string, object> p = new Parser().Parse(newval);
@@ -3295,7 +3291,7 @@ namespace Triggernometry
                                             }
                                         }
                                         string tgtname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _VariableJsonTarget);
-                                        VariableStore vs2 = (_VariableTargetPersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
+                                        VariableStore vs2 = (_VariableTargetPersist == false) ? plug.sessionvars : plug.cfg.PersistentVariables;
                                         string query = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _VariableExpression);
                                         JsonPath.JsonPathContext pc = new JsonPath.JsonPathContext();
                                         Dictionary<string, object> p = new Parser().Parse(newval);
@@ -3343,8 +3339,8 @@ namespace Triggernometry
                         {
                             string sourcename = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TableVariableName);
                             string targetname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TableVariableTarget);
-                            VariableStore svs = (_TableSourcePersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
-                            VariableStore tvs = (_TableTargetPersist == false) ? ctx.plug.sessionvars : ctx.plug.cfg.PersistentVariables;
+                            VariableStore svs = (_TableSourcePersist == false) ? plug.sessionvars : plug.cfg.PersistentVariables;
+                            VariableStore tvs = (_TableTargetPersist == false) ? plug.sessionvars : plug.cfg.PersistentVariables;
                             string sPersist = I18n.TrlVarPersist(_TableSourcePersist);
                             string tPersist = I18n.TrlVarPersist(_TableTargetPersist);
                             string expr;
@@ -3873,23 +3869,23 @@ namespace Triggernometry
                     #region Implementation - Text aura
                     case ActionTypeEnum.TextAura:
                         {
-                            ctx.plug.TextAuraManagement(ctx, this);
+                            plug.TextAuraManagement(ctx, this);
                         }
                         break;
                     #endregion
                     #region Implementation - Trigger operation
                     case ActionTypeEnum.Trigger:
                         {
-                            Trigger t = ctx.plug.GetTriggerById(_TriggerId, ctx.trig?.Repo);
+                            Trigger t = plug.GetTriggerById(_TriggerId, ctx.trig?.Repo);
                             if (t != null)
                             {
                                 switch (_TriggerOp)
                                 {
                                     case TriggerOpEnum.CancelAllTrigger:
-                                        ctx.plug.ClearActionQueue();
+                                        plug.ClearActionQueue();
                                         break;
                                     case TriggerOpEnum.CancelTrigger:
-                                        ctx.plug.CancelAllQueuedActionsFromTrigger(t);
+                                        plug.CancelAllQueuedActionsFromTrigger(t);
                                         break;
                                     case TriggerOpEnum.FireTrigger:
                                         {
@@ -3906,21 +3902,18 @@ namespace Triggernometry
                                                 le.TestMode = true;
                                                 le.ZoneId = ctx.zoneIdOverride;
                                             }
-                                            ctx.plug.TestTrigger(t, le, _TriggerForceType);
+                                            plug.TestTrigger(t, le, _TriggerForceType);
                                         }
                                         break;
                                     case TriggerOpEnum.EnableTrigger:
                                         {
                                             t.Enabled = true;
-                                            TreeNode tn;
-                                            if (ctx.trig == null || ctx.trig.Repo == null)
+
+                                            plug.ui.Invoke((System.Action)(() =>
                                             {
-                                                tn = ctx.plug.LocateNodeHostingTrigger(ctx.plug.ui.treeView1.Nodes[0], t);
-                                            }
-                                            else
-                                            {
-                                                tn = ctx.plug.LocateNodeHostingTrigger(ctx.plug.ui.treeView1.Nodes[1], t);
-                                            }
+                                                bool isLocal = ctx.trig == null || ctx.trig.Repo == null;
+                                                TreeNode tn = plug.LocateNodeHostingTrigger(plug.ui.treeView1.Nodes[isLocal ? 0 : 1], t);
+
                                             if (tn != null)
                                             {
                                                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/trigenable", "Trigger '{0}' enabled", t.LogName));
@@ -3930,20 +3923,18 @@ namespace Triggernometry
                                             {
                                                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodetrigenable", "Could not find tree node to modify for enabling trigger {0}", t.LogName));
                                             }
+                                            }));
                                         }
                                         break;
                                     case TriggerOpEnum.DisableTrigger:
                                         {
                                             t.Enabled = false;
-                                            TreeNode tn;
-                                            if (ctx.trig == null || ctx.trig.Repo == null)
+
+                                            plug.ui.Invoke((System.Action)(() =>
                                             {
-                                                tn = ctx.plug.LocateNodeHostingTrigger(ctx.plug.ui.treeView1.Nodes[0], t);
-                                            }
-                                            else
-                                            {
-                                                tn = ctx.plug.LocateNodeHostingTrigger(ctx.plug.ui.treeView1.Nodes[1], t);
-                                            }
+                                                bool isLocal = ctx.trig == null || ctx.trig.Repo == null;
+                                                TreeNode tn = plug.LocateNodeHostingTrigger(plug.ui.treeView1.Nodes[isLocal ? 0 : 1], t);
+
                                             if (tn != null)
                                             {
                                                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/trigdisable", "Trigger '{0}' disabled", t.LogName));
@@ -3953,6 +3944,7 @@ namespace Triggernometry
                                             {
                                                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notreenodetrigdisable", "Could not find tree node to modify for disabling trigger {0}", t.LogName));
                                             }
+                                            }));
                                         }
                                         break;
                                 }
@@ -3961,7 +3953,7 @@ namespace Triggernometry
                             {
                                 if (_TriggerOp == TriggerOpEnum.CancelAllTrigger)
                                 {
-                                    ctx.plug.ClearActionQueue();
+                                    plug.ClearActionQueue();
                                 }
                                 else
                                 {
@@ -4042,7 +4034,7 @@ namespace Triggernometry
                             string cbname = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _NamedCallbackName);
                             string cbparm = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _NamedCallbackParam);
                             AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/callbackinvoke", "Invoking named callback ({0}) with parameter ({1})", cbname, cbparm));
-                            ctx.plug.InvokeNamedCallback(cbname, cbparm);
+                            plug.InvokeNamedCallback(cbname, cbparm);
                         }
                         break;
                     #endregion
@@ -4072,7 +4064,7 @@ namespace Triggernometry
                                     continuing = true;
                                 }
                                 DateTime curTime = DateTime.Now;
-                                Action lastAction = ctx.plug.QueueActions(ctx, curTime, LoopActions, ctx.trig._Sequential, qa != null ? qa.mutex : null, ActionContextLogger);
+                                Action lastAction = plug.QueueActions(ctx, curTime, LoopActions, ctx.trig._Sequential, qa?.mutex, ActionContextLogger);
                                 lastAction.LoopAction = this;
                                 if (continuing == true)
                                 {
@@ -4083,35 +4075,35 @@ namespace Triggernometry
                         break;
                         #endregion
                 }
-            }
-            catch (Exception ex)
-            {
-                string triggerPath = qa?.ctx?.trig == null ? "(null)" : qa.ctx.trig.FullPath;
-                string actionDesc = "";
-                try { actionDesc = GetDescription(ctx); } catch { }
-                actionDesc = (actionDesc.Length > 100) ? (actionDesc.Substring(0, 97) + "...") : actionDesc;
-                AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/exception",
-                    "Action exception: {0}  \nIn action: {1}  \nIn trigger: {2}",
-                    (ActionType == ActionTypeEnum.ExecuteScript || ActionType == ActionTypeEnum.NamedCallback) ? ex.ToString() : ex.Message,
-                    actionDesc, triggerPath));
-            }
         ContinueChain:
             if (LoopAction != null)
             {
                 DateTime dt = DateTime.Now.AddMilliseconds(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, LoopAction._LoopDelayExpression));
-                ctx.plug.QueueAction(ctx, ctx.trig, qa != null ? qa.mutex : null, LoopAction, dt, false);
+                    plug.QueueAction(ctx, ctx.trig, qa?.mutex, LoopAction, dt, false);
             }
             else if (NextAction != null)
             {
                 DateTime dt = DateTime.Now.AddMilliseconds(ctx.EvaluateNumericExpression(ActionContextLogger, ctx, NextAction._ExecutionDelayExpression));
-                ctx.plug.QueueAction(ctx, ctx.trig, qa != null ? qa.mutex : null, NextAction, dt, false);
+                    plug.QueueAction(ctx, ctx.trig, qa?.mutex, NextAction, dt, false);
             }
-            else if (qa != null && qa.mutex != null)
+                else if (qa?.mutex != null)
             {
                 qa.mutex.Release(ctx);
                 qa.mutex = null;
             }
+            }
+            catch (Exception ex)
+            {
+                string triggerPath = qa?.ctx?.trig?.FullPath ?? "(null)";
+                string actionDesc = "";
+                try { actionDesc = GetDescription(ctx); } catch { }
+                actionDesc = (actionDesc.Length > 300) ? (actionDesc.Substring(0, 297) + "...") : actionDesc;
+                AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/exception",
+                    "Action exception: {0}  \nIn action: {1}  \nIn trigger: {2}",
+                    (_ActionType == ActionTypeEnum.ExecuteScript || _ActionType == ActionTypeEnum.NamedCallback || plug.cfg.DeveloperMode) ? ex.ToString() : ex.Message,
+                    actionDesc, triggerPath));
         }
+            }
 
         internal void Mywmp_PlayStateChange(int NewState)
         {
@@ -4162,10 +4154,7 @@ namespace Triggernometry
                     {
                         ct.ThrowIfCancellationRequested();
                         ExecutionImplementation(qa, ctx);
-                        if (qa != null)
-                        {
-                            qa.ActionFinished();
-                        }
+                        qa?.ActionFinished();
                     });
                 }
                 else
@@ -4173,10 +4162,7 @@ namespace Triggernometry
                     t = new Task(() =>
                     {
                         ExecutionImplementation(qa, ctx);
-                        if (qa != null)
-                        {
-                            qa.ActionFinished();
-                        }
+                        qa?.ActionFinished();
                     });
                 }
                 t.Start();
@@ -4184,10 +4170,7 @@ namespace Triggernometry
             else
             {
                 ExecutionImplementation(qa, ctx);
-                if (qa != null)
-                {
-                    qa.ActionFinished();
-                }
+                qa?.ActionFinished();
             }
         }
 
@@ -4413,6 +4396,33 @@ namespace Triggernometry
                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/jsonpostexception", "Couldn't send message due to exception: {0}", ex.Message));
                 return new Tuple<int, string>(-1, "");
             }
+        }
+
+        /// <summary> Set text to the clipboard using the UI thread. If text is empty, clear the clipboard. </summary>
+        public static void ClipBoardSet(string text)
+        {
+            plug.ui.Invoke(new System.Action(() =>
+            {
+                if (string.IsNullOrEmpty(text))
+                    Clipboard.Clear();
+                else
+                    Clipboard.SetText(text);
+            }));
+        }
+
+        /// <summary> Get the clipboard text using the UI thread. </summary>
+        public static string ClipBoardGet()
+            => (string)plug.ui.Invoke(new Func<string>(Clipboard.GetText));
+
+        public static ArgumentException InvalidEnumException(string enumName, string enumValue)
+        { 
+            return new ArgumentException(
+                I18n.Translate(
+                    "internal/Action/invalidEnumType",
+                    "{0} = {1} is not a known enum type.\n\n" +
+                    "This may be because your Triggernometry plugin is not up to date, or the data you are trying to import is corrupted.",
+                    enumName, enumValue)
+                );
         }
 
     }
