@@ -99,6 +99,10 @@ namespace Triggernometry
             LocalFunctions.Add("degtorad", x => x[0] / 180.0 * Math.PI);
             LocalFunctions.Add("distance", DistanceFunction);
             LocalFunctions.Add("d", DistanceFunction);
+            LocalFunctions.Add("manhattandistance", L1DistanceFunction);
+            LocalFunctions.Add("l1d", L1DistanceFunction);
+            LocalFunctions.Add("chebyshevdistance", LinfDistanceFunction);
+            LocalFunctions.Add("l∞d", LinfDistanceFunction);
             LocalFunctions.Add("projectdistance", ProjectDistanceFunction);
             LocalFunctions.Add("projd", ProjectDistanceFunction);
             LocalFunctions.Add("projectheight", ProjectHeightFunction);
@@ -215,9 +219,12 @@ namespace Triggernometry
             return 1;
         }
 
+        /// <summary>
+        /// Accepts 2n arguments: distance(*coord1, *coord2)
+        /// e.g. distance(x1, y1, x2, y2)  distance(x1, y1, z1, x2, y2, z2)
+        /// </summary>
         public static double DistanceFunction(double[] x)
-        {   // accepts 2n arguments: distance(*coord1, *coord2)
-            // e.g. distance(x1, y1, x2, y2)  distance(x1, y1, z1, x2, y2, z2)
+        {   
             if (x.Length == 0 || x.Length % 2 != 0) { return 0; }
             int dimension = x.Length / 2;
             double squaresum = 0;
@@ -226,6 +233,38 @@ namespace Triggernometry
                 squaresum += Math.Pow((x[i] - x[i + dimension]), 2.0);
             }
             return Math.Sqrt(squaresum);
+        }
+
+        /// <summary>
+        /// Similar to Distance function, but L₁-distance (Manhattan distance).
+        /// e.g. (x1, y1, x2, y2)  (x1, y1, z1, x2, y2, z2)
+        /// </summary>
+        public static double L1DistanceFunction(double[] x)
+        {
+            if (x.Length == 0 || x.Length % 2 != 0) { return 0; }
+            int dimension = x.Length / 2;
+            double d = 0;
+            for (int i = 0; i < dimension; i++)
+            {
+                d += Math.Abs(x[i] - x[i + dimension]);
+            }
+            return d;
+        }
+
+        /// <summary>
+        /// Similar to Distance function, but L∞-distance (Chebyshev distance).
+        /// e.g. (x1, y1, x2, y2)  (x1, y1, z1, x2, y2, z2)
+        /// </summary>
+        public static double LinfDistanceFunction(double[] x)
+        {
+            if (x.Length == 0 || x.Length % 2 != 0) { return 0; }
+            int dimension = x.Length / 2;
+            double d = 0;
+            for (int i = 0; i < dimension; i++)
+            {
+                d = Math.Max(d, Math.Abs(x[i] - x[i + dimension]));
+            }
+            return d;
         }
 
         // distance, projectdistance, projectheight
@@ -604,7 +643,7 @@ namespace Triggernometry
             expr = expr.Replace("°", "*0.01745329251994329576923690768488612");
 
             // replace continuous +/- to a single +/- base on the count of "-"
-            expr = MultiplePlusMinus.Replace(expr, match => match.Value.Replace("+", "").Length % 2 == 0 ? "+" : "-");
+            expr = MultiplePlusMinus.Replace(expr, match => match.Value.Count(c => c == '-') % 2 == 0 ? "+" : "-");
 
             for (var i = 0; i < expr.Length; i++)
             {   // traverse all chars in the expression

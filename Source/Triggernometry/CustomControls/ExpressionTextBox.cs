@@ -36,6 +36,8 @@ namespace Triggernometry.CustomControls
             // numeric func: distance
             "distance(x1, y1, x2, y2)", "distance(x1, y1, z1..., x2, y2, z2...)",
             "d(x1, y1, x2, y2)", "d(x1, y1, z1..., x2, y2, z2...)",
+            "l1d(x1, y1, z1..., x2, y2, z2...)", "l∞d(x1, y1, z1..., x2, y2, z2...)",
+            "manhattandistance(x1, y1, z1..., x2, y2, z2...)", "chebyshevdistance(x1, y1, z1..., x2, y2, z2...)",
             "projd(x1, y1, θ, x2, y2)", "projh(x1, y1, θ, x2, y2)",
             "projectdistance(x1, y1, θ, x2, y2)", "projectheight(x1, y1, θ, x2, y2)",
 
