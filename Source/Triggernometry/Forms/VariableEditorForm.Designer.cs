@@ -56,6 +56,7 @@
             this.btnRowInsert = new System.Windows.Forms.ToolStripButton();
             this.btnRowRemove = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnCopyAsCsv = new System.Windows.Forms.ToolStripButton();
             this.btnSaveAsCsv = new System.Windows.Forms.ToolStripButton();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.panel4.SuspendLayout();
@@ -243,6 +244,7 @@
             this.btnRowInsert,
             this.btnRowRemove,
             this.toolStripSeparator2,
+            this.btnCopyAsCsv,
             this.btnSaveAsCsv});
             this.tlsOptionsTable.Location = new System.Drawing.Point(10, 79);
             this.tlsOptionsTable.Name = "tlsOptionsTable";
@@ -312,6 +314,14 @@
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnCopyAsCsv
+            // 
+            this.btnCopyAsCsv.Image = ((System.Drawing.Image)(resources.GetObject("btnCopyAsCsv.Image")));
+            this.btnCopyAsCsv.Name = "btnCopyAsCsv";
+            this.btnCopyAsCsv.Size = new System.Drawing.Size(89, 22);
+            this.btnCopyAsCsv.Text = "Copy as CSV";
+            this.btnCopyAsCsv.Click += new System.EventHandler(this.btnCopyAsCsv_Click);
             // 
             // btnSaveAsCsv
             // 
@@ -421,6 +431,7 @@
         private System.Windows.Forms.ToolStripButton btnRowInsert;
         private System.Windows.Forms.ToolStripButton btnRowRemove;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton btnCopyAsCsv;
         private System.Windows.Forms.ToolStripButton btnSaveAsCsv;
         private System.Windows.Forms.ToolStrip tlsOptionsDict;
         private System.Windows.Forms.ToolStripButton btnKeyAdd;
