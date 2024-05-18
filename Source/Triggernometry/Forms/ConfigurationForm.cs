@@ -913,13 +913,16 @@ namespace Triggernometry.Forms
 
         private void dgvApiAccess_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex == -1)
+            if (e.RowIndex == -1 || e.ColumnIndex <= 0)
             {
                 return;
             }
             DataGridViewRow r = dgvApiAccess.Rows[e.RowIndex];
             DataGridViewCell c = r.Cells[e.ColumnIndex];
-            c.Value = ((bool)c.Value == false);
+            if (c.Value is bool value)
+            {
+                c.Value = !value;
+            }
         }
 
         private void dgvApiAccess_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -1180,16 +1183,21 @@ namespace Triggernometry.Forms
         {
             dgvAdditionalFeatures.ClearSelection();
         }
+
         private void dgvAdditionalFeatures_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex == -1)
+            if (e.RowIndex == -1 || e.ColumnIndex <= 0)
             {
                 return;
             }
             DataGridViewRow r = dgvAdditionalFeatures.Rows[e.RowIndex];
             DataGridViewCell c = r.Cells[e.ColumnIndex];
-            c.Value = ((bool)c.Value == false);
+            if (c.Value is bool value)
+            {
+                c.Value = !value;
+            }
         }
+
         private void dgvAdditionalFeatures_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             dgvAdditionalFeatures_CellContentClick(sender, e);
