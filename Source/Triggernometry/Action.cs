@@ -64,8 +64,18 @@ namespace Triggernometry
             }
         }
 
+        internal ActionTypeEnum _ActionType = ActionTypeEnum.SystemBeep;
+
         [XmlAttribute]
-        public ActionTypeEnum ActionType { get; set; } = ActionTypeEnum.SystemBeep;
+        public string ActionType 
+        {
+            get => (_ActionType != ActionTypeEnum.SystemBeep) ? _ActionType.ToString() : null;
+            set
+            {
+                if (Enum.TryParse(value, out _ActionType) || string.IsNullOrEmpty(value)) return;
+                else throw InvalidEnumException("ActionTypeEnum", value);
+            }
+        }
 
         internal string _ExecutionDelayExpression { get; set; } = "0";
         [XmlAttribute]
@@ -523,7 +533,7 @@ namespace Triggernometry
             {
                 temp += I18n.Translate("internal/Action/descassumingcondition", "assuming condition is met, ");
             }
-            switch (ActionType)
+            switch (_ActionType)
             {
                 case ActionTypeEnum.Trigger:
                     {
@@ -1673,7 +1683,7 @@ namespace Triggernometry
                 ctx.PushActionResult(1);
                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/executingaction", "Executing action '{0}' in thread {1}", GetDescription(ctx), System.Threading.Thread.CurrentThread.ManagedThreadId));
 
-                switch (ActionType)
+                switch (_ActionType)
                 {
                     #region Implementation - Beep
                     case ActionTypeEnum.SystemBeep:
@@ -4184,7 +4194,7 @@ namespace Triggernometry
         public void CopySettingsTo(Action a)
         {
             a.Id = Id;
-            a.ActionType = ActionType;
+            a._ActionType = _ActionType;
             a.OrderNumber = OrderNumber;
             a._Asynchronous = _Asynchronous;
             a._Enabled = _Enabled;

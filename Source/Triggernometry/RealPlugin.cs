@@ -2386,27 +2386,27 @@ namespace Triggernometry
         {
             foreach (Action a in actions)
             {
-                if (a.ActionType == Action.ActionTypeEnum.ExecuteScript && r.AllowScriptExecution == false)
+                if (a._ActionType == Action.ActionTypeEnum.ExecuteScript && r.AllowScriptExecution == false)
                 {
                     return false;
                 }
-                if (a.ActionType == Action.ActionTypeEnum.LaunchProcess && r.AllowProcessLaunch == false)
+                if (a._ActionType == Action.ActionTypeEnum.LaunchProcess && r.AllowProcessLaunch == false)
                 {
                     return false;
                 }
-                if (a.ActionType == Action.ActionTypeEnum.WindowMessage && r.AllowWindowMessages == false)
+                if (a._ActionType == Action.ActionTypeEnum.WindowMessage && r.AllowWindowMessages == false)
                 {
                     return false;
                 }
-                if (a.ActionType == Action.ActionTypeEnum.DiskFile && r.AllowDiskOperations == false)
+                if (a._ActionType == Action.ActionTypeEnum.DiskFile && r.AllowDiskOperations == false)
                 {
                     return false;
                 }
-                if (a.ActionType == Action.ActionTypeEnum.ObsControl && r.AllowObsControl == false)
+                if (a._ActionType == Action.ActionTypeEnum.ObsControl && r.AllowObsControl == false)
                 {
                     return false;
                 }
-                if (a.ActionType == Action.ActionTypeEnum.Loop)
+                if (a._ActionType == Action.ActionTypeEnum.Loop)
                 {
                     bool ret = ApplyActionSpecificRestrictions(a.LoopActions, r);
                     if (ret == false)

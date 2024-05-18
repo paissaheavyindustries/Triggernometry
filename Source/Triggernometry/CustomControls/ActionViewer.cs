@@ -466,7 +466,7 @@ namespace Triggernometry.CustomControls
                 catch { textColor = Color.Empty; }
 
                 // placeholder / normal color
-                if (a.ActionType == Action.ActionTypeEnum.Placeholder)
+                if (a._ActionType == Action.ActionTypeEnum.Placeholder)
                 {
                     e.CellStyle.BackColor = (bgColor != Color.Empty) ? bgColor : SystemColors.InactiveCaption;
                     e.CellStyle.ForeColor = (textColor != Color.Empty) ? textColor : SystemColors.InactiveCaptionText;
@@ -985,7 +985,7 @@ namespace Triggernometry.CustomControls
             ctxEditAction.Enabled = isSingleActionSelected;
             ctxEditPropCopyCnd.Enabled = isSingleActionSelected;
             ctxEditPropPasteCnd.Enabled = ActionViewer.copiedCondition != null;
-            ctxTestAction.Enabled = isSingleActionSelected && SelectedActions()[0].ActionType != Action.ActionTypeEnum.Placeholder;
+            ctxTestAction.Enabled = isSingleActionSelected && SelectedActions()[0]._ActionType != Action.ActionTypeEnum.Placeholder;
             bool allowMoveAndRemove = IsReadonly == false && (dgvActions.SelectedRows.Count > 0);
             ctxCopyAction.Enabled = allowMoveAndRemove;
             ctxMoveUp.Enabled = allowMoveAndRemove;

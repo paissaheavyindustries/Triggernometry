@@ -721,7 +721,7 @@ namespace Triggernometry.Forms
                 case 1:
                     {
                         Action a = new Action();
-                        a.ActionType = Action.ActionTypeEnum.SystemBeep;
+                        a._ActionType = Action.ActionTypeEnum.SystemBeep;
                         a._SystemBeepFreqExpression = "1046.5"; // C6
                         a._SystemBeepLengthExpression = "100";
                         a.OrderNumber = 1;
@@ -731,7 +731,7 @@ namespace Triggernometry.Forms
                 case 2:
                     {
                         Action a = new Action();
-                        a.ActionType = Action.ActionTypeEnum.PlaySound;
+                        a._ActionType = Action.ActionTypeEnum.PlaySound;
                         a._PlaySoundExclusive = true;
                         a._PlaySoundFileExpression = soundData;
                         a._PlaySoundVolumeExpression = "100";
@@ -742,7 +742,7 @@ namespace Triggernometry.Forms
                 case 3:
                     {
                         Action a = new Action();
-                        a.ActionType = Action.ActionTypeEnum.UseTTS;
+                        a._ActionType = Action.ActionTypeEnum.UseTTS;
                         a._UseTTSExclusive = true;
                         a._UseTTSTextExpression = soundData;
                         a._UseTTSVolumeExpression = "100";

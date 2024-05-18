@@ -833,7 +833,7 @@ namespace Triggernometry.Forms
 
         internal void SettingsToAction(Action a)
         {
-            a.ActionType = (Action.ActionTypeEnum)cbxActionType.SelectedIndex;
+            a._ActionType = (Action.ActionTypeEnum)cbxActionType.SelectedIndex;
             a._RefireInterrupt = (cbxRefireOption1.SelectedIndex == 0);
             a._RefireRequeue = (cbxRefireOption2.SelectedIndex == 1);
             a._ExecutionDelayExpression = expExecutionDelay.Expression;
