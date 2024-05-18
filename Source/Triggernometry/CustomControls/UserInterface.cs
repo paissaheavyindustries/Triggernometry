@@ -76,6 +76,18 @@ namespace Triggernometry.CustomControls
         // Create a node sorter that implements the IComparer interface.
         public class NodeSorter : IComparer
         {
+            private bool DetermineSortOrder(TreeNode parent)
+            {
+                if (parent?.Tag is Folder folder)
+                {
+                    return folder._DescendingSort;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
             // Compare the length of the strings, or the strings
             // themselves, if they are the same length.
             public int Compare(object x, object y)
@@ -89,8 +101,9 @@ namespace Triggernometry.CustomControls
                 if (ty.Tag is Folder && tx.Tag is Trigger)
                 {
                     return 1;
-                }                // If they are the same length, call Compare.
-                return string.Compare(tx.Text, ty.Text);
+                }
+                // Both folders / triggers:
+                return DetermineSortOrder(tx.Parent) ? string.Compare(ty.Text, tx.Text) : string.Compare(tx.Text, ty.Text);
             }
         }
     
@@ -749,6 +762,15 @@ namespace Triggernometry.CustomControls
             btnEdit_Click(sender, e);
         }
 
+        internal void ctxDescendingSort_Click(object sender, EventArgs e)
+        {
+            if (treeView1.SelectedNode?.Tag is Folder f)
+            {
+                f._DescendingSort = !f._DescendingSort;
+                treeView1.Sort();
+            }
+        }
+
         internal void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
             btnImportTrigger_Click(sender, e);
@@ -766,6 +788,7 @@ namespace Triggernometry.CustomControls
                 ctxAdd.Visible = false;
                 ctxUpdate.Visible = false;
                 ctxEdit.Visible = false;
+                ctxDescendingSort.Visible = false;
                 ctxFire.Visible = false;
                 ctxFireAllowCondition.Visible = false;
                 ctxCollapse.Visible = false;
@@ -787,6 +810,8 @@ namespace Triggernometry.CustomControls
                 ctxAdd.Visible = true;
                 ctxUpdate.Visible = true;
                 ctxEdit.Visible = true;
+                ctxDescendingSort.Visible = treeView1.SelectedNode.Tag is Folder;
+                ctxDescendingSort.Checked = treeView1.SelectedNode.Tag is Folder f && f._DescendingSort;
                 ctxFire.Visible = true;
                 ctxFireAllowCondition.Visible = true;
                 ctxCollapse.Visible = true;

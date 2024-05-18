@@ -42,6 +42,7 @@
             this.ctxAddRepoList = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxDescendingSort = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.ctxCopy = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxPaste = new System.Windows.Forms.ToolStripMenuItem();
@@ -155,6 +156,7 @@
             this.ctxAdd,
             this.ctxUpdate,
             this.ctxEdit,
+            this.ctxDescendingSort,
             this.toolStripSeparator7,
             this.ctxCopy,
             this.ctxPaste,
@@ -253,6 +255,14 @@
             this.ctxEdit.Size = new System.Drawing.Size(168, 22);
             this.ctxEdit.Text = "Edit";
             this.ctxEdit.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
+            // 
+            // ctxDescendingSort
+            // 
+            this.ctxDescendingSort.Image = ((System.Drawing.Image)(resources.GetObject("ctxDescendingSort.Image")));
+            this.ctxDescendingSort.Name = "ctxDescendingSort";
+            this.ctxDescendingSort.Size = new System.Drawing.Size(168, 22);
+            this.ctxDescendingSort.Text = "Sort By Descending";
+            this.ctxDescendingSort.Click += new System.EventHandler(this.ctxDescendingSort_Click);
             // 
             // toolStripSeparator7
             // 
@@ -1085,6 +1095,7 @@
         private System.Windows.Forms.ToolStripMenuItem ctxAddTrigger;
         private System.Windows.Forms.ToolStripMenuItem ctxDelete;
         private System.Windows.Forms.ToolStripMenuItem ctxEdit;
+        private System.Windows.Forms.ToolStripMenuItem ctxDescendingSort;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem ctxImport;
         private System.Windows.Forms.ToolStripMenuItem ctxExport;

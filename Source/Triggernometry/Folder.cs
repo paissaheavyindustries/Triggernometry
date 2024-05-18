@@ -136,6 +136,17 @@ namespace Triggernometry
             }
         }
 
+        internal bool _DescendingSort { get; set; } = false;
+        [XmlAttribute]
+        public string DescendingSort
+        {
+            get => _DescendingSort ? _DescendingSort.ToString() : null;
+            set
+            {
+                _DescendingSort = Boolean.Parse(value);
+            }
+        }
+
         [XmlAttribute]
         public Guid Id { get; set; }
 
