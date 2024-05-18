@@ -34,18 +34,18 @@ namespace Triggernometry.CustomControls
             "sinh(x)", "cosh(x)", "tanh(x)",
 
             // numeric func: distance
-            "distance(x1, y1, x2, y2)", "distance(x1, y1, z1..., x2, y2, z2...)",
-            "d(x1, y1, x2, y2)", "d(x1, y1, z1..., x2, y2, z2...)",
-            "l1d(x1, y1, z1..., x2, y2, z2...)", "l∞d(x1, y1, z1..., x2, y2, z2...)",
-            "manhattandistance(x1, y1, z1..., x2, y2, z2...)", "chebyshevdistance(x1, y1, z1..., x2, y2, z2...)",
-            "projd(x1, y1, θ, x2, y2)", "projh(x1, y1, θ, x2, y2)",
-            "projectdistance(x1, y1, θ, x2, y2)", "projectheight(x1, y1, θ, x2, y2)",
+            "distance(x0, y0, x1, y1)", "distance(x0, y0, z0..., x1, y1, z1...)",
+            "d(x0, y0, x1, y1)", "d(x0, y0, z0..., x1, y1, z1...)",
+            "l1d(x0, y0, z0..., x1, y1, z1...)", "l∞d(x0, y0, z0..., x1, y1, z1...)",
+            "manhattandistance(x0, y0, z0..., x1, y1, z1...)", "chebyshevdistance(x0, y0, z0..., x1, y1, z1...)",
+            "projd(x0, y0, θ, x1, y1)", "projh(x0, y0, θ, x1, y1)",
+            "projectdistance(x0, y0, θ, x1, y1)", "projectheight(x0, y0, θ, x1, y1)",
 
             // numeric func: angle
             "radtodeg(rad)", "degtorad(deg)",
-            "angle(x1, y1, x2, y2)", "θ(x1, y1, x2, y2)", "relangle(θ1, θ2)", "relθ(θ1, θ2)",
+            "angle(x0, y0, x1, y1)", "θ(x0, y0, x1, y1)", "relangle(θ0, θ1)", "relθ(θ0, θ1)",
             "roundir(θ, ±n, digits=0)", "roundvec(dx, dy, ±n, digits=0)",
-            "isanglebetween(θ, θ1, θ2)", "isθbetween(θ, θ1, θ2)",
+            "isanglebetween(θ, θ0, θ1)", "isθbetween(θ, θ0, θ1)",
 
             // numeric string func
             "hex2dec(hex)", "hex2float(hex)", "hex2double(hex)", "X8float(hex)", "parsedmg(hex)", "len(alphanumstr)",
@@ -1182,16 +1182,20 @@ namespace Triggernometry.CustomControls
         // Did not use WinProc since there are some regular TextBoxes in the forms besides ExpTxtBox.
         public static void ReplaceIncompleteLineBreaksInClipboard(object sender, EventArgs e)
         {
-            if (Clipboard.ContainsText())
+            try
             {
-                string clipboardText = Clipboard.GetText();
-                Regex rexIncompleteLinebreaks = new Regex(@"\r(?!\n)|(?<!\r)\n");
-                if (rexIncompleteLinebreaks.IsMatch(clipboardText))
+                if (Clipboard.ContainsText())
                 {
-                    string replacedText = clipboardText.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n");
-                    Clipboard.SetText(replacedText);
+                    string clipboardText = Clipboard.GetText();
+                    Regex rexIncompleteLinebreaks = new Regex(@"\r(?!\n)|(?<!\r)\n");
+                    if (rexIncompleteLinebreaks.IsMatch(clipboardText))
+                    {
+                        string replacedText = clipboardText.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n");
+                        Clipboard.SetText(replacedText);
+                    }
                 }
             }
+            catch { }
         }
 
         #region Color

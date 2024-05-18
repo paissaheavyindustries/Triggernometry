@@ -20,7 +20,7 @@ namespace Triggernometry.Forms
     public partial class TriggerForm : MemoryForm<TriggerForm>
     {
 
-        private bool IsReadonly { get; set; } = false;
+        private bool _isReadOnly = false;
 
         private WMPLib.WindowsMediaPlayer _wmp;
         internal WMPLib.WindowsMediaPlayer wmp
@@ -157,7 +157,7 @@ namespace Triggernometry.Forms
 
         internal void SetReadOnly()
         {
-            IsReadonly = true;
+            _isReadOnly = true;
             txtName.ReadOnly = true;
             txtRegexp.ReadOnly = true;
             btnOk.Enabled = false;

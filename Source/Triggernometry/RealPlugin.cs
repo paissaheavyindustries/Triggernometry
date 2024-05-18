@@ -292,6 +292,7 @@ namespace Triggernometry
         public delegate void SimpleVoidDelegate();
         public delegate double SimpleDoubleDelegate();
         public delegate string SimpleStringDelegate();
+        public delegate void BoolDelegate(bool boolParam);
         public delegate void TabPageDelegate(TabPage tp);
         public delegate void TtsDelegate(string text);
         public delegate void SoundDelegate(string filename, int volume);
@@ -1056,7 +1057,17 @@ namespace Triggernometry
 
         }
 
-        public static RealPlugin plug = new RealPlugin();
+        private static RealPlugin _plug;
+        public static RealPlugin plug
+        {
+            get 
+            { 
+                if (_plug == null)
+                    _plug = new RealPlugin();
+                return _plug;
+            }
+        }
+
         private RealPlugin()
         {
             DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "Microsoft.CodeAnalysis", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
@@ -1102,7 +1113,6 @@ namespace Triggernometry
             ThreadPool.SetMinThreads(10, 10);
             PluginBridges.BridgeFFXIV.OnLogEvent += BridgeFFXIV_OnLogEvent;
             _ep = new Endpoint();
-            _ep.plug = this;
             _ep.OnStatusChange += _ep_OnStatusChange;
         }
 
@@ -1719,7 +1729,7 @@ namespace Triggernometry
                     pair.Value.Clear();
                 }
             }
-            ui.ClearErrorCount();
+            ui?.ClearErrorCount();
         }
 
         internal void UnfilteredAddToLog(DebugLevelEnum level, string msg)
@@ -1731,7 +1741,7 @@ namespace Triggernometry
             }
             if (level == DebugLevelEnum.Error)
             {
-                ui.IncrementErrorCount();
+                ui?.IncrementErrorCount();
             }
             var queue = log[level];
             lock (queue)
@@ -2859,6 +2869,7 @@ namespace Triggernometry
                 ExitEvent.Dispose();
                 ExitEvent = null;
             }
+            _plug = null;
         }
 
         internal CancellationToken GetCancellationToken()
@@ -2964,22 +2975,20 @@ namespace Triggernometry
             }
         }
 
-        internal Action QueueActions(Context ctx, DateTime startingFrom, IEnumerable<Action> acts, bool sequential, RealPlugin.MutexInformation mtx, Context.LoggerDelegate logger)
+        internal Action QueueActions(Context ctx, DateTime startingFrom, IEnumerable<Action> actions, bool sequential, RealPlugin.MutexInformation mtx, Context.LoggerDelegate logger)
         {
             Action lastAction = null;
-            var finalAction = (from tx in acts orderby tx.OrderNumber descending select tx).FirstOrDefault();
+            var sortedActions = actions.OrderBy(a => a.OrderNumber);
+            var finalAction = sortedActions.LastOrDefault();
             if (sequential == false)
             {
-                var ix = from tx in acts
-                         orderby tx.OrderNumber ascending
-                         select tx;
-                foreach (Action a in ix)
+                foreach (Action action in sortedActions)
                 {
-                    if (a._Enabled == true)
+                    if (action._Enabled == true)
                     {
-                        startingFrom = startingFrom.AddMilliseconds(ctx.EvaluateNumericExpression(logger, this, a._ExecutionDelayExpression));
-                        QueueAction(ctx, ctx.trig, mtx, a, startingFrom, finalAction == a);
-                        lastAction = a;
+                        startingFrom = startingFrom.AddMilliseconds(ctx.EvaluateNumericExpression(logger, this, action._ExecutionDelayExpression));
+                        QueueAction(ctx, ctx.trig, mtx, action, startingFrom, finalAction == action);
+                        lastAction = action;
                     }
                 }
             }
@@ -2987,26 +2996,23 @@ namespace Triggernometry
             {
                 Action prev = null;
                 Action first = null;
-                var ix = from tx in acts
-                         orderby tx.OrderNumber ascending
-                         select tx;
-                foreach (Action a in ix)
+                foreach (Action action in sortedActions)
                 {
-                    if (a._Enabled == false)
+                    if (action._Enabled == false)
                     {
                         continue;
                     }
-                    lastAction = a;
+                    lastAction = action;
                     if (prev != null)
                     {
-                        prev.NextAction = a;
+                        prev.NextAction = action;
                     }
                     else
                     {
-                        first = a;
-                        startingFrom = startingFrom.AddMilliseconds(ctx.EvaluateNumericExpression(logger, this, a._ExecutionDelayExpression));
+                        first = action;
+                        startingFrom = startingFrom.AddMilliseconds(ctx.EvaluateNumericExpression(logger, this, action._ExecutionDelayExpression));
                     }
-                    prev = a;
+                    prev = action;
                 }
                 if (first != null)
                 {
