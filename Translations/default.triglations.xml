@@ -54,9 +54,9 @@
     <TranslationEntry Key="ActionForm/btnTextAuraFont" Translation="..." />
     <TranslationEntry Key="ActionForm/btnTextAuraGuide" Translation="Use visual guide for placement (right-click for more options)" />
     <TranslationEntry Key="ActionForm/btnTextAuraHide" Translation="Hide" />
+    <TranslationEntry Key="ActionForm/cbxActionType[ACT Interaction]" Translation="ACT Interaction" />
     <TranslationEntry Key="ActionForm/cbxActionType[Dict variable operation]" Translation="Dict variable operation" />
     <TranslationEntry Key="ActionForm/cbxActionType[Discord webhook]" Translation="Discord webhook" />
-    <TranslationEntry Key="ActionForm/cbxActionType[End encounter]" Translation="End encounter" />
     <TranslationEntry Key="ActionForm/cbxActionType[Execute script]" Translation="Execute script" />
     <TranslationEntry Key="ActionForm/cbxActionType[File operation]" Translation="File operation" />
     <TranslationEntry Key="ActionForm/cbxActionType[Folder operation]" Translation="Folder operation" />
@@ -83,6 +83,11 @@
     <TranslationEntry Key="ActionForm/cbxActionType[Text aura operation]" Translation="Text aura operation" />
     <TranslationEntry Key="ActionForm/cbxActionType[Trigger operation]" Translation="Trigger operation" />
     <TranslationEntry Key="ActionForm/cbxActionType[Use text-to-speech]" Translation="Use text-to-speech" />
+    <TranslationEntry Key="ActionForm/cbxActOpBoolParam[End/Disable]" Translation="End/Disable" />
+    <TranslationEntry Key="ActionForm/cbxActOpBoolParam[Start/Enable]" Translation="Start/Enable" />
+    <TranslationEntry Key="ActionForm/cbxActOpType[Log all network data]" Translation="Log all network data" />
+    <TranslationEntry Key="ActionForm/cbxActOpType[Set ACT combat state]" Translation="Set ACT combat state" />
+    <TranslationEntry Key="ActionForm/cbxActOpType[Use Deucalion (injection)]" Translation="Use Deucalion (injection)" />
     <TranslationEntry Key="ActionForm/cbxAuraDisplay[Centered]" Translation="Centered" />
     <TranslationEntry Key="ActionForm/cbxAuraDisplay[Normal]" Translation="Normal" />
     <TranslationEntry Key="ActionForm/cbxAuraDisplay[Stretched to fill]" Translation="Stretched to fill" />
@@ -164,7 +169,6 @@
     <TranslationEntry Key="ActionForm/cbxLvarOperation[Join all values in the list variable into a scalar variable (separator in expression)]" Translation="Join all values in the list variable into a scalar variable (separator in expression)" />
     <TranslationEntry Key="ActionForm/cbxLvarOperation[Pop and insert a value from a list into another list]" Translation="Pop and insert a value from a list into another list" />
     <TranslationEntry Key="ActionForm/cbxLvarOperation[Pop and set a value from a list into another list]" Translation="Pop and set a value from a list into another list" />
-    <TranslationEntry Key="ActionForm/cbxLvarOperation[Pop last value from list variable into a scalar variable (old action)]" Translation="Pop last value from list variable into a scalar variable (old action)" />
     <TranslationEntry Key="ActionForm/cbxLvarOperation[Pop the given index from list variable into a scalar variable]" Translation="Pop the given index from list variable into a scalar variable" />
     <TranslationEntry Key="ActionForm/cbxLvarOperation[Push value to the end of the list variable]" Translation="Push value to the end of the list variable" />
     <TranslationEntry Key="ActionForm/cbxLvarOperation[Remove value at the given index of the list variable]" Translation="Remove value at the given index of the list variable" />
@@ -375,6 +379,9 @@
     <TranslationEntry Key="ActionForm/label5" Translation="Loop actions" />
     <TranslationEntry Key="ActionForm/label6" Translation="Target Variable Name" />
     <TranslationEntry Key="ActionForm/lblActionType" Translation="Action type" />
+    <TranslationEntry Key="ActionForm/lblActOpBoolParam" Translation="State" />
+    <TranslationEntry Key="ActionForm/lblActOpStringParam" Translation="String Param" />
+    <TranslationEntry Key="ActionForm/lblActOpType" Translation="Option" />
     <TranslationEntry Key="ActionForm/lblAuraDisplay" Translation="Display method" />
     <TranslationEntry Key="ActionForm/lblAuraHeight" Translation="Height expression" />
     <TranslationEntry Key="ActionForm/lblAuraImage" Translation="Image to display" />
@@ -401,10 +408,8 @@
     <TranslationEntry Key="ActionForm/lblDictValueType" Translation="Value Expr type" />
     <TranslationEntry Key="ActionForm/lblDiscordMessage" Translation="Message to send" />
     <TranslationEntry Key="ActionForm/lblDiscordUrl" Translation="Webhook URL" />
-    <TranslationEntry Key="ActionForm/lblEndEncNoParams" Translation="This action has no configurable parameters." />
     <TranslationEntry Key="ActionForm/lblExecScriptAssemblies" Translation="List of assemblies to reference" />
     <TranslationEntry Key="ActionForm/lblExecScriptCode" Translation="Script code" />
-    <TranslationEntry Key="ActionForm/lblExecScriptLang" Translation="Script language" />
     <TranslationEntry Key="ActionForm/lblExecutionDelay" Translation="Execution delay from last action (ms)" />
     <TranslationEntry Key="ActionForm/lblFileOpName" Translation="File name" />
     <TranslationEntry Key="ActionForm/lblFileOpType" Translation="Operation type" />
@@ -537,7 +542,6 @@
     <TranslationEntry Key="ActionForm/███rtbHelperLvarInsertList" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarJoin" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarPopFirst" Translation="" />
-    <TranslationEntry Key="ActionForm/███rtbHelperLvarPopLast" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarPopToListInsert" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarPopToListSet" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarPush" Translation="" />
@@ -900,6 +904,10 @@
     <TranslationEntry Key="internal/Action/cancelfolder" Translation="Cancelled all trigger actions in folder ({0})" />
     <TranslationEntry Key="internal/Action/changetagtestmode" Translation="Action '{0}' test mode" />
     <TranslationEntry Key="internal/Action/changetagtrigaction" Translation="Trigger '{0}' action '{1}'" />
+    <TranslationEntry Key="internal/Action/descactcombatend" Translation="End ACT encounter" />
+    <TranslationEntry Key="internal/Action/descactcombatstart" Translation="Start ACT encounter" />
+    <TranslationEntry Key="internal/Action/descactlogallnetwork" Translation="{0} option: Log all network data" />
+    <TranslationEntry Key="internal/Action/descactusedeucalion" Translation="{0} option: Use Deucalion (injection)" />
     <TranslationEntry Key="internal/Action/descafterdelay" Translation="after {0} ms, " />
     <TranslationEntry Key="internal/Action/descassumingcondition" Translation="assuming condition is met, " />
     <TranslationEntry Key="internal/Action/descbeep" Translation="beep at ({0}) hz for ({1}) ms" />
@@ -922,7 +930,6 @@
     <TranslationEntry Key="internal/Action/descdiscordmsg" Translation="send message ({0}) to Discord webhook ({1})" />
     <TranslationEntry Key="internal/Action/descdiscordttsmsg" Translation="send TTS message ({0}) to Discord webhook ({1})" />
     <TranslationEntry Key="internal/Action/descenablefolder" Translation="enable folder ({0})" />
-    <TranslationEntry Key="internal/Action/descendencounter" Translation="end encounter" />
     <TranslationEntry Key="internal/Action/descexecscript" Translation="execute ({0}) script" />
     <TranslationEntry Key="internal/Action/descfilereadcsvtable" Translation="read csv file ({0}) into {2}table variable ({1}){3}" />
     <TranslationEntry Key="internal/Action/descfilereadlistvar" Translation="read file ({0}) lines into {2}list variable ({1}){3}" />
@@ -1094,6 +1101,7 @@
     <TranslationEntry Key="internal/Action/filescalarset" Translation="{2}Scalar variable ({0}) value read from file ({1})" />
     <TranslationEntry Key="internal/Action/filetableset" Translation="{2}Table variable ({0}) value read from CSV file ({1})" />
     <TranslationEntry Key="internal/Action/fivescripterrorsare" Translation="The first five errors are:" />
+    <TranslationEntry Key="internal/Action/invalidEnumType" Translation="{0} = {1} is not a known enum type.&#xD;&#xA;This may be because your Triggernometry plugin is not up to date, or the data you are trying to import is corrupted." />
     <TranslationEntry Key="internal/Action/jsonpostexception" Translation="Couldn't send message due to exception: {0}" />
     <TranslationEntry Key="internal/Action/jsonpostunexpectedresponse" Translation="Unexpected response code: {0}" />
     <TranslationEntry Key="internal/Action/listbuild" Translation="{1}List variable ({0}) built from expression ({2}) splitted by ({3})" />
@@ -1287,6 +1295,8 @@
     <TranslationEntry Key="internal/I18n/descasyncfalse" Translation="[Sync] " />
     <TranslationEntry Key="internal/I18n/descasynctrue" Translation="" />
     <TranslationEntry Key="internal/I18n/desccachefile" Translation=", caching the file on disk" />
+    <TranslationEntry Key="internal/I18n/descenablefalse" Translation="disable" />
+    <TranslationEntry Key="internal/I18n/descenabletrue" Translation="enable" />
     <TranslationEntry Key="internal/I18n/descexprtypenumeric" Translation="numeric" />
     <TranslationEntry Key="internal/I18n/descexprtypestring" Translation="string" />
     <TranslationEntry Key="internal/I18n/descpersistent" Translation="persistent " />
@@ -1312,35 +1322,31 @@
     <TranslationEntry Key="internal/I18n/type" Translation="type" />
     <TranslationEntry Key="internal/ImportForm/back" Translation="&lt; Back" />
     <TranslationEntry Key="internal/ImportForm/cancel" Translation="Cancel" />
-    <TranslationEntry Key="internal/ImportForm/dangerdisk" Translation="Some of the imported triggers include triggers which perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
-    <TranslationEntry Key="internal/ImportForm/dangerproc" Translation="Some of the imported triggers include triggers which launch arbitrary processes. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
-    <TranslationEntry Key="internal/ImportForm/dangerprocdisk" Translation="Some of the imported triggers include triggers which launch arbitrary processes and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
-    <TranslationEntry Key="internal/ImportForm/dangerprocscript" Translation="Some of the imported triggers include triggers which launch arbitrary processes and execute arbitrary scripts. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
-    <TranslationEntry Key="internal/ImportForm/dangerprocscriptdisk" Translation="Some of the imported triggers include triggers which launch arbitrary processes, execute arbitrary scripts, and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
-    <TranslationEntry Key="internal/ImportForm/dangerprocscriptwmsg" Translation="Some of the imported triggers include triggers which launch arbitrary processes, execute arbitrary scripts, and send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
-    <TranslationEntry Key="internal/ImportForm/dangerprocscriptwmsgdisk" Translation="Some of the imported triggers include triggers which launch arbitrary processes, execute arbitrary scripts, send arbitrary window messages, and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
-    <TranslationEntry Key="internal/ImportForm/dangerprocwmsg" Translation="Some of the imported triggers include triggers which launch arbitrary processes and send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
-    <TranslationEntry Key="internal/ImportForm/dangerprocwmsgdisk" Translation="Some of the imported triggers include triggers which launch arbitrary processes, send arbitrary window messages, and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
-    <TranslationEntry Key="internal/ImportForm/dangerscript" Translation="Some of the imported triggers include triggers which execute arbitrary scripts. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
-    <TranslationEntry Key="internal/ImportForm/dangerscriptdisk" Translation="Some of the imported triggers include triggers which execute arbitrary scripts and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
-    <TranslationEntry Key="internal/ImportForm/dangerscriptwmsg" Translation="Some of the imported triggers include triggers which execute arbitrary scripts and send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
-    <TranslationEntry Key="internal/ImportForm/dangerscriptwmsgdisk" Translation="Some of the imported triggers include triggers which execute arbitrary scripts, send arbitrary window messages, and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
-    <TranslationEntry Key="internal/ImportForm/dangerwmsg" Translation="Some of the imported triggers include triggers which send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
-    <TranslationEntry Key="internal/ImportForm/dangerwmsgdisk" Translation="Some of the imported triggers include triggers which send arbitrary window messages and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
+    <TranslationEntry Key="internal/ImportForm/danger" Translation="Some of the imported triggers include triggers which {0}. &#xD;&#xA;These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />
+    <TranslationEntry Key="internal/ImportForm/dangerDescJoiner" Translation=", " />
+    <TranslationEntry Key="internal/ImportForm/dangerDisk" Translation="perform file operations" />
+    <TranslationEntry Key="internal/ImportForm/dangerProc" Translation="launch arbitrary processes" />
+    <TranslationEntry Key="internal/ImportForm/dangerScript" Translation="execute arbitrary scripts" />
+    <TranslationEntry Key="internal/ImportForm/dangerWmsg" Translation="send arbitrary window messages" />
     <TranslationEntry Key="internal/ImportForm/editimportedfolder" Translation="Edit imported folder '{0}'" />
     <TranslationEntry Key="internal/ImportForm/editimportedtrigger" Translation="Edit imported trigger '{0}'" />
     <TranslationEntry Key="internal/ImportForm/exception" Translation="Exception" />
     <TranslationEntry Key="internal/ImportForm/import" Translation="Import" />
-    <TranslationEntry Key="internal/ImportForm/importcantrecognize" Translation="Can't recognize the provided data as any valid, importable format. You may be trying to import newer triggers to an older version of Triggernometry. Make sure you are using the latest version." />
     <TranslationEntry Key="internal/ImportForm/importedacttriggers" Translation="Imported ACT triggers ({0})" />
     <TranslationEntry Key="internal/ImportForm/importedconfigfile" Translation="Imported configuration file ({0})" />
     <TranslationEntry Key="internal/ImportForm/importerror" Translation="Import error" />
+    <TranslationEntry Key="internal/ImportForm/importerroracttrigger" Translation="The native ACT triggers cannot be read, possibly due to corrupted content." />
+    <TranslationEntry Key="internal/ImportForm/importerrorconfig" Translation="Please make sure you are running the latest version of Triggernometry. If you are already running the latest version, the imported config data might have been corrupted." />
+    <TranslationEntry Key="internal/ImportForm/importerrornotxml" Translation="The provided data does not show any XML characteristics. Please open the file and examine it, or check if the pasted data is complete." />
     <TranslationEntry Key="internal/ImportForm/importerrortext" Translation="An error occurred while attempting to import:" />
+    <TranslationEntry Key="internal/ImportForm/importerrortrig" Translation="The TriggernometryExport data was from version {0}. Please make sure you are running the latest version of Triggernometry. If you are already running the latest version, the data might have been corrupted." />
+    <TranslationEntry Key="internal/ImportForm/importerrorunknownroot" Translation="The XML contains data of a {0} object, which is not designed to be imported by Triggernometry." />
     <TranslationEntry Key="internal/ImportForm/importexception" Translation="An exception occurred: {0}" />
     <TranslationEntry Key="internal/ImportForm/next" Translation="Next &gt;" />
     <TranslationEntry Key="internal/ImportForm/restrictedtozone" Translation="restricted to zone" />
     <TranslationEntry Key="internal/ImportForm/savechanges" Translation="Save changes" />
     <TranslationEntry Key="internal/ImportForm/sourcenotactformat" Translation="The provided source does not appear to contain any triggers in ACT's export format." />
+    <TranslationEntry Key="internal/ImportForm/version" Translation="Source plugin version: {0}    Current plugin version: {1}" />
     <TranslationEntry Key="internal/ImportForm/warnacttab" Translation="Some of the imported ACT triggers include triggers which add results to a tab. However, importing these options is currently not supported. The affected items have been highlighted below." />
     <TranslationEntry Key="internal/ImportForm/warnacttabtimers" Translation="Some of the imported ACT triggers include triggers which add results to a tab and fire timers. However, importing these options is currently not supported. The affected items have been highlighted below." />
     <TranslationEntry Key="internal/ImportForm/warnacttimers" Translation="Some of the imported ACT triggers include triggers which fire timers. However, importing these options is currently not supported. The affected items have been highlighted below." />
@@ -1377,11 +1383,16 @@
     <TranslationEntry Key="internal/Plugin/deactalltextaura" Translation="Deactivating all text auras" />
     <TranslationEntry Key="internal/Plugin/deactimageaura" Translation="Deactivating image aura '{0}'" />
     <TranslationEntry Key="internal/Plugin/deactimageaurarex" Translation="Deactivating image auras matching '{0}'" />
+    <TranslationEntry Key="internal/Plugin/deactimageauratrig" Translation="Deactivating image auras from trigger '{0}' ({1})" />
     <TranslationEntry Key="internal/Plugin/deacttextaura" Translation="Deactivating text aura '{0}'" />
     <TranslationEntry Key="internal/Plugin/deacttextaurarex" Translation="Deactivating text auras matching '{0}'" />
+    <TranslationEntry Key="internal/Plugin/deacttextauratrig" Translation="Deactivating text auras from trigger '{0}' ({1})" />
     <TranslationEntry Key="internal/Plugin/debugnamedgroup" Translation="Trigger '{0}' named group '{1}': {2}" />
     <TranslationEntry Key="internal/Plugin/debugnumgroup" Translation="Trigger '{0}' numbered group {1}: {2}" />
     <TranslationEntry Key="internal/Plugin/downloadnewver" Translation="A new version ({0}) is available for download. Would you like to open the download page?" />
+    <TranslationEntry Key="internal/Plugin/endpointline" Translation="Endpoint data: ({0})" />
+    <TranslationEntry Key="internal/Plugin/endpointlineprocex" Translation="Exception ({0}) when processing endpoint data ({1}) in zone ({2})" />
+    <TranslationEntry Key="internal/Plugin/endpointsplitline" Translation="Split endpoint data: ({0})" />
     <TranslationEntry Key="internal/Plugin/exactimageaura" Translation="Exception '{0}' when activating image aura '{1}'" />
     <TranslationEntry Key="internal/Plugin/exacttextaura" Translation="Exception '{0}' when activating text aura '{1}'" />
     <TranslationEntry Key="internal/Plugin/exception" Translation="Exception" />
@@ -1420,6 +1431,7 @@
     <TranslationEntry Key="internal/Plugin/langload" Translation="Loading language from '{0}'" />
     <TranslationEntry Key="internal/Plugin/langloadex" Translation="Loading the language file '{0}' failed due to an exception" />
     <TranslationEntry Key="internal/Plugin/langloadfail" Translation="Loading language file failed, make sure you are running the latest version" />
+    <TranslationEntry Key="internal/Plugin/logline" Translation="Log line: ({0})" />
     <TranslationEntry Key="internal/Plugin/mutexdelayed" Translation="Context '{0}' has been waiting for mutex '{1}' on {2} for {3} ms, current owner is '{4}'" />
     <TranslationEntry Key="internal/Plugin/notadministrator" Translation="You are not running ACT as an administrator - this might prevent some triggers from working." />
     <TranslationEntry Key="internal/Plugin/procex" Translation="Exception ({0}) when processing log line ({1}) in zone ({2})" />
@@ -1687,6 +1699,7 @@
     <TranslationEntry Key="Plugin/UserInterface/ctxCollapse" Translation="Collapse all" />
     <TranslationEntry Key="Plugin/UserInterface/ctxCopy" Translation="Copy" />
     <TranslationEntry Key="Plugin/UserInterface/ctxDelete" Translation="Remove" />
+    <TranslationEntry Key="Plugin/UserInterface/ctxDescendingSort" Translation="Sort By Descending" />
     <TranslationEntry Key="Plugin/UserInterface/ctxEdit" Translation="Edit" />
     <TranslationEntry Key="Plugin/UserInterface/ctxExpand" Translation="Expand all" />
     <TranslationEntry Key="Plugin/UserInterface/ctxExport" Translation="Export" />
@@ -1834,7 +1847,10 @@
     <TranslationEntry Key="StateForm/btnTextForce" Translation="Force deactivate" />
     <TranslationEntry Key="StateForm/btnTextRefresh" Translation="Refresh" />
     <TranslationEntry Key="StateForm/colCallbackId" Translation="Id" />
+    <TranslationEntry Key="StateForm/colCallbackLastInvoked" Translation="Last Invoked" />
     <TranslationEntry Key="StateForm/colCallbackName" Translation="Name" />
+    <TranslationEntry Key="StateForm/colCallbackRegistrant" Translation="Registrant" />
+    <TranslationEntry Key="StateForm/colCallbackRegistrationTime" Translation="Registration Time" />
     <TranslationEntry Key="StateForm/colDictChangedBy" Translation="Changed by" />
     <TranslationEntry Key="StateForm/colDictLastChanged" Translation="Last changed" />
     <TranslationEntry Key="StateForm/colDictName" Translation="Name" />
@@ -2065,6 +2081,7 @@
     <TranslationEntry Key="VariableEditorForm/btnColumnAdd" Translation="Add column" />
     <TranslationEntry Key="VariableEditorForm/btnColumnInsert" Translation="Insert column" />
     <TranslationEntry Key="VariableEditorForm/btnColumnRemove" Translation="Remove column" />
+    <TranslationEntry Key="VariableEditorForm/btnCopyAsCsv" Translation="Copy as CSV" />
     <TranslationEntry Key="VariableEditorForm/btnItemAdd" Translation="Add item" />
     <TranslationEntry Key="VariableEditorForm/btnItemInsert" Translation="Insert item" />
     <TranslationEntry Key="VariableEditorForm/btnItemRemove" Translation="Remove item" />
@@ -2074,6 +2091,7 @@
     <TranslationEntry Key="VariableEditorForm/btnRowAdd" Translation="Add row" />
     <TranslationEntry Key="VariableEditorForm/btnRowInsert" Translation="Insert row" />
     <TranslationEntry Key="VariableEditorForm/btnRowRemove" Translation="Remove row" />
+    <TranslationEntry Key="VariableEditorForm/btnSaveAsCsv" Translation="Save as CSV" />
     <TranslationEntry Key="VariableEditorForm/grpGeneral" Translation=" General settings " />
     <TranslationEntry Key="VariableEditorForm/lblVariableName" Translation="Variable name" />
   </Translations>
