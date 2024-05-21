@@ -201,6 +201,9 @@
             this.dgvCallback = new Triggernometry.CustomControls.DataGridViewEx();
             this.colCallbackId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCallbackName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCallbackRegistrant = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCallbackRegistrationTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCallbackLastInvoked = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnCallbackRefresh = new System.Windows.Forms.ToolStripButton();
             this.tlsScalar.SuspendLayout();
@@ -408,14 +411,14 @@
             this.colScalarName.Name = "colScalarName";
             this.colScalarName.ReadOnly = true;
             this.colScalarName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.colScalarName.Width = 240;
+            this.colScalarName.Width = 160;
             // 
             // colScalarValue
             // 
             this.colScalarValue.HeaderText = "Value";
             this.colScalarValue.Name = "colScalarValue";
             this.colScalarValue.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.colScalarValue.Width = 240;
+            this.colScalarValue.Width = 160;
             // 
             // colScalarLastChanged
             // 
@@ -423,7 +426,7 @@
             this.colScalarLastChanged.Name = "colScalarLastChanged";
             this.colScalarLastChanged.ReadOnly = true;
             this.colScalarLastChanged.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            this.colScalarLastChanged.Width = 100;
+            this.colScalarLastChanged.Width = 125;
             // 
             // colScalarChangedBy
             // 
@@ -2025,7 +2028,10 @@
             this.dgvCallback.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCallback.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colCallbackId,
-            this.colCallbackName});
+            this.colCallbackName,
+            this.colCallbackRegistrant,
+            this.colCallbackRegistrationTime,
+            this.colCallbackLastInvoked});
             this.dgvCallback.ContextMenuStrip = this.contextMenuStrip1;
             this.dgvCallback.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvCallback.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
@@ -2048,14 +2054,36 @@
             this.colCallbackId.HeaderText = "Id";
             this.colCallbackId.Name = "colCallbackId";
             this.colCallbackId.ReadOnly = true;
+            this.colCallbackId.Width = 50;
             // 
             // colCallbackName
             // 
-            this.colCallbackName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.colCallbackName.HeaderText = "Name";
             this.colCallbackName.Name = "colCallbackName";
             this.colCallbackName.ReadOnly = true;
             this.colCallbackName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
+            this.colCallbackName.Width = 240;
+            // 
+            // colCallbackRegistrant
+            // 
+            this.colCallbackRegistrant.HeaderText = "Registrant";
+            this.colCallbackRegistrant.Name = "colCallbackRegistrant";
+            this.colCallbackRegistrant.ReadOnly = true;
+            this.colCallbackRegistrant.Width = 240;
+            // 
+            // colCallbackRegistrationTime
+            // 
+            this.colCallbackRegistrationTime.HeaderText = "Registration Time";
+            this.colCallbackRegistrationTime.Name = "colCallbackRegistrationTime";
+            this.colCallbackRegistrationTime.ReadOnly = true;
+            this.colCallbackRegistrationTime.Width = 120;
+            // 
+            // colCallbackLastInvoked
+            // 
+            this.colCallbackLastInvoked.HeaderText = "Last Invoked";
+            this.colCallbackLastInvoked.Name = "colCallbackLastInvoked";
+            this.colCallbackLastInvoked.ReadOnly = true;
+            this.colCallbackLastInvoked.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             // 
             // toolStrip1
             // 
@@ -2252,6 +2280,9 @@
         private CustomControls.DataGridViewEx dgvCallback;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCallbackId;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCallbackName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCallbackRegistrant;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCallbackRegistrationTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCallbackLastInvoked;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton btnCallbackRefresh;
         private System.Windows.Forms.ImageList imageList1;

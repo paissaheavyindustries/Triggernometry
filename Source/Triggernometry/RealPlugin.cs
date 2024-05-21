@@ -44,10 +44,14 @@ namespace Triggernometry
             public string Name { get; set; }
             public Delegate Callback { get; set; }
             public object Obj { get; set; }
+            public string Registrant { get; set; }
+            public DateTime RegistrationTime { get; set; }
+            public DateTime? LastInvoked { get; set; }
 
             public void Invoke(string val)
             {
                 Callback.DynamicInvoke(new object[] { Obj, val });
+                LastInvoked = DateTime.Now;
             }
 
         }
@@ -3884,13 +3888,17 @@ namespace Triggernometry
             }
         }
 
-        public void RegisterNamedCallback(int id, string name, Delegate del, object o)
+        public void RegisterNamedCallback(int id, string name, Delegate callback, object o, string registrant)
         {
-            NamedCallback nc = new NamedCallback();
-            nc.Id = id;
-            nc.Callback = del;
-            nc.Obj = o;
-            nc.Name = name;
+            NamedCallback nc = new NamedCallback
+        {
+                Id = id,
+                Callback = callback,
+                Obj = o,
+                Name = name,
+                Registrant = registrant,
+                RegistrationTime = DateTime.Now,
+            };
             lock (callbacksById)
             {
                 callbacksById[id] = nc;
@@ -3902,8 +3910,9 @@ namespace Triggernometry
             }
         }
 
-        public int RegisterNamedCallback(string name, Delegate callback, object o, bool allowDuplicatedName = false)
-        {   // used in scripts to register callbacks manually
+        // used in scripts
+        public int RegisterNamedCallback(string name, Delegate callback, object o, bool allowDuplicatedName = false, string registrant = "Triggernometry Script")
+        {   
             if (!allowDuplicatedName)
             {
                 UnregisterNamedCallback(name);
@@ -3915,7 +3924,7 @@ namespace Triggernometry
                 id = (callbacksById.Count == 0) ? 1 : callbacksById.Keys.Max() + 1;
             }
 
-            RegisterNamedCallback(id, name, callback, o);
+            RegisterNamedCallback(id, name, callback, o, registrant);
             return id;
         }
 

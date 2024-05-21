@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Costura;
 using System.Drawing;
 using System.Threading;
+using System.Diagnostics;
 
 namespace TriggernometryProxy
 {
@@ -24,7 +25,7 @@ namespace TriggernometryProxy
         private Control CornerPopup = null;
         private bool complained = false;
         private int callbackIdCounter = 0;
-        private List<Tuple<int, string, CustomCallbackDelegate, object>> queuedRegs = new List<Tuple<int, string, CustomCallbackDelegate, object>>();
+        private List<Tuple<int, string, CustomCallbackDelegate, object, string>> queuedRegs = new List<Tuple<int, string, CustomCallbackDelegate, object, string>>();
 
         public delegate void CustomCallbackDelegate(object o, string param);
         
@@ -33,7 +34,7 @@ namespace TriggernometryProxy
             CosturaUtility.Initialize();
         }
 
-        public int RegisterNamedCallback(string name, CustomCallbackDelegate callback, object o)
+        public int RegisterNamedCallback(string name, CustomCallbackDelegate callback, object o, string registrant)
         {
             if (name == null)
             {
@@ -48,14 +49,31 @@ namespace TriggernometryProxy
             {
                 if (Instance != null)
                 {
-                    Instance.RegisterNamedCallback(newid, name, callback, o);
+                    Instance.RegisterNamedCallback(newid, name, callback, o, registrant);
                 }
                 else
                 {
-                    queuedRegs.Add(new Tuple<int, string, CustomCallbackDelegate, object>(newid, name, callback, o));
+                    queuedRegs.Add(new Tuple<int, string, CustomCallbackDelegate, object, string>(newid, name, callback, o, registrant));
                 }
             }
             return newid;
+        }
+
+        // for backward compatibility: auto-detect the registrant
+        public int RegisterNamedCallback(string name, CustomCallbackDelegate callback, object o)
+        {
+            string registrant = "";
+
+            StackFrame callingFrame = new StackTrace().GetFrame(1);
+            if (callingFrame != null)
+            {
+                MethodBase callingMethod = callingFrame.GetMethod();
+                string callingMethodName = callingMethod.Name;
+                string callingClassName = callingMethod.DeclaringType.FullName;
+                registrant = $"{callingClassName}.{callingMethodName}";
+            }
+
+            return RegisterNamedCallback(name, callback, o, registrant);
         }
 
         public void UnregisterNamedCallback(int id)
@@ -110,9 +128,9 @@ namespace TriggernometryProxy
             lock (this)
             {
                 Instance = Triggernometry.RealPlugin.plug;
-                foreach (Tuple<int, string, CustomCallbackDelegate, object> t in queuedRegs)
+                foreach (Tuple<int, string, CustomCallbackDelegate, object, string> t in queuedRegs)
                 {
-                    Instance.RegisterNamedCallback(t.Item1, t.Item2, t.Item3, t.Item4);
+                    Instance.RegisterNamedCallback(t.Item1, t.Item2, t.Item3, t.Item4, t.Item5);
                 }
                 queuedRegs.Clear();
             }
