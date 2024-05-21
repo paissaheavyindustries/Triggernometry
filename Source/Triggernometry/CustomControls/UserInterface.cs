@@ -1162,6 +1162,7 @@ namespace Triggernometry.CustomControls
         internal TriggernometryExport ExportSelection()
         {
             TriggernometryExport exp = new TriggernometryExport();
+            exp.PluginVersion = RealPlugin.plug.cfg.PluginVersion;
             if (treeView1.SelectedNode.Tag is Trigger)
             {
                 Trigger t = (Trigger)treeView1.SelectedNode.Tag;

@@ -15,6 +15,7 @@ using System.Speech.Synthesis;
 using System.Net;
 using Triggernometry.CustomControls;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace Triggernometry.Forms
 {
@@ -238,85 +239,96 @@ namespace Triggernometry.Forms
 
         private void TryImportText()
         {
-            try
+            string starting = importData.Length > 100 ? importData.Substring(0, 100) : importData;
+            starting = starting.TrimStart();
+            bool isHtml;
+
+            if (starting.StartsWith("<"))
+                isHtml = false;
+            else if (starting.StartsWith("&lt;"))
+                isHtml = true;
+            else
+                throw new Exception(I18n.Translate("internal/ImportForm/importerrornotxml",
+                    "The provided data does not show any XML characteristics. Please open the file and examine it, or check if the pasted data is complete."));
+
+            string data = isHtml ? WebUtility.HtmlDecode(importData) : importData;
+            starting = data.Length > 100 ? data.Substring(0, 100) : data;
+            starting = starting.Replace("\r\n", " ").Replace("\r", " ").Replace("\n", " ").TrimStart();
+
+            Match match = new Regex("(?:<\\?xml[^>]*> *)?<(?<root>[^ >]+)").Match(starting);
+            string rootNodeName = match.Groups["root"].Value;
+            
+            switch (rootNodeName)
             {
-                TriggernometryExport tex = TriggernometryExport.Unserialize(importData);
-                if (tex != null)
-                {
-                    TryImportExport(tex);
-                    return;
-                }
+                case "TriggernometryExport":
+                    {
+                        TriggernometryExport tex = TriggernometryExport.Unserialize(importData);
+                        if (tex.Corrupted)
+                        {
+                            throw new Exception(I18n.Translate("internal/ImportForm/importerrortrig",
+                                "The TriggernometryExport data was from version {0}. " +
+                                "Please make sure you are running the latest version of Triggernometry. " +
+                                "If you are already running the latest version, the data might have been corrupted.",
+                                tex.PluginVersionDescription));
+                        }
+                        TryImportExport(tex);
+                        return;
+                    }
+                case "Configuration":
+                    {
+                        Configuration cfg;
+                        XmlSerializer xs = new XmlSerializer(typeof(Configuration));
+                        using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(data)))
+                        {
+                            try
+                            {
+                                cfg = (Configuration)xs.Deserialize(ms);
+                            }
+                            catch
+                            {
+                                throw new Exception(I18n.Translate("internal/ImportForm/importerrorconfig",
+                                    "Please make sure you are running the latest version of Triggernometry. " + 
+                                    "If you are already running the latest version, " +
+                                    "the imported config data might have been corrupted."));
+                            }
+                            TriggernometryExport tex = new TriggernometryExport();
+                            tex.PluginVersion = cfg.Constants.ContainsKey("TriggernometryVersionMajor")
+                                ? $"{cfg.Constants["TriggernometryVersionMajor"]}.{cfg.Constants["TriggernometryVersionMinor"]}.{cfg.Constants["TriggernometryVersionBuild"]}.{cfg.Constants["TriggernometryVersionRevision"]}"
+                                : $"1.1.6.6";
+                            tex.ExportedFolder = cfg.Root;
+                            tex.ExportedFolder.Name = I18n.Translate("internal/ImportForm/importedconfigfile", "Imported configuration file ({0})", DateTime.Now);
+                            tex.ExportedTrigger = null;
+                            TryImportExport(tex);
+                            return;
+                        }
+                    }
+                case "Trigger":
+                    {
+                        string nex = "<ActWrapper>" + importData + "</ActWrapper>";
+                        try
+                        {
+                            TryImportActWrapper(nex);
+                        }
+                        catch
+                        {
+                            throw new Exception(I18n.Translate("internal/ImportForm/importerroracttrigger",
+                                "The native ACT triggers cannot be read, possibly due to corrupted content."));
+                        }
+                        return;
+                    }
+                case "Language":
+                    switch (CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower())
+                    {   
+                        case "fr": throw new Exception("Vous essayez d'importer un fichier de localisation et non un déclencheur. Les fichiers de localisation doivent être placés dans le même répertoire que Triggernometry.dll.");
+                        case "jp": throw new Exception("トリガーではなく、ローカライズファイルをインポートしようとしています。ローカライズファイルは Triggernometry.dll と同じディレクトリに配置する必要があります。");
+                        case "zh": throw new Exception("你导入了汉化文件，而非触发器。汉化文件应直接置于 Triggernometry.dll 同目录下。");
+                        // case ...
+                        default:   throw new Exception("You are attempting to import a localization file instead of a trigger. Localization files should be placed in the same directory as Triggernometry.dll.");
+                    }
+                default:
+                    throw new Exception(I18n.Translate("internal/ImportForm/importerrorunknownroot",
+                        "The XML contains data of a {0} object, which is not designed to be imported by Triggernometry.", rootNodeName));
             }
-            catch (Exception)
-            {
-            }
-            try
-            {
-                TriggernometryExport tex = TriggernometryExport.Unserialize(WebUtility.HtmlDecode(importData));
-                if (tex != null)
-                {
-                    TryImportExport(tex);
-                    return;
-                }
-            }
-            catch (Exception)
-            {
-            }
-            try
-            {
-                string nex = "<ActWrapper>" + importData + "</ActWrapper>";
-                TryImportActWrapper(nex);
-                return;
-            }
-            catch (Exception)
-            {
-            }
-            try
-            {
-                string nex = "&lt;ActWrapper&gt;" + importData + "&lt;/ActWrapper&gt;";
-                TryImportActWrapper(WebUtility.HtmlDecode(nex));
-                return;
-            }
-            catch (Exception)
-            {
-            }
-            try
-            {
-                Configuration cfg = null;
-                XmlSerializer xs = new XmlSerializer(typeof(Configuration));
-                using (MemoryStream ms = new MemoryStream(UTF8Encoding.UTF8.GetBytes(importData)))
-                {
-                    cfg = (Configuration)xs.Deserialize(ms);
-                    TriggernometryExport tex = new TriggernometryExport();
-                    tex.ExportedFolder = cfg.Root;
-                    tex.ExportedFolder.Name = I18n.Translate("internal/ImportForm/importedconfigfile", "Imported configuration file ({0})", DateTime.Now);
-                    tex.ExportedTrigger = null;
-                    TryImportExport(tex);
-                    return;
-                }
-            }
-            catch (Exception)
-            {
-            }
-            try
-            {
-                Configuration cfg = null;
-                XmlSerializer xs = new XmlSerializer(typeof(Configuration));
-                using (MemoryStream ms = new MemoryStream(UTF8Encoding.UTF8.GetBytes(WebUtility.HtmlDecode(importData))))
-                {
-                    cfg = (Configuration)xs.Deserialize(ms);
-                    TriggernometryExport tex = new TriggernometryExport();
-                    tex.ExportedFolder = cfg.Root;
-                    tex.ExportedFolder.Name = I18n.Translate("internal/ImportForm/importedconfigfile", "Imported configuration file ({0})", DateTime.Now);
-                    tex.ExportedTrigger = null;
-                    TryImportExport(tex);
-                    return;
-                }
-            }
-            catch (Exception)
-            {
-            }
-            throw new Exception(I18n.Translate("internal/ImportForm/importcantrecognize", "Can't recognize the provided data as any valid, importable format. You may be trying to import newer triggers to an older version of Triggernometry. Make sure you are using the latest version."));
         }
 
         private bool IsActionTypeTrigger(Trigger trigger, Action.ActionTypeEnum actionType)
@@ -335,6 +347,10 @@ namespace Triggernometry.Forms
             BuildTreeFromExport(tex, null, null, false);
             treeView1.ExpandAll();
 
+            lblWarning.Text = I18n.Translate("internal/ImportForm/version", 
+                "Source plugin version: {0}    Current plugin version: {1}",
+                tex.PluginVersionDescription, RealPlugin.plug.cfg.PluginVersion);
+
             List<string> warningComponents = new List<string>();
 
             if (HasActionTypeTrigger(tex, Action.ActionTypeEnum.DiskFile))
@@ -350,13 +366,13 @@ namespace Triggernometry.Forms
             {
                 string dangerDescriptions = string.Join(I18n.Translate("internal/ImportForm/dangerDescJoiner", ", "), warningComponents);
                 string warning = I18n.Translate("internal/ImportForm/danger",
-                    "Some of the imported triggers include triggers which {0}. \n\n" +
+                    "Some of the imported triggers include triggers which {0}. \n" +
                     "These triggers can be dangerous and malicious triggers may even compromise your system and security. " +
                     "The items in question have been highlighted below.",
                     dangerDescriptions);
-                lblWarning.Text = warning;
-                lblWarning.Visible = true;
+                lblWarning.Text += "\n\n" + warning;
             }
+            lblWarning.Visible = true;
         }
 
         internal void BuildTreeFromExport(TriggernometryExport tex, TreeNode parentnode, Folder parentfolder, bool isRemote)
@@ -707,7 +723,7 @@ namespace Triggernometry.Forms
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
             ctxEdit.Enabled = btnEdit.Enabled;
-            cxtRemove.Enabled = btnRemove.Enabled;
+            ctxRemove.Enabled = btnRemove.Enabled;
         }
 
         private void TryImportActWrapper(string data)
