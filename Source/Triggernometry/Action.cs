@@ -1874,12 +1874,14 @@ namespace Triggernometry
                                     {   // Using the first 2 characters in the expression as the separator to split the remaining part into a new dict
                                         // e.g. expr = ":,aaa:1,bbb:2,ccc:3"
                                         VariableDictionary vt = new VariableDictionary();
-                                        string value = ParseValue();
-                                        if (value.Length > 1)
+                                        string expr = ParseValue();
+                                        if (expr.Length > 1)
                                         {
-                                            char kvSeparator = value[0];
-                                            char pairSeparator = value[1];
-                                            string splitval = value.Substring(2);
+                                            if (expr[1] == '\n' || expr.Substring(1).StartsWith("\r\n"))
+                                                expr = Context.ReplaceLineBreak(expr);
+                                            char kvSeparator = expr[0];
+                                            char pairSeparator = expr[1];
+                                            string splitval = expr.Substring(2);
                                             vt = VariableDictionary.Build(splitval, kvSeparator, pairSeparator, vdchanger);
                                             AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/dictbuild",
                                                 "{1}Dictionary ({0}) built from expression ({2}) splitted by ({3}) ({4})",
@@ -1889,7 +1891,7 @@ namespace Triggernometry
                                         {
                                             AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/dictbuildfail",
                                                 "{1}Dictionary ({0}) cannot be built since expression ({2}) length < 2",
-                                                targetname, tPersist, value));
+                                                targetname, tPersist, expr));
                                         }
                                         lock (tvs.Dict)
                                         {
@@ -2828,6 +2830,8 @@ namespace Triggernometry
                                         VariableList vl = new VariableList();
                                         if (expr.Length > 0)
                                         {
+                                            if (expr[0] == '\n' || expr.StartsWith("\r\n"))
+                                                expr = Context.ReplaceLineBreak(expr);
                                             char separator = expr[0];
                                             string splitval = expr.Substring(1);
                                             vl = VariableList.Build(splitval, separator, changer);
@@ -3579,6 +3583,8 @@ namespace Triggernometry
                                         expr = ParseExpr();
                                         if (expr.Length > 1)
                                         {
+                                            if (expr[1] == '\n' || expr.Substring(1).StartsWith("\r\n"))
+                                                expr = Context.ReplaceLineBreak(expr);
                                             char colSeparator = expr[0];
                                             char rowSeparator = expr[1];
                                             string splitval = expr.Substring(2);

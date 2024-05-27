@@ -245,7 +245,7 @@ namespace Triggernometry
         /// <param name="allowEmptyList"> Converts an empty string or spaces to an empty list, or a list with an empty string.</param>>
         public static string[] SplitArguments(string args, bool allowEmptyList = true, string separator = ",")
         {
-            if (string.IsNullOrWhiteSpace(args) && allowEmptyList)
+            if (allowEmptyList && Trim(args ?? "") == "")
             {
                 return new string[0];
             }
@@ -2030,7 +2030,7 @@ namespace Triggernometry
                                                 }
                                                 else if (arg.Length == 0)
                                                 {
-                                                    throw InvalidValueError(funcname, I18n.TranslateWord("char") + "/" + I18n.TranslateWord("charcode"), funcval, x);
+                                                    throw InvalidValueError(funcname, I18n.TranslateWord("char") + "/" + I18n.TranslateWord("charcode"), arg, x);
                                                 }
                                                 else if (arg.Length > 1)
                                                 {
