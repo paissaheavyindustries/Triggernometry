@@ -1987,7 +1987,7 @@ namespace Triggernometry.CustomControls
             }
         }
 
-        private void UpdateRepository(TreeNode tnupdate)
+        private void ForceUpdateRepository(TreeNode tnupdate)
         {
             if (tnupdate == null)
             {
@@ -2022,7 +2022,7 @@ namespace Triggernometry.CustomControls
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            UpdateRepository(treeView1.SelectedNode);
+            ForceUpdateRepository(treeView1.SelectedNode);
         }
 
         private void ctxUpdate_Click(object sender, EventArgs e)
@@ -2066,7 +2066,7 @@ namespace Triggernometry.CustomControls
                         treeView1.Nodes[1].Expand();
                         RecolorStartingFromNode(tn.Parent, tn.Parent.Checked, true);
                         treeView1.Sort();
-                        UpdateRepository(tn);
+                        ForceUpdateRepository(tn);
                     }
                 }
             }

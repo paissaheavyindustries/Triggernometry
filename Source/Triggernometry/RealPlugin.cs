@@ -2177,6 +2177,13 @@ namespace Triggernometry
             ui.ShowProgress(progress, state);
         }
 
+        private void ShowProgressWhenComplete(string state)
+        {
+            ui.ShowProgress(100, state);
+            System.Threading.Thread.Sleep(2000);
+            ui.ShowProgress(0, "");
+        }
+
         private void ClearRepository(Repository r)
         {
             ui.ClearRepository(r);
@@ -2188,13 +2195,12 @@ namespace Triggernometry
             ClearRepository(r);
             r.ClearLog();
             string trans;
-            bool useBackup = false;
+            bool useBackup = isStartup && r.UpdatePolicy != Repository.UpdatePolicyEnum.Startup;
+            // update the repo
+            if (!useBackup)  
+            {
             try
             {
-                if (isStartup == true && r.UpdatePolicy != Repository.UpdatePolicyEnum.Startup)
-                {
-                    useBackup = true;
-                }
                 if (singleUpdate == true)
                 {
                     trans = I18n.Translate("internal/Plugin/repoupdate", "Updating repository {0} at {1}", r.Name, r.Address);
@@ -2203,39 +2209,8 @@ namespace Triggernometry
                     ShowProgress(-1, trans);
                 }
                 System.Threading.Thread.Sleep(500);
-                DateTime remdate = DateTime.MinValue;
-                long remsize = 0, localsize = 0;
-                using (System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient())
-                {
-                    System.Net.Http.HttpRequestMessage request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Head, new Uri(r.Address));
-                    Task<System.Net.Http.HttpResponseMessage> tsk = httpClient.SendAsync(request);
-                    System.Net.Http.HttpResponseMessage response = tsk.Result;
-                    DateTimeOffset? lastmod = response.Content.Headers.LastModified;
-                    if (lastmod.HasValue == true)
-                    {
-                        remdate = lastmod.Value.DateTime;
-                    }
-                    else
-                    {
-                        remdate = r.LastUpdated;
-                    }
-                    long? conlen = response.Content.Headers.ContentLength;
-                    if (conlen.HasValue == true)
-                    {
-                        if (conlen.Value > 0)
-                        {
-                            remsize = conlen.Value;
-                        }
-                        else
-                        {
-                            remsize = 0;
-                        }
-                    }
-                    else
-                    {
-                        remsize = 0;
-                    }
-                }
+                    long localsize = 0;
+                    (DateTime remdate, long remsize) = FetchRepositoryMetadata(r);
                 DateTime cacheExpiry = DateTime.Now.AddMinutes(0 - cfg.CacheRepoExpiry);
                 bool cacheExpired = false;
                 if (r.KeepLocalBackup == true)
@@ -2248,21 +2223,15 @@ namespace Triggernometry
                         cacheExpired = (fi.LastWriteTime < cacheExpiry);
                     }
                 }
+                    // nothing has changed: try to load local backup
                 if (remdate == r.LastUpdated && remsize == localsize && localsize > 0 && r.KeepLocalBackup == true && cacheExpired == false)
                 {
                     trans = I18n.Translate("internal/Plugin/repousingbackup", "Repository {0} hasn't changed since {1}, and size hasn't changed from {2}, using local backup", r.Name, remdate, localsize);
                     FilteredAddToLog(DebugLevelEnum.Info, trans);
                     r.AddToLog(trans);
-                    if (LoadLocalBackupForRepository(r) == true)
+                        if (LoadLocalBackupForRepository(r) == true) // success
                     {
-                        if (singleUpdate == true)
-                        {
-                            trans = I18n.Translate("internal/Plugin/repoupdatecomplete", "Repository update complete");
-                            r.AddToLog(trans);
-                            ShowProgress(100, trans);
-                            System.Threading.Thread.Sleep(2000);
-                            ShowProgress(0, "");
-                        }
+                            if (singleUpdate) CompleteSingleUpdate(r);
                         return;
                     }
                 }
@@ -2282,7 +2251,7 @@ namespace Triggernometry
                     data = Encoding.UTF8.GetString(rawdata);
                 }
                 TriggernometryExport exp = TriggernometryExport.Unserialize(data);
-                if (exp != null)
+                    if (!exp.Corrupted)
                 {
                     r.ContentSize = data.Length;
                     AddContentToRepository(exp, r);
@@ -2303,24 +2272,39 @@ namespace Triggernometry
                 trans = I18n.Translate("internal/Plugin/repoupdateexception", "Couldn't update repository {0} due to exception: {1}", r.Name, ex.ToString());
                 r.AddToLog(trans);
                 FilteredAddToLog(DebugLevelEnum.Error, trans);
-                useBackup = true;
+                    useBackup = true; // use local backup if the update failed
+                }
             }
-            if (useBackup == true && r.KeepLocalBackup == true)
+            // load local backup
+            if (useBackup && r.KeepLocalBackup) 
             {
                 trans = I18n.Translate("internal/Plugin/repousinglocal", "Loading local backup of repository {0}", r.Name);
                 FilteredAddToLog(DebugLevelEnum.Info, trans);
                 r.AddToLog(trans);
                 LoadLocalBackupForRepository(r);
             }
-            if (singleUpdate == true)
+            if (singleUpdate) CompleteSingleUpdate(r);
+        }
+
+        private (DateTime remdate, long remsize) FetchRepositoryMetadata(Repository r)
+        {
+            using (var httpClient = new System.Net.Http.HttpClient())
             {
-                trans = I18n.Translate("internal/Plugin/repoupdatecomplete", "Repository update complete");
-                r.AddToLog(trans);
-                ShowProgress(100, trans);
-                System.Threading.Thread.Sleep(2000);
-                ShowProgress(0, "");
+                var request = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Head, new Uri(r.Address));
+                var response = httpClient.SendAsync(request).Result; 
+                var lastmod = response.Content.Headers.LastModified;
+                DateTime remdate = lastmod.HasValue ? lastmod.Value.DateTime : r.LastUpdated;
+                long remsize = response.Content.Headers.ContentLength.GetValueOrDefault(0);
+                return (remdate, remsize);
             }
         }
+
+        private void CompleteSingleUpdate(Repository r)
+            {
+            string trans = I18n.Translate("internal/Plugin/repoupdatecomplete", "Repository update complete");
+                r.AddToLog(trans);
+            ShowProgressWhenComplete(trans);
+            }
 
         internal void AllRepositoryUpdates(bool isStartup)
         {
@@ -2352,10 +2336,7 @@ namespace Triggernometry
                 ShowProgress((int)Math.Floor(100.0 * (float)done / (float)doing), trans);
                 RepositoryUpdate(r, false, isStartup);
             }
-            trans = I18n.Translate("internal/Plugin/repoupdatecomplete", "Repository update complete");
-            ShowProgress(100, trans);
-            System.Threading.Thread.Sleep(2000);
-            ShowProgress(0, "");
+            ShowProgressWhenComplete(I18n.Translate("internal/Plugin/repoupdatecomplete", "Repository update complete"));
         }
 
         private void ApplyRepositoryRestrictions(Folder f, Repository r)
@@ -2574,7 +2555,7 @@ namespace Triggernometry
                 r.AddToLog(trans);
                 string data = File.ReadAllText(fn);
                 TriggernometryExport exp = TriggernometryExport.Unserialize(data);
-                if (exp != null)
+                if (!exp.Corrupted)
                 {
                     r.LastUpdated = File.GetLastWriteTime(fn);
                     r.ContentSize = data.Length;
