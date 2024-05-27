@@ -554,8 +554,7 @@ namespace Triggernometry
             OperatorArity[op] = arity;
             if (op != " *")
             {
-                foreach (char c in op)
-                    OperatorChar.Add(c);    // add the chars which are considered as operator chars (for lexer)
+                OperatorChar.UnionWith(op);    // add the chars which are considered as operator chars (for lexer)
             }
 
             if (arity == 1)
