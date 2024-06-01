@@ -12,111 +12,63 @@ namespace Triggernometry
 
     public class Configuration
     {
+        // Configuration Form
 
-        public class APIUsage
-        {
+        #region General
 
-            [XmlAttribute]
-            public string Name { get; set; }
-
-            [XmlAttribute]
-            public bool AllowLocal { get; set; }
-
-            [XmlAttribute]
-            public bool AllowRemote { get; set; }
-
-            [XmlAttribute]
-            public bool AllowAdmin { get; set; }
-
-        }
-
-        [Flags]
-        public enum UnsafeUsageEnum
-        {
-            None = 0,
-            AllowLocal = 1,
-            AllowRemote = 2,
-            AllowAdmin = 4
-        }
-
-        public class Substitution : IComparable
-        {
-
-            [Flags]
-            public enum SubstitutionScopeEnum
-            {
-                CaptureGroup =  1,
-                NumericExpression = 2,
-                StringExpression = 4,
-                TextToSpeech = 8
-            }
-
-            [XmlAttribute]
-            public string SearchFor { get; set; }
-
-            [XmlAttribute]
-            public string ReplaceWith { get; set; }
-
-            [XmlAttribute]
-            public SubstitutionScopeEnum Scope { get; set; }
-
-            public string Replace(string input)
-            {
-                return input.Replace(SearchFor, ReplaceWith);
-            }
-
-            public int CompareTo(object obj)
-            {
-                Substitution b = (Substitution)obj;
-                int x = SearchFor.CompareTo(b.SearchFor);
-                if (x != 0)
-                {
-                    return x;
-                }
-                x = ReplaceWith.CompareTo(b.ReplaceWith);
-                if (x != 0)
-                {
-                    return x;
-                }
-                return Scope.CompareTo(b.Scope);
-            }
-        }
-
-        public string PerformSubstitution(string input, Substitution.SubstitutionScopeEnum scope)
-        {
-            if (Substitutions.Count > 0)
-            {
-                var reps = from ix in Substitutions where (ix.Scope & scope) == scope select ix;
-                if (reps.Count() > 0)
-                {
-                    foreach (Configuration.Substitution rep in reps)
-                    {
-                        input = rep.Replace(input);
-                    }
-                }
-            }
-            return input;
-        }
-
-        public Folder Root = new Folder();
-        public RepositoryFolder RepositoryRoot = new RepositoryFolder();
-        public Trigger TemplateTrigger = new Trigger() { Enabled = true, Conditions = null, Condition = new ConditionGroup() { Grouping = ConditionGroup.CndGroupingEnum.Or, Enabled = false } };
+        // Logging
 
         [XmlAttribute]
-        public bool UseTemplateTrigger { get; set; } = false;
+        public RealPlugin.DebugLevelEnum DebugLevel { get; set; } = RealPlugin.DebugLevelEnum.Info;
 
         [XmlAttribute]
-        public int Version { get; set; } = 1;
-
-        [XmlAttribute]
-        public string PluginVersion { get; set; } = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-
-        public enum UpdateNotificationsEnum
+        public string VerboseDebug // Old version
         {
-            Undefined,
-            Yes,
-            No
+            get
+            {
+                return null;
+            }
+            set
+            {
+                if (value == "true")
+                {
+                    DebugLevel = RealPlugin.DebugLevelEnum.Verbose;
+                }
+                else
+                {
+                    DebugLevel = RealPlugin.DebugLevelEnum.Info;
+                }
+            }
         }
+
+        [XmlAttribute]
+        public bool LogNormalEvents { get; set; } = true;
+
+        [XmlAttribute]
+        public bool LogVariableExpansions { get; set; } = false;
+
+        // Startup
+
+        internal bool _ShowWelcomeHasBeenSet = false;
+        private bool _ShowWelcome { get; set; } = true;
+
+        [XmlAttribute]
+        public bool ShowWelcome
+        {
+            get
+            {
+
+                return _ShowWelcome;
+            }
+            set
+            {
+                _ShowWelcome = value;
+                _ShowWelcomeHasBeenSet = true;
+            }
+        }
+
+        [XmlAttribute]
+        public bool WarnAdmin { get; set; } = true;
 
         public enum UpdateCheckMethodEnum
         {
@@ -130,83 +82,88 @@ namespace Triggernometry
         [XmlAttribute]
         public UpdateCheckMethodEnum UpdateCheckMethod { get; set; } = UpdateCheckMethodEnum.ACT;
 
-        [XmlAttribute]
-        public UpdateNotificationsEnum DefaultRepository { get; set; } = UpdateNotificationsEnum.Undefined;
+        // Startup Trigger/Folder
 
-        [XmlAttribute]
-        public bool AutosaveEnabled { get; set; } = false;
-
-        [XmlAttribute]
-        public int AutosaveInterval { get; set; } = 5;
-
-        [XmlAttribute]
-        public string Language { get; set; }
-
-        public List<Substitution> Substitutions { get; set; } = new List<Substitution>();
-
-        private bool Locked { get; set; } = false;
-
-        [XmlAttribute]
-        private UnsafeUsageEnum _UnsafeUsage = UnsafeUsageEnum.None;
-        public UnsafeUsageEnum UnsafeUsage
+        public enum StartupTriggerTypeEnum
         {
-            get
-            {
-                return _UnsafeUsage;
-            }
-            set
-            {
-                if (Locked == false)
-                {
-                    _UnsafeUsage = value;
-                }
-            }
+            Trigger,
+            Folder
         }
 
-        private List<APIUsage> _APIUsages { get; set; } = new List<APIUsage>();
-        public List<APIUsage> APIUsages
-        {
-            get
-            {
-                return Locked == false ? _APIUsages : null;
-            }
-            set
-            {
-                if (Locked == false)
-                {
-                    _APIUsages = value;
-                }
-            }
-        }
-
-        internal bool _ShowWelcomeHasBeenSet = false;
-        private bool _ShowWelcome { get; set; } = true;
         [XmlAttribute]
-        public bool ShowWelcome
-        {
-            get
-            {
-                
-                return _ShowWelcome;
-            }
-            set
-            {
-                _ShowWelcome = value;
-                _ShowWelcomeHasBeenSet = true;
-            }
-        }
+        public StartupTriggerTypeEnum StartupTriggerType { get; set; } = StartupTriggerTypeEnum.Trigger;
+
+        [XmlAttribute]
+        public Guid StartupTriggerId { get; set; } = Guid.Empty;
+
+        #endregion
+
+        #region Audio
+
+        // Global volume adjustment
 
         [XmlAttribute]
         public int SfxVolumeAdjustment { get; set; } = 100;
 
         [XmlAttribute]
-        public bool UseOsClipboard { get; set; } = true;
-
-        [XmlAttribute]
         public int TtsVolumeAdjustment { get; set; } = 100;
 
+        // ACT hooks
+
         [XmlAttribute]
-        public RealPlugin.DebugLevelEnum DebugLevel { get; set; } = RealPlugin.DebugLevelEnum.Info;
+        public bool UseACTForSound { get; set; } = false;
+
+        [XmlAttribute]
+        public bool UseACTForTTS { get; set; } = false;
+
+        #endregion
+
+        #region Shortcuts
+
+        [XmlAttribute]
+
+        public bool EnableShortcutTemplates { get; set; } = true;
+        public bool UseAbbrevInTemplates { get; set; } = true;
+        public bool WrapTextWhenSelected { get; set; } = true;
+
+        #endregion
+
+        #region Caching
+
+        [XmlAttribute]
+        public int CacheImageExpiry { get; set; } = 518400;
+
+        [XmlAttribute]
+        public int CacheSoundExpiry { get; set; } = 518400;
+
+        [XmlAttribute]
+        public int CacheJsonExpiry { get; set; } = 10080;
+
+        [XmlAttribute]
+        public int CacheRepoExpiry { get; set; } = 518400;
+
+        [XmlAttribute]
+        public int CacheFileExpiry { get; set; } = 518400;
+
+        #endregion
+
+        #region Endpoint
+
+        [XmlAttribute]
+        public string HttpEndpoint { get; set; } = "http://localhost:51423/";
+
+        [XmlAttribute]
+        public bool StartEndpointOnLaunch { get; set; } = true;
+
+        [XmlAttribute]
+        public bool LogEndpoint { get; set; } = true;
+
+        #endregion
+
+        #region FFXIV
+
+        [XmlAttribute]
+        public bool FfxivLogNetwork { get; set; } = false;
 
         public enum FfxivPartyOrderingEnum
         {
@@ -268,128 +225,140 @@ namespace Triggernometry
 
         private Dictionary<int, int> _FfxivCustomPartyOrderLookup { get; set; } = new Dictionary<int, int>();
 
-        [XmlAttribute]
-        public string VerboseDebug
+        #endregion
+
+        #region Substitutions
+
+        public List<Substitution> Substitutions { get; set; } = new List<Substitution>();
+
+        public class Substitution : IComparable
+        {
+
+            [Flags]
+            public enum SubstitutionScopeEnum
+            {
+                CaptureGroup = 1,
+                NumericExpression = 2,
+                StringExpression = 4,
+                TextToSpeech = 8
+            }
+
+            [XmlAttribute]
+            public string SearchFor { get; set; }
+
+            [XmlAttribute]
+            public string ReplaceWith { get; set; }
+
+            [XmlAttribute]
+            public SubstitutionScopeEnum Scope { get; set; }
+
+            public string Replace(string input)
+            {
+                return input.Replace(SearchFor, ReplaceWith);
+            }
+
+            public int CompareTo(object obj)
+            {
+                Substitution b = (Substitution)obj;
+                int x = SearchFor.CompareTo(b.SearchFor);
+                if (x != 0)
+                {
+                    return x;
+                }
+                x = ReplaceWith.CompareTo(b.ReplaceWith);
+                if (x != 0)
+                {
+                    return x;
+                }
+                return Scope.CompareTo(b.Scope);
+            }
+        }
+
+        public string PerformSubstitution(string input, Substitution.SubstitutionScopeEnum scope)
+        {
+            if (Substitutions.Count > 0)
+            {
+                var reps = from ix in Substitutions where (ix.Scope & scope) == scope select ix;
+                if (reps.Count() > 0)
+                {
+                    foreach (Configuration.Substitution rep in reps)
+                    {
+                        input = rep.Replace(input);
+                    }
+                }
+            }
+            return input;
+        }
+
+        #endregion
+
+        #region Constants
+
+        public SerializableDictionary<string, VariableScalar> Constants { get; set; } = new SerializableDictionary<string, VariableScalar>();
+
+        #endregion
+
+        #region Security
+
+        public class APIUsage
+        {
+
+            [XmlAttribute]
+            public string Name { get; set; }
+
+            [XmlAttribute]
+            public bool AllowLocal { get; set; }
+
+            [XmlAttribute]
+            public bool AllowRemote { get; set; }
+
+            [XmlAttribute]
+            public bool AllowAdmin { get; set; }
+
+        }
+
+        [Flags]
+        public enum UnsafeUsageEnum
+        {
+            None = 0,
+            AllowLocal = 1,
+            AllowRemote = 2,
+            AllowAdmin = 4
+        }
+
+        private bool SecuritySettingsLocked { get; set; } = false;
+
+        private List<APIUsage> _APIUsages { get; set; } = new List<APIUsage>();
+        public List<APIUsage> APIUsages
         {
             get
             {
-                return null;
+                return SecuritySettingsLocked == false ? _APIUsages : null;
             }
             set
             {
-                if (value == "true")
+                if (SecuritySettingsLocked == false)
                 {
-                    DebugLevel = RealPlugin.DebugLevelEnum.Verbose;
-                }
-                else
-                {
-                    DebugLevel = RealPlugin.DebugLevelEnum.Info;
+                    _APIUsages = value;
                 }
             }
         }
 
         [XmlAttribute]
-        public bool UseACTForTTS { get; set; } = false;
-
-        [XmlAttribute]
-        public bool UseACTForSound { get; set; } = false;
-
-        [XmlAttribute]
-        public bool WarnAdmin { get; set; } = true;
-
-        [XmlAttribute]
-        public string EventSeparator { get; set; } = "";
-
-        [XmlAttribute]
-        public Guid StartupTriggerId { get; set; } = Guid.Empty;
-
-        [XmlAttribute]
-        public bool UseScarborough { get; set; } = true;
-
-        public enum StartupTriggerTypeEnum
+        private UnsafeUsageEnum _UnsafeUsage = UnsafeUsageEnum.None;
+        public UnsafeUsageEnum UnsafeUsage
         {
-            Trigger,
-            Folder
-        }
-
-        [XmlAttribute]
-        public StartupTriggerTypeEnum StartupTriggerType { get; set; } = StartupTriggerTypeEnum.Trigger;
-
-        [XmlAttribute]
-        public bool LogNormalEvents { get; set; } = true;
-
-        [XmlAttribute]
-        public bool FfxivLogNetwork { get; set; } = false;
-
-        [XmlAttribute]
-        public bool LogEndpoint { get; set; } = true;
-
-        [XmlAttribute]
-        public bool TestLiveByDefault { get; set; } = false;
-
-        [XmlAttribute]
-        public bool TestIgnoreConditionsByDefault { get; set; } = false;
-
-        [XmlAttribute]
-        public bool ActionAsyncByDefault { get; set; } = true;
-
-        [XmlAttribute]
-        public string WindowToMonitor { get; set; } = "FINAL FANTASY XIV";
-
-        [XmlAttribute]
-        public bool DeveloperMode { get; set; } = false;
-
-        [XmlAttribute]
-        public int CacheImageExpiry { get; set; } = 518400;
-
-        [XmlAttribute]
-        public int CacheSoundExpiry { get; set; } = 518400;
-
-        [XmlAttribute]
-        public int CacheJsonExpiry { get; set; } = 10080;
-
-        [XmlAttribute]
-        public int CacheRepoExpiry { get; set; } = 518400;
-
-        [XmlAttribute]
-        public int CacheFileExpiry { get; set; } = 518400;
-
-        [XmlAttribute]
-        public bool LogVariableExpansions { get; set; } = false;
-
-        [XmlAttribute]
-        public int TestInputDestination { get; set; } = -1;
-
-        [XmlAttribute]
-        public int TestInputZoneType { get; set; } = -1;
-
-        [XmlAttribute]
-        public string HttpEndpoint { get; set; } = "http://localhost:51423/";
-
-        [XmlAttribute]
-        public bool StartEndpointOnLaunch { get; set; } = true;
-
-        public VariableStore PersistentVariables { get; set; } = new VariableStore();        
-        public SerializableDictionary<string, VariableScalar> Constants { get; set; } = new SerializableDictionary<string, VariableScalar>();
-
-        internal bool isnew;
-        internal DateTime lastWrite;
-        internal string corruptRecoveryError;
-
-        public Configuration()
-        {
-            corruptRecoveryError = "";
-            Root.Name = I18n.Translate("internal/Configuration/local", "Local triggers");
-            RepositoryRoot.Name = I18n.Translate("internal/Configuration/remote", "Remote triggers");
-            isnew = true;
-            lastWrite = DateTime.Now;
-            FfxivCustomPartyOrder = "19, 1, 21, 3, 32, 37, 24, 6, 28, 33, 40, 20, 2, 22, 4, 30, 29, 34, 39, 23, 5, 31, 38, 25, 7, 27, 26, 35, 36";
-            Constants["TelestoEndpoint"] = new VariableScalar() { Value = "localhost" };
-            Constants["TelestoPort"] = new VariableScalar() { Value = "45678" };
-            Constants["OBSWebsocketEndpoint"] = new VariableScalar() { Value = "localhost" };
-            Constants["OBSWebsocketPort"] = new VariableScalar() { Value = "4455" };
-            Constants["OBSWebsocketPassword"] = new VariableScalar() { Value = "" };
-            Constants["TriggernometryEndpoint"] = new VariableScalar() { Value = "http://localhost:51423/" };           
+            get
+            {
+                return _UnsafeUsage;
+            }
+            set
+            {
+                if (SecuritySettingsLocked == false)
+                {
+                    _UnsafeUsage = value;
+                }
+            }
         }
 
         internal List<APIUsage> GetAPIUsages()
@@ -420,6 +389,115 @@ namespace Triggernometry
         private void SetUnsafeUsage(UnsafeUsageEnum us)
         {
             _UnsafeUsage = us;
+        }
+
+        #endregion
+
+        #region Miscellaneous
+
+        // Default Settings
+
+        public Trigger TemplateTrigger = new Trigger() { Enabled = true, Conditions = null, Condition = new ConditionGroup() { Grouping = ConditionGroup.CndGroupingEnum.Or, Enabled = false } };
+
+        [XmlAttribute]
+        public bool UseTemplateTrigger { get; set; } = false;
+
+        // Future proofing
+
+        [XmlAttribute]
+        public string EventSeparator { get; set; } = "";
+
+        // User Interface
+
+        [XmlAttribute]
+        public bool UseOsClipboard { get; set; } = true;
+
+        [XmlAttribute]
+        public bool TestLiveByDefault { get; set; } = false;
+
+        [XmlAttribute]
+        public bool TestIgnoreConditionsByDefault { get; set; } = false;
+
+        [XmlAttribute]
+        public bool ActionAsyncByDefault { get; set; } = true;
+
+        [XmlAttribute]
+        public bool DeveloperMode { get; set; } = false;
+
+        [XmlAttribute]
+        public bool AutosaveEnabled { get; set; } = false;
+
+        [XmlAttribute]
+        public int AutosaveInterval { get; set; } = 5;
+
+        // Aura control
+
+        [XmlAttribute]
+        public string WindowToMonitor { get; set; } = "FINAL FANTASY XIV";
+
+        [XmlAttribute]
+        public bool UseScarborough { get; set; } = true;
+
+        #endregion
+
+        // Others
+
+        #region Test Input
+
+        [XmlAttribute]
+        public int TestInputDestination { get; set; } = -1;
+
+        [XmlAttribute]
+        public int TestInputZoneType { get; set; } = -1;
+
+        #endregion
+
+        #region Main UI / Others
+
+        public Folder Root = new Folder { 
+            Name = I18n.Translate("internal/Configuration/local", "Local triggers") 
+        };
+
+        public RepositoryFolder RepositoryRoot = new RepositoryFolder { 
+            Name = I18n.Translate("internal/Configuration/remote", "Remote triggers") 
+        };
+
+        public VariableStore PersistentVariables { get; set; } = new VariableStore();
+
+        public enum UpdateNotificationsEnum
+        {
+            Undefined,
+            Yes,
+            No
+        }
+
+        [XmlAttribute]
+        public UpdateNotificationsEnum DefaultRepository { get; set; } = UpdateNotificationsEnum.Undefined;
+
+        [XmlAttribute]
+        public string Language { get; set; }
+
+        #endregion
+
+        // [XmlAttribute]
+        // public int Version { get; set; } = 1;
+
+        [XmlAttribute]
+        public string PluginVersion { get; set; } = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+        internal bool isnew = true;
+        internal DateTime lastWrite = DateTime.Now;
+        internal string corruptRecoveryError = "";
+
+        public Configuration()
+        {
+            FfxivCustomPartyOrder = "19, 1, 21, 3, 32, 37, 24, 6, 28, 33, 40, 20, 2, 22, 4, 30, 29, 34, 39, 23, 5, 31, 38, 25, 7, 27, 26, 35, 36";
+            Constants["TelestoEndpoint"] = new VariableScalar() { Value = "localhost" };
+            Constants["TelestoPort"] = new VariableScalar() { Value = "45678" };
+            Constants["OBSWebsocketEndpoint"] = new VariableScalar() { Value = "localhost" };
+            Constants["OBSWebsocketPort"] = new VariableScalar() { Value = "4455" };
+            Constants["OBSWebsocketPassword"] = new VariableScalar() { Value = "" };
+            Constants["TriggernometryEndpoint"] = new VariableScalar() { Value = "http://localhost:51423/" };           
         }
 
         /*

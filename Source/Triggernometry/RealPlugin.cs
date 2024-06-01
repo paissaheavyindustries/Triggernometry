@@ -3422,7 +3422,7 @@ namespace Triggernometry
                 {
                     FilteredAddToLog(DebugLevelEnum.Warning, I18n.Translate("internal/Plugin/cfgnew", "Configuration file '{0}' does not exist, creating a new configuration", filename));
                     Configuration c = new Configuration();
-                    PropertyInfo setter = c.GetType().GetProperty("Locked", BindingFlags.NonPublic | BindingFlags.Instance);
+                    PropertyInfo setter = c.GetType().GetProperty("SecuritySettingsLocked", BindingFlags.NonPublic | BindingFlags.Instance);
                     setter.SetValue(c, true);
                     return c;
                 }
@@ -3452,7 +3452,7 @@ namespace Triggernometry
                 using (FileStream fs = File.Open(filename, FileMode.Open, FileAccess.Read))
                 {
                     cx = (Configuration)xs.Deserialize(fs);
-                    PropertyInfo setter = cx.GetType().GetProperty("Locked", BindingFlags.NonPublic | BindingFlags.Instance);
+                    PropertyInfo setter = cx.GetType().GetProperty("SecuritySettingsLocked", BindingFlags.NonPublic | BindingFlags.Instance);
                     setter.SetValue(cx, true);
                     cx.isnew = false;
                     cx.lastWrite = fi.LastWriteTimeUtc;
@@ -3562,7 +3562,7 @@ namespace Triggernometry
                 XmlSerializer xs = new XmlSerializer(typeof(Configuration));
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    PropertyInfo setter = cfg.GetType().GetProperty("Locked", BindingFlags.NonPublic | BindingFlags.Instance);
+                    PropertyInfo setter = cfg.GetType().GetProperty("SecuritySettingsLocked", BindingFlags.NonPublic | BindingFlags.Instance);
                     setter.SetValue(cfg, false);
                     xs.Serialize(ms, cfg, ns);
                     setter.SetValue(cfg, true);

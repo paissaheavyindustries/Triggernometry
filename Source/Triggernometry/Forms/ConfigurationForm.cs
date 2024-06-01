@@ -36,6 +36,7 @@ namespace Triggernometry.Forms
             label6.Tag = I18n.DoNotTranslate;
             RestoredSavedDimensions();
             FormClosing += ConfigurationForm_FormClosing;
+            SetToolTips();
         }
 
         private void ConfigurationForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -95,91 +96,60 @@ namespace Triggernometry.Forms
             );
         }
 
-        internal void SettingsFromConfiguration(Configuration a)
+        internal void SettingsFromConfiguration(Configuration cfg)
         {
-            if (a == null)
+            if (cfg == null) // actually could not be null
             {
-                Configuration c = new Configuration();
-                trbSoundVolume.Value = 100;
-                trbTtsVolume.Value = 100;
-                cbxLoggingLevel.SelectedIndex = (int)RealPlugin.DebugLevelEnum.Custom2;
-                chkActTts.Checked = false;
-                chkActSoundFiles.Checked = false;
-                chkClipboard.Checked = false;
-                cbxDevMode.Checked = false;
-                txtSeparator.Text = "";
-                cbxFfxivJobMethod.SelectedIndex = 0;                
-                chkWelcome.Checked = true;
-                chkUpdates.Checked = false;
-                cbxUpdateMethod.SelectedIndex = 1;
-                chkWarnAdmin.Checked = true;
-                cbxTestLive.Checked = false;
-                cbxTestIgnoreConditions.Checked = false;
-                cbxActionAsync.Checked = true;
-                chkLogNormalEvents.Checked = true;
-                chkLogVariableExpansions.Checked = false;
-                chkFfxivLogNetwork.Checked = false;
-                cbxEnableHwAccel.Checked = false;
-                txtMonitorWindow.Text = "";
-                nudCacheImageExpiry.Value = 518400;
-                nudCacheSoundExpiry.Value = 518400;
-                nudCacheJsonExpiry.Value = 10080;
-                nudCacheRepoExpiry.Value = 518400;
-                nudCacheFileExpiry.Value = 518400;
-                dgvSubstitutions.RowCount = 0;
-                cbxAutosaveConfig.Checked = false;
-                nudAutosaveMinutes.Value = 5;
-                txtEndpoint.Text = "http://localhost:51423/";
-                chkEndpointStartup.Checked = true;
-                chkEndpointLog.Checked = true;
-                SecuritySettingsFromConfiguration(null);
-                SetupConsts(null);
+                SettingsFromConfiguration(new Configuration());
+                return;
             }
-            else
+
+            trbSoundVolume.Value = cfg.SfxVolumeAdjustment;
+            trbTtsVolume.Value = cfg.TtsVolumeAdjustment;
+            cbxLoggingLevel.SelectedIndex = (int)cfg.DebugLevel;
+            chkActTts.Checked = cfg.UseACTForTTS;
+            chkActSoundFiles.Checked = cfg.UseACTForSound;
+            chkShortcutEnableTemplates.Checked = cfg.EnableShortcutTemplates;
+            chkShortcutUseAbbrevInTemplates.Checked = cfg.UseAbbrevInTemplates;
+            chkShortcutWrapTextWhenSelected.Checked = cfg.WrapTextWhenSelected;
+            chkClipboard.Checked = cfg.UseOsClipboard;
+            txtSeparator.Text = cfg.EventSeparator;
+            cbxDevMode.Checked = cfg.DeveloperMode;
+            cbxFfxivJobMethod.SelectedIndex = (int)cfg.FfxivPartyOrdering;
+            chkWelcome.Checked = cfg.ShowWelcome;
+            chkWarnAdmin.Checked = cfg.WarnAdmin;
+            cbxTestLive.Checked = cfg.TestLiveByDefault;
+            cbxTestIgnoreConditions.Checked = cfg.TestIgnoreConditionsByDefault;
+            cbxActionAsync.Checked = cfg.ActionAsyncByDefault;
+            chkUpdates.Checked = (cfg.UpdateNotifications == Configuration.UpdateNotificationsEnum.Yes);
+            cbxUpdateMethod.SelectedIndex = (int)cfg.UpdateCheckMethod;
+            chkLogNormalEvents.Checked = cfg.LogNormalEvents;
+            chkLogVariableExpansions.Checked = cfg.LogVariableExpansions;
+            chkFfxivLogNetwork.Checked = cfg.FfxivLogNetwork;
+            cbxEnableHwAccel.Checked = cfg.UseScarborough;
+            txtMonitorWindow.Text = cfg.WindowToMonitor;
+            nudCacheImageExpiry.Value = cfg.CacheImageExpiry;
+            nudCacheSoundExpiry.Value = cfg.CacheSoundExpiry;
+            nudCacheJsonExpiry.Value = cfg.CacheJsonExpiry;
+            nudCacheRepoExpiry.Value = cfg.CacheRepoExpiry;
+            nudCacheFileExpiry.Value = cfg.CacheFileExpiry;
+            subs.AddRange(cfg.Substitutions);
+            subs.Sort();
+            dgvSubstitutions.RowCount = cfg.Substitutions.Count;
+            cbxAutosaveConfig.Checked = cfg.AutosaveEnabled;
+            nudAutosaveMinutes.Value = cfg.AutosaveInterval;
+            txtEndpoint.Text = cfg.HttpEndpoint;
+            chkEndpointStartup.Checked = cfg.StartEndpointOnLaunch;
+            chkEndpointLog.Checked = cfg.LogEndpoint;
+            cbxTriggerTemplate.Checked = cfg.UseTemplateTrigger;
+            cfg.TemplateTrigger.CopySettingsTo(template);
+            SetupJobOrder(cfg);
+            SecuritySettingsFromConfiguration(cfg);
+            SetupConsts(plug.cfg.Constants);
+
+            if (cfg.StartupTriggerType == Configuration.StartupTriggerTypeEnum.Trigger)
             {
-                trbSoundVolume.Value = a.SfxVolumeAdjustment;                
-                trbTtsVolume.Value = a.TtsVolumeAdjustment;
-                cbxLoggingLevel.SelectedIndex = (int)a.DebugLevel;
-                chkActTts.Checked = a.UseACTForTTS;
-                chkActSoundFiles.Checked = a.UseACTForSound;
-                chkClipboard.Checked = a.UseOsClipboard;
-                txtSeparator.Text = a.EventSeparator;
-                cbxDevMode.Checked = a.DeveloperMode;
-                cbxFfxivJobMethod.SelectedIndex = (int)a.FfxivPartyOrdering;
-                chkWelcome.Checked = a.ShowWelcome;
-                chkWarnAdmin.Checked = a.WarnAdmin;
-                cbxTestLive.Checked = a.TestLiveByDefault;
-                cbxTestIgnoreConditions.Checked = a.TestIgnoreConditionsByDefault;
-                cbxActionAsync.Checked = a.ActionAsyncByDefault;
-                chkUpdates.Checked = (a.UpdateNotifications == Configuration.UpdateNotificationsEnum.Yes);
-                cbxUpdateMethod.SelectedIndex = (int)a.UpdateCheckMethod;
-                chkLogNormalEvents.Checked = a.LogNormalEvents;
-                chkLogVariableExpansions.Checked = a.LogVariableExpansions;
-                chkFfxivLogNetwork.Checked = a.FfxivLogNetwork;                
-                cbxEnableHwAccel.Checked = a.UseScarborough;
-                txtMonitorWindow.Text = a.WindowToMonitor;
-                nudCacheImageExpiry.Value = a.CacheImageExpiry;
-                nudCacheSoundExpiry.Value = a.CacheSoundExpiry;
-                nudCacheJsonExpiry.Value = a.CacheJsonExpiry;
-                nudCacheRepoExpiry.Value = a.CacheRepoExpiry;
-                nudCacheFileExpiry.Value = a.CacheFileExpiry;
-                subs.AddRange(a.Substitutions);
-                subs.Sort();
-                dgvSubstitutions.RowCount = a.Substitutions.Count;
-                cbxAutosaveConfig.Checked = a.AutosaveEnabled;
-                nudAutosaveMinutes.Value = a.AutosaveInterval;
-                txtEndpoint.Text = a.HttpEndpoint;
-                chkEndpointStartup.Checked = a.StartEndpointOnLaunch;
-                chkEndpointLog.Checked = a.LogEndpoint;
-                cbxTriggerTemplate.Checked = a.UseTemplateTrigger;
-                a.TemplateTrigger.CopySettingsTo(template);
-                SetupJobOrder(a);
-                SecuritySettingsFromConfiguration(a);
-                SetupConsts(plug.cfg.Constants);
-            }
-            if (a.StartupTriggerType == Configuration.StartupTriggerTypeEnum.Trigger)
-            {
-                TreeNode tn = plug.LocateNodeHostingTriggerId(trvTrigger.Nodes[0], a.StartupTriggerId, null);
+                TreeNode tn = plug.LocateNodeHostingTriggerId(trvTrigger.Nodes[0], cfg.StartupTriggerId, null);
                 if (tn != null)
                 {
                     tn.EnsureVisible();
@@ -187,9 +157,9 @@ namespace Triggernometry.Forms
                     trvTrigger.Update();
                 }
             }
-            if (a.StartupTriggerType == Configuration.StartupTriggerTypeEnum.Folder)
+            if (cfg.StartupTriggerType == Configuration.StartupTriggerTypeEnum.Folder)
             {
-                TreeNode tn = plug.LocateNodeHostingFolderId(trvTrigger.Nodes[0], a.StartupTriggerId, null);
+                TreeNode tn = plug.LocateNodeHostingFolderId(trvTrigger.Nodes[0], cfg.StartupTriggerId, null);
                 if (tn != null)
                 {
                     tn.EnsureVisible();
@@ -199,78 +169,81 @@ namespace Triggernometry.Forms
             }
         }
 
-        internal void SettingsToConfiguration(Configuration a)
+        internal void SettingsToConfiguration(Configuration cfg)
         {
-            a.SfxVolumeAdjustment = trbSoundVolume.Value;
-            a.TtsVolumeAdjustment = trbTtsVolume.Value;
-            a.DebugLevel = (RealPlugin.DebugLevelEnum)cbxLoggingLevel.SelectedIndex;
-            a.UseACTForTTS = chkActTts.Checked;
-            a.UseACTForSound = chkActSoundFiles.Checked;
-            a.EventSeparator = txtSeparator.Text;
-            a.UseOsClipboard = chkClipboard.Checked;
-            a.ShowWelcome = chkWelcome.Checked;
-            a.WarnAdmin = chkWarnAdmin.Checked;
-            a.TestLiveByDefault = cbxTestLive.Checked;
-            a.TestIgnoreConditionsByDefault = cbxTestIgnoreConditions.Checked;
-            a.ActionAsyncByDefault = cbxActionAsync.Checked;
-            a.LogNormalEvents = chkLogNormalEvents.Checked;
-            a.LogVariableExpansions = chkLogVariableExpansions.Checked;
-            a.FfxivLogNetwork = chkFfxivLogNetwork.Checked;
-            a.DeveloperMode = cbxDevMode.Checked;
-            a.UseScarborough = cbxEnableHwAccel.Checked;
-            a.WindowToMonitor = txtMonitorWindow.Text;
-            a.CacheImageExpiry = (int)nudCacheImageExpiry.Value;
-            a.CacheSoundExpiry = (int)nudCacheSoundExpiry.Value;            
-            a.CacheJsonExpiry = (int)nudCacheJsonExpiry.Value;            
-            a.CacheRepoExpiry = (int)nudCacheRepoExpiry.Value;
-            a.CacheFileExpiry = (int)nudCacheFileExpiry.Value;
-            a.AutosaveEnabled = cbxAutosaveConfig.Checked;
-            a.AutosaveInterval = (int)nudAutosaveMinutes.Value;
-            a.HttpEndpoint = txtEndpoint.Text;
-            a.StartEndpointOnLaunch = chkEndpointStartup.Checked;
-            a.LogEndpoint = chkEndpointLog.Checked;
-            a.UseTemplateTrigger = cbxTriggerTemplate.Checked;
-            template.CopySettingsTo(a.TemplateTrigger);
-            a.FfxivPartyOrdering = (Configuration.FfxivPartyOrderingEnum)cbxFfxivJobMethod.SelectedIndex;
+            cfg.SfxVolumeAdjustment = trbSoundVolume.Value;
+            cfg.TtsVolumeAdjustment = trbTtsVolume.Value;
+            cfg.DebugLevel = (RealPlugin.DebugLevelEnum)cbxLoggingLevel.SelectedIndex;
+            cfg.UseACTForTTS = chkActTts.Checked;
+            cfg.UseACTForSound = chkActSoundFiles.Checked;
+            cfg.EnableShortcutTemplates = chkShortcutEnableTemplates.Checked;
+            cfg.UseAbbrevInTemplates = chkShortcutUseAbbrevInTemplates.Checked;
+            cfg.WrapTextWhenSelected = chkShortcutWrapTextWhenSelected.Checked;
+            cfg.EventSeparator = txtSeparator.Text;
+            cfg.UseOsClipboard = chkClipboard.Checked;
+            cfg.ShowWelcome = chkWelcome.Checked;
+            cfg.WarnAdmin = chkWarnAdmin.Checked;
+            cfg.TestLiveByDefault = cbxTestLive.Checked;
+            cfg.TestIgnoreConditionsByDefault = cbxTestIgnoreConditions.Checked;
+            cfg.ActionAsyncByDefault = cbxActionAsync.Checked;
+            cfg.LogNormalEvents = chkLogNormalEvents.Checked;
+            cfg.LogVariableExpansions = chkLogVariableExpansions.Checked;
+            cfg.FfxivLogNetwork = chkFfxivLogNetwork.Checked;
+            cfg.DeveloperMode = cbxDevMode.Checked;
+            cfg.UseScarborough = cbxEnableHwAccel.Checked;
+            cfg.WindowToMonitor = txtMonitorWindow.Text;
+            cfg.CacheImageExpiry = (int)nudCacheImageExpiry.Value;
+            cfg.CacheSoundExpiry = (int)nudCacheSoundExpiry.Value;            
+            cfg.CacheJsonExpiry = (int)nudCacheJsonExpiry.Value;            
+            cfg.CacheRepoExpiry = (int)nudCacheRepoExpiry.Value;
+            cfg.CacheFileExpiry = (int)nudCacheFileExpiry.Value;
+            cfg.AutosaveEnabled = cbxAutosaveConfig.Checked;
+            cfg.AutosaveInterval = (int)nudAutosaveMinutes.Value;
+            cfg.HttpEndpoint = txtEndpoint.Text;
+            cfg.StartEndpointOnLaunch = chkEndpointStartup.Checked;
+            cfg.LogEndpoint = chkEndpointLog.Checked;
+            cfg.UseTemplateTrigger = cbxTriggerTemplate.Checked;
+            template.CopySettingsTo(cfg.TemplateTrigger);
+            cfg.FfxivPartyOrdering = (Configuration.FfxivPartyOrderingEnum)cbxFfxivJobMethod.SelectedIndex;
             if (chkUpdates.Checked == true)
             {
-                a.UpdateNotifications = Configuration.UpdateNotificationsEnum.Yes;
+                cfg.UpdateNotifications = Configuration.UpdateNotificationsEnum.Yes;
             }
             else
             {
-                if (a.UpdateNotifications != Configuration.UpdateNotificationsEnum.Undefined)
+                if (cfg.UpdateNotifications != Configuration.UpdateNotificationsEnum.Undefined)
                 {
-                    a.UpdateNotifications = Configuration.UpdateNotificationsEnum.No;
+                    cfg.UpdateNotifications = Configuration.UpdateNotificationsEnum.No;
                 }
             }
-            a.UpdateCheckMethod = (Configuration.UpdateCheckMethodEnum)cbxUpdateMethod.SelectedIndex;
+            cfg.UpdateCheckMethod = (Configuration.UpdateCheckMethodEnum)cbxUpdateMethod.SelectedIndex;
             TreeNode tn = trvTrigger.SelectedNode;
             if (tn != null)
             {
                 if (tn.Tag is Trigger)
                 {
-                    a.StartupTriggerId = ((Trigger)tn.Tag).Id;
-                    a.StartupTriggerType = Configuration.StartupTriggerTypeEnum.Trigger;
+                    cfg.StartupTriggerId = ((Trigger)tn.Tag).Id;
+                    cfg.StartupTriggerType = Configuration.StartupTriggerTypeEnum.Trigger;
                 }
                 if (tn.Tag is Folder)
                 {
-                    a.StartupTriggerId = ((Folder)tn.Tag).Id;
-                    a.StartupTriggerType = Configuration.StartupTriggerTypeEnum.Folder;
+                    cfg.StartupTriggerId = ((Folder)tn.Tag).Id;
+                    cfg.StartupTriggerType = Configuration.StartupTriggerTypeEnum.Folder;
                 }
             }
             else
             {
-                a.StartupTriggerId = Guid.Empty;
+                cfg.StartupTriggerId = Guid.Empty;
             }
             List<string> temp = new List<string>();
             foreach (FfxivJobOrderItem oi in lstFfxivJobOrder.Items)
             {
                 temp.Add(oi.JobId.ToString()); 
             }
-            a.FfxivCustomPartyOrder = String.Join(", ", temp);
-            a.Substitutions.Clear();
-            a.Substitutions.AddRange(subs);
-            MethodInfo setter = a.GetType().GetMethod("AddAPIUsage", BindingFlags.NonPublic | BindingFlags.Instance);
+            cfg.FfxivCustomPartyOrder = String.Join(", ", temp);
+            cfg.Substitutions.Clear();
+            cfg.Substitutions.AddRange(subs);
+            MethodInfo setter = cfg.GetType().GetMethod("AddAPIUsage", BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (DataGridViewRow r in dgvApiAccess.Rows)
             {
                 Configuration.APIUsage au = new Configuration.APIUsage()
@@ -280,7 +253,7 @@ namespace Triggernometry.Forms
                     AllowRemote = (bool)r.Cells[2].Value,
                     AllowAdmin = (bool)r.Cells[3].Value
                 };
-                setter.Invoke(a, new object[] { au, true });
+                setter.Invoke(cfg, new object[] { au, true });
             }
             foreach (DataGridViewRow r in dgvAdditionalFeatures.Rows)
             {
@@ -295,8 +268,8 @@ namespace Triggernometry.Forms
                         if (AllowLocal == true) us |= Configuration.UnsafeUsageEnum.AllowLocal;
                         if (AllowRemote == true) us |= Configuration.UnsafeUsageEnum.AllowRemote;
                         if (AllowAdmin == true) us |= Configuration.UnsafeUsageEnum.AllowAdmin;
-                        setter = a.GetType().GetMethod("SetUnsafeUsage", BindingFlags.NonPublic | BindingFlags.Instance);
-                        setter.Invoke(a, new object[] { us });
+                        setter = cfg.GetType().GetMethod("SetUnsafeUsage", BindingFlags.NonPublic | BindingFlags.Instance);
+                        setter.Invoke(cfg, new object[] { us });
                         break;
                 }
             };
@@ -992,12 +965,9 @@ namespace Triggernometry.Forms
             {
                 consts[kp.Key] = new VariableScalar() { Value = kp.Value.Value, LastChanged = kp.Value.LastChanged, LastChanger = kp.Value.LastChanger };
             }
-            if (constants != null)
+            foreach (KeyValuePair<string, VariableScalar> kp in constants ?? new SerializableDictionary<string, VariableScalar>())
             {
-                foreach (KeyValuePair<string, VariableScalar> kp in constants)
-                {
-                    consts[kp.Key] = new VariableScalar() { Value = kp.Value.Value, LastChanged = kp.Value.LastChanged, LastChanger = kp.Value.LastChanger };
-                }
+                consts[kp.Key] = new VariableScalar() { Value = kp.Value.Value, LastChanged = kp.Value.LastChanged, LastChanger = kp.Value.LastChanger };
             }
             RefreshConsts();
         }
@@ -1201,6 +1171,31 @@ namespace Triggernometry.Forms
         private void dgvAdditionalFeatures_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             dgvAdditionalFeatures_CellContentClick(sender, e);
+        }
+
+        private void SetToolTips()
+        {
+            toolTip.SetToolTip(chkShortcutEnableTemplates, 
+                I18n.Translate("internal/ConfigurationForm/tipShortcutEnableTemplates", "Allow to input ${{...}} expressions with shortcuts.") + "\n\n" + 
+                "Ctrl + Shift + 4: ${}\n" +
+                "Ctrl + Shift + V/L/T/D: ${v/l/t/d:}\n" +
+                "Ctrl + Shift + P, V/L/T/D: ${pv/pl/pt/pd:}\n" +
+                "Ctrl + Shift + N: ${n:}\n" +
+                "Ctrl + Shift + F: ${f::}\n" +
+                "Ctrl + Shift + E: ${_entity[].}\n" +
+                "Ctrl + Shift + M: ${_me.id}\n" +
+                "Ctrl + Shift + A: " + I18n.Translate("internal/ConfigurationForm/tipShortcutCtrlShiftA", "Select the next outer layer of brackets"));
+            toolTip.SetToolTip(chkShortcutUseAbbrevInTemplates, 
+                I18n.Translate("internal/ConfigurationForm/tipShortcutUseAbbrevInTemplates", "Use abbreviations in the template expressions instead of the full name:") + "\n\n" +
+                "${var/lvar/tvar/dvar:} => ${v/l/t/d:}\n" +
+                "${pvar/plvar/ptvar/pdvar:} => ${pv/pl/pt/pd:}\n" +
+                "${numeric:} => ${n:}\n" +
+                "${func:} => ${f:}\n" +
+                "${_ffxiventity[].} => ${_entity[].}\n" +
+                "${_ffxiventity[${_ffxivplayer}].id} => ${_me.id}");
+            toolTip.SetToolTip(chkShortcutWrapTextWhenSelected, I18n.Translate("internal/ConfigurationForm/tipShortcutWrapTextWhenSelected",
+                "If any text is selected when using the shortcut, \nwrap the text in the template expression, \ninstead of replacing it with an empty template expression.\n\n" +
+                "For example, you can select the expression \"1 + 1\" and press Ctrl + Shift + N, \nthen you will get \"${{n: 1 + 1}}\"."));
         }
 
     }

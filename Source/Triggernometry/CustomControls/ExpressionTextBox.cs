@@ -1396,10 +1396,11 @@ namespace Triggernometry.CustomControls
         }
         #endregion
 
-        #region Enhanced Double-Click Selection
-
         private class TextBox : System.Windows.Forms.TextBox
         {
+
+            #region Enhanced Double-Click Selection
+
             private int clickCount = 0;
             private DateTime lastClickTime = DateTime.Now;
             private ExpressionTextBox ExpTextBox => (ExpressionTextBox)Parent;
@@ -1482,7 +1483,7 @@ namespace Triggernometry.CustomControls
 
                 if (_leftBracketChars.ContainsKey(currentChar) || _rightBracketChars.ContainsKey(currentChar) || currentChar == '$' || currentChar == '¤')
                 {
-                    SelectEnclosedBrackets(index, currentChar);
+                    SelectEnclosedBrackets(index);
                     return;
                 }
 
@@ -1616,8 +1617,9 @@ namespace Triggernometry.CustomControls
 
             private static Dictionary<char, char> _rightBracketChars = _leftBracketChars.ToDictionary(pair => pair.Value, pair => pair.Key);
 
-            private void SelectEnclosedBrackets(int index, char clicked)
+            private void SelectEnclosedBrackets(int index)
             {
+                char clicked = Text[index];
                 char pair;
                 int direction;
                 if (_leftBracketChars.ContainsKey(clicked))
@@ -1633,7 +1635,7 @@ namespace Triggernometry.CustomControls
                 else if ((clicked == '$' || clicked == '¤') && index < Text.Length - 1 && Text[index + 1] == '{')
                 {
 
-                    SelectEnclosedBrackets(index + 1, '{'); return;
+                    SelectEnclosedBrackets(index + 1); return;
                 }
                 else
                 {
@@ -1667,9 +1669,150 @@ namespace Triggernometry.CustomControls
                 }
                 Select(start, length);
             }
+
+            #endregion
+
+            #region Shortcuts
+
+            private Keys prevKeyWithCtrlShift = Keys.None;
+
+            protected override void OnKeyUp(KeyEventArgs e)
+            {
+                if (!e.Control || !e.Shift)
+                {
+                    prevKeyWithCtrlShift = Keys.None;
+                }
+                base.OnKeyUp(e);
+            }
+
+            protected override void OnKeyDown(KeyEventArgs e)
+            {
+                if (e.Control && e.Shift && !e.Alt && RealPlugin.plug.cfg.EnableShortcutTemplates)
+                {
+                    bool handled = true;
+                    bool shouldWrap = SelectionLength != 0 && RealPlugin.plug.cfg.WrapTextWhenSelected;
+                    bool useAbbrev = RealPlugin.plug.cfg.UseAbbrevInTemplates;
+                    switch (e.KeyCode)
+                    {
+                        // Ctrl + Shift + 4: ${}
+                        case Keys.D4:
+                            if (shouldWrap)
+                                Paste($"${{{SelectedText}}}"); 
+                            else
+                                InsertStringOnBothSides("${", "}");
+                            break;
+                        // Ctrl + Shift + V/L/T/D: ${v/l/t/d:};
+                        // Ctrl + Shift + P, V/L/T/D: ${pv/pl/pt/pd:};
+                        case Keys.P:
+                            break;
+                        case Keys.V:
+                        case Keys.L:
+                        case Keys.T:
+                        case Keys.D:
+                            string varType = e.KeyCode.ToString().ToLower();
+                            varType = useAbbrev ? varType : varType.Trim('v') + "var";
+                            if (prevKeyWithCtrlShift == Keys.P)
+                                varType = "p" + varType;
+                            if (shouldWrap)
+                                Paste($"${{{varType}:{SelectedText}}}");
+                            else
+                                InsertStringOnBothSides($"${{{varType}:", "}");
+                            break;
+                        // Ctrl + Shift + N: ${n:}
+                        case Keys.N:
+                            string numeric = useAbbrev ? "n" : "numeric";
+                            if (shouldWrap)
+                                Paste($"${{{numeric}: {SelectedText.TrimStart()}}}");
+                            else
+                                InsertStringOnBothSides($"${{{numeric}: ", "}");
+                            break;
+                        // Ctrl + Shift + F: ${f::}
+                        case Keys.F:
+                            string func = useAbbrev ? "f" : "func";
+                            if (shouldWrap)
+                                InsertStringOnBothSides($"${{{func}:", $":{SelectedText}}}");
+                            else
+                                InsertStringOnBothSides($"${{{func}:", ":}");
+                            break;
+                        // Ctrl + Shift + E: ${_entity[].}
+                        case Keys.E:
+                            string entity = useAbbrev ? "entity" : "ffxiventity";
+                            if (shouldWrap)
+                                InsertStringOnBothSides($"${{_{entity}[{SelectedText}].", "}");
+                            else
+                                InsertStringOnBothSides($"${{_{entity}[", "].}");
+                            break;
+                        // Ctrl + Shift + M: ${_me.id}
+                        case Keys.M:
+                            Paste(useAbbrev ? "${_me.id}" : "${_ffxiventity[${_ffxivplayer}].id}");
+                            SelectionStart -= 3;
+                            SelectionLength = 2; // select "id"
+                            break;
+                        // Ctrl + Shift + A: Select the next outer layer of brackets
+                        case Keys.A:
+                            SelectNextOuterBracket();
+                            ExpTextBox.HideAutocomplete();
+                            break;
+                        default:
+                            handled = false;
+                            break;
+                    }
+                    prevKeyWithCtrlShift = e.KeyCode;
+                    if (handled)
+                    {
+                        e.SuppressKeyPress = true;
+                        e.Handled = true;
+                        return;
+                    }
+                }
+                base.OnKeyDown(e);
+            }
+
+            public void InsertStringOnBothSides(string newTextBeforeCursor, string newTextAfterCursor = "")
+            {
+                Paste(newTextBeforeCursor + newTextAfterCursor);
+                SelectionStart -= newTextAfterCursor.Length;
+                ExpTextBox.ProcessAutocomplete();
+            }
+
+            public void SelectNextOuterBracket()
+            {
+                bool hasOuterLayer = false;
+                int index;
+                Dictionary<char, int> counts = _leftBracketChars.ToDictionary(pair => pair.Key, pair => 0);
+                for (index = SelectionStart - 1; index >= 0; index--)
+                {
+                    char c = Text[index];
+                    if (c == '\"' || c == '\'')
+                    {
+                        continue;
+                    }
+                    if (_rightBracketChars.TryGetValue(c, out char pair))
+                    {
+                        counts[pair]--;
+                    }
+                    else if (_leftBracketChars.ContainsKey(c))
+                    {
+                        if (++counts[c] == 1)
+                        {
+                            hasOuterLayer = true;
+                            break;
+                        }
+                    }
+                }
+                if (hasOuterLayer)
+                {
+                    SelectEnclosedBrackets(index);
+                }
+                else
+                {
+                    System.Media.SystemSounds.Exclamation.Play();
+                }
+            }
+            #endregion
+
         }
 
-        #endregion
 
     }
 }

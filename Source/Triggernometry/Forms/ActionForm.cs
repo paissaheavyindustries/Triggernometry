@@ -2767,7 +2767,7 @@ namespace Triggernometry.Forms
             switch (cbxActionType.SelectedIndex)
             {
                 case (int)ActInteractionTypeEnum.SetCombatState:
-                    expActOpStringParam.Enabled = true;
+                    expActOpStringParam.Enabled = false;
                     break;
                 case (int)ActInteractionTypeEnum.LogAllNetwork:
                     expActOpStringParam.Enabled = false;
