@@ -64,7 +64,7 @@ namespace Triggernometry.CustomControls
             "etext:", "eimage:", "ecallback:", "estorage:",
 
             // special variables
-            "_incombat", "_lastencounter", "_activeencounter", "_configpath", "_pluginpath",
+            "_incombat", "_lastencounter", "_activeencounter", "_configpath", "_pluginpath", "_pluginVersion", 
             "_duration", "_event", "_since", "_sincems", "_triggerid", "_triggername", "_triggerpath", "_zone",
             "_response", "_responsecode", "_jsonresponse[x]",
             "_timestamp", "_timestampms", "_systemtime", "_systemtimems", "_clipboard",
@@ -88,7 +88,7 @@ namespace Triggernometry.CustomControls
             "padleft(char, len)", "padright(char, len)", "chr(separator=',')", "ord(joiner=',')",
             "trim()", "trim(char, char, ...)", "trimleft()", "trimleft(char, char, ...)", "trimright()", "trimright(char, char, ...)",
             "repeat(times, joiner=',')", "replace(oldStr, newStr='', isLooped=false)",
-            "format(type, format)", "compare(str, ignorecase=true)",
+            "format(type, format)", "compare(str, ignorecase=true)", "versioncompare(tgtVersion)",
             "contain(str)", "ifcontain(str, t, f)", "equal(str)", "ifequal(str, t, f)",
             "startwith(str)", "ifstartwith(str, t, f)", "endwith(str)", "ifendwith(str, t, f)",
             "match(str)", "ifmatch(str, t, f)", "capture(str, groupName)", "capture(str, groupIndex)",

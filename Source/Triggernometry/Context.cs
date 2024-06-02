@@ -843,6 +843,11 @@ namespace Triggernometry
                             val = RealPlugin.plug.pluginPath;
                             found = true;
                         }
+                        else if (x == "_pluginversion")
+                        {
+                            val = RealPlugin.plug.cfg.PluginVersion;
+                            found = true;
+                        }
                         else if (x.StartsWith("_env"))
                         {
                             mx = rexListIdx.Match(x);
@@ -1956,6 +1961,14 @@ namespace Triggernometry
                                         }
                                         val = "" + String.Compare(funcval, args[0], ignoreCase);
                                         break;
+                                    case "versioncompare": // ${f:versioncompare(1.2.0.0):1.1.8.0} = -1
+                                        if (argc != 1) { throw ArgCountError(funcname, "1", argc, x); }
+                                        Version srcVersion = Version.TryParse(funcval, out Version v) 
+                                            ? v : throw ParseTypeError(I18n.TranslateWord("string"), funcval, I18n.TranslateWord("version"), x);
+                                        Version tgtVersion = Version.TryParse(args[0], out v) 
+                                            ? v : throw ParseTypeError(I18n.TranslateWord("string"), args[0], I18n.TranslateWord("version"), x);
+                                        val = I18n.ThingToString(srcVersion.CompareTo(tgtVersion));
+                                        break;
                                     case "contain":
                                     case "startwith":
                                     case "endwith":
@@ -2437,11 +2450,11 @@ namespace Triggernometry
                 functionName, exprDesc, exprValue, totalExpression));
         }
 
-        public static Exception ParseTypeError(string exprDesc, string exprValue, string parseFormat, string totalExpression)
+        public static Exception ParseTypeError(string srcFormatDesc, string srcValue, string tgtFormatDesc, string fullExpression)
         {
             return new ArgumentException(I18n.Translate("internal/Context/parseTypeError",
                 "{0} ({1}) could not be parsed into {2}. Expr: ({3})",
-                exprDesc, exprValue, parseFormat, totalExpression));
+                srcFormatDesc, srcValue, tgtFormatDesc, fullExpression));
         }
 
         private static Exception ExtremumListZeroElementError(string varName, string totalExpression)

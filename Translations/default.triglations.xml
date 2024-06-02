@@ -686,6 +686,9 @@
     <TranslationEntry Key="ConfigurationForm/chkFfxivLogNetwork" Translation="Log network events" />
     <TranslationEntry Key="ConfigurationForm/chkLogNormalEvents" Translation="Log normal log lines" />
     <TranslationEntry Key="ConfigurationForm/chkLogVariableExpansions" Translation="Log variable expansions" />
+    <TranslationEntry Key="ConfigurationForm/chkShortcutEnableTemplates" Translation="Enable shortcuts to input template expressions" />
+    <TranslationEntry Key="ConfigurationForm/chkShortcutUseAbbrevInTemplates" Translation="Use abbreviation expressions in template expressions" />
+    <TranslationEntry Key="ConfigurationForm/chkShortcutWrapTextWhenSelected" Translation="Wrap selected text in template expressions" />
     <TranslationEntry Key="ConfigurationForm/chkUpdates" Translation="Check for updates on startup" />
     <TranslationEntry Key="ConfigurationForm/chkWarnAdmin" Translation="Warn if not running as Administrator" />
     <TranslationEntry Key="ConfigurationForm/chkWelcome" Translation="Show Welcome Screen on startup" />
@@ -722,6 +725,7 @@
     <TranslationEntry Key="ConfigurationForm/grpFutureProofing" Translation=" Future proofing " />
     <TranslationEntry Key="ConfigurationForm/grpGeneral" Translation=" Logging " />
     <TranslationEntry Key="ConfigurationForm/grpPartyListOrder" Translation=" Party list ordering " />
+    <TranslationEntry Key="ConfigurationForm/grpShortCutExpression" Translation=" Expressions " />
     <TranslationEntry Key="ConfigurationForm/grpStartup" Translation=" Startup " />
     <TranslationEntry Key="ConfigurationForm/grpStartupTrigger" Translation=" Startup trigger/folder " />
     <TranslationEntry Key="ConfigurationForm/grpUserInterface" Translation=" User interface " />
@@ -799,6 +803,7 @@
     <TranslationEntry Key="ConfigurationForm/tabGeneral" Translation="General" />
     <TranslationEntry Key="ConfigurationForm/tabMisc" Translation="Miscellaneous" />
     <TranslationEntry Key="ConfigurationForm/tabSecurity" Translation="Security" />
+    <TranslationEntry Key="ConfigurationForm/tabShortCuts" Translation="ShortCuts" />
     <TranslationEntry Key="ConfigurationForm/tabSubstitutions" Translation="Substitutions" />
     <TranslationEntry Key="ConfigurationForm/tslEndpointHistoryRecv" Translation="telegram(s) received" />
     <TranslationEntry Key="ConfigurationForm/txtCacheFileCount" Translation="0" />
@@ -1261,6 +1266,10 @@
     <TranslationEntry Key="internal/ConfigurationForm/subsregexgroup" Translation="capture groups" />
     <TranslationEntry Key="internal/ConfigurationForm/subsstrexpr" Translation="string expressions" />
     <TranslationEntry Key="internal/ConfigurationForm/substts" Translation="text to speech" />
+    <TranslationEntry Key="internal/ConfigurationForm/tipShortcutCtrlShiftA" Translation="Select the next outer layer of brackets" />
+    <TranslationEntry Key="internal/ConfigurationForm/tipShortcutEnableTemplates" Translation="Allow to input ${{...}} expressions with shortcuts." />
+    <TranslationEntry Key="internal/ConfigurationForm/tipShortcutUseAbbrevInTemplates" Translation="Use abbreviations in the template expressions instead of the full name:" />
+    <TranslationEntry Key="internal/ConfigurationForm/tipShortcutWrapTextWhenSelected" Translation="If any text is selected when using the shortcut, &#xD;&#xA;wrap the text in the template expression, &#xD;&#xA;instead of replacing it with an empty template expression. &#xD;&#xA;&#xD;&#xA;For example, you can select the expression &quot;1 + 1&quot; and press Ctrl + Shift + N, &#xD;&#xA;then you will get &quot;${{n: 1 + 1}}&quot;." />
     <TranslationEntry Key="internal/ConfigurationForm/warning" Translation="Warning" />
     <TranslationEntry Key="internal/Context/argCountError" Translation="({0}) requires {1} arguments, {2} were given. Expr: ({3})" />
     <TranslationEntry Key="internal/Context/expansion" Translation="Variable expansion from '{0}' to '{1}'" />

@@ -685,7 +685,10 @@
     <TranslationEntry Key="ConfigurationForm/chkEndpointStartup" Translation="启动时开始终端" />
     <TranslationEntry Key="ConfigurationForm/chkFfxivLogNetwork" Translation="记录网络事件日志" />
     <TranslationEntry Key="ConfigurationForm/chkLogNormalEvents" Translation="记录 ACT 解析日志" />
-    <TranslationEntry Key="ConfigurationForm/chkLogVariableExpansions" Translation="记录 '$...' 表达式展开结果" />
+    <TranslationEntry Key="ConfigurationForm/chkLogVariableExpansions" Translation="记录 $... 表达式展开结果" />
+    <TranslationEntry Key="ConfigurationForm/chkShortcutEnableTemplates" Translation="允许使用快捷键输入模板表达式" />
+    <TranslationEntry Key="ConfigurationForm/chkShortcutUseAbbrevInTemplates" Translation="使用缩写代替全称" />
+    <TranslationEntry Key="ConfigurationForm/chkShortcutWrapTextWhenSelected" Translation="将选中的文本包裹在模板表达式内部" />
     <TranslationEntry Key="ConfigurationForm/chkUpdates" Translation="启动时检查更新" />
     <TranslationEntry Key="ConfigurationForm/chkWarnAdmin" Translation="在非管理员模式下运行 ACT 时显示警告" />
     <TranslationEntry Key="ConfigurationForm/chkWelcome" Translation="启动时显示欢迎屏幕" />
@@ -722,6 +725,7 @@
     <TranslationEntry Key="ConfigurationForm/grpFutureProofing" Translation=" 未来特性防护 " />
     <TranslationEntry Key="ConfigurationForm/grpGeneral" Translation=" 通用 " />
     <TranslationEntry Key="ConfigurationForm/grpPartyListOrder" Translation=" 队伍列表排序 " />
+    <TranslationEntry Key="ConfigurationForm/grpShortCutExpression" Translation=" 表达式 " />
     <TranslationEntry Key="ConfigurationForm/grpStartup" Translation=" 插件启动时 " />
     <TranslationEntry Key="ConfigurationForm/grpStartupTrigger" Translation=" 启动时自动触发的触发器/分组 " />
     <TranslationEntry Key="ConfigurationForm/grpUserInterface" Translation=" 用户界面 " />
@@ -799,6 +803,7 @@
     <TranslationEntry Key="ConfigurationForm/tabGeneral" Translation="通用" />
     <TranslationEntry Key="ConfigurationForm/tabMisc" Translation="其他" />
     <TranslationEntry Key="ConfigurationForm/tabSecurity" Translation="安全" />
+    <TranslationEntry Key="ConfigurationForm/tabShortCuts" Translation="快捷键" />
     <TranslationEntry Key="ConfigurationForm/tabSubstitutions" Translation="文本替换" />
     <TranslationEntry Key="ConfigurationForm/tslEndpointHistoryRecv" Translation="条消息 (telegram) 已接收" />
     <TranslationEntry Key="ConfigurationForm/txtCacheFileCount" Translation="0" />
@@ -1261,6 +1266,10 @@
     <TranslationEntry Key="internal/ConfigurationForm/subsregexgroup" Translation="正则捕获组" />
     <TranslationEntry Key="internal/ConfigurationForm/subsstrexpr" Translation="文本表达式" />
     <TranslationEntry Key="internal/ConfigurationForm/substts" Translation="TTS 文本" />
+    <TranslationEntry Key="internal/ConfigurationForm/tipShortcutCtrlShiftA" Translation="选中外面一层括号" />
+    <TranslationEntry Key="internal/ConfigurationForm/tipShortcutEnableTemplates" Translation="允许使用下列快捷键输入对应的 ${{...}} 表达式。" />
+    <TranslationEntry Key="internal/ConfigurationForm/tipShortcutUseAbbrevInTemplates" Translation="快捷键输入表达式时，以缩写代替全名，如：" />
+    <TranslationEntry Key="internal/ConfigurationForm/tipShortcutWrapTextWhenSelected" Translation="当选中文本并使用快捷键时，将文本包裹在表达式中，而非用空白表达式替换文本。&#xD;&#xA;&#xD;&#xA;如：选中“1 + 1”并按下 Ctrl + Shift + N 可得到“${{n: 1 + 1}}”。" />
     <TranslationEntry Key="internal/ConfigurationForm/warning" Translation="警告" />
     <TranslationEntry Key="internal/Context/argCountError" Translation="({0}) 需要 {1} 个参数，而实际提供了 {2} 个。表达式：({3})" />
     <TranslationEntry Key="internal/Context/expansion" Translation="将表达式 '{0}' 展开为 '{1}'" />
@@ -1322,7 +1331,7 @@
     <TranslationEntry Key="internal/I18n/type" Translation="类型" />
     <TranslationEntry Key="internal/ImportForm/back" Translation="&lt; 返回" />
     <TranslationEntry Key="internal/ImportForm/cancel" Translation="取消" />
-    <TranslationEntry Key="internal/ImportForm/danger" Translation="导入的某些触发器会{0}。&#xD;&#xA;这些触发器可能有危险，若为恶意触发器甚至会损害您的系统安全，已黄色高亮显示，建议双击检查。" />
+    <TranslationEntry Key="internal/ImportForm/danger" Translation="导入的某些触发器会{0}。这些触发器可能有危险，若为恶意触发器甚至会损害您的系统安全，已黄色高亮显示，建议双击检查。" />
     <TranslationEntry Key="internal/ImportForm/dangerDescJoiner" Translation="、" />
     <TranslationEntry Key="internal/ImportForm/dangerDisk" Translation="操作文件" />
     <TranslationEntry Key="internal/ImportForm/dangerProc" Translation="运行进程" />

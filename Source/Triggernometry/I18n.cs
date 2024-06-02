@@ -276,22 +276,24 @@ namespace Triggernometry
             }
         }
 
-        private static HashSet<string> wordsToTranslate = new HashSet<string>
-        {
+        private static readonly HashSet<string> _wordsToTranslate = new HashSet<string> 
+        {   // all lowercase
             "bool", "char", "charcode", "double", "float", "hex", "index", "int", "key",
-            "length", "slice", "startindex", "string", "time", "times", "type"
+            "length", "slice", "startindex", "string", "time", "times", "type", "version"
         };
 
         internal static string TranslateWord(string key)
         {
-            if (wordsToTranslate.Contains(key))
+            key = key.ToLower();
+            if (_wordsToTranslate.Contains(key))
             {
                 string path = $"internal/I18n/{key}";
                 return Translate(path, key);
             }
             else
             {
-                throw new Exception($"The key \"{key}\" is not in I18n.wordsToTranslate.");
+                throw new Exception(Translate("internal/I18n/translatewordmissingkey", 
+                    "The key {0} is not in I18n._wordsToTranslate. Please report the bug if you see this error.", key));
             }
         }
 
