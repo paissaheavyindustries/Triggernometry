@@ -558,7 +558,6 @@ namespace Triggernometry
 
         /// For arguments and regex in ${func:...}.
         /// __LB__ / '｛' => '{';   __RB__ / '｝' => '}';
-        /// __LP__ / '（' => '(';   __RP__ / '）' => ')';
         /// __FLB__ => '｛';        __FRB__ => '｝'; 
         /// __FLP__ => '（';        __FRP__ => '）';
         private static string UnescapeCustomExpr(string rawExpr)
@@ -568,7 +567,6 @@ namespace Triggernometry
               .Replace("｛", "{").Replace("｝", "}")
               .Replace("__FLB__", "｛").Replace("__FRB__", "｝")
               .Replace("__LP__", "(").Replace("__RP__", ")")
-              .Replace("（", "(").Replace("）", ")")
               .Replace("__FLP__", "（").Replace("__FRP__", "）");
             return sb.ToString();
         }
