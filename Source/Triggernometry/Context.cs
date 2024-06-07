@@ -9,6 +9,7 @@ using System.Web.Script.Serialization;
 using Triggernometry.Variables;
 using System.Windows.Forms;
 using System.Reflection;
+using Triggernometry.Utilities;
 
 namespace Triggernometry
 {
@@ -857,6 +858,28 @@ namespace Triggernometry
                                 val = System.Environment.GetEnvironmentVariable(idx);
                                 found = true;
                             }
+                        }
+                        else if (x.StartsWith("_offset["))
+                        {
+                            mx = rexListIdx.Match(x);
+                            if (mx.Success)
+                            {
+                                string key = Trim(mx.Groups["index"].Value).ToLower();
+                                if (key == "1b")
+                                    val = I18n.ThingToString(Memory.Offset1B);
+                            }
+                            found = true;
+                        }
+                        else if (x.StartsWith("_targetmarker2id[") || x.StartsWith("_tm2id["))
+                        {
+                            mx = rexListIdx.Match(x);
+                            if (mx.Success)
+                            {
+                                string key = Trim(mx.Groups["index"].Value);
+                                uint id = Memory.EntityIdByTargetMarker(key) ?? throw ParseTypeError(I18n.TranslateWord("string"), key, "targetmarker", x);
+                                val = id.ToString("X8");
+                            }
+                            found = true;
                         }
                         else if (x.StartsWith("_storage["))
                         {

@@ -321,6 +321,7 @@
     <Compile Include="Forms\MemoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Memory.cs" />
     <Compile Include="ObsController.cs" />
     <Compile Include="LiveSplitController.cs" />
     <Compile Include="Parser.cs" />

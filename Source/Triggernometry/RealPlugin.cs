@@ -273,23 +273,7 @@ namespace Triggernometry
             return mi;
         }
 
-        private IntPtr _xivProcHandle = IntPtr.Zero;
-        public IntPtr XivProcHandle
-        {
-            get
-            {
-                if (WindowsUtils.GetProcessId(_xivProcHandle) == 0)
-                {
-                    if (_xivProcHandle != IntPtr.Zero)
-                    {
-                        WindowsUtils.CloseHandle(_xivProcHandle);
-                        _xivProcHandle = IntPtr.Zero;
-                    }
-                    _xivProcHandle = WindowsUtils.GetXIVHandle();
-                }
-                return _xivProcHandle;
-            }
-        }
+        public IntPtr XivProcHandle => Memory.XivProcHandle;
 
         private delegate void LogLineProcDelegate(LogEvent le);
         public delegate bool SimpleBoolDelegate();
@@ -2759,10 +2743,7 @@ namespace Triggernometry
 
         public void DeInitPlugin()
         {
-            if (ui != null)
-            {
-                ui.CloseForms();
-            }
+            ui?.CloseForms();
             PluginBridges.BridgeFFXIV.UnsubscribeFromNetworkEvents(this);
             if (_ep != null)
             {
@@ -2780,15 +2761,8 @@ namespace Triggernometry
                 _livesplit.Dispose();
                 _livesplit = null;
             }
-            if (_xivProcHandle != IntPtr.Zero)
-            {
-                WindowsUtils.CloseHandle(_xivProcHandle);
-                _xivProcHandle = IntPtr.Zero;
-            }
-            if (ExitEvent != null)
-            {
-                ExitEvent.Set();
-            }
+            Memory.DisposeXivProcHandle();
+            ExitEvent?.Set();
             if (ActionQueueThread != null)
             {
                 if (ActionQueueThread.Join(5000) == false)
@@ -3404,9 +3378,10 @@ namespace Triggernometry
             }
         }
 
-        public void ZoneChangeDelegate(uint ZoneID, string ZoneName)
+        public void ZoneChangeDelegate(uint ZoneID, string ZoneName) // BridgeFFXIV.SubscribeToZoneChanged()
         {
             PluginBridges.BridgeFFXIV.ZoneID = ZoneID;
+            Memory.UpdateOffset1B(); // async
             ZoneChanged(currentZone);
         }
 
