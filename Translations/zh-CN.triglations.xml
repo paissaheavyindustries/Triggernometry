@@ -830,10 +830,10 @@
     <TranslationEntry Key="ExportForm/ctxSelectionToClipboard" Translation="复制所选" />
     <TranslationEntry Key="ExportForm/tslFormat" Translation="格式" />
     <TranslationEntry Key="FolderForm/btnCancel" Translation="取消" />
-    <TranslationEntry Key="FolderForm/btnGetCurFfxivZone" Translation="自动获取当前区域 ID" />
-    <TranslationEntry Key="FolderForm/btnGetCurZone" Translation="自动获取当前区域名" />
+    <TranslationEntry Key="FolderForm/btnGetCurFfxivZone" Translation="获取当前" />
+    <TranslationEntry Key="FolderForm/btnGetCurZone" Translation="获取当前" />
     <TranslationEntry Key="FolderForm/btnOk" Translation="确定" />
-    <TranslationEntry Key="FolderForm/chkEventFilter" Translation="限制该分组触发器仅在匹配以下文本时才工作（可正则表达式）" />
+    <TranslationEntry Key="FolderForm/chkEventFilter" Translation="限制分组工作条件：触发文本匹配以下正则" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Class: Arcanist]" Translation="职业：秘术师" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Class: Archer]" Translation="职业：弓箭手" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Class: Conjurer]" Translation="职业：幻术师" />
@@ -874,19 +874,19 @@
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Summoner]" Translation="特职：召唤师" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Warrior]" Translation="特职：战士" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: White Mage]" Translation="特职：白魔法师" />
-    <TranslationEntry Key="FolderForm/chkFfxivClassFilterEnabled" Translation="限制该分组触发器工作职业" />
-    <TranslationEntry Key="FolderForm/chkFfxivZoneFilter" Translation="限制该分组触发器仅在以下区域 ID 工作" />
-    <TranslationEntry Key="FolderForm/chkZoneFilter" Translation="限制该分组触发器仅在以下区域名工作" />
+    <TranslationEntry Key="FolderForm/chkFfxivClassFilterEnabled" Translation="限制分组工作条件：指定职业" />
+    <TranslationEntry Key="FolderForm/chkFfxivZoneFilter" Translation="限制分组工作条件：指定区域 ID（正则）" />
+    <TranslationEntry Key="FolderForm/chkZoneFilter" Translation="限制分组工作条件：指定区域名（正则）" />
     <TranslationEntry Key="FolderForm/grpFfxivClassFilter" Translation="职业列表" />
-    <TranslationEntry Key="FolderForm/grpFiltering" Translation="过滤设置" />
-    <TranslationEntry Key="FolderForm/grpGeneral" Translation="通用" />
-    <TranslationEntry Key="FolderForm/lblEventFilterRegex" Translation="匹配文本正则表达式" />
+    <TranslationEntry Key="FolderForm/grpGeneral" Translation=" 通用 " />
+    <TranslationEntry Key="FolderForm/grpSetting" Translation=" 设置 " />
+    <TranslationEntry Key="FolderForm/lblEventFilterRegex" Translation="文本正则" />
     <TranslationEntry Key="FolderForm/lblFfxivZoneId" Translation="区域 ID" />
     <TranslationEntry Key="FolderForm/lblFolderName" Translation="分组名字" />
     <TranslationEntry Key="FolderForm/lblReadOnly" Translation="远程触发器为只读模式。如需修改，请复制一份本地触发器副本。" />
-    <TranslationEntry Key="FolderForm/lblZoneFilterRegex" Translation="区域名字正则表达式" />
-    <TranslationEntry Key="FolderForm/tabFFXIV" Translation="最终幻想 XIV" />
-    <TranslationEntry Key="FolderForm/tabGeneral" Translation="通用" />
+    <TranslationEntry Key="FolderForm/lblZoneFilterRegex" Translation="区域名称" />
+    <TranslationEntry Key="FolderForm/tabEnvironment" Translation="环境" />
+    <TranslationEntry Key="FolderForm/tabFilter" Translation="过滤" />
     <TranslationEntry Key="ImportForm" Translation="导入" />
     <TranslationEntry Key="ImportForm/btnBack" Translation="取消" />
     <TranslationEntry Key="ImportForm/btnEdit" Translation="编辑" />
@@ -1328,7 +1328,9 @@
     <TranslationEntry Key="internal/I18n/string" Translation="文本" />
     <TranslationEntry Key="internal/I18n/time" Translation="时间" />
     <TranslationEntry Key="internal/I18n/times" Translation="次数" />
+    <TranslationEntry Key="internal/I18n/translatewordmissingkey" Translation="I18n._wordsToTranslate 不包含翻译键 {0}。如果你看见了这句报错，请向开发人员反馈此问题。" />
     <TranslationEntry Key="internal/I18n/type" Translation="类型" />
+    <TranslationEntry Key="internal/I18n/version" Translation="版本号" />
     <TranslationEntry Key="internal/ImportForm/back" Translation="&lt; 返回" />
     <TranslationEntry Key="internal/ImportForm/cancel" Translation="取消" />
     <TranslationEntry Key="internal/ImportForm/danger" Translation="导入的某些触发器会{0}。这些触发器可能有危险，若为恶意触发器甚至会损害您的系统安全，已黄色高亮显示，建议双击检查。" />

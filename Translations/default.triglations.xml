@@ -830,8 +830,8 @@
     <TranslationEntry Key="ExportForm/ctxSelectionToClipboard" Translation="Selection to clipboard" />
     <TranslationEntry Key="ExportForm/tslFormat" Translation="Format" />
     <TranslationEntry Key="FolderForm/btnCancel" Translation="Cancel" />
-    <TranslationEntry Key="FolderForm/btnGetCurFfxivZone" Translation="Retrieve current zone ID" />
-    <TranslationEntry Key="FolderForm/btnGetCurZone" Translation="Retrieve current zone name" />
+    <TranslationEntry Key="FolderForm/btnGetCurFfxivZone" Translation="Retrieve" />
+    <TranslationEntry Key="FolderForm/btnGetCurZone" Translation="Retrieve" />
     <TranslationEntry Key="FolderForm/btnOk" Translation="OK" />
     <TranslationEntry Key="FolderForm/chkEventFilter" Translation="Restrict event processing only to events with matching event text" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Class: Arcanist]" Translation="Class: Arcanist" />
@@ -878,15 +878,15 @@
     <TranslationEntry Key="FolderForm/chkFfxivZoneFilter" Translation="Restrict event processing only to when currently in given zone ID" />
     <TranslationEntry Key="FolderForm/chkZoneFilter" Translation="Restrict event processing only to events with matching zone name" />
     <TranslationEntry Key="FolderForm/grpFfxivClassFilter" Translation=" Classes " />
-    <TranslationEntry Key="FolderForm/grpFiltering" Translation=" Filtering settings " />
-    <TranslationEntry Key="FolderForm/grpGeneral" Translation=" General settings " />
+    <TranslationEntry Key="FolderForm/grpGeneral" Translation=" General " />
+    <TranslationEntry Key="FolderForm/grpSetting" Translation=" Settings " />
     <TranslationEntry Key="FolderForm/lblEventFilterRegex" Translation="Event text regular expression" />
     <TranslationEntry Key="FolderForm/lblFfxivZoneId" Translation="Zone ID" />
     <TranslationEntry Key="FolderForm/lblFolderName" Translation="Folder name" />
     <TranslationEntry Key="FolderForm/lblReadOnly" Translation="You are in read-only mode, as the configuration of remote folders can't be edited locally. If you wish to edit the folder, you will need to make a local copy of it." />
     <TranslationEntry Key="FolderForm/lblZoneFilterRegex" Translation="Zone name regular expression" />
-    <TranslationEntry Key="FolderForm/tabFFXIV" Translation="Final Fantasy XIV" />
-    <TranslationEntry Key="FolderForm/tabGeneral" Translation="General" />
+    <TranslationEntry Key="FolderForm/tabEnvironment" Translation="Environment" />
+    <TranslationEntry Key="FolderForm/tabFilter" Translation="Filter" />
     <TranslationEntry Key="ImportForm" Translation="Import" />
     <TranslationEntry Key="ImportForm/btnBack" Translation="Cancel" />
     <TranslationEntry Key="ImportForm/btnEdit" Translation="Edit" />
@@ -1328,7 +1328,9 @@
     <TranslationEntry Key="internal/I18n/string" Translation="string" />
     <TranslationEntry Key="internal/I18n/time" Translation="time" />
     <TranslationEntry Key="internal/I18n/times" Translation="times" />
+    <TranslationEntry Key="internal/I18n/translatewordmissingkey" Translation="The key {0} is not in I18n._wordsToTranslate. Please report the bug if you see this error." />
     <TranslationEntry Key="internal/I18n/type" Translation="type" />
+    <TranslationEntry Key="internal/I18n/version" Translation="Version" />
     <TranslationEntry Key="internal/ImportForm/back" Translation="&lt; Back" />
     <TranslationEntry Key="internal/ImportForm/cancel" Translation="Cancel" />
     <TranslationEntry Key="internal/ImportForm/danger" Translation="Some of the imported triggers include triggers which {0}. &#xD;&#xA;These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below." />

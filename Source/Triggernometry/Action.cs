@@ -65,6 +65,9 @@ namespace Triggernometry
             }
         }
 
+        [XmlIgnore]
+        public Trigger ParentTrigger { get; set; } = null;
+
         internal ActionTypeEnum _ActionType = ActionTypeEnum.SystemBeep;
 
         [XmlAttribute]
@@ -1498,14 +1501,7 @@ namespace Triggernometry
         {
             if (_DebugLevel == RealPlugin.DebugLevelEnum.Inherit)
             {
-                if (ctx.trig != null)
-                {
-                    return ctx.trig.GetDebugLevel(plug);
-                }
-                else
-                {
-                    return RealPlugin.DebugLevelEnum.Verbose;
-                }
+                return ctx.trig?.GetDebugLevel(plug) ?? DebugLevelEnum.Verbose;
             }
             else
             {
@@ -1686,7 +1682,7 @@ namespace Triggernometry
                     {
                         if (Condition.CheckCondition(ctx, ActionContextLogger, ctx) == false)
                         {
-                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/actionnotfired", "Action #{0} on trigger '{1}' not fired, condition not met", OrderNumber, (ctx.trig != null ? ctx.trig.LogName : "(null)")));
+                            AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/actionnotfired", "Action #{0} on trigger '{1}' not fired, condition not met", OrderNumber, ctx.trig?.LogName ?? "(null)"));
                             ctx.PushActionResult(0);
                             goto ContinueChain;
                         }
@@ -2179,7 +2175,7 @@ namespace Triggernometry
 
                                             plug.ui.Invoke((System.Action)(() =>
                                             {
-                                                bool isLocal = ctx.trig == null || ctx.trig.Repo == null;
+                                                bool isLocal = ctx.trig?.Repo == null;
                                                 TreeNode tn = plug.LocateNodeHostingFolder(plug.ui.treeView1.Nodes[isLocal ? 0 : 1], f);
 
                                                 if (tn != null)
@@ -2200,7 +2196,7 @@ namespace Triggernometry
 
                                             plug.ui.Invoke((System.Action)(() =>
                                             {
-                                                bool isLocal = ctx.trig == null || ctx.trig.Repo == null;
+                                                bool isLocal = ctx.trig?.Repo == null;
                                                 TreeNode tn = plug.LocateNodeHostingFolder(plug.ui.treeView1.Nodes[isLocal ? 0 : 1], f);
 
                                                 if (tn != null)
@@ -3124,7 +3120,7 @@ namespace Triggernometry
                             switch (_RepositoryOp)
                             {
                                 case RepositoryOpEnum.UpdateSelf:
-                                    r = ctx.trig != null ? ctx.trig.Repo : null;
+                                    r = ctx.trig?.Repo;
                                     break;
                                 case RepositoryOpEnum.UpdateRepo:
                                     r = plug.GetRepositoryById(_RepositoryId);
@@ -4195,6 +4191,7 @@ namespace Triggernometry
 
         public void CopySettingsTo(Action a)
         {
+            a.ParentTrigger = ParentTrigger;
             a.Id = Id;
             a._ActionType = _ActionType;
             a.OrderNumber = OrderNumber;

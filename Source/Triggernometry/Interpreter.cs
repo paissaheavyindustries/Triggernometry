@@ -355,7 +355,7 @@ namespace Triggernometry
         public bool GetUnsafeUsage(Context ctx)
         {
             Configuration.UnsafeUsageEnum us = ctx.plug.cfg.UnsafeUsage;
-            bool isremote = ctx.trig != null && ctx.trig.Repo != null;
+            bool isremote = ctx.trig?.Repo != null;
             bool isadmin = ctx.plug.runningAsAdmin;
             if (isadmin == true && (us & Configuration.UnsafeUsageEnum.AllowAdmin) == 0)
             {
@@ -374,7 +374,7 @@ namespace Triggernometry
 
         public string[] GetBadApis(Context ctx)
         {
-            bool isremote = ctx.trig != null && ctx.trig.Repo != null;
+            bool isremote = ctx.trig?.Repo != null;
             bool isadmin = ctx.plug.runningAsAdmin;
             List<string> apis = new List<string>();
             foreach (Configuration.APIUsage a in ctx.plug.cfg.GetAPIUsages())

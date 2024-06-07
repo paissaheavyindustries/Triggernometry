@@ -830,8 +830,8 @@
     <TranslationEntry Key="ExportForm/ctxSelectionToClipboard" Translation="選択箇所をクリップボードにコピー" />
     <TranslationEntry Key="ExportForm/tslFormat" Translation="フォーマット" />
     <TranslationEntry Key="FolderForm/btnCancel" Translation="キャンセル" />
-    <TranslationEntry Key="FolderForm/btnGetCurFfxivZone" Translation="Retrieve current zone ID" />
-    <TranslationEntry Key="FolderForm/btnGetCurZone" Translation="現在のゾーン名を取得" />
+    <TranslationEntry Key="FolderForm/btnGetCurFfxivZone" Translation="現在のIDを取得" />
+    <TranslationEntry Key="FolderForm/btnGetCurZone" Translation="現在の名を取得" />
     <TranslationEntry Key="FolderForm/btnOk" Translation="OK" />
     <TranslationEntry Key="FolderForm/chkEventFilter" Translation="一致するイベントテキストを持つイベントのみにイベント処理を制限する" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Class: Arcanist]" Translation="クラス：巴術士" />
@@ -878,15 +878,15 @@
     <TranslationEntry Key="FolderForm/chkFfxivZoneFilter" Translation="Restrict event processing only to when currently in given zone ID" />
     <TranslationEntry Key="FolderForm/chkZoneFilter" Translation="一致するゾーン名を持つイベントのみにイベント処理を制限する" />
     <TranslationEntry Key="FolderForm/grpFfxivClassFilter" Translation=" クラス・ジョブ " />
-    <TranslationEntry Key="FolderForm/grpFiltering" Translation=" フィルター設定 " />
-    <TranslationEntry Key="FolderForm/grpGeneral" Translation=" 一般設定 " />
+    <TranslationEntry Key="FolderForm/grpGeneral" Translation=" 一般 " />
+    <TranslationEntry Key="FolderForm/grpSetting" Translation=" 設定 " />
     <TranslationEntry Key="FolderForm/lblEventFilterRegex" Translation="イベントテキストの正規表現" />
     <TranslationEntry Key="FolderForm/lblFfxivZoneId" Translation="Zone ID" />
     <TranslationEntry Key="FolderForm/lblFolderName" Translation="フォルダ名" />
     <TranslationEntry Key="FolderForm/lblReadOnly" Translation="読み取り専用モードです。リモートトリガーの構成を編集する場合は、ローカルにコピーを作成する必要があります。" />
     <TranslationEntry Key="FolderForm/lblZoneFilterRegex" Translation="ゾーン名の正規表現" />
-    <TranslationEntry Key="FolderForm/tabFFXIV" Translation="Final Fantasy XIV" />
-    <TranslationEntry Key="FolderForm/tabGeneral" Translation="一般" />
+    <TranslationEntry Key="FolderForm/tabEnvironment" Translation="環境" />
+    <TranslationEntry Key="FolderForm/tabFilter" Translation="フィルター" />
     <TranslationEntry Key="ImportForm" Translation="インポート" />
     <TranslationEntry Key="ImportForm/btnBack" Translation="キャンセル" />
     <TranslationEntry Key="ImportForm/btnEdit" Translation="編集" />
@@ -1328,7 +1328,9 @@
     <TranslationEntry Key="internal/I18n/string" Translation="string" />
     <TranslationEntry Key="internal/I18n/time" Translation="time" />
     <TranslationEntry Key="internal/I18n/times" Translation="times" />
+    <TranslationEntry Key="internal/I18n/translatewordmissingkey" Translation="The key {0} is not in I18n._wordsToTranslate. Please report the bug if you see this error." />
     <TranslationEntry Key="internal/I18n/type" Translation="type" />
+    <TranslationEntry Key="internal/I18n/version" Translation="Version" />
     <TranslationEntry Key="internal/ImportForm/back" Translation="&lt; 戻る" />
     <TranslationEntry Key="internal/ImportForm/cancel" Translation="キャンセル" />
     <TranslationEntry Key="internal/ImportForm/danger" Translation="インポートされたトリガーの一部には、{0}トリガーが含まれています。&#xD;&#xA;これらのトリガーは危険であり、悪意のあるトリガーによってシステムの正常性とセキュリティが侵害される可能性があります。問題の項目は以下で強調表示されています。" />

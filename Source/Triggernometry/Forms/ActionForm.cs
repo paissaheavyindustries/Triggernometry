@@ -108,7 +108,7 @@ namespace Triggernometry.Forms
             }
         }
 
-        // internal string Clipboard = "";
+        internal Trigger ParentTrigger = null;
 
         internal static ImageConverter ic = new ImageConverter();
 
@@ -541,7 +541,7 @@ namespace Triggernometry.Forms
             }
             else
             {
-                cbxActionType.SelectedIndex = (int)a._ActionType;
+                ParentTrigger = a.ParentTrigger;                cbxActionType.SelectedIndex = (int)a._ActionType;
                 cbxRefireOption1.SelectedIndex = (a._RefireInterrupt == true ? 0 : 1);
                 cbxRefireOption2.SelectedIndex = (a._RefireRequeue == true ? 1 : 0);
                 expExecutionDelay.Expression = a._ExecutionDelayExpression;
@@ -826,6 +826,7 @@ namespace Triggernometry.Forms
 
         internal void SettingsToAction(Action a)
         {
+            a.ParentTrigger = ParentTrigger;
             a._ActionType = (Action.ActionTypeEnum)cbxActionType.SelectedIndex;
             a._RefireInterrupt = (cbxRefireOption1.SelectedIndex == 0);
             a._RefireRequeue = (cbxRefireOption2.SelectedIndex == 1);
@@ -1088,14 +1089,15 @@ namespace Triggernometry.Forms
         private void TestAction(bool liveValues, bool ignoreConditions = false)
         {
             Action a = new Action();
+            SettingsToAction(a);
+            if (ignoreConditions) a.Condition = new ConditionGroup();
+
             Context ctx = new Context();
             ctx.plug = plug;
             ctx.testByPlaceholder = (liveValues == false);
-            ctx.trig = null;
+            ctx.trig = a.ParentTrigger;
             ctx.soundhook = plug.SoundPlaybackSmart;
             ctx.ttshook = plug.TtsPlaybackSmart;
-            SettingsToAction(a);
-            if (ignoreConditions) { a.Condition = new ConditionGroup(); }
             ctx.triggered = DateTime.UtcNow;
             a.Execute(null, ctx);
         }

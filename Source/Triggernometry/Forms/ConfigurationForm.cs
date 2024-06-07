@@ -911,30 +911,20 @@ namespace Triggernometry.Forms
 
         private void btnTriggerTemplate_Click(object sender, EventArgs e)
         {
-            using (Forms.TriggerForm tf = new Forms.TriggerForm())
+            using (TriggerForm tf = new TriggerForm(template))
             {
-                Trigger t = template;
-                Trigger.TriggerSourceEnum oldSource = t._Source;
-                tf.AllowAnonymousTrigger = true;
-                tf.plug = plug;
-                ExpressionTextBox.CurrentTriggerRegexStr = t.RegularExpression;
-                tf.fakectx.trig = t;
-                tf.fakectx.plug = plug;
-                tf.SettingsFromTrigger(t);
-                tf.initialDescriptions = tf.GetAllDescriptionsStr();
+                Trigger.TriggerSourceEnum oldSource = template._Source;
+                ExpressionTextBox.CurrentTriggerRegexStr = template.RegularExpression;
                 tf.imgs = plug.ui.imageList1;
                 tf.trv = plug.ui.treeView1;
                 tf.Text = I18n.Translate("internal/UserInterface/edittemplatetrigger", "Edit template trigger");
-                tf.btnOk.Text = I18n.Translate("internal/TriggerForm/btnOk", "Save Changes");
-                tf.GetTriggerDescription();
-                tf.SetTriggerDescription();
                 tf.wmp = plug.wmp;
                 tf.tts = plug.tts;
                 if (tf.ShowDialog() == DialogResult.OK)
                 {
-                    lock (t) // verified
+                    lock (template) // verified
                     {
-                        tf.SettingsToTrigger(t);
+                        tf.SettingsToTrigger(template);
                     }
                 }
             }

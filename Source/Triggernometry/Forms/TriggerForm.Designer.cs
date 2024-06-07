@@ -165,7 +165,6 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(535, 20);
             this.txtName.TabIndex = 1;
-            this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
             // txtRegexp
             // 
@@ -228,7 +227,6 @@
             // 
             this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOk.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnOk.Enabled = false;
             this.btnOk.Location = new System.Drawing.Point(0, 0);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(150, 35);
@@ -526,8 +524,8 @@
             this.cbxRefireOption1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxRefireOption1.FormattingEnabled = true;
             this.cbxRefireOption1.Items.AddRange(new object[] {
-            "Interrupt all actions previously queued from this trigger...",
-            "Keep all actions previously queued from this trigger..."});
+            "Keep all actions previously queued from this trigger...",
+            "Interrupt all actions previously queued from this trigger..."});
             this.cbxRefireOption1.Location = new System.Drawing.Point(282, 30);
             this.cbxRefireOption1.Name = "cbxRefireOption1";
             this.cbxRefireOption1.Size = new System.Drawing.Size(357, 21);

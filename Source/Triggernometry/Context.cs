@@ -731,7 +731,7 @@ namespace Triggernometry
                         }
                         else if (x == "_triggername")
                         {
-                            val = trig != null ? trig.Name : "(null)";
+                            val = trig?.Name ?? "(null)";
                             found = true;
                         }
                         else if (x == "_triggerid")

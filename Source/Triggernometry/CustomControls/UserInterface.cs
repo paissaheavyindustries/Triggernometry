@@ -490,25 +490,10 @@ namespace Triggernometry.CustomControls
 
         internal void btnAddTrigger_Click(object sender, EventArgs e)
         {
-            using (Forms.TriggerForm tf = new Forms.TriggerForm())
+            Trigger srcTrigger = cfg.UseTemplateTrigger ? cfg.TemplateTrigger : null;
+            using (Forms.TriggerForm tf = new Forms.TriggerForm(srcTrigger))
             {
-                if (cfg.UseTemplateTrigger == true)
-                {
-                    Trigger t = new Trigger();
-                    cfg.TemplateTrigger.CopySettingsTo(t);
-                    tf.SettingsFromTrigger(t);
-                }
-                else
-                {
-                    tf.SettingsFromTrigger(null);
-                }
-                tf.initialDescriptions = tf.GetAllDescriptionsStr();
-                tf.plug = plug;
-                tf.fakectx.plug = plug;
                 tf.Text = I18n.Translate("internal/UserInterface/addtrigger", "Add new trigger");
-                tf.BtnOkSetText();
-                tf.GetTriggerDescription();
-                tf.SetTriggerDescription();
                 tf.imgs = imageList1;
                 tf.trv = treeView1;
                 tf.wmp = wmp;
@@ -632,36 +617,19 @@ namespace Triggernometry.CustomControls
 
         internal void btnEdit_Click(object sender, EventArgs e)
         {
-            if (treeView1.SelectedNode.Tag is Trigger)
+            if (treeView1.SelectedNode.Tag is Trigger t)
             {
-                using (Forms.TriggerForm tf = new Forms.TriggerForm())
+                bool readOnly = IsPartOfRemote(treeView1.SelectedNode);
+                bool readMe = t.Repo != null && treeView1.SelectedNode.ImageIndex == (int)ImageIndices.Readme;
+                using (Forms.TriggerForm tf = new Forms.TriggerForm(t, readOnly, readMe))
                 {
-                    Trigger t = (Trigger)treeView1.SelectedNode.Tag;
                     Trigger.TriggerSourceEnum oldSource = t._Source;
-                    tf.plug = plug;
                     ExpressionTextBox.CurrentTriggerRegexStr = t.RegularExpression;
-                    tf.fakectx.trig = t;
-                    tf.fakectx.plug = plug;
-                    tf.SettingsFromTrigger(t);
-                    tf.initialDescriptions = tf.GetAllDescriptionsStr();
-                    if (IsPartOfRemote(treeView1.SelectedNode) == true)
-                    {
-                        tf.SetReadOnly();
-                    }
                     tf.imgs = imageList1;
                     tf.trv = treeView1;
-                    if (t.Repo != null && treeView1.SelectedNode.ImageIndex == (int)ImageIndices.Readme)
-                    {
-                        tf.EnterReadmeMode();
-                        tf.Text = I18n.Translate("internal/UserInterface/edittriggerreadme", "Instructions for repository '{0}'", t.Repo.Name);
-                    }
-                    else
-                    {
-                        tf.Text = I18n.Translate("internal/UserInterface/edittrigger", "Edit trigger '{0}'", t.Name);
-                        tf.BtnOkSetText();
-                        tf.GetTriggerDescription();
-                        tf.SetTriggerDescription();
-                    }
+                    tf.Text = readMe 
+                        ? I18n.Translate("internal/UserInterface/edittriggerreadme", "Instructions for repository '{0}'", t.Repo.Name) 
+                        : tf.Text = I18n.Translate("internal/UserInterface/edittrigger", "Edit trigger '{0}'", t.Name);
                     tf.wmp = wmp;
                     tf.tts = tts;
                     if (tf.ShowDialog() == DialogResult.OK)
@@ -688,12 +656,11 @@ namespace Triggernometry.CustomControls
                     }
                 }
             }
-            else if (treeView1.SelectedNode.Tag is Repository)
+            else if (treeView1.SelectedNode.Tag is Repository r)
             {
                 using (Forms.RepositoryForm rf = new Forms.RepositoryForm())
                 {
                     rf.plug = plug;
-                    Repository r = (Repository)treeView1.SelectedNode.Tag;                    
                     rf.SettingsFromRepository(r);
                     rf.Text = I18n.Translate("internal/UserInterface/editrepository", "Edit repository '{0}'", r.Name);
                     rf.btnOk.Text = I18n.Translate("internal/UserInterface/savechanges", "Save changes");
@@ -1638,6 +1605,7 @@ namespace Triggernometry.CustomControls
 
         internal void ClearErrorCount()
         {
+            if (this.IsDisposed) return;
             if (this.InvokeRequired)
             {
                 this.Invoke(new System.Action(ClearErrorCount));
@@ -1650,6 +1618,7 @@ namespace Triggernometry.CustomControls
 
         internal void IncrementErrorCount()
         {
+            if (this.IsDisposed) return;
             if (this.InvokeRequired)
             {
                 this.Invoke(new System.Action(IncrementErrorCount));

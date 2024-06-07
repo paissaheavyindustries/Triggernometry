@@ -658,22 +658,14 @@ namespace Triggernometry.Forms
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            if (treeView1.SelectedNode.Tag is Trigger)
+            if (treeView1.SelectedNode.Tag is Trigger t)
             {
-                using (Forms.TriggerForm tf = new Forms.TriggerForm())
+                using (Forms.TriggerForm tf = new Forms.TriggerForm(t))
                 {
-                    Trigger t = (Trigger)treeView1.SelectedNode.Tag;
                     tf.trv = trv;
                     tf.imgs = imgs;
-                    tf.SettingsFromTrigger(t);
-                    tf.initialDescriptions = tf.GetAllDescriptionsStr();
-                    tf.plug = plug;
                     ExpressionTextBox.CurrentTriggerRegexStr = t.RegularExpression;
-                    tf.fakectx.plug = plug;
                     tf.Text = I18n.Translate("internal/ImportForm/editimportedtrigger", "Edit imported trigger '{0}'", t.Name);
-                    tf.BtnOkSetText();
-                    tf.GetTriggerDescription();
-                    tf.SetTriggerDescription();
                     tf.wmp = wmp;
                     tf.tts = tts;
                     if (tf.ShowDialog() == DialogResult.OK)
