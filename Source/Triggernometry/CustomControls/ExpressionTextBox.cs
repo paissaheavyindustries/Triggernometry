@@ -62,9 +62,10 @@ namespace Triggernometry.CustomControls
             "tvarcl:", "ptvarcl:", "tvarrl:", "ptvarrl:", "tvardl:", "ptvardl:",
             "?l:", "?lvar:", "?t:", "?tvar:", "?d:", "?dvar:",
             "etext:", "eimage:", "ecallback:", "estorage:",
+            "env:",
 
             // special variables
-            "_incombat", "_lastencounter", "_activeencounter", "_configpath", "_pluginpath", "_pluginVersion", 
+            "_incombat", "_lastencounter", "_activeencounter", "_configpath", "_pluginpath", "_pluginversion", 
             "_duration", "_event", "_since", "_sincems", "_triggerid", "_triggername", "_triggerpath", "_zone",
             "_response", "_responsecode", "_jsonresponse[x]",
             "_timestamp", "_timestampms", "_systemtime", "_systemtimems", "_clipboard",

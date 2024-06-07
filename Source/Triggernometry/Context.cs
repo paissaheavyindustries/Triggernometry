@@ -1648,6 +1648,22 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
+                        else if (x.StartsWith("env:"))
+                        {
+                            string envVarName = x.Substring(4);
+                            Folder f = trig?.Parent;
+                            string envVarValue = "";
+                            while (f != null)
+                            {
+                                if (f.EnvironmentVariables.TryGetValue(envVarName, out envVarValue))
+                                {
+                                    break;
+                                }
+                                f = f.Parent;
+                            }
+                            val = envVarValue;
+                            found = true;
+                        }
                         else if (x.StartsWith("numeric:") || x.StartsWith("n:"))
                         {
                             string numexpr = (x.StartsWith("numeric:")) ? x.Substring(8) : x.Substring(2);

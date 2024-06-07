@@ -255,6 +255,22 @@ namespace Triggernometry
 
         internal Repository Repo { get; set; } = null;
 
+        [XmlIgnore]
+        public Dictionary<string, string> EnvironmentVariables { get; private set; } = new Dictionary<string, string>();
+
+        private string _rawEnvironmentVariables = null;
+
+        [XmlAttribute]
+        public string RawEnvironmentVariables 
+        { 
+            get => string.IsNullOrWhiteSpace(_rawEnvironmentVariables) ? null : _rawEnvironmentVariables;
+            set
+            {
+                _rawEnvironmentVariables = value;
+                ParseRawEnvironmentVariables();
+            }
+        }
+
         public Folder()
         {
             Folders = new List<Folder>();
@@ -363,6 +379,26 @@ namespace Triggernometry
 			}
 			return ret == true ? FilterFailReason.Passed : FilterFailReason.Failed;
 		}
+
+        internal void ParseRawEnvironmentVariables()
+        {
+            if (string.IsNullOrWhiteSpace(_rawEnvironmentVariables)) return;
+            var kvps = Context.SplitArguments(_rawEnvironmentVariables, allowEmptyList: false, separator: ",");
+            foreach (var rawkvp in kvps) 
+            {
+                var kvp = Context.SplitArguments(rawkvp, allowEmptyList: false, separator: "=");
+                if (kvp.Length >= 2)
+                {
+                    EnvironmentVariables[kvp[0]] = kvp[1];
+                }
+                if (kvp.Length > 2)
+                {
+                    RealPlugin.plug.UnfilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Folder/envvariablekvptoolong",
+                        "The raw environment variable key-value pair expression contains more than 2 parts. \n Folder: {0}; \n Expression: {1}",
+                        FullPath, kvp));
+                }
+            }
+        }
 
     }
 
