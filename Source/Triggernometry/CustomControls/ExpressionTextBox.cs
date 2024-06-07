@@ -38,14 +38,14 @@ namespace Triggernometry.CustomControls
             "d(x0, y0, x1, y1)", "d(x0, y0, z0..., x1, y1, z1...)",
             "l1d(x0, y0, z0..., x1, y1, z1...)", "l∞d(x0, y0, z0..., x1, y1, z1...)",
             "manhattandistance(x0, y0, z0..., x1, y1, z1...)", "chebyshevdistance(x0, y0, z0..., x1, y1, z1...)",
-            "projd(x0, y0, θ, x1, y1)", "projh(x0, y0, θ, x1, y1)",
-            "projectdistance(x0, y0, θ, x1, y1)", "projectheight(x0, y0, θ, x1, y1)",
+            "projd(srcX, srcY, θ, tgtX, tgtY)", "projh(srcX, srcY, θ, tgtX, tgtY)", "ispointinray(srcX, srcY, θ, width, tgtX, tgtY)",
+            "projectdistance(srcX, srcY, θ, tgtX, tgtY)", "projectheight(srcX, srcY, θ, tgtX, tgtY)",
 
             // numeric func: angle
             "radtodeg(rad)", "degtorad(deg)",
-            "angle(x0, y0, x1, y1)", "θ(x0, y0, x1, y1)", "relangle(θ0, θ1)", "relθ(θ0, θ1)",
-            "roundir(θ, ±n, digits=0)", "roundvec(dx, dy, ±n, digits=0)",
-            "isanglebetween(θ, θ0, θ1)", "isθbetween(θ, θ0, θ1)",
+            "angle(srcX, srcY, tgtX, tgtY)", "θ(srcX, srcY, tgtX, tgtY)", "relangle(srcθ, tgtθ)", "relθ(srcθ, tgtθ)",
+            "roundir(θ, ±n, digits=0)", "roundvec(dx, dy, ±n, digits=0)", "dir2rad(direction, ±n)",
+            "isanglebetween(θ, minθ, maxθ)", "isθbetween(θ, minθ, maxθ)",
 
             // numeric string func
             "hex2dec(hex)", "hex2float(hex)", "hex2double(hex)", "X8float(hex)", "parsedmg(hex)", "len(alphanumstr)",
@@ -61,7 +61,7 @@ namespace Triggernometry.CustomControls
             "dvar:", "pdvar:", "edvar:", "epdvar:", "d:", "pd:", "ed:", "epd:",
             "tvarcl:", "ptvarcl:", "tvarrl:", "ptvarrl:", "tvardl:", "ptvardl:",
             "?l:", "?lvar:", "?t:", "?tvar:", "?d:", "?dvar:",
-            "etext:", "eimage:", "ecallback:", "estorage:",
+            "etext:", "eimage:", "ecallback:", "estorage:", 
             "env:",
 
             // special variables
@@ -1397,7 +1397,7 @@ namespace Triggernometry.CustomControls
         }
         #endregion
 
-        private class TextBox : System.Windows.Forms.TextBox
+        public class TextBox : System.Windows.Forms.TextBox
         {
 
             #region Enhanced Double-Click Selection

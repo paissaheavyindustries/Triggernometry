@@ -97,6 +97,7 @@ namespace Triggernometry
             LocalFunctions.Add("atan2", x => Math.Atan2(x[0], x[1]));
             LocalFunctions.Add("radtodeg", x => x[0] / Math.PI * 180.0);
             LocalFunctions.Add("degtorad", x => x[0] / 180.0 * Math.PI);
+            LocalFunctions.Add("dir2rad", DirectionToRadFunction);
             LocalFunctions.Add("distance", DistanceFunction);
             LocalFunctions.Add("d", DistanceFunction);
             LocalFunctions.Add("manhattandistance", L1DistanceFunction);
@@ -107,6 +108,7 @@ namespace Triggernometry
             LocalFunctions.Add("projd", ProjectDistanceFunction);
             LocalFunctions.Add("projectheight", ProjectHeightFunction);
             LocalFunctions.Add("projh", ProjectHeightFunction);
+            LocalFunctions.Add("ispointinray", IsPointInRayFunction);
             LocalFunctions.Add("angle", x => Math.Atan2(x[2] - x[0], x[3] - x[1]));
             LocalFunctions.Add("θ", x => Math.Atan2(x[2] - x[0], x[3] - x[1]));
             LocalFunctions.Add("relangle", x => ModFunction(x[1] - x[0] + Math.PI, 2 * Math.PI) - Math.PI);
@@ -279,8 +281,7 @@ namespace Triggernometry
         // Useful when doing calculations about line AoE.
 
         public static double ProjectDistanceFunction(double[] x)
-        {   // projectdistance(x1, y1, θ1, x2, y2)
-
+        {   // projectdistance(x0, y0, θ0, x1, y1)
             if (x.Length != 5) { return 0; }
             double dx = x[3] - x[0];
             double dy = x[4] - x[1];
@@ -289,13 +290,22 @@ namespace Triggernometry
         }
 
         public static double ProjectHeightFunction(double[] x)
-        {   // projectheight(x1, y1, θ1, x2, y2)
-
+        {   // projectheight(x0, y0, θ0, x1, y1)
             if (x.Length != 5) { return 0; }
             double dx = x[3] - x[0];
             double dy = x[4] - x[1];
             double θ = x[2];
             return Math.Abs(dx * Math.Cos(θ) - dy * Math.Sin(θ));
+        }
+
+        public static double IsPointInRayFunction(double[] x)
+        {   // ispointinray(x0, y0, θ0, width, x1, y1)
+            if (x.Length != 6) { return 0; }
+            double dx = x[4] - x[0];
+            double dy = x[5] - x[1];
+            double θ = x[2];
+            double width = x[3];
+            return Math.Abs(dx * Math.Cos(θ) - dy * Math.Sin(θ)) <= width && dx * Math.Sin(θ) + dy * Math.Cos(θ) >= 0 ? 1 : 0;
         }
 
         // roundir, roundvec
@@ -339,6 +349,7 @@ namespace Triggernometry
                     return 0;
             }
         }
+
         public static double RoundvecFunction(double[] input)
         {
             switch (input.Length)
@@ -350,6 +361,19 @@ namespace Triggernometry
                 default:
                     return 0;
             }
+        }
+
+        /// <summary> Reverse function of roundir.</summary>
+        public static double DirectionToRadFunction(double[] input)
+        {
+            double direction = input[0];
+            double segments = input[1];
+            if (segments < 0)
+            {
+                segments *= -1;
+                direction += 0.5;
+            }
+            return -Math.PI + 2 * Math.PI * ModFunction(direction / segments, 1);
         }
 
         /// <summary>
