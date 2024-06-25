@@ -875,16 +875,16 @@
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Warrior]" Translation="Job: Warrior" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: White Mage]" Translation="Job: White Mage" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilterEnabled" Translation="Process events only if currently on one of the specified classes" />
-    <TranslationEntry Key="FolderForm/chkFfxivZoneFilter" Translation="Restrict event processing only to when currently in given zone ID" />
-    <TranslationEntry Key="FolderForm/chkZoneFilter" Translation="Restrict event processing only to events with matching zone name" />
+    <TranslationEntry Key="FolderForm/chkFfxivZoneFilter" Translation="Restrict event processing only to when currently in given zone ID (regex)" />
+    <TranslationEntry Key="FolderForm/chkZoneFilter" Translation="Restrict event processing only to events with matching zone name (regex)" />
     <TranslationEntry Key="FolderForm/grpFfxivClassFilter" Translation=" Classes " />
     <TranslationEntry Key="FolderForm/grpGeneral" Translation=" General " />
     <TranslationEntry Key="FolderForm/grpSetting" Translation=" Settings " />
-    <TranslationEntry Key="FolderForm/lblEventFilterRegex" Translation="Event text regular expression" />
+    <TranslationEntry Key="FolderForm/lblEventFilterRegex" Translation="Text regex" />
     <TranslationEntry Key="FolderForm/lblFfxivZoneId" Translation="Zone ID" />
     <TranslationEntry Key="FolderForm/lblFolderName" Translation="Folder name" />
     <TranslationEntry Key="FolderForm/lblReadOnly" Translation="You are in read-only mode, as the configuration of remote folders can't be edited locally. If you wish to edit the folder, you will need to make a local copy of it." />
-    <TranslationEntry Key="FolderForm/lblZoneFilterRegex" Translation="Zone name regular expression" />
+    <TranslationEntry Key="FolderForm/lblZoneFilterRegex" Translation="Zone name" />
     <TranslationEntry Key="FolderForm/tabEnvironment" Translation="Environment" />
     <TranslationEntry Key="FolderForm/tabFilter" Translation="Filter" />
     <TranslationEntry Key="ImportForm" Translation="Import" />
@@ -1100,7 +1100,7 @@
     <TranslationEntry Key="internal/Action/disabledfolderwithid" Translation="Disabled folder ({0}) with id ({1})" />
     <TranslationEntry Key="internal/Action/dynamicexprerror" Translation="The dynamic expression ({0}) is invalid in the current action. Expression: ({1})" />
     <TranslationEntry Key="internal/Action/enabledfolderwithid" Translation="Enabled folder ({0}) with id ({1})" />
-    <TranslationEntry Key="internal/Action/exception" Translation="Action exception: {0} \nIn action: {1} \nIn trigger: {2}" />
+    <TranslationEntry Key="internal/Action/exception" Translation="Action exception: {0} \nIn action: {1} \nIn trigger: {2}{3}" />
     <TranslationEntry Key="internal/Action/executingaction" Translation="Executing action '{0}' in thread {1}" />
     <TranslationEntry Key="internal/Action/filelistset" Translation="{2}List variable ({0}) value read from file ({1})" />
     <TranslationEntry Key="internal/Action/filescalarset" Translation="{2}Scalar variable ({0}) value read from file ({1})" />
@@ -1414,6 +1414,7 @@
     <TranslationEntry Key="internal/Plugin/iniactui" Translation="setting up ACT ui" />
     <TranslationEntry Key="internal/Plugin/inicache" Translation="performing cache cleanup" />
     <TranslationEntry Key="internal/Plugin/inicfg" Translation="loading configuration" />
+    <TranslationEntry Key="internal/Plugin/iniendpoint" Translation="starting endpoint" />
     <TranslationEntry Key="internal/Plugin/inierror" Translation="Error while {0} ({1})" />
     <TranslationEntry Key="internal/Plugin/inievents" Translation="creating events" />
     <TranslationEntry Key="internal/Plugin/inifilename" Translation="determining filename" />

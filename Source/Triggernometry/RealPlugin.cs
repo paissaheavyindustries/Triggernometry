@@ -1,23 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Drawing;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Globalization;
 using System.IO;
-using System.Xml.Serialization;
-using System.Speech.Synthesis;
-using System.Threading;
-using System.Text.RegularExpressions;
-using System.Reflection;
+using System.Linq;
 using System.Net;
-using WMPLib;
+using System.Net.Http;
+using System.Reflection;
 using System.Security.Principal;
+using System.Speech.Synthesis;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Script.Serialization;
-using Triggernometry.Variables;
+using System.Windows.Forms;
+using System.Xml.Serialization;
 using Triggernometry.CustomControls;
 using Triggernometry.Utilities;
+using Triggernometry.Variables;
+using WMPLib;
 
 namespace Triggernometry
 {
@@ -2592,8 +2594,13 @@ namespace Triggernometry
             }
         }
 
-        internal void CheckForUpdates()
+        internal void CheckForUpdates(bool isManual = false)
         {
+            if (I18n.IsChineseEnvironment)
+            {
+                CheckForUpdatesBuiltinCN(isManual);
+                return;
+            }
             switch (cfg.UpdateCheckMethod)
             {
                 case Configuration.UpdateCheckMethodEnum.ACT:
@@ -2681,6 +2688,86 @@ namespace Triggernometry
             tx.Start();
         }
 
+        private static readonly string _updateRemotePathCN = "https://vip.123pan.cn/1824544011/Triggernometry_Release_CN/";
+
+        public void CheckForUpdatesBuiltinCN(bool isManual = false)
+        {
+            Task.Run(() =>
+            {
+                Version localVersion, remoteVersion;
+                try
+                {
+                    using (HttpClient client = new HttpClient())
+                    {
+                        string versionString = client.GetStringAsync(_updateRemotePathCN + "version").GetAwaiter().GetResult();
+                        remoteVersion = Version.Parse(versionString.Trim());
+                        localVersion = Assembly.GetExecutingAssembly().GetName().Version;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    plug.FilteredAddToLog(DebugLevelEnum.Error, "Triggernometry 更新检查失败：" + ex.ToString());
+                    return;
+                }
+                Debug.Log(localVersion, remoteVersion, "<se.10>");
+                if (remoteVersion > localVersion)
+                {
+                    plug.FilteredAddToLog(DebugLevelEnum.Info, $"Triggernometry 已发布新版本 {remoteVersion}，当前版本 {localVersion}。");
+                    string filePath = Path.Combine(pluginPath, $"{pluginName}.dll");
+                    Toast t = new Toast
+                    {
+                        ToastText = $"Triggernometry 更新检查：本地已有版本 {localVersion} 低于远程版本 {remoteVersion}。是否后台开始更新插件及汉化文件？（更新不影响当前使用）",
+                        ToastType = Toast.ToastTypeEnum.YesNo
+                    };
+                    t.OnYes += (_, __) => UpdatePluginCN(filePath, localVersion, remoteVersion);
+                    ui.QueueToast(t);
+                }
+                else
+                {
+                    string info = $"Triggernometry 更新检查：本地已有版本 {localVersion} 不低于远程版本 {remoteVersion}，无需更新。";
+                    plug.FilteredAddToLog(DebugLevelEnum.Info, info);
+                    if (isManual)
+                    {
+                        ui.QueueToast(new Toast { ToastText = info, ToastType = Toast.ToastTypeEnum.OK });
+                    }
+                }
+            });
+        }
+
+        private void UpdatePluginCN(string filePath, Version localVersion, Version remoteVersion)
+        {
+            Task.Run(async () =>
+            {
+                try
+                {
+                    string tmpPath = filePath + ".tmp";
+                    using (HttpClient client = new HttpClient())
+                    {
+                        byte[] fileBytes = await client.GetByteArrayAsync(_updateRemotePathCN + "Triggernometry.dll");
+                        File.WriteAllBytes(tmpPath, fileBytes);
+                    }
+                    if (File.Exists(filePath))
+                    {
+                        string backupPath = $"{filePath}.{localVersion}.backup";
+                        if (File.Exists(backupPath))
+                            File.Delete(backupPath);
+                        File.Move(filePath, backupPath);
+                    }
+                    File.Move(tmpPath, filePath);
+                    UpdateTranslationCN(isManual: false);
+                    ui.QueueToast(new Toast
+                    {
+                        ToastText = $"Triggernometry 插件已更新至 {remoteVersion}，重启后生效。",
+                        ToastType = Toast.ToastTypeEnum.OK
+                    });
+                }
+                catch (Exception ex)
+                {
+                    FilteredAddToLog(DebugLevelEnum.Error, $"Triggernometry 插件更新失败：{ex.Message}");
+                }
+            });
+        }
+
         private void AutoUpdatePromptResult(CustomControls.Toast t, bool result)
         {
             if (result == true)
@@ -2689,14 +2776,40 @@ namespace Triggernometry
             }
         }
 
+        public void UpdateTranslationCN(bool isManual = false)
+        {
+            string fileName = "zh-CN.triglations.xml";
+            string localPath = Path.Combine(pluginPath, fileName);
+            string remotePath = _updateRemotePathCN + fileName;
+            Task.Run(async () =>
+            {
+                try
+                {
+                    using (HttpClient client = new HttpClient())
+                    {
+                        var fileBytes = await client.GetByteArrayAsync(remotePath);
+                        File.WriteAllBytes(localPath, fileBytes);
+                        UnfilteredAddToLog(DebugLevelEnum.Info, "已更新汉化文件。");
+                    }
+                    if (!isManual) return;
+                    ui.QueueToast(new Toast
+                    {
+                        ToastText = $"已更新汉化文件，重启以应用更新。",
+                        ToastType = CustomControls.Toast.ToastTypeEnum.OK
+                    });
+                }
+                catch (Exception ex)
+                {
+                    UnfilteredAddToLog(DebugLevelEnum.Error, "更新汉化文件失败：" + ex.Message);
+                }
+            });
+        }
+
         public void BackupConfiguration()
         {
             string curver = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            string cfgver = cfg.PluginVersion;
-            if (cfgver == null)
-            {
-                cfgver = "pre1.0.4.4";
-            }
+            string cfgver = cfg.PluginVersion ?? "pre1.0.4.4";
+            cfg.PrevPluginVersion = cfgver;
             if (cfgver != curver)
             {
                 string oldfn = Path.Combine(path, pluginName + ".config.xml");

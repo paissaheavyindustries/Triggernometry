@@ -1100,7 +1100,7 @@
     <TranslationEntry Key="internal/Action/disabledfolderwithid" Translation="禁用分组 ({0}, id: {1})" />
     <TranslationEntry Key="internal/Action/dynamicexprerror" Translation="动态表达式 ({0}) 在当前动作中无法使用。总表达式：({1})" />
     <TranslationEntry Key="internal/Action/enabledfolderwithid" Translation="启用分组 ({0}, id: {1})" />
-    <TranslationEntry Key="internal/Action/exception" Translation="动作异常：{0}  &#xD;&#xA;动作：{1}  &#xD;&#xA;触发器：{2}" />
+    <TranslationEntry Key="internal/Action/exception" Translation="动作异常：{0}  &#xD;&#xA;动作：{1}  &#xD;&#xA;触发器：{2}{3}" />
     <TranslationEntry Key="internal/Action/executingaction" Translation="在进程 {1} 执行操作 '{0}'" />
     <TranslationEntry Key="internal/Action/filelistset" Translation="从文件 ({1}) 读取内容到{2}列表 ({0})" />
     <TranslationEntry Key="internal/Action/filescalarset" Translation="从文件 ({1}) 读取内容到{2}标量 ({0})" />
@@ -1414,6 +1414,7 @@
     <TranslationEntry Key="internal/Plugin/iniactui" Translation="设置 ACT 界面" />
     <TranslationEntry Key="internal/Plugin/inicache" Translation="执行缓存清理" />
     <TranslationEntry Key="internal/Plugin/inicfg" Translation="加载配置文件" />
+    <TranslationEntry Key="internal/Plugin/iniendpoint" Translation="开启终端" />
     <TranslationEntry Key="internal/Plugin/inierror" Translation="错误 当 {0} ({1})" />
     <TranslationEntry Key="internal/Plugin/inievents" Translation="创建事件" />
     <TranslationEntry Key="internal/Plugin/inifilename" Translation="确定文件名" />

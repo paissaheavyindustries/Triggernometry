@@ -498,7 +498,7 @@ namespace Triggernometry.Forms
         private void btnCopyAsCsv_Click(object sender, EventArgs e)
         {
             VariableTable v = (VariableTable)VariableToEdit;
-            Action.ClipBoardSet(v.ToCSVString());
+            Action.ClipboardSetText(v.ToCSVString());
         }
 
         private void btnSaveAsCsv_Click(object sender, EventArgs e) 

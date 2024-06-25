@@ -58,7 +58,7 @@ namespace Triggernometry.Utilities
 
         public static IntPtr XivBaseAddress => XivProc.MainModule.BaseAddress;
 
-        private static void UpdateProcCacheIfNeeded()
+        private static void UpdateProcCacheIfNeeded() // any better ways to monitor the changing of ffxiv process?
         {
             if ((DateTime.Now - _lastUpdateTime).TotalSeconds > CACHE_INTERVAL_SECONDS)
             {
@@ -67,7 +67,7 @@ namespace Triggernometry.Utilities
                 _xivProc = PluginBridges.BridgeFFXIV.GetProcess();
                 _xivProcId = _xivProc?.Id ?? 0;
 
-                if (_xivProc.HasExited)
+                if (_xivProc?.HasExited ?? true)
                 {
                     _xivProcHandle = IntPtr.Zero;
                     return;
@@ -75,16 +75,21 @@ namespace Triggernometry.Utilities
                 
                 if (_xivProcHandle != IntPtr.Zero)
                 {
-                    if (GetProcessId(_xivProcHandle) != _xivProcId)
+                    if (GetProcessId(_xivProcHandle) == _xivProcId)
+                    {
+                        return;
+                    }
+                    else
                     {
                         DisposeXivProcHandle();
-                        _xivProcHandle = OpenProcess(PROCESS_ALL_ACCESS, false, _xivProcId);
                     }
                 }
-                else
+                foreach (var action in _xivProcUpdatedActions.Values)
                 {
-                    _xivProcHandle = OpenProcess(PROCESS_ALL_ACCESS, false, _xivProcId);
+                    try { action.Invoke(); }
+                    catch (Exception ex) { plug.UnfilteredAddToLog(DebugLevelEnum.Error, ex.ToString()); }
                 }
+                _xivProcHandle = OpenProcess(PROCESS_ALL_ACCESS, false, _xivProcId);
             }
         }
 
@@ -96,6 +101,19 @@ namespace Triggernometry.Utilities
                 catch { }
                 _xivProcHandle = IntPtr.Zero;
             }
+        }
+
+        private static Dictionary<string, System.Action> _xivProcUpdatedActions = new Dictionary<string, System.Action>();
+
+        // could be used in scripts
+        public static void RegisterXivProcUpdatedAction(string key, System.Action action)
+        {
+            _xivProcUpdatedActions[key] = action;
+        }
+
+        public static void UnregisterXivProcUpdatedAction(string key)
+        {
+            _xivProcUpdatedActions.Remove(key);
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]

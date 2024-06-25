@@ -2201,7 +2201,7 @@ namespace Triggernometry
                         }
                         else if (x == "_clipboard")
                         {
-                            val = Action.ClipBoardGet();
+                            val = Action.ClipboardGetText();
                             if (val.Contains("${_clipboard}"))
                             {
                                 throw InfiniteClipboardError();

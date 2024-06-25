@@ -2193,7 +2193,7 @@ namespace Triggernometry.CustomControls
 
         private void btnUpdateCheck_Click(object sender, EventArgs e)
         {
-            plug.CheckForUpdates();
+            plug.CheckForUpdates(isManual: true);
         }
 
         private void timer1_Tick(object sender, EventArgs e)

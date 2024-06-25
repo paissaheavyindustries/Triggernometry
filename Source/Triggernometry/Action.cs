@@ -3253,7 +3253,7 @@ namespace Triggernometry
                                         {
                                             text = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _VariableExpression);
                                         }
-                                        ClipBoardSet(text);
+                                        ClipboardSetText(text);
                                         AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/scalarclipboard",
                                             "Set text ({0}) to clipboard", text));
                                         break;
@@ -4113,10 +4113,25 @@ namespace Triggernometry
                 string actionDesc = "";
                 try { actionDesc = GetDescription(ctx); } catch { }
                 actionDesc = (actionDesc.Length > 300) ? (actionDesc.Substring(0, 297) + "...") : actionDesc;
+                bool showDetail = _ActionType == ActionTypeEnum.ExecuteScript || _ActionType == ActionTypeEnum.NamedCallback || plug.cfg.DeveloperMode;
+                string exDesc1 = ex.Message; // type and message
+                string exDesc2 = ""; // inner and stack
+                if (showDetail)
+                {
+                    exDesc1 = ex.GetType().FullName + ": " + exDesc1;
+                    exDesc2 = Environment.NewLine;
+                    if (ex.InnerException != null)
+                    {
+                        exDesc2 += Environment.NewLine + " ---> " + ex.InnerException.ToString();
+                    }
+                    if (ex.StackTrace != null)
+                    {
+                        exDesc2 += Environment.NewLine + ex.StackTrace;
+                    }
+                }
                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/exception",
-                    "Action exception: {0}  \nIn action: {1}  \nIn trigger: {2}",
-                    (_ActionType == ActionTypeEnum.ExecuteScript || _ActionType == ActionTypeEnum.NamedCallback || plug.cfg.DeveloperMode) ? ex.ToString() : ex.Message,
-                    actionDesc, triggerPath));
+                    "Action exception: {0}  \nIn action: {1}  \nIn trigger: {2}{3}",
+                    exDesc1, actionDesc, triggerPath, exDesc2));
             }
         }
 
@@ -4418,7 +4433,7 @@ namespace Triggernometry
         }
 
         /// <summary> Set text to the clipboard using the UI thread. If text is empty, clear the clipboard. </summary>
-        public static void ClipBoardSet(string text)
+        public static void ClipboardSetText(string text)
         {
             plug.ui.Invoke(new System.Action(() =>
             {
@@ -4430,7 +4445,7 @@ namespace Triggernometry
         }
 
         /// <summary> Get the clipboard text using the UI thread. </summary>
-        public static string ClipBoardGet()
+        public static string ClipboardGetText()
             => (string)plug.ui.Invoke(new Func<string>(Clipboard.GetText));
 
         public static ArgumentException InvalidEnumException(string enumName, string enumValue)

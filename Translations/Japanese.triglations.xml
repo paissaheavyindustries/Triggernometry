@@ -880,11 +880,11 @@
     <TranslationEntry Key="FolderForm/grpFfxivClassFilter" Translation=" クラス・ジョブ " />
     <TranslationEntry Key="FolderForm/grpGeneral" Translation=" 一般 " />
     <TranslationEntry Key="FolderForm/grpSetting" Translation=" 設定 " />
-    <TranslationEntry Key="FolderForm/lblEventFilterRegex" Translation="イベントテキストの正規表現" />
+    <TranslationEntry Key="FolderForm/lblEventFilterRegex" Translation="正規表現" />
     <TranslationEntry Key="FolderForm/lblFfxivZoneId" Translation="Zone ID" />
     <TranslationEntry Key="FolderForm/lblFolderName" Translation="フォルダ名" />
     <TranslationEntry Key="FolderForm/lblReadOnly" Translation="読み取り専用モードです。リモートトリガーの構成を編集する場合は、ローカルにコピーを作成する必要があります。" />
-    <TranslationEntry Key="FolderForm/lblZoneFilterRegex" Translation="ゾーン名の正規表現" />
+    <TranslationEntry Key="FolderForm/lblZoneFilterRegex" Translation="ゾーン名" />
     <TranslationEntry Key="FolderForm/tabEnvironment" Translation="環境" />
     <TranslationEntry Key="FolderForm/tabFilter" Translation="フィルター" />
     <TranslationEntry Key="ImportForm" Translation="インポート" />
@@ -1100,7 +1100,7 @@
     <TranslationEntry Key="internal/Action/disabledfolderwithid" Translation="Disabled folder ({0}) with id ({1})" />
     <TranslationEntry Key="internal/Action/dynamicexprerror" Translation="The dynamic expression ({0}) is invalid in the current action. Expression: ({1})" />
     <TranslationEntry Key="internal/Action/enabledfolderwithid" Translation="Enabled folder ({0}) with id ({1})" />
-    <TranslationEntry Key="internal/Action/exception" Translation="Action exception: {0} \nIn action: {1} \nIn trigger: {2}" />
+    <TranslationEntry Key="internal/Action/exception" Translation="Action exception: {0} \nIn action: {1} \nIn trigger: {2}{3}" />
     <TranslationEntry Key="internal/Action/executingaction" Translation="Executing action '{0}' in thread {1}" />
     <TranslationEntry Key="internal/Action/filelistset" Translation="{2}リスト変数 ({0}) にファイル ({1}) を読み込む" />
     <TranslationEntry Key="internal/Action/filescalarset" Translation="{2}スカラ変数 ({0}) にファイル ({1}) を読み込む" />
@@ -1414,7 +1414,8 @@
     <TranslationEntry Key="internal/Plugin/iniactui" Translation="setting up ACT ui" />
     <TranslationEntry Key="internal/Plugin/inicache" Translation="performing cache cleanup" />
     <TranslationEntry Key="internal/Plugin/inicfg" Translation="loading configuration" />
-    <TranslationEntry Key="internal/Plugin/inierror" Translation="Error while {0} ({1})" />
+    <TranslationEntry Key="internal/Plugin/iniendpoint" Translation="starting endpoint" />
+    <TranslationEntry Key="internal/Plugin/inievents" Translation="creating events" />
     <TranslationEntry Key="internal/Plugin/inievents" Translation="creating events" />
     <TranslationEntry Key="internal/Plugin/inifilename" Translation="determining filename" />
     <TranslationEntry Key="internal/Plugin/inilanguages" Translation="loading languages" />

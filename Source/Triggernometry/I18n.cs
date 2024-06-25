@@ -360,6 +360,8 @@ namespace Triggernometry
             }
         }
 
+        public static bool IsChineseEnvironment => (RealPlugin.plug.cfg.Language ?? "").Contains("zh") || CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "zh";
+
     }
 
 }
