@@ -31,7 +31,7 @@ namespace Triggernometry
             Stopped
         }
 
-        internal RealPlugin plug { get; set; }
+        internal RealPlugin plug => RealPlugin.plug;
         internal StatusEnum Status { get; set; }
         internal string StatusDescription { get; set; } = "zzz";
         private Context curctx = null;

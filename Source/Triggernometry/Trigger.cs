@@ -669,9 +669,8 @@ namespace Triggernometry
 
         internal void QueueActions(Context ctx, DateTime curtime, RealPlugin.MutexInformation mtx)
         {
-            RealPlugin p = ctx.plug;
             //System.Diagnostics.Debug.WriteLine("### queuing actions for " + ctx.ToString());
-            p.QueueActions(ctx, curtime, Actions, _Sequential, mtx, TriggerContextLogger);
+            RealPlugin.plug.QueueActions(ctx, curtime, Actions, _Sequential, mtx, TriggerContextLogger);
         }
 
         internal bool Fire(RealPlugin p, Context ctx, RealPlugin.MutexInformation mtx)

@@ -808,7 +808,6 @@
     <TranslationEntry Key="Plugin/UserInterface/ctxExport" Translation="Exporter" />
     <TranslationEntry Key="Plugin/UserInterface/ctxImport" Translation="Importer" />
     <TranslationEntry Key="Plugin/UserInterface/ctxPaste" Translation="Coller" />
-    <TranslationEntry Key="Plugin/UserInterface/errThing1" Translation="Des erreurs ont été rencontrées" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeImport" Translation="C'est très similaire à la création d'un trigger. Après cet écran, vous pouvez sélectionner le dossier dans lequel vous souhaitez importer tous les trigger(ou Root), puis appuyer sur le bouton Importer dans la barre supérieure.&#xD;&#xA;&#xD;&#xA;Voici le bouton que vous devriez rechercher:" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeImportHeader" Translation="J'ai ce fichier XML qui est censé avoir des triggers. Comment dois-je l'utiliser?" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeIntro" Translation="Voici quelques réponses aux questions fréquemment posées pour vous aider à démarrer:" />

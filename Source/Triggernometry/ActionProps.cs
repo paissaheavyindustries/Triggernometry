@@ -39,11 +39,13 @@ namespace Triggernometry
             DiscordWebhook,
             LiveSplitControl,
             ObsControl,
-            EndEncounter,
+            ActInteraction,
             Trigger,
             Folder,
             Repository,
-            Placeholder
+            Placeholder,
+            // Old actions:
+            // EndEncounter => ActInteraction
         }
 
         public enum VariableOpEnum
@@ -175,7 +177,6 @@ namespace Triggernometry
             PopFirst,
             PopToListInsert,
             PopToListSet,
-            PopLast,
             Build,
             Filter,
             Join,
@@ -191,6 +192,8 @@ namespace Triggernometry
             SortByKeys,
             UnsetAll,
             UnsetRegex,
+            // Old
+            // PopLast => PopFirst
         }
 
         public enum ListVariableExpTypeEnum
@@ -315,8 +318,51 @@ namespace Triggernometry
             ZoneIdFFXIV
         }
 
+        public enum ActInteractionTypeEnum
+        {
+            SetCombatState,
+            LogAllNetwork,
+            UseDeucalion,
+        }
+
         #endregion
 
+        #region Action specific properties - ACT Interaction operation
+
+        internal ActInteractionTypeEnum _ActOpType { get; set; } = ActInteractionTypeEnum.SetCombatState;
+        [XmlAttribute]
+        public string ActOpType
+        {
+            get => _ActOpType != ActInteractionTypeEnum.SetCombatState ? _ActOpType.ToString() : null;
+            set
+            {
+                _ActOpType = (ActInteractionTypeEnum)Enum.Parse(typeof(ActInteractionTypeEnum), value);
+            }
+        }
+
+        internal bool _ActOpBoolParam { get; set; } = false;
+        [XmlAttribute]
+        public string ActOpBoolParam
+        {
+            get => _ActOpBoolParam ? _ActOpBoolParam.ToString() : null;
+            set
+            {
+                _ActOpBoolParam = bool.Parse(value);
+            }
+        }
+
+        internal string _ActOpStringParam = "";
+        [XmlAttribute]
+        public string ActOpStringParam
+        {
+            get => _ActOpStringParam != "" ? _ActOpStringParam : null;
+            set
+            {
+                _ActOpStringParam = value;
+            }
+        }
+
+        #endregion
         #region Action specific properties - Beep
 
         internal string _SystemBeepFreqExpression = "1046.5"; // freq(C6)
@@ -1348,20 +1394,20 @@ namespace Triggernometry
         [XmlAttribute]
         public string ListVariableOp
         {
-            get
-            {
-                if (_ListVariableOp != ListVariableOpEnum.Unset)
-                {
-                    return _ListVariableOp.ToString();
-                }
-                else
-                {
-                    return null;
-                }
-            }
+            get => _ListVariableOp != ListVariableOpEnum.Unset ? _ListVariableOp.ToString() : null;
             set
             {
-                _ListVariableOp = (ListVariableOpEnum)Enum.Parse(typeof(ListVariableOpEnum), value);
+                if (Enum.TryParse(value, out ListVariableOpEnum type) || string.IsNullOrEmpty(value))
+                {
+                    _ListVariableOp = type;
+                }
+                // convert old actions
+                else if (value == "PopLast")
+                {
+                    _ListVariableOp = ListVariableOpEnum.PopFirst;
+                    _ListVariableIndex = "-1";
+                }
+                else throw InvalidEnumException("ListVariableOpEnum", value);
             }
         }
 
@@ -2603,7 +2649,7 @@ namespace Triggernometry
         {
             get
             {
-                if (ActionType != ActionTypeEnum.TextAura)
+                if (_ActionType != ActionTypeEnum.TextAura)
                 {
                     return null;
                 }
@@ -2921,7 +2967,7 @@ namespace Triggernometry
         {
             get
             {
-                if (_TextAuraFontName == "" || ActionType != ActionTypeEnum.TextAura)
+                if (_TextAuraFontName == "" || _ActionType != ActionTypeEnum.TextAura)
                 {
                     return null;
                 }

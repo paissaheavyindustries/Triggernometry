@@ -9,6 +9,7 @@ using System.Web.Script.Serialization;
 using Triggernometry.Variables;
 using System.Windows.Forms;
 using System.Reflection;
+using Triggernometry.Utilities;
 
 namespace Triggernometry
 {
@@ -45,12 +46,6 @@ namespace Triggernometry
             = new Regex(@"^(?<name>[^[]*)\[(?<column>[^[\]]*)\]\[(?<row>[^[\]]*)\]\.(?<prop>[^([]+?)(?:\((?<arg>[^)]*)\))? *$");
         internal static Regex rexExistVar       // evar: / epvar: / elvar: ...
             = new Regex(@"^e(?<persist>p?)(?<type>[vltd]|text|image|callback|storage)(?:v?ar)?:(?<name>.*)$");
-        // for splitting arguments:
-        internal static Regex reSplitArgComma = new Regex("(?<=^|,)( *\"[^\"]*\" *| *'[^']*' *|[^,]*)(?=$|,)");
-        internal static Regex reSplitArgEqual = new Regex("(?<=^|=)( *\"[^\"]*\" *| *'[^']*' *|[^=]*)(?=$|=)");
-        internal static Regex reSplitArgPipe = new Regex("(?<=^|\\|)( *\"[^\"]*\" *| *'[^']*' *|[^|]*)(?=$|\\|)");
-        internal static Regex reDQuotedArg = new Regex("^ *\"(?<arg>[^\"]*)\" *$");
-        internal static Regex reSQuotedArg = new Regex("^ *'(?<arg>[^']*)' *$");
 
         internal static Regex reHex8 = new Regex("^[0-9A-Fa-f]{1,8}$");
 
@@ -76,7 +71,7 @@ namespace Triggernometry
         internal string dictValue { get; set; } = "";       // for ${_val}
 
         public const double EORZEA_MULTIPLIER = 3600D / 175D;
-        public const string LINEBREAK_PLACEHOLDER = "⏎";
+        public const char LINEBREAK_PLACEHOLDER = '⏎';
         private static readonly CultureInfo InvClt = CultureInfo.InvariantCulture;
         private static readonly NumberStyles NSFloat = NumberStyles.Float;
         public Random rng = new Random();
@@ -216,45 +211,65 @@ namespace Triggernometry
             return vd;
         }
 
-        /// <summary> Split an expression with commas or other specified separators to a list of arguments. 
-        /// If the argument contains separator, single/double quotes, it should be quoted like "xx,xx" 'xx,xx' 'xx"xx' "xx'xx".</summary>
-        /// <param name="args"> </param>
+        internal static Regex BuildSplitArgRegex(string separator)
+        {
+            string s = Regex.Escape(separator);
+            char lb = LINEBREAK_PLACEHOLDER;
+            return new Regex(
+                $"(?<=^|{s})((?:\\s|{lb})*\"[^\"]*\"(?:\\s|{lb})*|(?:\\s|{lb})*'[^']*'(?:\\s|{lb})*|[^{s}]*)(?=$|{s})");
+            //    (?<=^|{s}): after a separator or start-of-line
+            //               (?:\\s|{lb})*\"[^\"]*\"(?:\\s|{lb})*: spaces? + " + text? + " + spaces?
+            //                                                    (?:\\s|{lb})*'[^']*'(?:\\s|{lb})*: spaces? + ' + text? + ' + spaces?
+            //                                                                                      [^{s}]*: any unquoted text
+            //                                                                                              (?=$|{s}): before a separator or end-of-line
+
+        }
+
+        /// <summary>Trim all whitespace characters and the linebreak placeholders from both sides of the string.</summary>
+        public static string Trim(string s) => reTrim.Match(s).Groups["string"].Value;
+        /// <summary>Trim all whitespace characters and the linebreak placeholders from the left side of the string.</summary>
+        public static string TrimL(string s) => reTrimL.Match(s).Groups["string"].Value;
+        /// <summary>Trim all whitespace characters and the linebreak placeholders from the right side of the string.</summary>
+        public static string TrimR(string s) => reTrimR.Match(s).Groups["string"].Value;
+
+        internal static Regex reSplitArgComma = BuildSplitArgRegex(",");
+        internal static Regex reSplitArgEqual = BuildSplitArgRegex("=");
+        internal static Regex reSplitArgPipe = BuildSplitArgRegex("|");
+        internal static Regex reTrim = new Regex($"^[\\s{LINEBREAK_PLACEHOLDER}]*(?<string>.*?)[\\s{LINEBREAK_PLACEHOLDER}]*$");
+        internal static Regex reTrimL = new Regex($"^[\\s{LINEBREAK_PLACEHOLDER}]*(?<string>.*?)$");
+        internal static Regex reTrimR = new Regex($"^(?<string>.*?)[\\s{LINEBREAK_PLACEHOLDER}]*$");
+
+        /// <summary> 
+        /// Split an expression with commas or other specified separators to a list of arguments. <br />
+        /// If the argument contains separator, single/double quotes, it should be quoted like "xx,xx" 'xx,xx' 'xx"xx' "xx'xx".
+        /// </summary>
         /// <param name="allowEmptyList"> Converts an empty string or spaces to an empty list, or a list with an empty string.</param>>
         public static string[] SplitArguments(string args, bool allowEmptyList = true, string separator = ",")
         {
-            if (string.IsNullOrWhiteSpace(args) && allowEmptyList)
+            if (allowEmptyList && Trim(args ?? "") == "")
             {
                 return new string[0];
             }
-            // (?<=^|{s}): after a separator or start-of-line
-            // ( *\"[^\"]*\" *| *'[^']*' *|[^{s}]*): string in "", or string in '', or string without separator
-            // (?=$|{s}): before a separator or end-of-line
-            string s = Regex.Escape(separator);
             var reSingleArg = (separator == ",") ? reSplitArgComma 
                             : (separator == "=") ? reSplitArgEqual
                             : (separator == "|") ? reSplitArgPipe
-                            : new Regex($"(?<=^|{s})( *\"[^\"]*\" *| *'[^']*' *|[^{s}]*)(?=$|{s})");
+                            : BuildSplitArgRegex(separator);
 
             args = UnescapeCustomExpr(args);
             var matches = reSingleArg.Matches(args);
             var result = new List<string>();
             foreach (Match match in matches)
             {
-                var currentMatch = match.Value;
-                var dQuotedMatch = reDQuotedArg.Match(currentMatch);
-                var sQuotedMatch = reSQuotedArg.Match(currentMatch);
-                if (dQuotedMatch.Success)
+                string currentMatch = Trim(match.Value);
+                int length = currentMatch.Length;
+                if (length >= 2 
+                    && currentMatch[0] == currentMatch[length - 1] 
+                    && (currentMatch[0] == '\"' || currentMatch[0] == '\'')  // quoted string: "..." '...'
+                    )
                 {
-                    result.Add(dQuotedMatch.Groups["arg"].Value);
+                    currentMatch = currentMatch.Substring(1, length - 2); // remove " / '
                 }
-                else if (sQuotedMatch.Success)
-                {
-                    result.Add(sQuotedMatch.Groups["arg"].Value);
-                }
-                else
-                {
-                    result.Add(currentMatch.Trim());
-                }
+                result.Add(currentMatch);
             }
             return result.ToArray();
         }
@@ -294,7 +309,7 @@ namespace Triggernometry
             string[] slices = SplitArguments(slicesStr, allowEmptyList: false);
             foreach (string slice in slices)
             {   // parse slice string to int start/end/step
-                string[] sliceArgs = slice.Split(':').Select(s => s.Trim()).ToArray();
+                string[] sliceArgs = slice.Split(':').Select(s => Trim(s)).ToArray();
                 if (sliceArgs.Length > 3) { throw ArgCountError(I18n.TranslateWord("slice"), "0-3", sliceArgs.Length, rawExpr); }
 
                 string startStr = GetArgument(sliceArgs, 0, "", true);
@@ -303,7 +318,7 @@ namespace Triggernometry
                 int start = 0; int end = 0; int step = 0;
                 try
                 {
-                    if (sliceArgs.Length == 1 && startStr.Trim() != "")
+                    if (sliceArgs.Length == 1 && Trim(startStr) != "")
                     {   // sliceArgs.Length = 1: push a single index
                         start = int.Parse(startStr, InvClt);
                         start = (start >= 0) ? (start - startIndex) : (start + totalLength);
@@ -450,22 +465,99 @@ namespace Triggernometry
             return result;
         }
 
+        public static string ToFullWidth(string input)
+        {
+            char[] array = input.ToCharArray();
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i] == 32) // ' '
+                {
+                    array[i] = (char)0x3000; // '　'
+                }
+                else if (array[i] > 32 && array[i] < 127)
+                {
+                    array[i] = (char)(array[i] + 0xFEE0);
+                }
+            }
+            return new string(array);
+        }
+
+        public static string ToHalfWidth(string input)
+        {
+            char[] array = input.ToCharArray();
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i] == 0x3000)
+                {
+                    array[i] = (char)32;
+                }
+                else if (array[i] > 0xFF00 && array[i] < 0xFF5F) 
+                {
+                    array[i] = (char)(array[i] - 0xFEE0);
+                }
+            }
+            return new string(array);
+        }
+
+        /// <summary> Convert the letters and numbers in a string to the XIV-defined black box character.</summary>
+        /// <param name="combineDigits">True if you want the numbers 10-31 in the string to be combined as a single XIV character.</param>
+        public static string ToXIVChar(string input, bool combineDigits)
+        {
+            StringBuilder result = new StringBuilder();
+            char[] array = input.ToCharArray();
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i] >= 'a' && array[i] <= 'z')
+                {
+                    // Convert lowercase letters to special XIV capital characters
+                    result.Append((char)(array[i] + 57360));
+                }
+                else if (array[i] >= 'A' && array[i] <= 'Z')
+                {
+                    // Convert uppercase letters to special XIV capital characters
+                    result.Append((char)(array[i] + 57392));
+                }
+                else if (array[i] >= '0' && array[i] <= '9')
+                {
+                    // Convert digits to special XIV capital characters 10-31
+                    if (combineDigits && i + 1 < array.Length && array[i + 1] >= '0' && array[i + 1] <= '9')
+                    {
+                        int num = 10 * (array[i] - '0') + (array[i + 1] - '0');
+                        if (num >= 10 && num <= 31)
+                        {
+                            result.Append((char)(num + 57487));
+                            i++;
+                            continue;
+                        }
+                    }
+                    // Convert digits to special XIV capital characters 0-9
+                    result.Append((char)(array[i] + 57439));
+                }
+                else
+                {
+                    result.Append(array[i]);
+                }
+            }
+            return result.ToString();
+        }
+
         /// <summary> use "⏎" as a single-digit placeholder for linebreaks
         /// to parse linebreaks as regular characters.</summary>
-        public static string ReplaceLineBreak(string str, string placeholder = LINEBREAK_PLACEHOLDER)
+        public static string ReplaceLineBreak(string str, string placeholder = null)
         {
+            placeholder = placeholder ?? LINEBREAK_PLACEHOLDER.ToString();
             return str.Replace("\r\n", placeholder).Replace("\r", placeholder).Replace("\n", placeholder);
         }
 
         /// <summary> replace linebreaks with the placeholder when converting charcode to char </summary>
         private static char GetReplacedChar(int charcode)
         {   
-            return (charcode == 10 || charcode == 13) ? LINEBREAK_PLACEHOLDER[0] : (char)charcode;
+            return (charcode == 10 || charcode == 13) ? LINEBREAK_PLACEHOLDER : (char)charcode;
         }
 
         /// For arguments and regex in ${func:...}.
         /// __LB__ / '｛' => '{';   __RB__ / '｝' => '}';
-        /// __LP__ / '（' => '(';   __RP__ / '）' => ')';
         /// __FLB__ => '｛';        __FRB__ => '｝'; 
         /// __FLP__ => '（';        __FRP__ => '）';
         private static string UnescapeCustomExpr(string rawExpr)
@@ -475,7 +567,6 @@ namespace Triggernometry
               .Replace("｛", "{").Replace("｝", "}")
               .Replace("__FLB__", "｛").Replace("__FRB__", "｝")
               .Replace("__LP__", "(").Replace("__RP__", ")")
-              .Replace("（", "(").Replace("）", ")")
               .Replace("__FLP__", "（").Replace("__FRP__", "）");
             return sb.ToString();
         }
@@ -639,12 +730,17 @@ namespace Triggernometry
                         }
                         else if (x == "_triggername")
                         {
-                            val = trig != null ? trig.Name : "(null)";
+                            val = trig?.Name ?? "(null)";
                             found = true;
                         }
                         else if (x == "_triggerid")
                         {
                             val = trig != null ? trig.Id.ToString() : "(null)";
+                            found = true;
+                        }
+                        else if (x == "_triggerpath")
+                        {
+                            val = trig?.FullPath ?? "";
                             found = true;
                         }
                         else if (x == "_loopiterator" || x == "_i")
@@ -746,6 +842,11 @@ namespace Triggernometry
                             val = RealPlugin.plug.pluginPath;
                             found = true;
                         }
+                        else if (x == "_pluginversion")
+                        {
+                            val = RealPlugin.plug.cfg.PluginVersion;
+                            found = true;
+                        }
                         else if (x.StartsWith("_env"))
                         {
                             mx = rexListIdx.Match(x);
@@ -756,12 +857,34 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
+                        else if (x.StartsWith("_offset["))
+                        {
+                            mx = rexListIdx.Match(x);
+                            if (mx.Success)
+                            {
+                                string key = Trim(mx.Groups["index"].Value).ToLower();
+                                if (key == "1b")
+                                    val = I18n.ThingToString(Memory.Offset1B);
+                            }
+                            found = true;
+                        }
+                        else if (x.StartsWith("_targetmarker2id[") || x.StartsWith("_tm2id["))
+                        {
+                            mx = rexListIdx.Match(x);
+                            if (mx.Success)
+                            {
+                                string key = Trim(mx.Groups["index"].Value);
+                                uint id = Memory.EntityIdByTargetMarker(key) ?? throw ParseTypeError(I18n.TranslateWord("string"), key, "targetmarker", x);
+                                val = id.ToString("X8");
+                            }
+                            found = true;
+                        }
                         else if (x.StartsWith("_storage["))
                         {
                             mx = rexListIdx.Match(x);
                             if (mx.Success)
                             {
-                                string key = mx.Groups["index"].Value.Trim();
+                                string key = Trim(mx.Groups["index"].Value);
                                 Dictionary<string, object> storage = plug.scriptingStorage;
 
                                 if (!storage.ContainsKey(key))
@@ -783,7 +906,7 @@ namespace Triggernometry
                             mx = rexListProp.Match(x);
                             if (mx.Success)
                             {
-                                string rawJob = mx.Groups["index"].Value.Trim();
+                                string rawJob = Trim(mx.Groups["index"].Value);
                                 if (!Entity.jobNameToIdMap.ContainsKey(rawJob.ToLower()))
                                 {
                                     throw InvalidValueError("_job", "key", rawJob, x);
@@ -799,7 +922,7 @@ namespace Triggernometry
                             mx = rexListIdx.Match(x);
                             if (mx.Success)
                             {
-                                string idx = mx.Groups["index"].Value.Trim();
+                                string idx = Trim(mx.Groups["index"].Value);
                                 lock (plug.cfg.Constants)
                                 {
                                     if (plug.cfg.Constants.ContainsKey(idx))
@@ -819,7 +942,7 @@ namespace Triggernometry
                             mx = rexListIdx.Match(x);
                             if (mx.Success)
                             {
-                                string idx = mx.Groups["index"].Value.Trim();
+                                string idx = Trim(mx.Groups["index"].Value);
                                 switch (idx)
                                 {
                                     case "DebugLevel": val = ((int)plug.cfg.DebugLevel).ToString(InvClt); break;
@@ -1300,7 +1423,7 @@ namespace Triggernometry
                                         {
                                             VariableTable vt = GetTableVariable(store, gname, false);
                                             string joiner1 = GetArgument(args, 0, ",", false);
-                                            string joiner2 = GetArgument(args, 1, LINEBREAK_PLACEHOLDER, false);
+                                            string joiner2 = GetArgument(args, 1, LINEBREAK_PLACEHOLDER.ToString(), false);
                                             string colSlicesStr = GetArgument(args, 2, ":");
                                             string rowSlicesStr = GetArgument(args, 3, ":");
                                             var colIndices = GetSliceIndices(colSlicesStr, vt.Width, x, startIndex: 1);
@@ -1546,6 +1669,22 @@ namespace Triggernometry
                                 found = true;
                             }
                         }
+                        else if (x.StartsWith("env:"))
+                        {
+                            string envVarName = x.Substring(4);
+                            Folder f = trig?.Parent;
+                            string envVarValue = "";
+                            while (f != null)
+                            {
+                                if (f.EnvironmentVariables.TryGetValue(envVarName, out envVarValue))
+                                {
+                                    break;
+                                }
+                                f = f.Parent;
+                            }
+                            val = envVarValue;
+                            found = true;
+                        }
                         else if (x.StartsWith("numeric:") || x.StartsWith("n:"))
                         {
                             string numexpr = (x.StartsWith("numeric:")) ? x.Substring(8) : x.Substring(2);
@@ -1566,27 +1705,32 @@ namespace Triggernometry
                             Match rxm = rexFunc.Match(funcexpr);
                             if (rxm.Success)
                             {
-                                string funcname = rxm.Groups["name"].Value.ToLower();
+                                string funcname = Trim(rxm.Groups["name"].Value.ToLower());
                                 string funcarg = rxm.Groups["arg"].Value;
                                 string funcval = rxm.Groups["val"].Value;
                                 string[] args = SplitArguments(funcarg);
                                 int argc = args.Count();
                                 switch (funcname)
                                 {
-                                    case "toupper": // toupper()
-                                        val = funcval.ToUpper();
+                                    case "toupper": val = funcval.ToUpper(); break;
+                                    case "tolower": val = funcval.ToLower(); break;
+                                    case "tofullwidth": val = ToFullWidth(funcval); break;
+                                    case "tohalfwidth": val = ToHalfWidth(funcval); break;
+                                    case "toxivchar":
+                                        {
+                                            if (!bool.TryParse(GetArgument(args, 0, "false"), out bool combineDigits))
+                                            {
+                                                throw ParseTypeError(I18n.TranslateWord("string"), args[0], I18n.TranslateWord("bool"), x);
+                                            }
+                                            val = ToXIVChar(funcval, combineDigits);
+                                        }
                                         break;
-                                    case "tolower": // tolower()
-                                        val = funcval.ToLower();
-                                        break;
-                                    case "length": // length()
-                                        val = funcval.Length.ToString();
-                                        break;
+                                    case "length": val = funcval.Length.ToString(); break;
                                     case "hex2dec":    // hex2dec()
                                     case "hex2float":  // hex2float()
                                     case "hex2double": // hex2double()
                                         {
-                                            funcval = funcval.Trim();
+                                            funcval = Trim(funcval);
                                             if (!new Regex("^[0-9A-Fa-f]+$").IsMatch(funcval))
                                             {
                                                 throw InvalidValueError(funcname, "funcval", funcval, x);
@@ -1609,7 +1753,7 @@ namespace Triggernometry
                                         break;
                                     case "parsedmg": // parse the hex damage in ACT loglines to dec value
                                         {
-                                            funcval = funcval.Trim();
+                                            funcval = Trim(funcval);
                                             if (!reHex8.IsMatch(funcval))
                                             {
                                                 throw InvalidValueError(funcname, "funcval", funcval, x);
@@ -1649,6 +1793,45 @@ namespace Triggernometry
                                             }
                                             string format = funcname.Substring(6).ToUpper(); // "X" "X2" "X4" "X8"
                                             val = intValue.ToString(format);
+                                        }
+                                        break;
+                                    case "ord": // chars => charcodes separated by separator
+                                        {
+                                            if (argc > 1) { throw ArgCountError(funcname, "0-1", argc, x); }
+                                            string separator = GetArgument(args, 0, ",");
+                                            List<int> charcodes = new List<int>();
+                                            for (int idx = 0; idx < funcval.Length; idx++)
+                                            {
+                                                if (char.IsHighSurrogate(funcval[idx]) && idx + 1 < funcval.Length && char.IsLowSurrogate(funcval[idx + 1]))
+                                                {
+                                                    charcodes.Add(char.ConvertToUtf32(funcval[idx++], funcval[idx]));
+                                                }
+                                                else
+                                                {
+                                                    charcodes.Add(funcval[idx]);
+                                                }
+                                            }
+                                            val = string.Join(separator, charcodes);
+                                        }
+                                        break;
+                                    case "chr": // charcodes separated by separator => chars
+                                        {
+                                            if (argc > 1) { throw ArgCountError(funcname, "0-1", argc, x); }
+                                            string separator = GetArgument(args, 0, ",");
+                                            string[] rawCharcodes = SplitArguments(funcval, separator: separator);
+                                            List<string> chars = new List<string>();
+                                            for (int idx = 0; idx < rawCharcodes.Length; idx++)
+                                            {
+                                                if (int.TryParse(rawCharcodes[idx], out int charcode))
+                                                {
+                                                    chars.Add(char.ConvertFromUtf32(charcode));
+                                                }
+                                                else
+                                                {
+                                                    throw ParseTypeError($"#{idx}" + I18n.TranslateWord("string"), rawCharcodes[idx], I18n.TranslateWord("int"), x);
+                                                }
+                                            }
+                                            val = string.Join("", chars);
                                         }
                                         break;
                                     case "padleft":
@@ -1725,7 +1908,7 @@ namespace Triggernometry
                                             if (argc != 1 && argc != 2) { throw ArgCountError(funcname, "1-2", argc, x); }
                                             if (!int.TryParse(args[0], NSFloat, InvClt, out int startIndex))
                                             {
-                                                throw ParseTypeError(I18n.TranslateWord("startIndex"), args[0], I18n.TranslateWord("int"), x);
+                                                throw ParseTypeError(I18n.TranslateWord("startindex"), args[0], I18n.TranslateWord("int"), x);
                                             }
                                             if (startIndex < 0)
                                             {
@@ -1772,7 +1955,7 @@ namespace Triggernometry
                                                 ? strArray[normIndex] : "";
                                         }
                                         break;
-                                    case "args":
+                                    case "args": // for testing the argument splitting: ${f:args(...):}
                                         val = "(" + string.Join(")\n(", args) + ")";
                                         break;
                                     case "i":
@@ -1814,6 +1997,14 @@ namespace Triggernometry
                                             throw ParseTypeError("ignoreCase", ignoreCaseStr, I18n.TranslateWord("bool"), x);
                                         }
                                         val = "" + String.Compare(funcval, args[0], ignoreCase);
+                                        break;
+                                    case "versioncompare": // ${f:versioncompare(1.2.0.0):1.1.8.0} = -1
+                                        if (argc != 1) { throw ArgCountError(funcname, "1", argc, x); }
+                                        Version srcVersion = Version.TryParse(funcval, out Version v) 
+                                            ? v : throw ParseTypeError(I18n.TranslateWord("string"), funcval, I18n.TranslateWord("version"), x);
+                                        Version tgtVersion = Version.TryParse(args[0], out v) 
+                                            ? v : throw ParseTypeError(I18n.TranslateWord("string"), args[0], I18n.TranslateWord("version"), x);
+                                        val = I18n.ThingToString(srcVersion.CompareTo(tgtVersion));
                                         break;
                                     case "contain":
                                     case "startwith":
@@ -1889,7 +2080,7 @@ namespace Triggernometry
                                                 }
                                                 else if (arg.Length == 0)
                                                 {
-                                                    throw InvalidValueError(funcname, I18n.TranslateWord("char") + "/" + I18n.TranslateWord("charcode"), funcval, x);
+                                                    throw InvalidValueError(funcname, I18n.TranslateWord("char") + "/" + I18n.TranslateWord("charcode"), arg, x);
                                                 }
                                                 else if (arg.Length > 1)
                                                 {
@@ -1906,13 +2097,13 @@ namespace Triggernometry
                                         switch (funcname)
                                         {
                                             case "trim":
-                                                val = argc == 0 ? funcval.Trim() : funcval.Trim(trimCharsArray);
+                                                val = argc == 0 ? Trim(funcval) : funcval.Trim(trimCharsArray);
                                                 break;
                                             case "trimleft":
-                                                val = argc == 0 ? funcval.TrimStart() : funcval.TrimStart(trimCharsArray);
+                                                val = argc == 0 ? TrimL(funcval) : funcval.TrimStart(trimCharsArray);
                                                 break;
                                             case "trimright":
-                                                val = argc == 0 ? funcval.TrimEnd() : funcval.TrimEnd(trimCharsArray);
+                                                val = argc == 0 ? TrimR(funcval) : funcval.TrimEnd(trimCharsArray);
                                                 break;
                                         }
                                         break;
@@ -1950,8 +2141,8 @@ namespace Triggernometry
                             if (mx.Success)
                             {
                                 bool isParty = x.Contains("party[");
-                                string key = mx.Groups["index"].Value.Trim();
-                                string prop = mx.Groups["prop"].Value.Trim();
+                                string key = Trim(mx.Groups["index"].Value);
+                                string prop = Trim(mx.Groups["prop"].Value);
                                 VariableDictionary entity = new VariableDictionary();
 
                                 if (isParty && key.Length == 1 && char.IsDigit(key[0]))
@@ -1964,12 +2155,12 @@ namespace Triggernometry
                                     string key2 = null;
                                     if (!isParty && idx > 0)
                                     {
-                                        key2 = key.Substring(0, idx).Trim();
+                                        key2 = Trim(key.Substring(0, idx));
                                     }
 
                                     if (key2 != null && PluginBridges.BridgeFFXIV._nullCombatant.ContainsKey(key2))
                                     {   // _entity[bnpcid=13681]
-                                        string value2 = key.Substring(idx + 1).Trim();
+                                        string value2 = Trim(key.Substring(idx + 1));
                                         var entities = PluginBridges.BridgeFFXIV.GetAllEntities();
                                         entity = entities.FirstOrDefault(vd => vd.GetValue(key2).ToString() == value2) 
                                             ?? PluginBridges.BridgeFFXIV._nullCombatant;
@@ -1992,7 +2183,7 @@ namespace Triggernometry
                         }
                         else if (x.StartsWith("_me.")) // ${_me.prop}
                         {
-                            string prop = x.Substring(4).Trim();
+                            string prop = Trim(x.Substring(4));
                             if (PluginBridges.BridgeFFXIV.PlayerHexId == "")
                             {
                                 PluginBridges.BridgeFFXIV.UpdateState();
@@ -2010,10 +2201,7 @@ namespace Triggernometry
                         }
                         else if (x == "_clipboard")
                         {
-                            Thread staThread = new Thread(() => val = Clipboard.GetText());
-                            staThread.SetApartmentState(ApartmentState.STA);
-                            staThread.Start();
-                            staThread.Join();
+                            val = Action.ClipboardGetText();
                             if (val.Contains("${_clipboard}"))
                             {
                                 throw InfiniteClipboardError();
@@ -2242,7 +2430,7 @@ namespace Triggernometry
             }
 
             // replace back linebreaks
-            newexpr = newexpr.Replace(LINEBREAK_PLACEHOLDER, "\n");
+            newexpr = newexpr.Replace(LINEBREAK_PLACEHOLDER.ToString(), Environment.NewLine);
 
             if (trig != null)
             {
@@ -2299,11 +2487,11 @@ namespace Triggernometry
                 functionName, exprDesc, exprValue, totalExpression));
         }
 
-        public static Exception ParseTypeError(string exprDesc, string exprValue, string parseFormat, string totalExpression)
+        public static Exception ParseTypeError(string srcFormatDesc, string srcValue, string tgtFormatDesc, string fullExpression)
         {
             return new ArgumentException(I18n.Translate("internal/Context/parseTypeError",
                 "{0} ({1}) could not be parsed into {2}. Expr: ({3})",
-                exprDesc, exprValue, parseFormat, totalExpression));
+                srcFormatDesc, srcValue, tgtFormatDesc, fullExpression));
         }
 
         private static Exception ExtremumListZeroElementError(string varName, string totalExpression)

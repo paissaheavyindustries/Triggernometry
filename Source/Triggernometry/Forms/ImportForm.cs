@@ -15,6 +15,7 @@ using System.Speech.Synthesis;
 using System.Net;
 using Triggernometry.CustomControls;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace Triggernometry.Forms
 {
@@ -238,314 +239,140 @@ namespace Triggernometry.Forms
 
         private void TryImportText()
         {
-            try
+            string starting = importData.Length > 100 ? importData.Substring(0, 100) : importData;
+            starting = starting.TrimStart();
+            bool isHtml;
+
+            if (starting.StartsWith("<"))
+                isHtml = false;
+            else if (starting.StartsWith("&lt;"))
+                isHtml = true;
+            else
+                throw new Exception(I18n.Translate("internal/ImportForm/importerrornotxml",
+                    "The provided data does not show any XML characteristics. Please open the file and examine it, or check if the pasted data is complete."));
+
+            string data = isHtml ? WebUtility.HtmlDecode(importData) : importData;
+            starting = data.Length > 100 ? data.Substring(0, 100) : data;
+            starting = starting.Replace("\r\n", " ").Replace("\r", " ").Replace("\n", " ").TrimStart();
+
+            Match match = new Regex("(?:<\\?xml[^>]*> *)?<(?<root>[^ >]+)").Match(starting);
+            string rootNodeName = match.Groups["root"].Value;
+            
+            switch (rootNodeName)
             {
-                TriggernometryExport tex = TriggernometryExport.Unserialize(importData);
-                if (tex != null)
-                {
-                    TryImportExport(tex);
-                    return;
-                }
+                case "TriggernometryExport":
+                    {
+                        TriggernometryExport tex = TriggernometryExport.Unserialize(importData);
+                        if (tex.Corrupted)
+                        {
+                            throw new Exception(I18n.Translate("internal/ImportForm/importerrortrig",
+                                "The TriggernometryExport data was from version {0}. " +
+                                "Please make sure you are running the latest version of Triggernometry. " +
+                                "If you are already running the latest version, the data might have been corrupted.",
+                                tex.PluginVersionDescription));
+                        }
+                        TryImportExport(tex);
+                        return;
+                    }
+                case "Configuration":
+                    {
+                        Configuration cfg;
+                        XmlSerializer xs = new XmlSerializer(typeof(Configuration));
+                        using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(data)))
+                        {
+                            try
+                            {
+                                cfg = (Configuration)xs.Deserialize(ms);
+                            }
+                            catch
+                            {
+                                throw new Exception(I18n.Translate("internal/ImportForm/importerrorconfig",
+                                    "Please make sure you are running the latest version of Triggernometry. " + 
+                                    "If you are already running the latest version, " +
+                                    "the imported config data might have been corrupted."));
+                            }
+                            TriggernometryExport tex = new TriggernometryExport();
+                            tex.PluginVersion = cfg.Constants.ContainsKey("TriggernometryVersionMajor")
+                                ? $"{cfg.Constants["TriggernometryVersionMajor"]}.{cfg.Constants["TriggernometryVersionMinor"]}.{cfg.Constants["TriggernometryVersionBuild"]}.{cfg.Constants["TriggernometryVersionRevision"]}"
+                                : $"1.1.6.6";
+                            tex.ExportedFolder = cfg.Root;
+                            tex.ExportedFolder.Name = I18n.Translate("internal/ImportForm/importedconfigfile", "Imported configuration file ({0})", DateTime.Now);
+                            tex.ExportedTrigger = null;
+                            TryImportExport(tex);
+                            return;
+                        }
+                    }
+                case "Trigger":
+                    {
+                        string nex = "<ActWrapper>" + importData + "</ActWrapper>";
+                        try
+                        {
+                            TryImportActWrapper(nex);
+                        }
+                        catch
+                        {
+                            throw new Exception(I18n.Translate("internal/ImportForm/importerroracttrigger",
+                                "The native ACT triggers cannot be read, possibly due to corrupted content."));
+                        }
+                        return;
+                    }
+                case "Language":
+                    switch (CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower())
+                    {   
+                        case "fr": throw new Exception("Vous essayez d'importer un fichier de localisation et non un déclencheur. Les fichiers de localisation doivent être placés dans le même répertoire que Triggernometry.dll.");
+                        case "jp": throw new Exception("トリガーではなく、ローカライズファイルをインポートしようとしています。ローカライズファイルは Triggernometry.dll と同じディレクトリに配置する必要があります。");
+                        case "zh": throw new Exception("你导入了汉化文件，而非触发器。汉化文件应直接置于 Triggernometry.dll 同目录下。");
+                        // case ...
+                        default:   throw new Exception("You are attempting to import a localization file instead of a trigger. Localization files should be placed in the same directory as Triggernometry.dll.");
+                    }
+                default:
+                    throw new Exception(I18n.Translate("internal/ImportForm/importerrorunknownroot",
+                        "The XML contains data of a {0} object, which is not designed to be imported by Triggernometry.", rootNodeName));
             }
-            catch (Exception)
-            {
-            }
-            try
-            {
-                TriggernometryExport tex = TriggernometryExport.Unserialize(WebUtility.HtmlDecode(importData));
-                if (tex != null)
-                {
-                    TryImportExport(tex);
-                    return;
-                }
-            }
-            catch (Exception)
-            {
-            }
-            try
-            {
-                string nex = "<ActWrapper>" + importData + "</ActWrapper>";
-                TryImportActWrapper(nex);
-                return;
-            }
-            catch (Exception)
-            {
-            }
-            try
-            {
-                string nex = "&lt;ActWrapper&gt;" + importData + "&lt;/ActWrapper&gt;";
-                TryImportActWrapper(WebUtility.HtmlDecode(nex));
-                return;
-            }
-            catch (Exception)
-            {
-            }
-            try
-            {
-                Configuration cfg = null;
-                XmlSerializer xs = new XmlSerializer(typeof(Configuration));
-                using (MemoryStream ms = new MemoryStream(UTF8Encoding.UTF8.GetBytes(importData)))
-                {
-                    cfg = (Configuration)xs.Deserialize(ms);
-                    TriggernometryExport tex = new TriggernometryExport();
-                    tex.ExportedFolder = cfg.Root;
-                    tex.ExportedFolder.Name = I18n.Translate("internal/ImportForm/importedconfigfile", "Imported configuration file ({0})", DateTime.Now);
-                    tex.ExportedTrigger = null;
-                    TryImportExport(tex);
-                    return;
-                }
-            }
-            catch (Exception)
-            {
-            }
-            try
-            {
-                Configuration cfg = null;
-                XmlSerializer xs = new XmlSerializer(typeof(Configuration));
-                using (MemoryStream ms = new MemoryStream(UTF8Encoding.UTF8.GetBytes(WebUtility.HtmlDecode(importData))))
-                {
-                    cfg = (Configuration)xs.Deserialize(ms);
-                    TriggernometryExport tex = new TriggernometryExport();
-                    tex.ExportedFolder = cfg.Root;
-                    tex.ExportedFolder.Name = I18n.Translate("internal/ImportForm/importedconfigfile", "Imported configuration file ({0})", DateTime.Now);
-                    tex.ExportedTrigger = null;
-                    TryImportExport(tex);
-                    return;
-                }
-            }
-            catch (Exception)
-            {
-            }
-            throw new Exception(I18n.Translate("internal/ImportForm/importcantrecognize", "Can't recognize the provided data as any valid, importable format. You may be trying to import newer triggers to an older version of Triggernometry. Make sure you are using the latest version."));
         }
 
-        private bool HasWmsgTriggers(Folder f)
-        {
-            foreach (Folder sf in f.Folders)
-            {
-                if (HasWmsgTriggers(sf) == true)
-                {
-                    return true;
-                }
-            }
-            foreach (Trigger t in f.Triggers)
-            {
-                if (IsWmsgTrigger(t) == true)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+        private bool IsActionTypeTrigger(Trigger trigger, Action.ActionTypeEnum actionType)
+            => trigger.Actions.Any(action => action._ActionType == actionType);
 
-        private bool IsWmsgTrigger(Trigger t)
-        {
-            var ix = from ax in t.Actions where ax.ActionType == Action.ActionTypeEnum.WindowMessage select ax;
-            return (ix.Count() > 0);
-        }
+        private bool HasActionTypeTrigger(Folder folder, Action.ActionTypeEnum actionType)
+            => folder.Triggers.Any(trigger => IsActionTypeTrigger(trigger, actionType)) ||
+               folder.Folders.Any(subfolder => HasActionTypeTrigger(subfolder, actionType));
 
-        private bool HasDiskTriggers(Folder f)
-        {
-            foreach (Folder sf in f.Folders)
-            {
-                if (HasDiskTriggers(sf) == true)
-                {
-                    return true;
-                }
-            }
-            foreach (Trigger t in f.Triggers)
-            {
-                if (IsDiskTrigger(t) == true)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private bool IsDiskTrigger(Trigger t)
-        {
-            var ix = from ax in t.Actions where ax.ActionType == Action.ActionTypeEnum.DiskFile select ax;
-            return (ix.Count() > 0);
-        }
-
-        private bool HasLaunchTriggers(Folder f)
-        {            
-            foreach (Folder sf in f.Folders)
-            {
-                if (HasLaunchTriggers(sf) == true)
-                {
-                    return true;
-                }
-            }
-            foreach (Trigger t in f.Triggers)
-            {
-                if (IsLaunchTrigger(t) == true)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private bool IsLaunchTrigger(Trigger t)
-        {
-            var ix = from ax in t.Actions where ax.ActionType == Action.ActionTypeEnum.LaunchProcess select ax;
-            return (ix.Count() > 0);
-        }
-
-        private bool HasScriptTriggers(Folder f)
-        {
-            foreach (Folder sf in f.Folders)
-            {
-                if (HasScriptTriggers(sf) == true)
-                {
-                    return true;
-                }
-            }
-            foreach (Trigger t in f.Triggers)
-            {
-                if (IsScriptTrigger(t) == true)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private bool IsScriptTrigger(Trigger t)
-        {
-            var ix = from ax in t.Actions where ax.ActionType == Action.ActionTypeEnum.ExecuteScript select ax;
-            return (ix.Count() > 0);
-        }
-
-        private bool HasWmsgTriggers(TriggernometryExport tex)
-        {
-            return (tex.ExportedFolder != null ? HasWmsgTriggers(tex.ExportedFolder) : IsWmsgTrigger(tex.ExportedTrigger));
-        }
-
-        private bool HasScriptTriggers(TriggernometryExport tex)
-        {
-            return (tex.ExportedFolder != null ? HasScriptTriggers(tex.ExportedFolder) : IsScriptTrigger(tex.ExportedTrigger));
-        }
-
-        private bool HasLaunchTriggers(TriggernometryExport tex)
-        {
-            return (tex.ExportedFolder != null ? HasLaunchTriggers(tex.ExportedFolder) : IsLaunchTrigger(tex.ExportedTrigger));
-        }
-
-        private bool HasDiskTriggers(TriggernometryExport tex)
-        {
-            return (tex.ExportedFolder != null ? HasDiskTriggers(tex.ExportedFolder) : IsDiskTrigger(tex.ExportedTrigger));
-        }
+        private bool HasActionTypeTrigger(TriggernometryExport tex, Action.ActionTypeEnum actionType)
+            => tex.ExportedFolder != null ? HasActionTypeTrigger(tex.ExportedFolder, actionType)
+                                          : IsActionTypeTrigger(tex.ExportedTrigger, actionType);
 
         private void TryImportExport(TriggernometryExport tex)
         {
-            string warning = "";
-            bool includesLaunch = HasLaunchTriggers(tex);
-            bool includesScript = HasScriptTriggers(tex);
-            bool includesWmsg = HasWmsgTriggers(tex);
-            bool includesDisk = HasDiskTriggers(tex);
             BuildTreeFromExport(tex, null, null, false);
             treeView1.ExpandAll();
-            if (includesLaunch == true || includesScript == true || includesWmsg == true || includesDisk == true)
+
+            lblWarning.Text = I18n.Translate("internal/ImportForm/version", 
+                "Source plugin version: {0}    Current plugin version: {1}",
+                tex.PluginVersionDescription, RealPlugin.plug.cfg.PluginVersion);
+
+            List<string> warningComponents = new List<string>();
+
+            if (HasActionTypeTrigger(tex, Action.ActionTypeEnum.DiskFile))
+                warningComponents.Add(I18n.Translate("internal/ImportForm/dangerDisk", "perform file operations"));
+            if (HasActionTypeTrigger(tex, Action.ActionTypeEnum.LaunchProcess))
+                warningComponents.Add(I18n.Translate("internal/ImportForm/dangerProc", "launch arbitrary processes"));
+            if (HasActionTypeTrigger(tex, Action.ActionTypeEnum.ExecuteScript))
+                warningComponents.Add(I18n.Translate("internal/ImportForm/dangerScript", "execute arbitrary scripts"));
+            if (HasActionTypeTrigger(tex, Action.ActionTypeEnum.WindowMessage))
+                warningComponents.Add(I18n.Translate("internal/ImportForm/dangerWmsg", "send arbitrary window messages"));
+
+            if (warningComponents.Count > 0)
             {
-                if (includesDisk == true)
-                {
-                    if (includesLaunch == true)
-                    {
-                        if (includesScript == true)
-                        {
-                            if (includesWmsg == true)
-                            {
-                                warning = I18n.Translate("internal/ImportForm/dangerprocscriptwmsgdisk", "Some of the imported triggers include triggers which launch arbitrary processes, execute arbitrary scripts, send arbitrary window messages, and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
-                            }
-                            else
-                            {
-                                warning = I18n.Translate("internal/ImportForm/dangerprocscriptdisk", "Some of the imported triggers include triggers which launch arbitrary processes, execute arbitrary scripts, and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
-                            }
-                        }
-                        else
-                        {
-                            if (includesWmsg == true)
-                            {
-                                warning = I18n.Translate("internal/ImportForm/dangerprocwmsgdisk", "Some of the imported triggers include triggers which launch arbitrary processes, send arbitrary window messages, and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
-                            }
-                            else
-                            {
-                                warning = I18n.Translate("internal/ImportForm/dangerprocdisk", "Some of the imported triggers include triggers which launch arbitrary processes and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
-                            }
-                        }
-                    }
-                    else if (includesScript == true)
-                    {
-                        if (includesWmsg == true)
-                        {
-                            warning = I18n.Translate("internal/ImportForm/dangerscriptwmsgdisk", "Some of the imported triggers include triggers which execute arbitrary scripts, send arbitrary window messages, and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
-                        }
-                        else
-                        {
-                            warning = I18n.Translate("internal/ImportForm/dangerscriptdisk", "Some of the imported triggers include triggers which execute arbitrary scripts and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
-                        }
-                    }
-                    else if (includesWmsg == true)
-                    {
-                        warning = I18n.Translate("internal/ImportForm/dangerwmsgdisk", "Some of the imported triggers include triggers which send arbitrary window messages and perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
-                    }
-                    else
-                    {
-                        warning = I18n.Translate("internal/ImportForm/dangerdisk", "Some of the imported triggers include triggers which perform file operations. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
-                    }
-                }
-                else
-                {
-                    if (includesLaunch == true)
-                    {
-                        if (includesScript == true)
-                        {
-                            if (includesWmsg == true)
-                            {
-                                warning = I18n.Translate("internal/ImportForm/dangerprocscriptwmsg", "Some of the imported triggers include triggers which launch arbitrary processes, execute arbitrary scripts, and send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
-                            }
-                            else
-                            {
-                                warning = I18n.Translate("internal/ImportForm/dangerprocscript", "Some of the imported triggers include triggers which launch arbitrary processes and execute arbitrary scripts. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
-                            }
-                        }
-                        else
-                        {
-                            if (includesWmsg == true)
-                            {
-                                warning = I18n.Translate("internal/ImportForm/dangerprocwmsg", "Some of the imported triggers include triggers which launch arbitrary processes and send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
-                            }
-                            else
-                            {
-                                warning = I18n.Translate("internal/ImportForm/dangerproc", "Some of the imported triggers include triggers which launch arbitrary processes. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
-                            }
-                        }
-                    }
-                    else if (includesScript == true)
-                    {
-                        if (includesWmsg == true)
-                        {
-                            warning = I18n.Translate("internal/ImportForm/dangerscriptwmsg", "Some of the imported triggers include triggers which execute arbitrary scripts and send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
-                        }
-                        else
-                        {
-                            warning = I18n.Translate("internal/ImportForm/dangerscript", "Some of the imported triggers include triggers which execute arbitrary scripts. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
-                        }
-                    }
-                    else if (includesWmsg == true)
-                    {
-                        warning = I18n.Translate("internal/ImportForm/dangerwmsg", "Some of the imported triggers include triggers which send arbitrary window messages. These triggers can be dangerous and malicious triggers may even compromise your system and security. The items in question have been highlighted below.");
-                    }
-                }
+                string dangerDescriptions = string.Join(I18n.Translate("internal/ImportForm/dangerDescJoiner", ", "), warningComponents);
+                string warning = I18n.Translate("internal/ImportForm/danger",
+                    "Some of the imported triggers include triggers which {0}. \n" +
+                    "These triggers can be dangerous and malicious triggers may even compromise your system and security. " +
+                    "The items in question have been highlighted below.",
+                    dangerDescriptions);
+                lblWarning.Text += "\n\n" + warning;
             }
-            if (warning.Length > 0)
-            {
-                lblWarning.Text = warning;
-                lblWarning.Visible = true;
-            }
+            lblWarning.Visible = true;
         }
 
         internal void BuildTreeFromExport(TriggernometryExport tex, TreeNode parentnode, Folder parentfolder, bool isRemote)
@@ -594,7 +421,10 @@ namespace Triggernometry.Forms
                 tn.Tag = t;
                 tn.ImageIndex = (int)CustomControls.UserInterface.ImageIndices.Bolt;
                 tn.SelectedImageIndex = tn.ImageIndex;
-                if ((IsLaunchTrigger(t) == true || IsScriptTrigger(t) == true || IsWmsgTrigger(t) == true || IsDiskTrigger(t) == true) && isRemote == false)
+                if ((IsActionTypeTrigger(t, Action.ActionTypeEnum.DiskFile) ||
+                     IsActionTypeTrigger(t, Action.ActionTypeEnum.LaunchProcess) ||
+                     IsActionTypeTrigger(t, Action.ActionTypeEnum.ExecuteScript) ||
+                     IsActionTypeTrigger(t, Action.ActionTypeEnum.WindowMessage)) && !isRemote)
                 {
                     tn.BackColor = Color.Yellow;
                 }
@@ -721,7 +551,7 @@ namespace Triggernometry.Forms
                 case 1:
                     {
                         Action a = new Action();
-                        a.ActionType = Action.ActionTypeEnum.SystemBeep;
+                        a._ActionType = Action.ActionTypeEnum.SystemBeep;
                         a._SystemBeepFreqExpression = "1046.5"; // C6
                         a._SystemBeepLengthExpression = "100";
                         a.OrderNumber = 1;
@@ -731,7 +561,7 @@ namespace Triggernometry.Forms
                 case 2:
                     {
                         Action a = new Action();
-                        a.ActionType = Action.ActionTypeEnum.PlaySound;
+                        a._ActionType = Action.ActionTypeEnum.PlaySound;
                         a._PlaySoundExclusive = true;
                         a._PlaySoundFileExpression = soundData;
                         a._PlaySoundVolumeExpression = "100";
@@ -742,7 +572,7 @@ namespace Triggernometry.Forms
                 case 3:
                     {
                         Action a = new Action();
-                        a.ActionType = Action.ActionTypeEnum.UseTTS;
+                        a._ActionType = Action.ActionTypeEnum.UseTTS;
                         a._UseTTSExclusive = true;
                         a._UseTTSTextExpression = soundData;
                         a._UseTTSVolumeExpression = "100";
@@ -828,22 +658,14 @@ namespace Triggernometry.Forms
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            if (treeView1.SelectedNode.Tag is Trigger)
+            if (treeView1.SelectedNode.Tag is Trigger t)
             {
-                using (Forms.TriggerForm tf = new Forms.TriggerForm())
+                using (Forms.TriggerForm tf = new Forms.TriggerForm(t))
                 {
-                    Trigger t = (Trigger)treeView1.SelectedNode.Tag;
                     tf.trv = trv;
                     tf.imgs = imgs;
-                    tf.SettingsFromTrigger(t);
-                    tf.initialDescriptions = tf.GetAllDescriptionsStr();
-                    tf.plug = plug;
                     ExpressionTextBox.CurrentTriggerRegexStr = t.RegularExpression;
-                    tf.fakectx.plug = plug;
                     tf.Text = I18n.Translate("internal/ImportForm/editimportedtrigger", "Edit imported trigger '{0}'", t.Name);
-                    tf.BtnOkSetText();
-                    tf.GetTriggerDescription();
-                    tf.SetTriggerDescription();
                     tf.wmp = wmp;
                     tf.tts = tts;
                     if (tf.ShowDialog() == DialogResult.OK)
@@ -893,7 +715,7 @@ namespace Triggernometry.Forms
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
             ctxEdit.Enabled = btnEdit.Enabled;
-            cxtRemove.Enabled = btnRemove.Enabled;
+            ctxRemove.Enabled = btnRemove.Enabled;
         }
 
         private void TryImportActWrapper(string data)

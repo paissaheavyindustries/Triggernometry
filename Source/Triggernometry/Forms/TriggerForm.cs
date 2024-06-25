@@ -19,8 +19,9 @@ namespace Triggernometry.Forms
 
     public partial class TriggerForm : MemoryForm<TriggerForm>
     {
+        public Trigger trig;
 
-        private bool IsReadonly { get; set; } = false;
+        private bool _isReadOnly = false;
 
         private WMPLib.WindowsMediaPlayer _wmp;
         internal WMPLib.WindowsMediaPlayer wmp
@@ -93,36 +94,24 @@ namespace Triggernometry.Forms
             }
         }
 
-        private Context _fakectx;
-        internal Context fakectx
-        {
-            get
-            {
-                return _fakectx;
-            }
-            set
-            {
-                _fakectx = value;
-            }
-        }
+        internal Context fakectx { get; set; } = new Context();
 
         internal List<Action> Actions => actionViewer1.Actions;
-
-        internal bool AllowAnonymousTrigger { get; set; } = false;
 
         internal string initialDescriptions;
         private string closeReason;
 
-        public TriggerForm() : base()
+        public TriggerForm(Trigger t, bool readOnly = false, bool readMe = false) : base()
         {
+            _isInitializing = true;
             InitializeComponent();
             initialDescriptions = "";
+
             this.KeyPreview = true;
             this.FormClosing += TriggerForm_FormClosing;
             CancelDgvSelectionAttachToAll(this);
             btnOk.Click += btnOk_Click;
             closeReason = "";
-            fakectx = new Context();
             actionViewer1.fakectx = fakectx;
             actionViewer1.ActionsUpdated += actionViewer1_ActionsUpdated;
             cndCondition.ConditionsUpdated += cndCondition_ConditionsUpdated;
@@ -140,6 +129,25 @@ namespace Triggernometry.Forms
             txtEvent.GotFocus += ExpressionTextBox.ReplaceIncompleteLineBreaksInClipboard;
             txtName.GotFocus += ExpressionTextBox.ReplaceIncompleteLineBreaksInClipboard;
             RestoredSavedDimensions();
+
+            plug = RealPlugin.plug;
+            trig = t;
+            actionViewer1.trig = t;
+            SettingsFromTrigger(trig);
+            fakectx.plug = plug;
+            fakectx.trig = trig;
+            foreach (Action action in Actions)
+            {
+                action.ParentTrigger = trig;
+            }
+
+            if (readOnly) SetReadOnly();
+            if (readMe) EnterReadmeMode();
+            else BtnOkUpdateText();
+
+            _isInitializing = false;
+            initialDescriptions = GetAllDescriptionsStr();
+            SetTriggerDescription();
         }
 
         private void CloseTree(TreeNode tn)
@@ -157,7 +165,7 @@ namespace Triggernometry.Forms
 
         internal void SetReadOnly()
         {
-            IsReadonly = true;
+            _isReadOnly = true;
             txtName.ReadOnly = true;
             txtRegexp.ReadOnly = true;
             btnOk.Enabled = false;
@@ -186,118 +194,35 @@ namespace Triggernometry.Forms
 
         internal void SettingsFromTrigger(Trigger t)
         {
-            if (t == null)
+            t = t ?? new Trigger();
+
+            txtName.Text = t.Name ?? "";
+            txtRegexp.Text = t.RegularExpression ?? "";
+            txtDescription.Text = t._Description;
+            txtEvent.Text = t._TestInput;
+            cbxRefireOption1.SelectedIndex = (int)t._PrevActions;
+            cbxRefireOption2.SelectedIndex = (int)t._PrevActionsRefire;
+            cbxScheduleFrom.SelectedIndex = (int)t._Scheduling;
+            cbxRefireWithinPeriod.SelectedIndex = (int)t._PeriodRefire;
+            cbxTriggerSource.SelectedIndex = (int)t._Source;
+            expRefirePeriod.Expression = t._RefirePeriodExpression;
+            cbxEditAutofire.Checked = t._EditAutofire;
+            cbxEditAutofireAllowCondition.Checked = t._EditAutofireAllowCondition;
+            cbxSequential.Checked = t._Sequential;
+            cbxLoggingLevel.SelectedIndex = (int)t._DebugLevel;
+            foreach (Action action in t.Actions.OrderBy(a => a.OrderNumber))
             {
-                txtName.Text = "";
-                txtRegexp.Text = "";                
-                cbxRefireOption1.SelectedIndex = 1;
-                cbxRefireOption2.SelectedIndex = 0;
-                cbxScheduleFrom.SelectedIndex = 0;
-                cbxTriggerSource.SelectedIndex = 0;
-                cbxRefireWithinPeriod.SelectedIndex = 0;
-                expRefirePeriod.Expression = "0";
-                cbxEditAutofire.Checked = false;
-                cbxEditAutofireAllowCondition.Checked = false;
-                cbxSequential.Checked = false;
-                cbxLoggingLevel.SelectedIndex = (int)RealPlugin.DebugLevelEnum.Inherit;
-                txtDescription.Text = "";
-                txtEvent.Text = "";
-                cndCondition.ConditionToEdit = new ConditionGroup() { Enabled = false };
-                expMutexName.Expression = "";
-                chkReadmeTrigger.Checked = false;
+                Action newAction = new Action();
+                action.CopySettingsTo(newAction);
+                Actions.Add(newAction);
             }
-            else
+            cndCondition.ConditionToEdit = (ConditionGroup)t.Condition?.Duplicate() ?? new ConditionGroup
             {
-                txtName.Text = t.Name;
-                txtRegexp.Text = t.RegularExpression;
-                txtDescription.Text = t._Description;
-                txtEvent.Text = t._TestInput;
-                switch (t._PrevActions)
-                {
-                    case Trigger.PrevActionsEnum.Interrupt:
-                        cbxRefireOption1.SelectedIndex = 0;
-                        break;
-                    case Trigger.PrevActionsEnum.Keep:
-                        cbxRefireOption1.SelectedIndex = 1;
-                        break;
-                }
-                switch (t._PrevActionsRefire)
-                {
-                    case Trigger.RefireEnum.Allow:
-                        cbxRefireOption2.SelectedIndex = 0;
-                        break;
-                    case Trigger.RefireEnum.Deny:
-                        cbxRefireOption2.SelectedIndex = 1;
-                        break;
-                }
-                switch (t._Scheduling)
-                {
-                    case Trigger.SchedulingEnum.FromFire:
-                        cbxScheduleFrom.SelectedIndex = 0;
-                        break;
-                    case Trigger.SchedulingEnum.FromLastAction:
-                        cbxScheduleFrom.SelectedIndex = 1;
-                        break;
-                    case Trigger.SchedulingEnum.FromRefirePeriod:
-                        cbxScheduleFrom.SelectedIndex = 2;
-                        break;
-                }
-                switch (t._PeriodRefire)
-                {
-                    case Trigger.RefireEnum.Allow:
-                        cbxRefireWithinPeriod.SelectedIndex = 0;
-                        break;
-                    case Trigger.RefireEnum.Deny:
-                        cbxRefireWithinPeriod.SelectedIndex = 1;
-                        break;
-                }
-                switch (t._Source)
-                {
-                    case Trigger.TriggerSourceEnum.Log:
-                        cbxTriggerSource.SelectedIndex = 0;
-                        break;
-                    case Trigger.TriggerSourceEnum.FFXIVNetwork:
-                        cbxTriggerSource.SelectedIndex = 1;
-                        break;
-                    case Trigger.TriggerSourceEnum.None:
-                        cbxTriggerSource.SelectedIndex = 2;
-                        break;
-                    case Trigger.TriggerSourceEnum.ACT:
-                        cbxTriggerSource.SelectedIndex = 3;
-                        break;
-                    case Trigger.TriggerSourceEnum.Endpoint:
-                        cbxTriggerSource.SelectedIndex = 4;
-                        break;
-                }
-                expRefirePeriod.Expression = t._RefirePeriodExpression;
-                cbxEditAutofire.Checked = t._EditAutofire;
-                cbxEditAutofireAllowCondition.Checked = t._EditAutofireAllowCondition;
-                cbxSequential.Checked = t._Sequential;
-                cbxLoggingLevel.SelectedIndex = (int)t._DebugLevel;
-                var ix = from tx in t.Actions
-                         orderby tx.OrderNumber ascending
-                         select tx;
-                foreach (Action a in ix)
-                {
-                    Action b = new Action();
-                    a.CopySettingsTo(b);
-                    Actions.Add(b);
-                }
-                ConditionGroup cx;
-                if (t.Condition != null)
-                {
-                    cx = (ConditionGroup)t.Condition.Duplicate();
-                }
-                else
-                {
-                    cx = new ConditionGroup();
-                    cx.Grouping = ConditionGroup.CndGroupingEnum.Or;
-                    cx.Enabled = false;
-                }
-                cndCondition.ConditionToEdit = cx;
-                expMutexName.Expression = t._MutexToCapture;
-                chkReadmeTrigger.Checked = t._IsReadme;
-            }
+                Grouping = CndGroupingEnum.Or,
+                Enabled = false
+            };
+            expMutexName.Expression = t._MutexToCapture;
+            chkReadmeTrigger.Checked = t._IsReadme;
         }
 
         internal void SettingsToTrigger(Trigger t)
@@ -309,84 +234,22 @@ namespace Triggernometry.Forms
             t._EditAutofire = cbxEditAutofire.Checked;
             t._EditAutofireAllowCondition = cbxEditAutofireAllowCondition.Checked;
             t._Sequential = cbxSequential.Checked;
-            switch (cbxRefireOption1.SelectedIndex)
-            {
-                case 0:
-                    t._PrevActions = Trigger.PrevActionsEnum.Interrupt;
-                    break;
-                case 1:
-                    t._PrevActions = Trigger.PrevActionsEnum.Keep;
-                    break;
-            }
-            switch (cbxRefireOption2.SelectedIndex)
-            {
-                case 0:
-                    t._PrevActionsRefire = Trigger.RefireEnum.Allow;
-                    break;
-                case 1:
-                    t._PrevActionsRefire = Trigger.RefireEnum.Deny;
-                    break;
-            }
-            switch (cbxScheduleFrom.SelectedIndex)
-            {
-                case 0:
-                    t._Scheduling = Trigger.SchedulingEnum.FromFire;
-                    break;
-                case 1:
-                    t._Scheduling = Trigger.SchedulingEnum.FromLastAction;
-                    break;
-                case 2:
-                    t._Scheduling = Trigger.SchedulingEnum.FromRefirePeriod;
-                    break;
-            }
-            switch (cbxRefireWithinPeriod.SelectedIndex)
-            {
-                case 0:
-                    t._PeriodRefire = Trigger.RefireEnum.Allow;
-                    break;
-                case 1:
-                    t._PeriodRefire = Trigger.RefireEnum.Deny;
-                    break;
-            }
-            switch (cbxTriggerSource.SelectedIndex)
-            {
-                case 0:
-                    t._Source = Trigger.TriggerSourceEnum.Log;
-                    break;
-                case 1:
-                    t._Source = Trigger.TriggerSourceEnum.FFXIVNetwork;
-                    break;
-                case 2:
-                    t._Source = Trigger.TriggerSourceEnum.None;
-                    break;
-                case 3:
-                    t._Source = Trigger.TriggerSourceEnum.ACT;
-                    break;
-                case 4:
-                    t._Source = Trigger.TriggerSourceEnum.Endpoint;
-                    break;
-            }
+            t._PrevActions = (Trigger.PrevActionsEnum)cbxRefireOption1.SelectedIndex;
+            t._PrevActionsRefire = (Trigger.RefireEnum)cbxRefireOption2.SelectedIndex;
+            t._Scheduling = (Trigger.SchedulingEnum)cbxScheduleFrom.SelectedIndex;
+            t._PeriodRefire = (Trigger.RefireEnum)cbxRefireWithinPeriod.SelectedIndex; 
+            t._Source = (Trigger.TriggerSourceEnum)cbxTriggerSource.SelectedIndex;
             t._RefirePeriodExpression = expRefirePeriod.Expression;
             t._DebugLevel = (RealPlugin.DebugLevelEnum)cbxLoggingLevel.SelectedIndex;
-            t.Actions.Clear();
-            var ix = from tx in Actions
-                     orderby tx.OrderNumber ascending
-                     select tx;
-            t.Actions.AddRange(ix);
+            t.Actions = Actions.OrderBy(tx => tx.OrderNumber).ToList();
             t.Condition = cndCondition.ConditionToEdit;
             t._MutexToCapture = expMutexName.Expression;
             t._IsReadme = chkReadmeTrigger.Checked;
         }
 
-        private void txtName_TextChanged(object sender, EventArgs e)
-        {
-            btnOk.Enabled = true; // (AllowAnonymousTrigger == true) || (txtName.TextLength > 0);
-        }
-
         private void TriggerForm_Shown(object sender, EventArgs e)
         {
             actionViewer1.RefreshDgv();
-            txtName_TextChanged(null, null);
         }
 
         internal void EnterReadmeMode()
@@ -481,7 +344,7 @@ namespace Triggernometry.Forms
             Close();
         }
 
-        internal void BtnOkSetText()
+        internal void BtnOkUpdateText()
         {
             btnOk.Text = (!cbxEditAutofire.Checked) ? I18n.Translate("internal/TriggerForm/btnOk", "Save Changes")
                        : (cbxEditAutofireAllowCondition.Checked) ? I18n.Translate("internal/TriggerForm/btnOkAutofire", "Save and Fire")
@@ -491,13 +354,13 @@ namespace Triggernometry.Forms
         private void cbxEditAutofire_CheckedChanged(object sender, EventArgs e)
         {
             if (this.Text != I18n.Translate("ConfigurationForm/btnTriggerTemplate", "Edit template trigger"))
-                BtnOkSetText();
+                BtnOkUpdateText();
         }
 
         private void cbxEditAutofireAllowCondition_CheckedChanged(object sender, EventArgs e)
         {
             if (this.Text != I18n.Translate("ConfigurationForm/btnTriggerTemplate", "Edit template trigger"))
-                BtnOkSetText();
+                BtnOkUpdateText();
         }
 
         internal double totalDelay;
@@ -505,14 +368,17 @@ namespace Triggernometry.Forms
         internal CndGroupingEnum rootConditionType;
         internal bool interrupt;
         internal double cooldown;
+        private bool _isInitializing;
 
         internal void GetDescInterrupt()
         {
-            interrupt = (cbxRefireOption1.SelectedIndex != 1 || cbxRefireOption2.SelectedIndex != 0) ;
+            if (_isInitializing) return; 
+            interrupt = (cbxRefireOption1.SelectedIndex != (int)Trigger.PrevActionsEnum.Keep || cbxRefireOption2.SelectedIndex != (int)Trigger.RefireEnum.Allow) ;
         }
 
         internal void GetDescCooldown()
         {
+            if (_isInitializing) return;
             try 
             { 
                 cooldown = (cbxRefireWithinPeriod.SelectedIndex == 0) ? 0
@@ -523,12 +389,14 @@ namespace Triggernometry.Forms
 
         private void actionViewer1_ActionsUpdated(object sender, EventArgs e)
         {
+            if (_isInitializing) return;
             totalDelay = actionViewer1.GetActionTotalDelay();
             SetTriggerDescription();
         }
 
         private void cndCondition_ConditionsUpdated(object sender, EventArgs e)
         {
+            if (_isInitializing) return;
             rootConditionCount = cndCondition.CountRootConditions();
             rootConditionType = cndCondition.RootConditionType();
             SetTriggerDescription();
@@ -536,31 +404,31 @@ namespace Triggernometry.Forms
 
         private void interrupt_Changed(object sender, EventArgs e)
         {
+            if (_isInitializing) return;
             GetDescInterrupt();
             SetTriggerDescription();
         }
         private void cooldown_Changed(object sender, EventArgs e)
         {
+            if (_isInitializing) return;
             GetDescCooldown();
             SetTriggerDescription();
         }
 
         private void UpdateTriggerDescription(object sender, EventArgs e)
         {
+            if (_isInitializing) return;
             SetTriggerDescription();
         }
 
-        internal void GetTriggerDescription()
+        internal void SetTriggerDescription()
         {
             totalDelay = actionViewer1.GetActionTotalDelay();
             rootConditionCount = cndCondition.CountRootConditions();
             rootConditionType = cndCondition.RootConditionType();
             GetDescInterrupt();
             GetDescCooldown();
-        }
 
-        internal void SetTriggerDescription()
-        {
             lblTriggerDesc.Text = "";
             string desc = "";
 
@@ -587,15 +455,9 @@ namespace Triggernometry.Forms
                              : I18n.Translate("internal/TriggerForm/descCndGrouped", "Grouped");  // -1: contains active group folder
                 if (rootConditionCount > 1)
                 {
-                    string type = "";
-                    switch (rootConditionType)
-                    {
-                        case CndGroupingEnum.And: type = I18n.Translate("internal/TriggerForm/descCndTypeAnd", "AND"); break;
-                        case CndGroupingEnum.Not: type = I18n.Translate("internal/TriggerForm/descCndTypeNot", "NOT"); break;
-                        case CndGroupingEnum.Or: type = I18n.Translate("internal/TriggerForm/descCndTypeOr", "OR"); break;
-                        case CndGroupingEnum.Xor: type = I18n.Translate("internal/TriggerForm/descCndTypeXor", "XOR"); break;
-                    }
-                    desc += I18n.Translate("internal/TriggerForm/descCndCntLogic", "[Conditions: {0} ({1})]  ", count, type);
+                    string logic = rootConditionType.ToString();
+                    string logicDesc = I18n.Translate($"internal/TriggerForm/descCndType{logic}", logic.ToUpper());
+                    desc += I18n.Translate("internal/TriggerForm/descCndCntLogic", "[Conditions: {0} ({1})]  ", count, logicDesc);
                 }
                 else 
                 {

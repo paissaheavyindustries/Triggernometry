@@ -309,10 +309,6 @@ If the index exceeds the list range, the list remains unchanged, and the session
 
 Example: Popping the index `3` from the list `1, 2, 3, 4` results in a list `1, 2, 4` and a session variable (value of `3`).</value>
   </data>
-  <data name="rtbHelperLvarPopLast.Text" xml:space="preserve">
-    <value>Pop the last element of the list into a session variable.
-This method is deprecated, it is recommended to use "Pop Specific Index" instead with index `−1`.</value>
-  </data>
   <data name="rtbHelperLvarPopToListInsert.Text" xml:space="preserve">
     <value>Pop the value at the specified index of the source list and insert it at the specified index of another list.
 It is equivalent to the combined action of "Remove Index" and "Insert to Index".

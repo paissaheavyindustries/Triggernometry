@@ -808,7 +808,6 @@
     <TranslationEntry Key="Plugin/UserInterface/ctxExport" Translation="Vie" />
     <TranslationEntry Key="Plugin/UserInterface/ctxImport" Translation="Tuo" />
     <TranslationEntry Key="Plugin/UserInterface/ctxPaste" Translation="Liitä" />
-    <TranslationEntry Key="Plugin/UserInterface/errThing1" Translation="Virheitä havaittu" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeImport" Translation="Se on aika lähellä herättimen luontia. Tämän tervetulotoivotuksen jälkeen voit valita kansion johon haluat tuoda kaikki herättimet (esim. juuri), ja painaa ylhäällä vasemmalta löytyvää Tuo-nappia.&#xD;&#xA;&#xD;&#xA;Nappi näyttää suunnilleen tältä:" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeImportHeader" Translation="Miten käytän tätä saamaani herättimiä sisältävää XML-tiedostoa?" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeIntro" Translation="Tässä joitain vastauksista yleisesti kysyttyihin kysymyksiin:" />

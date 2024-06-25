@@ -17,6 +17,7 @@ namespace Triggernometry.CustomControls
 
     public partial class ActionViewer : UserControl
     {
+        public Trigger trig = null;
 
         private bool IsReadonly { get; set; } = false;
 
@@ -27,7 +28,7 @@ namespace Triggernometry.CustomControls
         internal RealPlugin plug;
         internal ImageList imgs;
         internal TreeView trv;
-        internal Context fakectx;
+        internal Context fakectx = new Context();
 
         internal string ClipboardAction = "";
         internal List<Action> PrevActions;
@@ -37,7 +38,6 @@ namespace Triggernometry.CustomControls
         public ActionViewer()
         {
             InitializeComponent();
-            fakectx = new Context();
         }
 
         internal event EventHandler ActionsUpdated;
@@ -175,6 +175,7 @@ namespace Triggernometry.CustomControls
             using (Forms.ActionForm af = new Forms.ActionForm())
             {
                 af.plug = plug;
+                af.ParentTrigger = trig;
                 af.wmp = wmp;
                 af.tts = tts;
                 af.trv = trv;
@@ -227,6 +228,7 @@ namespace Triggernometry.CustomControls
             {
                 Action a = Actions[rowIndex];
                 af.plug = plug;
+                af.ParentTrigger = trig;
                 af.wmp = wmp;
                 af.trv = trv;
                 af.fakectx = fakectx;
@@ -466,7 +468,7 @@ namespace Triggernometry.CustomControls
                 catch { textColor = Color.Empty; }
 
                 // placeholder / normal color
-                if (a.ActionType == Action.ActionTypeEnum.Placeholder)
+                if (a._ActionType == Action.ActionTypeEnum.Placeholder)
                 {
                     e.CellStyle.BackColor = (bgColor != Color.Empty) ? bgColor : SystemColors.InactiveCaption;
                     e.CellStyle.ForeColor = (textColor != Color.Empty) ? textColor : SystemColors.InactiveCaptionText;
@@ -758,7 +760,7 @@ namespace Triggernometry.CustomControls
             selectedAction.CopySettingsTo(a);
             Context ctx = new Context();
             ctx.plug = RealPlugin.plug;
-            ctx.trig = null;
+            ctx.trig = a.ParentTrigger;
             ctx.soundhook = RealPlugin.plug.SoundPlaybackSmart;
             ctx.ttshook = RealPlugin.plug.TtsPlaybackSmart;
             ctx.triggered = DateTime.UtcNow;
@@ -985,7 +987,7 @@ namespace Triggernometry.CustomControls
             ctxEditAction.Enabled = isSingleActionSelected;
             ctxEditPropCopyCnd.Enabled = isSingleActionSelected;
             ctxEditPropPasteCnd.Enabled = ActionViewer.copiedCondition != null;
-            ctxTestAction.Enabled = isSingleActionSelected && SelectedActions()[0].ActionType != Action.ActionTypeEnum.Placeholder;
+            ctxTestAction.Enabled = isSingleActionSelected && SelectedActions()[0]._ActionType != Action.ActionTypeEnum.Placeholder;
             bool allowMoveAndRemove = IsReadonly == false && (dgvActions.SelectedRows.Count > 0);
             ctxCopyAction.Enabled = allowMoveAndRemove;
             ctxMoveUp.Enabled = allowMoveAndRemove;
