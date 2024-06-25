@@ -1058,6 +1058,11 @@ namespace Triggernometry
             }
         }
 
+        public static void ResetPlugin()
+        {
+            _plug = new RealPlugin();
+        }
+
         private RealPlugin()
         {
             DefaultAPIUsages.Add(new Configuration.APIUsage() { Name = "Microsoft.CodeAnalysis", AllowLocal = false, AllowRemote = false, AllowAdmin = false });
@@ -2139,6 +2144,11 @@ namespace Triggernometry
                 _livesplit = new LiveSplitController();
                 exwhere = I18n.Translate("internal/Plugin/iniscripting", "setting up scripting - try changing the plugin load order in ACT");
                 scripting = new Interpreter();
+                exwhere = I18n.Translate("internal/Plugin/iniendpoint", "starting endpoint");
+                if (cfg.StartEndpointOnLaunch == true)
+                {
+                    _ep.Start();
+                }
                 pluginStatusText.Text = I18n.Translate("internal/Plugin/iniready", "Ready");
                 FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/inited", "Initialized"));
                 Task tx = new Task(() =>
@@ -2146,10 +2156,6 @@ namespace Triggernometry
                     AllRepositoryUpdates(true);
                 });
                 tx.Start();
-                if (cfg.StartEndpointOnLaunch == true)
-                {
-                    _ep.Start();
-                }
                 isInitialized = true;
             }
             catch (Exception ex)

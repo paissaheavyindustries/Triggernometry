@@ -125,6 +125,7 @@ namespace TriggernometryProxy
 
         public void InitPlugin(TabPage pluginScreenSpace, Label pluginStatusText)
         {
+            Triggernometry.RealPlugin.ResetPlugin();
             lock (this)
             {
                 Instance = Triggernometry.RealPlugin.plug;
