@@ -72,7 +72,7 @@ namespace Triggernometry
             AddJob("22", RoleType.StrengthMelee,  "龙", "龙骑", "DRG", "竜", "龙骑士",   "Dragoon",        "Dragoon",       "Chevalier dragon", "竜騎士",         "용기사");
             AddJob("23", RoleType.PhysicalRanged, "诗", "诗人", "BRD", "詩", "吟游诗人", "Barde",          "Bard",          "Barde",            "吟遊詩人",       "음유시인");
             AddJob("24", RoleType.PureHealer,     "白", "白魔", "WHM", "白", "白魔法师", "Weißmagier",     "White Mage",    "Mage blanc",       "白魔道士",       "백마도사");
-            AddJob("25", RoleType.MagicalRanged,  "黑", "黑魔", "BLM", "黒", "黑魔法师", "Schwarzmagier",  "Black Mage",    "Mage noir",        "黒魔道士",       "흑마도사");
+            AddJob("25", RoleType.MagicalRanged,  "黑", "黑魔", "BLM", "黒", "黑魔法师", "Schwarzmagier",  "Black Mage",    "Mage noir",        "黒魔道士",       "흑마도사");            
             AddJob("26", RoleType.MagicalRanged,  "秘", "秘术", "ACN", "巴", "秘术师",   "Hermetiker",     "Arcanist",      "Arcaniste",        "巴術士",         "비술사");
             AddJob("27", RoleType.MagicalRanged,  "召", "召唤", "SMN", "召", "召唤师",   "Beschwörer",     "Summoner",      "Invocateur",       "召喚士",         "소환사");
             AddJob("28", RoleType.BarrierHealer,  "学", "学者", "SCH", "学", "学者",     "Gelehrter",      "Scholar",       "Érudit",           "学者",           "학자");
@@ -88,8 +88,8 @@ namespace Triggernometry
             AddJob("38", RoleType.PhysicalRanged, "舞", "舞者", "DNC", "踊", "舞者",     "Tänzer",         "Dancer",       "Danseur",           "踊り子",         "무도가");
             AddJob("39", RoleType.StrengthMelee,  "钐", "钐镰", "RPR", "リ", "钐镰客",   "Schnitter",      "Reaper",       "Faucheur",          "リーパー",       "리퍼");
             AddJob("40", RoleType.BarrierHealer,  "贤", "贤者", "SGE", "賢", "贤者",     "Weiser",         "Sage",         "Sage",              "賢者",           "현자");
-            AddJob("41", RoleType.DexterityMelee, "金", "四一", "041", "金", "职业四一", "job_41",         "job_41",       "Viper",             "job_41",         "job_41");
-            AddJob("42", RoleType.MagicalRanged,  "生", "四二", "042", "生", "职业四二", "job_42",         "job_42",       "job_42",            "job_42",         "job_42");
+            AddJob("41", RoleType.DexterityMelee, "-",  "--",   "VPR", "ヴ", "-",        "Viper",         "Viper",        "Rôdeur vipère",     "ヴァイパー",      "-");
+            AddJob("42", RoleType.MagicalRanged,  "-",  "--",   "PCT", "ピ", "-",        "Piktomant",     "Pictomancer",  "Pictomancien",      "ピクトマンサー",  "-");
             AddJob("43", RoleType.None,           "丽", "四三", "043", "丽", "职业四三", "job_43",         "job_43",       "job_43",            "job_43",         "job_43");
             AddJob("44", RoleType.None,           "水", "四四", "044", "水", "职业四四", "job_44",         "job_44",       "job_44",            "job_44",         "job_44");
         }

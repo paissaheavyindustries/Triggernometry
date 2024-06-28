@@ -442,11 +442,13 @@ namespace Triggernometry
         Rogue		29
         Samurai		34
         Reaper      39
+        Viper       41
         Bard		23
         Archer		5
         Machinist	31
         Dancer      38
         Black Mage	25
+        Pictomancer 42
         Thaumaturge	7
         Summoner	27
         Arcanist	26
