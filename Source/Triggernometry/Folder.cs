@@ -383,9 +383,15 @@ namespace Triggernometry
         internal void ParseRawEnvironmentVariables()
         {
             if (string.IsNullOrWhiteSpace(_rawEnvironmentVariables)) return;
-            var kvps = Context.SplitArguments(_rawEnvironmentVariables, allowEmptyList: false, separator: ",");
+            // separate each lines
+            var kvps = Context.SplitArguments(
+                Context.ReplaceLineBreak(_rawEnvironmentVariables), 
+                allowEmptyList: false, 
+                separator: Context.LINEBREAK_PLACEHOLDER.ToString()
+                );
             foreach (var rawkvp in kvps) 
             {
+                if (rawkvp.StartsWith("//") || string.IsNullOrWhiteSpace(rawkvp)) continue;
                 var kvp = Context.SplitArguments(rawkvp, allowEmptyList: false, separator: "=");
                 if (kvp.Length >= 2)
                 {
