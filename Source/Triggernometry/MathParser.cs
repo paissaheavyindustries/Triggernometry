@@ -50,8 +50,8 @@ namespace Triggernometry
             // otherwise use (-a) [op] b.
             AddOperator("-", false, 2, binaryOperation: (a, b) => a - b);
             AddOperator("+", false, 2, binaryOperation: (a, b) => a + b);
-            AddOperator("<<", false, 2, binaryOperation: (a, b) => Truncate(a) << Truncate(b));         // bitwise left
-            AddOperator(">>", false, 2, binaryOperation: (a, b) => Truncate(a) >> Truncate(b));         // bitwise right
+            AddOperator("<<", false, 2, binaryOperation: (a, b) => Truncate(a) << (int)Truncate(b));         // bitwise left
+            AddOperator(">>", false, 2, binaryOperation: (a, b) => Truncate(a) >> (int)Truncate(b));         // bitwise right
             AddOperator("??", true, 2);      // string operator: (a is numeric) ? a : b. Similar to null-coalescing operator ??
             AddOperator(">", false, 2, binaryOperation: (a, b) => a > b + TOLERANCE ? 1 : 0);
             AddOperator("≥", false, 2, binaryOperation: (a, b) => a + TOLERANCE >= b ? 1 : 0);
@@ -183,12 +183,12 @@ namespace Triggernometry
 
         public const double ETmin2sec = 70.0 / 24.0;
 
-        public static int Truncate(double x, double tolerance = TOLERANCE)
+        public static long Truncate(double x, double tolerance = TOLERANCE)
         {
             if (x > 0)
-                return (int)(x + tolerance);
+                return (long)(x + tolerance);
             else
-                return (int)(x - tolerance);
+                return (long)(x - tolerance);
         }
 
         public static double ModFunction(double a, double b)
