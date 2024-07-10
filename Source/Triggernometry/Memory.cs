@@ -271,6 +271,8 @@ namespace Triggernometry.Utilities
             /// <param name="patternStr"></param>
             public ScanPattern(string patternStr)
             {
+                // '?' : a wildcard
+                // '*' : a wildcard to jump to
                 RawPattern = patternStr.Trim().Replace("??", "?").Replace("**", "*");
                 string[] splittedRawPattern = RawPattern.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 string regexStr = "";
@@ -307,8 +309,8 @@ namespace Triggernometry.Utilities
             }
         }
 
-        public static int? ScanPoint(byte[] data, string rawPattern) => ScanPoint(data, new ScanPattern(rawPattern));
-        public static int? ScanPoint(byte[] data, ScanPattern pattern)
+        public static int? ScanPoint(byte[] data, string rawPattern, bool showWarning = true) => ScanPoint(data, new ScanPattern(rawPattern), showWarning);
+        public static int? ScanPoint(byte[] data, ScanPattern pattern, bool showWarning = true)
         {
             string dataStr = Encoding.GetEncoding("ISO-8859-1").GetString(data);  // Latin-1
             int address;
@@ -321,7 +323,7 @@ namespace Triggernometry.Utilities
             }
             else
             {
-                plug.UnfilteredAddToLog(DebugLevelEnum.Warning, $"Failed to find \"{pattern.RawPattern}\" in module data");
+                plug.UnfilteredAddToLog(showWarning ? DebugLevelEnum.Warning : DebugLevelEnum.Verbose, $"Failed to find \"{pattern.RawPattern}\" in module data");
                 return null;
             }
             if (pattern.Jump)
@@ -390,22 +392,30 @@ namespace Triggernometry.Utilities
         private static int? _headMarkerOffsetRelAddress3;
         private static int GetHeadMarkerOffset()
         {
-            byte[] moduleData = ReadModuleData(XivProc);
+            try
+            {   // 6.x
+                byte[] moduleData = ReadModuleData(XivProc);
 
-            int relAddress1 = ScanPoint(moduleData, "89 1d * * * * 40 ? ? 75") 
-                ?? throw ScanNotFoundException("headMarkerOffsetRelAddress1");
-            int relAddress2 = ScanPoint(moduleData, "41 ? ? 89 15 * * * * 48 ? ? ? 5f") 
-                ?? throw ScanNotFoundException("headMarkerOffsetRelAddress2"); 
-            int relAddress3 = _headMarkerOffsetRelAddress3 ?? ScanPoint(moduleData, "8b ? * * * * 44 ? ? ? ? ? ? 4c 89 b4 24")
-                ?? throw ScanNotFoundException("headMarkerOffsetRelAddress3"); 
+                int relAddress1 = ScanPoint(moduleData, "89 1d * * * * 40 ? ? 75", false)
+                    ?? throw ScanNotFoundException("headMarkerOffsetRelAddress1");
+                int relAddress2 = ScanPoint(moduleData, "41 ? ? 89 15 * * * * 48 ? ? ? 5f", false)
+                    ?? throw ScanNotFoundException("headMarkerOffsetRelAddress2");
+                int relAddress3 = _headMarkerOffsetRelAddress3 ?? ScanPoint(moduleData, "8b ? * * * * 44 ? ? ? ? ? ? 4c 89 b4 24", false)
+                    ?? throw ScanNotFoundException("headMarkerOffsetRelAddress3");
 
-            _headMarkerOffsetRelAddress3 = relAddress3; // client-based fixed value
+                _headMarkerOffsetRelAddress3 = relAddress3; // client-based fixed value
 
-            int param1 = BytesToStructure<int>(moduleData, relAddress1);
-            int param2 = BytesToStructure<int>(moduleData, relAddress2);
-            int param3 = BytesToStructure<int>(moduleData, relAddress3);
+                int param1 = BytesToStructure<int>(moduleData, relAddress1);
+                int param2 = BytesToStructure<int>(moduleData, relAddress2);
+                int param3 = BytesToStructure<int>(moduleData, relAddress3);
 
-            return Math.Min(param1 - param2 + param3, 0);
+                return Math.Min(param1 - param2 + param3, 0);
+            }
+            catch // to-do
+            {
+                _headMarkerOffsetRelAddress3 = 0;
+                return 0; 
+            }
         }
 
         private static int _targetMarkerRelAddress = 0;
@@ -419,7 +429,7 @@ namespace Triggernometry.Utilities
                     int offset = ScanPoint(moduleData, "48 8d 0d * * * * 4c 8b 85") ?? throw ScanNotFoundException("HeadMarkerAddress");
                     _targetMarkerRelAddress = offset + 0x10;
                 }
-                return _targetMarkerRelAddress;
+                return _targetMarkerRelAddress;            
             }
         }
 
@@ -465,21 +475,29 @@ namespace Triggernometry.Utilities
             return null;
         }
 
-        public static IntPtr GetCameraAddress()   
+        public static IntPtr GetCameraAddress()
         {
             byte[] moduleData = ReadModuleData(XivProc);
-            ScanPattern pattern = new ScanPattern(              // svr2kos2@github
-                "48 83 c4 28 " +                                // add rsp, 28
-                "e9 ?? ?? ?? ?? " +                             // jmp xxxxxxxx
-                "cc cc cc cc cc cc cc cc cc cc cc cc cc " +     // int 3 * 13
-                "48 8d 0d ");                                   // lea
+            try
+            {
+                int relativeAddress = ScanPoint(moduleData, "4C 8D 35 * * * * 48 8B 09", false) ?? throw ScanNotFoundException("camaraAddress7.0");
+                IntPtr pointerValue = Read<IntPtr>(XivProc.Handle, XivBaseAddress + relativeAddress);
+                return pointerValue;
+            }
+            catch
+            {
+                ScanPattern pattern = new ScanPattern(              // svr2kos2@github
+                    "48 83 c4 28 " +                                // add rsp, 28
+                    "e9 ?? ?? ?? ?? " +                             // jmp xxxxxxxx
+                    "cc cc cc cc cc cc cc cc cc cc cc cc cc " +     // int 3 * 13
+                    "48 8d 0d ");                                   // lea
+                int lea = ScanPoint(moduleData, pattern) - 0x76 ?? throw ScanNotFoundException("camaraAddress6.0");
+                int relativeOffset = BytesToStructure<int>(moduleData, lea + 0x3);
+                var absoluteAddress = IntPtr.Add(XivBaseAddress, lea + relativeOffset + 7);
 
-            int lea = ScanPoint(moduleData, pattern) - 0x76 ?? throw ScanNotFoundException("camaraAddress");
-            int relativeOffset = BytesToStructure<int>(moduleData, lea + 0x3);            
-            var absoluteAddress = IntPtr.Add(XivBaseAddress, lea + relativeOffset + 7);
-
-            IntPtr pointerValue = Read<IntPtr>(XivProc.Handle, absoluteAddress);
-            return pointerValue;
+                IntPtr pointerValue = Read<IntPtr>(XivProc.Handle, absoluteAddress);
+                return pointerValue;
+            }
         }
     }
 }

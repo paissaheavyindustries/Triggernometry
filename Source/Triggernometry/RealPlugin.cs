@@ -3500,7 +3500,7 @@ namespace Triggernometry
         public void ZoneChangeDelegate(uint ZoneID, string ZoneName) // BridgeFFXIV.SubscribeToZoneChanged()
         {
             PluginBridges.BridgeFFXIV.ZoneID = ZoneID;
-            Memory.UpdateOffset1B(); // async
+            // to-do: Memory.UpdateOffset1B(); // async  
             ZoneChanged(currentZone);
         }
 
