@@ -2206,7 +2206,6 @@ namespace Triggernometry.Forms
         {
             lblKeypresses.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
             expKeypresses.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
-            btnSendKeysLink.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
             btnSendKeysListen.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
             lblKeypressWindow.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
             expWindowTitle.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);

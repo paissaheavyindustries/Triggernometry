@@ -1404,7 +1404,7 @@ namespace Triggernometry.CustomControls
 
             private int clickCount = 0;
             private DateTime lastClickTime = DateTime.Now;
-            private ExpressionTextBox ExpTextBox => (ExpressionTextBox)Parent;
+            private ExpressionTextBox ExpTextBox => Parent as ExpressionTextBox;
 
             protected override void WndProc(ref Message m)
             {
@@ -1547,7 +1547,7 @@ namespace Triggernometry.CustomControls
                 else if (type == SupportedExpressionTypeEnum.String || type == SupportedExpressionTypeEnum.Color
                       || type == SupportedExpressionTypeEnum.Regex) // To do: better logic for regexes
                 {
-                    HashSet<char> separators = new HashSet<char>("^$¤{}[](),.:;=|/\\'\"，。？！、《》【】“”‘’…" + Context.LINEBREAK_PLACEHOLDER);
+                    HashSet<char> separators = new HashSet<char>("^$¤{}[](),.:;=|/\\'\"，。？！、：；（）《》「」『』【】“”‘’…" + Context.LINEBREAK_PLACEHOLDER);
                     if (type == SupportedExpressionTypeEnum.Regex)
                         separators.ExceptWith(".");
                     if (!separators.Contains(currentChar))
@@ -1577,7 +1577,7 @@ namespace Triggernometry.CustomControls
 
             private SupportedExpressionTypeEnum GetExpressionEnvironmentAt(int position)
             {
-                if (ExpTextBox._ExpressionType == SupportedExpressionTypeEnum.Regex)
+                if (ExpTextBox?._ExpressionType == SupportedExpressionTypeEnum.Regex)
                     return SupportedExpressionTypeEnum.Regex;
 
                 if (position > Text.Length)
@@ -1601,7 +1601,7 @@ namespace Triggernometry.CustomControls
                 }
 
                 if (lBracketCount != 1) // not in {...}
-                    return ExpTextBox._ExpressionType;
+                    return ExpTextBox?._ExpressionType ?? SupportedExpressionTypeEnum.String;
 
                 if (afterLBracket.StartsWith("n:") || afterLBracket.StartsWith("numeric:"))
                     return SupportedExpressionTypeEnum.Numeric;
@@ -1752,7 +1752,7 @@ namespace Triggernometry.CustomControls
                         // Ctrl + Shift + A: Select the next outer layer of brackets
                         case Keys.A:
                             SelectNextOuterBracket();
-                            ExpTextBox.HideAutocomplete();
+                            ExpTextBox?.HideAutocomplete();
                             break;
                         default:
                             handled = false;
@@ -1773,7 +1773,7 @@ namespace Triggernometry.CustomControls
             {
                 Paste(newTextBeforeCursor + newTextAfterCursor);
                 SelectionStart -= newTextAfterCursor.Length;
-                ExpTextBox.ProcessAutocomplete();
+                ExpTextBox?.ProcessAutocomplete();
             }
 
             public void SelectNextOuterBracket()

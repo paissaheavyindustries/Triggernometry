@@ -2715,7 +2715,6 @@ namespace Triggernometry
                     plug.FilteredAddToLog(DebugLevelEnum.Error, "Triggernometry 更新检查失败：" + ex.ToString());
                     return;
                 }
-                Debug.Log(localVersion, remoteVersion, "<se.10>");
                 if (remoteVersion > localVersion)
                 {
                     plug.FilteredAddToLog(DebugLevelEnum.Info, $"Triggernometry 已发布新版本 {remoteVersion}，当前版本 {localVersion}。");
