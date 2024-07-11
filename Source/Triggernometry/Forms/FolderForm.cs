@@ -57,12 +57,14 @@ namespace Triggernometry.Forms
             AddClass("Job: Monk", 20);
             AddClass("Job: Ninja", 30);
             AddClass("Job: Paladin", 19);
+            AddClass("Job: Pictomancer", 42);
             AddClass("Job: Reaper", 39);
             AddClass("Job: Red Mage", 35);
             AddClass("Job: Sage", 40);
             AddClass("Job: Samurai", 34);
             AddClass("Job: Scholar", 28);
             AddClass("Job: Summoner", 27);
+            AddClass("Job: Viper", 41);
             AddClass("Job: Warrior", 21);
             AddClass("Job: White Mage", 24);
             AddClass("Crafter: Alchemist", 14);

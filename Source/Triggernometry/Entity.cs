@@ -72,7 +72,7 @@ namespace Triggernometry
             AddJob("22", RoleType.StrengthMelee,  "龙", "龙骑", "DRG", "竜", "龙骑士",   "Dragoon",        "Dragoon",       "Chevalier dragon", "竜騎士",         "용기사");
             AddJob("23", RoleType.PhysicalRanged, "诗", "诗人", "BRD", "詩", "吟游诗人", "Barde",          "Bard",          "Barde",            "吟遊詩人",       "음유시인");
             AddJob("24", RoleType.PureHealer,     "白", "白魔", "WHM", "白", "白魔法师", "Weißmagier",     "White Mage",    "Mage blanc",       "白魔道士",       "백마도사");
-            AddJob("25", RoleType.MagicalRanged,  "黑", "黑魔", "BLM", "黒", "黑魔法师", "Schwarzmagier",  "Black Mage",    "Mage noir",        "黒魔道士",       "흑마도사");
+            AddJob("25", RoleType.MagicalRanged,  "黑", "黑魔", "BLM", "黒", "黑魔法师", "Schwarzmagier",  "Black Mage",    "Mage noir",        "黒魔道士",       "흑마도사");            
             AddJob("26", RoleType.MagicalRanged,  "秘", "秘术", "ACN", "巴", "秘术师",   "Hermetiker",     "Arcanist",      "Arcaniste",        "巴術士",         "비술사");
             AddJob("27", RoleType.MagicalRanged,  "召", "召唤", "SMN", "召", "召唤师",   "Beschwörer",     "Summoner",      "Invocateur",       "召喚士",         "소환사");
             AddJob("28", RoleType.BarrierHealer,  "学", "学者", "SCH", "学", "学者",     "Gelehrter",      "Scholar",       "Érudit",           "学者",           "학자");

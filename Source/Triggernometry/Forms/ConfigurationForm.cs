@@ -445,11 +445,13 @@ namespace Triggernometry.Forms
             order.Add(new FfxivJobOrderItem() { Name = "Rogue", JobId = 29 });
             order.Add(new FfxivJobOrderItem() { Name = "Samurai", JobId = 34 });
             order.Add(new FfxivJobOrderItem() { Name = "Reaper", JobId = 39 });
+            order.Add(new FfxivJobOrderItem() { Name = "Viper", JobId = 41 });
             order.Add(new FfxivJobOrderItem() { Name = "Bard", JobId = 23 });
             order.Add(new FfxivJobOrderItem() { Name = "Archer", JobId = 5 });
             order.Add(new FfxivJobOrderItem() { Name = "Machinist", JobId = 31 });
             order.Add(new FfxivJobOrderItem() { Name = "Dancer", JobId = 38 });
             order.Add(new FfxivJobOrderItem() { Name = "Black Mage", JobId = 25 });
+            order.Add(new FfxivJobOrderItem() { Name = "Pictomancer", JobId = 42 });
             order.Add(new FfxivJobOrderItem() { Name = "Thaumaturge", JobId = 7 });
             order.Add(new FfxivJobOrderItem() { Name = "Summoner", JobId = 27 });
             order.Add(new FfxivJobOrderItem() { Name = "Arcanist", JobId = 26 });
