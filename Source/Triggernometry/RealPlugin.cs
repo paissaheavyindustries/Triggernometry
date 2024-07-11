@@ -2602,11 +2602,11 @@ namespace Triggernometry
 
         internal void CheckForUpdates(bool isManual = false)
         {
-            if (I18n.IsChineseEnvironment)
+            /*if (I18n.IsChineseEnvironment)
             {
                 CheckForUpdatesBuiltinCN(isManual);
                 return;
-            }
+            }*/
             switch (cfg.UpdateCheckMethod)
             {
                 case Configuration.UpdateCheckMethodEnum.ACT:
@@ -2694,6 +2694,7 @@ namespace Triggernometry
             tx.Start();
         }
 
+        /*
         private static readonly string _updateRemotePathCN = "https://vip.123pan.cn/1824544011/Triggernometry_Release_CN/";
 
         public void CheckForUpdatesBuiltinCN(bool isManual = false)
@@ -2772,15 +2773,7 @@ namespace Triggernometry
                 }
             });
         }
-
-        private void AutoUpdatePromptResult(CustomControls.Toast t, bool result)
-        {
-            if (result == true)
-            {
-                System.Diagnostics.Process.Start(updateDownloadUrl);
-            }
-        }
-
+        
         public void UpdateTranslationCN(bool isManual = false)
         {
             string fileName = "zh-CN.triglations.xml";
@@ -2808,6 +2801,14 @@ namespace Triggernometry
                     UnfilteredAddToLog(DebugLevelEnum.Error, "更新汉化文件失败：" + ex.Message);
                 }
             });
+        }*/
+
+        private void AutoUpdatePromptResult(CustomControls.Toast t, bool result)
+        {
+            if (result == true)
+            {
+                System.Diagnostics.Process.Start(updateDownloadUrl);
+            }
         }
 
         public void BackupConfiguration()
