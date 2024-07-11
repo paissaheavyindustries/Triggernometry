@@ -951,6 +951,7 @@ namespace Triggernometry
                                     case "FfxivLogNetwork": val = plug.cfg.FfxivLogNetwork ? "1" : "0"; break;
                                     case "UseOsClipboard": val = plug.cfg.UseOsClipboard ? "1" : "0"; break;
                                     case "DeveloperMode": val = plug.cfg.DeveloperMode ? "1" : "0"; break;
+                                    case "AutoComplete": val = plug.cfg.AutoComplete ? "1" : "0"; break;
                                     case "Autosave": val = plug.cfg.AutosaveEnabled ? plug.cfg.AutosaveInterval.ToString(InvClt) : "0"; break;
                                     case "Language": val = plug.cfg.Language; break;
                                     case "UnsafeUsage": val = ((int)plug.cfg.UnsafeUsage).ToString(); break;

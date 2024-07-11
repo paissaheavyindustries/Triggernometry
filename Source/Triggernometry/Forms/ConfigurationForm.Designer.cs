@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigurationForm));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -239,6 +239,7 @@
             this.btnTriggerTemplate = new System.Windows.Forms.Button();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
+            this.cbxAutoComplete = new System.Windows.Forms.CheckBox();
             this.panel4.SuspendLayout();
             this.grpVolAdjustment.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -328,7 +329,7 @@
             this.panel3.Location = new System.Drawing.Point(10, 606);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(764, 10);
-            this.panel3.TabStop = false;
+            this.panel3.TabIndex = 2;
             // 
             // panel4
             // 
@@ -338,7 +339,7 @@
             this.panel4.Location = new System.Drawing.Point(10, 616);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(764, 35);
-            this.panel4.TabStop = false;
+            this.panel4.TabIndex = 3;
             // 
             // btnCancel
             // 
@@ -347,6 +348,7 @@
             this.btnCancel.Location = new System.Drawing.Point(614, 0);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(150, 35);
+            this.btnCancel.TabIndex = 0;
             this.btnCancel.TabStop = false;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -358,6 +360,7 @@
             this.btnOk.Location = new System.Drawing.Point(0, 0);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(150, 35);
+            this.btnOk.TabIndex = 1;
             this.btnOk.TabStop = false;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
@@ -371,6 +374,7 @@
             this.grpVolAdjustment.Name = "grpVolAdjustment";
             this.grpVolAdjustment.Padding = new System.Windows.Forms.Padding(10);
             this.grpVolAdjustment.Size = new System.Drawing.Size(742, 89);
+            this.grpVolAdjustment.TabIndex = 2;
             this.grpVolAdjustment.TabStop = false;
             this.grpVolAdjustment.Text = " Global volume adjustment ";
             // 
@@ -396,7 +400,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(722, 56);
-            this.tableLayoutPanel2.TabStop = false;
+            this.tableLayoutPanel2.TabIndex = 0;
             // 
             // label6
             // 
@@ -406,7 +410,7 @@
             this.label6.Location = new System.Drawing.Point(675, 28);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(44, 28);
-            this.label6.TabStop = false;
+            this.label6.TabIndex = 0;
             this.label6.Text = "100 %";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -418,7 +422,7 @@
             this.label5.Location = new System.Drawing.Point(675, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(44, 28);
-            this.label5.TabStop = false;
+            this.label5.TabIndex = 1;
             this.label5.Text = "100 %";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -430,6 +434,7 @@
             this.trbTtsVolume.Maximum = 100;
             this.trbTtsVolume.Name = "trbTtsVolume";
             this.trbTtsVolume.Size = new System.Drawing.Size(560, 22);
+            this.trbTtsVolume.TabIndex = 2;
             this.trbTtsVolume.TabStop = false;
             this.trbTtsVolume.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trbTtsVolume.Value = 100;
@@ -444,6 +449,7 @@
             this.trbSoundVolume.Maximum = 100;
             this.trbSoundVolume.Name = "trbSoundVolume";
             this.trbSoundVolume.Size = new System.Drawing.Size(560, 22);
+            this.trbSoundVolume.TabIndex = 3;
             this.trbSoundVolume.TabStop = false;
             this.trbSoundVolume.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trbSoundVolume.Value = 100;
@@ -458,7 +464,7 @@
             this.lblSoundVolume.Location = new System.Drawing.Point(3, 0);
             this.lblSoundVolume.Name = "lblSoundVolume";
             this.lblSoundVolume.Size = new System.Drawing.Size(100, 28);
-            this.lblSoundVolume.TabStop = false;
+            this.lblSoundVolume.TabIndex = 4;
             this.lblSoundVolume.Text = "Sound file playback";
             this.lblSoundVolume.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -470,7 +476,7 @@
             this.lblTtsVolume.Location = new System.Drawing.Point(3, 28);
             this.lblTtsVolume.Name = "lblTtsVolume";
             this.lblTtsVolume.Size = new System.Drawing.Size(100, 28);
-            this.lblTtsVolume.TabStop = false;
+            this.lblTtsVolume.TabIndex = 5;
             this.lblTtsVolume.Text = "Text-to-speech";
             this.lblTtsVolume.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -483,6 +489,7 @@
             this.grpGeneral.Name = "grpGeneral";
             this.grpGeneral.Padding = new System.Windows.Forms.Padding(10);
             this.grpGeneral.Size = new System.Drawing.Size(742, 106);
+            this.grpGeneral.TabIndex = 4;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = " Logging ";
             // 
@@ -505,7 +512,7 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.Size = new System.Drawing.Size(722, 73);
-            this.tableLayoutPanel3.TabStop = false;
+            this.tableLayoutPanel3.TabIndex = 0;
             // 
             // chkLogVariableExpansions
             // 
@@ -516,6 +523,7 @@
             this.chkLogVariableExpansions.Location = new System.Drawing.Point(3, 53);
             this.chkLogVariableExpansions.Name = "chkLogVariableExpansions";
             this.chkLogVariableExpansions.Size = new System.Drawing.Size(716, 17);
+            this.chkLogVariableExpansions.TabIndex = 0;
             this.chkLogVariableExpansions.TabStop = false;
             this.chkLogVariableExpansions.Text = "Log variable expansions";
             this.chkLogVariableExpansions.UseVisualStyleBackColor = true;
@@ -529,6 +537,7 @@
             this.chkLogNormalEvents.Location = new System.Drawing.Point(3, 30);
             this.chkLogNormalEvents.Name = "chkLogNormalEvents";
             this.chkLogNormalEvents.Size = new System.Drawing.Size(716, 17);
+            this.chkLogNormalEvents.TabIndex = 1;
             this.chkLogNormalEvents.TabStop = false;
             this.chkLogNormalEvents.Text = "Log normal log lines";
             this.chkLogNormalEvents.UseVisualStyleBackColor = true;
@@ -541,7 +550,7 @@
             this.lblLoggingLevel.Location = new System.Drawing.Point(3, 0);
             this.lblLoggingLevel.Name = "lblLoggingLevel";
             this.lblLoggingLevel.Size = new System.Drawing.Size(355, 27);
-            this.lblLoggingLevel.TabStop = false;
+            this.lblLoggingLevel.TabIndex = 2;
             this.lblLoggingLevel.Text = "Logging filtering level";
             this.lblLoggingLevel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -561,6 +570,7 @@
             this.cbxLoggingLevel.Location = new System.Drawing.Point(364, 3);
             this.cbxLoggingLevel.Name = "cbxLoggingLevel";
             this.cbxLoggingLevel.Size = new System.Drawing.Size(355, 21);
+            this.cbxLoggingLevel.TabIndex = 3;
             this.cbxLoggingLevel.TabStop = false;
             // 
             // trvTrigger
@@ -573,6 +583,7 @@
             this.trvTrigger.Name = "trvTrigger";
             this.trvTrigger.ShowNodeToolTips = true;
             this.trvTrigger.Size = new System.Drawing.Size(722, 243);
+            this.trvTrigger.TabIndex = 0;
             this.trvTrigger.TabStop = false;
             this.trvTrigger.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvTrigger_BeforeCollapse);
             this.trvTrigger.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvTrigger_BeforeExpand);
@@ -604,6 +615,7 @@
             this.grpActHooks.Name = "grpActHooks";
             this.grpActHooks.Padding = new System.Windows.Forms.Padding(10);
             this.grpActHooks.Size = new System.Drawing.Size(742, 79);
+            this.grpActHooks.TabIndex = 0;
             this.grpActHooks.TabStop = false;
             this.grpActHooks.Text = " ACT hooks ";
             // 
@@ -621,7 +633,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.Size = new System.Drawing.Size(722, 46);
-            this.tableLayoutPanel1.TabStop = false;
+            this.tableLayoutPanel1.TabIndex = 0;
             // 
             // chkActSoundFiles
             // 
@@ -631,6 +643,7 @@
             this.chkActSoundFiles.Location = new System.Drawing.Point(3, 3);
             this.chkActSoundFiles.Name = "chkActSoundFiles";
             this.chkActSoundFiles.Size = new System.Drawing.Size(716, 17);
+            this.chkActSoundFiles.TabIndex = 0;
             this.chkActSoundFiles.TabStop = false;
             this.chkActSoundFiles.Text = "Use ACT for playing sound files";
             this.chkActSoundFiles.UseVisualStyleBackColor = true;
@@ -643,6 +656,7 @@
             this.chkActTts.Location = new System.Drawing.Point(3, 26);
             this.chkActTts.Name = "chkActTts";
             this.chkActTts.Size = new System.Drawing.Size(716, 17);
+            this.chkActTts.TabIndex = 1;
             this.chkActTts.TabStop = false;
             this.chkActTts.Text = "Use ACT for text-to-speech";
             this.chkActTts.UseVisualStyleBackColor = true;
@@ -654,7 +668,7 @@
             this.panel2.Location = new System.Drawing.Point(7, 96);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(742, 10);
-            this.panel2.TabStop = false;
+            this.panel2.TabIndex = 1;
             // 
             // grpFutureProofing
             // 
@@ -665,6 +679,7 @@
             this.grpFutureProofing.Name = "grpFutureProofing";
             this.grpFutureProofing.Padding = new System.Windows.Forms.Padding(10);
             this.grpFutureProofing.Size = new System.Drawing.Size(742, 59);
+            this.grpFutureProofing.TabIndex = 4;
             this.grpFutureProofing.TabStop = false;
             this.grpFutureProofing.Text = " Future proofing ";
             // 
@@ -683,7 +698,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(722, 26);
-            this.tableLayoutPanel4.TabStop = false;
+            this.tableLayoutPanel4.TabIndex = 0;
             // 
             // txtSeparator
             // 
@@ -701,7 +716,7 @@
             this.lblSeparator.Location = new System.Drawing.Point(3, 0);
             this.lblSeparator.Name = "lblSeparator";
             this.lblSeparator.Size = new System.Drawing.Size(102, 26);
-            this.lblSeparator.TabStop = false;
+            this.lblSeparator.TabIndex = 8;
             this.lblSeparator.Text = "Event text separator";
             this.lblSeparator.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -722,6 +737,7 @@
             this.tbcMain.Name = "tbcMain";
             this.tbcMain.SelectedIndex = 0;
             this.tbcMain.Size = new System.Drawing.Size(764, 596);
+            this.tbcMain.TabIndex = 1;
             this.tbcMain.TabStop = false;
             // 
             // tabGeneral
@@ -749,6 +765,7 @@
             this.grpStartupTrigger.Name = "grpStartupTrigger";
             this.grpStartupTrigger.Padding = new System.Windows.Forms.Padding(10);
             this.grpStartupTrigger.Size = new System.Drawing.Size(742, 301);
+            this.grpStartupTrigger.TabIndex = 0;
             this.grpStartupTrigger.TabStop = false;
             this.grpStartupTrigger.Text = " Startup trigger/folder ";
             // 
@@ -761,7 +778,7 @@
             this.tlsDirectPaste.Location = new System.Drawing.Point(10, 23);
             this.tlsDirectPaste.Name = "tlsDirectPaste";
             this.tlsDirectPaste.Size = new System.Drawing.Size(722, 25);
-            this.tlsDirectPaste.TabStop = false;
+            this.tlsDirectPaste.TabIndex = 1;
             // 
             // btnClearSelection
             // 
@@ -789,7 +806,7 @@
             this.panel11.Location = new System.Drawing.Point(7, 252);
             this.panel11.Name = "panel11";
             this.panel11.Size = new System.Drawing.Size(742, 10);
-            this.panel11.TabStop = false;
+            this.panel11.TabIndex = 1;
             // 
             // grpStartup
             // 
@@ -800,6 +817,7 @@
             this.grpStartup.Name = "grpStartup";
             this.grpStartup.Padding = new System.Windows.Forms.Padding(10);
             this.grpStartup.Size = new System.Drawing.Size(742, 129);
+            this.grpStartup.TabIndex = 2;
             this.grpStartup.TabStop = false;
             this.grpStartup.Text = " Startup ";
             // 
@@ -823,7 +841,7 @@
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel7.Size = new System.Drawing.Size(722, 96);
-            this.tableLayoutPanel7.TabStop = false;
+            this.tableLayoutPanel7.TabIndex = 0;
             // 
             // cbxUpdateMethod
             // 
@@ -836,6 +854,7 @@
             this.cbxUpdateMethod.Location = new System.Drawing.Point(364, 72);
             this.cbxUpdateMethod.Name = "cbxUpdateMethod";
             this.cbxUpdateMethod.Size = new System.Drawing.Size(355, 21);
+            this.cbxUpdateMethod.TabIndex = 0;
             this.cbxUpdateMethod.TabStop = false;
             // 
             // lblUpdateMethod
@@ -846,7 +865,7 @@
             this.lblUpdateMethod.Location = new System.Drawing.Point(3, 69);
             this.lblUpdateMethod.Name = "lblUpdateMethod";
             this.lblUpdateMethod.Size = new System.Drawing.Size(355, 27);
-            this.lblUpdateMethod.TabStop = false;
+            this.lblUpdateMethod.TabIndex = 1;
             this.lblUpdateMethod.Text = "Plugin update check method";
             this.lblUpdateMethod.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -859,6 +878,7 @@
             this.chkWarnAdmin.Location = new System.Drawing.Point(3, 26);
             this.chkWarnAdmin.Name = "chkWarnAdmin";
             this.chkWarnAdmin.Size = new System.Drawing.Size(716, 17);
+            this.chkWarnAdmin.TabIndex = 2;
             this.chkWarnAdmin.TabStop = false;
             this.chkWarnAdmin.Text = "Warn if not running as Administrator";
             this.chkWarnAdmin.UseVisualStyleBackColor = true;
@@ -872,6 +892,7 @@
             this.chkUpdates.Location = new System.Drawing.Point(3, 49);
             this.chkUpdates.Name = "chkUpdates";
             this.chkUpdates.Size = new System.Drawing.Size(716, 17);
+            this.chkUpdates.TabIndex = 3;
             this.chkUpdates.TabStop = false;
             this.chkUpdates.Text = "Check for updates on startup";
             this.chkUpdates.UseVisualStyleBackColor = true;
@@ -885,6 +906,7 @@
             this.chkWelcome.Location = new System.Drawing.Point(3, 3);
             this.chkWelcome.Name = "chkWelcome";
             this.chkWelcome.Size = new System.Drawing.Size(716, 17);
+            this.chkWelcome.TabIndex = 4;
             this.chkWelcome.TabStop = false;
             this.chkWelcome.Text = "Show Welcome Screen on startup";
             this.chkWelcome.UseVisualStyleBackColor = true;
@@ -895,7 +917,7 @@
             this.panel10.Location = new System.Drawing.Point(7, 113);
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(742, 10);
-            this.panel10.TabStop = false;
+            this.panel10.TabIndex = 3;
             // 
             // tabAudio
             // 
@@ -926,9 +948,11 @@
             this.grpShortCutExpression.AutoSize = true;
             this.grpShortCutExpression.Controls.Add(this.tableLayoutPanelShortCutExpression);
             this.grpShortCutExpression.Dock = System.Windows.Forms.DockStyle.Top;
+            this.grpShortCutExpression.Location = new System.Drawing.Point(7, 7);
             this.grpShortCutExpression.Name = "grpShortCutExpression";
             this.grpShortCutExpression.Padding = new System.Windows.Forms.Padding(10);
-            this.grpShortCutExpression.TabStop = true;
+            this.grpShortCutExpression.Size = new System.Drawing.Size(742, 102);
+            this.grpShortCutExpression.TabIndex = 0;
             this.grpShortCutExpression.Text = " Expressions ";
             // 
             // tableLayoutPanelShortCutExpression
@@ -941,12 +965,14 @@
             this.tableLayoutPanelShortCutExpression.Controls.Add(this.chkShortcutUseAbbrevInTemplates, 0, 1);
             this.tableLayoutPanelShortCutExpression.Controls.Add(this.chkShortcutWrapTextWhenSelected, 0, 2);
             this.tableLayoutPanelShortCutExpression.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelShortCutExpression.Location = new System.Drawing.Point(10, 23);
             this.tableLayoutPanelShortCutExpression.Name = "tableLayoutPanelShortCutExpression";
             this.tableLayoutPanelShortCutExpression.RowCount = 3;
             this.tableLayoutPanelShortCutExpression.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelShortCutExpression.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelShortCutExpression.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelShortCutExpression.TabStop = false;
+            this.tableLayoutPanelShortCutExpression.Size = new System.Drawing.Size(722, 69);
+            this.tableLayoutPanelShortCutExpression.TabIndex = 0;
             // 
             // chkShortcutEnableTemplates
             // 
@@ -954,7 +980,10 @@
             this.chkShortcutEnableTemplates.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tableLayoutPanelShortCutExpression.SetColumnSpan(this.chkShortcutEnableTemplates, 2);
             this.chkShortcutEnableTemplates.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkShortcutEnableTemplates.Location = new System.Drawing.Point(3, 3);
             this.chkShortcutEnableTemplates.Name = "chkShortcutEnableTemplates";
+            this.chkShortcutEnableTemplates.Size = new System.Drawing.Size(716, 17);
+            this.chkShortcutEnableTemplates.TabIndex = 0;
             this.chkShortcutEnableTemplates.TabStop = false;
             this.chkShortcutEnableTemplates.Text = "Enable shortcuts to input template expressions";
             this.chkShortcutEnableTemplates.UseVisualStyleBackColor = true;
@@ -965,7 +994,10 @@
             this.chkShortcutUseAbbrevInTemplates.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tableLayoutPanelShortCutExpression.SetColumnSpan(this.chkShortcutUseAbbrevInTemplates, 2);
             this.chkShortcutUseAbbrevInTemplates.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkShortcutUseAbbrevInTemplates.Location = new System.Drawing.Point(3, 26);
             this.chkShortcutUseAbbrevInTemplates.Name = "chkShortcutUseAbbrevInTemplates";
+            this.chkShortcutUseAbbrevInTemplates.Size = new System.Drawing.Size(716, 17);
+            this.chkShortcutUseAbbrevInTemplates.TabIndex = 1;
             this.chkShortcutUseAbbrevInTemplates.TabStop = false;
             this.chkShortcutUseAbbrevInTemplates.Text = "Use abbreviation expressions in template expressions";
             this.chkShortcutUseAbbrevInTemplates.UseVisualStyleBackColor = true;
@@ -976,7 +1008,10 @@
             this.chkShortcutWrapTextWhenSelected.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tableLayoutPanelShortCutExpression.SetColumnSpan(this.chkShortcutWrapTextWhenSelected, 2);
             this.chkShortcutWrapTextWhenSelected.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkShortcutWrapTextWhenSelected.Location = new System.Drawing.Point(3, 49);
             this.chkShortcutWrapTextWhenSelected.Name = "chkShortcutWrapTextWhenSelected";
+            this.chkShortcutWrapTextWhenSelected.Size = new System.Drawing.Size(716, 17);
+            this.chkShortcutWrapTextWhenSelected.TabIndex = 2;
             this.chkShortcutWrapTextWhenSelected.TabStop = false;
             this.chkShortcutWrapTextWhenSelected.Text = "Wrap selected text in template expressions";
             this.chkShortcutWrapTextWhenSelected.UseVisualStyleBackColor = true;
@@ -1008,7 +1043,7 @@
             this.panel16.Location = new System.Drawing.Point(7, 7);
             this.panel16.Name = "panel16";
             this.panel16.Size = new System.Drawing.Size(742, 556);
-            this.panel16.TabStop = false;
+            this.panel16.TabIndex = 0;
             // 
             // grpCacheFile
             // 
@@ -1019,6 +1054,7 @@
             this.grpCacheFile.Name = "grpCacheFile";
             this.grpCacheFile.Padding = new System.Windows.Forms.Padding(10);
             this.grpCacheFile.Size = new System.Drawing.Size(725, 140);
+            this.grpCacheFile.TabIndex = 0;
             this.grpCacheFile.TabStop = false;
             this.grpCacheFile.Text = " File downloads ";
             // 
@@ -1046,7 +1082,7 @@
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel16.Size = new System.Drawing.Size(705, 107);
-            this.tableLayoutPanel16.TabStop = false;
+            this.tableLayoutPanel16.TabIndex = 0;
             // 
             // btnCacheFileBrowse
             // 
@@ -1055,6 +1091,7 @@
             this.btnCacheFileBrowse.Location = new System.Drawing.Point(420, 81);
             this.btnCacheFileBrowse.Name = "btnCacheFileBrowse";
             this.btnCacheFileBrowse.Size = new System.Drawing.Size(282, 23);
+            this.btnCacheFileBrowse.TabIndex = 0;
             this.btnCacheFileBrowse.TabStop = false;
             this.btnCacheFileBrowse.Text = "Browse";
             this.btnCacheFileBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1070,6 +1107,7 @@
             this.btnCacheFileClear.Location = new System.Drawing.Point(132, 81);
             this.btnCacheFileClear.Name = "btnCacheFileClear";
             this.btnCacheFileClear.Size = new System.Drawing.Size(282, 23);
+            this.btnCacheFileClear.TabIndex = 1;
             this.btnCacheFileClear.TabStop = false;
             this.btnCacheFileClear.Text = "Clear cache";
             this.btnCacheFileClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1098,7 +1136,7 @@
             this.lblCacheFileSize.Location = new System.Drawing.Point(3, 52);
             this.lblCacheFileSize.Name = "lblCacheFileSize";
             this.lblCacheFileSize.Size = new System.Drawing.Size(123, 26);
-            this.lblCacheFileSize.TabStop = false;
+            this.lblCacheFileSize.TabIndex = 14;
             this.lblCacheFileSize.Text = "Current disk size in bytes";
             this.lblCacheFileSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1110,7 +1148,7 @@
             this.lblCacheFileCount.Location = new System.Drawing.Point(3, 26);
             this.lblCacheFileCount.Name = "lblCacheFileCount";
             this.lblCacheFileCount.Size = new System.Drawing.Size(123, 26);
-            this.lblCacheFileCount.TabStop = false;
+            this.lblCacheFileCount.TabIndex = 15;
             this.lblCacheFileCount.Text = "Current item count";
             this.lblCacheFileCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1122,7 +1160,7 @@
             this.lblCacheFileExpiry.Location = new System.Drawing.Point(3, 0);
             this.lblCacheFileExpiry.Name = "lblCacheFileExpiry";
             this.lblCacheFileExpiry.Size = new System.Drawing.Size(123, 26);
-            this.lblCacheFileExpiry.TabStop = false;
+            this.lblCacheFileExpiry.TabIndex = 16;
             this.lblCacheFileExpiry.Text = "Expiration in minutes";
             this.lblCacheFileExpiry.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1138,6 +1176,7 @@
             0});
             this.nudCacheFileExpiry.Name = "nudCacheFileExpiry";
             this.nudCacheFileExpiry.Size = new System.Drawing.Size(570, 20);
+            this.nudCacheFileExpiry.TabIndex = 17;
             this.nudCacheFileExpiry.TabStop = false;
             this.nudCacheFileExpiry.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudCacheFileExpiry.Value = new decimal(new int[] {
@@ -1164,7 +1203,7 @@
             this.panel17.Location = new System.Drawing.Point(0, 590);
             this.panel17.Name = "panel17";
             this.panel17.Size = new System.Drawing.Size(725, 10);
-            this.panel17.TabStop = false;
+            this.panel17.TabIndex = 1;
             // 
             // grpCacheRepo
             // 
@@ -1175,6 +1214,7 @@
             this.grpCacheRepo.Name = "grpCacheRepo";
             this.grpCacheRepo.Padding = new System.Windows.Forms.Padding(10);
             this.grpCacheRepo.Size = new System.Drawing.Size(725, 140);
+            this.grpCacheRepo.TabIndex = 2;
             this.grpCacheRepo.TabStop = false;
             this.grpCacheRepo.Text = " Repository backups ";
             // 
@@ -1202,7 +1242,7 @@
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel15.Size = new System.Drawing.Size(705, 107);
-            this.tableLayoutPanel15.TabStop = false;
+            this.tableLayoutPanel15.TabIndex = 0;
             // 
             // btnCacheRepoBrowse
             // 
@@ -1211,6 +1251,7 @@
             this.btnCacheRepoBrowse.Location = new System.Drawing.Point(420, 81);
             this.btnCacheRepoBrowse.Name = "btnCacheRepoBrowse";
             this.btnCacheRepoBrowse.Size = new System.Drawing.Size(282, 23);
+            this.btnCacheRepoBrowse.TabIndex = 0;
             this.btnCacheRepoBrowse.TabStop = false;
             this.btnCacheRepoBrowse.Text = "Browse";
             this.btnCacheRepoBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1226,6 +1267,7 @@
             this.btnCacheRepoClear.Location = new System.Drawing.Point(132, 81);
             this.btnCacheRepoClear.Name = "btnCacheRepoClear";
             this.btnCacheRepoClear.Size = new System.Drawing.Size(282, 23);
+            this.btnCacheRepoClear.TabIndex = 1;
             this.btnCacheRepoClear.TabStop = false;
             this.btnCacheRepoClear.Text = "Clear cache";
             this.btnCacheRepoClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1254,7 +1296,7 @@
             this.lblCacheRepoSize.Location = new System.Drawing.Point(3, 52);
             this.lblCacheRepoSize.Name = "lblCacheRepoSize";
             this.lblCacheRepoSize.Size = new System.Drawing.Size(123, 26);
-            this.lblCacheRepoSize.TabStop = false;
+            this.lblCacheRepoSize.TabIndex = 14;
             this.lblCacheRepoSize.Text = "Current disk size in bytes";
             this.lblCacheRepoSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1266,7 +1308,7 @@
             this.lblCacheRepoCount.Location = new System.Drawing.Point(3, 26);
             this.lblCacheRepoCount.Name = "lblCacheRepoCount";
             this.lblCacheRepoCount.Size = new System.Drawing.Size(123, 26);
-            this.lblCacheRepoCount.TabStop = false;
+            this.lblCacheRepoCount.TabIndex = 15;
             this.lblCacheRepoCount.Text = "Current item count";
             this.lblCacheRepoCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1278,7 +1320,7 @@
             this.lblCacheRepoExpiry.Location = new System.Drawing.Point(3, 0);
             this.lblCacheRepoExpiry.Name = "lblCacheRepoExpiry";
             this.lblCacheRepoExpiry.Size = new System.Drawing.Size(123, 26);
-            this.lblCacheRepoExpiry.TabStop = false;
+            this.lblCacheRepoExpiry.TabIndex = 16;
             this.lblCacheRepoExpiry.Text = "Expiration in minutes";
             this.lblCacheRepoExpiry.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1294,6 +1336,7 @@
             0});
             this.nudCacheRepoExpiry.Name = "nudCacheRepoExpiry";
             this.nudCacheRepoExpiry.Size = new System.Drawing.Size(570, 20);
+            this.nudCacheRepoExpiry.TabIndex = 17;
             this.nudCacheRepoExpiry.TabStop = false;
             this.nudCacheRepoExpiry.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudCacheRepoExpiry.Value = new decimal(new int[] {
@@ -1320,7 +1363,7 @@
             this.panel15.Location = new System.Drawing.Point(0, 440);
             this.panel15.Name = "panel15";
             this.panel15.Size = new System.Drawing.Size(725, 10);
-            this.panel15.TabStop = false;
+            this.panel15.TabIndex = 3;
             // 
             // grpCacheJSON
             // 
@@ -1331,6 +1374,7 @@
             this.grpCacheJSON.Name = "grpCacheJSON";
             this.grpCacheJSON.Padding = new System.Windows.Forms.Padding(10);
             this.grpCacheJSON.Size = new System.Drawing.Size(725, 140);
+            this.grpCacheJSON.TabIndex = 4;
             this.grpCacheJSON.TabStop = false;
             this.grpCacheJSON.Text = " JSON responses ";
             // 
@@ -1359,7 +1403,7 @@
             this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel13.Size = new System.Drawing.Size(705, 107);
-            this.tableLayoutPanel13.TabStop = false;
+            this.tableLayoutPanel13.TabIndex = 0;
             // 
             // nudCacheJsonExpiry
             // 
@@ -1373,6 +1417,7 @@
             0});
             this.nudCacheJsonExpiry.Name = "nudCacheJsonExpiry";
             this.nudCacheJsonExpiry.Size = new System.Drawing.Size(570, 20);
+            this.nudCacheJsonExpiry.TabIndex = 0;
             this.nudCacheJsonExpiry.TabStop = false;
             this.nudCacheJsonExpiry.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudCacheJsonExpiry.Value = new decimal(new int[] {
@@ -1388,6 +1433,7 @@
             this.btnCacheJsonBrowse.Location = new System.Drawing.Point(420, 81);
             this.btnCacheJsonBrowse.Name = "btnCacheJsonBrowse";
             this.btnCacheJsonBrowse.Size = new System.Drawing.Size(282, 23);
+            this.btnCacheJsonBrowse.TabIndex = 1;
             this.btnCacheJsonBrowse.TabStop = false;
             this.btnCacheJsonBrowse.Text = "Browse";
             this.btnCacheJsonBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1403,6 +1449,7 @@
             this.btnCacheJsonClear.Location = new System.Drawing.Point(132, 81);
             this.btnCacheJsonClear.Name = "btnCacheJsonClear";
             this.btnCacheJsonClear.Size = new System.Drawing.Size(282, 23);
+            this.btnCacheJsonClear.TabIndex = 2;
             this.btnCacheJsonClear.TabStop = false;
             this.btnCacheJsonClear.Text = "Clear cache";
             this.btnCacheJsonClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1431,7 +1478,7 @@
             this.lblCacheJsonSize.Location = new System.Drawing.Point(3, 52);
             this.lblCacheJsonSize.Name = "lblCacheJsonSize";
             this.lblCacheJsonSize.Size = new System.Drawing.Size(123, 26);
-            this.lblCacheJsonSize.TabStop = false;
+            this.lblCacheJsonSize.TabIndex = 14;
             this.lblCacheJsonSize.Text = "Current disk size in bytes";
             this.lblCacheJsonSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1443,7 +1490,7 @@
             this.lblCacheJsonCount.Location = new System.Drawing.Point(3, 26);
             this.lblCacheJsonCount.Name = "lblCacheJsonCount";
             this.lblCacheJsonCount.Size = new System.Drawing.Size(123, 26);
-            this.lblCacheJsonCount.TabStop = false;
+            this.lblCacheJsonCount.TabIndex = 15;
             this.lblCacheJsonCount.Text = "Current item count";
             this.lblCacheJsonCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1455,7 +1502,7 @@
             this.lblCacheJsonExpiry.Location = new System.Drawing.Point(3, 0);
             this.lblCacheJsonExpiry.Name = "lblCacheJsonExpiry";
             this.lblCacheJsonExpiry.Size = new System.Drawing.Size(123, 26);
-            this.lblCacheJsonExpiry.TabStop = false;
+            this.lblCacheJsonExpiry.TabIndex = 16;
             this.lblCacheJsonExpiry.Text = "Expiration in minutes";
             this.lblCacheJsonExpiry.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1477,7 +1524,7 @@
             this.panel14.Location = new System.Drawing.Point(0, 290);
             this.panel14.Name = "panel14";
             this.panel14.Size = new System.Drawing.Size(725, 10);
-            this.panel14.TabStop = false;
+            this.panel14.TabIndex = 5;
             // 
             // grpCacheSound
             // 
@@ -1488,6 +1535,7 @@
             this.grpCacheSound.Name = "grpCacheSound";
             this.grpCacheSound.Padding = new System.Windows.Forms.Padding(10);
             this.grpCacheSound.Size = new System.Drawing.Size(725, 140);
+            this.grpCacheSound.TabIndex = 6;
             this.grpCacheSound.TabStop = false;
             this.grpCacheSound.Text = " Sound files ";
             // 
@@ -1515,7 +1563,7 @@
             this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel14.Size = new System.Drawing.Size(705, 107);
-            this.tableLayoutPanel14.TabStop = false;
+            this.tableLayoutPanel14.TabIndex = 0;
             // 
             // btnCacheSoundBrowse
             // 
@@ -1524,6 +1572,7 @@
             this.btnCacheSoundBrowse.Location = new System.Drawing.Point(420, 81);
             this.btnCacheSoundBrowse.Name = "btnCacheSoundBrowse";
             this.btnCacheSoundBrowse.Size = new System.Drawing.Size(282, 23);
+            this.btnCacheSoundBrowse.TabIndex = 0;
             this.btnCacheSoundBrowse.TabStop = false;
             this.btnCacheSoundBrowse.Text = "Browse";
             this.btnCacheSoundBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1539,6 +1588,7 @@
             this.btnCacheSoundClear.Location = new System.Drawing.Point(132, 81);
             this.btnCacheSoundClear.Name = "btnCacheSoundClear";
             this.btnCacheSoundClear.Size = new System.Drawing.Size(282, 23);
+            this.btnCacheSoundClear.TabIndex = 1;
             this.btnCacheSoundClear.TabStop = false;
             this.btnCacheSoundClear.Text = "Clear cache";
             this.btnCacheSoundClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1567,7 +1617,7 @@
             this.lblCacheSoundSize.Location = new System.Drawing.Point(3, 52);
             this.lblCacheSoundSize.Name = "lblCacheSoundSize";
             this.lblCacheSoundSize.Size = new System.Drawing.Size(123, 26);
-            this.lblCacheSoundSize.TabStop = false;
+            this.lblCacheSoundSize.TabIndex = 14;
             this.lblCacheSoundSize.Text = "Current disk size in bytes";
             this.lblCacheSoundSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1579,7 +1629,7 @@
             this.lblCacheSoundCount.Location = new System.Drawing.Point(3, 26);
             this.lblCacheSoundCount.Name = "lblCacheSoundCount";
             this.lblCacheSoundCount.Size = new System.Drawing.Size(123, 26);
-            this.lblCacheSoundCount.TabStop = false;
+            this.lblCacheSoundCount.TabIndex = 15;
             this.lblCacheSoundCount.Text = "Current item count";
             this.lblCacheSoundCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1591,7 +1641,7 @@
             this.lblCacheSoundExpiry.Location = new System.Drawing.Point(3, 0);
             this.lblCacheSoundExpiry.Name = "lblCacheSoundExpiry";
             this.lblCacheSoundExpiry.Size = new System.Drawing.Size(123, 26);
-            this.lblCacheSoundExpiry.TabStop = false;
+            this.lblCacheSoundExpiry.TabIndex = 16;
             this.lblCacheSoundExpiry.Text = "Expiration in minutes";
             this.lblCacheSoundExpiry.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1607,6 +1657,7 @@
             0});
             this.nudCacheSoundExpiry.Name = "nudCacheSoundExpiry";
             this.nudCacheSoundExpiry.Size = new System.Drawing.Size(570, 20);
+            this.nudCacheSoundExpiry.TabIndex = 17;
             this.nudCacheSoundExpiry.TabStop = false;
             this.nudCacheSoundExpiry.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudCacheSoundExpiry.Value = new decimal(new int[] {
@@ -1633,7 +1684,7 @@
             this.panel13.Location = new System.Drawing.Point(0, 140);
             this.panel13.Name = "panel13";
             this.panel13.Size = new System.Drawing.Size(725, 10);
-            this.panel13.TabStop = false;
+            this.panel13.TabIndex = 7;
             // 
             // grpCacheImage
             // 
@@ -1644,6 +1695,7 @@
             this.grpCacheImage.Name = "grpCacheImage";
             this.grpCacheImage.Padding = new System.Windows.Forms.Padding(10);
             this.grpCacheImage.Size = new System.Drawing.Size(725, 140);
+            this.grpCacheImage.TabIndex = 8;
             this.grpCacheImage.TabStop = false;
             this.grpCacheImage.Text = " Image files ";
             // 
@@ -1671,7 +1723,7 @@
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel12.Size = new System.Drawing.Size(705, 107);
-            this.tableLayoutPanel12.TabStop = false;
+            this.tableLayoutPanel12.TabIndex = 0;
             // 
             // btnCacheImageBrowse
             // 
@@ -1680,6 +1732,7 @@
             this.btnCacheImageBrowse.Location = new System.Drawing.Point(420, 81);
             this.btnCacheImageBrowse.Name = "btnCacheImageBrowse";
             this.btnCacheImageBrowse.Size = new System.Drawing.Size(282, 23);
+            this.btnCacheImageBrowse.TabIndex = 0;
             this.btnCacheImageBrowse.TabStop = false;
             this.btnCacheImageBrowse.Text = "Browse";
             this.btnCacheImageBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1708,7 +1761,7 @@
             this.lblCacheImageSize.Location = new System.Drawing.Point(3, 52);
             this.lblCacheImageSize.Name = "lblCacheImageSize";
             this.lblCacheImageSize.Size = new System.Drawing.Size(123, 26);
-            this.lblCacheImageSize.TabStop = false;
+            this.lblCacheImageSize.TabIndex = 14;
             this.lblCacheImageSize.Text = "Current disk size in bytes";
             this.lblCacheImageSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1720,7 +1773,7 @@
             this.lblCacheImageCount.Location = new System.Drawing.Point(3, 26);
             this.lblCacheImageCount.Name = "lblCacheImageCount";
             this.lblCacheImageCount.Size = new System.Drawing.Size(123, 26);
-            this.lblCacheImageCount.TabStop = false;
+            this.lblCacheImageCount.TabIndex = 15;
             this.lblCacheImageCount.Text = "Current item count";
             this.lblCacheImageCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1732,7 +1785,7 @@
             this.lblCacheImageExpiry.Location = new System.Drawing.Point(3, 0);
             this.lblCacheImageExpiry.Name = "lblCacheImageExpiry";
             this.lblCacheImageExpiry.Size = new System.Drawing.Size(123, 26);
-            this.lblCacheImageExpiry.TabStop = false;
+            this.lblCacheImageExpiry.TabIndex = 16;
             this.lblCacheImageExpiry.Text = "Expiration in minutes";
             this.lblCacheImageExpiry.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1748,6 +1801,7 @@
             0});
             this.nudCacheImageExpiry.Name = "nudCacheImageExpiry";
             this.nudCacheImageExpiry.Size = new System.Drawing.Size(570, 20);
+            this.nudCacheImageExpiry.TabIndex = 17;
             this.nudCacheImageExpiry.TabStop = false;
             this.nudCacheImageExpiry.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudCacheImageExpiry.Value = new decimal(new int[] {
@@ -1775,6 +1829,7 @@
             this.btnCacheImageClear.Location = new System.Drawing.Point(132, 81);
             this.btnCacheImageClear.Name = "btnCacheImageClear";
             this.btnCacheImageClear.Size = new System.Drawing.Size(282, 23);
+            this.btnCacheImageClear.TabIndex = 18;
             this.btnCacheImageClear.TabStop = false;
             this.btnCacheImageClear.Text = "Clear cache";
             this.btnCacheImageClear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1807,6 +1862,7 @@
             this.grpEndpointHistory.Name = "grpEndpointHistory";
             this.grpEndpointHistory.Padding = new System.Windows.Forms.Padding(10);
             this.grpEndpointHistory.Size = new System.Drawing.Size(742, 321);
+            this.grpEndpointHistory.TabIndex = 0;
             this.grpEndpointHistory.TabStop = false;
             this.grpEndpointHistory.Text = " Endpoint history ";
             // 
@@ -1818,7 +1874,7 @@
             this.panel21.Location = new System.Drawing.Point(10, 23);
             this.panel21.Name = "panel21";
             this.panel21.Size = new System.Drawing.Size(722, 288);
-            this.panel21.TabStop = false;
+            this.panel21.TabIndex = 0;
             // 
             // dgvEndpointHistory
             // 
@@ -1837,6 +1893,7 @@
             this.dgvEndpointHistory.RowHeadersVisible = false;
             this.dgvEndpointHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvEndpointHistory.Size = new System.Drawing.Size(722, 263);
+            this.dgvEndpointHistory.TabIndex = 0;
             this.dgvEndpointHistory.TabStop = false;
             this.dgvEndpointHistory.VirtualMode = true;
             this.dgvEndpointHistory.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.dgvEndpointHistory_CellValueNeeded);
@@ -1866,7 +1923,7 @@
             this.toolStrip2.Location = new System.Drawing.Point(0, 0);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Size = new System.Drawing.Size(722, 25);
-            this.toolStrip2.TabStop = false;
+            this.toolStrip2.TabIndex = 1;
             this.toolStrip2.Text = "toolStrip2";
             // 
             // btnEndpointHistUpdate
@@ -1898,7 +1955,7 @@
             this.panel20.Location = new System.Drawing.Point(7, 232);
             this.panel20.Name = "panel20";
             this.panel20.Size = new System.Drawing.Size(742, 10);
-            this.panel20.TabStop = false;
+            this.panel20.TabIndex = 1;
             // 
             // grpEndpointSettings
             // 
@@ -1909,6 +1966,7 @@
             this.grpEndpointSettings.Name = "grpEndpointSettings";
             this.grpEndpointSettings.Padding = new System.Windows.Forms.Padding(10);
             this.grpEndpointSettings.Size = new System.Drawing.Size(742, 105);
+            this.grpEndpointSettings.TabIndex = 2;
             this.grpEndpointSettings.TabStop = false;
             this.grpEndpointSettings.Text = " Endpoint settings ";
             // 
@@ -1931,7 +1989,7 @@
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel8.Size = new System.Drawing.Size(722, 72);
-            this.tableLayoutPanel8.TabStop = false;
+            this.tableLayoutPanel8.TabIndex = 0;
             // 
             // chkEndpointStartup
             // 
@@ -1942,6 +2000,7 @@
             this.chkEndpointStartup.Location = new System.Drawing.Point(3, 29);
             this.chkEndpointStartup.Name = "chkEndpointStartup";
             this.chkEndpointStartup.Size = new System.Drawing.Size(716, 17);
+            this.chkEndpointStartup.TabIndex = 0;
             this.chkEndpointStartup.TabStop = false;
             this.chkEndpointStartup.Text = "Start endpoint on launch";
             this.chkEndpointStartup.UseVisualStyleBackColor = true;
@@ -1955,6 +2014,7 @@
             this.chkEndpointLog.Location = new System.Drawing.Point(3, 52);
             this.chkEndpointLog.Name = "chkEndpointLog";
             this.chkEndpointLog.Size = new System.Drawing.Size(716, 17);
+            this.chkEndpointLog.TabIndex = 1;
             this.chkEndpointLog.TabStop = false;
             this.chkEndpointLog.Text = "Log received data";
             this.chkEndpointLog.UseVisualStyleBackColor = true;
@@ -1975,7 +2035,7 @@
             this.lblEndpoint.Location = new System.Drawing.Point(3, 0);
             this.lblEndpoint.Name = "lblEndpoint";
             this.lblEndpoint.Size = new System.Drawing.Size(80, 26);
-            this.lblEndpoint.TabStop = false;
+            this.lblEndpoint.TabIndex = 8;
             this.lblEndpoint.Text = "HTTP endpoint";
             this.lblEndpoint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1985,7 +2045,7 @@
             this.panel7.Location = new System.Drawing.Point(7, 117);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(742, 10);
-            this.panel7.TabStop = false;
+            this.panel7.TabIndex = 3;
             // 
             // grpEndpointState
             // 
@@ -1996,6 +2056,7 @@
             this.grpEndpointState.Name = "grpEndpointState";
             this.grpEndpointState.Padding = new System.Windows.Forms.Padding(10);
             this.grpEndpointState.Size = new System.Drawing.Size(742, 110);
+            this.grpEndpointState.TabIndex = 4;
             this.grpEndpointState.TabStop = false;
             this.grpEndpointState.Text = " Status ";
             // 
@@ -2014,7 +2075,7 @@
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel18.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel18.Size = new System.Drawing.Size(722, 77);
-            this.tableLayoutPanel18.TabStop = false;
+            this.tableLayoutPanel18.TabIndex = 0;
             // 
             // btnEndpointStart
             // 
@@ -2024,6 +2085,7 @@
             this.btnEndpointStart.Location = new System.Drawing.Point(639, 3);
             this.btnEndpointStart.Name = "btnEndpointStart";
             this.btnEndpointStart.Size = new System.Drawing.Size(80, 32);
+            this.btnEndpointStart.TabIndex = 0;
             this.btnEndpointStart.TabStop = false;
             this.btnEndpointStart.Text = "Start";
             this.btnEndpointStart.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -2038,6 +2100,7 @@
             this.btnEndpointStop.Location = new System.Drawing.Point(639, 41);
             this.btnEndpointStop.Name = "btnEndpointStop";
             this.btnEndpointStop.Size = new System.Drawing.Size(80, 33);
+            this.btnEndpointStop.TabIndex = 1;
             this.btnEndpointStop.TabStop = false;
             this.btnEndpointStop.Text = "Stop";
             this.btnEndpointStop.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -2077,6 +2140,7 @@
             this.grpPartyListOrder.Name = "grpPartyListOrder";
             this.grpPartyListOrder.Padding = new System.Windows.Forms.Padding(10);
             this.grpPartyListOrder.Size = new System.Drawing.Size(742, 490);
+            this.grpPartyListOrder.TabIndex = 0;
             this.grpPartyListOrder.TabStop = false;
             this.grpPartyListOrder.Text = " Party list ordering ";
             // 
@@ -2098,7 +2162,7 @@
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.Size = new System.Drawing.Size(722, 457);
-            this.tableLayoutPanel5.TabStop = false;
+            this.tableLayoutPanel5.TabIndex = 0;
             // 
             // lblFfxivJobOrder
             // 
@@ -2109,7 +2173,7 @@
             this.lblFfxivJobOrder.Name = "lblFfxivJobOrder";
             this.lblFfxivJobOrder.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.lblFfxivJobOrder.Size = new System.Drawing.Size(85, 571);
-            this.lblFfxivJobOrder.TabStop = false;
+            this.lblFfxivJobOrder.TabIndex = 0;
             this.lblFfxivJobOrder.Text = "Job order";
             // 
             // lblFfxivJobMethod
@@ -2120,7 +2184,7 @@
             this.lblFfxivJobMethod.Location = new System.Drawing.Point(3, 0);
             this.lblFfxivJobMethod.Name = "lblFfxivJobMethod";
             this.lblFfxivJobMethod.Size = new System.Drawing.Size(85, 27);
-            this.lblFfxivJobMethod.TabStop = false;
+            this.lblFfxivJobMethod.TabIndex = 1;
             this.lblFfxivJobMethod.Text = "Ordering method";
             this.lblFfxivJobMethod.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2136,6 +2200,7 @@
             this.cbxFfxivJobMethod.Location = new System.Drawing.Point(94, 3);
             this.cbxFfxivJobMethod.Name = "cbxFfxivJobMethod";
             this.cbxFfxivJobMethod.Size = new System.Drawing.Size(625, 21);
+            this.cbxFfxivJobMethod.TabIndex = 2;
             this.cbxFfxivJobMethod.TabStop = false;
             this.cbxFfxivJobMethod.SelectedIndexChanged += new System.EventHandler(this.cbxFfxivJobMethod_SelectedIndexChanged);
             // 
@@ -2147,7 +2212,7 @@
             this.panel1.Location = new System.Drawing.Point(94, 30);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(625, 565);
-            this.panel1.TabStop = false;
+            this.panel1.TabIndex = 3;
             // 
             // lstFfxivJobOrder
             // 
@@ -2157,6 +2222,7 @@
             this.lstFfxivJobOrder.Location = new System.Drawing.Point(0, 25);
             this.lstFfxivJobOrder.Name = "lstFfxivJobOrder";
             this.lstFfxivJobOrder.Size = new System.Drawing.Size(625, 540);
+            this.lstFfxivJobOrder.TabIndex = 0;
             this.lstFfxivJobOrder.TabStop = false;
             this.lstFfxivJobOrder.SelectedIndexChanged += new System.EventHandler(this.lstFfxivJobOrder_SelectedIndexChanged);
             this.lstFfxivJobOrder.EnabledChanged += new System.EventHandler(this.lstFfxivJobOrder_EnabledChanged);
@@ -2172,7 +2238,7 @@
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(625, 25);
-            this.toolStrip1.TabStop = false;
+            this.toolStrip1.TabIndex = 1;
             // 
             // btnFfxivJobUp
             // 
@@ -2214,7 +2280,7 @@
             this.panel9.Location = new System.Drawing.Point(7, 63);
             this.panel9.Name = "panel9";
             this.panel9.Size = new System.Drawing.Size(742, 10);
-            this.panel9.TabStop = false;
+            this.panel9.TabIndex = 1;
             // 
             // grpFfxivEventLogging
             // 
@@ -2225,6 +2291,7 @@
             this.grpFfxivEventLogging.Name = "grpFfxivEventLogging";
             this.grpFfxivEventLogging.Padding = new System.Windows.Forms.Padding(10);
             this.grpFfxivEventLogging.Size = new System.Drawing.Size(742, 56);
+            this.grpFfxivEventLogging.TabIndex = 2;
             this.grpFfxivEventLogging.TabStop = false;
             this.grpFfxivEventLogging.Text = " Event logging ";
             // 
@@ -2241,7 +2308,7 @@
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel9.Size = new System.Drawing.Size(722, 23);
-            this.tableLayoutPanel9.TabStop = false;
+            this.tableLayoutPanel9.TabIndex = 0;
             // 
             // chkFfxivLogNetwork
             // 
@@ -2251,6 +2318,7 @@
             this.chkFfxivLogNetwork.Location = new System.Drawing.Point(3, 3);
             this.chkFfxivLogNetwork.Name = "chkFfxivLogNetwork";
             this.chkFfxivLogNetwork.Size = new System.Drawing.Size(716, 17);
+            this.chkFfxivLogNetwork.TabIndex = 0;
             this.chkFfxivLogNetwork.TabStop = false;
             this.chkFfxivLogNetwork.Text = "Log network events";
             this.chkFfxivLogNetwork.UseVisualStyleBackColor = true;
@@ -2287,6 +2355,7 @@
             this.dgvSubstitutions.ShowEditingIcon = false;
             this.dgvSubstitutions.ShowRowErrors = false;
             this.dgvSubstitutions.Size = new System.Drawing.Size(742, 531);
+            this.dgvSubstitutions.TabIndex = 0;
             this.dgvSubstitutions.TabStop = false;
             this.dgvSubstitutions.VirtualMode = true;
             this.dgvSubstitutions.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSubstitutions_CellDoubleClick);
@@ -2328,7 +2397,7 @@
             this.tlsSubstitutions.Location = new System.Drawing.Point(7, 7);
             this.tlsSubstitutions.Name = "tlsSubstitutions";
             this.tlsSubstitutions.Size = new System.Drawing.Size(742, 25);
-            this.tlsSubstitutions.TabStop = false;
+            this.tlsSubstitutions.TabIndex = 1;
             // 
             // btnSubAdd
             // 
@@ -2378,7 +2447,7 @@
             this.panel19.Location = new System.Drawing.Point(7, 7);
             this.panel19.Name = "panel19";
             this.panel19.Size = new System.Drawing.Size(742, 556);
-            this.panel19.TabStop = false;
+            this.panel19.TabIndex = 0;
             // 
             // dgvConstVariables
             // 
@@ -2401,6 +2470,7 @@
             this.dgvConstVariables.ShowEditingIcon = false;
             this.dgvConstVariables.ShowRowErrors = false;
             this.dgvConstVariables.Size = new System.Drawing.Size(742, 531);
+            this.dgvConstVariables.TabIndex = 0;
             this.dgvConstVariables.TabStop = false;
             this.dgvConstVariables.VirtualMode = true;
             this.dgvConstVariables.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvConstVariables_CellDoubleClick);
@@ -2435,7 +2505,7 @@
             this.tlsScalar.Location = new System.Drawing.Point(0, 0);
             this.tlsScalar.Name = "tlsScalar";
             this.tlsScalar.Size = new System.Drawing.Size(742, 25);
-            this.tlsScalar.TabStop = false;
+            this.tlsScalar.TabIndex = 1;
             // 
             // btnConstAdd
             // 
@@ -2496,11 +2566,12 @@
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(10);
             this.groupBox2.Size = new System.Drawing.Size(742, 556);
+            this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = " Scripting API access ";
-            //
+            // 
             // dgvAdditionalFeatures
-            //
+            // 
             this.dgvAdditionalFeatures.AllowUserToAddRows = false;
             this.dgvAdditionalFeatures.AllowUserToDeleteRows = false;
             this.dgvAdditionalFeatures.AllowUserToResizeColumns = false;
@@ -2523,48 +2594,49 @@
             this.dgvAdditionalFeatures.ShowEditingIcon = false;
             this.dgvAdditionalFeatures.ShowRowErrors = false;
             this.dgvAdditionalFeatures.Size = new System.Drawing.Size(722, 189);
+            this.dgvAdditionalFeatures.TabIndex = 0;
             this.dgvAdditionalFeatures.TabStop = false;
             this.dgvAdditionalFeatures.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAdditionalFeatures_CellContentClick);
             this.dgvAdditionalFeatures.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAdditionalFeatures_CellContentDoubleClick);
             this.dgvAdditionalFeatures.SelectionChanged += new System.EventHandler(this.dgvAdditionalFeatures_SelectionChanged);
-            //
+            // 
             // dataGridViewTextBoxColumn1
-            //
+            // 
             this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridViewTextBoxColumn1.HeaderText = "Additional features";
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
             this.dataGridViewTextBoxColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridViewTextBoxColumn1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            //
+            // 
             // dataGridViewCheckBoxColumn1
-            //
+            // 
             this.dataGridViewCheckBoxColumn1.HeaderText = "Allow for local triggers";
             this.dataGridViewCheckBoxColumn1.Name = "dataGridViewCheckBoxColumn1";
             this.dataGridViewCheckBoxColumn1.ReadOnly = true;
             this.dataGridViewCheckBoxColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            //
+            // 
             // dataGridViewCheckBoxColumn2
-            //
+            // 
             this.dataGridViewCheckBoxColumn2.HeaderText = "Allow for remote triggers";
             this.dataGridViewCheckBoxColumn2.Name = "dataGridViewCheckBoxColumn2";
             this.dataGridViewCheckBoxColumn2.ReadOnly = true;
             this.dataGridViewCheckBoxColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            //
+            // 
             // dataGridViewCheckBoxColumn3
-            //
+            // 
             this.dataGridViewCheckBoxColumn3.HeaderText = "Allow if running as admin";
             this.dataGridViewCheckBoxColumn3.Name = "dataGridViewCheckBoxColumn3";
             this.dataGridViewCheckBoxColumn3.ReadOnly = true;
             this.dataGridViewCheckBoxColumn3.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            //
+            // 
             // panel8
-            //
+            // 
             this.panel8.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel8.Location = new System.Drawing.Point(10, 347);
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(722, 10);
-            this.panel8.TabStop = false;
+            this.panel8.TabIndex = 1;
             // 
             // dgvApiAccess
             // 
@@ -2590,6 +2662,7 @@
             this.dgvApiAccess.ShowEditingIcon = false;
             this.dgvApiAccess.ShowRowErrors = false;
             this.dgvApiAccess.Size = new System.Drawing.Size(722, 284);
+            this.dgvApiAccess.TabIndex = 2;
             this.dgvApiAccess.TabStop = false;
             this.dgvApiAccess.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApiAccess_CellContentClick);
             this.dgvApiAccess.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApiAccess_CellContentDoubleClick);
@@ -2631,7 +2704,7 @@
             this.panel18.Location = new System.Drawing.Point(10, 53);
             this.panel18.Name = "panel18";
             this.panel18.Size = new System.Drawing.Size(722, 10);
-            this.panel18.TabStop = false;
+            this.panel18.TabIndex = 3;
             // 
             // btnUnlockSecurity
             // 
@@ -2640,6 +2713,7 @@
             this.btnUnlockSecurity.Location = new System.Drawing.Point(10, 23);
             this.btnUnlockSecurity.Name = "btnUnlockSecurity";
             this.btnUnlockSecurity.Size = new System.Drawing.Size(722, 30);
+            this.btnUnlockSecurity.TabIndex = 4;
             this.btnUnlockSecurity.TabStop = false;
             this.btnUnlockSecurity.Text = "Unlock security settings for editing";
             this.btnUnlockSecurity.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -2669,10 +2743,11 @@
             this.groupBox1.AutoSize = true;
             this.groupBox1.Controls.Add(this.tableLayoutPanel11);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox1.Location = new System.Drawing.Point(7, 332);
+            this.groupBox1.Location = new System.Drawing.Point(7, 378);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
             this.groupBox1.Size = new System.Drawing.Size(742, 82);
+            this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = " Aura control ";
             // 
@@ -2692,7 +2767,7 @@
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel11.Size = new System.Drawing.Size(722, 49);
-            this.tableLayoutPanel11.TabStop = false;
+            this.tableLayoutPanel11.TabIndex = 0;
             // 
             // txtMonitorWindow
             // 
@@ -2710,7 +2785,7 @@
             this.lblMonitorWindow.Location = new System.Drawing.Point(3, 0);
             this.lblMonitorWindow.Name = "lblMonitorWindow";
             this.lblMonitorWindow.Size = new System.Drawing.Size(195, 26);
-            this.lblMonitorWindow.TabStop = false;
+            this.lblMonitorWindow.TabIndex = 9;
             this.lblMonitorWindow.Text = "Monitor window for showing/hiding aura";
             this.lblMonitorWindow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2723,6 +2798,7 @@
             this.cbxEnableHwAccel.Location = new System.Drawing.Point(3, 29);
             this.cbxEnableHwAccel.Name = "cbxEnableHwAccel";
             this.cbxEnableHwAccel.Size = new System.Drawing.Size(716, 17);
+            this.cbxEnableHwAccel.TabIndex = 10;
             this.cbxEnableHwAccel.TabStop = false;
             this.cbxEnableHwAccel.Text = "Enable aura hardware acceleration";
             this.cbxEnableHwAccel.UseVisualStyleBackColor = true;
@@ -2730,10 +2806,10 @@
             // panel12
             // 
             this.panel12.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel12.Location = new System.Drawing.Point(7, 345);
+            this.panel12.Location = new System.Drawing.Point(7, 368);
             this.panel12.Name = "panel12";
             this.panel12.Size = new System.Drawing.Size(742, 10);
-            this.panel12.TabStop = false;
+            this.panel12.TabIndex = 1;
             // 
             // grpUserInterface
             // 
@@ -2743,7 +2819,8 @@
             this.grpUserInterface.Location = new System.Drawing.Point(7, 148);
             this.grpUserInterface.Name = "grpUserInterface";
             this.grpUserInterface.Padding = new System.Windows.Forms.Padding(10);
-            this.grpUserInterface.Size = new System.Drawing.Size(742, 197);
+            this.grpUserInterface.Size = new System.Drawing.Size(742, 220);
+            this.grpUserInterface.TabIndex = 2;
             this.grpUserInterface.TabStop = false;
             this.grpUserInterface.Text = " User interface ";
             // 
@@ -2753,18 +2830,19 @@
             this.tableLayoutPanel10.ColumnCount = 2;
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel10.Controls.Add(this.cbxAutoComplete, 0, 5);
             this.tableLayoutPanel10.Controls.Add(this.cbxActionAsync, 0, 3);
             this.tableLayoutPanel10.Controls.Add(this.chkClipboard, 0, 0);
-            this.tableLayoutPanel10.Controls.Add(this.lblAutosaveInterval, 0, 6);
-            this.tableLayoutPanel10.Controls.Add(this.cbxAutosaveConfig, 0, 5);
+            this.tableLayoutPanel10.Controls.Add(this.lblAutosaveInterval, 0, 7);
+            this.tableLayoutPanel10.Controls.Add(this.cbxAutosaveConfig, 0, 6);
             this.tableLayoutPanel10.Controls.Add(this.cbxDevMode, 0, 4);
             this.tableLayoutPanel10.Controls.Add(this.cbxTestLive, 0, 1);
             this.tableLayoutPanel10.Controls.Add(this.cbxTestIgnoreConditions, 0, 2);
-            this.tableLayoutPanel10.Controls.Add(this.nudAutosaveMinutes, 1, 6);
+            this.tableLayoutPanel10.Controls.Add(this.nudAutosaveMinutes, 1, 7);
             this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel10.Location = new System.Drawing.Point(10, 23);
             this.tableLayoutPanel10.Name = "tableLayoutPanel10";
-            this.tableLayoutPanel10.RowCount = 6;
+            this.tableLayoutPanel10.RowCount = 8;
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -2772,8 +2850,9 @@
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(722, 164);
-            this.tableLayoutPanel10.TabStop = false;
+            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(722, 187);
+            this.tableLayoutPanel10.TabIndex = 0;
             // 
             // cbxActionAsync
             // 
@@ -2784,6 +2863,7 @@
             this.cbxActionAsync.Location = new System.Drawing.Point(3, 72);
             this.cbxActionAsync.Name = "cbxActionAsync";
             this.cbxActionAsync.Size = new System.Drawing.Size(716, 17);
+            this.cbxActionAsync.TabIndex = 0;
             this.cbxActionAsync.TabStop = false;
             this.cbxActionAsync.Text = "New actions asynchronous by default";
             this.cbxActionAsync.UseVisualStyleBackColor = true;
@@ -2797,6 +2877,7 @@
             this.chkClipboard.Location = new System.Drawing.Point(3, 3);
             this.chkClipboard.Name = "chkClipboard";
             this.chkClipboard.Size = new System.Drawing.Size(716, 17);
+            this.chkClipboard.TabIndex = 1;
             this.chkClipboard.TabStop = false;
             this.chkClipboard.Text = "Use operating system clipboard";
             this.chkClipboard.UseVisualStyleBackColor = true;
@@ -2806,10 +2887,10 @@
             this.lblAutosaveInterval.AutoEllipsis = true;
             this.lblAutosaveInterval.AutoSize = true;
             this.lblAutosaveInterval.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAutosaveInterval.Location = new System.Drawing.Point(3, 138);
+            this.lblAutosaveInterval.Location = new System.Drawing.Point(3, 161);
             this.lblAutosaveInterval.Name = "lblAutosaveInterval";
             this.lblAutosaveInterval.Size = new System.Drawing.Size(616, 26);
-            this.lblAutosaveInterval.TabStop = false;
+            this.lblAutosaveInterval.TabIndex = 2;
             this.lblAutosaveInterval.Text = "Autosaving time interval in minutes";
             this.lblAutosaveInterval.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -2819,9 +2900,10 @@
             this.cbxAutosaveConfig.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.tableLayoutPanel10.SetColumnSpan(this.cbxAutosaveConfig, 2);
             this.cbxAutosaveConfig.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxAutosaveConfig.Location = new System.Drawing.Point(3, 118);
+            this.cbxAutosaveConfig.Location = new System.Drawing.Point(3, 141);
             this.cbxAutosaveConfig.Name = "cbxAutosaveConfig";
             this.cbxAutosaveConfig.Size = new System.Drawing.Size(716, 17);
+            this.cbxAutosaveConfig.TabIndex = 3;
             this.cbxAutosaveConfig.TabStop = false;
             this.cbxAutosaveConfig.Text = "Enable configuration auto-save";
             this.cbxAutosaveConfig.UseVisualStyleBackColor = true;
@@ -2836,6 +2918,7 @@
             this.cbxDevMode.Location = new System.Drawing.Point(3, 95);
             this.cbxDevMode.Name = "cbxDevMode";
             this.cbxDevMode.Size = new System.Drawing.Size(716, 17);
+            this.cbxDevMode.TabIndex = 4;
             this.cbxDevMode.TabStop = false;
             this.cbxDevMode.Text = "Developer mode";
             this.cbxDevMode.UseVisualStyleBackColor = true;
@@ -2849,6 +2932,7 @@
             this.cbxTestLive.Location = new System.Drawing.Point(3, 26);
             this.cbxTestLive.Name = "cbxTestLive";
             this.cbxTestLive.Size = new System.Drawing.Size(716, 17);
+            this.cbxTestLive.TabIndex = 5;
             this.cbxTestLive.TabStop = false;
             this.cbxTestLive.Text = "Set testing with live values as the default action test method";
             this.cbxTestLive.UseVisualStyleBackColor = true;
@@ -2862,12 +2946,13 @@
             this.cbxTestIgnoreConditions.Location = new System.Drawing.Point(3, 49);
             this.cbxTestIgnoreConditions.Name = "cbxTestIgnoreConditions";
             this.cbxTestIgnoreConditions.Size = new System.Drawing.Size(716, 17);
+            this.cbxTestIgnoreConditions.TabIndex = 6;
             this.cbxTestIgnoreConditions.Text = "Ignore conditions as default when testing actions";
             this.cbxTestIgnoreConditions.UseVisualStyleBackColor = true;
             // 
             // nudAutosaveMinutes
             // 
-            this.nudAutosaveMinutes.Location = new System.Drawing.Point(625, 141);
+            this.nudAutosaveMinutes.Location = new System.Drawing.Point(625, 164);
             this.nudAutosaveMinutes.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -2880,6 +2965,7 @@
             0});
             this.nudAutosaveMinutes.Name = "nudAutosaveMinutes";
             this.nudAutosaveMinutes.Size = new System.Drawing.Size(94, 20);
+            this.nudAutosaveMinutes.TabIndex = 7;
             this.nudAutosaveMinutes.TabStop = false;
             this.nudAutosaveMinutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nudAutosaveMinutes.Value = new decimal(new int[] {
@@ -2891,10 +2977,10 @@
             // panel6
             // 
             this.panel6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel6.Location = new System.Drawing.Point(7, 161);
+            this.panel6.Location = new System.Drawing.Point(7, 138);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(742, 10);
-            this.panel6.TabStop = false;
+            this.panel6.TabIndex = 3;
             // 
             // panel5
             // 
@@ -2902,7 +2988,7 @@
             this.panel5.Location = new System.Drawing.Point(7, 69);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(742, 10);
-            this.panel5.TabStop = false;
+            this.panel5.TabIndex = 5;
             // 
             // grpDefaultSettings
             // 
@@ -2914,6 +3000,7 @@
             this.grpDefaultSettings.Name = "grpDefaultSettings";
             this.grpDefaultSettings.Padding = new System.Windows.Forms.Padding(10);
             this.grpDefaultSettings.Size = new System.Drawing.Size(742, 62);
+            this.grpDefaultSettings.TabIndex = 6;
             this.grpDefaultSettings.TabStop = false;
             this.grpDefaultSettings.Text = " Default settings ";
             // 
@@ -2932,7 +3019,7 @@
             this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel17.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel17.Size = new System.Drawing.Size(722, 29);
-            this.tableLayoutPanel17.TabStop = false;
+            this.tableLayoutPanel17.TabIndex = 0;
             // 
             // cbxTriggerTemplate
             // 
@@ -2942,6 +3029,7 @@
             this.cbxTriggerTemplate.Location = new System.Drawing.Point(3, 3);
             this.cbxTriggerTemplate.Name = "cbxTriggerTemplate";
             this.cbxTriggerTemplate.Size = new System.Drawing.Size(516, 23);
+            this.cbxTriggerTemplate.TabIndex = 0;
             this.cbxTriggerTemplate.TabStop = false;
             this.cbxTriggerTemplate.Text = "Use template trigger for default values";
             this.cbxTriggerTemplate.UseVisualStyleBackColor = true;
@@ -2952,6 +3040,7 @@
             this.btnTriggerTemplate.Location = new System.Drawing.Point(525, 3);
             this.btnTriggerTemplate.Name = "btnTriggerTemplate";
             this.btnTriggerTemplate.Size = new System.Drawing.Size(194, 23);
+            this.btnTriggerTemplate.TabIndex = 1;
             this.btnTriggerTemplate.TabStop = false;
             this.btnTriggerTemplate.Text = "Edit template trigger";
             this.btnTriggerTemplate.UseVisualStyleBackColor = true;
@@ -2969,11 +3058,25 @@
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.tableLayoutPanel6.Size = new System.Drawing.Size(722, 29);
-            this.tableLayoutPanel6.TabStop = false;
+            this.tableLayoutPanel6.TabIndex = 1;
             // 
             // fontDialog1
             // 
             this.fontDialog1.AllowScriptChange = false;
+            // 
+            // cbxAutoComplete
+            // 
+            this.cbxAutoComplete.AutoSize = true;
+            this.cbxAutoComplete.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel10.SetColumnSpan(this.cbxAutoComplete, 2);
+            this.cbxAutoComplete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbxAutoComplete.Location = new System.Drawing.Point(3, 118);
+            this.cbxAutoComplete.Name = "cbxAutoComplete";
+            this.cbxAutoComplete.Size = new System.Drawing.Size(716, 17);
+            this.cbxAutoComplete.TabIndex = 8;
+            this.cbxAutoComplete.TabStop = false;
+            this.cbxAutoComplete.Text = "Enable autocomplete on text fields";
+            this.cbxAutoComplete.UseVisualStyleBackColor = true;
             // 
             // ConfigurationForm
             // 
@@ -3333,5 +3436,6 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn2;
         private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn3;
         private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.CheckBox cbxAutoComplete;
     }
 }

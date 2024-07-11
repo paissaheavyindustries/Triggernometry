@@ -115,6 +115,7 @@ namespace Triggernometry.Forms
             chkClipboard.Checked = cfg.UseOsClipboard;
             txtSeparator.Text = cfg.EventSeparator;
             cbxDevMode.Checked = cfg.DeveloperMode;
+            cbxAutoComplete.Checked = cfg.AutoComplete;
             cbxFfxivJobMethod.SelectedIndex = (int)cfg.FfxivPartyOrdering;
             chkWelcome.Checked = cfg.ShowWelcome;
             chkWarnAdmin.Checked = cfg.WarnAdmin;
@@ -190,6 +191,7 @@ namespace Triggernometry.Forms
             cfg.LogVariableExpansions = chkLogVariableExpansions.Checked;
             cfg.FfxivLogNetwork = chkFfxivLogNetwork.Checked;
             cfg.DeveloperMode = cbxDevMode.Checked;
+            cfg.AutoComplete = cbxAutoComplete.Checked;
             cfg.UseScarborough = cbxEnableHwAccel.Checked;
             cfg.WindowToMonitor = txtMonitorWindow.Text;
             cfg.CacheImageExpiry = (int)nudCacheImageExpiry.Value;

@@ -425,6 +425,9 @@ namespace Triggernometry
         public bool DeveloperMode { get; set; } = false;
 
         [XmlAttribute]
+        public bool AutoComplete { get; set; } = true;
+
+        [XmlAttribute]
         public bool AutosaveEnabled { get; set; } = false;
 
         [XmlAttribute]

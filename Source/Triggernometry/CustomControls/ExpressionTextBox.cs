@@ -745,10 +745,13 @@ namespace Triggernometry.CustomControls
         {
             UpdateBackground();
             if (textBox1.Multiline) { MultiLineAdjustHeight(); }
-            if (ExpressionType != SupportedExpressionTypeEnum.Regex && textBox1.Focused)
+            if (RealPlugin.plug.cfg.AutoComplete == true)
             {
-                acfDebounceTimer.Stop();
-                acfDebounceTimer.Start();
+                if (ExpressionType != SupportedExpressionTypeEnum.Regex && textBox1.Focused)
+                {
+                    acfDebounceTimer.Stop();
+                    acfDebounceTimer.Start();
+                }
             }
         }
 
@@ -1813,7 +1816,5 @@ namespace Triggernometry.CustomControls
             #endregion
 
         }
-
-
     }
 }

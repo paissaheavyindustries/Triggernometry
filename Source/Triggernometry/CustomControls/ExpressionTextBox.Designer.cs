@@ -83,8 +83,8 @@
 
         #endregion
         private System.Windows.Forms.ToolTip toolTip1;
-        internal System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Panel panel2;
         internal System.Windows.Forms.Panel panel1;
+        internal TextBox textBox1;
     }
 }
