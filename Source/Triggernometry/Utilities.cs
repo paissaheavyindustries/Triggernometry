@@ -217,21 +217,5 @@ namespace Triggernometry.Utilities
             return true;
         }
 
-        const uint PROCESS_ALL_ACCESS = 0x1F0FFF;
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern int GetProcessId(IntPtr hProcess);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern IntPtr OpenProcess(uint dwDesiredAccess, bool bInheritHandle, int dwProcessId);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool CloseHandle(IntPtr hObject);
-
-        public static IntPtr GetXIVHandle()
-        {
-            return OpenProcess(PROCESS_ALL_ACCESS, false, PluginBridges.BridgeFFXIV.GetProcessId());
-        }
     }
 }

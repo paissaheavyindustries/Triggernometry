@@ -34,23 +34,12 @@ namespace Triggernometry.CustomControls
                 var hitTestInfo = HitTest(localPos);
                 if (hitTestInfo.Location == TreeViewHitTestLocations.StateImage)
                 {
-                    Message mx = new Message();
-                    mx.HWnd = m.HWnd;
-                    mx.LParam = m.LParam;
-                    mx.WParam = m.WParam;
-                    mx.Msg = 0x201; // lmb down
-                    base.WndProc(ref mx);
-                    m.Result = mx.Result;
-                }
-                else
-                {
+                    m.Msg = 0x201; // lmb down
                     base.WndProc(ref m);
+                    return;
                 }
             }
-            else
-            {
-                base.WndProc(ref m);
-            }
+            base.WndProc(ref m);
         }
 
     }

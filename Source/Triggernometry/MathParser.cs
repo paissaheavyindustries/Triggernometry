@@ -50,8 +50,8 @@ namespace Triggernometry
             // otherwise use (-a) [op] b.
             AddOperator("-", false, 2, binaryOperation: (a, b) => a - b);
             AddOperator("+", false, 2, binaryOperation: (a, b) => a + b);
-            AddOperator("<<", false, 2, binaryOperation: (a, b) => Truncate(a) << Truncate(b));         // bitwise left
-            AddOperator(">>", false, 2, binaryOperation: (a, b) => Truncate(a) >> Truncate(b));         // bitwise right
+            AddOperator("<<", false, 2, binaryOperation: (a, b) => Truncate(a) << (int)Truncate(b));         // bitwise left
+            AddOperator(">>", false, 2, binaryOperation: (a, b) => Truncate(a) >> (int)Truncate(b));         // bitwise right
             AddOperator("??", true, 2);      // string operator: (a is numeric) ? a : b. Similar to null-coalescing operator ??
             AddOperator(">", false, 2, binaryOperation: (a, b) => a > b + TOLERANCE ? 1 : 0);
             AddOperator("≥", false, 2, binaryOperation: (a, b) => a + TOLERANCE >= b ? 1 : 0);
@@ -97,12 +97,18 @@ namespace Triggernometry
             LocalFunctions.Add("atan2", x => Math.Atan2(x[0], x[1]));
             LocalFunctions.Add("radtodeg", x => x[0] / Math.PI * 180.0);
             LocalFunctions.Add("degtorad", x => x[0] / 180.0 * Math.PI);
+            LocalFunctions.Add("dir2rad", DirectionToRadFunction);
             LocalFunctions.Add("distance", DistanceFunction);
             LocalFunctions.Add("d", DistanceFunction);
+            LocalFunctions.Add("manhattandistance", L1DistanceFunction);
+            LocalFunctions.Add("l1d", L1DistanceFunction);
+            LocalFunctions.Add("chebyshevdistance", LinfDistanceFunction);
+            LocalFunctions.Add("l∞d", LinfDistanceFunction);
             LocalFunctions.Add("projectdistance", ProjectDistanceFunction);
             LocalFunctions.Add("projd", ProjectDistanceFunction);
             LocalFunctions.Add("projectheight", ProjectHeightFunction);
             LocalFunctions.Add("projh", ProjectHeightFunction);
+            LocalFunctions.Add("ispointinray", IsPointInRayFunction);
             LocalFunctions.Add("angle", x => Math.Atan2(x[2] - x[0], x[3] - x[1]));
             LocalFunctions.Add("θ", x => Math.Atan2(x[2] - x[0], x[3] - x[1]));
             LocalFunctions.Add("relangle", x => ModFunction(x[1] - x[0] + Math.PI, 2 * Math.PI) - Math.PI);
@@ -177,12 +183,12 @@ namespace Triggernometry
 
         public const double ETmin2sec = 70.0 / 24.0;
 
-        public static int Truncate(double x, double tolerance = TOLERANCE)
+        public static long Truncate(double x, double tolerance = TOLERANCE)
         {
             if (x > 0)
-                return (int)(x + tolerance);
+                return (long)(x + tolerance);
             else
-                return (int)(x - tolerance);
+                return (long)(x - tolerance);
         }
 
         public static double ModFunction(double a, double b)
@@ -215,9 +221,12 @@ namespace Triggernometry
             return 1;
         }
 
+        /// <summary>
+        /// Accepts 2n arguments: distance(*coord1, *coord2)
+        /// e.g. distance(x1, y1, x2, y2)  distance(x1, y1, z1, x2, y2, z2)
+        /// </summary>
         public static double DistanceFunction(double[] x)
-        {   // accepts 2n arguments: distance(*coord1, *coord2)
-            // e.g. distance(x1, y1, x2, y2)  distance(x1, y1, z1, x2, y2, z2)
+        {   
             if (x.Length == 0 || x.Length % 2 != 0) { return 0; }
             int dimension = x.Length / 2;
             double squaresum = 0;
@@ -226,6 +235,38 @@ namespace Triggernometry
                 squaresum += Math.Pow((x[i] - x[i + dimension]), 2.0);
             }
             return Math.Sqrt(squaresum);
+        }
+
+        /// <summary>
+        /// Similar to Distance function, but L₁-distance (Manhattan distance).
+        /// e.g. (x1, y1, x2, y2)  (x1, y1, z1, x2, y2, z2)
+        /// </summary>
+        public static double L1DistanceFunction(double[] x)
+        {
+            if (x.Length == 0 || x.Length % 2 != 0) { return 0; }
+            int dimension = x.Length / 2;
+            double d = 0;
+            for (int i = 0; i < dimension; i++)
+            {
+                d += Math.Abs(x[i] - x[i + dimension]);
+            }
+            return d;
+        }
+
+        /// <summary>
+        /// Similar to Distance function, but L∞-distance (Chebyshev distance).
+        /// e.g. (x1, y1, x2, y2)  (x1, y1, z1, x2, y2, z2)
+        /// </summary>
+        public static double LinfDistanceFunction(double[] x)
+        {
+            if (x.Length == 0 || x.Length % 2 != 0) { return 0; }
+            int dimension = x.Length / 2;
+            double d = 0;
+            for (int i = 0; i < dimension; i++)
+            {
+                d = Math.Max(d, Math.Abs(x[i] - x[i + dimension]));
+            }
+            return d;
         }
 
         // distance, projectdistance, projectheight
@@ -240,8 +281,7 @@ namespace Triggernometry
         // Useful when doing calculations about line AoE.
 
         public static double ProjectDistanceFunction(double[] x)
-        {   // projectdistance(x1, y1, θ1, x2, y2)
-
+        {   // projectdistance(x0, y0, θ0, x1, y1)
             if (x.Length != 5) { return 0; }
             double dx = x[3] - x[0];
             double dy = x[4] - x[1];
@@ -250,13 +290,22 @@ namespace Triggernometry
         }
 
         public static double ProjectHeightFunction(double[] x)
-        {   // projectheight(x1, y1, θ1, x2, y2)
-
+        {   // projectheight(x0, y0, θ0, x1, y1)
             if (x.Length != 5) { return 0; }
             double dx = x[3] - x[0];
             double dy = x[4] - x[1];
             double θ = x[2];
             return Math.Abs(dx * Math.Cos(θ) - dy * Math.Sin(θ));
+        }
+
+        public static double IsPointInRayFunction(double[] x)
+        {   // ispointinray(x0, y0, θ0, width, x1, y1)
+            if (x.Length != 6) { return 0; }
+            double dx = x[4] - x[0];
+            double dy = x[5] - x[1];
+            double θ = x[2];
+            double width = x[3];
+            return Math.Abs(dx * Math.Cos(θ) - dy * Math.Sin(θ)) <= width && dx * Math.Sin(θ) + dy * Math.Cos(θ) >= 0 ? 1 : 0;
         }
 
         // roundir, roundvec
@@ -300,6 +349,7 @@ namespace Triggernometry
                     return 0;
             }
         }
+
         public static double RoundvecFunction(double[] input)
         {
             switch (input.Length)
@@ -311,6 +361,19 @@ namespace Triggernometry
                 default:
                     return 0;
             }
+        }
+
+        /// <summary> Reverse function of roundir.</summary>
+        public static double DirectionToRadFunction(double[] input)
+        {
+            double direction = input[0];
+            double segments = input[1];
+            if (segments < 0)
+            {
+                segments *= -1;
+                direction += 0.5;
+            }
+            return -Math.PI + 2 * Math.PI * ModFunction(direction / segments, 1);
         }
 
         /// <summary>
@@ -515,8 +578,7 @@ namespace Triggernometry
             OperatorArity[op] = arity;
             if (op != " *")
             {
-                foreach (char c in op)
-                    OperatorChar.Add(c);    // add the chars which are considered as operator chars (for lexer)
+                OperatorChar.UnionWith(op);    // add the chars which are considered as operator chars (for lexer)
             }
 
             if (arity == 1)
@@ -604,7 +666,7 @@ namespace Triggernometry
             expr = expr.Replace("°", "*0.01745329251994329576923690768488612");
 
             // replace continuous +/- to a single +/- base on the count of "-"
-            expr = MultiplePlusMinus.Replace(expr, match => match.Value.Replace("+", "").Length % 2 == 0 ? "+" : "-");
+            expr = MultiplePlusMinus.Replace(expr, match => match.Value.Count(c => c == '-') % 2 == 0 ? "+" : "-");
 
             for (var i = 0; i < expr.Length; i++)
             {   // traverse all chars in the expression

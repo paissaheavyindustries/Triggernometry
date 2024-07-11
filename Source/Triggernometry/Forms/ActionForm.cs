@@ -10,7 +10,6 @@ using System.Globalization;
 using System.Diagnostics;
 using Triggernometry.CustomControls;
 using static Triggernometry.Action;
-using System.Runtime.InteropServices;
 using static Triggernometry.CustomControls.ColorSelector;
 
 namespace Triggernometry.Forms
@@ -109,7 +108,7 @@ namespace Triggernometry.Forms
             }
         }
 
-        // internal string Clipboard = "";
+        internal Trigger ParentTrigger = null;
 
         internal static ImageConverter ic = new ImageConverter();
 
@@ -533,13 +532,16 @@ namespace Triggernometry.Forms
                 expLoopIterationDelay.Expression = "";
                 expLoopInit.Expression = "0";
                 expLoopIncr.Expression = "1";
+                cbxActOpType.SelectedIndex = 0;
+                cbxActOpBoolParam.SelectedIndex = 0;
+                expActOpStringParam.Expression = "";
                 cbxRepositoryOp.SelectedIndex = 0;
                 cbxTriggerZoneType.SelectedIndex = 0;
                 expJsonVariable.Expression = "";
             }
             else
             {
-                cbxActionType.SelectedIndex = (int)a.ActionType;
+                ParentTrigger = a.ParentTrigger;                cbxActionType.SelectedIndex = (int)a._ActionType;
                 cbxRefireOption1.SelectedIndex = (a._RefireInterrupt == true ? 0 : 1);
                 cbxRefireOption2.SelectedIndex = (a._RefireRequeue == true ? 1 : 0);
                 expExecutionDelay.Expression = a._ExecutionDelayExpression;
@@ -665,36 +667,7 @@ namespace Triggernometry.Forms
                 expWmsgCode.Expression = a._WmsgCode;
                 expWmsgWparam.Expression = a._WmsgWparam;
                 expWmsgLparam.Expression = a._WmsgLparam;
-                switch (a._TextAuraAlignment)
-                {
-                    case Action.TextAuraAlignmentEnum.TopLeft:
-                        cbxTextAuraAlignment.SelectedIndex = 0;
-                        break;
-                    case Action.TextAuraAlignmentEnum.TopCenter:
-                        cbxTextAuraAlignment.SelectedIndex = 1;
-                        break;
-                    case Action.TextAuraAlignmentEnum.TopRight:
-                        cbxTextAuraAlignment.SelectedIndex = 2;
-                        break;
-                    case Action.TextAuraAlignmentEnum.MiddleLeft:
-                        cbxTextAuraAlignment.SelectedIndex = 3;
-                        break;
-                    case Action.TextAuraAlignmentEnum.MiddleCenter:
-                        cbxTextAuraAlignment.SelectedIndex = 4;
-                        break;
-                    case Action.TextAuraAlignmentEnum.MiddleRight:
-                        cbxTextAuraAlignment.SelectedIndex = 5;
-                        break;
-                    case Action.TextAuraAlignmentEnum.BottomLeft:
-                        cbxTextAuraAlignment.SelectedIndex = 6;
-                        break;
-                    case Action.TextAuraAlignmentEnum.BottomCenter:
-                        cbxTextAuraAlignment.SelectedIndex = 7;
-                        break;
-                    case Action.TextAuraAlignmentEnum.BottomRight:
-                        cbxTextAuraAlignment.SelectedIndex = 8;
-                        break;
-                }
+                cbxTextAuraAlignment.SelectedIndex = (int)a._TextAuraAlignment;
                 expTextAuraName.Expression = a._TextAuraName;
                 expTextAuraText.Expression = a._TextAuraExpression;
                 expTextAuraXIni.Expression = a._TextAuraXIniExpression;
@@ -718,9 +691,25 @@ namespace Triggernometry.Forms
                 fic.Size = a._TextAuraFontSize;
                 fic.Effect = a._TextAuraEffect;
                 txtTextAuraFont.Tag = fic;
-                colorSelector1.TextColor = ExpressionTextBox.ParseColor(fakectx.EvaluateStringExpression(null, fakectx, a._TextAuraForegroundClInt), Color.Black);
-                colorSelector1.TextOutlineColor = ExpressionTextBox.ParseColor(fakectx.EvaluateStringExpression(null, fakectx, a._TextAuraOutlineClInt), Color.Empty);
-                colorSelector1.BackgroundColor = ExpressionTextBox.ParseColor(fakectx.EvaluateStringExpression(null, fakectx, a._TextAuraBackgroundClInt), Color.Transparent);
+
+                try
+                {
+                    colorSelector1.TextColor = ExpressionTextBox.ParseColor(fakectx.EvaluateStringExpression(null, fakectx, a._TextAuraForegroundClInt), Color.Black);
+                }
+                catch { colorSelector1.TextColor = Color.Black; }
+
+                try
+                {
+                    colorSelector1.TextOutlineColor = ExpressionTextBox.ParseColor(fakectx.EvaluateStringExpression(null, fakectx, a._TextAuraOutlineClInt), Color.Empty);
+                }
+                catch { colorSelector1.TextOutlineColor = Color.Empty; }
+
+                try
+                {
+                    colorSelector1.BackgroundColor = ExpressionTextBox.ParseColor(fakectx.EvaluateStringExpression(null, fakectx, a._TextAuraBackgroundClInt), Color.Transparent);
+                }
+                catch { colorSelector1.BackgroundColor = Color.Transparent; }
+
                 expTextForeColor.Text = a._TextAuraForegroundClInt;
                 expTextOutlineColor.Text = a._TextAuraOutlineClInt;
                 expTextBackColor.Text = a._TextAuraBackgroundClInt;
@@ -818,6 +807,9 @@ namespace Triggernometry.Forms
                 expLoopIterationDelay.Expression = a._LoopDelayExpression;
                 expLoopIncr.Expression = a._LoopIncrExpression;
                 expLoopInit.Expression = a._LoopInitExpression;
+                cbxActOpType.SelectedIndex = (int)a._ActOpType;
+                cbxActOpBoolParam.SelectedIndex = a._ActOpBoolParam ? 1 : 0;
+                expActOpStringParam.Expression = a._ActOpStringParam;
                 tn = plug.LocateNodeHostingRepositoryId(trvRepositoryLink.Nodes[0], a._RepositoryId);
                 if (tn != null)
                 {
@@ -834,7 +826,8 @@ namespace Triggernometry.Forms
 
         internal void SettingsToAction(Action a)
         {
-            a.ActionType = (Action.ActionTypeEnum)cbxActionType.SelectedIndex;
+            a.ParentTrigger = ParentTrigger;
+            a._ActionType = (Action.ActionTypeEnum)cbxActionType.SelectedIndex;
             a._RefireInterrupt = (cbxRefireOption1.SelectedIndex == 0);
             a._RefireRequeue = (cbxRefireOption2.SelectedIndex == 1);
             a._ExecutionDelayExpression = expExecutionDelay.Expression;
@@ -1076,6 +1069,9 @@ namespace Triggernometry.Forms
             a.LoopDelayExpression = expLoopIterationDelay.Expression;
             a.LoopIncrExpression = expLoopIncr.Expression;
             a.LoopInitExpression = expLoopInit.Expression;
+            a._ActOpType = (ActInteractionTypeEnum)cbxActOpType.SelectedIndex;
+            a._ActOpBoolParam = cbxActOpBoolParam.SelectedIndex == 1;
+            a._ActOpStringParam = expActOpStringParam.Expression;
             tn = trvRepositoryLink.SelectedNode;
             if (tn != null)
             {
@@ -1093,14 +1089,15 @@ namespace Triggernometry.Forms
         private void TestAction(bool liveValues, bool ignoreConditions = false)
         {
             Action a = new Action();
+            SettingsToAction(a);
+            if (ignoreConditions) a.Condition = new ConditionGroup();
+
             Context ctx = new Context();
             ctx.plug = plug;
             ctx.testByPlaceholder = (liveValues == false);
-            ctx.trig = null;
+            ctx.trig = a.ParentTrigger;
             ctx.soundhook = plug.SoundPlaybackSmart;
             ctx.ttshook = plug.TtsPlaybackSmart;
-            SettingsToAction(a);
-            if (ignoreConditions) { a.Condition = new ConditionGroup(); }
             ctx.triggered = DateTime.UtcNow;
             a.Execute(null, ctx);
         }
@@ -1562,7 +1559,7 @@ namespace Triggernometry.Forms
             ctx.testByPlaceholder = true;
             ctx.trig = null;
             SettingsToAction(a);
-            a.ActionType = Action.ActionTypeEnum.Aura;
+            a._ActionType = Action.ActionTypeEnum.Aura;
             a._AuraOp = Action.AuraOpEnum.DeactivateAura;
             ctx.triggered = DateTime.UtcNow;
             a.Execute(null, ctx);
@@ -1576,7 +1573,7 @@ namespace Triggernometry.Forms
             ctx.testByPlaceholder = true;
             ctx.trig = null;
             SettingsToAction(a);
-            a.ActionType = Action.ActionTypeEnum.TextAura;
+            a._ActionType = Action.ActionTypeEnum.TextAura;
             a._AuraOp = Action.AuraOpEnum.DeactivateAura;
             ctx.triggered = DateTime.UtcNow;
             a.Execute(null, ctx);
@@ -1878,16 +1875,6 @@ namespace Triggernometry.Forms
                     expLvarIndex.Enabled = true;
                     expLvarName.AutofillType = ExpressionTextBox.AutofillTypeEnum.List;
                     expLvarTarget.AutofillType = ExpressionTextBox.AutofillTypeEnum.List;
-                    break;
-                case (int)ListVariableOpEnum.PopLast:
-                    expLvarName.Enabled = true;
-                    expLvarName.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
-                    expLvarValue.Enabled = false;
-                    cbxLvarExpType.Enabled = false;
-                    expLvarTarget.Enabled = true;
-                    expLvarIndex.Enabled = false;
-                    expLvarName.AutofillType = ExpressionTextBox.AutofillTypeEnum.List;
-                    expLvarTarget.AutofillType = ExpressionTextBox.AutofillTypeEnum.Scalar;
                     break;
                 case (int)ListVariableOpEnum.Build:
                     expLvarName.Enabled = false;
@@ -2219,7 +2206,6 @@ namespace Triggernometry.Forms
         {
             lblKeypresses.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
             expKeypresses.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
-            btnSendKeysLink.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
             btnSendKeysListen.Enabled = (cbxKeypressMethod.SelectedIndex == 0);
             lblKeypressWindow.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
             expWindowTitle.Enabled = (cbxKeypressMethod.SelectedIndex >= 1);
@@ -2777,6 +2763,22 @@ namespace Triggernometry.Forms
             ExtEditor = null;
         }
 
+        private void cbxActOpType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (cbxActionType.SelectedIndex)
+            {
+                case (int)ActInteractionTypeEnum.SetCombatState:
+                    expActOpStringParam.Enabled = false;
+                    break;
+                case (int)ActInteractionTypeEnum.LogAllNetwork:
+                    expActOpStringParam.Enabled = false;
+                    break;
+                case (int)ActInteractionTypeEnum.UseDeucalion:
+                    expActOpStringParam.Enabled = false;
+                    break;
+            }
+        }
+
         private void cbxRepositoryOp_SelectedIndexChanged(object sender, EventArgs e)
         {
             trvRepositoryLink.Enabled = (cbxRepositoryOp.SelectedIndex == 1);
@@ -2925,309 +2927,6 @@ namespace Triggernometry.Forms
             }
         }
 
-        public class RichTextBoxHelper : RichTextBox // to do: change to CustomControls
-        {   
-            private readonly Form ParentForm;
-            private readonly TableLayoutPanel ParentTable;
-            private const double lineSpacing = 1.4;
-            internal static bool _Expanded = false;  // all textboxes share the same state
-            public bool Expanded
-            {
-                get { return _Expanded; }
-                set
-                {
-                    _Expanded = value;
-                    UpdateText();
-                }
-            }
-
-            /// <summary> Append the RichTextBoxHelper to the end of the given TableLayoutPanel in the given form.</summary>
-            public RichTextBoxHelper(string name, Form parentForm, TableLayoutPanel table, int colIndex = 1)
-            {
-                Name = name;
-                ReadOnly = true;
-                Tag = I18n.DoNotTranslate;
-
-                ParentForm = parentForm;
-                ParentTable = table;
-                // append to the last row and span to the last grid of the row
-                ParentTable.RowCount += 1;
-                ParentTable.RowStyles.Add(new RowStyle());
-                ParentTable.Controls.Add(this, colIndex, ParentTable.RowCount - 1);
-                if (ParentTable.ColumnCount - colIndex > 1) 
-                { 
-                    table.SetColumnSpan(this, ParentTable.ColumnCount - colIndex); 
-                }
-                Dock = DockStyle.Left;
-                Margin = new Padding(3, 15, 15, 7);
-                TabStop = false;
-
-                BorderStyle = BorderStyle.None;
-                ScrollBars = RichTextBoxScrollBars.Vertical;
-                Cursor = Cursors.Hand;
-                BackColor = parentForm.BackColor;
-                if (I18n.CurrentLanguage.LanguageName.Contains("CN")) // will switch to a more general implementation
-                { 
-                    Font = new Font("Microsoft YaHei", Font.Size); 
-                } 
-
-                Expanded = _Expanded;
-            }
-
-            internal void UpdateText()
-            {
-                LockRichTextBox();
-                if (_Expanded)
-                {
-                    Dock = DockStyle.Fill;
-                    string key = "";
-                    switch (Name)
-                    {
-                        case "rtbVariableHelper":
-                            key = "rtbHelperVar" + Enum.GetName(typeof(VariableOpEnum), ((ActionForm)ParentForm).cbxVariableOp.SelectedIndex); break;
-                        case "rtbLvarHelper":
-                            key = "rtbHelperLvar" + Enum.GetName(typeof(ListVariableOpEnum), ((ActionForm)ParentForm).cbxLvarOperation.SelectedIndex); break;
-                        case "rtbTvarHelper":
-                            key = "rtbHelperTvar" + Enum.GetName(typeof(TableVariableOpEnum), ((ActionForm)ParentForm).cbxTvarOpType.SelectedIndex); break;
-                        case "rtbDictHelper":
-                            key = "rtbHelperDict" + Enum.GetName(typeof(DictVariableOpEnum), ((ActionForm)ParentForm).cbxDictOpType.SelectedIndex); break;
-                        case "rtbSendKeysHelper":
-                            key = "rtbHelperSendKeys" + Enum.GetName(typeof(KeypressTypeEnum), ((ActionForm)ParentForm).cbxKeypressMethod.SelectedIndex); break;
-                        case "rtbCallbackHelper": key = "rtbHelperCallback"; break;
-                        case "rtbWmsgHelper": key = "rtbHelperWmsg"; break;
-                        case "rtbJsonHelper": key = "rtbHelperJson"; break;
-                    }
-                    var resources = new System.ComponentModel.ComponentResourceManager(typeof(ActionForm));
-                    Text = I18n.Translate($"ActionForm/{key}", resources.GetString($"{key}.Text") ?? "");
-                }
-                else
-                {
-                    Dock = DockStyle.Left;
-                    Text = I18n.Translate("ActionForm/rtbHelper", "[Show Help]");
-                }
-                SetStyles();
-                SetHeight();
-                UnlockRichTextBox();
-            }
-
-            private const int WM_SETFOCUS = 0x7;
-            private const int WM_SETREDRAW = 0x000B;
-            private const int WM_SETCURSOR = 0x0020;
-            private const int WM_MOUSEMOVE = 0x0200;
-            private const int WM_LBUTTONDOWN = 0x201;
-            private const int WM_LBUTTONUP = 0x202;
-            private const int WM_LBUTTONDBLCLK = 0x203;
-            private const int WM_RBUTTONDOWN = 0x204;
-            private const int WM_RBUTTONUP = 0x205;
-            private const int WM_RBUTTONDBLCLK = 0x206;
-            private const int WM_KEYDOWN = 0x0100;
-            private const int WM_KEYUP = 0x0101;
-
-            [DllImport("user32.dll")]
-            static extern bool HideCaret(IntPtr hWnd);
-            [DllImport("user32.dll")]
-            public static extern IntPtr SetCursor(IntPtr hCursor);
-            protected override void WndProc(ref Message m)
-            {
-                HideCaret(Handle);
-                if (m.Msg == WM_SETFOCUS || m.Msg == WM_KEYDOWN || m.Msg == WM_KEYUP ||
-                    m.Msg == WM_LBUTTONDOWN || m.Msg == WM_MOUSEMOVE || m.Msg == WM_LBUTTONDBLCLK ||
-                    m.Msg == WM_RBUTTONDOWN || m.Msg == WM_RBUTTONUP || m.Msg == WM_RBUTTONDBLCLK)
-                {
-                    return;
-                }
-                else if (m.Msg == WM_LBUTTONUP)
-                {
-                    Expanded = !Expanded;
-                }
-                else if (m.Msg == WM_SETCURSOR)
-                {
-                    SetCursor(Cursors.Help.Handle);
-                    return;
-                }
-                else
-                {
-                    base.WndProc(ref m);
-                }
-            }
-
-            [DllImport("user32.dll")]
-            private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
-
-            public void LockRichTextBox()
-            {
-                SendMessage(this.Handle, WM_SETREDRAW, IntPtr.Zero, IntPtr.Zero);
-                ReadOnly = false;
-            }
-
-            public void UnlockRichTextBox()
-            {
-                SendMessage(this.Handle, WM_SETREDRAW, new IntPtr(1), IntPtr.Zero);
-                ReadOnly = true;
-                Refresh();
-            }
-
-            /*
-            private const int EM_SETLINESPACING = 0x00CA;
-            private const int LINE_SPACE_MULTIPLE = 1;
-            private const int LINE_SPACE_TWIPS = 2;
-            
-            private void SetLineSpacing(double spacing)
-            {
-                float fontSize = this.Font.SizeInPoints;
-                int spacingTwips = (int)(fontSize * spacing * 20);
-                SendMessage(this.Handle, EM_SETLINESPACING, (IntPtr)LINE_SPACE_TWIPS, (IntPtr)spacingTwips);
-            }
-            */
-
-            private void SetHeight()
-            {
-                int residueHeight;
-                if (ParentTable.Parent is TabPage tabPage)
-                {
-                    Point rtbLocation = ParentTable.PointToScreen(Location);
-                    int tabControlBottom = tabPage.PointToScreen(new Point(0, tabPage.Height)).Y;
-                    residueHeight = tabControlBottom - rtbLocation.Y - 10;
-                }
-                else
-                {
-                    residueHeight = 200;
-                }
-
-                int totalLines = GetLineFromCharIndex(TextLength) + 1;
-                int lineHeight = (int)(Font.Height * 1.5);
-                int textHeight = totalLines * lineHeight;
-
-                Height = Math.Min(residueHeight, textHeight);
-            }
-
-            internal static Color[] expressionColors = {
-                Color.FromArgb(0, 85, 221),
-                Color.FromArgb(140, 0, 0)
-            };
-            internal static Color monospaceColor = Color.FromArgb(32, 64, 144);
-            internal static Color stringColor = Color.FromArgb(34, 153, 0);
-            internal static Color separatorColor = Color.FromArgb(204, 102, 0);
-
-            private void SetStyles()
-            {   // this is currently a very rough implementation for setting colors for formatted text
-                SelectAll();
-                if (!_Expanded)
-                {
-                    SelectionColor = Color.FromArgb(160, 160, 160);
-                }
-                else
-                {
-                    // initial color
-                    SelectionColor = Color.Black;
-
-                    // set color for ${...}
-                    int depth = 0;
-                    int totalLength = Text.Length;
-                    for (int i = 0; i < totalLength; i++)
-                    {
-                        if (i < totalLength - 1 && Text.Substring(i, 2) == "${")
-                        {
-                            depth++;
-                        }
-                        if (depth > 0)
-                        {
-                            Select(i, 1);
-                            SelectionColor = expressionColors[(depth - 1) % expressionColors.Count()];
-                            if (Text[i] == '}') { depth--; }
-                        }
-                    }
-
-                    // set color and style for `...`
-                    Font monospaceFont = new Font("Consolas", Font.Size);
-                    int start = 0;
-                    while (start < Text.Length)
-                    {
-                        int openIndex = Find("`", start, RichTextBoxFinds.None);
-                        if (openIndex == -1) break;
-
-                        int closeIndex = Find("`", openIndex + 1, RichTextBoxFinds.None);
-                        if (closeIndex == -1) break;
-
-                        Select(openIndex, closeIndex - openIndex + 1);
-                        SelectionFont = monospaceFont;
-
-                        for (int i = openIndex; i <= closeIndex; i++)
-                        {
-                            Select(i, 1);
-                            if (SelectionColor == Color.Black)
-                            {
-                                SelectionColor = monospaceColor;
-                            }
-                        }
-                        Select(closeIndex, 1);
-                        SelectedText = "";
-                        Select(openIndex, 1);
-                        SelectedText = "";
-                        start = closeIndex - 1;
-                    }
-
-                    // set color for '...'
-                    start = 0;
-                    while (start < Text.Length)
-                    {
-                        int openIndex = Find("'", start, RichTextBoxFinds.None);
-                        if (openIndex == -1) break;
-
-                        int closeIndex = Find("'", openIndex + 1, RichTextBoxFinds.None);
-                        if (closeIndex == -1) break;
-
-                        Select(openIndex, closeIndex - openIndex + 1);
-                        if (!SelectedText.Contains("$"))
-                        {
-                            SelectionColor = stringColor;
-                        }
-                        Select(openIndex, 1);
-                        SelectionColor = stringColor;
-                        Select(closeIndex, 1);
-                        SelectionColor = stringColor;
-                        start = closeIndex + 1;
-                    }
-
-                    // set color for "..."
-                    start = 0;
-                    while (start < Text.Length)
-                    {
-                        int openIndex = Find("\"", start, RichTextBoxFinds.None);
-                        if (openIndex == -1) break;
-
-                        int closeIndex = Find("\"", openIndex + 1, RichTextBoxFinds.None);
-                        if (closeIndex == -1) break;
-
-                        Select(openIndex, closeIndex - openIndex + 1);
-                        if (!SelectedText.Contains("$"))
-                        {
-                            SelectionColor = stringColor;
-                        }
-                        Select(openIndex, 1);
-                        SelectionColor = stringColor;
-                        Select(closeIndex, 1);
-                        SelectionColor = stringColor;
-                        start = closeIndex + 1;
-                    }
-
-                    // set color for separators
-                    for (start = 0; start < Text.Length; start++)
-                    {
-                        Select(start, 1);
-                        char ch = Text[start];
-                        if (SelectionColor == Color.Black) { continue; } // plain text
-                        if (ch == ',' && SelectionColor == stringColor) { continue; }
-                        if (ch == ',' || ch == '|' || ch == '=' || ch == ';' || ch == ':' || ch == Context.LINEBREAK_PLACEHOLDER[0])
-                        {
-                            SelectionColor = separatorColor;
-                        }
-                    }
-                }
-                Select(0, 0);
-            }
-
-        }
     }
 
 }

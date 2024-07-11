@@ -87,7 +87,16 @@ namespace Triggernometry
             }
             if (CurrentLanguage != null)
             {
-                return CurrentLanguage.Translate(key, text, args);
+                try
+                {
+                    return CurrentLanguage.Translate(key, text, args);
+                }
+                catch (FormatException)
+                {
+                    RealPlugin.plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/I18n/formatex", 
+                        "You might need to update your translation file (your_language_name.triglations.xml). \nFormatException occured during translating \"{0}\".",key));
+                    return String.Format(text, args);
+                }
             }
             else
             {
@@ -267,22 +276,24 @@ namespace Triggernometry
             }
         }
 
-        private static HashSet<string> wordsToTranslate = new HashSet<string>
-        {
+        private static readonly HashSet<string> _wordsToTranslate = new HashSet<string> 
+        {   // all lowercase
             "bool", "char", "charcode", "double", "float", "hex", "index", "int", "key",
-            "length", "slice", "startindex", "string", "time", "times", "type"
+            "length", "slice", "startindex", "string", "time", "times", "type", "version"
         };
 
         internal static string TranslateWord(string key)
         {
-            if (wordsToTranslate.Contains(key))
+            key = key.ToLower();
+            if (_wordsToTranslate.Contains(key))
             {
                 string path = $"internal/I18n/{key}";
                 return Translate(path, key);
             }
             else
             {
-                throw new Exception($"The key \"{key}\" is not in I18n.wordsToTranslate.");
+                throw new Exception(Translate("internal/I18n/translatewordmissingkey", 
+                    "The key {0} is not in I18n._wordsToTranslate. Please report the bug if you see this error.", key));
             }
         }
 
@@ -321,6 +332,12 @@ namespace Triggernometry
                            : Translate("internal/I18n/descasyncfalse", "[Sync] ");
         }
 
+        internal static string TranslateEnable(bool enable)
+        {
+            return enable ? Translate("internal/I18n/descenabletrue", "enable")
+                          : Translate("internal/I18n/descenablefalse", "disable");
+        }
+
         public static string TrlTriggerDescTime(double ms)
         {
             ms = Math.Round(ms);
@@ -342,6 +359,8 @@ namespace Triggernometry
                 return I18n.Translate("internal/I18n/desctimems", "{0} ms", ms);
             }
         }
+
+        public static bool IsChineseEnvironment => (RealPlugin.plug.cfg.Language ?? "").Contains("zh") || CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "zh";
 
     }
 

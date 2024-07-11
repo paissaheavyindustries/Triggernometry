@@ -54,9 +54,9 @@
     <TranslationEntry Key="ActionForm/btnTextAuraFont" Translation="..." />
     <TranslationEntry Key="ActionForm/btnTextAuraGuide" Translation="配置ガイドを使用（右クリックで詳細オプションを開く）" />
     <TranslationEntry Key="ActionForm/btnTextAuraHide" Translation="隠す" />
+    <TranslationEntry Key="ActionForm/cbxActionType[ACT Interaction]" Translation="ACT Interaction" />
     <TranslationEntry Key="ActionForm/cbxActionType[Dict variable operation]" Translation="Dict variable operation" />
     <TranslationEntry Key="ActionForm/cbxActionType[Discord webhook]" Translation="Discord webhook" />
-    <TranslationEntry Key="ActionForm/cbxActionType[End encounter]" Translation="ACT本体にEndを送信" />
     <TranslationEntry Key="ActionForm/cbxActionType[Execute script]" Translation="スクリプトを実行" />
     <TranslationEntry Key="ActionForm/cbxActionType[File operation]" Translation="ファイルの操作" />
     <TranslationEntry Key="ActionForm/cbxActionType[Folder operation]" Translation="フォルダの操作" />
@@ -83,6 +83,11 @@
     <TranslationEntry Key="ActionForm/cbxActionType[Text aura operation]" Translation="テキスト表示オーバーレイの操作" />
     <TranslationEntry Key="ActionForm/cbxActionType[Trigger operation]" Translation="トリガーの操作" />
     <TranslationEntry Key="ActionForm/cbxActionType[Use text-to-speech]" Translation="Text-to-speechによる読み上げ" />
+    <TranslationEntry Key="ActionForm/cbxActOpBoolParam[End/Disable]" Translation="End/Disable" />
+    <TranslationEntry Key="ActionForm/cbxActOpBoolParam[Start/Enable]" Translation="Start/Enable" />
+    <TranslationEntry Key="ActionForm/cbxActOpType[Log all network data]" Translation="Log all network data" />
+    <TranslationEntry Key="ActionForm/cbxActOpType[Set ACT combat state]" Translation="Set ACT combat state" />
+    <TranslationEntry Key="ActionForm/cbxActOpType[Use Deucalion (injection)]" Translation="Use Deucalion (injection)" />
     <TranslationEntry Key="ActionForm/cbxAuraDisplay[Centered]" Translation="中央に表示" />
     <TranslationEntry Key="ActionForm/cbxAuraDisplay[Normal]" Translation="元の大きさで表示" />
     <TranslationEntry Key="ActionForm/cbxAuraDisplay[Stretched to fill]" Translation="引き伸ばして表示" />
@@ -164,7 +169,6 @@
     <TranslationEntry Key="ActionForm/cbxLvarOperation[Join all values in the list variable into a scalar variable (separator in expression)]" Translation="リスト変数のすべての値をスカラ変数に結合（区切り文字を式に記述）" />
     <TranslationEntry Key="ActionForm/cbxLvarOperation[Pop and insert a value from a list into another list]" Translation="Pop and insert a value from a list into another list" />
     <TranslationEntry Key="ActionForm/cbxLvarOperation[Pop and set a value from a list into another list]" Translation="Pop and set a value from a list into another list" />
-    <TranslationEntry Key="ActionForm/cbxLvarOperation[Pop last value from list variable into a scalar variable (old action)]" Translation="リスト変数の最後の値をスカラ変数に代入（旧アクション）"/>
     <TranslationEntry Key="ActionForm/cbxLvarOperation[Pop the given index from list variable into a scalar variable]" Translation="Pop the given index from list variable into a scalar variable" />
     <TranslationEntry Key="ActionForm/cbxLvarOperation[Push value to the end of the list variable]" Translation="リスト変数の最後に値を追加" />
     <TranslationEntry Key="ActionForm/cbxLvarOperation[Remove value at the given index of the list variable]" Translation="リスト変数から指定インデックスの値を削除" />
@@ -375,6 +379,9 @@
     <TranslationEntry Key="ActionForm/label5" Translation="Loop actions" />
     <TranslationEntry Key="ActionForm/label6" Translation="Target Variable Name" />
     <TranslationEntry Key="ActionForm/lblActionType" Translation="アクションタイプ" />
+    <TranslationEntry Key="ActionForm/lblActOpBoolParam" Translation="State" />
+    <TranslationEntry Key="ActionForm/lblActOpStringParam" Translation="String Param" />
+    <TranslationEntry Key="ActionForm/lblActOpType" Translation="Option" />
     <TranslationEntry Key="ActionForm/lblAuraDisplay" Translation="表示方法" />
     <TranslationEntry Key="ActionForm/lblAuraHeight" Translation="高さ" />
     <TranslationEntry Key="ActionForm/lblAuraImage" Translation="表示する画像" />
@@ -401,10 +408,8 @@
     <TranslationEntry Key="ActionForm/lblDictValueType" Translation="Value Expr type" />
     <TranslationEntry Key="ActionForm/lblDiscordMessage" Translation="送信するメッセージ" />
     <TranslationEntry Key="ActionForm/lblDiscordUrl" Translation="Webhook URL" />
-    <TranslationEntry Key="ActionForm/lblEndEncNoParams" Translation="このアクションタイプには設定可能なパラメータはありません" />
     <TranslationEntry Key="ActionForm/lblExecScriptAssemblies" Translation="参照するアセンブリのリスト" />
     <TranslationEntry Key="ActionForm/lblExecScriptCode" Translation="スクリプト" />
-    <TranslationEntry Key="ActionForm/lblExecScriptLang" Translation="スクリプト言語" />
     <TranslationEntry Key="ActionForm/lblExecutionDelay" Translation="次の実行までのディレイ (ms)" />
     <TranslationEntry Key="ActionForm/lblFileOpName" Translation="ファイル名" />
     <TranslationEntry Key="ActionForm/lblFileOpType" Translation="操作タイプ" />
@@ -537,7 +542,6 @@
     <TranslationEntry Key="ActionForm/███rtbHelperLvarInsertList" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarJoin" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarPopFirst" Translation="" />
-    <TranslationEntry Key="ActionForm/███rtbHelperLvarPopLast" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarPopToListInsert" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarPopToListSet" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarPush" Translation="" />
@@ -682,6 +686,9 @@
     <TranslationEntry Key="ConfigurationForm/chkFfxivLogNetwork" Translation="ネットワークイベントを記録する" />
     <TranslationEntry Key="ConfigurationForm/chkLogNormalEvents" Translation="通常のログを記録する" />
     <TranslationEntry Key="ConfigurationForm/chkLogVariableExpansions" Translation="Log variable expansions" />
+    <TranslationEntry Key="ConfigurationForm/chkShortcutEnableTemplates" Translation="Enable shortcuts to input template expressions" />
+    <TranslationEntry Key="ConfigurationForm/chkShortcutUseAbbrevInTemplates" Translation="Use abbreviation expressions in template expressions" />
+    <TranslationEntry Key="ConfigurationForm/chkShortcutWrapTextWhenSelected" Translation="Wrap selected text in template expressions" />
     <TranslationEntry Key="ConfigurationForm/chkUpdates" Translation="起動時に更新を確認" />
     <TranslationEntry Key="ConfigurationForm/chkWarnAdmin" Translation="管理者権限で起動していない場合に警告を表示" />
     <TranslationEntry Key="ConfigurationForm/chkWelcome" Translation="起動時にようこそ画面を表示" />
@@ -718,6 +725,7 @@
     <TranslationEntry Key="ConfigurationForm/grpFutureProofing" Translation=" 互換性 " />
     <TranslationEntry Key="ConfigurationForm/grpGeneral" Translation=" ログ " />
     <TranslationEntry Key="ConfigurationForm/grpPartyListOrder" Translation=" パーティリストの並び順 " />
+    <TranslationEntry Key="ConfigurationForm/grpShortCutExpression" Translation=" Expressions " />
     <TranslationEntry Key="ConfigurationForm/grpStartup" Translation=" 起動 " />
     <TranslationEntry Key="ConfigurationForm/grpStartupTrigger" Translation=" 起動時に実行するトリガー（フォルダ） " />
     <TranslationEntry Key="ConfigurationForm/grpUserInterface" Translation=" ユーザインターフェース " />
@@ -795,6 +803,7 @@
     <TranslationEntry Key="ConfigurationForm/tabGeneral" Translation="一般" />
     <TranslationEntry Key="ConfigurationForm/tabMisc" Translation="その他" />
     <TranslationEntry Key="ConfigurationForm/tabSecurity" Translation="Security" />
+    <TranslationEntry Key="ConfigurationForm/tabShortCuts" Translation="ShortCuts" />
     <TranslationEntry Key="ConfigurationForm/tabSubstitutions" Translation="置換" />
     <TranslationEntry Key="ConfigurationForm/tslEndpointHistoryRecv" Translation="telegram(s) received" />
     <TranslationEntry Key="ConfigurationForm/txtCacheFileCount" Translation="0" />
@@ -821,8 +830,8 @@
     <TranslationEntry Key="ExportForm/ctxSelectionToClipboard" Translation="選択箇所をクリップボードにコピー" />
     <TranslationEntry Key="ExportForm/tslFormat" Translation="フォーマット" />
     <TranslationEntry Key="FolderForm/btnCancel" Translation="キャンセル" />
-    <TranslationEntry Key="FolderForm/btnGetCurFfxivZone" Translation="Retrieve current zone ID" />
-    <TranslationEntry Key="FolderForm/btnGetCurZone" Translation="現在のゾーン名を取得" />
+    <TranslationEntry Key="FolderForm/btnGetCurFfxivZone" Translation="現在のIDを取得" />
+    <TranslationEntry Key="FolderForm/btnGetCurZone" Translation="現在の名を取得" />
     <TranslationEntry Key="FolderForm/btnOk" Translation="OK" />
     <TranslationEntry Key="FolderForm/chkEventFilter" Translation="一致するイベントテキストを持つイベントのみにイベント処理を制限する" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Class: Arcanist]" Translation="クラス：巴術士" />
@@ -869,15 +878,15 @@
     <TranslationEntry Key="FolderForm/chkFfxivZoneFilter" Translation="Restrict event processing only to when currently in given zone ID" />
     <TranslationEntry Key="FolderForm/chkZoneFilter" Translation="一致するゾーン名を持つイベントのみにイベント処理を制限する" />
     <TranslationEntry Key="FolderForm/grpFfxivClassFilter" Translation=" クラス・ジョブ " />
-    <TranslationEntry Key="FolderForm/grpFiltering" Translation=" フィルター設定 " />
-    <TranslationEntry Key="FolderForm/grpGeneral" Translation=" 一般設定 " />
-    <TranslationEntry Key="FolderForm/lblEventFilterRegex" Translation="イベントテキストの正規表現" />
+    <TranslationEntry Key="FolderForm/grpGeneral" Translation=" 一般 " />
+    <TranslationEntry Key="FolderForm/grpSetting" Translation=" 設定 " />
+    <TranslationEntry Key="FolderForm/lblEventFilterRegex" Translation="正規表現" />
     <TranslationEntry Key="FolderForm/lblFfxivZoneId" Translation="Zone ID" />
     <TranslationEntry Key="FolderForm/lblFolderName" Translation="フォルダ名" />
     <TranslationEntry Key="FolderForm/lblReadOnly" Translation="読み取り専用モードです。リモートトリガーの構成を編集する場合は、ローカルにコピーを作成する必要があります。" />
-    <TranslationEntry Key="FolderForm/lblZoneFilterRegex" Translation="ゾーン名の正規表現" />
-    <TranslationEntry Key="FolderForm/tabFFXIV" Translation="Final Fantasy XIV" />
-    <TranslationEntry Key="FolderForm/tabGeneral" Translation="一般" />
+    <TranslationEntry Key="FolderForm/lblZoneFilterRegex" Translation="ゾーン名" />
+    <TranslationEntry Key="FolderForm/tabEnvironment" Translation="環境" />
+    <TranslationEntry Key="FolderForm/tabFilter" Translation="フィルター" />
     <TranslationEntry Key="ImportForm" Translation="インポート" />
     <TranslationEntry Key="ImportForm/btnBack" Translation="キャンセル" />
     <TranslationEntry Key="ImportForm/btnEdit" Translation="編集" />
@@ -900,6 +909,10 @@
     <TranslationEntry Key="internal/Action/cancelfolder" Translation="Cancelled all trigger actions in folder ({0})" />
     <TranslationEntry Key="internal/Action/changetagtestmode" Translation="Action '{0}' test mode" />
     <TranslationEntry Key="internal/Action/changetagtrigaction" Translation="Trigger '{0}' action '{1}'" />
+    <TranslationEntry Key="internal/Action/descactcombatend" Translation="End ACT encounter" />
+    <TranslationEntry Key="internal/Action/descactcombatstart" Translation="Start ACT encounter" />
+    <TranslationEntry Key="internal/Action/descactlogallnetwork" Translation="{0} option: Log all network data" />
+    <TranslationEntry Key="internal/Action/descactusedeucalion" Translation="{0} option: Use Deucalion (injection)" />
     <TranslationEntry Key="internal/Action/descafterdelay" Translation="{0} ms 後に、" />
     <TranslationEntry Key="internal/Action/descassumingcondition" Translation="条件を満たしたとき、" />
     <TranslationEntry Key="internal/Action/descbeep" Translation="ビープ音を再生 ({0}hz, {1}ms)" />
@@ -922,7 +935,6 @@
     <TranslationEntry Key="internal/Action/descdiscordmsg" Translation="メッセージ ({0}) をDiscord webhook ({1}) に送信" />
     <TranslationEntry Key="internal/Action/descdiscordttsmsg" Translation="TTSメッセージ ({0}) をDiscord webhook ({1}) に送信" />
     <TranslationEntry Key="internal/Action/descenablefolder" Translation="フォルダ ({0}) を有効化" />
-    <TranslationEntry Key="internal/Action/descendencounter" Translation="ACT本体にEndを送信" />
     <TranslationEntry Key="internal/Action/descexecscript" Translation="スクリプト ({0}) を実行" />
     <TranslationEntry Key="internal/Action/descfilereadcsvtable" Translation="read csv file ({0}) into {2}table variable ({1}){3}" />
     <TranslationEntry Key="internal/Action/descfilereadlistvar" Translation="read file ({0}) lines into {2}list variable ({1}){3}" />
@@ -1088,12 +1100,13 @@
     <TranslationEntry Key="internal/Action/disabledfolderwithid" Translation="Disabled folder ({0}) with id ({1})" />
     <TranslationEntry Key="internal/Action/dynamicexprerror" Translation="The dynamic expression ({0}) is invalid in the current action. Expression: ({1})" />
     <TranslationEntry Key="internal/Action/enabledfolderwithid" Translation="Enabled folder ({0}) with id ({1})" />
-    <TranslationEntry Key="internal/Action/exception" Translation="Action exception: {0} \nIn action: {1} \nIn trigger: {2}" />
+    <TranslationEntry Key="internal/Action/exception" Translation="Action exception: {0} \nIn action: {1} \nIn trigger: {2}{3}" />
     <TranslationEntry Key="internal/Action/executingaction" Translation="Executing action '{0}' in thread {1}" />
     <TranslationEntry Key="internal/Action/filelistset" Translation="{2}リスト変数 ({0}) にファイル ({1}) を読み込む" />
     <TranslationEntry Key="internal/Action/filescalarset" Translation="{2}スカラ変数 ({0}) にファイル ({1}) を読み込む" />
     <TranslationEntry Key="internal/Action/filetableset" Translation="{2}Table variable ({0}) value read from CSV file ({1})" />
     <TranslationEntry Key="internal/Action/fivescripterrorsare" Translation="最初の5つのエラーを表示：" />
+    <TranslationEntry Key="internal/Action/invalidEnumType" Translation="{0} = {1} is not a known enum type.&#xD;&#xA;This may be because your Triggernometry plugin is not up to date, or the data you are trying to import is corrupted." />
     <TranslationEntry Key="internal/Action/jsonpostexception" Translation="例外が発生したためメッセージを送信できませんでした: {0}" />
     <TranslationEntry Key="internal/Action/jsonpostunexpectedresponse" Translation="想定外のレスポンスコードです: {0}" />
     <TranslationEntry Key="internal/Action/listbuild" Translation="{1}List variable ({0}) built from expression ({2}) splitted by ({3})" />
@@ -1253,6 +1266,10 @@
     <TranslationEntry Key="internal/ConfigurationForm/subsregexgroup" Translation="キャプチャーグループ" />
     <TranslationEntry Key="internal/ConfigurationForm/subsstrexpr" Translation="文字列式" />
     <TranslationEntry Key="internal/ConfigurationForm/substts" Translation="音声読み上げ" />
+    <TranslationEntry Key="internal/ConfigurationForm/tipShortcutCtrlShiftA" Translation="Select the next outer layer of brackets" />
+    <TranslationEntry Key="internal/ConfigurationForm/tipShortcutEnableTemplates" Translation="Allow to input ${{...}} expressions with shortcuts." />
+    <TranslationEntry Key="internal/ConfigurationForm/tipShortcutUseAbbrevInTemplates" Translation="Use abbreviations in the template expressions instead of the full name:" />
+    <TranslationEntry Key="internal/ConfigurationForm/tipShortcutWrapTextWhenSelected" Translation="If any text is selected when using the shortcut, &#xD;&#xA;wrap the text in the template expression, &#xD;&#xA;instead of replacing it with an empty template expression. &#xD;&#xA;&#xD;&#xA;For example, you can select the expression &quot;1 + 1&quot; and press Ctrl + Shift + N, &#xD;&#xA;then you will get &quot;${{n: 1 + 1}}&quot;." />
     <TranslationEntry Key="internal/ConfigurationForm/warning" Translation="警告" />
     <TranslationEntry Key="internal/Context/argCountError" Translation="({0}) requires {1} arguments, {2} were given. Expr: ({3})" />
     <TranslationEntry Key="internal/Context/expansion" Translation="Variable expansion from '{0}' to '{1}'" />
@@ -1287,6 +1304,8 @@
     <TranslationEntry Key="internal/I18n/descasyncfalse" Translation="[Sync] " />
     <TranslationEntry Key="internal/I18n/descasynctrue" Translation="" />
     <TranslationEntry Key="internal/I18n/desccachefile" Translation=", caching the file on disk" />
+    <TranslationEntry Key="internal/I18n/descenablefalse" Translation="disable" />
+    <TranslationEntry Key="internal/I18n/descenabletrue" Translation="enable" />
     <TranslationEntry Key="internal/I18n/descexprtypenumeric" Translation="numeric" />
     <TranslationEntry Key="internal/I18n/descexprtypestring" Translation="string" />
     <TranslationEntry Key="internal/I18n/descpersistent" Translation="persistent " />
@@ -1298,6 +1317,7 @@
     <TranslationEntry Key="internal/I18n/desctimesec" Translation="{0} s" />
     <TranslationEntry Key="internal/I18n/double" Translation="double" />
     <TranslationEntry Key="internal/I18n/float" Translation="float" />
+    <TranslationEntry Key="internal/I18n/formatex" Translation="You might need to update your translation file (your_language_name.triglations.xml). &#xD;&#xA;FormatException occured during translating &quot;{0}&quot;." />
     <TranslationEntry Key="internal/I18n/hex" Translation="hex" />
     <TranslationEntry Key="internal/I18n/index" Translation="index" />
     <TranslationEntry Key="internal/I18n/int" Translation="int" />
@@ -1308,39 +1328,37 @@
     <TranslationEntry Key="internal/I18n/string" Translation="string" />
     <TranslationEntry Key="internal/I18n/time" Translation="time" />
     <TranslationEntry Key="internal/I18n/times" Translation="times" />
+    <TranslationEntry Key="internal/I18n/translatewordmissingkey" Translation="The key {0} is not in I18n._wordsToTranslate. Please report the bug if you see this error." />
     <TranslationEntry Key="internal/I18n/type" Translation="type" />
+    <TranslationEntry Key="internal/I18n/version" Translation="Version" />
     <TranslationEntry Key="internal/ImportForm/back" Translation="&lt; 戻る" />
     <TranslationEntry Key="internal/ImportForm/cancel" Translation="キャンセル" />
-    <TranslationEntry Key="internal/ImportForm/dangerdisk" Translation="インポートされたトリガーの一部には、ファイル操作を実行するトリガーが含まれます。悪意のあるトリガーによってシステムの正常性とセキュリティが侵害される潜在的な危険性があります。問題の項目は以下で強調表示されています" />
-    <TranslationEntry Key="internal/ImportForm/dangerproc" Translation="インポートされたトリガーの一部には、任意のプロセスを実行するトリガーが含まれます。悪意のあるトリガーによってシステムの正常性とセキュリティが侵害される潜在的な危険性があります。問題の項目は以下で強調表示されています" />
-    <TranslationEntry Key="internal/ImportForm/dangerprocdisk" Translation="インポートされたトリガーの一部には、任意のプロセスを実行するトリガー、ファイルの操作を実行するトリガーが含まれます。悪意のあるトリガーによってシステムの正常性とセキュリティが侵害される潜在的な危険性があります。問題の項目は以下で強調表示されています" />
-    <TranslationEntry Key="internal/ImportForm/dangerprocscript" Translation="インポートされたトリガーの一部には、任意のプロセスを実行するトリガー、スクリプトの実行を行うトリガーが含まれます。悪意のあるトリガーによってシステムの正常性とセキュリティが侵害される潜在的な危険性があります。問題の項目は以下で強調表示されています" />
-    <TranslationEntry Key="internal/ImportForm/dangerprocscriptdisk" Translation="インポートされたトリガーの一部には、任意のプロセスを実行するトリガー、スクリプトの実行を行うトリガー、ファイルの操作を実行するトリガーが含まれます。悪意のあるトリガーによってシステムの正常性とセキュリティが侵害される潜在的な危険性があります。問題の項目は以下で強調表示されています" />
-    <TranslationEntry Key="internal/ImportForm/dangerprocscriptwmsg" Translation="インポートされたトリガーの一部には、任意のプロセスを実行するトリガー、スクリプトの実行を行うトリガー、任意のウィンドウにメッセージを送信するトリガーが含まれます。悪意のあるトリガーによってシステムの正常性とセキュリティが侵害される潜在的な危険性があります。問題の項目は以下で強調表示されています" />
-    <TranslationEntry Key="internal/ImportForm/dangerprocscriptwmsgdisk" Translation="インポートされたトリガーの一部には、任意のプロセスを実行するトリガー、スクリプトの実行を行うトリガー、任意のウィンドウにメッセージを送信するトリガー、ファイルの操作を実行するトリガーが含まれます。悪意のあるトリガーによってシステムの正常性とセキュリティが侵害される潜在的な危険性があります。問題の項目は以下で強調表示されています" />
-    <TranslationEntry Key="internal/ImportForm/dangerprocwmsg" Translation="インポートされたトリガーの一部には、任意のプロセスを実行するトリガー、任意のウィンドウにメッセージを送信するトリガーが含まれます。悪意のあるトリガーによってシステムの正常性とセキュリティが侵害される潜在的な危険性があります。問題の項目は以下で強調表示されています" />
-    <TranslationEntry Key="internal/ImportForm/dangerprocwmsgdisk" Translation="インポートされたトリガーの一部には、任意のプロセスを実行するトリガー、任意のウィンドウにメッセージを送信するトリガー、ファイルの操作を実行するトリガーが含まれます。悪意のあるトリガーによってシステムの正常性とセキュリティが侵害される潜在的な危険性があります。問題の項目は以下で強調表示されています" />
-    <TranslationEntry Key="internal/ImportForm/dangerscript" Translation="インポートされたトリガーの一部には、スクリプトの実行を行うトリガーが含まれます。悪意のあるトリガーによってシステムの正常性とセキュリティが侵害される潜在的な危険性があります。問題の項目は以下で強調表示されています" />
-    <TranslationEntry Key="internal/ImportForm/dangerscriptdisk" Translation="インポートされたトリガーの一部には、スクリプトの実行を行うトリガー、ファイルの操作を実行するトリガーが含まれます。悪意のあるトリガーによってシステムの正常性とセキュリティが侵害される潜在的な危険性があります。問題の項目は以下で強調表示されています" />
-    <TranslationEntry Key="internal/ImportForm/dangerscriptwmsg" Translation="インポートされたトリガーの一部には、スクリプトの実行を行うトリガー、任意のウィンドウにメッセージを送信するトリガーが含まれます。悪意のあるトリガーによってシステムの正常性とセキュリティが侵害される潜在的な危険性があります。問題の項目は以下で強調表示されています" />
-    <TranslationEntry Key="internal/ImportForm/dangerscriptwmsgdisk" Translation="インポートされたトリガーの一部には、スクリプトの実行を行うトリガー、任意のウィンドウにメッセージを送信するトリガー、ファイルの操作を実行するトリガーが含まれます。悪意のあるトリガーによってシステムの正常性とセキュリティが侵害される潜在的な危険性があります。問題の項目は以下で強調表示されています" />
-    <TranslationEntry Key="internal/ImportForm/dangerwmsg" Translation="インポートされたトリガーの一部には、任意のウィンドウにメッセージを送信するトリガーが含まれます。悪意のあるトリガーによってシステムの正常性とセキュリティが侵害される潜在的な危険性があります。問題の項目は以下で強調表示されています" />
-    <TranslationEntry Key="internal/ImportForm/dangerwmsgdisk" Translation="インポートされたトリガーの一部には、任意のウィンドウにメッセージを送信するトリガー、ファイルの操作を実行するトリガーが含まれます。悪意のあるトリガーによってシステムの正常性とセキュリティが侵害される潜在的な危険性があります。問題の項目は以下で強調表示されています" />
+    <TranslationEntry Key="internal/ImportForm/danger" Translation="インポートされたトリガーの一部には、{0}トリガーが含まれています。&#xD;&#xA;これらのトリガーは危険であり、悪意のあるトリガーによってシステムの正常性とセキュリティが侵害される可能性があります。問題の項目は以下で強調表示されています。" />
+    <TranslationEntry Key="internal/ImportForm/dangerDescJoiner" Translation="、" />
+    <TranslationEntry Key="internal/ImportForm/dangerDisk" Translation="ファイル操作を行います" />
+    <TranslationEntry Key="internal/ImportForm/dangerProc" Translation="任意のプロセスを起動します" />
+    <TranslationEntry Key="internal/ImportForm/dangerScript" Translation="スクリプトを実行します" />
+    <TranslationEntry Key="internal/ImportForm/dangerWmsg" Translation="任意のウィンドウメッセージを送信します" />    
     <TranslationEntry Key="internal/ImportForm/editimportedfolder" Translation="インポートしたフォルダ '{0}' を編集" />
     <TranslationEntry Key="internal/ImportForm/editimportedtrigger" Translation="インポートしたトリガー '{0}' を編集" />
     <TranslationEntry Key="internal/ImportForm/exception" Translation="例外" />
     <TranslationEntry Key="internal/ImportForm/import" Translation="インポート" />
-    <TranslationEntry Key="internal/ImportForm/importcantrecognize" Translation="有効なインポート可能なデータ形式として認識できません。新しいトリガーを古いバージョンのTriggernometryにインポートしようとしている可能性があります。最新バージョンを使用していることを確認してください。" />
     <TranslationEntry Key="internal/ImportForm/importedacttriggers" Translation="インポート済のACTトリガー ({0})" />
     <TranslationEntry Key="internal/ImportForm/importedconfigfile" Translation="インポート済の設定ファイル ({0})" />
     <TranslationEntry Key="internal/ImportForm/importerror" Translation="インポートエラー" />
+    <TranslationEntry Key="internal/ImportForm/importerroracttrigger" Translation="The native ACT triggers cannot be read, possibly due to corrupted content." />
+    <TranslationEntry Key="internal/ImportForm/importerrorconfig" Translation="Please make sure you are running the latest version of Triggernometry. If you are already running the latest version, the imported config data might have been corrupted." />
+    <TranslationEntry Key="internal/ImportForm/importerrornotxml" Translation="The provided data does not show any XML characteristics. Please open the file and examine it, or check if the pasted data is complete." />
     <TranslationEntry Key="internal/ImportForm/importerrortext" Translation="インポート中にエラーが発生しました:" />
+    <TranslationEntry Key="internal/ImportForm/importerrortrig" Translation="The TriggernometryExport data was from version {0}. Please make sure you are running the latest version of Triggernometry. If you are already running the latest version, the data might have been corrupted." />
+    <TranslationEntry Key="internal/ImportForm/importerrorunknownroot" Translation="The XML contains data of a {0} object, which is not designed to be imported by Triggernometry." />
     <TranslationEntry Key="internal/ImportForm/importexception" Translation="An exception occurred: {0}" />
     <TranslationEntry Key="internal/ImportForm/next" Translation="次へ &gt;" />
     <TranslationEntry Key="internal/ImportForm/restrictedtozone" Translation="ゾーン制限" />
     <TranslationEntry Key="internal/ImportForm/savechanges" Translation="変更を保存" />
     <TranslationEntry Key="internal/ImportForm/sourcenotactformat" Translation="ACTのエクスポート形式のトリガーが見つかりませんでした。" />
     <TranslationEntry Key="internal/ImportForm/warnacttab" Translation="インポートされたACTトリガーの一部には、結果をタブに追加するトリガーが含まれています。これらのオプションのインポートは現在サポートされていません。該当の項目は以下で強調表示されています" />
+    <TranslationEntry Key="internal/ImportForm/version" Translation="Source plugin version: {0}    Current plugin version: {1}" />
     <TranslationEntry Key="internal/ImportForm/warnacttabtimers" Translation="インポートされたACTトリガーの一部には、結果をタブに追加するトリガー、タイマーを起動するトリガーが含まれています。これらのオプションのインポートは現在サポートされていません。該当の項目は以下で強調表示されています" />
     <TranslationEntry Key="internal/ImportForm/warnacttimers" Translation="インポートされたACTトリガーの一部には、結果をタブに追加するトリガー、タイマーを起動するトリガーが含まれています。これらのオプションのインポートは現在サポートされていません。該当の項目は以下で強調表示されています" />
     <TranslationEntry Key="internal/Interpreter/scriptblocked" Translation="Script execution on trigger {0} blocked due to restricted API: {1}" />
@@ -1376,11 +1394,16 @@
     <TranslationEntry Key="internal/Plugin/deactalltextaura" Translation="すべてのテキストオーバーレイを無効化しています" />
     <TranslationEntry Key="internal/Plugin/deactimageaura" Translation="画像オーバーレイ '{0}' を無効化しています" />
     <TranslationEntry Key="internal/Plugin/deactimageaurarex" Translation="'{0}' にマッチする画像オーバーレイを無効化しています" />
+    <TranslationEntry Key="internal/Plugin/deactimageauratrig" Translation="Deactivating image auras from trigger '{0}' ({1})" />
     <TranslationEntry Key="internal/Plugin/deacttextaura" Translation="テキストオーバーレイ '{0}' を無効化しています" />
     <TranslationEntry Key="internal/Plugin/deacttextaurarex" Translation="'{0}' にマッチするテキストオーバーレイを無効化しています" />
+    <TranslationEntry Key="internal/Plugin/deacttextauratrig" Translation="Deactivating text auras from trigger '{0}' ({1})" />
     <TranslationEntry Key="internal/Plugin/debugnamedgroup" Translation="Trigger '{0}' named group '{1}': {2}" />
     <TranslationEntry Key="internal/Plugin/debugnumgroup" Translation="Trigger '{0}' numbered group {1}: {2}" />
     <TranslationEntry Key="internal/Plugin/downloadnewver" Translation="新しいバージョンのTriggernometry ({0}) が利用可能です。ダウンロードページを開きますか？" />
+    <TranslationEntry Key="internal/Plugin/endpointline" Translation="Endpoint data: ({0})" />
+    <TranslationEntry Key="internal/Plugin/endpointlineprocex" Translation="Exception ({0}) when processing endpoint data ({1}) in zone ({2})" />
+    <TranslationEntry Key="internal/Plugin/endpointsplitline" Translation="Split endpoint data: ({0})" />
     <TranslationEntry Key="internal/Plugin/exactimageaura" Translation="画像オーバーレイ '{1}' を有効化する途中で例外が発生しました: '{0}'" />
     <TranslationEntry Key="internal/Plugin/exacttextaura" Translation="テキストオーバーレイ '{1}' を有効化する途中で例外が発生しました: '{0}'" />
     <TranslationEntry Key="internal/Plugin/exception" Translation="例外" />
@@ -1391,11 +1414,13 @@
     <TranslationEntry Key="internal/Plugin/iniactui" Translation="setting up ACT ui" />
     <TranslationEntry Key="internal/Plugin/inicache" Translation="performing cache cleanup" />
     <TranslationEntry Key="internal/Plugin/inicfg" Translation="loading configuration" />
-    <TranslationEntry Key="internal/Plugin/inierror" Translation="Error while {0} ({1})" />
+    <TranslationEntry Key="internal/Plugin/iniendpoint" Translation="starting endpoint" />
+    <TranslationEntry Key="internal/Plugin/inievents" Translation="creating events" />
     <TranslationEntry Key="internal/Plugin/inievents" Translation="creating events" />
     <TranslationEntry Key="internal/Plugin/inifilename" Translation="determining filename" />
     <TranslationEntry Key="internal/Plugin/inilanguages" Translation="loading languages" />
     <TranslationEntry Key="internal/Plugin/iniready" Translation="Ready" />
+    <TranslationEntry Key="internal/Plugin/iniscripting" Translation="setting up scripting - try changing the plugin load order in ACT" />
     <TranslationEntry Key="internal/Plugin/inited" Translation="Initialized" />
     <TranslationEntry Key="internal/Plugin/initing" Translation="Initializing" />
     <TranslationEntry Key="internal/Plugin/initoasts" Translation="setting up toasts" />
@@ -1418,12 +1443,15 @@
     <TranslationEntry Key="internal/Plugin/langload" Translation="Loading language from '{0}'" />
     <TranslationEntry Key="internal/Plugin/langloadex" Translation="Loading the language file '{0}' failed due to an exception" />
     <TranslationEntry Key="internal/Plugin/langloadfail" Translation="Loading language file failed, make sure you are running the latest version" />
+    <TranslationEntry Key="internal/Plugin/logline" Translation="Log line: ({0})" />
     <TranslationEntry Key="internal/Plugin/mutexdelayed" Translation="Context '{0}' has been waiting for mutex '{1}' on {2} for {3} ms, current owner is '{4}'" />
     <TranslationEntry Key="internal/Plugin/notadministrator" Translation="管理者としてACTを実行していません。一部のトリガーが機能しない可能性があります。" />
     <TranslationEntry Key="internal/Plugin/procex" Translation="Exception ({0}) when processing log line ({1}) in zone ({2})" />
     <TranslationEntry Key="internal/Plugin/queuedactscancelled" Translation="{0} queued action(s) from trigger '{1}' cancelled" />
     <TranslationEntry Key="internal/Plugin/releaseunownedmutex" Translation="Tried to release unowned mutex '{0}' from context '{1}'" />
+    <TranslationEntry Key="internal/Plugin/repodownloading" Translation="Downloading repository {0} from {1}" />
     <TranslationEntry Key="internal/Plugin/repoexportnull" Translation="リポジトリ {0} のデータは逆シリアル化できませんでした。Triggernometryの最新バージョンを実行していることを確認してください。" />
+    <TranslationEntry Key="internal/Plugin/repofetching" Translation="Repository {0} has changed since {1} (new timestamp {2}), or size has changed from {3} (new size {4}), fetching new version" />
     <TranslationEntry Key="internal/Plugin/repoloadedlocal" Translation="Loaded local backup of repository {0} from {1}" />
     <TranslationEntry Key="internal/Plugin/repoloadinglocal" Translation="Loading local backup of repository {0} in {1}" />
     <TranslationEntry Key="internal/Plugin/repoloadlocalexception" Translation="Couldn't load local backup of repository {0} due to exception: {1}" />
@@ -1569,7 +1597,7 @@
     <TranslationEntry Key="internal/UserInterface/areyousurefolder" Translation="フォルダ '{0}' を削除します" />
     <TranslationEntry Key="internal/UserInterface/areyousurerepo" Translation="リポジトリ '{0}' を削除します" />
     <TranslationEntry Key="internal/UserInterface/areyousuretrigger" Translation="トリガー '{0}' を削除します" />
-	<TranslationEntry Key="internal/UserInterface/clearvar" Translation="Are you sure you want to clear the session variables?" />
+	  <TranslationEntry Key="internal/UserInterface/clearvar" Translation="Are you sure you want to clear the session variables?" />
     <TranslationEntry Key="internal/UserInterface/confirm" Translation="削除の確認" />
     <TranslationEntry Key="internal/UserInterface/copyfail" Translation="Tree copy failed due to exception: {0}" />
     <TranslationEntry Key="internal/UserInterface/editfolder" Translation="フォルダの編集 '{0}'" />
@@ -1578,6 +1606,9 @@
     <TranslationEntry Key="internal/UserInterface/edittemplatetrigger" Translation="Edit template trigger" />
     <TranslationEntry Key="internal/UserInterface/edittrigger" Translation="トリガーの編集 '{0}'" />
     <TranslationEntry Key="internal/UserInterface/edittriggerreadme" Translation="Instructions for repository '{0}'" />
+    <TranslationEntry Key="internal/UserInterface/errorCount0" Translation="No new errors" />
+    <TranslationEntry Key="internal/UserInterface/errorCount1" Translation="1 error" />
+    <TranslationEntry Key="internal/UserInterface/errorCountN" Translation="{0} errors" />
     <TranslationEntry Key="internal/UserInterface/folderidreassign" Translation="Reassigning new id ({0}) for folder ({1}) due to already assigned id ({2}) on folder ({3})" />
     <TranslationEntry Key="internal/UserInterface/folderplural" Translation="{0} folders" />
     <TranslationEntry Key="internal/UserInterface/foldersingular" Translation="{0} folder" />
@@ -1680,6 +1711,7 @@
     <TranslationEntry Key="Plugin/UserInterface/ctxCollapse" Translation="すべて折りたたむ" />
     <TranslationEntry Key="Plugin/UserInterface/ctxCopy" Translation="コピー" />
     <TranslationEntry Key="Plugin/UserInterface/ctxDelete" Translation="削除" />
+    <TranslationEntry Key="Plugin/UserInterface/ctxDescendingSort" Translation="Sort By Descending" />
     <TranslationEntry Key="Plugin/UserInterface/ctxEdit" Translation="編集" />
     <TranslationEntry Key="Plugin/UserInterface/ctxExpand" Translation="すべて展開表示" />
     <TranslationEntry Key="Plugin/UserInterface/ctxExport" Translation="エクスポート" />
@@ -1689,7 +1721,6 @@
     <TranslationEntry Key="Plugin/UserInterface/ctxPaste" Translation="貼り付け" />
     <TranslationEntry Key="Plugin/UserInterface/ctxReadme" Translation="手順を開く" />
     <TranslationEntry Key="Plugin/UserInterface/ctxUpdate" Translation="更新" />
-    <TranslationEntry Key="Plugin/UserInterface/errThing1" Translation="エラーが発生しました" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeImport" Translation="It's very similar to creating a trigger. After this screen, you can select the folder where you want to import all the triggers to (or Root), and then hit the Import button on the top bar.&#xD;&#xA;&#xD;&#xA;This is the button you should be looking out for:" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeImportHeader" Translation="I have this XML file which is supposed to have some triggers. How do I use it?" />
     <TranslationEntry Key="Plugin/UserInterface/lblWelcomeIntro" Translation="Here are some answers to commonly asked questions to get you started:" />
@@ -1828,7 +1859,10 @@
     <TranslationEntry Key="StateForm/btnTextForce" Translation="強制的に無効化" />
     <TranslationEntry Key="StateForm/btnTextRefresh" Translation="更新" />
     <TranslationEntry Key="StateForm/colCallbackId" Translation="Id" />
+    <TranslationEntry Key="StateForm/colCallbackLastInvoked" Translation="Last Invoked" />
     <TranslationEntry Key="StateForm/colCallbackName" Translation="Name" />
+    <TranslationEntry Key="StateForm/colCallbackRegistrant" Translation="Registrant" />
+    <TranslationEntry Key="StateForm/colCallbackRegistrationTime" Translation="Registration Time" />
     <TranslationEntry Key="StateForm/colDictChangedBy" Translation="Changed by" />
     <TranslationEntry Key="StateForm/colDictLastChanged" Translation="Last changed" />
     <TranslationEntry Key="StateForm/colDictName" Translation="Name" />
@@ -2059,6 +2093,7 @@
     <TranslationEntry Key="VariableEditorForm/btnColumnAdd" Translation="列を追加" />
     <TranslationEntry Key="VariableEditorForm/btnColumnInsert" Translation="列を挿入" />
     <TranslationEntry Key="VariableEditorForm/btnColumnRemove" Translation="列を削除" />
+    <TranslationEntry Key="VariableEditorForm/btnCopyAsCsv" Translation="Copy as CSV" />
     <TranslationEntry Key="VariableEditorForm/btnItemAdd" Translation="項目を追加" />
     <TranslationEntry Key="VariableEditorForm/btnItemInsert" Translation="項目を挿入" />
     <TranslationEntry Key="VariableEditorForm/btnItemRemove" Translation="項目を削除" />
@@ -2068,6 +2103,7 @@
     <TranslationEntry Key="VariableEditorForm/btnRowAdd" Translation="行を追加" />
     <TranslationEntry Key="VariableEditorForm/btnRowInsert" Translation="行を挿入" />
     <TranslationEntry Key="VariableEditorForm/btnRowRemove" Translation="行を削除" />
+    <TranslationEntry Key="VariableEditorForm/btnSaveAsCsv" Translation="Save as CSV" />
     <TranslationEntry Key="VariableEditorForm/grpGeneral" Translation=" 一般設定 " />
     <TranslationEntry Key="VariableEditorForm/lblVariableName" Translation="変数名" />
   </Translations>

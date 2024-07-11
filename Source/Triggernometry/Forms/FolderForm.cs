@@ -90,26 +90,32 @@ namespace Triggernometry.Forms
             RestoredSavedDimensions();
         }
 
-        internal void SetReadOnly()
+        internal void SetReadOnly(bool showRemoteBanner = true)
         {
             btnOk.Enabled = false;
             btnOk.Visible = false;
             btnCancel.Dock = DockStyle.Fill;
-            panel5.Visible = true;
+            panelReadOnly.Visible = showRemoteBanner;
             txtFolderName.ReadOnly = true;
             chkZoneFilter.Enabled = false;
             btnGetCurZone.Enabled = false;
+            btnGetCurFfxivZone.Enabled = false;
             chkEventFilter.Enabled = false;
             chkFfxivClassFilter.SelectionMode = SelectionMode.None;
             chkFfxivClassFilterEnabled.Enabled = false;
-            txtZoneFilterRegex.ReadOnly = true;
-            txtEventFilterRegex.ReadOnly = true;
+            expZoneFilterRegex.ReadOnly = true;
+            expEventFilterRegex.ReadOnly = true;
             chkFfxivZoneFilter.Enabled = false;
-            txtFfxivZoneFilterRegex.Enabled = false;
+            expFfxivZoneFilterRegex.Enabled = false;
         }
 
         internal void JobFilterFromInt(Int64 val)
         {
+            if (val == 0)
+            {
+                chkFfxivClassFilter.ClearSelected();
+                return;
+            }
             //System.Diagnostics.Debug.WriteLine("opening filter = " + val);
             List<int> indices = new List<int>();
             for (int id = 1; id < 60; id++)
@@ -153,30 +159,18 @@ namespace Triggernometry.Forms
 
         internal void SettingsFromFolder(Folder f)
         {
-            if (f == null)
-            {
-				txtFolderName.Text = "";
-                chkZoneFilter.Checked = false;
-                chkEventFilter.Checked = false;
-                txtZoneFilterRegex.Text = "";
-                txtEventFilterRegex.Text = "";
-                chkFfxivClassFilterEnabled.Checked = false;
-                chkFfxivClassFilter.ClearSelected();
-                chkFfxivZoneFilter.Checked = false;
-                txtFfxivZoneFilterRegex.Text = "";
-            }
-            else
-            { 
-                txtFolderName.Text = f.Name;
-				chkZoneFilter.Checked = f._ZoneFilterEnabled;
-				chkEventFilter.Checked = f._EventFilterEnabled;
-				txtZoneFilterRegex.Text = f.ZoneFilterRegularExpression;
-				txtEventFilterRegex.Text = f.EventFilterRegularExpression;
-                chkFfxivClassFilterEnabled.Checked = f._FFXIVJobFilterEnabled;
-                chkFfxivZoneFilter.Checked = f._FFXIVZoneFilterEnabled;
-                JobFilterFromInt(f._FFXIVJobFilter);
-                txtFfxivZoneFilterRegex.Text = f.FfxivZoneFilterRegularExpression;
-            }
+            f = f ?? new Folder();
+            txtFolderName.Text = f.Name ?? "";
+            chkZoneFilter.Checked = f._ZoneFilterEnabled;
+            chkEventFilter.Checked = f._EventFilterEnabled;
+            expZoneFilterRegex.Text = f.ZoneFilterRegularExpression ?? "";
+            expEventFilterRegex.Text = f.EventFilterRegularExpression ?? "";
+            chkFfxivClassFilterEnabled.Checked = f._FFXIVJobFilterEnabled;
+            chkFfxivZoneFilter.Checked = f._FFXIVZoneFilterEnabled;
+            JobFilterFromInt(f._FFXIVJobFilter);
+            expFfxivZoneFilterRegex.Text = f.FfxivZoneFilterRegularExpression ?? "";
+            txtEnvironment.Text = f.RawEnvironmentVariables ?? "";
+            if (f._ReadOnly) SetReadOnly(showRemoteBanner: false); // disables the edit of a local folder
         }
 
         internal void SettingsToFolder(Folder f)
@@ -184,28 +178,24 @@ namespace Triggernometry.Forms
             f.Name = txtFolderName.Text;
 			f._ZoneFilterEnabled = chkZoneFilter.Checked;
 			f._EventFilterEnabled = chkEventFilter.Checked;
-			f.ZoneFilterRegularExpression = txtZoneFilterRegex.Text;
-			f.EventFilterRegularExpression = txtEventFilterRegex.Text;
+			f.ZoneFilterRegularExpression = expZoneFilterRegex.Text;
+			f.EventFilterRegularExpression = expEventFilterRegex.Text;
             f._FFXIVJobFilterEnabled = chkFfxivClassFilterEnabled.Checked;
             f._FFXIVJobFilter = JobfilterToInt();
             f._FFXIVZoneFilterEnabled = chkFfxivZoneFilter.Checked;
-            f.FfxivZoneFilterRegularExpression = txtFfxivZoneFilterRegex.Text;
-        }
-
-        private void txtName_TextChanged(object sender, EventArgs e)
-        {
-            btnOk.Enabled = true; // (txtFolderName.TextLength > 0);
+            f.FfxivZoneFilterRegularExpression = expFfxivZoneFilterRegex.Text;
+            f.RawEnvironmentVariables = txtEnvironment.Text;
         }
 
         private void chkZoneFilter_CheckedChanged(object sender, EventArgs e)
         {
-            txtZoneFilterRegex.Enabled = chkZoneFilter.Checked;
+            expZoneFilterRegex.Enabled = chkZoneFilter.Checked;
             btnGetCurZone.Enabled = chkZoneFilter.Checked;
         }
 
         private void chkEventFilter_CheckedChanged(object sender, EventArgs e)
         {
-            txtEventFilterRegex.Enabled = chkEventFilter.Checked;
+            expEventFilterRegex.Enabled = chkEventFilter.Checked;
         }
 
         private void chkFfxivClassFilterEnabled_CheckedChanged(object sender, EventArgs e)
@@ -215,7 +205,7 @@ namespace Triggernometry.Forms
 
         private void btnGetCurZone_Click(object sender, EventArgs e)
         {
-            txtZoneFilterRegex.Text = "^" + Regex.Escape(plug.CurrentZoneHook()) + "$";
+            expZoneFilterRegex.Text = "^" + Regex.Escape(plug.CurrentZoneHook()) + "$";
         }
 
         private void chkFfxivClassFilter_SelectedIndexChanged(object sender, EventArgs e)
@@ -225,12 +215,12 @@ namespace Triggernometry.Forms
 
         private void btnGetCurFfxivZone_Click(object sender, EventArgs e)
         {
-            txtFfxivZoneFilterRegex.Text = "^" + PluginBridges.BridgeFFXIV.ZoneID.ToString() + "$";
+            expFfxivZoneFilterRegex.Text = "^" + PluginBridges.BridgeFFXIV.ZoneID.ToString() + "$";
         }
 
         private void chkFfxivZoneFilter_CheckedChanged(object sender, EventArgs e)
         {
-            txtFfxivZoneFilterRegex.Enabled = chkFfxivZoneFilter.Checked;
+            expFfxivZoneFilterRegex.Enabled = chkFfxivZoneFilter.Checked;
             btnGetCurFfxivZone.Enabled = chkFfxivZoneFilter.Checked;
         }
 

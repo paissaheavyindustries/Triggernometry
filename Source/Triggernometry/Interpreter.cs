@@ -24,7 +24,7 @@ namespace Triggernometry
 
             private static bool IsBadApi(string assy, params string[] badApis)
             {
-                return badApis.Any(x => assy.Contains(x) == true);
+                return assy != null && badApis.Any(x => assy.Contains(x) == true);
             }
 
             public static bool Validate(Script script, out string badApi, params string[] badApis)
@@ -37,8 +37,8 @@ namespace Triggernometry
                 foreach (UsingDirectiveSyntax usingdir in srn.Usings)
                 {
                     ISymbol symbol = model.GetSymbolInfo(usingdir.Name).Symbol;
-                    string name = symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                    if (IsBadApi(name, badApis) == true)
+                    string name = symbol?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                    if (IsBadApi(name, badApis))
                     {
                         badApi = name;
                         return false;
@@ -57,13 +57,13 @@ namespace Triggernometry
                             break;
                         case SymbolKind.Local:
                             var localSymbol = ((ILocalSymbol)symbol);
-                            type = localSymbol.Type;                            
+                            type = localSymbol.Type;
                             break;
                         default:
                             continue;
                     }
-                    string name = type.ContainingNamespace != null ? type.ContainingNamespace.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat) : null;
-                    if (name != null && IsBadApi(name, badApis) == true)
+                    string name = type.ContainingNamespace?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                    if (IsBadApi(name, badApis))
                     {
                         badApi = name;
                         return false;
@@ -73,10 +73,8 @@ namespace Triggernometry
                 foreach (var invoc in invocs)
                 {
                     ISymbol symbol = model.GetSymbolInfo(invoc).Symbol;
-                    IAssemblySymbol ia = symbol.ContainingAssembly;
-                    INamespaceSymbol ns = symbol.ContainingNamespace;
-                    string name = ns.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                    if (IsBadApi(name, badApis) == true)
+                    string name = symbol.ContainingNamespace?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                    if (IsBadApi(name, badApis))
                     {
                         badApi = name;
                         return false;
@@ -86,8 +84,8 @@ namespace Triggernometry
                 foreach (var method in methods)
                 {
                     IMethodSymbol symbol = model.GetDeclaredSymbol(method) as IMethodSymbol;
-                    string name = symbol.ContainingAssembly.Name;
-                    if (IsBadApi(name, badApis) == true)
+                    string name = symbol.ContainingAssembly?.Name;
+                    if (IsBadApi(name, badApis))
                     {
                         badApi = name;
                         return false;
@@ -96,15 +94,15 @@ namespace Triggernometry
                 var props = srn.DescendantNodes().OfType<PropertyDeclarationSyntax>();
                 foreach (var prop in props)
                 {
-                    IPropertySymbol symbol = model.GetDeclaredSymbol(prop) as IPropertySymbol;                    
-                    string name = symbol.Type.ContainingAssembly.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                    if (IsBadApi(name, badApis) == true)
+                    IPropertySymbol symbol = model.GetDeclaredSymbol(prop) as IPropertySymbol;
+                    string name = symbol.Type.ContainingAssembly?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                    if (IsBadApi(name, badApis))
                     {
                         badApi = name;
                         return false;
                     }
-                    name = symbol.Type.ContainingNamespace.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                    if (IsBadApi(name, badApis) == true)
+                    name = symbol.Type.ContainingNamespace?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                    if (IsBadApi(name, badApis))
                     {
                         badApi = name;
                         return false;
@@ -150,7 +148,7 @@ namespace Triggernometry
             {
                 Action a = new Action();
                 a._PlaySoundFileExpression = uri;
-                CurrentContext.soundhook(CurrentContext, a);                
+                CurrentContext.soundhook(CurrentContext, a);
             }
 
             public string EvaluateStringExpression(string expr)
@@ -324,7 +322,7 @@ namespace Triggernometry
 
         public Interpreter()
         {
-            _so = ScriptOptions.Default;            
+            _so = ScriptOptions.Default;
             var asms = AppDomain.CurrentDomain.GetAssemblies();
             foreach (Assembly asm in asms)
             {
@@ -350,14 +348,14 @@ namespace Triggernometry
                     }
                 }
             }
-            _so = _so.AddImports("System");            
+            _so = _so.AddImports("System");
             Evaluate("int whee;", null, new Context() { plug = RealPlugin.plug });
         }
 
         public bool GetUnsafeUsage(Context ctx)
         {
             Configuration.UnsafeUsageEnum us = ctx.plug.cfg.UnsafeUsage;
-            bool isremote = ctx.trig != null && ctx.trig.Repo != null;
+            bool isremote = ctx.trig?.Repo != null;
             bool isadmin = ctx.plug.runningAsAdmin;
             if (isadmin == true && (us & Configuration.UnsafeUsageEnum.AllowAdmin) == 0)
             {
@@ -376,7 +374,7 @@ namespace Triggernometry
 
         public string[] GetBadApis(Context ctx)
         {
-            bool isremote = ctx.trig != null && ctx.trig.Repo != null;
+            bool isremote = ctx.trig?.Repo != null;
             bool isadmin = ctx.plug.runningAsAdmin;
             List<string> apis = new List<string>();
             foreach (Configuration.APIUsage a in ctx.plug.cfg.GetAPIUsages())
@@ -416,12 +414,30 @@ namespace Triggernometry
                 if (Validator.Validate(scp, out string badApi, badApis) == true)
                 {
                     Task<ScriptState<object>> ts = scp.RunAsync(g);
-                    Task.Run(async () => { await ts; }).Wait();
+                    try
+                    {
+                        Task.Run(async () => { await ts; }).Wait();
+                    }
+                    catch (AggregateException aex)
+                    {
+                        foreach (var ex in aex.Flatten().InnerExceptions)
+                        {
+                            g.TriggernometryHelpers.Log(RealPlugin.DebugLevelEnum.Error, I18n.Translate(
+                                    "internal/Interpreter/scriptExecutionError",
+                                    "Error occurred during script execution: \n{0}", ex.ToString()));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        g.TriggernometryHelpers.Log(RealPlugin.DebugLevelEnum.Error, I18n.Translate(
+                                    "internal/Interpreter/scriptExecutionError",
+                                    "Error occurred during script execution: \n{0}", ex.ToString()));
+                    }
                 }
                 else
                 {
                     g.TriggernometryHelpers.Log(
-                        RealPlugin.DebugLevelEnum.Error, 
+                        RealPlugin.DebugLevelEnum.Error,
                         I18n.Translate(
                             "internal/Interpreter/scriptblocked", "Script execution on trigger {0} blocked due to restricted API: {1}",
                             ctx?.trig?.LogName ?? "(null)", badApi
@@ -441,9 +457,15 @@ namespace Triggernometry
                     foreach (var ex in aex.Flatten().InnerExceptions)
                     {
                         g.TriggernometryHelpers.Log(RealPlugin.DebugLevelEnum.Error, I18n.Translate(
-                                "internal/Interpreter/scriptExecutionError", 
+                                "internal/Interpreter/scriptExecutionError",
                                 "Error occurred during script execution: \n{0}", ex.ToString()));
                     }
+                }
+                catch (Exception ex)
+                {
+                    g.TriggernometryHelpers.Log(RealPlugin.DebugLevelEnum.Error, I18n.Translate(
+                                "internal/Interpreter/scriptExecutionError",
+                                "Error occurred during script execution: \n{0}", ex.ToString()));
                 }
             }
         }

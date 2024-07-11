@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Costura;
 using System.Drawing;
 using System.Threading;
+using System.Diagnostics;
 
 namespace TriggernometryProxy
 {
@@ -24,7 +25,7 @@ namespace TriggernometryProxy
         private Control CornerPopup = null;
         private bool complained = false;
         private int callbackIdCounter = 0;
-        private List<Tuple<int, string, CustomCallbackDelegate, object>> queuedRegs = new List<Tuple<int, string, CustomCallbackDelegate, object>>();
+        private List<Tuple<int, string, CustomCallbackDelegate, object, string>> queuedRegs = new List<Tuple<int, string, CustomCallbackDelegate, object, string>>();
 
         public delegate void CustomCallbackDelegate(object o, string param);
         
@@ -33,7 +34,7 @@ namespace TriggernometryProxy
             CosturaUtility.Initialize();
         }
 
-        public int RegisterNamedCallback(string name, CustomCallbackDelegate callback, object o)
+        public int RegisterNamedCallback(string name, CustomCallbackDelegate callback, object o, string registrant)
         {
             if (name == null)
             {
@@ -48,14 +49,31 @@ namespace TriggernometryProxy
             {
                 if (Instance != null)
                 {
-                    Instance.RegisterNamedCallback(newid, name, callback, o);
+                    Instance.RegisterNamedCallback(newid, name, callback, o, registrant);
                 }
                 else
                 {
-                    queuedRegs.Add(new Tuple<int, string, CustomCallbackDelegate, object>(newid, name, callback, o));
+                    queuedRegs.Add(new Tuple<int, string, CustomCallbackDelegate, object, string>(newid, name, callback, o, registrant));
                 }
             }
             return newid;
+        }
+
+        // for backward compatibility: auto-detect the registrant
+        public int RegisterNamedCallback(string name, CustomCallbackDelegate callback, object o)
+        {
+            string registrant = "";
+
+            StackFrame callingFrame = new StackTrace().GetFrame(1);
+            if (callingFrame != null)
+            {
+                MethodBase callingMethod = callingFrame.GetMethod();
+                string callingMethodName = callingMethod.Name;
+                string callingClassName = callingMethod.DeclaringType.FullName;
+                registrant = $"{callingClassName}.{callingMethodName}";
+            }
+
+            return RegisterNamedCallback(name, callback, o, registrant);
         }
 
         public void UnregisterNamedCallback(int id)
@@ -107,12 +125,13 @@ namespace TriggernometryProxy
 
         public void InitPlugin(TabPage pluginScreenSpace, Label pluginStatusText)
         {
+            Triggernometry.RealPlugin.ResetPlugin();
             lock (this)
             {
                 Instance = Triggernometry.RealPlugin.plug;
-                foreach (Tuple<int, string, CustomCallbackDelegate, object> t in queuedRegs)
+                foreach (Tuple<int, string, CustomCallbackDelegate, object, string> t in queuedRegs)
                 {
-                    Instance.RegisterNamedCallback(t.Item1, t.Item2, t.Item3, t.Item4);
+                    Instance.RegisterNamedCallback(t.Item1, t.Item2, t.Item3, t.Item4, t.Item5);
                 }
                 queuedRegs.Clear();
             }
@@ -124,7 +143,9 @@ namespace TriggernometryProxy
                 ComplainAboutReload();
             }
             FailsafeRegisterHook("InCombatHook", "InCombat");
-            FailsafeRegisterHook("EndCombatHook", "EndCombat");
+            FailsafeRegisterHook("SetCombatStateHook", "SetCombatState");
+            FailsafeRegisterHook("UseDeucalionHook", "UseDeucalion");
+            FailsafeRegisterHook("LogAllNetworkHook", "LogAllNetwork");
             FailsafeRegisterHook("CurrentZoneHook", "GetCurrentZone");
             FailsafeRegisterHook("ActiveEncounterHook", "ExportActiveEncounter");
             FailsafeRegisterHook("LastEncounterHook", "ExportLastEncounter");
@@ -249,6 +270,7 @@ namespace TriggernometryProxy
             ActGlobals.oFormActMain.OnLogLineRead -= OFormActMain_OnLogLineRead;
             ActGlobals.oFormActMain.BeforeLogLineRead -= OFormActMain_BeforeLogLineRead;
             Instance.DeInitPlugin();
+            Instance = null;
             HideCornerNotification();
         }
 
@@ -296,6 +318,19 @@ namespace TriggernometryProxy
         public void EndCombat()
         {
             ActGlobals.oFormActMain.EndCombat(false);
+        }
+
+        public void SetCombatState(bool inCombat)
+        {
+            if (inCombat)
+            {
+                string myName = Triggernometry.PluginBridges.BridgeFFXIV.GetMyself()?.GetValue("name").ToString() ?? "Player";
+                ActGlobals.oFormActMain.SetEncounter(DateTime.Now, myName, myName);
+            }
+            else
+            {
+                ActGlobals.oFormActMain.EndCombat(false);
+            }
         }
 
         public string GetCurrentZone()
@@ -522,6 +557,99 @@ namespace TriggernometryProxy
             {
                 mainform.ActiveZone.ActiveEncounter.LogLines.Add(new LogLineEntry(DateTime.Now, message, 0xFFF, mainform.GlobalTimeSorter));
             }
+        }
+
+        public static ActPluginData GetPluginDataByName(string name)
+        {
+            foreach (var plugin in ActGlobals.oFormActMain.ActPlugins)
+            {
+                if (plugin.cbEnabled.Checked && plugin.pluginObj != null)
+                {
+                    if (plugin.lblPluginTitle.Text == name)
+                    {
+                        return plugin;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static List<string> GetMethodsDesc(object obj)
+        {
+            List<string> results = new List<string>();
+            Type type = obj.GetType();
+            MethodInfo[] methods = type.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            foreach (MethodInfo method in methods)
+            {
+                if (method.Name.StartsWith("get_") || method.Name.StartsWith("set_") || method.Name.StartsWith("add_") || method.Name.StartsWith("remove_"))
+                    continue;
+                string s = $"{method.ReturnType.Name} {method.Name}({string.Join(", ", method.GetParameters().Select(p => $"{p.ParameterType.Name} {p.Name}"))})";
+                results.Add(s);
+            }
+            return results;
+        }
+
+        public void UseDeucalion(bool enabled) => FfxivActPluginHelper.UseDeucalion(enabled);
+        public void LogAllNetwork(bool enabled) => FfxivActPluginHelper.LogAllNetwork(enabled);
+
+        public static class FfxivActPluginHelper
+        {
+            public static ActPluginData pluginData;
+            public static object pluginObj;
+            public static CheckBox chkLogAllNetwork;
+            public static CheckBox chkUseDeucalion;
+
+            static FfxivActPluginHelper()
+            {
+                pluginData = GetPluginDataByName("FFXIV_ACT_Plugin.dll");
+                pluginObj = pluginData?.pluginObj;
+                if (pluginObj == null) return;
+                ScanControls(pluginData.tpPluginSpace);
+            }
+
+            private static void ScanControls(Control parent)
+            {
+                foreach (Control ctrl in parent.Controls)
+                {
+                    if (ctrl is CheckBox chk)
+                    {
+                        switch (ctrl.Name)
+                        {
+                            case "chkUseDeucalion": chkUseDeucalion = chk; break;
+                            case "chkLogAllNetwork": chkLogAllNetwork = chk; break;
+                        }
+                    }
+                    else if (ctrl.HasChildren)
+                    {
+                        ScanControls(ctrl);
+                    }
+                }
+            }
+
+            public static void UseDeucalion(bool enabled)
+            {
+                if (chkUseDeucalion.InvokeRequired)
+                {
+                    chkUseDeucalion.Invoke(new Action(() => chkUseDeucalion.Checked = enabled));
+                }
+                else
+                {
+                    chkUseDeucalion.Checked = enabled;
+                }
+            }
+
+            public static void LogAllNetwork(bool enabled)
+            {
+                if (chkLogAllNetwork.InvokeRequired)
+                {
+                    chkLogAllNetwork.Invoke(new Action(() => chkLogAllNetwork.Checked = enabled));
+                }
+                else
+                {
+                    chkLogAllNetwork.Checked = enabled;
+                }
+            }
+
         }
 
     }

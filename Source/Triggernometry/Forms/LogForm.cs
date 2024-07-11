@@ -16,7 +16,7 @@ namespace Triggernometry.Forms
     public partial class LogForm : MemoryForm<LogForm>
     {
 
-        internal RealPlugin plug;
+        internal RealPlugin plug = RealPlugin.plug;
 
         internal List<InternalLog> logData;
         internal List<InternalLog> virtualData;
@@ -122,9 +122,14 @@ namespace Triggernometry.Forms
         private void RefreshLog()
         {
             logData.Clear();
-            lock (plug.log)
+            foreach (var pair in plug.log)
             {
-                logData.AddRange(plug.log);
+                var queue = pair.Value;
+                lock (queue)
+                {
+                    logData.AddRange(queue);
+                }
+                
             }
             logData.Sort((a, b) => b.Timestamp.CompareTo(a.Timestamp));
             if (dgvLog.VirtualMode == true)

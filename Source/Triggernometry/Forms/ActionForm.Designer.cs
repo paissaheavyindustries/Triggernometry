@@ -170,8 +170,14 @@ namespace Triggernometry.Forms
             this.lblFolderOp = new System.Windows.Forms.Label();
             this.cbxFolderOp = new System.Windows.Forms.ComboBox();
             this.trvFolder = new System.Windows.Forms.TreeView();
-            this.tabEndEncounter = new System.Windows.Forms.TabPage();
-            this.lblEndEncNoParams = new System.Windows.Forms.Label();
+            this.tabActInteraction = new System.Windows.Forms.TabPage();
+            this.tableActInteraction = new System.Windows.Forms.TableLayoutPanel();
+            this.lblActOpType = new System.Windows.Forms.Label();
+            this.cbxActOpType = new System.Windows.Forms.ComboBox();
+            this.lblActOpBoolParam = new System.Windows.Forms.Label();
+            this.cbxActOpBoolParam = new System.Windows.Forms.ComboBox();
+            this.lblActOpStringParam = new System.Windows.Forms.Label();
+            this.expActOpStringParam = new Triggernometry.CustomControls.ExpressionTextBox();
             this.tabDiscordWebhook = new System.Windows.Forms.TabPage();
             this.discordTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.cbxDiscordTts = new System.Windows.Forms.CheckBox();
@@ -462,7 +468,7 @@ namespace Triggernometry.Forms
             this.tableLayoutPanel11.SuspendLayout();
             this.tabFolderOperation.SuspendLayout();
             this.tableLayoutPanel12.SuspendLayout();
-            this.tabEndEncounter.SuspendLayout();
+            this.tabActInteraction.SuspendLayout();
             this.tabDiscordWebhook.SuspendLayout();
             this.discordTableLayout.SuspendLayout();
             this.tabTextAura.SuspendLayout();
@@ -576,7 +582,7 @@ namespace Triggernometry.Forms
                 "Discord webhook",
                 "LiveSplit remote control operation",
                 "OBS remote control operation",
-                "End encounter",
+                "ACT Interaction",
                 "Trigger operation",
                 "Folder operation",
                 "Repository operation",
@@ -635,7 +641,7 @@ namespace Triggernometry.Forms
             this.tbcActionSettings.Controls.Add(this.tabDiscordWebhook);
             this.tbcActionSettings.Controls.Add(this.tabLiveSplitControl);
             this.tbcActionSettings.Controls.Add(this.tabObsControl);
-            this.tbcActionSettings.Controls.Add(this.tabEndEncounter);
+            this.tbcActionSettings.Controls.Add(this.tabActInteraction);
             this.tbcActionSettings.Controls.Add(this.tabTriggerOperation);
             this.tbcActionSettings.Controls.Add(this.tabFolderOperation);
             this.tbcActionSettings.Controls.Add(this.tabRepo);
@@ -2533,26 +2539,102 @@ namespace Triggernometry.Forms
             this.trvFolder.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvFolder_BeforeExpand);
             this.trvFolder.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvFolder_BeforeSelect);
             // 
-            // tabEndEncounter
+            // tabActInteraction
             // 
-            this.tabEndEncounter.Controls.Add(this.lblEndEncNoParams);
-            this.tabEndEncounter.Location = new System.Drawing.Point(4, 25);
-            this.tabEndEncounter.Name = "tabEndEncounter";
-            this.tabEndEncounter.Size = new System.Drawing.Size(742, 414);
-            this.tabEndEncounter.TabStop = false;
-            this.tabEndEncounter.Text = "End";
-            this.tabEndEncounter.UseVisualStyleBackColor = true;
+            this.tabActInteraction.Controls.Add(this.tableActInteraction);
+            this.tabActInteraction.Location = new System.Drawing.Point(4, 25);
+            this.tabActInteraction.Name = "tabActInteraction";
+            this.tabActInteraction.Size = new System.Drawing.Size(742, 414);
+            this.tabActInteraction.TabStop = false;
+            this.tabActInteraction.Text = "Act";
+            this.tabActInteraction.UseVisualStyleBackColor = true;
             // 
-            // lblEndEncNoParams
+            // tableActInteraction
             // 
-            this.lblEndEncNoParams.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblEndEncNoParams.Location = new System.Drawing.Point(0, 0);
-            this.lblEndEncNoParams.Name = "lblEndEncNoParams";
-            this.lblEndEncNoParams.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
-            this.lblEndEncNoParams.Size = new System.Drawing.Size(742, 414);
-            this.lblEndEncNoParams.TabStop = false;
-            this.lblEndEncNoParams.Text = "This action has no configurable parameters.";
-            this.lblEndEncNoParams.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.tableActInteraction.AutoSize = true;
+            this.tableActInteraction.ColumnCount = 2;
+            this.tableActInteraction.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableActInteraction.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableActInteraction.Controls.Add(this.lblActOpType, 0, 0);
+            this.tableActInteraction.Controls.Add(this.cbxActOpType, 1, 0);
+            this.tableActInteraction.Controls.Add(this.lblActOpBoolParam, 0, 1);
+            this.tableActInteraction.Controls.Add(this.cbxActOpBoolParam, 1, 1);
+            this.tableActInteraction.Controls.Add(this.lblActOpStringParam, 0, 2);
+            this.tableActInteraction.Controls.Add(this.expActOpStringParam, 1, 2);
+            this.tableActInteraction.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableActInteraction.Location = new System.Drawing.Point(0, 0);
+            this.tableActInteraction.Name = "tableActInteraction";
+            this.tableActInteraction.RowCount = 3;
+            this.tableActInteraction.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableActInteraction.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableActInteraction.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableActInteraction.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableActInteraction.Size = new System.Drawing.Size(742, 105);
+            this.tableActInteraction.TabStop = false;
+            // 
+            // lblActOpType
+            // 
+            this.lblActOpType.AutoSize = true;
+            this.lblActOpType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblActOpType.Name = "lblActOpType";
+            this.lblActOpType.TabStop = false;
+            this.lblActOpType.Text = "Option";
+            this.lblActOpType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbxActOpType
+            // 
+            this.cbxActOpType.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxActOpType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxActOpType.FormattingEnabled = true;
+            this.cbxActOpType.Items.AddRange(new object[] {
+                "Set ACT combat state",
+                "Log all network data",
+                "Use Deucalion (injection)",
+            });
+            this.cbxActOpType.Name = "cbxActOpType";
+            this.cbxActOpType.TabStop = false;
+            this.cbxActOpType.SelectedIndexChanged += new System.EventHandler(this.cbxActOpType_SelectedIndexChanged);
+            // 
+            // lblActOpBoolParam
+            // 
+            this.lblActOpBoolParam.AutoSize = true;
+            this.lblActOpBoolParam.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblActOpBoolParam.Name = "lblActOpBoolParam";
+            this.lblActOpBoolParam.TabStop = false;
+            this.lblActOpBoolParam.Text = "State";
+            this.lblActOpBoolParam.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbxActOpBoolParam
+            // 
+            this.cbxActOpBoolParam.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxActOpBoolParam.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxActOpBoolParam.FormattingEnabled = true;
+            this.cbxActOpBoolParam.Items.AddRange(new object[] {
+                "End/Disable",
+                "Start/Enable",
+            });
+            this.cbxActOpBoolParam.Name = "cbxActOpBoolParam";
+            this.cbxActOpBoolParam.TabStop = false;
+            // 
+            // lblActOpStringParam
+            // 
+            this.lblActOpStringParam.AutoSize = true;
+            this.lblActOpStringParam.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblActOpStringParam.Name = "lblActOpStringParam";
+            this.lblActOpStringParam.TabStop = false;
+            this.lblActOpStringParam.Text = "String Param";
+            this.lblActOpStringParam.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // expActOpStringParam
+            // 
+            this.expActOpStringParam.AutocompleteAvailable = true;
+            this.expActOpStringParam.AutoSize = true;
+            this.expActOpStringParam.Dock = System.Windows.Forms.DockStyle.Top;
+            this.expActOpStringParam.Expression = "";
+            this.expActOpStringParam.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            this.expActOpStringParam.Name = "expActOpStringParam";
+            this.expActOpStringParam.ReadOnly = false;
+            this.expActOpStringParam.TabIndex = 10;
             // 
             // tabDiscordWebhook
             // 
@@ -3636,7 +3718,6 @@ namespace Triggernometry.Forms
             "Pop the given index from list variable into a scalar variable",
             "Pop and insert a value from a list into another list",
             "Pop and set a value from a list into another list",
-            "Pop last value from list variable into a scalar variable (old action)",
             "Build a list variable from the expression separated by its first character",
             "Filter elements into another list",
             "Join all values in the list variable into a scalar variable (separator in expression)",
@@ -6273,7 +6354,7 @@ namespace Triggernometry.Forms
             this.tabFolderOperation.PerformLayout();
             this.tableLayoutPanel12.ResumeLayout(false);
             this.tableLayoutPanel12.PerformLayout();
-            this.tabEndEncounter.ResumeLayout(false);
+            this.tabActInteraction.ResumeLayout(false);
             this.tabDiscordWebhook.ResumeLayout(false);
             this.tabDiscordWebhook.PerformLayout();
             this.discordTableLayout.ResumeLayout(false);
@@ -6446,7 +6527,7 @@ namespace Triggernometry.Forms
         private CustomControls.ExpressionTextBox expVariableName;
         private System.Windows.Forms.Label lblVariableName;
         private System.Windows.Forms.Label lblVariableOp;
-        private System.Windows.Forms.ComboBox cbxVariableOp;
+        internal System.Windows.Forms.ComboBox cbxVariableOp;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
         private System.Windows.Forms.Label lblTrigger;
         private CustomControls.ExpressionTextBox expTriggerText;
@@ -6499,8 +6580,14 @@ namespace Triggernometry.Forms
         private System.Windows.Forms.Label lblFolderOp;
         private System.Windows.Forms.ComboBox cbxFolderOp;
         internal System.Windows.Forms.TreeView trvFolder;
-        private System.Windows.Forms.TabPage tabEndEncounter;
-        private System.Windows.Forms.Label lblEndEncNoParams;
+        private System.Windows.Forms.TabPage tabActInteraction;
+        private System.Windows.Forms.TableLayoutPanel tableActInteraction;
+        private System.Windows.Forms.Label lblActOpType;
+        private System.Windows.Forms.ComboBox cbxActOpType;
+        private System.Windows.Forms.Label lblActOpBoolParam;
+        private System.Windows.Forms.ComboBox cbxActOpBoolParam;
+        private System.Windows.Forms.Label lblActOpStringParam;
+        private Triggernometry.CustomControls.ExpressionTextBox expActOpStringParam;
         private System.Windows.Forms.TabPage tabTextAura;
         private System.Windows.Forms.Button btnAuraGuide;
         private System.Windows.Forms.TabControl tbcAction;
@@ -6586,7 +6673,7 @@ namespace Triggernometry.Forms
         private CustomControls.ExpressionTextBox expLvarName;
         private System.Windows.Forms.Label lblLvarName;
         private System.Windows.Forms.Label lblLvarOperation;
-        private System.Windows.Forms.ComboBox cbxLvarOperation;
+        internal System.Windows.Forms.ComboBox cbxLvarOperation;
         private System.Windows.Forms.TabPage tabObsControl;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel18;
         private System.Windows.Forms.ComboBox cbxObsOpType;
@@ -6610,7 +6697,7 @@ namespace Triggernometry.Forms
         private CustomControls.ExpressionTextBox expJsonEndpoint;
         private System.Windows.Forms.TabPage tabActionCondition;
         private CustomControls.ConditionViewer cndCondition;
-        private System.Windows.Forms.ComboBox cbxKeypressMethod;
+        internal System.Windows.Forms.ComboBox cbxKeypressMethod;
         private System.Windows.Forms.Label lblKeypressMethod;
         private CustomControls.ExpressionTextBox expKeypress;
         private CustomControls.ExpressionTextBox expWindowTitle;
@@ -6659,14 +6746,14 @@ namespace Triggernometry.Forms
         private CustomControls.ExpressionTextBox expTvarName;
         private System.Windows.Forms.Label lblTvarName;
         private System.Windows.Forms.Label lblTvarOpType;
-        private System.Windows.Forms.ComboBox cbxTvarOpType;
+        internal System.Windows.Forms.ComboBox cbxTvarOpType;
         private CustomControls.ExpressionTextBox expTvarRow;
         private System.Windows.Forms.Label lblTvarRow;
         private System.Windows.Forms.CheckBox cbxFileOpCache;
         private System.Windows.Forms.TabPage tabDictVariable;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelDict;
         private System.Windows.Forms.Label lblDictOpType;
-        private System.Windows.Forms.ComboBox cbxDictOpType;
+        internal System.Windows.Forms.ComboBox cbxDictOpType;
         private System.Windows.Forms.Label lblDictName;
         private CustomControls.ExpressionTextBox expDictName;
         private CustomControls.PersistenceSwitch prsDictSource;

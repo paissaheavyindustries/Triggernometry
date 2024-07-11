@@ -494,13 +494,27 @@ namespace Triggernometry.Forms
             RestoreEdit();
         }
 
+        /// <summary> Copy the current editted result of the table to the clipboard in CSV format. </summary>
+        private void btnCopyAsCsv_Click(object sender, EventArgs e)
+        {
+            VariableTable v = (VariableTable)VariableToEdit;
+            Action.ClipboardSetText(v.ToCSVString());
+        }
+
         private void btnSaveAsCsv_Click(object sender, EventArgs e) 
         {
             saveFileDialog1.FileName = txtVariableName.Text + ".csv";
             if (saveFileDialog1.ShowDialog() == DialogResult.OK) 
             {
                 VariableTable v = (VariableTable)VariableToEdit;
-                File.WriteAllText(saveFileDialog1.FileName, v.ToCSVString());
+                try
+                {
+                    File.WriteAllText(saveFileDialog1.FileName, v.ToCSVString());
+                }
+                catch (IOException ex)
+                {
+                    MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

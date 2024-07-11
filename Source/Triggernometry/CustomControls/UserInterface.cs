@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Speech.Synthesis;
+using System.Threading;
 
 namespace Triggernometry.CustomControls
 {
@@ -75,6 +76,18 @@ namespace Triggernometry.CustomControls
         // Create a node sorter that implements the IComparer interface.
         public class NodeSorter : IComparer
         {
+            private bool DetermineSortOrder(TreeNode parent)
+            {
+                if (parent?.Tag is Folder folder)
+                {
+                    return folder._DescendingSort;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
             // Compare the length of the strings, or the strings
             // themselves, if they are the same length.
             public int Compare(object x, object y)
@@ -88,8 +101,9 @@ namespace Triggernometry.CustomControls
                 if (ty.Tag is Folder && tx.Tag is Trigger)
                 {
                     return 1;
-                }                // If they are the same length, call Compare.
-                return string.Compare(tx.Text, ty.Text);
+                }
+                // Both folders / triggers:
+                return DetermineSortOrder(tx.Parent) ? string.Compare(ty.Text, tx.Text) : string.Compare(tx.Text, ty.Text);
             }
         }
     
@@ -107,6 +121,7 @@ namespace Triggernometry.CustomControls
             treeView1.DragEnter += TreeView1_DragEnter;
             treeView1.DragOver += TreeView1_DragOver;
             statusStrip1.VisibleChanged += StatusStrip1_VisibleChanged;
+            ClearErrorCount();
         }
 
         private void StatusStrip1_VisibleChanged(object sender, EventArgs e)
@@ -475,25 +490,10 @@ namespace Triggernometry.CustomControls
 
         internal void btnAddTrigger_Click(object sender, EventArgs e)
         {
-            using (Forms.TriggerForm tf = new Forms.TriggerForm())
+            Trigger srcTrigger = cfg.UseTemplateTrigger ? cfg.TemplateTrigger : null;
+            using (Forms.TriggerForm tf = new Forms.TriggerForm(srcTrigger))
             {
-                if (cfg.UseTemplateTrigger == true)
-                {
-                    Trigger t = new Trigger();
-                    cfg.TemplateTrigger.CopySettingsTo(t);
-                    tf.SettingsFromTrigger(t);
-                }
-                else
-                {
-                    tf.SettingsFromTrigger(null);
-                }
-                tf.initialDescriptions = tf.GetAllDescriptionsStr();
-                tf.plug = plug;
-                tf.fakectx.plug = plug;
                 tf.Text = I18n.Translate("internal/UserInterface/addtrigger", "Add new trigger");
-                tf.BtnOkSetText();
-                tf.GetTriggerDescription();
-                tf.SetTriggerDescription();
                 tf.imgs = imageList1;
                 tf.trv = treeView1;
                 tf.wmp = wmp;
@@ -617,36 +617,19 @@ namespace Triggernometry.CustomControls
 
         internal void btnEdit_Click(object sender, EventArgs e)
         {
-            if (treeView1.SelectedNode.Tag is Trigger)
+            if (treeView1.SelectedNode.Tag is Trigger t)
             {
-                using (Forms.TriggerForm tf = new Forms.TriggerForm())
+                bool readOnly = IsPartOfRemote(treeView1.SelectedNode);
+                bool readMe = t.Repo != null && treeView1.SelectedNode.ImageIndex == (int)ImageIndices.Readme;
+                using (Forms.TriggerForm tf = new Forms.TriggerForm(t, readOnly, readMe))
                 {
-                    Trigger t = (Trigger)treeView1.SelectedNode.Tag;
                     Trigger.TriggerSourceEnum oldSource = t._Source;
-                    tf.plug = plug;
                     ExpressionTextBox.CurrentTriggerRegexStr = t.RegularExpression;
-                    tf.fakectx.trig = t;
-                    tf.fakectx.plug = plug;
-                    tf.SettingsFromTrigger(t);
-                    tf.initialDescriptions = tf.GetAllDescriptionsStr();
-                    if (IsPartOfRemote(treeView1.SelectedNode) == true)
-                    {
-                        tf.SetReadOnly();
-                    }
                     tf.imgs = imageList1;
                     tf.trv = treeView1;
-                    if (t.Repo != null && treeView1.SelectedNode.ImageIndex == (int)ImageIndices.Readme)
-                    {
-                        tf.EnterReadmeMode();
-                        tf.Text = I18n.Translate("internal/UserInterface/edittriggerreadme", "Instructions for repository '{0}'", t.Repo.Name);
-                    }
-                    else
-                    {
-                        tf.Text = I18n.Translate("internal/UserInterface/edittrigger", "Edit trigger '{0}'", t.Name);
-                        tf.BtnOkSetText();
-                        tf.GetTriggerDescription();
-                        tf.SetTriggerDescription();
-                    }
+                    tf.Text = readMe 
+                        ? I18n.Translate("internal/UserInterface/edittriggerreadme", "Instructions for repository '{0}'", t.Repo.Name) 
+                        : tf.Text = I18n.Translate("internal/UserInterface/edittrigger", "Edit trigger '{0}'", t.Name);
                     tf.wmp = wmp;
                     tf.tts = tts;
                     if (tf.ShowDialog() == DialogResult.OK)
@@ -673,12 +656,11 @@ namespace Triggernometry.CustomControls
                     }
                 }
             }
-            else if (treeView1.SelectedNode.Tag is Repository)
+            else if (treeView1.SelectedNode.Tag is Repository r)
             {
                 using (Forms.RepositoryForm rf = new Forms.RepositoryForm())
                 {
                     rf.plug = plug;
-                    Repository r = (Repository)treeView1.SelectedNode.Tag;                    
                     rf.SettingsFromRepository(r);
                     rf.Text = I18n.Translate("internal/UserInterface/editrepository", "Edit repository '{0}'", r.Name);
                     rf.btnOk.Text = I18n.Translate("internal/UserInterface/savechanges", "Save changes");
@@ -747,6 +729,15 @@ namespace Triggernometry.CustomControls
             btnEdit_Click(sender, e);
         }
 
+        internal void ctxDescendingSort_Click(object sender, EventArgs e)
+        {
+            if (treeView1.SelectedNode?.Tag is Folder f)
+            {
+                f._DescendingSort = !f._DescendingSort;
+                treeView1.Sort();
+            }
+        }
+
         internal void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
             btnImportTrigger_Click(sender, e);
@@ -764,6 +755,7 @@ namespace Triggernometry.CustomControls
                 ctxAdd.Visible = false;
                 ctxUpdate.Visible = false;
                 ctxEdit.Visible = false;
+                ctxDescendingSort.Visible = false;
                 ctxFire.Visible = false;
                 ctxFireAllowCondition.Visible = false;
                 ctxCollapse.Visible = false;
@@ -785,6 +777,8 @@ namespace Triggernometry.CustomControls
                 ctxAdd.Visible = true;
                 ctxUpdate.Visible = true;
                 ctxEdit.Visible = true;
+                ctxDescendingSort.Visible = treeView1.SelectedNode.Tag is Folder;
+                ctxDescendingSort.Checked = treeView1.SelectedNode.Tag is Folder f && f._DescendingSort;
                 ctxFire.Visible = true;
                 ctxFireAllowCondition.Visible = true;
                 ctxCollapse.Visible = true;
@@ -814,9 +808,9 @@ namespace Triggernometry.CustomControls
                 ctxDelete.Enabled = btnRemoveTrigger.Enabled;
                 ctxImport.Enabled = btnImportTrigger.Enabled;
                 ctxExport.Enabled = btnExportTrigger.Enabled;
-                ctxFire.Visible = cfg.DeveloperMode;
-                ctxFireAllowCondition.Visible = cfg.DeveloperMode;
-                toolStripSeparator12.Visible = cfg.DeveloperMode;
+                ctxFire.Visible = true; // cfg.DeveloperMode;
+                ctxFireAllowCondition.Visible = true; // cfg.DeveloperMode;
+                toolStripSeparator12.Visible = true; // cfg.DeveloperMode;
                 ctxCopy.Enabled = (treeView1.SelectedNode != null);
                 ctxPaste.Enabled = ctxAddTrigger.Enabled == true && (
                     (cfg.UseOsClipboard == false && (Clipboard != null && Clipboard.Length > 0))
@@ -1135,6 +1129,7 @@ namespace Triggernometry.CustomControls
         internal TriggernometryExport ExportSelection()
         {
             TriggernometryExport exp = new TriggernometryExport();
+            exp.PluginVersion = RealPlugin.plug.cfg.PluginVersion;
             if (treeView1.SelectedNode.Tag is Trigger)
             {
                 Trigger t = (Trigger)treeView1.SelectedNode.Tag;
@@ -1279,7 +1274,6 @@ namespace Triggernometry.CustomControls
                 if (formlog == null)
                 {
                     formlog = new Forms.LogForm();
-                    formlog.plug = plug;
                     formlog.startWithErrorSearch = errorSearch;
                     formlog.FormClosed += Formlog_FormClosed;
                     formlog.Show(plug.mainform);
@@ -1510,10 +1504,10 @@ namespace Triggernometry.CustomControls
                 switch (ti.ShowDialog())
                 {
                     case DialogResult.OK:
-                        string[] lines = ti.txtEvent.Lines;
+                        string[] lines = ti.txtEvent.Lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
                         testInputHistoryLines = lines;
                         testInputHistoryZone = ti.txtZoneName.Text;
-                        plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeue", "Queueing {0} user log lines", lines.Count()));
+                        plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/UserInterface/loglinequeue", "Queueing {0} user log lines", lines.Length));
                         LogEvent.SourceEnum src = LogEvent.SourceEnum.Log;
                         cfg.TestInputDestination = ti.cbxEventDestination.SelectedIndex;
                         cfg.TestInputZoneType = ti.cbxZoneType.SelectedIndex;
@@ -1569,26 +1563,70 @@ namespace Triggernometry.CustomControls
             }
         }
 
-        internal void ShowErrorThing(object sender, EventArgs e)
-        {
-            if (this.InvokeRequired == true)
+        private int _newErrorCount = 0;
+        /// <summary> Should only use this property on the main UI thread. </summary>
+        private int NewErrorCount {
+            get => _newErrorCount;
+            set 
             {
-                this.Invoke(new VoidDelegate(ShowErrorThing), sender, e);
-                return;
+                _newErrorCount = value;
+                UpdateErrorCount();
             }
-            errThing2.Visible = true;
-            errThing1.Visible = true;
         }
 
-        internal void HideErrorThing(object sender, EventArgs e)
+        private void UpdateErrorCount()
         {
-            if (this.InvokeRequired == true)
+            if (NewErrorCount == 0)
             {
-                this.Invoke(new VoidDelegate(HideErrorThing), sender, e);
+                errThing1.Text = I18n.Translate("internal/UserInterface/errorCount0", "No new errors");
+                var resources = new ComponentResourceManager(typeof(UserInterface));
+                errThing1.Image = (Image)resources.GetObject("btnViewLog.Image");
+            }
+            else if (NewErrorCount == 1)
+            {
+                errThing1.Text = I18n.Translate("internal/UserInterface/errorCount1", "1 error");
+                var resources = new ComponentResourceManager(typeof(UserInterface));
+                errThing1.Image = (Image)resources.GetObject("errThing1.Image");
+            }
+            else if (NewErrorCount > 10000)
+            {
+                return; // avoid a infinitely looped error continuously invoking this method and freezing the UI
+            }
+            else if (NewErrorCount == 10000)
+            {
+                errThing1.Text = I18n.Translate("internal/UserInterface/errorCountN", "{0} errors", "9999+");
+            }
+            else
+            {
+                errThing1.Text = I18n.Translate("internal/UserInterface/errorCountN", "{0} errors", NewErrorCount);
                 return;
             }
-            errThing1.Visible = false;
-            errThing2.Visible = false;
+        }
+
+        internal void ClearErrorCount()
+        {
+            if (this.IsDisposed) return;
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new System.Action(ClearErrorCount));
+            }
+            else
+            {
+                NewErrorCount = 0;
+            }
+        }
+
+        internal void IncrementErrorCount()
+        {
+            if (this.IsDisposed) return;
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new System.Action(IncrementErrorCount));
+            }
+            else
+            {
+                NewErrorCount += 1;
+            }
         }
 
         internal void PasteSelected()
@@ -1918,7 +1956,7 @@ namespace Triggernometry.CustomControls
             }
         }
 
-        private void UpdateRepository(TreeNode tnupdate)
+        private void ForceUpdateRepository(TreeNode tnupdate)
         {
             if (tnupdate == null)
             {
@@ -1953,7 +1991,7 @@ namespace Triggernometry.CustomControls
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            UpdateRepository(treeView1.SelectedNode);
+            ForceUpdateRepository(treeView1.SelectedNode);
         }
 
         private void ctxUpdate_Click(object sender, EventArgs e)
@@ -1997,7 +2035,7 @@ namespace Triggernometry.CustomControls
                         treeView1.Nodes[1].Expand();
                         RecolorStartingFromNode(tn.Parent, tn.Parent.Checked, true);
                         treeView1.Sort();
-                        UpdateRepository(tn);
+                        ForceUpdateRepository(tn);
                     }
                 }
             }
@@ -2011,6 +2049,7 @@ namespace Triggernometry.CustomControls
         private void errThing1_Click(object sender, EventArgs e)
         {
             OpenLogForm(true);
+            NewErrorCount = 0;
         }
 
         private void ctxCollapse_Click(object sender, EventArgs e)
@@ -2154,7 +2193,7 @@ namespace Triggernometry.CustomControls
 
         private void btnUpdateCheck_Click(object sender, EventArgs e)
         {
-            plug.CheckForUpdates();
+            plug.CheckForUpdates(isManual: true);
         }
 
         private void timer1_Tick(object sender, EventArgs e)

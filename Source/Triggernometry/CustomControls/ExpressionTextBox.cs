@@ -13,7 +13,7 @@ namespace Triggernometry.CustomControls
 {
     public partial class ExpressionTextBox : UserControl
     {
-        
+
         #region Autofill Text
 
         public static List<string> math = new List<string>()
@@ -23,9 +23,9 @@ namespace Triggernometry.CustomControls
             "phi", "major", "minor", "ETmin2sec", "semitone", "cent",
 
             // numeric func: basic
-            "sqrt(x)", "pow(x, y)", "root(x, y)", "exp(x)", "log(x)", "log(x, base)",
+            "sqrt(x)", "pow(x, y)", "root(x, y)", "exp(x)", "log(x, base=e)",
             "abs(x)", "sign(x)", "rem(x, y)", "mod(x, y)", "random(start, end)",
-            "truncate(x)", "floor(x)", "ceiling(x)", "round(x)", "round(x, digits)",
+            "truncate(x)", "floor(x)", "ceiling(x)", "round(x, digits=0)",
             "max(...)", "min(...)", "or(...)", "and(...)", "if(condition, trueVal, falseVal)",
 
             // numeric func: trigonometric 
@@ -34,20 +34,22 @@ namespace Triggernometry.CustomControls
             "sinh(x)", "cosh(x)", "tanh(x)",
 
             // numeric func: distance
-            "distance(x1, y1, x2, y2)", "distance(x1, y1, z1..., x2, y2, z2...)",
-            "d(x1, y1, x2, y2)", "d(x1, y1, z1..., x2, y2, z2...)",
-            "projd(x1, y1, θ, x2, y2)", "projh(x1, y1, θ, x2, y2)",
-            "projectdistance(x1, y1, θ, x2, y2)", "projectheight(x1, y1, θ, x2, y2)",
+            "distance(x0, y0, x1, y1)", "distance(x0, y0, z0..., x1, y1, z1...)",
+            "d(x0, y0, x1, y1)", "d(x0, y0, z0..., x1, y1, z1...)",
+            "l1d(x0, y0, z0..., x1, y1, z1...)", "l∞d(x0, y0, z0..., x1, y1, z1...)",
+            "manhattandistance(x0, y0, z0..., x1, y1, z1...)", "chebyshevdistance(x0, y0, z0..., x1, y1, z1...)",
+            "projd(srcX, srcY, θ, tgtX, tgtY)", "projh(srcX, srcY, θ, tgtX, tgtY)", "ispointinray(srcX, srcY, θ, width, tgtX, tgtY)",
+            "projectdistance(srcX, srcY, θ, tgtX, tgtY)", "projectheight(srcX, srcY, θ, tgtX, tgtY)",
 
             // numeric func: angle
             "radtodeg(rad)", "degtorad(deg)",
-            "angle(x1, y1, x2, y2)", "θ(x1, y1, x2, y2)", "relangle(θ1, θ2)", "relθ(θ1, θ2)",
-            "roundir(θ, ±n)", "roundir(θ, ±n, digits)", "roundvec(dx, dy, ±n)", "roundvec(dx, dy, ±n, digits)",
-            "isanglebetween(θ, θ1, θ2)", "isθbetween(θ, θ1, θ2)",
+            "angle(srcX, srcY, tgtX, tgtY)", "θ(srcX, srcY, tgtX, tgtY)", "relangle(srcθ, tgtθ)", "relθ(srcθ, tgtθ)",
+            "roundir(θ, ±n, digits=0)", "roundvec(dx, dy, ±n, digits=0)", "dir2rad(direction, ±n)",
+            "isanglebetween(θ, minθ, maxθ)", "isθbetween(θ, minθ, maxθ)",
 
             // numeric string func
             "hex2dec(hex)", "hex2float(hex)", "hex2double(hex)", "X8float(hex)", "parsedmg(hex)", "len(alphanumstr)",
-            "freq(note)", "freq(note, semitones)", "nextETms(XX:XX)", "nextETms(ETmin)",
+            "freq(note, semitones=0)", "nextETms(XX:XX)", "nextETms(ETmin)",
         };
 
         public static List<string> prefixes = new List<string>() // right after "${"
@@ -59,11 +61,12 @@ namespace Triggernometry.CustomControls
             "dvar:", "pdvar:", "edvar:", "epdvar:", "d:", "pd:", "ed:", "epd:",
             "tvarcl:", "ptvarcl:", "tvarrl:", "ptvarrl:", "tvardl:", "ptvardl:",
             "?l:", "?lvar:", "?t:", "?tvar:", "?d:", "?dvar:",
-            "etext:", "eimage:", "ecallback:", "estorage:",
+            "etext:", "eimage:", "ecallback:", "estorage:", 
+            "env:",
 
             // special variables
-            "_incombat", "_lastencounter", "_activeencounter", "_configpath", "_pluginpath",
-            "_duration", "_event", "_since", "_sincems", "_triggerid", "_triggername", "_zone",
+            "_incombat", "_lastencounter", "_activeencounter", "_configpath", "_pluginpath", "_pluginversion", 
+            "_duration", "_event", "_since", "_sincems", "_triggerid", "_triggername", "_triggerpath", "_zone",
             "_response", "_responsecode", "_jsonresponse[x]",
             "_timestamp", "_timestampms", "_systemtime", "_systemtimems", "_clipboard",
             "_screenwidth", "_screenheight", "_textaura[x]", "_imageaura[x]",
@@ -78,16 +81,15 @@ namespace Triggernometry.CustomControls
 
         public static List<string> funcs = new List<string>()
         {
-            "toupper", "tolower", "length",
+            "toupper", "tolower", "tofullwidth", "tohalfwidth", "toxivchar(combineDigits=false)", "length",
             "dec2hex", "dec2hex2", "dec2hex4", "dec2hex8", "float2hex", "double2hex",
             "hex2dec", "hex2float", "hex2double", "parsedmg",
-            "substring(index)", "substring(index, len)", "slice(slices)", "pick(index)", "pick(index, separator)",
-            "indexof(str)", "lastindexof(str)", "i(str)", "indicesof(str)", "indicesof(str, joiner, slices)",
-            "padleft(char, len)", "padright(char, len)",
+            "substring(index)", "substring(index, len)", "slice(slices)", "pick(index, separator=',')",
+            "indexof(str)", "lastindexof(str)", "i(str)", "indicesof(str, joiner=',', slices='::')",
+            "padleft(char, len)", "padright(char, len)", "chr(separator=',')", "ord(joiner=',')",
             "trim()", "trim(char, char, ...)", "trimleft()", "trimleft(char, char, ...)", "trimright()", "trimright(char, char, ...)",
-            "repeat(times)", "repeat(times, joiner)",
-            "replace(oldStr)", "replace(oldStr, newStr)", "replace(oldStr, newStr, isLooped)",
-            "format(x, y)", "compare(str)", "compare(str, ignorecase)",
+            "repeat(times, joiner=',')", "replace(oldStr, newStr='', isLooped=false)",
+            "format(type, format)", "compare(str, ignorecase=true)", "versioncompare(tgtVersion)",
             "contain(str)", "ifcontain(str, t, f)", "equal(str)", "ifequal(str, t, f)",
             "startwith(str)", "ifstartwith(str, t, f)", "endwith(str)", "ifendwith(str, t, f)",
             "match(str)", "ifmatch(str, t, f)", "capture(str, groupName)", "capture(str, groupIndex)",
@@ -96,39 +98,39 @@ namespace Triggernometry.CustomControls
 
         public static List<string> lvarProps = new List<string>()
         {
-            "size", "length", "indexof(str)", "i(str)", "lastindexof(str)", 
-            "indicesof(str)", "indicesof(str, joiner, slices)",
-            "sum()", "sum(slices)", "count(str)", "count(str, slices)",
-            "join()", "join(joiner, slices)",
-            "randjoin()", "randjoin(joiner, slices)",
-            "contain(str)", "contain(str, slices)", "ifcontain(str, t, f)",
-            "max()", "max(type, slices)", "min()", "min(type, slices)",
+            "size", "length", "indexof(str)", "i(str)", "lastindexof(str)",
+            "indicesof(str, joiner=',', slices='::')",
+            "sum(slices='::')", "count(str, slices='::')",
+            "join(joiner=',', slices='::')",
+            "randjoin(joiner=',', slices='::')",
+            "contain(str, slices='::')", "ifcontain(str, t, f)",
+            "max(type='n', slices='::')", "min(type='n', slices='::')",
         };
 
         public static List<string> tvarProps = new List<string>()
         {
             "w", "width", "h", "height",
-            "hjoin()", "hjoin(joiner1, joiner2, colSlices, rowSlices)",
-            "vjoin()", "vjoin(joiner1, joiner2, colSlices, rowSlices)",
-            "hlookup(str, rowIndex)", "hlookup(str, rowIndex, colSlices)",
-            "vlookup(str, colIndex)", "vlookup(str, colIndex, rowSlices)",
-            "hl(str, rowIndex)", "hl(str, rowIndex, colSlices)",
-            "vl(str, colIndex)", "vl(str, colIndex, rowSlices)",
-            "count(str)", "count(str, colSlices, rowSlices)",
-            "sum()", "sum(colSlices, rowSlices)",
-            "max()", "max(type, colSlices, rowSlices)",
-            "min()", "min(type, colSlices, rowSlices)",
-            "contain(str)", "contain(str, colSlices, rowSlices)", "ifcontain(str, t, f)",
+            "hjoin()", "hjoin(joiner1=',', joiner2='⏎', colSlices='::', rowSlices='::')",
+            "vjoin()", "vjoin(joiner1=',', joiner2='⏎', colSlices='::', rowSlices='::')",
+            "hlookup(str, rowIndex, colSlices='::')",
+            "vlookup(str, colIndex, rowSlices='::')",
+            "hl(str, rowIndex, colSlices='::')",
+            "vl(str, colIndex, rowSlices='::')",
+            "count(str, colSlices='::', rowSlices='::')",
+            "sum(colSlices='::', rowSlices='::')",
+            "max()", "max(type='n', colSlices='::', rowSlices='::')",
+            "min()", "min(type='n', colSlices='::', rowSlices='::')",
+            "contain(str, colSlices='::', rowSlices='::')", "ifcontain(str, t, f)",
         };
 
         public static List<string> dvarProps = new List<string>()
         {
             "size", "length", "ekey(key)", "evalue(value)", "ifekey(key, t, f)", "ifevalue(value, t, f)",
-            "keyof(value)", "keysof(value)", "keysof(value, joiner)",
-            "joinall()", "joinall(kvjoiner, pairjoiner)",
-            "joinkeys()", "joinkeys(joiner)", "joinvalues()", "joinvalues(joiner)",
+            "keyof(value)", "keysof(value, joiner=',')",
+            "joinall(kvjoiner='=', pairjoiner=',')",
+            "joinkeys(joiner=',')", "joinvalues(joiner=',')",
             "sumkeys", "sum", "count(value)",
-            "max()", "min()", "maxkey()", "minkey()", "max(type)", "min(type)", "maxkey(type)", "minkey(type)",
+            "max(type='n')", "min(type='n')", "maxkey(type='n')", "minkey(type='n')",
         };
 
         public static List<string> textAuraProps = new List<string>()
@@ -148,7 +150,7 @@ namespace Triggernometry.CustomControls
             "x", "y", "z", "heading", "h", "distance", "iscasting", "casttime", "maxcasttime", "castid",
             "inparty", "order", "worldid", "worldname", "currentworldid", "targetid", "casttargetid",
             "isT", "isH", "isD", "isM", "isR", "isC", "isG", "isTH", "isCG", "isTM", "isHR",
-            "jobCN", "jobDE", "jobEN", "jobFR", "jobJP", "jobKR", "jobCN1", "jobCN2", "jobEN3", "jobJP1", 
+            "jobCN", "jobDE", "jobEN", "jobFR", "jobJP", "jobKR", "jobCN1", "jobCN2", "jobEN3", "jobJP1",
         };
 
         public static List<string> jobProps = new List<string>()
@@ -606,7 +608,7 @@ namespace Triggernometry.CustomControls
                 else
                 {
                     if (!textBox1.Multiline) // switch to multiline mode
-                    {   
+                    {
                         ToggleExpand();
                     }
                     else // input linebreaks (+ indent), instead of closing the form
@@ -645,7 +647,7 @@ namespace Triggernometry.CustomControls
         internal static Color BgYellow = Color.FromArgb(255, 240, 210);        // capture group not found
         internal static Color BgGreen  = Color.FromArgb(225, 255, 225);        // correct
         internal static Color BgBlue   = Color.FromArgb(210, 240, 255);        // persistent variable
-
+        
         private void UpdateBackground()
         {
             if (!Enabled && !IsPersistent)
@@ -746,7 +748,7 @@ namespace Triggernometry.CustomControls
             if (ExpressionType != SupportedExpressionTypeEnum.Regex && textBox1.Focused)
             {
                 acfDebounceTimer.Stop();
-                acfDebounceTimer.Start(); 
+                acfDebounceTimer.Start();
             }
         }
 
@@ -1095,8 +1097,8 @@ namespace Triggernometry.CustomControls
             }
 
             // all matches failed or temp contains no unclosed '{'
-            
-            if (AutofillType != AutofillTypeEnum.None) 
+
+            if (AutofillType != AutofillTypeEnum.None)
             {
                 var names = GetExistingAutofillNameList(AutofillType, IsPersistent);
                 names.AddRange(GetDynamicAutofillNameList(AutofillType, IsPersistent) ?? new List<string>());
@@ -1181,17 +1183,20 @@ namespace Triggernometry.CustomControls
         // Did not use WinProc since there are some regular TextBoxes in the forms besides ExpTxtBox.
         public static void ReplaceIncompleteLineBreaksInClipboard(object sender, EventArgs e)
         {
-            if (Clipboard.ContainsText())
+            try
             {
-                string clipboardText = Clipboard.GetText();
-                Regex rexIncompleteLinebreaks = new Regex(@"\r(?!\n)|(?<!\r)\n");
-                string replacedText = rexIncompleteLinebreaks.Replace(clipboardText, "\r\n");
-                if (replacedText.Length != clipboardText.Length)
+                if (Clipboard.ContainsText())
                 {
-                    MessageBox.Show($"Before: {clipboardText.Length}\nAfter:{replacedText.Length}");
-                    Clipboard.SetText(replacedText);
+                    string clipboardText = Clipboard.GetText();
+                    Regex rexIncompleteLinebreaks = new Regex(@"\r(?!\n)|(?<!\r)\n");
+                    if (rexIncompleteLinebreaks.IsMatch(clipboardText))
+                    {
+                        string replacedText = clipboardText.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n");
+                        Clipboard.SetText(replacedText);
+                    }
                 }
             }
+            catch { }
         }
 
         #region Color
@@ -1321,13 +1326,13 @@ namespace Triggernometry.CustomControls
             switch (type)
             {
                 case AutofillTypeEnum.Scalar: return vs.Scalar.Keys.ToList();
-                case AutofillTypeEnum.List:   return vs.List.Keys.ToList();
-                case AutofillTypeEnum.Table:  return vs.Table.Keys.ToList();
-                case AutofillTypeEnum.Dict:   return vs.Dict.Keys.ToList();
-                case AutofillTypeEnum.Text:   return (RealPlugin.plug.sc != null) ? RealPlugin.plug.sc.textitems.Keys.ToList()  : RealPlugin.plug.textauras.Keys.ToList();
-                case AutofillTypeEnum.Image:  return (RealPlugin.plug.sc != null) ? RealPlugin.plug.sc.imageitems.Keys.ToList() : RealPlugin.plug.imageauras.Keys.ToList();
+                case AutofillTypeEnum.List: return vs.List.Keys.ToList();
+                case AutofillTypeEnum.Table: return vs.Table.Keys.ToList();
+                case AutofillTypeEnum.Dict: return vs.Dict.Keys.ToList();
+                case AutofillTypeEnum.Text: return (RealPlugin.plug.sc != null) ? RealPlugin.plug.sc.textitems.Keys.ToList() : RealPlugin.plug.textauras.Keys.ToList();
+                case AutofillTypeEnum.Image: return (RealPlugin.plug.sc != null) ? RealPlugin.plug.sc.imageitems.Keys.ToList() : RealPlugin.plug.imageauras.Keys.ToList();
                 case AutofillTypeEnum.Callback: return RealPlugin.plug.callbacksByName.Keys.ToList();
-                case AutofillTypeEnum.Storage:  return RealPlugin.plug.scriptingStorage.Keys.ToList();
+                case AutofillTypeEnum.Storage: return RealPlugin.plug.scriptingStorage.Keys.ToList();
                 default: return new List<string>();
             }
         }
@@ -1336,7 +1341,7 @@ namespace Triggernometry.CustomControls
         {
             if (ExpressionType == SupportedExpressionTypeEnum.Regex)
                 return;
-            
+
             // search for all expressions like ${var:xxx}, ${l:xxx.prop}, ${pd:xxx[key]},
             // and add the names "xxx" to their corresponding namelist. 
             foreach (Match match in rexDynamicNames.Matches(Text))
@@ -1390,6 +1395,425 @@ namespace Triggernometry.CustomControls
                 RegisterAllDynamicVarNamesOnForm(children);
             }
         }
-        #endregion 
+        #endregion
+
+        public class TextBox : System.Windows.Forms.TextBox
+        {
+
+            #region Enhanced Double-Click Selection
+
+            private int clickCount = 0;
+            private DateTime lastClickTime = DateTime.Now;
+            private ExpressionTextBox ExpTextBox => Parent as ExpressionTextBox;
+
+            protected override void WndProc(ref Message m)
+            {
+                const int WM_LBUTTONDOWN = 0x0201;
+                const int WM_LBUTTONDBLCLK = 0x0203;
+
+                if (m.Msg == WM_LBUTTONDBLCLK)
+                {
+                    clickCount = 2;
+                    lastClickTime = DateTime.Now;
+
+                    int x = m.LParam.ToInt32() & 0xFFFF;
+                    int y = (m.LParam.ToInt32() >> 16) & 0xFFFF;
+                    Point clickPoint = new Point(x, y);
+
+                    int index = GetCharIndexFromPosition(clickPoint);
+                    if (index < 0) return;
+
+                    Point charPosition = GetPositionFromCharIndex(index);
+                    if (clickPoint.X < charPosition.X && index > 0)
+                    {
+                        index--;
+                    }
+
+                    HandleDoubleClick(index);
+                    return;
+                }
+                if (m.Msg == WM_LBUTTONDOWN)
+                {
+                    TimeSpan interval = DateTime.Now - lastClickTime;
+                    if (interval.TotalMilliseconds > SystemInformation.DoubleClickTime || clickCount >= 3)
+                    {
+                        clickCount = 0;
+                    }
+
+                    clickCount++;
+                    lastClickTime = DateTime.Now;
+                    if (clickCount == 3)
+                    {
+                        if (Multiline)
+                        {
+                            int x = m.LParam.ToInt32() & 0xFFFF;
+                            int y = (m.LParam.ToInt32() >> 16) & 0xFFFF;
+                            int index = GetCharIndexFromPosition(new Point(x, y));
+                            int lineIndex = GetLineFromCharIndex(index);
+                            int lineStart = GetFirstCharIndexFromLine(lineIndex);
+                            int lineEnd = GetFirstCharIndexFromLine(lineIndex + 1);
+                            if (lineEnd == -1) lineEnd = Text.Length; // last line
+
+                            Select(lineStart, lineEnd - lineStart);
+                        }
+                        else
+                        {
+                            Select(0, Text.Length);
+                        }
+                        clickCount = 0;
+                        return;
+                    }
+                }
+
+                base.WndProc(ref m);
+            }
+
+            private void HandleDoubleClick(int index)
+            {
+                if (index < 0 || index >= Text.Length)
+                    return;
+
+                char currentChar = Text[index];
+                if (char.IsWhiteSpace(currentChar))
+                {
+                    SelectAdjacentChars(index, c => char.IsWhiteSpace(c) && c != '\n' && c != '\r');
+                    return;
+                }
+
+                SupportedExpressionTypeEnum type = GetExpressionEnvironmentAt(index);
+
+                if (_leftBracketChars.ContainsKey(currentChar) || _rightBracketChars.ContainsKey(currentChar) || currentChar == '$' || currentChar == '¤')
+                {
+                    SelectEnclosedBrackets(index);
+                    return;
+                }
+
+                if (type == SupportedExpressionTypeEnum.Numeric)
+                {
+                    // select the adjacent alphanumeric chars
+                    if (!MathParser.OperatorChar.Contains(currentChar))
+                    {
+                        SelectAdjacentChars(index, c => !MathParser.OperatorChar.Contains(c) && !char.IsWhiteSpace(c) && c != '}');
+                        // if the prev char is a unary operator, select it
+                        int prevIdx = SelectionStart - 1;
+                        if (prevIdx < 0)
+                        {
+                            return;
+                        }
+                        char prevChar = Text[prevIdx];
+                        if (prevChar != '+' && prevChar != '-')
+                        {
+                            return;
+                        }
+                        int i = prevIdx - 1;
+                        // scan the prev char before +/- to check if it is really a unary op
+                        while (true)
+                        {
+                            if (i < 0 || Text[i] == '\n' || MathParser.OperatorChar.Contains(Text[i]))
+                            {
+                                Select(prevIdx, SelectionLength + 1); return;
+                            }
+                            else if (char.IsWhiteSpace(Text[i--])) continue;
+                            else return;
+                        }
+                    }
+                    // select the current op
+                    else
+                    {
+                        // if it is the 2nd char of an op
+                        if (index > 0 && !char.IsWhiteSpace(Text[index - 1]))
+                        {
+                            string potentialOperator = Text.Substring(index - 1, 2);
+                            if (MathParser.OperatorOrder.Contains(potentialOperator))
+                            {
+                                Select(index - 1, 2);
+                                return;
+                            }
+                        }
+                        // if it is the 1st char of an op
+                        if (index < Text.Length - 1 && !char.IsWhiteSpace(Text[index + 1]))
+                        {
+                            string potentialOperator = Text.Substring(index, 2);
+                            if (MathParser.OperatorOrder.Contains(potentialOperator))
+                            {
+                                Select(index, 2);
+                                return;
+                            }
+                        }
+                        // if it is a single-char op
+                        Select(index, 1);
+                    }
+                }
+                else if (type == SupportedExpressionTypeEnum.String || type == SupportedExpressionTypeEnum.Color
+                      || type == SupportedExpressionTypeEnum.Regex) // To do: better logic for regexes
+                {
+                    HashSet<char> separators = new HashSet<char>("^$¤{}[](),.:;=|/\\'\"，。？！、：；（）《》「」『』【】“”‘’…" + Context.LINEBREAK_PLACEHOLDER);
+                    if (type == SupportedExpressionTypeEnum.Regex)
+                        separators.ExceptWith(".");
+                    if (!separators.Contains(currentChar))
+                    {
+                        SelectAdjacentChars(index, c => !separators.Contains(c) && !char.IsWhiteSpace(c));
+                    }
+                    else
+                    {
+                        Select(index, 1);
+                    }
+                }
+            }
+
+            private void SelectAdjacentChars(int index, Func<char, bool> predicate)
+            {
+                int start = index;
+                int end = index;
+
+                while (start > 0 && predicate(Text[start - 1]))
+                    start--;
+
+                while (end < Text.Length - 1 && predicate(Text[end + 1]))
+                    end++;
+
+                Select(start, end - start + 1);
+            }
+
+            private SupportedExpressionTypeEnum GetExpressionEnvironmentAt(int position)
+            {
+                if (ExpTextBox?._ExpressionType == SupportedExpressionTypeEnum.Regex)
+                    return SupportedExpressionTypeEnum.Regex;
+
+                if (position > Text.Length)
+                    return SupportedExpressionTypeEnum.String;
+
+                string prevText = Text.Substring(0, position);
+                int lBracketCount = 0;
+                string afterLBracket = "";
+                for (int i = prevText.Length - 1; i >= 0; i--)
+                {
+                    if (prevText[i] == '}')
+                        lBracketCount--;
+                    else if (prevText[i] == '{')
+                        lBracketCount++;
+
+                    if (lBracketCount == 1)
+                    {
+                        afterLBracket = prevText.Substring(i + 1);
+                        break;
+                    }
+                }
+
+                if (lBracketCount != 1) // not in {...}
+                    return ExpTextBox?._ExpressionType ?? SupportedExpressionTypeEnum.String;
+
+                if (afterLBracket.StartsWith("n:") || afterLBracket.StartsWith("numeric:"))
+                    return SupportedExpressionTypeEnum.Numeric;
+                else
+                    return SupportedExpressionTypeEnum.String;
+            }
+
+            private static Dictionary<char, char> _leftBracketChars = new Dictionary<char, char> {
+                { '(',  ')'  }, { '[',  ']'  }, { '{',  '}'  },
+                { '【', '】' }, { '《', '》' }, { '（', '）' },
+                { '“',  '”'  }, { '‘',  '’'  }, { '「', '」' },
+                { '\"', '\"' }, { '\'', '\'' }, // too complicated to determine if a " or ' is left/right, so always consider it as left for now
+            };
+
+            private static Dictionary<char, char> _rightBracketChars = _leftBracketChars.ToDictionary(pair => pair.Value, pair => pair.Key);
+
+            private void SelectEnclosedBrackets(int index)
+            {
+                char clicked = Text[index];
+                char pair;
+                int direction;
+                if (_leftBracketChars.ContainsKey(clicked))
+                {
+                    pair = _leftBracketChars[clicked];
+                    direction = 1;
+                }
+                else if (_rightBracketChars.ContainsKey(clicked))
+                {
+                    pair = _rightBracketChars[clicked];
+                    direction = -1;
+                }
+                else if ((clicked == '$' || clicked == '¤') && index < Text.Length - 1 && Text[index + 1] == '{')
+                {
+
+                    SelectEnclosedBrackets(index + 1); return;
+                }
+                else
+                {
+                    Select(index, 1); return;
+                }
+               
+                int count = 0; 
+                int end = (direction == 1) ? Text.Length - 1 : 0;
+                for (int i = index + direction; i >= 0 && i < Text.Length; i += direction)
+                {
+                    char c = Text[i];
+                    if (c == pair)
+                    {
+                        count++;
+                    }
+                    else if (c == clicked)
+                    {
+                        count--;
+                    }
+                    if (count == 1)
+                    {
+                        end = i;  break;
+                    }
+                }
+
+                int start = Math.Min(index, end);
+                int length = Math.Abs(index - end) + 1;
+                if (start >= 1 && Text[start] == '{' && (Text[start - 1] == '$' || Text[start - 1] == '¤'))
+                {
+                    start--;  length++;
+                }
+                Select(start, length);
+            }
+
+            #endregion
+
+            #region Shortcuts
+
+            private Keys prevKeyWithCtrlShift = Keys.None;
+
+            protected override void OnKeyUp(KeyEventArgs e)
+            {
+                if (!e.Control || !e.Shift)
+                {
+                    prevKeyWithCtrlShift = Keys.None;
+                }
+                base.OnKeyUp(e);
+            }
+
+            protected override void OnKeyDown(KeyEventArgs e)
+            {
+                if (e.Control && e.Shift && !e.Alt && RealPlugin.plug.cfg.EnableShortcutTemplates)
+                {
+                    bool handled = true;
+                    bool shouldWrap = SelectionLength != 0 && RealPlugin.plug.cfg.WrapTextWhenSelected;
+                    bool useAbbrev = RealPlugin.plug.cfg.UseAbbrevInTemplates;
+                    switch (e.KeyCode)
+                    {
+                        // Ctrl + Shift + 4: ${}
+                        case Keys.D4:
+                            if (shouldWrap)
+                                Paste($"${{{SelectedText}}}"); 
+                            else
+                                InsertStringOnBothSides("${", "}");
+                            break;
+                        // Ctrl + Shift + V/L/T/D: ${v/l/t/d:};
+                        // Ctrl + Shift + P, V/L/T/D: ${pv/pl/pt/pd:};
+                        case Keys.P:
+                            break;
+                        case Keys.V:
+                        case Keys.L:
+                        case Keys.T:
+                        case Keys.D:
+                            string varType = e.KeyCode.ToString().ToLower();
+                            varType = useAbbrev ? varType : varType.Trim('v') + "var";
+                            if (prevKeyWithCtrlShift == Keys.P)
+                                varType = "p" + varType;
+                            if (shouldWrap)
+                                Paste($"${{{varType}:{SelectedText}}}");
+                            else
+                                InsertStringOnBothSides($"${{{varType}:", "}");
+                            break;
+                        // Ctrl + Shift + N: ${n:}
+                        case Keys.N:
+                            string numeric = useAbbrev ? "n" : "numeric";
+                            if (shouldWrap)
+                                Paste($"${{{numeric}: {SelectedText.TrimStart()}}}");
+                            else
+                                InsertStringOnBothSides($"${{{numeric}: ", "}");
+                            break;
+                        // Ctrl + Shift + F: ${f::}
+                        case Keys.F:
+                            string func = useAbbrev ? "f" : "func";
+                            if (shouldWrap)
+                                InsertStringOnBothSides($"${{{func}:", $":{SelectedText}}}");
+                            else
+                                InsertStringOnBothSides($"${{{func}:", ":}");
+                            break;
+                        // Ctrl + Shift + E: ${_entity[].}
+                        case Keys.E:
+                            string entity = useAbbrev ? "entity" : "ffxiventity";
+                            if (shouldWrap)
+                                InsertStringOnBothSides($"${{_{entity}[{SelectedText}].", "}");
+                            else
+                                InsertStringOnBothSides($"${{_{entity}[", "].}");
+                            break;
+                        // Ctrl + Shift + M: ${_me.id}
+                        case Keys.M:
+                            Paste(useAbbrev ? "${_me.id}" : "${_ffxiventity[${_ffxivplayer}].id}");
+                            SelectionStart -= 3;
+                            SelectionLength = 2; // select "id"
+                            break;
+                        // Ctrl + Shift + A: Select the next outer layer of brackets
+                        case Keys.A:
+                            SelectNextOuterBracket();
+                            ExpTextBox?.HideAutocomplete();
+                            break;
+                        default:
+                            handled = false;
+                            break;
+                    }
+                    prevKeyWithCtrlShift = e.KeyCode;
+                    if (handled)
+                    {
+                        e.SuppressKeyPress = true;
+                        e.Handled = true;
+                        return;
+                    }
+                }
+                base.OnKeyDown(e);
+            }
+
+            public void InsertStringOnBothSides(string newTextBeforeCursor, string newTextAfterCursor = "")
+            {
+                Paste(newTextBeforeCursor + newTextAfterCursor);
+                SelectionStart -= newTextAfterCursor.Length;
+                ExpTextBox?.ProcessAutocomplete();
+            }
+
+            public void SelectNextOuterBracket()
+            {
+                bool hasOuterLayer = false;
+                int index;
+                Dictionary<char, int> counts = _leftBracketChars.ToDictionary(pair => pair.Key, pair => 0);
+                for (index = SelectionStart - 1; index >= 0; index--)
+                {
+                    char c = Text[index];
+                    if (c == '\"' || c == '\'')
+                    {
+                        continue;
+                    }
+                    if (_rightBracketChars.TryGetValue(c, out char pair))
+                    {
+                        counts[pair]--;
+                    }
+                    else if (_leftBracketChars.ContainsKey(c))
+                    {
+                        if (++counts[c] == 1)
+                        {
+                            hasOuterLayer = true;
+                            break;
+                        }
+                    }
+                }
+                if (hasOuterLayer)
+                {
+                    SelectEnclosedBrackets(index);
+                }
+                else
+                {
+                    System.Media.SystemSounds.Exclamation.Play();
+                }
+            }
+            #endregion
+
+        }
+
+
     }
 }

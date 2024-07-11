@@ -55,7 +55,7 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctxEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.cxtRemove = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxRemove = new System.Windows.Forms.ToolStripMenuItem();
             this.lblWarning = new System.Windows.Forms.Label();
             this.tlsImport = new System.Windows.Forms.ToolStrip();
             this.btnEdit = new System.Windows.Forms.ToolStripButton();
@@ -354,7 +354,7 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ctxEdit,
             this.toolStripSeparator2,
-            this.cxtRemove});
+            this.ctxRemove});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(118, 54);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
@@ -372,13 +372,13 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(114, 6);
             // 
-            // cxtRemove
+            // ctxRemove
             // 
-            this.cxtRemove.Image = ((System.Drawing.Image)(resources.GetObject("cxtRemove.Image")));
-            this.cxtRemove.Name = "cxtRemove";
-            this.cxtRemove.Size = new System.Drawing.Size(117, 22);
-            this.cxtRemove.Text = "Remove";
-            this.cxtRemove.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
+            this.ctxRemove.Image = ((System.Drawing.Image)(resources.GetObject("cxtRemove.Image")));
+            this.ctxRemove.Name = "cxtRemove";
+            this.ctxRemove.Size = new System.Drawing.Size(117, 22);
+            this.ctxRemove.Text = "Remove";
+            this.ctxRemove.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
             // lblWarning
             // 
@@ -388,7 +388,7 @@
             this.lblWarning.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblWarning.Location = new System.Drawing.Point(0, 25);
             this.lblWarning.Name = "lblWarning";
-            this.lblWarning.Size = new System.Drawing.Size(556, 63);
+            this.lblWarning.Size = new System.Drawing.Size(956, 63);
             this.lblWarning.TabIndex = 4;
             this.lblWarning.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblWarning.Visible = false;
@@ -443,12 +443,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnBack;
-            this.ClientSize = new System.Drawing.Size(584, 361);
+            this.ClientSize = new System.Drawing.Size(984, 661);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel4);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.MinimumSize = new System.Drawing.Size(600, 400);
+            this.MinimumSize = new System.Drawing.Size(1000, 700);
             this.Name = "ImportForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.ShowInTaskbar = false;
@@ -508,7 +508,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem ctxEdit;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem cxtRemove;
+        private System.Windows.Forms.ToolStripMenuItem ctxRemove;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
         private System.Windows.Forms.ToolStripMenuItem ctxPasteFromClipboard;
     }

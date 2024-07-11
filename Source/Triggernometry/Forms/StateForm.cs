@@ -1735,8 +1735,13 @@ namespace Triggernometry.Forms
                         e.Value = cb.Id.ToString(CultureInfo.InvariantCulture);
                         break;
                     case 1:
-                        e.Value = cb.Name;
-                        break;
+                        e.Value = cb.Name; break;
+                    case 2:
+                        e.Value = cb.Registrant; break;
+                    case 3:
+                        e.Value = cb.RegistrationTime.ToString(); break;
+                    case 4:
+                        e.Value = cb.LastInvoked?.ToString() ?? ""; break;
                 }
             }
         }
