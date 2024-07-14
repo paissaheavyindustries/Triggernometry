@@ -44,7 +44,8 @@ namespace Triggernometry.Forms
             this.lblBeepFrequency = new System.Windows.Forms.Label();
             this.tabPlaySoundFile = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.chkSoundMyOutput = new System.Windows.Forms.CheckBox();
+            this.cbxSoundMethod = new System.Windows.Forms.ComboBox();
+            this.lblSoundMethod = new System.Windows.Forms.Label();
             this.chkSoundExclusive = new System.Windows.Forms.CheckBox();
             this.expSoundVolume = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblSoundVolume = new System.Windows.Forms.Label();
@@ -53,7 +54,8 @@ namespace Triggernometry.Forms
             this.expSoundFile = new Triggernometry.CustomControls.ExpressionTextBox();
             this.tabTextToSpeech = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.chkSpeechMyOutput = new System.Windows.Forms.CheckBox();
+            this.cbxTtsMethod = new System.Windows.Forms.ComboBox();
+            this.lblSpeechRouting = new System.Windows.Forms.Label();
             this.chkSpeechExclusive = new System.Windows.Forms.CheckBox();
             this.expSpeechRate = new Triggernometry.CustomControls.ExpressionTextBox();
             this.lblSpeechRate = new System.Windows.Forms.Label();
@@ -760,7 +762,8 @@ namespace Triggernometry.Forms
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel3.Controls.Add(this.chkSoundMyOutput, 0, 3);
+            this.tableLayoutPanel3.Controls.Add(this.cbxSoundMethod, 1, 4);
+            this.tableLayoutPanel3.Controls.Add(this.lblSoundMethod, 0, 4);
             this.tableLayoutPanel3.Controls.Add(this.chkSoundExclusive, 0, 2);
             this.tableLayoutPanel3.Controls.Add(this.expSoundVolume, 1, 1);
             this.tableLayoutPanel3.Controls.Add(this.lblSoundVolume, 0, 1);
@@ -770,7 +773,8 @@ namespace Triggernometry.Forms
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 4;
+            this.tableLayoutPanel3.RowCount = 5;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -778,20 +782,31 @@ namespace Triggernometry.Forms
             this.tableLayoutPanel3.Size = new System.Drawing.Size(742, 106);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
-            // chkSoundMyOutput
+            // cbxSoundMethod
             // 
-            this.chkSoundMyOutput.AutoSize = true;
-            this.chkSoundMyOutput.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.tableLayoutPanel3.SetColumnSpan(this.chkSoundMyOutput, 3);
-            this.chkSoundMyOutput.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkSoundMyOutput.Location = new System.Drawing.Point(3, 84);
-            this.chkSoundMyOutput.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
-            this.chkSoundMyOutput.Name = "chkSoundMyOutput";
-            this.chkSoundMyOutput.Size = new System.Drawing.Size(737, 17);
-            this.chkSoundMyOutput.TabIndex = 0;
-            this.chkSoundMyOutput.TabStop = false;
-            this.chkSoundMyOutput.Text = "Use Triggernometry for output regardless of ACT hook configuration";
-            this.chkSoundMyOutput.UseVisualStyleBackColor = true;
+            this.tableLayoutPanel3.SetColumnSpan(this.cbxSoundMethod, 2);
+            this.cbxSoundMethod.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxSoundMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxSoundMethod.FormattingEnabled = true;
+            this.cbxSoundMethod.Items.AddRange(new object[] {
+            "Default",
+            "Windows Media Player API",
+            "ACT"});
+            this.cbxSoundMethod.Location = new System.Drawing.Point(143, 82);
+            this.cbxSoundMethod.Name = "cbxSoundMethod";
+            this.cbxSoundMethod.Size = new System.Drawing.Size(596, 21);
+            this.cbxSoundMethod.TabIndex = 22;
+            // 
+            // lblSoundMethod
+            // 
+            this.lblSoundMethod.AutoSize = true;
+            this.lblSoundMethod.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblSoundMethod.Location = new System.Drawing.Point(3, 79);
+            this.lblSoundMethod.Name = "lblSoundMethod";
+            this.lblSoundMethod.Size = new System.Drawing.Size(134, 27);
+            this.lblSoundMethod.TabIndex = 21;
+            this.lblSoundMethod.Text = "Audio output method";
+            this.lblSoundMethod.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // chkSoundExclusive
             // 
@@ -891,7 +906,8 @@ namespace Triggernometry.Forms
             this.tableLayoutPanel4.ColumnCount = 2;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Controls.Add(this.chkSpeechMyOutput, 0, 4);
+            this.tableLayoutPanel4.Controls.Add(this.cbxTtsMethod, 1, 5);
+            this.tableLayoutPanel4.Controls.Add(this.lblSpeechRouting, 0, 5);
             this.tableLayoutPanel4.Controls.Add(this.chkSpeechExclusive, 0, 3);
             this.tableLayoutPanel4.Controls.Add(this.expSpeechRate, 1, 2);
             this.tableLayoutPanel4.Controls.Add(this.lblSpeechRate, 0, 2);
@@ -908,24 +924,34 @@ namespace Triggernometry.Forms
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(742, 152);
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(742, 132);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
-            // chkSpeechMyOutput
+            // cbxTtsMethod
             // 
-            this.chkSpeechMyOutput.AutoSize = true;
-            this.chkSpeechMyOutput.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.tableLayoutPanel4.SetColumnSpan(this.chkSpeechMyOutput, 3);
-            this.chkSpeechMyOutput.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkSpeechMyOutput.Location = new System.Drawing.Point(3, 110);
-            this.chkSpeechMyOutput.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
-            this.chkSpeechMyOutput.Name = "chkSpeechMyOutput";
-            this.chkSpeechMyOutput.Size = new System.Drawing.Size(737, 17);
-            this.chkSpeechMyOutput.TabIndex = 0;
-            this.chkSpeechMyOutput.TabStop = false;
-            this.chkSpeechMyOutput.Text = "Use Triggernometry for output regardless of ACT hook configuration";
-            this.chkSpeechMyOutput.UseVisualStyleBackColor = true;
+            this.cbxTtsMethod.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbxTtsMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxTtsMethod.FormattingEnabled = true;
+            this.cbxTtsMethod.Items.AddRange(new object[] {
+            "Default",
+            "Windows Speech API",
+            "ACT"});
+            this.cbxTtsMethod.Location = new System.Drawing.Point(163, 108);
+            this.cbxTtsMethod.Name = "cbxTtsMethod";
+            this.cbxTtsMethod.Size = new System.Drawing.Size(576, 21);
+            this.cbxTtsMethod.TabIndex = 21;
+            // 
+            // lblSpeechRouting
+            // 
+            this.lblSpeechRouting.AutoSize = true;
+            this.lblSpeechRouting.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblSpeechRouting.Location = new System.Drawing.Point(3, 105);
+            this.lblSpeechRouting.Name = "lblSpeechRouting";
+            this.lblSpeechRouting.Size = new System.Drawing.Size(154, 27);
+            this.lblSpeechRouting.TabIndex = 20;
+            this.lblSpeechRouting.Text = "Audio output method";
+            this.lblSpeechRouting.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // chkSpeechExclusive
             // 
@@ -6992,8 +7018,6 @@ namespace Triggernometry.Forms
         private System.Windows.Forms.TextBox txtObsWebsocketLink;
         private System.Windows.Forms.CheckBox chkProcessLog;
         private System.Windows.Forms.CheckBox chkProcessLogACT;
-        private System.Windows.Forms.CheckBox chkSoundMyOutput;
-        private System.Windows.Forms.CheckBox chkSpeechMyOutput;
         private System.Windows.Forms.TabPage tabGenericJson;
         private System.Windows.Forms.TableLayoutPanel jsonTableLayout;
         private CustomControls.ExpressionTextBox expJsonFiring;
@@ -7169,5 +7193,9 @@ namespace Triggernometry.Forms
         private System.Windows.Forms.Label lblLsOpType;
         private System.Windows.Forms.Button btnKeycodesListen;
         private System.Windows.Forms.Button btnSendKeysListen;
+        private System.Windows.Forms.Label lblSpeechRouting;
+        private System.Windows.Forms.ComboBox cbxSoundMethod;
+        private System.Windows.Forms.Label lblSoundMethod;
+        private System.Windows.Forms.ComboBox cbxTtsMethod;
     }
 }

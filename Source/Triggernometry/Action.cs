@@ -4229,7 +4229,6 @@ namespace Triggernometry
             a._LaunchProcessWindowStyle = _LaunchProcessWindowStyle;
             a._LaunchProcessWorkingDirExpression = _LaunchProcessWorkingDirExpression;
             a._PlaySoundExclusive = _PlaySoundExclusive;
-            a._PlaySoundMyself = _PlaySoundMyself;
             a._PlaySoundFileExpression = _PlaySoundFileExpression;
             a._PlaySoundVolumeExpression = _PlaySoundVolumeExpression;
             a._RefireInterrupt = _RefireInterrupt;
@@ -4240,7 +4239,6 @@ namespace Triggernometry
             a._UseTTSRateExpression = _UseTTSRateExpression;
             a._UseTTSTextExpression = _UseTTSTextExpression;
             a._UseTTSVolumeExpression = _UseTTSVolumeExpression;
-            a._PlaySpeechMyself = _PlaySpeechMyself;
             a._ExecScriptAssembliesExpression = _ExecScriptAssembliesExpression;
             a._ExecScriptExpression = _ExecScriptExpression;
             a._MessageBoxIconType = _MessageBoxIconType;
@@ -4396,6 +4394,8 @@ namespace Triggernometry
             a._JsonResultVariable = _JsonResultVariable;
             a._JsonResultVariablePersist = _JsonResultVariablePersist;
             a._TriggerZoneType = _TriggerZoneType;
+            a.SoundRouting = SoundRouting;
+            a.TTSRouting = TTSRouting;
         }
 
         private Tuple<int, string> SendJson(Context ctx, Action.HTTPMethodEnum method, string url, string json, IEnumerable<string> headers, bool expectNoContent)

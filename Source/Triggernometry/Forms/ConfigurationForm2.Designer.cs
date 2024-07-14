@@ -1102,7 +1102,7 @@
             this.cbxTtsMethod.FormattingEnabled = true;
             this.cbxTtsMethod.Items.AddRange(new object[] {
             "None (disabled)",
-            "Triggernometry",
+            "Windows Speech API",
             "ACT",
             "External application"});
             this.cbxTtsMethod.Location = new System.Drawing.Point(159, 3);
@@ -1410,7 +1410,7 @@
             this.cbxSoundMethod.FormattingEnabled = true;
             this.cbxSoundMethod.Items.AddRange(new object[] {
             "None (disabled)",
-            "Triggernometry",
+            "Windows Media Player API",
             "ACT",
             "External application"});
             this.cbxSoundMethod.Location = new System.Drawing.Point(159, 3);

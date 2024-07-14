@@ -1774,17 +1774,28 @@ namespace Triggernometry
 
         internal void TtsPlaybackSmart(Context ctx, Action a)
         {
-            if (cfg.TtsMethod == Configuration.AudioRoutingMethodEnum.ExternalApplication)
+            switch (a.TTSRouting)
             {
-                TtsPlaybackExternal(ctx, a);
-            }
-            else if (cfg.TtsMethod == Configuration.AudioRoutingMethodEnum.ACT && a._PlaySpeechMyself == false)
-            {
-                TtsPlaybackAct(ctx, a);
-            }
-            else if (cfg.TtsMethod == Configuration.AudioRoutingMethodEnum.Triggernometry)
-            {
-                TtsPlaybackSelf(ctx, a);
+                case Configuration.AudioRoutingMethodEnum.None:
+                    if (cfg.TtsMethod == Configuration.AudioRoutingMethodEnum.ExternalApplication)
+                    {
+                        TtsPlaybackExternal(ctx, a);
+                    }
+                    else if (cfg.TtsMethod == Configuration.AudioRoutingMethodEnum.ACT)
+                    {
+                        TtsPlaybackAct(ctx, a);
+                    }
+                    else if (cfg.TtsMethod == Configuration.AudioRoutingMethodEnum.Triggernometry)
+                    {
+                        TtsPlaybackSelf(ctx, a);
+                    }
+                    break;
+                case Configuration.AudioRoutingMethodEnum.ACT:
+                    TtsPlaybackAct(ctx, a);
+                    break;
+                case Configuration.AudioRoutingMethodEnum.Triggernometry:
+                    TtsPlaybackSelf(ctx, a);
+                    break;
             }
         }
 
@@ -1823,17 +1834,28 @@ namespace Triggernometry
                     }
                 }
             }
-            if (cfg.SoundMethod == Configuration.AudioRoutingMethodEnum.ExternalApplication)
+            switch (a.SoundRouting)
             {
-                SoundPlaybackExternal(ctx, a, filename);
-            }
-            else if (WMPUnavailable == true || (cfg.SoundMethod == Configuration.AudioRoutingMethodEnum.ACT && a._PlaySoundMyself == false))
-            {
-                SoundPlaybackAct(ctx, a, filename);
-            }
-            else if (cfg.SoundMethod == Configuration.AudioRoutingMethodEnum.Triggernometry)
-            {
-                SoundPlaybackSelf(ctx, a, filename);
+                case Configuration.AudioRoutingMethodEnum.None:
+                    if (cfg.SoundMethod == Configuration.AudioRoutingMethodEnum.ExternalApplication)
+                    {
+                        SoundPlaybackExternal(ctx, a, filename);
+                    }
+                    else if (WMPUnavailable == true || cfg.SoundMethod == Configuration.AudioRoutingMethodEnum.ACT)
+                    {
+                        SoundPlaybackAct(ctx, a, filename);
+                    }
+                    else if (cfg.SoundMethod == Configuration.AudioRoutingMethodEnum.Triggernometry)
+                    {
+                        SoundPlaybackSelf(ctx, a, filename);
+                    }
+                    break;
+                case Configuration.AudioRoutingMethodEnum.ACT:
+                    SoundPlaybackAct(ctx, a, filename);
+                    break;
+                case Configuration.AudioRoutingMethodEnum.Triggernometry:
+                    SoundPlaybackSelf(ctx, a, filename);
+                    break;                
             }
         }
 
@@ -2583,18 +2605,13 @@ namespace Triggernometry
                     {
                         foreach (Action a in t.Actions)
                         {
-                            a._PlaySoundMyself = true;
-                            a._PlaySpeechMyself = true;
+                            a.SoundRouting = Configuration.AudioRoutingMethodEnum.Triggernometry;
+                            a.TTSRouting = Configuration.AudioRoutingMethodEnum.Triggernometry;
                         }
                     }
                     break;
                 case Repository.AudioOutputEnum.NeverOverride:
                     {
-                        foreach (Action a in t.Actions)
-                        {
-                            a._PlaySoundMyself = false;
-                            a._PlaySpeechMyself = false;
-                        }
                     }
                     break;
             }

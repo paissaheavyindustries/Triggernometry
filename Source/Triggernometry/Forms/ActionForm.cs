@@ -373,12 +373,10 @@ namespace Triggernometry.Forms
                 expSoundFile.Expression = "";
                 expSoundVolume.Expression = "100";
                 chkSoundExclusive.Checked = true;
-                chkSoundMyOutput.Checked = false;
                 expTextToSay.Expression = "";
                 expSpeechVolume.Expression = "100";
                 expSpeechRate.Expression = "0";
                 chkSpeechExclusive.Checked = true;
-                chkSpeechMyOutput.Checked = false;
                 expProcessName.Expression = "";
                 expProcessParameters.Expression = "";
                 expProcessWorkingDir.Expression = "";
@@ -538,6 +536,8 @@ namespace Triggernometry.Forms
                 cbxRepositoryOp.SelectedIndex = 0;
                 cbxTriggerZoneType.SelectedIndex = 0;
                 expJsonVariable.Expression = "";
+                cbxSoundMethod.SelectedIndex = 0;
+                cbxTtsMethod.SelectedIndex = 0;
             }
             else
             {
@@ -552,12 +552,10 @@ namespace Triggernometry.Forms
                 expSoundFile.Expression = a._PlaySoundFileExpression;
                 expSoundVolume.Expression = a._PlaySoundVolumeExpression;
                 chkSoundExclusive.Checked = a._PlaySoundExclusive;
-                chkSoundMyOutput.Checked = a._PlaySoundMyself;
                 expTextToSay.Expression = a._UseTTSTextExpression;
                 expSpeechVolume.Expression = a._UseTTSVolumeExpression;
                 expSpeechRate.Expression = a._UseTTSRateExpression;
                 chkSpeechExclusive.Checked = a._UseTTSExclusive;
-                chkSpeechMyOutput.Checked = a._PlaySpeechMyself;
                 expProcessName.Expression = a._LaunchProcessPathExpression;
                 expProcessParameters.Expression = a._LaunchProcessCmdlineExpression;
                 expProcessWorkingDir.Expression = a._LaunchProcessWorkingDirExpression;
@@ -821,6 +819,8 @@ namespace Triggernometry.Forms
                 cbxRepositoryOp.SelectedIndex = (int)a._RepositoryOp;
                 cbxTriggerZoneType.SelectedIndex = (int)a._TriggerZoneType;
                 expJsonVariable.Expression = a._JsonResultVariable;
+                cbxSoundMethod.SelectedIndex = (int)a.SoundRouting;
+                cbxTtsMethod.SelectedIndex = (int)a.TTSRouting;
             }
             chkProcessLog_CheckedChanged(null, null);
         }
@@ -838,7 +838,6 @@ namespace Triggernometry.Forms
             a._PlaySoundFileExpression = expSoundFile.Expression;
             a._PlaySoundVolumeExpression = expSoundVolume.Expression;
             a._PlaySoundExclusive = chkSoundExclusive.Checked;
-            a._PlaySoundMyself = chkSoundMyOutput.Checked;
             a._UseTTSTextExpression = expTextToSay.Expression;
             a._LogProcess = chkProcessLog.Checked;
             a._LogProcessACT = chkProcessLogACT.Checked;
@@ -846,7 +845,6 @@ namespace Triggernometry.Forms
             a._UseTTSVolumeExpression = expSpeechVolume.Expression;
             a._UseTTSRateExpression = expSpeechRate.Expression;
             a._UseTTSExclusive = chkSpeechExclusive.Checked;
-            a._PlaySpeechMyself = chkSpeechMyOutput.Checked;
             a._LaunchProcessPathExpression = expProcessName.Expression;
             a._LaunchProcessCmdlineExpression = expProcessParameters.Expression;
             a._LaunchProcessWorkingDirExpression = expProcessWorkingDir.Expression;
@@ -1085,6 +1083,8 @@ namespace Triggernometry.Forms
             a._RepositoryOp = (Action.RepositoryOpEnum)cbxRepositoryOp.SelectedIndex;
             a._TriggerZoneType = (Action.TriggerZoneTypeEnum)cbxTriggerZoneType.SelectedIndex;
             a._JsonResultVariable = expJsonVariable.Expression;
+            a.SoundRouting = (Configuration.AudioRoutingMethodEnum)cbxSoundMethod.SelectedIndex;
+            a.TTSRouting = (Configuration.AudioRoutingMethodEnum)cbxTtsMethod.SelectedIndex;
         }
 
         private void TestAction(bool liveValues, bool ignoreConditions = false)

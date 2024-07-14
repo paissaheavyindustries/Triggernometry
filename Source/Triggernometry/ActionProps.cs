@@ -2130,44 +2130,46 @@ namespace Triggernometry
             }
         }
 
-        internal bool _PlaySoundMyself { get; set; } = false;
+        [XmlAttribute]
+        public Configuration.AudioRoutingMethodEnum SoundRouting { get; set; } = Configuration.AudioRoutingMethodEnum.None;
+                
         [XmlAttribute]
         public string PlaySoundMyself
         {
             get
             {
-                if (_PlaySoundMyself == false)
-                {
-                    return null;
-                }
-                return _PlaySoundMyself.ToString();
+                return null;
             }
             set
             {
-                _PlaySoundMyself = Boolean.Parse(value);
+                if (Boolean.Parse(value))
+                {
+                    SoundRouting = Configuration.AudioRoutingMethodEnum.Triggernometry;
+                }
             }
         }
 
         #endregion
         #region Action specific properties - Play speech
-
-        internal bool _PlaySpeechMyself { get; set; } = false;
+        
         [XmlAttribute]
         public string PlaySpeechMyself
         {
             get
             {
-                if (_PlaySpeechMyself == false)
-                {
-                    return null;
-                }
-                return _PlaySpeechMyself.ToString();
+                return null;
             }
             set
             {
-                _PlaySpeechMyself = Boolean.Parse(value);
+                if (Boolean.Parse(value))
+                {
+                    TTSRouting = Configuration.AudioRoutingMethodEnum.Triggernometry;
+                }
             }
         }
+
+        [XmlAttribute]
+        public Configuration.AudioRoutingMethodEnum TTSRouting { get; set; } = Configuration.AudioRoutingMethodEnum.None;
 
         internal string _UseTTSTextExpression = "";
         [XmlAttribute]
