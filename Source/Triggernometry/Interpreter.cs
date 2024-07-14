@@ -28,7 +28,7 @@ namespace Triggernometry
             }
 
             public static bool Validate(Script script, out string badApi, params string[] badApis)
-            {
+            {                
                 Compilation comp = script.GetCompilation();
                 SyntaxTree st = comp.SyntaxTrees.First();
                 CompilationUnitSyntax srn = st.GetRoot() as CompilationUnitSyntax;
@@ -73,7 +73,7 @@ namespace Triggernometry
                 foreach (var invoc in invocs)
                 {
                     ISymbol symbol = model.GetSymbolInfo(invoc).Symbol;
-                    string name = symbol.ContainingNamespace?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                    string name = symbol?.ContainingNamespace?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                     if (IsBadApi(name, badApis))
                     {
                         badApi = name;
@@ -84,7 +84,7 @@ namespace Triggernometry
                 foreach (var method in methods)
                 {
                     IMethodSymbol symbol = model.GetDeclaredSymbol(method) as IMethodSymbol;
-                    string name = symbol.ContainingAssembly?.Name;
+                    string name = symbol?.ContainingAssembly?.Name;
                     if (IsBadApi(name, badApis))
                     {
                         badApi = name;
@@ -95,13 +95,13 @@ namespace Triggernometry
                 foreach (var prop in props)
                 {
                     IPropertySymbol symbol = model.GetDeclaredSymbol(prop) as IPropertySymbol;
-                    string name = symbol.Type.ContainingAssembly?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                    string name = symbol?.Type.ContainingAssembly?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                     if (IsBadApi(name, badApis))
                     {
                         badApi = name;
                         return false;
                     }
-                    name = symbol.Type.ContainingNamespace?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                    name = symbol?.Type.ContainingNamespace?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                     if (IsBadApi(name, badApis))
                     {
                         badApi = name;

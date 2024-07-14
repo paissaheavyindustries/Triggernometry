@@ -946,10 +946,10 @@ namespace Triggernometry
                                 switch (idx)
                                 {
                                     case "DebugLevel": val = ((int)plug.cfg.DebugLevel).ToString(InvClt); break;
-                                    case "UseACTForSound": val = plug.cfg.UseACTForSound ? "1" : "0"; break;
-                                    case "UseACTForTTS": val = plug.cfg.UseACTForTTS ? "1" : "0"; break;
+                                    case "UseACTForSound": val = plug.cfg.SoundMethod == Configuration.AudioRoutingMethodEnum.ACT ? "1" : "0"; break;
+                                    case "UseACTForTTS": val = plug.cfg.TtsMethod == Configuration.AudioRoutingMethodEnum.ACT ? "1" : "0"; break;
                                     case "FfxivLogNetwork": val = plug.cfg.FfxivLogNetwork ? "1" : "0"; break;
-                                    case "UseOsClipboard": val = plug.cfg.UseOsClipboard ? "1" : "0"; break;
+                                    case "UseOsClipboard": val = "1"; break;
                                     case "DeveloperMode": val = plug.cfg.DeveloperMode ? "1" : "0"; break;
                                     case "AutoComplete": val = plug.cfg.AutoComplete ? "1" : "0"; break;
                                     case "Autosave": val = plug.cfg.AutosaveEnabled ? plug.cfg.AutosaveInterval.ToString(InvClt) : "0"; break;

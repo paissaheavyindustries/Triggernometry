@@ -38,8 +38,8 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.tableLayoutPanelButtons = new System.Windows.Forms.TableLayoutPanel();
-            this.btnCancel = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.lblTriggerDesc = new System.Windows.Forms.Label();
             this.tbcMain = new System.Windows.Forms.TabControl();
             this.tabTriggerActions = new System.Windows.Forms.TabPage();
@@ -169,10 +169,12 @@
             // txtRegexp
             // 
             this.txtRegexp.AutocompleteAvailable = true;
+            this.txtRegexp.AutofillType = Triggernometry.CustomControls.ExpressionTextBox.AutofillTypeEnum.None;
             this.txtRegexp.AutoSize = true;
             this.txtRegexp.Dock = System.Windows.Forms.DockStyle.Top;
             this.txtRegexp.Expression = "";
             this.txtRegexp.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
+            this.txtRegexp.IsPersistent = false;
             this.txtRegexp.Location = new System.Drawing.Point(106, 29);
             this.txtRegexp.Name = "txtRegexp";
             this.txtRegexp.ReadOnly = false;
@@ -182,7 +184,7 @@
             // panel3
             // 
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(10, 506);
+            this.panel3.Location = new System.Drawing.Point(10, 501);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(664, 10);
             this.panel3.TabIndex = 11;
@@ -191,9 +193,10 @@
             // 
             this.panel4.Controls.Add(this.tableLayoutPanelButtons);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel4.Location = new System.Drawing.Point(10, 516);
+            this.panel4.Location = new System.Drawing.Point(10, 511);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(664, 40);
+            this.panel4.TabIndex = 15;
             // 
             // tableLayoutPanelButtons
             // 
@@ -210,39 +213,40 @@
             this.tableLayoutPanelButtons.RowCount = 1;
             this.tableLayoutPanelButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.tableLayoutPanelButtons.Size = new System.Drawing.Size(664, 40);
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCancel.Location = new System.Drawing.Point(514, 0);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(150, 35);
-            this.btnCancel.TabIndex = 1;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.MinimumSize = new System.Drawing.Size(0, 35);
+            this.tableLayoutPanelButtons.TabIndex = 0;
             // 
             // btnOk
             // 
             this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOk.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnOk.Location = new System.Drawing.Point(0, 0);
+            this.btnOk.Location = new System.Drawing.Point(3, 3);
+            this.btnOk.MinimumSize = new System.Drawing.Size(0, 35);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(150, 35);
+            this.btnOk.Size = new System.Drawing.Size(144, 35);
             this.btnOk.TabIndex = 0;
             this.btnOk.Text = "Save Changes";
             this.btnOk.UseVisualStyleBackColor = true;
-            this.btnOk.MinimumSize = new System.Drawing.Size(0, 35);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCancel.Location = new System.Drawing.Point(517, 3);
+            this.btnCancel.MinimumSize = new System.Drawing.Size(0, 35);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(144, 35);
+            this.btnCancel.TabIndex = 1;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
             // 
             // lblTriggerDesc
             // 
             this.lblTriggerDesc.AutoSize = true;
             this.lblTriggerDesc.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTriggerDesc.Location = new System.Drawing.Point(167, 0);
+            this.lblTriggerDesc.Location = new System.Drawing.Point(153, 0);
             this.lblTriggerDesc.Name = "lblTriggerDesc";
-            this.lblTriggerDesc.Size = new System.Drawing.Size(330, 35);
-            this.lblTriggerDesc.Text = "";
+            this.lblTriggerDesc.Size = new System.Drawing.Size(358, 40);
+            this.lblTriggerDesc.TabIndex = 2;
             this.lblTriggerDesc.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tbcMain
@@ -256,7 +260,7 @@
             this.tbcMain.Location = new System.Drawing.Point(10, 156);
             this.tbcMain.Name = "tbcMain";
             this.tbcMain.SelectedIndex = 0;
-            this.tbcMain.Size = new System.Drawing.Size(664, 350);
+            this.tbcMain.Size = new System.Drawing.Size(664, 345);
             this.tbcMain.TabIndex = 13;
             // 
             // tabTriggerActions
@@ -265,7 +269,7 @@
             this.tabTriggerActions.Location = new System.Drawing.Point(4, 22);
             this.tabTriggerActions.Name = "tabTriggerActions";
             this.tabTriggerActions.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTriggerActions.Size = new System.Drawing.Size(656, 324);
+            this.tabTriggerActions.Size = new System.Drawing.Size(656, 319);
             this.tabTriggerActions.TabIndex = 0;
             this.tabTriggerActions.Text = "Trigger actions";
             this.tabTriggerActions.UseVisualStyleBackColor = true;
@@ -275,7 +279,7 @@
             this.actionViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.actionViewer1.Location = new System.Drawing.Point(3, 3);
             this.actionViewer1.Name = "actionViewer1";
-            this.actionViewer1.Size = new System.Drawing.Size(650, 318);
+            this.actionViewer1.Size = new System.Drawing.Size(650, 313);
             this.actionViewer1.TabIndex = 2;
             // 
             // tabTriggerCondition
@@ -284,7 +288,7 @@
             this.tabTriggerCondition.Location = new System.Drawing.Point(4, 22);
             this.tabTriggerCondition.Name = "tabTriggerCondition";
             this.tabTriggerCondition.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTriggerCondition.Size = new System.Drawing.Size(656, 324);
+            this.tabTriggerCondition.Size = new System.Drawing.Size(656, 319);
             this.tabTriggerCondition.TabIndex = 5;
             this.tabTriggerCondition.Text = "Trigger condition";
             this.tabTriggerCondition.UseVisualStyleBackColor = true;
@@ -295,7 +299,7 @@
             this.cndCondition.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cndCondition.Location = new System.Drawing.Point(3, 3);
             this.cndCondition.Name = "cndCondition";
-            this.cndCondition.Size = new System.Drawing.Size(650, 318);
+            this.cndCondition.Size = new System.Drawing.Size(650, 313);
             this.cndCondition.TabIndex = 4;
             // 
             // tabScheduling
@@ -304,7 +308,7 @@
             this.tabScheduling.Location = new System.Drawing.Point(4, 22);
             this.tabScheduling.Name = "tabScheduling";
             this.tabScheduling.Padding = new System.Windows.Forms.Padding(7);
-            this.tabScheduling.Size = new System.Drawing.Size(656, 324);
+            this.tabScheduling.Size = new System.Drawing.Size(656, 319);
             this.tabScheduling.TabIndex = 2;
             this.tabScheduling.Text = "Scheduling";
             this.tabScheduling.UseVisualStyleBackColor = true;
@@ -352,11 +356,13 @@
             // expMutexName
             // 
             this.expMutexName.AutocompleteAvailable = true;
+            this.expMutexName.AutofillType = Triggernometry.CustomControls.ExpressionTextBox.AutofillTypeEnum.None;
             this.expMutexName.AutoSize = true;
             this.tableLayoutPanel15.SetColumnSpan(this.expMutexName, 2);
             this.expMutexName.Dock = System.Windows.Forms.DockStyle.Top;
             this.expMutexName.Expression = "";
             this.expMutexName.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.String;
+            this.expMutexName.IsPersistent = false;
             this.expMutexName.Location = new System.Drawing.Point(282, 164);
             this.expMutexName.Name = "expMutexName";
             this.expMutexName.ReadOnly = false;
@@ -545,11 +551,13 @@
             // expRefirePeriod
             // 
             this.expRefirePeriod.AutocompleteAvailable = true;
+            this.expRefirePeriod.AutofillType = Triggernometry.CustomControls.ExpressionTextBox.AutofillTypeEnum.None;
             this.expRefirePeriod.AutoSize = true;
             this.tableLayoutPanel15.SetColumnSpan(this.expRefirePeriod, 2);
             this.expRefirePeriod.Dock = System.Windows.Forms.DockStyle.Top;
             this.expRefirePeriod.Expression = "";
             this.expRefirePeriod.ExpressionType = Triggernometry.CustomControls.ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
+            this.expRefirePeriod.IsPersistent = false;
             this.expRefirePeriod.Location = new System.Drawing.Point(282, 138);
             this.expRefirePeriod.Name = "expRefirePeriod";
             this.expRefirePeriod.ReadOnly = false;
@@ -563,7 +571,7 @@
             this.tabDebugging.Location = new System.Drawing.Point(4, 22);
             this.tabDebugging.Name = "tabDebugging";
             this.tabDebugging.Padding = new System.Windows.Forms.Padding(7);
-            this.tabDebugging.Size = new System.Drawing.Size(656, 324);
+            this.tabDebugging.Size = new System.Drawing.Size(656, 319);
             this.tabDebugging.TabIndex = 3;
             this.tabDebugging.Text = "Debugging";
             this.tabDebugging.UseVisualStyleBackColor = true;
@@ -588,7 +596,7 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(642, 310);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(642, 305);
             this.tableLayoutPanel3.TabIndex = 4;
             // 
             // cbxLoggingLevel
@@ -631,7 +639,7 @@
             this.txtEvent.Multiline = true;
             this.txtEvent.Name = "txtEvent";
             this.txtEvent.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtEvent.Size = new System.Drawing.Size(524, 277);
+            this.txtEvent.Size = new System.Drawing.Size(524, 272);
             this.txtEvent.TabIndex = 9;
             this.txtEvent.WordWrap = false;
             // 
@@ -643,7 +651,7 @@
             this.lblEvent.Location = new System.Drawing.Point(3, 27);
             this.lblEvent.Name = "lblEvent";
             this.lblEvent.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.lblEvent.Size = new System.Drawing.Size(106, 283);
+            this.lblEvent.Size = new System.Drawing.Size(106, 278);
             this.lblEvent.TabIndex = 8;
             this.lblEvent.Text = "Test input lines";
             // 
@@ -670,7 +678,7 @@
             this.tabDescription.Location = new System.Drawing.Point(4, 22);
             this.tabDescription.Name = "tabDescription";
             this.tabDescription.Padding = new System.Windows.Forms.Padding(7);
-            this.tabDescription.Size = new System.Drawing.Size(656, 324);
+            this.tabDescription.Size = new System.Drawing.Size(656, 319);
             this.tabDescription.TabIndex = 4;
             this.tabDescription.Text = "Description";
             this.tabDescription.UseVisualStyleBackColor = true;
@@ -688,7 +696,7 @@
             this.tableLayoutPanel23.RowCount = 2;
             this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel23.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel23.Size = new System.Drawing.Size(642, 310);
+            this.tableLayoutPanel23.Size = new System.Drawing.Size(642, 305);
             this.tableLayoutPanel23.TabIndex = 3;
             // 
             // chkReadmeTrigger
@@ -696,7 +704,7 @@
             this.chkReadmeTrigger.AutoSize = true;
             this.chkReadmeTrigger.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkReadmeTrigger.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkReadmeTrigger.Location = new System.Drawing.Point(3, 288);
+            this.chkReadmeTrigger.Location = new System.Drawing.Point(3, 283);
             this.chkReadmeTrigger.Margin = new System.Windows.Forms.Padding(3, 5, 2, 5);
             this.chkReadmeTrigger.Name = "chkReadmeTrigger";
             this.chkReadmeTrigger.Size = new System.Drawing.Size(637, 17);
@@ -713,7 +721,7 @@
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtDescription.Size = new System.Drawing.Size(636, 277);
+            this.txtDescription.Size = new System.Drawing.Size(636, 272);
             this.txtDescription.TabIndex = 0;
             this.txtDescription.WordWrap = false;
             // 
@@ -770,6 +778,7 @@
             this.tableLayoutPanel1.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.tableLayoutPanelButtons.ResumeLayout(false);
+            this.tableLayoutPanelButtons.PerformLayout();
             this.tbcMain.ResumeLayout(false);
             this.tabTriggerActions.ResumeLayout(false);
             this.tabTriggerCondition.ResumeLayout(false);

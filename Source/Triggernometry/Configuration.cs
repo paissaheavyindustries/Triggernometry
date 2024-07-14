@@ -73,7 +73,8 @@ namespace Triggernometry
         public enum UpdateCheckMethodEnum
         {
             Builtin,
-            ACT
+            ACT,
+            External
         }
 
         [XmlAttribute]
@@ -81,6 +82,9 @@ namespace Triggernometry
 
         [XmlAttribute]
         public UpdateCheckMethodEnum UpdateCheckMethod { get; set; } = UpdateCheckMethodEnum.ACT;
+
+        [XmlAttribute]
+        public string UpdateExternalChannelURI { get; set; } = "";
 
         // Startup Trigger/Folder
 
@@ -100,6 +104,14 @@ namespace Triggernometry
 
         #region Audio
 
+        public enum AudioRoutingMethodEnum
+        {
+            None,
+            Triggernometry,
+            ACT,
+            ExternalApplication
+        }
+
         // Global volume adjustment
 
         [XmlAttribute]
@@ -111,10 +123,64 @@ namespace Triggernometry
         // ACT hooks
 
         [XmlAttribute]
-        public bool UseACTForSound { get; set; } = false;
+        public string UseACTForSound
+        {
+            get
+            {
+                return null;
+            }
+            set
+            {
+                bool temp = bool.Parse(value);
+                if (temp == true)
+                {
+                    SoundMethod = AudioRoutingMethodEnum.ACT;
+                }
+                else
+                {
+                    SoundMethod = AudioRoutingMethodEnum.Triggernometry;
+                }
+            }
+        }
 
         [XmlAttribute]
-        public bool UseACTForTTS { get; set; } = false;
+        public string UseACTForTTS
+        {
+            get
+            {
+                return null;
+            }
+            set
+            {
+                bool temp = bool.Parse(value);
+                if (temp == true)
+                {
+                    SoundMethod = AudioRoutingMethodEnum.ACT;
+                }
+                else
+                {
+                    SoundMethod = AudioRoutingMethodEnum.Triggernometry;
+                }
+            }
+        }
+
+        [XmlAttribute]
+        public AudioRoutingMethodEnum SoundMethod { get; set; } = AudioRoutingMethodEnum.Triggernometry;
+
+        [XmlAttribute]
+        public string SoundExternalApp { get; set; } = "";
+
+        [XmlAttribute]
+        public string SoundExternalAppArgs { get; set; } = "";
+
+        [XmlAttribute]
+        public AudioRoutingMethodEnum TtsMethod { get; set; } = AudioRoutingMethodEnum.Triggernometry;
+
+        [XmlAttribute]
+        public string TtsExternalApp { get; set; } = "";
+
+        [XmlAttribute]
+        public string TtsExternalAppArgs { get; set; } = "";
 
         #endregion
 
@@ -402,15 +468,19 @@ namespace Triggernometry
         [XmlAttribute]
         public bool UseTemplateTrigger { get; set; } = false;
 
-        // Future proofing
-
-        [XmlAttribute]
-        public string EventSeparator { get; set; } = "";
-
         // User Interface
 
         [XmlAttribute]
-        public bool UseOsClipboard { get; set; } = true;
+        public bool UiFontDefault { get; set; } = true;
+
+        [XmlAttribute]
+        public string UiFontName { get; set; } = null;
+
+        [XmlAttribute]
+        public float UiFontSize { get; set; } = 10.0f;
+
+        [XmlAttribute]
+        public Action.TextAuraEffectEnum UiFontEffect { get; set; } = Action.TextAuraEffectEnum.None;
 
         [XmlAttribute]
         public bool TestLiveByDefault { get; set; } = false;

@@ -2157,7 +2157,18 @@ namespace Triggernometry
                         {
                             string scp = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ExecScriptExpression);
                             string assy = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ExecScriptAssembliesExpression);
-                            plug.scripting.Evaluate(scp, assy, ctx);
+                            while (plug.scriptingInited == false)
+                            {
+                                Thread.Sleep(10);
+                            }
+                            if (plug.scripting != null)
+                            {
+                                plug.scripting.Evaluate(scp, assy, ctx);
+                            }
+                            else
+                            {
+                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/scriptinifailed", "Action #{0} on trigger '{1}' not fired, scripting not available", OrderNumber, ctx.trig?.LogName ?? "(null)"));
+                            }
                         }
                         break;
                     #endregion

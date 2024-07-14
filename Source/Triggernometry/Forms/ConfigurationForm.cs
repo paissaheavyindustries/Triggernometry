@@ -103,17 +103,12 @@ namespace Triggernometry.Forms
                 SettingsFromConfiguration(new Configuration());
                 return;
             }
-
             trbSoundVolume.Value = cfg.SfxVolumeAdjustment;
             trbTtsVolume.Value = cfg.TtsVolumeAdjustment;
             cbxLoggingLevel.SelectedIndex = (int)cfg.DebugLevel;
-            chkActTts.Checked = cfg.UseACTForTTS;
-            chkActSoundFiles.Checked = cfg.UseACTForSound;
             chkShortcutEnableTemplates.Checked = cfg.EnableShortcutTemplates;
             chkShortcutUseAbbrevInTemplates.Checked = cfg.UseAbbrevInTemplates;
-            chkShortcutWrapTextWhenSelected.Checked = cfg.WrapTextWhenSelected;
-            chkClipboard.Checked = cfg.UseOsClipboard;
-            txtSeparator.Text = cfg.EventSeparator;
+            chkShortcutWrapTextWhenSelected.Checked = cfg.WrapTextWhenSelected;                        
             cbxDevMode.Checked = cfg.DeveloperMode;
             cbxAutoComplete.Checked = cfg.AutoComplete;
             cbxFfxivJobMethod.SelectedIndex = (int)cfg.FfxivPartyOrdering;
@@ -123,7 +118,7 @@ namespace Triggernometry.Forms
             cbxTestIgnoreConditions.Checked = cfg.TestIgnoreConditionsByDefault;
             cbxActionAsync.Checked = cfg.ActionAsyncByDefault;
             chkUpdates.Checked = (cfg.UpdateNotifications == Configuration.UpdateNotificationsEnum.Yes);
-            cbxUpdateMethod.SelectedIndex = (int)cfg.UpdateCheckMethod;
+            cbxUpdateMethod.SelectedIndex = (int)cfg.UpdateCheckMethod;            
             chkLogNormalEvents.Checked = cfg.LogNormalEvents;
             chkLogVariableExpansions.Checked = cfg.LogVariableExpansions;
             chkFfxivLogNetwork.Checked = cfg.FfxivLogNetwork;
@@ -175,13 +170,9 @@ namespace Triggernometry.Forms
             cfg.SfxVolumeAdjustment = trbSoundVolume.Value;
             cfg.TtsVolumeAdjustment = trbTtsVolume.Value;
             cfg.DebugLevel = (RealPlugin.DebugLevelEnum)cbxLoggingLevel.SelectedIndex;
-            cfg.UseACTForTTS = chkActTts.Checked;
-            cfg.UseACTForSound = chkActSoundFiles.Checked;
             cfg.EnableShortcutTemplates = chkShortcutEnableTemplates.Checked;
             cfg.UseAbbrevInTemplates = chkShortcutUseAbbrevInTemplates.Checked;
-            cfg.WrapTextWhenSelected = chkShortcutWrapTextWhenSelected.Checked;
-            cfg.EventSeparator = txtSeparator.Text;
-            cfg.UseOsClipboard = chkClipboard.Checked;
+            cfg.WrapTextWhenSelected = chkShortcutWrapTextWhenSelected.Checked;            
             cfg.ShowWelcome = chkWelcome.Checked;
             cfg.WarnAdmin = chkWarnAdmin.Checked;
             cfg.TestLiveByDefault = cbxTestLive.Checked;

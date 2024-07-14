@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -7,6 +8,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using System.Security.Policy;
 using System.Security.Principal;
 using System.Speech.Synthesis;
 using System.Text;
@@ -20,6 +23,7 @@ using Triggernometry.CustomControls;
 using Triggernometry.Utilities;
 using Triggernometry.Variables;
 using WMPLib;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Triggernometry
 {
@@ -37,6 +41,23 @@ namespace Triggernometry
             Info,
             Verbose,
             Inherit
+        }
+
+        public class UpdateManifest
+        {
+
+            [XmlAttribute]
+            public string Version { get; set; }
+
+            [XmlAttribute]
+            public string PluginDownloadURI { get; set; }
+
+            [XmlAttribute]
+            public string LanguageDownloadURI { get; set; }
+
+            [XmlAttribute]
+            public string Message { get; set; }
+
         }
 
         public class NamedCallback
@@ -348,6 +369,7 @@ namespace Triggernometry
         internal int MinX = int.MaxValue, MinY = int.MaxValue, MaxX = int.MinValue, MaxY = int.MinValue;
         internal Dictionary<string, MutexInformation> mutexes = new Dictionary<string, MutexInformation>();
         internal Interpreter scripting;
+        internal bool scriptingInited = false;        
         internal Dictionary<string, object> scriptingStorage = new Dictionary<string, object>();
         private List<Configuration.APIUsage> DefaultAPIUsages = new List<Configuration.APIUsage>();
 
@@ -1111,6 +1133,81 @@ namespace Triggernometry
             _ep.OnStatusChange += _ep_OnStatusChange;
         }
 
+        internal static Font CreateFontFromDefinition(string name, float size, Action.TextAuraEffectEnum effect)
+        {
+            FontStyle fs = FontStyle.Regular;
+            if ((effect & Action.TextAuraEffectEnum.Bold) == Action.TextAuraEffectEnum.Bold)
+            {
+                fs |= FontStyle.Bold;
+            }
+            if ((effect & Action.TextAuraEffectEnum.Italic) == Action.TextAuraEffectEnum.Italic)
+            {
+                fs |= FontStyle.Italic;
+            }
+            if ((effect & Action.TextAuraEffectEnum.Underline) == Action.TextAuraEffectEnum.Underline)
+            {
+                fs |= FontStyle.Underline;
+            }
+            if ((effect & Action.TextAuraEffectEnum.Strikeout) == Action.TextAuraEffectEnum.Strikeout)
+            {
+                fs |= FontStyle.Strikeout;
+            }
+            return new Font(name, size, fs);
+        }
+
+        internal static void ApplyFontOverrideToForm(Form f, Font fnt)
+        {
+            foreach (Control c in f.Controls)
+            {
+                ApplyFontOverrideToControl(c, fnt);
+            }
+        }
+
+        internal static void ApplyFontOverrideToControl(Control c, Font fnt)
+        {
+            foreach (Control cc in c.Controls)
+            {
+                ApplyFontOverrideToControl(cc, fnt);
+            }
+            if (c is ToolStrip)
+            {
+                ToolStrip ts = (ToolStrip)c;
+                foreach (ToolStripItem tsi in ts.Items)
+                {
+                    tsi.Font = fnt;
+                }
+            }
+            switch (c)
+            {
+                case TextBox x:
+                    x.Font = fnt; break;
+                case ExpressionTextBox x:
+                    x.Font = fnt; break;
+                case Button x:
+                    x.Font = fnt; break;
+                case MenuButton x:
+                    x.Font = fnt; break;
+                case Label x:
+                    x.Font = fnt; break;
+                case ComboBox x:
+                    x.Font = fnt; break;
+                case ListBox x:
+                    x.Font = fnt; break;
+                case CheckBox x:
+                    x.Font = fnt; break;
+                case DataGridView x:
+                    x.Font = fnt; break;
+                case TreeView x:
+                    x.Font = fnt; break;
+                case GroupBox x:
+                    x.Font = fnt; break;
+                case NumericUpDown x:
+                    x.Font = fnt; break;
+                case TabControl x:
+                    x.Font = fnt; break;
+            }
+        }
+
         private void _ep_OnStatusChange(Endpoint.StatusEnum newStatus, string statusDesc)
         {
             FilteredAddToLog(DebugLevelEnum.Verbose, String.Format("Endpoint ({0}) {1}", newStatus, statusDesc));
@@ -1553,11 +1650,7 @@ namespace Triggernometry
 
         internal void TtsPlaybackAct(Context ctx, Action a)
         {
-            string text = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._UseTTSTextExpression);
-            if (ctx.plug != null)
-            {
-                text = ctx.plug.cfg.PerformSubstitution(text, Configuration.Substitution.SubstitutionScopeEnum.TextToSpeech);
-            }
+            string text = TtsPlaybackGetTextFromAction(ctx, a);
             TtsPlaybackHook(text);
         }
 
@@ -1576,13 +1669,19 @@ namespace Triggernometry
             SoundPlaybackHook(filename, (int)Math.Floor(vol));
         }
 
-        internal void TtsPlaybackSelf(Context ctx, Action a)
+        internal string TtsPlaybackGetTextFromAction(Context ctx, Action a)
         {
             string text = ctx.EvaluateStringExpression(a.ActionContextLogger, ctx, a._UseTTSTextExpression);
             if (ctx.plug != null)
             {
                 text = ctx.plug.cfg.PerformSubstitution(text, Configuration.Substitution.SubstitutionScopeEnum.TextToSpeech);
             }
+            return text;
+        }
+
+        internal void TtsPlaybackSelf(Context ctx, Action a)
+        {
+            string text = TtsPlaybackGetTextFromAction(ctx, a);
             SpeechSynthesizer mytts;
             if (a._UseTTSExclusive == true)
             {
@@ -1648,13 +1747,42 @@ namespace Triggernometry
             mywmp.URL = filename;
         }
 
+        internal void TtsPlaybackExternal(Context ctx, Action a)
+        {
+            string proc = (cfg.TtsExternalApp ?? "").Trim();
+            if (proc.Length == 0)
+            {
+                return;
+            }
+            string text = TtsPlaybackGetTextFromAction(ctx, a);
+            string args = cfg.TtsExternalAppArgs ?? "";
+            args = args.Replace("$source", text);
+            Process.Start(proc, args);
+        }
+
+        internal void SoundPlaybackExternal(Context ctx, Action a, string filename)
+        {
+            string proc = (cfg.SoundExternalApp ?? "").Trim();
+            if (proc.Length == 0)
+            {
+                return;
+            }
+            string args = cfg.SoundExternalAppArgs ?? "";
+            args = args.Replace("$source", filename);
+            Process.Start(proc, args);
+        }
+
         internal void TtsPlaybackSmart(Context ctx, Action a)
         {
-            if (cfg.UseACTForTTS == true && a._PlaySpeechMyself == false)
+            if (cfg.TtsMethod == Configuration.AudioRoutingMethodEnum.ExternalApplication)
+            {
+                TtsPlaybackExternal(ctx, a);
+            }
+            else if (cfg.TtsMethod == Configuration.AudioRoutingMethodEnum.ACT && a._PlaySpeechMyself == false)
             {
                 TtsPlaybackAct(ctx, a);
             }
-            else
+            else if (cfg.TtsMethod == Configuration.AudioRoutingMethodEnum.Triggernometry)
             {
                 TtsPlaybackSelf(ctx, a);
             }
@@ -1683,7 +1811,7 @@ namespace Triggernometry
                         filename = fn;
                         fromcache = true;
                     }
-                }
+                }                
                 if (fromcache == false)
                 {
                     using (WebClient wc = new WebClient())
@@ -1695,11 +1823,15 @@ namespace Triggernometry
                     }
                 }
             }
-            if (WMPUnavailable == true || (cfg.UseACTForSound == true && a._PlaySoundMyself == false))
+            if (cfg.SoundMethod == Configuration.AudioRoutingMethodEnum.ExternalApplication)
+            {
+                SoundPlaybackExternal(ctx, a, filename);
+            }
+            else if (WMPUnavailable == true || (cfg.SoundMethod == Configuration.AudioRoutingMethodEnum.ACT && a._PlaySoundMyself == false))
             {
                 SoundPlaybackAct(ctx, a, filename);
             }
-            else
+            else if (cfg.SoundMethod == Configuration.AudioRoutingMethodEnum.Triggernometry)
             {
                 SoundPlaybackSelf(ctx, a, filename);
             }
@@ -2044,6 +2176,7 @@ namespace Triggernometry
                 ui.btnCornerPopup.Tag = pluginScreenSpace;
                 ui.cfg = cfg;
                 I18n.TranslateControl("Plugin", ui);
+                ui.UpdateUiFont();
                 ui.Dock = DockStyle.Fill;
                 ui.plug = this;
                 pluginScreenSpace.Controls.Add(ui);
@@ -2142,8 +2275,19 @@ namespace Triggernometry
                 AuraUpdateThread.Start();
                 _obs = new ObsController();
                 _livesplit = new LiveSplitController();
-                exwhere = I18n.Translate("internal/Plugin/iniscripting", "setting up scripting - try changing the plugin load order in ACT");
-                scripting = new Interpreter();
+                Task txs = new Task(() =>
+                {                    
+                    try
+                    {
+                        scripting = new Interpreter();
+                    }
+                    catch (Exception ex)
+                    {
+                        FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/iniscripterror", "Error when initializing scripting - try changing plugin load order: {0}", ex.Message));
+                    }
+                    scriptingInited = true;                    
+                });
+                txs.Start();
                 exwhere = I18n.Translate("internal/Plugin/iniendpoint", "starting endpoint");
                 if (cfg.StartEndpointOnLaunch == true)
                 {
@@ -2162,7 +2306,7 @@ namespace Triggernometry
             {
                 pluginStatusText.Text = I18n.Translate("internal/Plugin/inierror", "Error while {0} ({1})", exwhere, ex.ToString());
             }
-        }
+        }        
 
         private void ShowProgress(int progress, string state)
         {
@@ -2602,11 +2746,6 @@ namespace Triggernometry
 
         internal void CheckForUpdates(bool isManual = false)
         {
-            /*if (I18n.IsChineseEnvironment)
-            {
-                CheckForUpdatesBuiltinCN(isManual);
-                return;
-            }*/
             switch (cfg.UpdateCheckMethod)
             {
                 case Configuration.UpdateCheckMethodEnum.ACT:
@@ -2614,6 +2753,9 @@ namespace Triggernometry
                     break;
                 case Configuration.UpdateCheckMethodEnum.Builtin:
                     CheckForUpdatesBuiltin();
+                    break;
+                case Configuration.UpdateCheckMethodEnum.External:
+                    CheckForUpdatesExternal(cfg.UpdateExternalChannelURI);
                     break;
             }
         }
@@ -2694,64 +2836,80 @@ namespace Triggernometry
             tx.Start();
         }
 
-        /*
-        private static readonly string _updateRemotePathCN = "https://vip.123pan.cn/1824544011/Triggernometry_Release_CN/";
-
-        public void CheckForUpdatesBuiltinCN(bool isManual = false)
+        public void CheckForUpdatesExternal(string uri, bool isManual = false)
         {
             Task.Run(() =>
             {
                 Version localVersion, remoteVersion;
+                UpdateManifest um = null;
                 try
                 {
-                    using (HttpClient client = new HttpClient())
+                    string manifest;
+                    Uri u = new Uri(uri);
+                    if (u.IsFile == false)
                     {
-                        string versionString = client.GetStringAsync(_updateRemotePathCN + "version").GetAwaiter().GetResult();
-                        remoteVersion = Version.Parse(versionString.Trim());
-                        localVersion = Assembly.GetExecutingAssembly().GetName().Version;
+                        using (HttpClient client = new HttpClient())
+                        {
+                            manifest = client.GetStringAsync(uri).GetAwaiter().GetResult();
+                        }
+                        XmlSerializer xs = new XmlSerializer(typeof(UpdateManifest));
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            um = (UpdateManifest)xs.Deserialize(ms);
+                        }
+                    }
+                    else
+                    {
+                        XmlSerializer xs = new XmlSerializer(typeof(UpdateManifest));
+                        using (FileStream fs = File.Open(uri, FileMode.Open, FileAccess.Read))
+                        {                            
+                            um = (UpdateManifest)xs.Deserialize(fs);
+                        }                        
+                    }
+                    remoteVersion = Version.Parse(um.Version.Trim());
+                    localVersion = Assembly.GetExecutingAssembly().GetName().Version;
+                    if (remoteVersion > localVersion)
+                    {
+                        plug.FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/extupdateavailable", "External update available (current version: {0}, remote version: {1})", localVersion, remoteVersion));
+                        string filePath = Path.Combine(pluginPath, $"{pluginName}.dll");
+                        Toast t = new Toast
+                        {
+                            ToastText = string.Format(um.Message, localVersion, remoteVersion),
+                            ToastType = Toast.ToastTypeEnum.YesNo
+                        };
+                        t.OnYes += (_, __) => UpdatePluginExternal(um, filePath, localVersion, remoteVersion);
+                        ui.QueueToast(t);
                     }
                 }
                 catch (Exception ex)
                 {
-                    plug.FilteredAddToLog(DebugLevelEnum.Error, "Triggernometry 更新检查失败：" + ex.ToString());
+                    plug.FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/Plugin/extupdatefailed", "Couldn't process update manifest from {0}, error: {1}", uri, ex.Message));
                     return;
-                }
-                if (remoteVersion > localVersion)
-                {
-                    plug.FilteredAddToLog(DebugLevelEnum.Info, $"Triggernometry 已发布新版本 {remoteVersion}，当前版本 {localVersion}。");
-                    string filePath = Path.Combine(pluginPath, $"{pluginName}.dll");
-                    Toast t = new Toast
-                    {
-                        ToastText = $"Triggernometry 更新检查：本地已有版本 {localVersion} 低于远程版本 {remoteVersion}。是否后台开始更新插件及汉化文件？（更新不影响当前使用）",
-                        ToastType = Toast.ToastTypeEnum.YesNo
-                    };
-                    t.OnYes += (_, __) => UpdatePluginCN(filePath, localVersion, remoteVersion);
-                    ui.QueueToast(t);
-                }
-                else
-                {
-                    string info = $"Triggernometry 更新检查：本地已有版本 {localVersion} 不低于远程版本 {remoteVersion}，无需更新。";
-                    plug.FilteredAddToLog(DebugLevelEnum.Info, info);
-                    if (isManual)
-                    {
-                        ui.QueueToast(new Toast { ToastText = info, ToastType = Toast.ToastTypeEnum.OK });
-                    }
                 }
             });
         }
 
-        private void UpdatePluginCN(string filePath, Version localVersion, Version remoteVersion)
+        private void UpdatePluginExternal(UpdateManifest um, string filePath, Version localVersion, Version remoteVersion)
         {
             Task.Run(async () =>
             {
                 try
                 {
                     string tmpPath = filePath + ".tmp";
-                    using (HttpClient client = new HttpClient())
+                    Uri u = new Uri(um.PluginDownloadURI);
+                    byte[] fileBytes;
+                    if (u.IsFile == false)
                     {
-                        byte[] fileBytes = await client.GetByteArrayAsync(_updateRemotePathCN + "Triggernometry.dll");
-                        File.WriteAllBytes(tmpPath, fileBytes);
+                        using (HttpClient client = new HttpClient())
+                        {
+                            fileBytes = await client.GetByteArrayAsync(um.PluginDownloadURI);
+                            File.WriteAllBytes(tmpPath, fileBytes);
+                        }
                     }
+                    else
+                    {
+                        File.Copy(um.PluginDownloadURI, tmpPath, true);                        
+                    }                    
                     if (File.Exists(filePath))
                     {
                         string backupPath = $"{filePath}.{localVersion}.backup";
@@ -2760,48 +2918,67 @@ namespace Triggernometry
                         File.Move(filePath, backupPath);
                     }
                     File.Move(tmpPath, filePath);
-                    UpdateTranslationCN(isManual: false);
+                    if (um.LanguageDownloadURI != null)
+                    {
+                        UpdateTranslationExternal(um);
+                    }
+                    string logt = I18n.Translate("internal/Plugin/extupdatesuccess", "Plugin version updated from {0} to {1}. Restart ACT for changes to take effect.", localVersion, remoteVersion);
+                    plug.FilteredAddToLog(DebugLevelEnum.Info, logt);
                     ui.QueueToast(new Toast
                     {
-                        ToastText = $"Triggernometry 插件已更新至 {remoteVersion}，重启后生效。",
+                        ToastText = logt,
                         ToastType = Toast.ToastTypeEnum.OK
                     });
                 }
                 catch (Exception ex)
                 {
-                    FilteredAddToLog(DebugLevelEnum.Error, $"Triggernometry 插件更新失败：{ex.Message}");
+                    string err = I18n.Translate("internal/Plugin/extupdatedlfailed", "Couldn't download plugin update from {0}, error: {1}", um.PluginDownloadURI, ex.Message);
+                    plug.FilteredAddToLog(DebugLevelEnum.Error, err);
+                    ui.QueueToast(new Toast
+                    {
+                        ToastText = err,
+                        ToastType = Toast.ToastTypeEnum.OK
+                    });
                 }
             });
         }
         
-        public void UpdateTranslationCN(bool isManual = false)
+        public void UpdateTranslationExternal(UpdateManifest um)
         {
-            string fileName = "zh-CN.triglations.xml";
-            string localPath = Path.Combine(pluginPath, fileName);
-            string remotePath = _updateRemotePathCN + fileName;
+            string fileName = Path.GetFileName(um.LanguageDownloadURI);
+            string localPath = Path.Combine(pluginPath, fileName);            
             Task.Run(async () =>
             {
                 try
                 {
-                    using (HttpClient client = new HttpClient())
+                    Uri u = new Uri(um.PluginDownloadURI);
+                    if (u.IsFile == false)
                     {
-                        var fileBytes = await client.GetByteArrayAsync(remotePath);
-                        File.WriteAllBytes(localPath, fileBytes);
-                        UnfilteredAddToLog(DebugLevelEnum.Info, "已更新汉化文件。");
+                        using (HttpClient client = new HttpClient())
+                        {
+                            var fileBytes = await client.GetByteArrayAsync(um.LanguageDownloadURI);
+                            File.WriteAllBytes(localPath, fileBytes);
+                        }
                     }
-                    if (!isManual) return;
-                    ui.QueueToast(new Toast
+                    else
                     {
-                        ToastText = $"已更新汉化文件，重启以应用更新。",
-                        ToastType = CustomControls.Toast.ToastTypeEnum.OK
-                    });
+                        File.Copy(um.LanguageDownloadURI, localPath, true);
+                    }
+                    string logt = I18n.Translate("internal/Plugin/exttranssuccess", "Translation updated, testart ACT for changes to take effect.");
+                    plug.FilteredAddToLog(DebugLevelEnum.Info, logt);
                 }
                 catch (Exception ex)
                 {
-                    UnfilteredAddToLog(DebugLevelEnum.Error, "更新汉化文件失败：" + ex.Message);
+                    string err = I18n.Translate("internal/Plugin/exttransdlfailed", "Couldn't download language update from {0}, error: {1}", um.LanguageDownloadURI, ex.Message);
+                    plug.FilteredAddToLog(DebugLevelEnum.Error, err);
+                    ui.QueueToast(new Toast
+                    {
+                        ToastText = err,
+                        ToastType = Toast.ToastTypeEnum.OK
+                    });
                 }
             });
-        }*/
+        }
 
         private void AutoUpdatePromptResult(CustomControls.Toast t, bool result)
         {
@@ -3384,26 +3561,11 @@ namespace Triggernometry
             string detectedZone = currentZone != null ? currentZone : "";
             try
             {
-                if (cfg.EventSeparator.Length > 0)
+                if (cfg.LogEndpoint == true)
                 {
-                    string[] lines = data.Split(new string[] { cfg.EventSeparator }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (string line in lines)
-                    {
-                        if (cfg.LogEndpoint == true)
-                        {
-                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/endpointsplitline", "Split endpoint data: ({0})", line));
-                        }
-                        LogLineQueuer(line, detectedZone, LogEvent.SourceEnum.Endpoint);
-                    }
+                    FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/endpointline", "Endpoint data: ({0})", data));
                 }
-                else
-                {
-                    if (cfg.LogEndpoint == true)
-                    {
-                        FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/endpointline", "Endpoint data: ({0})", data));
-                    }
-                    LogLineQueuer(data, detectedZone, LogEvent.SourceEnum.Endpoint);
-                }
+                LogLineQueuer(data, detectedZone, LogEvent.SourceEnum.Endpoint);
             }
             catch (Exception ex)
             {
@@ -3424,26 +3586,11 @@ namespace Triggernometry
             }
             try
             {
-                if (cfg.EventSeparator.Length > 0)
+                if (cfg.FfxivLogNetwork == true)
                 {
-                    string[] lines = logLine.Split(new string[] { cfg.EventSeparator }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (string line in lines)
-                    {
-                        if (cfg.FfxivLogNetwork == true)
-                        {
-                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/ffxivnetworksplitlogline", "Split network log line: ({0})", line));
-                        }
-                        LogLineQueuer(line, detectedZone, LogEvent.SourceEnum.NetworkFFXIV);
-                    }
+                    FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/ffxivnetworklogline", "Network log line: ({0})", logLine));
                 }
-                else
-                {
-                    if (cfg.FfxivLogNetwork == true)
-                    {
-                        FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/ffxivnetworklogline", "Network log line: ({0})", logLine));
-                    }
-                    LogLineQueuer(logLine, detectedZone, LogEvent.SourceEnum.NetworkFFXIV);
-                }
+                LogLineQueuer(logLine, detectedZone, LogEvent.SourceEnum.NetworkFFXIV);
             }
             catch (Exception ex)
             {
@@ -3464,31 +3611,13 @@ namespace Triggernometry
             }
             try
             {
-                if (cfg.EventSeparator.Length > 0)
+                if (logLine != "" && (logLine.Length < 5 || logLine.Substring(logLine.Length - 5) != "] FB:"))
                 {
-                    string[] lines = logLine.Split(new string[] { cfg.EventSeparator }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (string line in lines)
+                    if (cfg.LogNormalEvents == true)
                     {
-                        if (logLine.Substring(logLine.Length - 5) != "] FB:")
-                        {
-                            if (cfg.LogNormalEvents == true)
-                            {
-                                FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/splitlogline", "Split log line: ({0})", line));
-                            }
-                            LogLineQueuer(line, detectedZone, LogEvent.SourceEnum.Log);
-                        }
+                        FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/logline", "Log line: ({0})", logLine));
                     }
-                }
-                else
-                {
-                    if (logLine != "" && (logLine.Length < 5 || logLine.Substring(logLine.Length - 5) != "] FB:"))
-                    {
-                        if (cfg.LogNormalEvents == true)
-                        {
-                            FilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Plugin/logline", "Log line: ({0})", logLine));
-                        }
-                        LogLineQueuer(logLine, detectedZone, LogEvent.SourceEnum.Log);
-                    }
+                    LogLineQueuer(logLine, detectedZone, LogEvent.SourceEnum.Log);
                 }
             }
             catch (Exception ex)

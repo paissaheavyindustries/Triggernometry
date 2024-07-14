@@ -758,11 +758,7 @@ namespace Triggernometry.CustomControls
             ctxAddGroup.Enabled = btnAddGroup.Enabled;
             ctxRemove.Enabled = btnDelete.Enabled;
             ctxCopy.Enabled = (trvNodes.SelectedNode != null);
-            ctxPaste.Enabled = btnAddCondition.Enabled == true && (
-                (plug.cfg.UseOsClipboard == false && (plug.ui.Clipboard != null && plug.ui.Clipboard.Length > 0))
-                ||
-                (plug.cfg.UseOsClipboard == true && System.Windows.Forms.Clipboard.ContainsText() == true)
-            );
+            ctxPaste.Enabled = (btnAddCondition.Enabled == true && System.Windows.Forms.Clipboard.ContainsText() == true);
             ctxPasteOver.Enabled = ctxPaste.Enabled;
             TreeNode selectedNode = trvNodes.SelectedNode;
             ctxExpandAll.Enabled = selectedNode != null && selectedNode.Tag is ConditionGroup;
@@ -799,14 +795,7 @@ namespace Triggernometry.CustomControls
             try
             {
                 string data = ExportSelection();
-                if (plug.cfg.UseOsClipboard == true)
-                {
-                    System.Windows.Forms.Clipboard.SetText(data);
-                }
-                else
-                {
-                    plug.ui.Clipboard = data;
-                }
+                System.Windows.Forms.Clipboard.SetText(data);
                 OnConditionsUpdated();
             }
             catch (Exception ex)
@@ -820,14 +809,7 @@ namespace Triggernometry.CustomControls
             string data = null;
             try
             {
-                if (plug.cfg.UseOsClipboard == true)
-                {
-                    data = System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText);
-                }
-                else
-                {
-                    data = plug.ui.Clipboard;
-                }
+                data = System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText);
                 if (data != null && data.Length > 0)
                 {
                     XmlDocument doc = new XmlDocument();

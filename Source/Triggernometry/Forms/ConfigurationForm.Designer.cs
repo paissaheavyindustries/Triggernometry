@@ -223,6 +223,7 @@
             this.panel12 = new System.Windows.Forms.Panel();
             this.grpUserInterface = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+            this.cbxAutoComplete = new System.Windows.Forms.CheckBox();
             this.cbxActionAsync = new System.Windows.Forms.CheckBox();
             this.chkClipboard = new System.Windows.Forms.CheckBox();
             this.lblAutosaveInterval = new System.Windows.Forms.Label();
@@ -239,7 +240,6 @@
             this.btnTriggerTemplate = new System.Windows.Forms.Button();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
-            this.cbxAutoComplete = new System.Windows.Forms.CheckBox();
             this.panel4.SuspendLayout();
             this.grpVolAdjustment.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -940,7 +940,7 @@
             this.tabShortCuts.Padding = new System.Windows.Forms.Padding(7);
             this.tabShortCuts.Size = new System.Drawing.Size(756, 570);
             this.tabShortCuts.TabIndex = 2;
-            this.tabShortCuts.Text = "ShortCuts";
+            this.tabShortCuts.Text = "Shortcuts";
             this.tabShortCuts.UseVisualStyleBackColor = true;
             // 
             // grpShortCutExpression
@@ -953,6 +953,7 @@
             this.grpShortCutExpression.Padding = new System.Windows.Forms.Padding(10);
             this.grpShortCutExpression.Size = new System.Drawing.Size(742, 102);
             this.grpShortCutExpression.TabIndex = 0;
+            this.grpShortCutExpression.TabStop = false;
             this.grpShortCutExpression.Text = " Expressions ";
             // 
             // tableLayoutPanelShortCutExpression
@@ -2854,6 +2855,20 @@
             this.tableLayoutPanel10.Size = new System.Drawing.Size(722, 187);
             this.tableLayoutPanel10.TabIndex = 0;
             // 
+            // cbxAutoComplete
+            // 
+            this.cbxAutoComplete.AutoSize = true;
+            this.cbxAutoComplete.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tableLayoutPanel10.SetColumnSpan(this.cbxAutoComplete, 2);
+            this.cbxAutoComplete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbxAutoComplete.Location = new System.Drawing.Point(3, 118);
+            this.cbxAutoComplete.Name = "cbxAutoComplete";
+            this.cbxAutoComplete.Size = new System.Drawing.Size(716, 17);
+            this.cbxAutoComplete.TabIndex = 8;
+            this.cbxAutoComplete.TabStop = false;
+            this.cbxAutoComplete.Text = "Enable autocomplete on text fields";
+            this.cbxAutoComplete.UseVisualStyleBackColor = true;
+            // 
             // cbxActionAsync
             // 
             this.cbxActionAsync.AutoSize = true;
@@ -3063,20 +3078,6 @@
             // fontDialog1
             // 
             this.fontDialog1.AllowScriptChange = false;
-            // 
-            // cbxAutoComplete
-            // 
-            this.cbxAutoComplete.AutoSize = true;
-            this.cbxAutoComplete.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.tableLayoutPanel10.SetColumnSpan(this.cbxAutoComplete, 2);
-            this.cbxAutoComplete.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxAutoComplete.Location = new System.Drawing.Point(3, 118);
-            this.cbxAutoComplete.Name = "cbxAutoComplete";
-            this.cbxAutoComplete.Size = new System.Drawing.Size(716, 17);
-            this.cbxAutoComplete.TabIndex = 8;
-            this.cbxAutoComplete.TabStop = false;
-            this.cbxAutoComplete.Text = "Enable autocomplete on text fields";
-            this.cbxAutoComplete.UseVisualStyleBackColor = true;
             // 
             // ConfigurationForm
             // 

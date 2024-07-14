@@ -541,7 +541,8 @@ namespace Triggernometry.Forms
             }
             else
             {
-                ParentTrigger = a.ParentTrigger;                cbxActionType.SelectedIndex = (int)a._ActionType;
+                ParentTrigger = a.ParentTrigger;
+                cbxActionType.SelectedIndex = (int)a._ActionType;
                 cbxRefireOption1.SelectedIndex = (a._RefireInterrupt == true ? 0 : 1);
                 cbxRefireOption2.SelectedIndex = (a._RefireRequeue == true ? 1 : 0);
                 expExecutionDelay.Expression = a._ExecutionDelayExpression;

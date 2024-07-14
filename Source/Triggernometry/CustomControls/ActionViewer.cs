@@ -30,7 +30,6 @@ namespace Triggernometry.CustomControls
         internal TreeView trv;
         internal Context fakectx = new Context();
 
-        internal string ClipboardAction = "";
         internal List<Action> PrevActions;
         internal List<int> PrevSelectedIndices;
         private static ConditionGroup copiedCondition;
@@ -549,14 +548,7 @@ namespace Triggernometry.CustomControls
             {
                 if (btnRemoveAction.Enabled == true)
                 {
-                    if (plug.cfg.UseOsClipboard == true)
-                    {
-                        System.Windows.Forms.Clipboard.SetText(ExportActionSelection());
-                    }
-                    else
-                    {
-                        ClipboardAction = ExportActionSelection();
-                    }
+                    System.Windows.Forms.Clipboard.SetText(ExportActionSelection());
                 }
             }
             catch (Exception ex)
@@ -572,15 +564,7 @@ namespace Triggernometry.CustomControls
                 return;
             }
             StoreActions();
-            string data = null;
-            if (plug.cfg.UseOsClipboard == true)
-            {
-                data = System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText);
-            }
-            else
-            {
-                data = ClipboardAction;
-            }
+            string data = System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText);
             try
             {
                 XmlDocument doc = new XmlDocument();
@@ -1001,15 +985,7 @@ namespace Triggernometry.CustomControls
 
         private bool OkToPasteAction()
         {
-            string data = null;
-            if (plug.cfg.UseOsClipboard == true)
-            {
-                data = System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText);
-            }
-            else
-            {
-                data = ClipboardAction;
-            }
+            string data = System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText);
             return IsReadonly == false && (data != null && data.Length > 0);
         }
 

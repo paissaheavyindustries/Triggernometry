@@ -59,6 +59,26 @@ namespace Triggernometry.CustomControls
             }
         }
 
+        public bool Collapsible { get; set; } = false;
+        public Control Collapsee { get; set; } = null;
+
+        private bool _Collapsed = false;
+        public bool Collapsed
+        {
+            get
+            {
+                return _Collapsed;
+            }
+            set
+            {
+                if (_Collapsed != value)
+                {
+                    _Collapsed = value;
+                    UpdateCollapse();
+                }
+            }
+        }
+
         public PrettyCaption()
         {
             InitializeComponent();
@@ -73,6 +93,14 @@ namespace Triggernometry.CustomControls
         void PrettyCaption_Resize(object sender, EventArgs e)
         {
             RecreateBrush(false);
+        }
+
+        void UpdateCollapse()
+        {
+            if (Collapsee != null)
+            {
+                Collapsee.Visible = _Collapsed == false;                
+            }
         }
 
         void RecreateBrush(bool colorChange)
@@ -102,6 +130,14 @@ namespace Triggernometry.CustomControls
         {
             Graphics gr = e.Graphics;
             gr.FillRectangle(br, e.ClipRectangle);
+        }
+
+        private void lblContent_Click(object sender, EventArgs e)
+        {
+            if (Collapsible)
+            {
+                Collapsed = (Collapsed == false);
+            }
         }
 
     }

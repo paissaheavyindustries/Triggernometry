@@ -42,6 +42,7 @@
             this.lblContent.TabIndex = 1;
             this.lblContent.Text = "label1";
             this.lblContent.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblContent.Click += new System.EventHandler(this.lblContent_Click);
             // 
             // PrettyCaption
             // 

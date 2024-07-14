@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Triggernometry.Forms;
 using static Triggernometry.Action;
+using Microsoft.CodeAnalysis;
 
 namespace Triggernometry.CustomControls
 {
@@ -265,10 +266,13 @@ namespace Triggernometry.CustomControls
             ReadOnly = true;
             TabStop = false;
             BorderStyle = BorderStyle.None;
-            
-            if (I18n.CurrentLanguage.LanguageName.Contains("CN")) // will switch to a more general implementation
+
+            if (I18n.CurrentLanguage != null)
             {
-                Font = new Font("Microsoft YaHei", Font.Size);
+                if (I18n.CurrentLanguage.LanguageName.Contains("CN")) // will switch to a more general implementation
+                {
+                    Font = new Font("Microsoft YaHei", Font.Size);
+                }
             }
 
             this.GetType()

@@ -170,31 +170,31 @@
             this.ctxCollapse,
             this.ctxReadme});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(169, 298);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(245, 342);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // ctxFire
             // 
             this.ctxFire.Image = ((System.Drawing.Image)(resources.GetObject("ctxFire.Image")));
             this.ctxFire.Name = "ctxFire";
-            this.ctxFire.Size = new System.Drawing.Size(168, 22);
-            this.ctxFire.Text = "Fire (Ignore Conditions)";
             this.ctxFire.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
+            this.ctxFire.Size = new System.Drawing.Size(244, 22);
+            this.ctxFire.Text = "Fire (Ignore Conditions)";
             this.ctxFire.Click += new System.EventHandler(this.ctxFire_Click);
             // 
             // ctxFireAllowCondition
             // 
-            this.ctxFireAllowCondition.Image = ((System.Drawing.Image)(resources.GetObject("ctxFire.Image")));
+            this.ctxFireAllowCondition.Image = ((System.Drawing.Image)(resources.GetObject("ctxFireAllowCondition.Image")));
             this.ctxFireAllowCondition.Name = "ctxFireAllowCondition";
-            this.ctxFireAllowCondition.Size = new System.Drawing.Size(168, 22);
-            this.ctxFireAllowCondition.Text = "Fire (Allow Conditions)";
             this.ctxFireAllowCondition.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
+            this.ctxFireAllowCondition.Size = new System.Drawing.Size(244, 22);
+            this.ctxFireAllowCondition.Text = "Fire (Allow Conditions)";
             this.ctxFireAllowCondition.Click += new System.EventHandler(this.ctxFireAllowCondition_Click);
             // 
             // toolStripSeparator12
             // 
             this.toolStripSeparator12.Name = "toolStripSeparator12";
-            this.toolStripSeparator12.Size = new System.Drawing.Size(165, 6);
+            this.toolStripSeparator12.Size = new System.Drawing.Size(241, 6);
             // 
             // ctxAdd
             // 
@@ -205,7 +205,7 @@
             this.ctxAddRepoList});
             this.ctxAdd.Image = ((System.Drawing.Image)(resources.GetObject("ctxAdd.Image")));
             this.ctxAdd.Name = "ctxAdd";
-            this.ctxAdd.Size = new System.Drawing.Size(168, 22);
+            this.ctxAdd.Size = new System.Drawing.Size(244, 22);
             this.ctxAdd.Text = "Add";
             // 
             // ctxAddFolder
@@ -244,7 +244,7 @@
             // 
             this.ctxUpdate.Image = ((System.Drawing.Image)(resources.GetObject("ctxUpdate.Image")));
             this.ctxUpdate.Name = "ctxUpdate";
-            this.ctxUpdate.Size = new System.Drawing.Size(168, 22);
+            this.ctxUpdate.Size = new System.Drawing.Size(244, 22);
             this.ctxUpdate.Text = "Update";
             this.ctxUpdate.Click += new System.EventHandler(this.ctxUpdate_Click);
             // 
@@ -252,7 +252,7 @@
             // 
             this.ctxEdit.Image = ((System.Drawing.Image)(resources.GetObject("ctxEdit.Image")));
             this.ctxEdit.Name = "ctxEdit";
-            this.ctxEdit.Size = new System.Drawing.Size(168, 22);
+            this.ctxEdit.Size = new System.Drawing.Size(244, 22);
             this.ctxEdit.Text = "Edit";
             this.ctxEdit.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
             // 
@@ -260,21 +260,21 @@
             // 
             this.ctxDescendingSort.Image = ((System.Drawing.Image)(resources.GetObject("ctxDescendingSort.Image")));
             this.ctxDescendingSort.Name = "ctxDescendingSort";
-            this.ctxDescendingSort.Size = new System.Drawing.Size(168, 22);
+            this.ctxDescendingSort.Size = new System.Drawing.Size(244, 22);
             this.ctxDescendingSort.Text = "Sort By Descending";
             this.ctxDescendingSort.Click += new System.EventHandler(this.ctxDescendingSort_Click);
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(165, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(241, 6);
             // 
             // ctxCopy
             // 
             this.ctxCopy.Image = ((System.Drawing.Image)(resources.GetObject("ctxCopy.Image")));
             this.ctxCopy.Name = "ctxCopy";
             this.ctxCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.ctxCopy.Size = new System.Drawing.Size(168, 22);
+            this.ctxCopy.Size = new System.Drawing.Size(244, 22);
             this.ctxCopy.Text = "Copy";
             this.ctxCopy.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
@@ -283,20 +283,20 @@
             this.ctxPaste.Image = ((System.Drawing.Image)(resources.GetObject("ctxPaste.Image")));
             this.ctxPaste.Name = "ctxPaste";
             this.ctxPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.ctxPaste.Size = new System.Drawing.Size(168, 22);
+            this.ctxPaste.Size = new System.Drawing.Size(244, 22);
             this.ctxPaste.Text = "Paste";
             this.ctxPaste.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(165, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(241, 6);
             // 
             // ctxImport
             // 
             this.ctxImport.Image = ((System.Drawing.Image)(resources.GetObject("ctxImport.Image")));
             this.ctxImport.Name = "ctxImport";
-            this.ctxImport.Size = new System.Drawing.Size(168, 22);
+            this.ctxImport.Size = new System.Drawing.Size(244, 22);
             this.ctxImport.Text = "Import";
             this.ctxImport.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
             // 
@@ -304,33 +304,33 @@
             // 
             this.ctxExport.Image = ((System.Drawing.Image)(resources.GetObject("ctxExport.Image")));
             this.ctxExport.Name = "ctxExport";
-            this.ctxExport.Size = new System.Drawing.Size(168, 22);
+            this.ctxExport.Size = new System.Drawing.Size(244, 22);
             this.ctxExport.Text = "Export";
             this.ctxExport.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(165, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(241, 6);
             // 
             // ctxDelete
             // 
             this.ctxDelete.Image = ((System.Drawing.Image)(resources.GetObject("ctxDelete.Image")));
             this.ctxDelete.Name = "ctxDelete";
-            this.ctxDelete.Size = new System.Drawing.Size(168, 22);
+            this.ctxDelete.Size = new System.Drawing.Size(244, 22);
             this.ctxDelete.Text = "Remove";
             this.ctxDelete.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
             // toolStripSeparator11
             // 
             this.toolStripSeparator11.Name = "toolStripSeparator11";
-            this.toolStripSeparator11.Size = new System.Drawing.Size(165, 6);
+            this.toolStripSeparator11.Size = new System.Drawing.Size(241, 6);
             // 
             // ctxExpand
             // 
             this.ctxExpand.Image = ((System.Drawing.Image)(resources.GetObject("ctxExpand.Image")));
             this.ctxExpand.Name = "ctxExpand";
-            this.ctxExpand.Size = new System.Drawing.Size(168, 22);
+            this.ctxExpand.Size = new System.Drawing.Size(244, 22);
             this.ctxExpand.Text = "Expand all";
             this.ctxExpand.Click += new System.EventHandler(this.ctxExpand_Click);
             // 
@@ -338,7 +338,7 @@
             // 
             this.ctxCollapse.Image = ((System.Drawing.Image)(resources.GetObject("ctxCollapse.Image")));
             this.ctxCollapse.Name = "ctxCollapse";
-            this.ctxCollapse.Size = new System.Drawing.Size(168, 22);
+            this.ctxCollapse.Size = new System.Drawing.Size(244, 22);
             this.ctxCollapse.Text = "Collapse all";
             this.ctxCollapse.Click += new System.EventHandler(this.ctxCollapse_Click);
             // 
@@ -346,7 +346,7 @@
             // 
             this.ctxReadme.Image = ((System.Drawing.Image)(resources.GetObject("ctxReadme.Image")));
             this.ctxReadme.Name = "ctxReadme";
-            this.ctxReadme.Size = new System.Drawing.Size(168, 22);
+            this.ctxReadme.Size = new System.Drawing.Size(244, 22);
             this.ctxReadme.Text = "Open instructions";
             this.ctxReadme.Click += new System.EventHandler(this.ctxReadme_Click);
             // 
@@ -390,7 +390,7 @@
             // 
             this.btnAddTriggerFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnAddTriggerFolder.Image")));
             this.btnAddTriggerFolder.Name = "btnAddTriggerFolder";
-            this.btnAddTriggerFolder.Size = new System.Drawing.Size(177, 22);
+            this.btnAddTriggerFolder.Size = new System.Drawing.Size(180, 22);
             this.btnAddTriggerFolder.Text = "Folder";
             this.btnAddTriggerFolder.Click += new System.EventHandler(this.btnAddTriggerFolder_Click);
             // 
@@ -398,7 +398,7 @@
             // 
             this.btnAddTrigger.Image = ((System.Drawing.Image)(resources.GetObject("btnAddTrigger.Image")));
             this.btnAddTrigger.Name = "btnAddTrigger";
-            this.btnAddTrigger.Size = new System.Drawing.Size(177, 22);
+            this.btnAddTrigger.Size = new System.Drawing.Size(180, 22);
             this.btnAddTrigger.Text = "Trigger";
             this.btnAddTrigger.Click += new System.EventHandler(this.btnAddTrigger_Click);
             // 
@@ -406,7 +406,7 @@
             // 
             this.btnAddRepo.Image = ((System.Drawing.Image)(resources.GetObject("btnAddRepo.Image")));
             this.btnAddRepo.Name = "btnAddRepo";
-            this.btnAddRepo.Size = new System.Drawing.Size(177, 22);
+            this.btnAddRepo.Size = new System.Drawing.Size(180, 22);
             this.btnAddRepo.Text = "Repository";
             this.btnAddRepo.Click += new System.EventHandler(this.remoteTriggerRepositoryToolStripMenuItem_Click);
             // 
@@ -414,7 +414,7 @@
             // 
             this.btnAddRepoList.Image = ((System.Drawing.Image)(resources.GetObject("btnAddRepoList.Image")));
             this.btnAddRepoList.Name = "btnAddRepoList";
-            this.btnAddRepoList.Size = new System.Drawing.Size(177, 22);
+            this.btnAddRepoList.Size = new System.Drawing.Size(180, 22);
             this.btnAddRepoList.Text = "Repository from list";
             this.btnAddRepoList.Click += new System.EventHandler(this.btnAddRepoList_Click);
             // 
@@ -511,10 +511,10 @@
             // 
             this.btnTestInput.Image = ((System.Drawing.Image)(resources.GetObject("btnTestInput.Image")));
             this.btnTestInput.Name = "btnTestInput";
-            this.btnTestInput.Size = new System.Drawing.Size(248, 22);
+            this.btnTestInput.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
+            this.btnTestInput.Size = new System.Drawing.Size(286, 22);
             this.btnTestInput.Text = "Test input";
             this.btnTestInput.Click += new System.EventHandler(this.testInputToolStripMenuItem_Click);
-            this.btnTestInput.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
             // 
             // btnActionQueueProcessing
             // 
@@ -523,7 +523,7 @@
             this.btnActionQueueDisabled});
             this.btnActionQueueProcessing.Image = ((System.Drawing.Image)(resources.GetObject("btnActionQueueProcessing.Image")));
             this.btnActionQueueProcessing.Name = "btnActionQueueProcessing";
-            this.btnActionQueueProcessing.Size = new System.Drawing.Size(248, 22);
+            this.btnActionQueueProcessing.Size = new System.Drawing.Size(286, 22);
             this.btnActionQueueProcessing.Text = "Action queue processing";
             // 
             // btnActionQueueEnabled
@@ -546,27 +546,27 @@
             // 
             this.btnDeactivateAllAuras.Image = ((System.Drawing.Image)(resources.GetObject("btnDeactivateAllAuras.Image")));
             this.btnDeactivateAllAuras.Name = "btnDeactivateAllAuras";
-            this.btnDeactivateAllAuras.Size = new System.Drawing.Size(248, 22);
+            this.btnDeactivateAllAuras.ShortcutKeyDisplayString = "Ctrl+\\";
+            this.btnDeactivateAllAuras.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Oem5)));
+            this.btnDeactivateAllAuras.Size = new System.Drawing.Size(286, 22);
             this.btnDeactivateAllAuras.Text = "Deactivate all auras";
             this.btnDeactivateAllAuras.Click += new System.EventHandler(this.deactivateAllAurasToolStripMenuItem_Click);
-            this.btnDeactivateAllAuras.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.OemPipe)));
-            this.btnDeactivateAllAuras.ShortcutKeyDisplayString = "Ctrl+\\";
             // 
             // btnTryInterrupt
             // 
             this.btnTryInterrupt.Image = ((System.Drawing.Image)(resources.GetObject("btnTryInterrupt.Image")));
             this.btnTryInterrupt.Name = "btnTryInterrupt";
-            this.btnTryInterrupt.Size = new System.Drawing.Size(248, 22);
+            this.btnTryInterrupt.ShortcutKeyDisplayString = "Ctrl+[";
+            this.btnTryInterrupt.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.OemOpenBrackets)));
+            this.btnTryInterrupt.Size = new System.Drawing.Size(286, 22);
             this.btnTryInterrupt.Text = "Try to interrupt executing actions";
             this.btnTryInterrupt.Click += new System.EventHandler(this.killExecutingActionsToolStripMenuItem_Click);
-            this.btnTryInterrupt.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.OemOpenBrackets)));
-            this.btnTryInterrupt.ShortcutKeyDisplayString = "Ctrl+[";
             // 
             // btnClearVars
             // 
             this.btnClearVars.Image = ((System.Drawing.Image)(resources.GetObject("btnClearVars.Image")));
             this.btnClearVars.Name = "btnClearVars";
-            this.btnClearVars.Size = new System.Drawing.Size(248, 22);
+            this.btnClearVars.Size = new System.Drawing.Size(286, 22);
             this.btnClearVars.Text = "Clear all variables";
             this.btnClearVars.Click += new System.EventHandler(this.clearAllVariablesToolStripMenuItem_Click);
             // 
@@ -574,53 +574,53 @@
             // 
             this.btnClearActionQueue.Image = ((System.Drawing.Image)(resources.GetObject("btnClearActionQueue.Image")));
             this.btnClearActionQueue.Name = "btnClearActionQueue";
-            this.btnClearActionQueue.Size = new System.Drawing.Size(248, 22);
+            this.btnClearActionQueue.ShortcutKeyDisplayString = "Ctrl+]";
+            this.btnClearActionQueue.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Oem6)));
+            this.btnClearActionQueue.Size = new System.Drawing.Size(286, 22);
             this.btnClearActionQueue.Text = "Clear action queue";
             this.btnClearActionQueue.Click += new System.EventHandler(this.clearActionQueueToolStripMenuItem_Click);
-            this.btnClearActionQueue.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.OemCloseBrackets)));
-            this.btnClearActionQueue.ShortcutKeyDisplayString = "Ctrl+]";
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(245, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(283, 6);
             // 
             // btnEditConfig
             // 
             this.btnEditConfig.Image = ((System.Drawing.Image)(resources.GetObject("btnEditConfig.Image")));
             this.btnEditConfig.Name = "btnEditConfig";
-            this.btnEditConfig.Size = new System.Drawing.Size(248, 22);
+            this.btnEditConfig.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
+            this.btnEditConfig.Size = new System.Drawing.Size(286, 22);
             this.btnEditConfig.Text = "Edit configuration";
             this.btnEditConfig.Click += new System.EventHandler(this.configurationToolStripMenuItem_Click);
-            this.btnEditConfig.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
             // 
             // btnSaveConfig
             // 
             this.btnSaveConfig.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveConfig.Image")));
             this.btnSaveConfig.Name = "btnSaveConfig";
-            this.btnSaveConfig.Size = new System.Drawing.Size(248, 22);
+            this.btnSaveConfig.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.btnSaveConfig.Size = new System.Drawing.Size(286, 22);
             this.btnSaveConfig.Text = "Save configuration";
             this.btnSaveConfig.Click += new System.EventHandler(this.saveConfigurationManuallyToolStripMenuItem_Click);
-            this.btnSaveConfig.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             // 
             // btnGotoConfig
             // 
             this.btnGotoConfig.Image = ((System.Drawing.Image)(resources.GetObject("btnGotoConfig.Image")));
             this.btnGotoConfig.Name = "btnGotoConfig";
-            this.btnGotoConfig.Size = new System.Drawing.Size(248, 22);
+            this.btnGotoConfig.Size = new System.Drawing.Size(286, 22);
             this.btnGotoConfig.Text = "Go to configuration folder";
             this.btnGotoConfig.Click += new System.EventHandler(this.goToConfigurationFolderToolStripMenuItem_Click);
             // 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(245, 6);
+            this.toolStripSeparator8.Size = new System.Drawing.Size(283, 6);
             // 
             // btnBenchmark
             // 
             this.btnBenchmark.Image = ((System.Drawing.Image)(resources.GetObject("btnBenchmark.Image")));
             this.btnBenchmark.Name = "btnBenchmark";
-            this.btnBenchmark.Size = new System.Drawing.Size(248, 22);
+            this.btnBenchmark.Size = new System.Drawing.Size(286, 22);
             this.btnBenchmark.Text = "Trigger benchmark";
             this.btnBenchmark.Click += new System.EventHandler(this.runBenchmarkToolStripMenuItem_Click);
             // 
@@ -628,40 +628,40 @@
             // 
             this.btnViewVariables.Image = ((System.Drawing.Image)(resources.GetObject("btnViewVariables.Image")));
             this.btnViewVariables.Name = "btnViewVariables";
-            this.btnViewVariables.Size = new System.Drawing.Size(248, 22);
+            this.btnViewVariables.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+            this.btnViewVariables.Size = new System.Drawing.Size(286, 22);
             this.btnViewVariables.Text = "View state";
             this.btnViewVariables.Click += new System.EventHandler(this.viewVariablesToolStripMenuItem_Click);
-            this.btnViewVariables.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
             // 
             // btnViewLog
             // 
             this.btnViewLog.Image = ((System.Drawing.Image)(resources.GetObject("btnViewLog.Image")));
             this.btnViewLog.Name = "btnViewLog";
-            this.btnViewLog.Size = new System.Drawing.Size(248, 22);
+            this.btnViewLog.ShortcutKeyDisplayString = "Ctrl+`";
+            this.btnViewLog.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Oemtilde)));
+            this.btnViewLog.Size = new System.Drawing.Size(286, 22);
             this.btnViewLog.Text = "View log";
             this.btnViewLog.Click += new System.EventHandler(this.viewLogToolStripMenuItem_Click);
-            this.btnViewLog.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Oemtilde)));
-            this.btnViewLog.ShortcutKeyDisplayString = "Ctrl+`";
             // 
             // btnSearch
             // 
             this.btnSearch.Image = ((System.Drawing.Image)(resources.GetObject("btnSearch.Image")));
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(248, 22);
+            this.btnSearch.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
+            this.btnSearch.Size = new System.Drawing.Size(286, 22);
             this.btnSearch.Text = "Search";
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
-            this.btnSearch.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(245, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(283, 6);
             // 
             // btnUpdateCheck
             // 
             this.btnUpdateCheck.Image = ((System.Drawing.Image)(resources.GetObject("btnUpdateCheck.Image")));
             this.btnUpdateCheck.Name = "btnUpdateCheck";
-            this.btnUpdateCheck.Size = new System.Drawing.Size(248, 22);
+            this.btnUpdateCheck.Size = new System.Drawing.Size(286, 22);
             this.btnUpdateCheck.Text = "Check for updates";
             this.btnUpdateCheck.Click += new System.EventHandler(this.btnUpdateCheck_Click);
             // 
@@ -669,7 +669,7 @@
             // 
             this.btnAbout.Image = ((System.Drawing.Image)(resources.GetObject("btnAbout.Image")));
             this.btnAbout.Name = "btnAbout";
-            this.btnAbout.Size = new System.Drawing.Size(248, 22);
+            this.btnAbout.Size = new System.Drawing.Size(286, 22);
             this.btnAbout.Text = "About";
             this.btnAbout.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -718,7 +718,7 @@
             this.errThing1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.errThing1.Image = ((System.Drawing.Image)(resources.GetObject("errThing1.Image")));
             this.errThing1.Name = "errThing1";
-            this.errThing1.Size = new System.Drawing.Size(180, 22);
+            this.errThing1.Size = new System.Drawing.Size(97, 22);
             this.errThing1.Text = "No new errors";
             this.errThing1.Click += new System.EventHandler(this.errThing1_Click);
             // 

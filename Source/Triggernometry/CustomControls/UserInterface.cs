@@ -36,7 +36,8 @@ namespace Triggernometry.CustomControls
         internal int numLoadedTriggers;
         internal int numLoadedFolders;
         internal Random r = new Random();
-        internal string Clipboard = "";
+        internal Font _OriginalFont = null;
+        internal Font _FontOverride = null;
 
         internal Queue<Toast> Toasts = new Queue<Toast>();
 
@@ -122,6 +123,16 @@ namespace Triggernometry.CustomControls
             treeView1.DragOver += TreeView1_DragOver;
             statusStrip1.VisibleChanged += StatusStrip1_VisibleChanged;
             ClearErrorCount();
+            Disposed += UserInterface_Disposed;
+        }
+
+        private void UserInterface_Disposed(object sender, EventArgs e)
+        {
+            if (_FontOverride != null)
+            {
+                _FontOverride.Dispose();
+                _FontOverride = null;
+            }
         }
 
         private void StatusStrip1_VisibleChanged(object sender, EventArgs e)
@@ -812,11 +823,7 @@ namespace Triggernometry.CustomControls
                 ctxFireAllowCondition.Visible = true; // cfg.DeveloperMode;
                 toolStripSeparator12.Visible = true; // cfg.DeveloperMode;
                 ctxCopy.Enabled = (treeView1.SelectedNode != null);
-                ctxPaste.Enabled = ctxAddTrigger.Enabled == true && (
-                    (cfg.UseOsClipboard == false && (Clipboard != null && Clipboard.Length > 0))
-                    ||
-                    (cfg.UseOsClipboard == true && System.Windows.Forms.Clipboard.ContainsText() == true)
-                );
+                ctxPaste.Enabled = (ctxAddTrigger.Enabled == true && System.Windows.Forms.Clipboard.ContainsText() == true);
                 if (treeView1.SelectedNode != null)
                 {
                     ctxCollapse.Enabled = (treeView1.SelectedNode.Nodes.Count > 0);
@@ -887,14 +894,7 @@ namespace Triggernometry.CustomControls
             try
             {
                 string data = ExportSelection().Serialize();
-                if (cfg.UseOsClipboard == true)
-                {
-                    System.Windows.Forms.Clipboard.SetText(data);
-                }
-                else
-                {
-                    Clipboard = data;
-                }
+                System.Windows.Forms.Clipboard.SetText(data);
             }
             catch (Exception ex)
             {
@@ -1206,9 +1206,42 @@ namespace Triggernometry.CustomControls
             }
         }
 
+        internal void UpdateUiFont()
+        {
+            if (_OriginalFont == null)
+            {
+                _OriginalFont = Font;
+            }
+            if (cfg.UiFontDefault == false)
+            {
+                try
+                {
+                    Font oldf = _FontOverride;
+                    _FontOverride = RealPlugin.CreateFontFromDefinition(cfg.UiFontName, cfg.UiFontSize, cfg.UiFontEffect);
+                    RealPlugin.ApplyFontOverrideToControl(this, _FontOverride);
+                    if (oldf != null)
+                    {
+                        oldf.Dispose();
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+            else
+            {
+                if (_FontOverride != null)
+                {
+                    RealPlugin.ApplyFontOverrideToControl(this, _OriginalFont);
+                    _FontOverride.Dispose();
+                    _FontOverride = null;                    
+                }
+            }
+        }
+
         internal void configurationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (Forms.ConfigurationForm cf = new Forms.ConfigurationForm())
+            using (Forms.ConfigurationForm2 cf = new Forms.ConfigurationForm2())
             {
                 cf.plug = plug;
                 cf.trvTrigger.ImageList = imageList1;
@@ -1221,6 +1254,7 @@ namespace Triggernometry.CustomControls
                     {
                         cf.SettingsToConfiguration(plug.cfg);
                     }
+                    UpdateUiFont();
                 }
             }
         }
@@ -1633,16 +1667,8 @@ namespace Triggernometry.CustomControls
         {
             string data = null;
             try
-            {
-                
-                if (cfg.UseOsClipboard == true)
-                {
-                    data = System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText);
-                }
-                else
-                {
-                    data = Clipboard;
-                }
+            {                
+                data = System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText);
                 if (data != null && data.Length > 0)
                 {
                     TriggernometryExport exp = TriggernometryExport.Unserialize(data);
@@ -2223,6 +2249,7 @@ namespace Triggernometry.CustomControls
                 }
             }
         }
+
     }
 
 }
