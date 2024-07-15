@@ -137,7 +137,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionBase.cs" />
     <Compile Include="ActionProps.cs" />
+    <Compile Include="Actions\ActionActInteraction.cs" />
+    <Compile Include="Actions\ActionBeep.cs" />
+    <Compile Include="Actions\ActionDiscordWebhook.cs" />
+    <Compile Include="Actions\ActionDiskOperation.cs" />
+    <Compile Include="Actions\ActionExecuteScript.cs" />
+    <Compile Include="Actions\ActionFolderOperation.cs" />
+    <Compile Include="Actions\ActionJsonRequest.cs" />
+    <Compile Include="Actions\ActionKeypress.cs" />
+    <Compile Include="Actions\ActionLaunchProcess.cs" />
+    <Compile Include="Actions\ActionLiveSplitControl.cs" />
+    <Compile Include="Actions\ActionLogMessage.cs" />
+    <Compile Include="Actions\ActionLoop.cs" />
+    <Compile Include="Actions\ActionMessageBox.cs" />
+    <Compile Include="Actions\ActionMouse.cs" />
+    <Compile Include="Actions\ActionMutex.cs" />
+    <Compile Include="Actions\ActionNamedCallback.cs" />
+    <Compile Include="Actions\ActionObsControl.cs" />
+    <Compile Include="Actions\ActionOverlayImage.cs" />
+    <Compile Include="Actions\ActionOverlayText.cs" />
+    <Compile Include="Actions\ActionPlaceholder.cs" />
+    <Compile Include="Actions\ActionPlaySound.cs" />
+    <Compile Include="Actions\ActionPlaySpeech.cs" />
+    <Compile Include="Actions\ActionRepository.cs" />
+    <Compile Include="Actions\ActionVariableDict.cs" />
+    <Compile Include="Actions\ActionVariableList.cs" />
+    <Compile Include="Actions\ActionVariableScalar.cs" />
+    <Compile Include="Actions\ActionTriggerOperation.cs" />
+    <Compile Include="Actions\ActionVariableTable.cs" />
+    <Compile Include="Actions\ActionWindowMessage.cs" />
     <Compile Include="Aura\Aura.cs" />
     <Compile Include="Aura\AuraImage.cs" />
     <Compile Include="Aura\AuraText.cs" />

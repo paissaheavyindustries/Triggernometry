@@ -552,8 +552,8 @@ namespace Triggernometry
 
         #endregion
 
-        // [XmlAttribute]
-        // public int Version { get; set; } = 1;
+        [XmlAttribute]
+        public int Version { get; set; } = 1;
 
         [XmlAttribute]
         public string PluginVersion { get; set; } = Assembly.GetExecutingAssembly().GetName().Version.ToString();
