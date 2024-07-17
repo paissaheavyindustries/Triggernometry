@@ -150,7 +150,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Reference to the trigger
         /// </summary>
-        [ActionAttribute(ordernum: 3)] // todo need to figure this out
+        [ActionAttribute(ordernum: 3, specialtype: ActionAttribute.SpecialTypeEnum.TriggerReference)]
         private Guid _TriggerId { get; set; } = Guid.Empty;
         [XmlAttribute]
         public string TriggerId
@@ -219,7 +219,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Trigger force firing flags
         /// </summary>
-        [ActionAttribute(ordernum: 6)] // todo flags display in editor
+        [ActionAttribute(ordernum: 6)]
         private ForceEnum _Force { get; set; } = ForceEnum.NoSkip;
         [XmlAttribute]
         public string Force

@@ -61,7 +61,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Reference to remote respository
         /// </summary>
-        [ActionAttribute(ordernum: 2)] // todo need to figure this out
+        [ActionAttribute(ordernum: 2, specialtype: ActionAttribute.SpecialTypeEnum.RepoReference)]
         private Guid _RepositoryId { get; set; } = Guid.Empty;
         [XmlAttribute]
         public string RepositoryId

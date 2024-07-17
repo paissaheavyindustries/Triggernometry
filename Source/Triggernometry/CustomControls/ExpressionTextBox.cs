@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Triggernometry.Variables;
 using System.Runtime.InteropServices;
 using System.Globalization;
+using System.ComponentModel;
 
 namespace Triggernometry.CustomControls
 {
@@ -326,6 +327,23 @@ namespace Triggernometry.CustomControls
         private Timer acfDebounceTimer = new Timer();
 
         public Forms.AutoCompleteForm acf = null;
+        private static readonly object EventText;
+
+        // unhide TextChanged on base class
+        private EventHandler _TextChanged;
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        public new event EventHandler TextChanged
+        {
+            add
+            {
+                _TextChanged += value;
+            }
+            remove
+            {
+                _TextChanged -= value;
+            }
+        }
 
         public ExpressionTextBox()
         {
@@ -333,7 +351,7 @@ namespace Triggernometry.CustomControls
             ctx = new Context();
             fakectx = new Context();
             fakectx.testByPlaceholder = true;
-            ResetTooltip();
+            ResetTooltip();            
             textBox1.TextChanged += TextBox1_TextChanged;
             textBox1.KeyPress += TextBox1_KeyPress;
             textBox1.KeyDown += TextBox1_KeyDown;
@@ -753,6 +771,7 @@ namespace Triggernometry.CustomControls
                     acfDebounceTimer.Start();
                 }
             }
+            _TextChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void ProcessAutocomplete()

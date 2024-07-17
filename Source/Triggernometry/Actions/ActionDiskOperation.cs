@@ -67,7 +67,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// File name
         /// </summary>
-        [ActionAttribute(ordernum: 2)]
+        [ActionAttribute(ordernum: 2, specialtype: ActionAttribute.SpecialTypeEnum.FileSelector)]
         private string _Filename { get; set; } = "";
         [XmlAttribute]
         public string Filename

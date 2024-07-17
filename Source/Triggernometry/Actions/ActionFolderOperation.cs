@@ -52,7 +52,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Reference to the folder
         /// </summary>
-        [ActionAttribute(ordernum: 2)] // todo need to figure this out
+        [ActionAttribute(ordernum: 2, specialtype: ActionAttribute.SpecialTypeEnum.FolderReference)]
         private Guid _FolderId { get; set; } = Guid.Empty;
         [XmlAttribute]
         public string FolderId

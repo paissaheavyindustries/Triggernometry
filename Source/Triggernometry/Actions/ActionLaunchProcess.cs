@@ -42,7 +42,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Path to the process to launch
         /// </summary>
-        [ActionAttribute(ordernum: 2)]
+        [ActionAttribute(ordernum: 2, specialtype: ActionAttribute.SpecialTypeEnum.ExecutableSelector)]
         private string _Path { get; set; } = "";
         [XmlAttribute]
         public string Path

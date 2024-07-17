@@ -64,7 +64,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Keypress expression (relevant only for SendKeys)
         /// </summary>
-        [ActionAttribute(ordernum: 2)]
+        [ActionAttribute(ordernum: 2, specialtype: ActionAttribute.SpecialTypeEnum.KeypressRecorder)]
         private string _Keypress { get; set; } = "";
         [XmlAttribute]
         public string Keypress
@@ -86,7 +86,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Keycode (relevant only for window message modes)
         /// </summary>
-        [ActionAttribute(ordernum: 3)]
+        [ActionAttribute(ordernum: 3, specialtype: ActionAttribute.SpecialTypeEnum.KeypressRecorder)]
         private string _Keycode { get; set; } = "";
         [XmlAttribute]
         public string Keycode
