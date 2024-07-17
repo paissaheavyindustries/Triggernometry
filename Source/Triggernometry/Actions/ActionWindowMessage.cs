@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 using Triggernometry.Utilities;
 
@@ -20,7 +21,8 @@ namespace Triggernometry.Actions
         /// If 0, message is sent to first window with a matching title in all processes.
         /// If >0, message is sent to all windows in all processes with matching title in the given process.
         /// </summary>
-        private string _ProcessId = "";
+        [ActionAttribute(ordernum: 1, typehint: typeof(uint))]
+        private string _ProcessId { get; set; } = "";
         [XmlAttribute]
         public string ProcessId
         {
@@ -41,7 +43,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Window title to send window message to
         /// </summary>
-        private string _WindowTitle = "";
+        [ActionAttribute(ordernum: 2)]
+        private string _WindowTitle { get; set; } = "";
         [XmlAttribute]
         public string WindowTitle
         {
@@ -62,7 +65,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Id of the window message
         /// </summary>
-        private string _MessageId = "";
+        [ActionAttribute(ordernum: 3, typehint: typeof(uint))]
+        private string _MessageId { get; set; } = "";
         [XmlAttribute]
         public string MessageId
         {
@@ -83,7 +87,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Wparam of the window message
         /// </summary>
-        private string _Wparam = "";
+        [ActionAttribute(ordernum: 4, typehint: typeof(int))]
+        private string _Wparam { get; set; } = "";
         [XmlAttribute]
         public string Wparam
         {
@@ -104,7 +109,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Lparam of the window message
         /// </summary>
-        private string _Lparam = "";
+        [ActionAttribute(ordernum: 5, typehint: typeof(int))]
+        private string _Lparam { get; set; } = "";
         [XmlAttribute]
         public string Lparam
         {
@@ -159,12 +165,6 @@ namespace Triggernometry.Actions
             int wparam = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _Wparam);
             int lparam = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _Lparam);
             WindowsUtils.SendMessageToWindow(procid, window, (ushort)code, wparam, lparam);
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            // todo
-            return null;
         }
 
         #endregion

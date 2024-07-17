@@ -14,6 +14,8 @@ namespace Triggernometry.Actions
 
         #region Properties
 
+        // todo probably needs a custom property editor
+
         /// <summary>
         /// Image overlay operations
         /// </summary>
@@ -386,11 +388,6 @@ namespace Triggernometry.Actions
         {
             Context ctx = ai.ctx;
             ctx.plug.ImageAuraManagement(ctx, null); // todo supposed to be a reference to this action
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            return null; // todo
         }
 
         #endregion

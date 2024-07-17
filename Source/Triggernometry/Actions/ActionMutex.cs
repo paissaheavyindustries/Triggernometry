@@ -26,6 +26,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Type of the mutex operation
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private OperationEnum _Operation { get; set; } = OperationEnum.Release;
         [XmlAttribute]
         public string Operation
@@ -50,7 +51,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Name of the mutex
         /// </summary>
-        private string _Name = "";
+        [ActionAttribute(ordernum: 2)]
+        private string _Name { get; set; } = "";
         [XmlAttribute]
         public string Name
         {
@@ -103,11 +105,6 @@ namespace Triggernometry.Actions
                     }
                     break;
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            return null; // todo
         }
 
         #endregion

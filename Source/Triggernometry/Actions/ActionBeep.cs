@@ -17,7 +17,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Frequency of the beep
         /// </summary>
-        private string _Frequency = "1046.5"; // freq(C6)
+        [ActionAttribute(ordernum: 1, typehint: typeof(float))]
+        private string _Frequency { get; set; } = "1046.5"; // freq(C6)
         [XmlAttribute]
         public string Frequency
         {
@@ -38,7 +39,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Duration of the beep
         /// </summary>
-        private string _Duration = "100";
+        [ActionAttribute(ordernum: 2, typehint: typeof(int))]
+        private string _Duration { get; set; } = "100";
         [XmlAttribute]
         public string Duration
         {
@@ -86,11 +88,6 @@ namespace Triggernometry.Actions
                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/beeplengthlo", "Beep length below limit, capping to {0}", len));
             }
             Console.Beep((int)Math.Ceiling(freq), (int)Math.Ceiling(len));
-        }
-
-        internal override Control GetPropertyEditor()
-        {            
-            return null; // todo
         }
 
         #endregion

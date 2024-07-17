@@ -43,6 +43,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Type of the OBS control operation
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private OperationEnum _Operation { get; set; } = OperationEnum.StartStreaming;
         [XmlAttribute]
         public string Operation
@@ -67,7 +68,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// OBS WebSocket endpoint
         /// </summary>
-        private string _Endpoint = @"ws://${_const[OBSWebsocketEndpoint]}:${_const[OBSWebsocketPort]}";
+        [ActionAttribute(ordernum: 2)]
+        private string _Endpoint { get; set; } = @"ws://${_const[OBSWebsocketEndpoint]}:${_const[OBSWebsocketPort]}";
         [XmlAttribute]
         public string Endpoint
         {
@@ -88,7 +90,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Optional password for the OBS endpoint
         /// </summary>
-        private string _Password = @"${_const[OBSWebsocketPassword]}";
+        [ActionAttribute(ordernum: 3)]
+        private string _Password { get; set; } = @"${_const[OBSWebsocketPassword]}";
         [XmlAttribute]
         public string Password
         {
@@ -109,7 +112,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Name of the scene referenced in some operations
         /// </summary>
-        private string _SceneName = "";
+        [ActionAttribute(ordernum: 4)]
+        private string _SceneName { get; set; } = "";
         [XmlAttribute]
         public string SceneName
         {
@@ -130,7 +134,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Name of the source referenced in some operations
         /// </summary>
-        private string _SourceName = "";
+        [ActionAttribute(ordernum: 5)]
+        private string _SourceName { get; set; } = "";
         [XmlAttribute]
         public string SourceName
         {
@@ -151,7 +156,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Custom JSON payload
         /// </summary>
-        private string _JSONPayload = "";
+        [ActionAttribute(ordernum: 6)]
+        private string _JSONPayload { get; set; } = "";
         [XmlAttribute]
         public string JSONPayload
         {
@@ -319,11 +325,6 @@ namespace Triggernometry.Actions
                     }
                 }
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            return null; // todo
         }
 
         #endregion

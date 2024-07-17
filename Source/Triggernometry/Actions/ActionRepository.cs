@@ -36,6 +36,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Type of the repository operation
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private OperationEnum _Operation { get; set; } = OperationEnum.UpdateSelf;
         [XmlAttribute]
         public string Operation
@@ -60,6 +61,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Reference to remote respository
         /// </summary>
+        [ActionAttribute(ordernum: 2)] // todo need to figure this out
         private Guid _RepositoryId { get; set; } = Guid.Empty;
         [XmlAttribute]
         public string RepositoryId
@@ -124,12 +126,6 @@ namespace Triggernometry.Actions
             {
                 ctx.plug.RepositoryUpdate(r, true, false);
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            // todo
-            return null;
         }
 
         #endregion

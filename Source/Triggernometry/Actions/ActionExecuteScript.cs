@@ -17,7 +17,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Comma-separated list of referenced assemblies
         /// </summary>
-        private string _Assemblies = "";
+        [ActionAttribute(ordernum: 1)]
+        private string _Assemblies { get; set; } = "";
         [XmlAttribute]
         public string Assemblies
         {
@@ -38,7 +39,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Script code expression
         /// </summary>
-        private string _Script = "";
+        [ActionAttribute(ordernum: 2)]
+        private string _Script { get; set; } = "";
         [XmlAttribute]
         public string Script
         {
@@ -82,11 +84,6 @@ namespace Triggernometry.Actions
             {
                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/scriptinifailed", "Action #{0} on trigger '{1}' not fired, scripting not available", OrderNumber, ctx.trig?.LogName ?? "(null)"));
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            return null; // todo
         }
 
         #endregion

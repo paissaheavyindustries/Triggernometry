@@ -54,6 +54,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Dictionary variable operation type
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private OperationEnum _Operation { get; set; } = OperationEnum.Unset;
         [XmlAttribute]
         public string Operation
@@ -78,6 +79,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Type of the key expression
         /// </summary>
+        [ActionAttribute(ordernum: 2)]
         private ExpressionTypeEnum _KeyType { get; set; } = ExpressionTypeEnum.String;
         [XmlAttribute]
         public string KeyType
@@ -95,6 +97,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Type of the value expression
         /// </summary>
+        [ActionAttribute(ordernum: 3)]
         private ExpressionTypeEnum _ValueType { get; set; } = ExpressionTypeEnum.String;
         [XmlAttribute]
         public string ValueType
@@ -112,7 +115,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Name of the dictionary variable
         /// </summary>
-        private string _Name = "";
+        [ActionAttribute(ordernum: 4)]
+        private string _Name { get; set; } = "";
         [XmlAttribute]
         public string Name
         {
@@ -129,7 +133,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Name of the target variable for some operations
         /// </summary>
-        private string _TargetVariable = "";
+        [ActionAttribute(ordernum: 5)]
+        private string _TargetVariable { get; set; } = "";
         [XmlAttribute]
         public string TargetVariable
         {
@@ -144,7 +149,8 @@ namespace Triggernometry.Actions
         }
 
         // todo remove?
-        private string _VariableLength = "";
+        [ActionAttribute(ordernum: 6)]
+        private string _VariableLength { get; set; } = "";
         [XmlAttribute]
         public string VariableLength
         {
@@ -161,7 +167,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Key expression
         /// </summary>
-        private string _Key = "";
+        [ActionAttribute(ordernum: 7)]
+        private string _Key { get; set; } = "";
         [XmlAttribute]
         public string Key
         {
@@ -178,7 +185,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Value expression
         /// </summary>
-        private string _Value = "";
+        [ActionAttribute(ordernum: 8)]
+        private string _Value { get; set; } = "";
         [XmlAttribute]
         public string Value
         {
@@ -195,6 +203,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Indicates whether referenced variable is persistent or not
         /// </summary>
+        [ActionAttribute(ordernum: 9)] // todo need to couple this with variable on editor
         private bool _Persistent { get; set; } = false;
         [XmlAttribute]
         public string Persistent
@@ -212,6 +221,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Indicates whether referenced target variable is persistent or not
         /// </summary>
+        [ActionAttribute(ordernum: 10)] // todo need to couple this with variable on editor
         private bool _TargetPersistent { get; set; } = false;
         [XmlAttribute]
         public string TargetPersistent
@@ -570,12 +580,6 @@ namespace Triggernometry.Actions
                     }
                     break;
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            // todo
-            return null;
         }
 
         #endregion

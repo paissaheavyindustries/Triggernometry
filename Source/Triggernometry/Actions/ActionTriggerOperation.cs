@@ -100,6 +100,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Type of the zone information provided
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private ZoneTypeEnum _ZoneType { get; set; } = ZoneTypeEnum.ZoneName;
         [XmlAttribute]
         public string ZoneType
@@ -124,6 +125,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Type of the trigger operation
         /// </summary>
+        [ActionAttribute(ordernum: 2)]
         private OperationEnum _Operation { get; set; } = OperationEnum.FireTrigger;
         [XmlAttribute]
         public string Operation
@@ -148,6 +150,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Reference to the trigger
         /// </summary>
+        [ActionAttribute(ordernum: 3)] // todo need to figure this out
         private Guid _TriggerId { get; set; } = Guid.Empty;
         [XmlAttribute]
         public string TriggerId
@@ -172,7 +175,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Event text the trigger is fired with
         /// </summary>
-        private string _Text = "";
+        [ActionAttribute(ordernum: 4)]
+        private string _Text { get; set; } = "";
         [XmlAttribute]
         public string Text
         {
@@ -193,7 +197,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Zone information the trigger is fired with
         /// </summary>
-        private string _Zone = "";
+        [ActionAttribute(ordernum: 5)]
+        private string _Zone { get; set; } = "";
         [XmlAttribute]
         public string Zone
         {
@@ -210,10 +215,11 @@ namespace Triggernometry.Actions
                 _Zone = value;
             }
         }
-        
+
         /// <summary>
         /// Trigger force firing flags
         /// </summary>
+        [ActionAttribute(ordernum: 6)] // todo flags display in editor
         private ForceEnum _Force { get; set; } = ForceEnum.NoSkip;
         [XmlAttribute]
         public string Force
@@ -453,12 +459,6 @@ namespace Triggernometry.Actions
                     AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notrigiderror", "No trigger id, and op is not cancel all actions, unexpected"));
                 }
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            // todo
-            return null;
         }
 
         #endregion

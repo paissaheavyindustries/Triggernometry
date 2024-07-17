@@ -24,7 +24,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Discord webhook URL
         /// </summary>
-        private string _WebhookURL = "";
+        [ActionAttribute(ordernum: 1)]
+        private string _WebhookURL { get; set; } = "";
         [XmlAttribute]
         public string WebhookURL
         {
@@ -45,7 +46,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Message to send to the webhook
         /// </summary>
-        private string _Message = "";
+        [ActionAttribute(ordernum: 2)]
+        private string _Message { get; set; } = "";
         [XmlAttribute]
         public string Message
         {
@@ -66,6 +68,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// If set, sent telegram will be flagged as a TTS message
         /// </summary>
+        [ActionAttribute(ordernum: 3)]
         private bool _UseTTS { get; set; } = false;
         [XmlAttribute]
         public string UseTTS
@@ -122,11 +125,6 @@ namespace Triggernometry.Actions
                 var wh = new JavaScriptSerializer().Serialize(new { content = msg });
                 SendJson(ctx, MethodEnum.POST, url, wh, null, true);
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            return null; // todo
         }
 
         #endregion

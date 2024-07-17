@@ -36,6 +36,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Type of ACT interaction
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private OperationEnum _Operation { get; set; } = OperationEnum.SetCombatState;
         [XmlAttribute]
         public string Operation
@@ -50,14 +51,15 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Value to set
         /// </summary>
-        private bool _Value { get; set; } = false;
+        [ActionAttribute(ordernum: 2)]
+        private string _Value { get; set; } = "";
         [XmlAttribute]
         public string Value
         {
-            get => _Value ? _Value.ToString() : null;
+            get => _Value != "" ? _Value : null;
             set
             {
-                _Value = bool.Parse(value);
+                _Value = value;
             }
         }
 
@@ -70,14 +72,14 @@ namespace Triggernometry.Actions
             switch (_Operation)
             {
                 case OperationEnum.SetCombatState:
-                    return _Value == false ? 
+                    return bool.Parse(_Value) == false ? 
                         I18n.Translate("internal/Action/descactcombatend", "end ACT encounter")
                         :
                         I18n.Translate("internal/Action/descactcombatstart", "start ACT encounter");                    
                 case OperationEnum.LogAllNetwork:
-                    return I18n.Translate("internal/Action/descactlogallnetwork", "{0} option: Log all network data", I18n.TranslateEnable(_Value));
+                    return I18n.Translate("internal/Action/descactlogallnetwork", "{0} option: Log all network data", I18n.TranslateEnable(bool.Parse(_Value)));
                 case OperationEnum.UseDeucalion:
-                    return I18n.Translate("internal/Action/descactusedeucalion", "{0} option: Use Deucalion (injection)", I18n.TranslateEnable(_Value));
+                    return I18n.Translate("internal/Action/descactusedeucalion", "{0} option: Use Deucalion (injection)", I18n.TranslateEnable(bool.Parse(_Value)));
             }
             return "";
         }
@@ -88,20 +90,15 @@ namespace Triggernometry.Actions
             switch (_Operation)
             {
                 case OperationEnum.SetCombatState:
-                    plug.SetCombatStateHook(_Value);
+                    plug.SetCombatStateHook(bool.Parse(_Value));
                     break;
                 case OperationEnum.LogAllNetwork:
-                    plug.LogAllNetworkHook(_Value);
+                    plug.LogAllNetworkHook(bool.Parse(_Value));
                     break;
                 case OperationEnum.UseDeucalion:
-                    plug.UseDeucalionHook(_Value);
+                    plug.UseDeucalionHook(bool.Parse(_Value));
                     break;
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {            
-            return null; // todo
         }
 
         #endregion

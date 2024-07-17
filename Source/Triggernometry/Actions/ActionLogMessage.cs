@@ -30,6 +30,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Target stream for the log event to be inserted into
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private LogEvent.SourceEnum _Target { get; set; } = LogEvent.SourceEnum.Log;
         [XmlAttribute]
         public string Target
@@ -51,7 +52,8 @@ namespace Triggernometry.Actions
             }
         }
 
-        private string _Message = "";
+        [ActionAttribute(ordernum: 2)]
+        private string _Message { get; set; } = "";
         [XmlAttribute]
         public string Message
         {
@@ -72,6 +74,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// If set, the logged message will be processed as if it came to Triggernometry from the specified target
         /// </summary>
+        [ActionAttribute(ordernum: 3)]
         private bool _ProcessAsLogline { get; set; } = false;
         [XmlAttribute]
         public string ProcessAsLogline
@@ -93,6 +96,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// If set, the logged message will be inserted into ACT's encounter log
         /// </summary>
+        [ActionAttribute(ordernum: 4)]
         private bool _AddToACTEncounter { get; set; } = false;
         [XmlAttribute]
         public string AddToACTEncounter
@@ -114,6 +118,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Level for the logged message
         /// </summary>
+        [ActionAttribute(ordernum: 5)]
         private LogLevelEnum _Level { get; set; } = LogLevelEnum.Error;
         [XmlAttribute]
         public string Level
@@ -205,11 +210,6 @@ namespace Triggernometry.Actions
             {
                 ctx.plug.ACTEncounterLogHook(message);
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            return null; // todo
         }
 
         #endregion

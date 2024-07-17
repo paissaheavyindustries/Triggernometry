@@ -16,6 +16,8 @@ namespace Triggernometry.Actions
 
         #region Properties
 
+        // todo probably needs a custom property editor
+
         private bool ShouldSerializeLoopCondition()
         {
             return (LoopCondition.Children.Count > 0);
@@ -38,7 +40,7 @@ namespace Triggernometry.Actions
 
         /// <summary>
         /// Delay between every loop iteration
-        /// </summary>
+        /// </summary>        
         private string _DelayExpression = "";
         [XmlAttribute]
         public string DelayExpression
@@ -145,11 +147,6 @@ namespace Triggernometry.Actions
                     return;
                 }
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            return null; // todo
         }
 
         #endregion

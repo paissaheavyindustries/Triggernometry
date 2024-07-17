@@ -28,8 +28,31 @@ namespace Triggernometry.Actions
         }
 
         /// <summary>
+        /// Remote endpoint expression
+        /// </summary>
+        [ActionAttribute(ordernum: 1)]
+        private string _Endpoint { get; set; } = "";
+        [XmlAttribute]
+        public string Endpoint
+        {
+            get
+            {
+                if (_Endpoint == "")
+                {
+                    return null;
+                }
+                return _Endpoint;
+            }
+            set
+            {
+                _Endpoint = value;
+            }
+        }
+
+        /// <summary>
         /// Request method to use
         /// </summary>
+        [ActionAttribute(ordernum: 2)]
         private MethodEnum _Method { get; set; } = MethodEnum.POST;
         [XmlAttribute]
         public string Method
@@ -49,72 +72,10 @@ namespace Triggernometry.Actions
         }
 
         /// <summary>
-        /// If set, Triggernometry will check its cache for a similar request and return that
-        /// </summary>
-        private bool _UseCache { get; set; } = false;
-        [XmlAttribute]
-        public string UseCache
-        {
-            get
-            {
-                if (_UseCache == false)
-                {
-                    return null;
-                }
-                return _UseCache.ToString();
-            }
-            set
-            {
-                _UseCache = Boolean.Parse(value);
-            }
-        }
-
-        /// <summary>
-        /// Scalar variable in which the result of the request will be stored
-        /// </summary>
-        private string _ResultVariable = "";
-        [XmlAttribute]
-        public string ResultVariable
-        {
-            get
-            {
-                if (_ResultVariable == "")
-                {
-                    return null;
-                }
-                return _ResultVariable;
-            }
-            set
-            {
-                _ResultVariable = value;
-            }
-        }
-
-        /// <summary>
-        /// Remote endpoint expression
-        /// </summary>
-        private string _Endpoint = "";
-        [XmlAttribute]
-        public string Endpoint
-        {
-            get
-            {
-                if (_Endpoint == "")
-                {
-                    return null;
-                }
-                return _Endpoint;
-            }
-            set
-            {
-                _Endpoint = value;
-            }
-        }
-
-        /// <summary>
         /// Payload expression
         /// </summary>
-        private string _Payload = "";
+        [ActionAttribute(ordernum: 3)]
+        private string _Payload { get; set; } = "";
         [XmlAttribute]
         public string Payload
         {
@@ -135,7 +96,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Header expression
         /// </summary>
-        private string _Headers = "";
+        [ActionAttribute(ordernum: 4)]
+        private string _Headers { get; set; } = "";
         [XmlAttribute]
         public string Headers
         {
@@ -154,9 +116,32 @@ namespace Triggernometry.Actions
         }
 
         /// <summary>
+        /// Scalar variable in which the result of the request will be stored
+        /// </summary>
+        [ActionAttribute(ordernum: 5)]
+        private string _ResultVariable { get; set; } = "";
+        [XmlAttribute]
+        public string ResultVariable
+        {
+            get
+            {
+                if (_ResultVariable == "")
+                {
+                    return null;
+                }
+                return _ResultVariable;
+            }
+            set
+            {
+                _ResultVariable = value;
+            }
+        }
+
+        /// <summary>
         /// Expression to be used when the result of the request is intended to be fired as a log event
         /// </summary>
-        private string _FiringExpression = "";
+        [ActionAttribute(ordernum: 6)]
+        private string _FiringExpression { get; set; } = "";
         [XmlAttribute]
         public string FiringExpression
         {
@@ -175,8 +160,31 @@ namespace Triggernometry.Actions
         }
 
         /// <summary>
+        /// If set, Triggernometry will check its cache for a similar request and return that
+        /// </summary>
+        [ActionAttribute(ordernum: 7)]
+        private bool _UseCache { get; set; } = false;
+        [XmlAttribute]
+        public string UseCache
+        {
+            get
+            {
+                if (_UseCache == false)
+                {
+                    return null;
+                }
+                return _UseCache.ToString();
+            }
+            set
+            {
+                _UseCache = Boolean.Parse(value);
+            }
+        }
+
+        /// <summary>
         /// Indicates whether referenced variable is persistent or not
         /// </summary>
+        [ActionAttribute(ordernum: 8)] // todo need to couple this with variable on editor
         private bool _Persistent { get; set; } = false;
         [XmlAttribute]
         public string Persistent
@@ -307,11 +315,6 @@ namespace Triggernometry.Actions
                     ctx.plug.LogLineQueuer(firing, "", LogEvent.SourceEnum.Log);
                 }
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            return null; // todo
         }
 
         #endregion

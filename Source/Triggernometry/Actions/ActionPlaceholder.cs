@@ -23,12 +23,6 @@ namespace Triggernometry.Actions
             // nothing to execute            
         }
 
-        internal override Control GetPropertyEditor()
-        {
-            // no properties to edit
-            return null;
-        }
-
         #endregion
 
     }

@@ -29,6 +29,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Icon to display on message box
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private MessageBoxIconEnum _Icon { get; set; } = MessageBoxIconEnum.None;
         [XmlAttribute]
         public string Icon
@@ -53,7 +54,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Text to display on message box
         /// </summary>
-        private string _Text = "";
+        [ActionAttribute(ordernum: 2)]
+        private string _Text { get; set; } = "";
         [XmlAttribute]
         public string Text
         {
@@ -92,11 +94,6 @@ namespace Triggernometry.Actions
             {
                 MessageBox.Show(ctx.EvaluateStringExpression(ActionContextLogger, ctx, _Text), "", MessageBoxButtons.OK, (System.Windows.Forms.MessageBoxIcon)_Icon);
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            return null; // todo
         }
 
         #endregion

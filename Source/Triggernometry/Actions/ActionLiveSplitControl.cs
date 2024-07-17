@@ -33,6 +33,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Type of the LiveSplit control operation
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private OperationEnum _Operation { get; set; } = OperationEnum.StartOrSplit;
         [XmlAttribute]
         public string Operation
@@ -57,7 +58,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Custom payload to send to LiveSplit
         /// </summary>
-        private string _CustomPayload = "";
+        [ActionAttribute(ordernum: 2)]
+        private string _CustomPayload { get; set; } = "";
         [XmlAttribute]
         public string CustomPayload
         {
@@ -160,11 +162,6 @@ namespace Triggernometry.Actions
                     }
                 }
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            return null; // todo
         }
 
         #endregion

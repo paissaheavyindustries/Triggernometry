@@ -16,7 +16,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Name of the callback to invoke
         /// </summary>
-        private string _Name = "";
+        [ActionAttribute(ordernum: 1)]
+        private string _Name { get; set; } = "";
         [XmlAttribute]
         public string Name
         {
@@ -37,7 +38,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Parameter value to pass to the callback
         /// </summary>
-        private string _Parameter = "";
+        [ActionAttribute(ordernum: 2)]
+        private string _Parameter { get; set; } = "";
         [XmlAttribute]
         public string Parameter
         {
@@ -71,11 +73,6 @@ namespace Triggernometry.Actions
             string cbparm = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _Parameter);
             AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/callbackinvoke", "Invoking named callback ({0}) with parameter ({1})", cbname, cbparm));
             ctx.plug.InvokeNamedCallback(cbname, cbparm);
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            return null; // todo
         }
 
         #endregion

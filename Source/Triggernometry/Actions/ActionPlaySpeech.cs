@@ -17,6 +17,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Audio target where speech will be directed (None means default)
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private Configuration.AudioRoutingMethodEnum _AudioTarget { get; set; } = Configuration.AudioRoutingMethodEnum.None;
         [XmlAttribute]
         public string AudioTarget
@@ -41,7 +42,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Message expression
         /// </summary>
-        private string _Message = "";
+        [ActionAttribute(ordernum: 2)]
+        private string _Message { get; set; } = "";
         [XmlAttribute]
         public string Message
         {
@@ -62,7 +64,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Volume expression (0 - 100)
         /// </summary>
-        private string _Volume = "100";
+        [ActionAttribute(ordernum: 3, typeof(float))]
+        private string _Volume { get; set; } = "100";
         [XmlAttribute]
         public string Volume
         {
@@ -83,7 +86,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Rate (speech speed) expression
         /// </summary>
-        private string _Rate = "0";
+        [ActionAttribute(ordernum: 4, typeof(int))]
+        private string _Rate { get; set; } = "0";
         [XmlAttribute]
         public string Rate
         {
@@ -102,6 +106,7 @@ namespace Triggernometry.Actions
         }
 
         // todo remove?
+        [ActionAttribute(ordernum: 5)]
         private bool _ExclusivePlayer { get; set; } = true;
         [XmlAttribute]
         public string ExclusivePlayer
@@ -133,12 +138,6 @@ namespace Triggernometry.Actions
         {
             Context ctx = ai.ctx;
             ctx.ttshook(ctx, null); // todo
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            // todo
-            return null;
         }
 
         #endregion

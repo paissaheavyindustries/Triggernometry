@@ -67,6 +67,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Scalar variable operation type
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private OperationEnum _Operation { get; set; } = OperationEnum.Unset;
         [XmlAttribute]
         public string Operation
@@ -91,7 +92,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Name of the scalar variable
         /// </summary>
-        private string _Name = "";
+        [ActionAttribute(ordernum: 2)]
+        private string _Name { get; set; } = "";
         [XmlAttribute]
         public string Name
         {
@@ -112,7 +114,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Name of the target variable for some JSON operations
         /// </summary>
-        private string _JsonTargetName = "";
+        [ActionAttribute(ordernum: 3)]
+        private string _JsonTargetName { get; set; } = "";
         [XmlAttribute]
         public string JsonTargetName
         {
@@ -133,7 +136,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Value expression
         /// </summary>
-        private string _Value = "";
+        [ActionAttribute(ordernum: 4)]
+        private string _Value { get; set; } = "";
         [XmlAttribute]
         public string Value
         {
@@ -154,6 +158,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Indicates whether referenced target variable is persistent or not
         /// </summary>
+        [ActionAttribute(ordernum: 5)] // todo need to couple this with variable on editor
         private bool _JsonTargetPersistent { get; set; } = false;
         [XmlAttribute]
         public string JsonTargetPersistent
@@ -175,6 +180,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Indicates whether referenced variable is persistent or not
         /// </summary>
+        [ActionAttribute(ordernum: 6)] // todo need to couple this with variable on editor
         private bool _Persistent { get; set; } = false;
         [XmlAttribute]
         public string Persistent
@@ -474,12 +480,6 @@ namespace Triggernometry.Actions
                     }
                     break;
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            // todo
-            return null;
         }
 
         #endregion

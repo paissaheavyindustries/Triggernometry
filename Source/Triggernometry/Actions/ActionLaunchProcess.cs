@@ -17,6 +17,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Window style to launch the process with
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private System.Diagnostics.ProcessWindowStyle _WindowStyle { get; set; } = System.Diagnostics.ProcessWindowStyle.Normal;
         [XmlAttribute]
         public string WindowStyle
@@ -41,7 +42,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Path to the process to launch
         /// </summary>
-        private string _Path = "";
+        [ActionAttribute(ordernum: 2)]
+        private string _Path { get; set; } = "";
         [XmlAttribute]
         public string Path
         {
@@ -62,7 +64,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Command line arguments to pass to the process
         /// </summary>
-        private string _Arguments = "";
+        [ActionAttribute(ordernum: 3)]
+        private string _Arguments { get; set; } = "";
         [XmlAttribute]
         public string Arguments
         {
@@ -83,7 +86,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Working directory
         /// </summary>
-        private string _WorkingDirectory = "";
+        [ActionAttribute(ordernum: 4)]
+        private string _WorkingDirectory { get; set; } = "";
         [XmlAttribute]
         public string WorkingDirectory
         {
@@ -149,11 +153,6 @@ namespace Triggernometry.Actions
                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/waitingprocexit", "Waiting for process to exit"));
                 p.WaitForExit();
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            return null; // todo
         }
 
         #endregion

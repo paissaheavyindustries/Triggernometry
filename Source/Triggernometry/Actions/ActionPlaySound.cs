@@ -17,6 +17,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Audio target where speech will be directed (None means default)
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private Configuration.AudioRoutingMethodEnum _AudioTarget { get; set; } = Configuration.AudioRoutingMethodEnum.None;
         [XmlAttribute]
         public string AudioTarget
@@ -41,7 +42,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Sound file name expression
         /// </summary>
-        private string _Filename = "";
+        [ActionAttribute(ordernum: 2)]
+        private string _Filename { get; set; } = "";
         [XmlAttribute]
         public string Filename
         {
@@ -62,7 +64,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Volume expression (0 - 100)
         /// </summary>
-        private string _Volume = "100";
+        [ActionAttribute(ordernum: 3, typeof(float))]
+        private string _Volume { get; set; } = "100";
         [XmlAttribute]
         public string Volume
         {
@@ -81,6 +84,7 @@ namespace Triggernometry.Actions
         }
 
         // todo remove?
+        [ActionAttribute(ordernum: 4)]
         private bool _ExclusivePlayer { get; set; } = true;
         [XmlAttribute]
         public string ExclusivePlayer
@@ -112,12 +116,6 @@ namespace Triggernometry.Actions
         {
             Context ctx = ai.ctx;
             ctx.soundhook(ctx, null); // todo
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            // todo
-            return null;
         }
 
         #endregion

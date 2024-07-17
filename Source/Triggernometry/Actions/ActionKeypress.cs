@@ -39,6 +39,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Type of the keypress operation
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private OperationEnum _Operation { get; set; } = OperationEnum.SendKeys;
         [XmlAttribute]
         public string Operation
@@ -63,7 +64,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Keypress expression (relevant only for SendKeys)
         /// </summary>
-        private string _Keypress = "";
+        [ActionAttribute(ordernum: 2)]
+        private string _Keypress { get; set; } = "";
         [XmlAttribute]
         public string Keypress
         {
@@ -84,7 +86,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Keycode (relevant only for window message modes)
         /// </summary>
-        private string _Keycode = "";
+        [ActionAttribute(ordernum: 3)]
+        private string _Keycode { get; set; } = "";
         [XmlAttribute]
         public string Keycode
         {
@@ -105,7 +108,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Window title to send keypress to (relevant only for window message modes)
         /// </summary>
-        private string _WindowTitle = "";
+        [ActionAttribute(ordernum: 4)]
+        private string _WindowTitle { get; set; } = "";
         [XmlAttribute]
         public string WindowTitle
         {
@@ -126,7 +130,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Process ID to send keypress to (relevant only for window message modes)
         /// </summary>
-        private string _ProcessId = "";
+        [ActionAttribute(ordernum: 5, typehint: typeof(int))]
+        private string _ProcessId { get; set; } = "";
         [XmlAttribute]
         public string ProcessId
         {
@@ -214,11 +219,6 @@ namespace Triggernometry.Actions
                     }
                     break;
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            return null; // todo
         }
 
         #endregion

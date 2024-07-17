@@ -67,6 +67,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// List variable operation type
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private OperationEnum _Operation { get; set; } = OperationEnum.Unset;
         [XmlAttribute]
         public string Operation
@@ -91,6 +92,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Type of the value expression
         /// </summary>
+        [ActionAttribute(ordernum: 2)]
         private ExpressionTypeEnum _ValueType { get; set; } = ExpressionTypeEnum.String;
         [XmlAttribute]
         public string ValueType
@@ -115,7 +117,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Name of the list variable
         /// </summary>
-        private string _Name = "";
+        [ActionAttribute(ordernum: 3)]
+        private string _Name { get; set; } = "";
         [XmlAttribute]
         public string Name
         {
@@ -136,7 +139,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Value expression
         /// </summary>
-        private string _ValueExpression = "";
+        [ActionAttribute(ordernum: 4)]
+        private string _ValueExpression { get; set; } = "";
         [XmlAttribute]
         public string ValueExpression
         {
@@ -157,7 +161,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Index inside the list variable (zero-based)
         /// </summary>
-        private string _Index = "";
+        [ActionAttribute(ordernum: 5)]
+        private string _Index { get; set; } = "";
         [XmlAttribute]
         public string Index
         {
@@ -178,7 +183,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Name of the target variable for some operations
         /// </summary>
-        private string _Target = "";
+        [ActionAttribute(ordernum: 6)]
+        private string _Target { get; set; } = "";
         [XmlAttribute]
         public string Target
         {
@@ -199,6 +205,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Indicates whether referenced variable is persistent or not
         /// </summary>
+        [ActionAttribute(ordernum: 7)] // todo need to couple this with variable on editor
         private bool _Persistent { get; set; } = false;
         [XmlAttribute]
         public string Persistent
@@ -220,6 +227,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Indicates whether referenced target variable is persistent or not
         /// </summary>
+        [ActionAttribute(ordernum: 8)] // todo need to couple this with variable on editor
         private bool _TargetPersistent { get; set; } = false;
         [XmlAttribute]
         public string TargetPersistent
@@ -906,12 +914,6 @@ namespace Triggernometry.Actions
                         break;
                     }
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            // todo
-            return null;
         }
 
         #endregion

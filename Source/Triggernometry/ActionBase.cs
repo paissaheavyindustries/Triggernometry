@@ -1,11 +1,21 @@
-﻿using System;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SharpDX;
+using SharpDX.Direct2D1.Effects;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using Triggernometry.CustomControls;
+using static System.Windows.Forms.AxHost;
 using static Triggernometry.RealPlugin;
 
 namespace Triggernometry
@@ -42,6 +52,21 @@ namespace Triggernometry
     [XmlInclude(typeof(Actions.ActionWindowMessage))]
     public abstract class ActionBase
     {
+
+        [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
+        public class ActionAttribute : Attribute
+        {
+
+            int _ordernum;
+            Type _typehint;            
+
+            public ActionAttribute(int ordernum = 0, Type typehint = null)
+            {
+                _ordernum = ordernum;
+                _typehint = typehint;                
+            }
+
+        }
 
         internal Guid Id { get; set; } = Guid.NewGuid();
         internal Trigger ParentTrigger { get; set; } = null;
@@ -438,7 +463,166 @@ namespace Triggernometry
 
         #region Action-specific properties
 
-        internal abstract Control GetPropertyEditor();
+        private List<(PropertyInfo prop, int ordernum, Type type)> GetProperties()
+        {
+            PropertyInfo[] props = GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            List<(PropertyInfo prop, int ordernum, Type type)> results = new List<(PropertyInfo prop, int ordernum, Type type)>();
+            foreach (PropertyInfo pi in props)
+            {
+                CustomAttributeData actionAttr = null;
+                foreach (CustomAttributeData cad in pi.CustomAttributes)
+                {
+                    if (cad.AttributeType == typeof(ActionAttribute))
+                    {
+                        actionAttr = cad;
+                    }
+                }
+                if (actionAttr == null)
+                {
+                    continue;
+                }                
+                Type typeHint = (Type)actionAttr.ConstructorArguments[1].Value;
+                if (typeHint == null)
+                {
+                    object val = pi.GetValue(this);
+                    typeHint = val.GetType();
+                    if (typeHint.IsEnum)
+                    {
+                        typeHint = typeof(Enum);
+                    }
+                }
+                results.Add((
+                    prop: pi, 
+                    ordernum: (int)actionAttr.ConstructorArguments[0].Value,
+                    type: typeHint
+                ));
+            }
+            results.Sort((a, b) => a.ordernum.CompareTo(b.ordernum));
+            return results;
+        }
+
+        private Control GetGenericPropertyEditor()
+        {
+            var props = GetProperties();
+            List<(PropertyInfo prop, int ordernum, Type type, object ctrl)> propeditors = new List<(PropertyInfo prop, int ordernum, Type type, object ctrl)>();
+            // the generic property editor is a TableLayoutPanel, where
+            // - first column is AutoSize for Labels
+            // - second column is 100 % for content
+            // - third optional column is 50px for a button or some such, use ColumnSpan 2 on second column if not needed
+            TableLayoutPanel tlp = new TableLayoutPanel();
+            tlp.ColumnCount = 3;
+            tlp.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100.0f));
+            tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 50.0f));            
+            foreach (var prop in props)
+            {
+                Control temp = GetPropertyEditor(prop);
+                if (temp != null)
+                {
+                    propeditors.Add((prop: prop.prop, ordernum: prop.ordernum, type: prop.type, ctrl: temp));
+                    continue;
+                }
+                if (prop.type == typeof(string))
+                {
+                    // show string expression field
+                    ExpressionTextBox etb = new ExpressionTextBox();
+                    etb.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                    etb.Expression = (string)prop.prop.GetValue(this);
+                    propeditors.Add((prop: prop.prop, ordernum: prop.ordernum, type: prop.type, ctrl: etb));
+                }
+                else if (prop.type == typeof(int) || prop.type == typeof(uint))
+                {
+                    // show numeric expression field
+                    ExpressionTextBox etb = new ExpressionTextBox();
+                    etb.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
+                    etb.Expression = (string)prop.prop.GetValue(this);
+                    propeditors.Add((prop: prop.prop, ordernum: prop.ordernum, type: prop.type, ctrl: etb));
+                }
+                else if (prop.type == typeof(Regex))
+                {
+                    // show regex expression field
+                    ExpressionTextBox etb = new ExpressionTextBox();
+                    etb.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.Regex;
+                    etb.Expression = (string)prop.prop.GetValue(this);
+                    propeditors.Add((prop: prop.prop, ordernum: prop.ordernum, type: prop.type, ctrl: etb));
+                }
+                else if (prop.type == typeof(bool))
+                {
+                    // show checkbox
+                    CheckBox cb = new CheckBox();
+                    cb.Text = "";
+                    cb.CheckAlign = ContentAlignment.MiddleRight;
+                    propeditors.Add((prop: prop.prop, ordernum: prop.ordernum, type: prop.type, ctrl: cb));
+                }
+                else if (prop.type == typeof(Enum))
+                {
+                    // show combobox
+                    ComboBox cb = new ComboBox();
+                    cb.DropDownStyle = ComboBoxStyle.DropDownList;                    
+                    string[] names = Enum.GetNames(prop.prop.PropertyType);
+                    foreach (string name in names)
+                    {
+                        // for example, "Internal/Enum/ActionActInteraction/OperationEnum/SetCombatState"
+                        string trkey = "Internal/Enum/" + prop.prop.PropertyType.DeclaringType.Name + "/" + prop.prop.PropertyType.Name + "/" + name;
+                        cb.Items.Add(trkey);
+                    }
+                    propeditors.Add((prop: prop.prop, ordernum: prop.ordernum, type: prop.type, ctrl: cb));
+                }
+            }
+            tlp.RowCount = propeditors.Count;
+            for (int i = 0; i < propeditors.Count; i++)
+            {                
+                tlp.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+                Label l = new Label();
+                // for example, "Internal/Property/ActionActInteraction/Operation"
+                string trkey = "Internal/Property/" + this.GetType().Name + "/" + Regex.Replace(propeditors[i].prop.Name, "[^a-zA-Z0-9]", "");
+                l.Text = trkey;
+                l.Dock = DockStyle.Fill;
+                l.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+                l.MinimumSize = new Size(150, 0);
+                tlp.Controls.Add(l, 0, i);
+                (PropertyInfo prop, int ordernum, Type type, object ctrl) pe = propeditors[i];
+                if (pe.ctrl is object[])
+                {
+                    int col = 1;
+                    object[] ctrls = (object[])pe.ctrl;
+                    foreach (object o in ctrls)
+                    {
+                        Control ctrl = (Control)o;
+                        ctrl.Dock = DockStyle.Top;
+                        tlp.Controls.Add(ctrl, col, i);
+                        tlp.SetColumnSpan(ctrl, 1);
+                        col++;
+                    }
+                }
+                else
+                {
+                    Control ctrl = (Control)pe.ctrl;
+                    ctrl.Dock = DockStyle.Top;
+                    tlp.Controls.Add(ctrl, 1, i);
+                    tlp.SetColumnSpan(ctrl, 2);
+                }
+            }
+            tlp.Dock = DockStyle.Top;
+            tlp.AutoSize = true;
+            tlp.BackColor = SystemColors.Highlight;
+            return tlp;
+        }
+
+        protected virtual Control GetPropertyEditor((PropertyInfo prop, int ordernum, Type type) prop)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Creates a property editor control for the action. Actions can override this to provide their own entirely custom property editor.
+        /// Alternatively, if controls want to use the generic property editor but provide a custom editor only for one parameter, override the PropertyInfo overload instead.
+        /// </summary>
+        /// <returns>Property editor for the action</returns>
+        internal virtual Control GetPropertyEditor()
+        {
+            return GetGenericPropertyEditor();
+        }
 
         #endregion
 

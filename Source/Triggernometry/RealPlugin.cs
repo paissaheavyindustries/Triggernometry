@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using System.Security.Policy;
 using System.Security.Principal;
 using System.Speech.Synthesis;
 using System.Text;
@@ -23,7 +20,6 @@ using Triggernometry.CustomControls;
 using Triggernometry.Utilities;
 using Triggernometry.Variables;
 using WMPLib;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Triggernometry
 {

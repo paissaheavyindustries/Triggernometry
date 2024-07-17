@@ -27,6 +27,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Type of the folder operation
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private OperationEnum _Operation { get; set; } = OperationEnum.Enable;
         [XmlAttribute]
         public string Operation
@@ -51,6 +52,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Reference to the folder
         /// </summary>
+        [ActionAttribute(ordernum: 2)] // todo need to figure this out
         private Guid _FolderId { get; set; } = Guid.Empty;
         [XmlAttribute]
         public string FolderId
@@ -157,11 +159,6 @@ namespace Triggernometry.Actions
             {
                 AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/nofolderwithid", "Didn't find a folder with id ({0})", _FolderId));
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            return null; // todo
         }
 
         #endregion

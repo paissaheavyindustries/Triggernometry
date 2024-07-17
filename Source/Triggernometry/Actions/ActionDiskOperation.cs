@@ -42,6 +42,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Type of the file system operation
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private OperationEnum _Operation { get; set; } = OperationEnum.ReadIntoVariable;
         [XmlAttribute]
         public string Operation
@@ -66,7 +67,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// File name
         /// </summary>
-        private string _Filename;
+        [ActionAttribute(ordernum: 2)]
+        private string _Filename { get; set; } = "";
         [XmlAttribute]
         public string Filename
         {
@@ -87,7 +89,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Target variable name
         /// </summary>
-        private string _Variable;
+        [ActionAttribute(ordernum: 3)]
+        private string _Variable { get; set; } = "";
         [XmlAttribute]
         public string Variable
         {
@@ -108,6 +111,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// If set, instructs Triggernometry to look at its own cache first for the file, reading that instead if found (applies to remote files)
         /// </summary>
+        [ActionAttribute(ordernum: 4)]
         private bool _UseCache { get; set; } = false;
         [XmlAttribute]
         public string UseCache
@@ -129,6 +133,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Indicates whether referenced variable is persistent or not
         /// </summary>
+        [ActionAttribute(ordernum: 5)] // todo need to couple this with variable on editor
         private bool _Persistent { get; set; } = false;
         [XmlAttribute]
         public string Persistent
@@ -325,11 +330,6 @@ namespace Triggernometry.Actions
                     }
                     break;
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            return null; // todo
         }
 
         #endregion

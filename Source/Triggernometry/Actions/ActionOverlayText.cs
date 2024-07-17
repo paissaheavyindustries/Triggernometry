@@ -15,6 +15,8 @@ namespace Triggernometry.Actions
 
         #region Properties
 
+        // todo probably needs a custom property editor
+
         /// <summary>
         /// Text overlay operations
         /// </summary>
@@ -557,11 +559,6 @@ namespace Triggernometry.Actions
         {
             Context ctx = ai.ctx;
             ctx.plug.TextAuraManagement(ctx, null); // todo supposed to be a reference to this action
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            return null; // todo
         }
 
         #endregion

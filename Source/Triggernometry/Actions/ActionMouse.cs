@@ -45,6 +45,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Type of the mouse operation
         /// </summary>
+        [ActionAttribute(ordernum: 1)]
         private OperationEnum _Operation { get; set; } = OperationEnum.Move;
         [XmlAttribute]
         public string Operation
@@ -69,6 +70,7 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Coordinate system to use
         /// </summary>
+        [ActionAttribute(ordernum: 2)]
         private CoordinateEnum _Coordinate { get; set; } = CoordinateEnum.Absolute;
         [XmlAttribute]
         public string Coordinate
@@ -93,7 +95,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Mouse X position/offset
         /// </summary>
-        private string _X = "0";
+        [ActionAttribute(ordernum: 3, typehint: typeof(int))]
+        private string _X { get; set; } = "0";
         [XmlAttribute]
         public string X
         {
@@ -114,7 +117,8 @@ namespace Triggernometry.Actions
         /// <summary>
         /// Mouse Y position/offset
         /// </summary>
-        private string _Y = "0";
+        [ActionAttribute(ordernum: 4, typehint: typeof(int))]
+        private string _Y { get; set; } = "0";
         [XmlAttribute]
         public string Y
         {
@@ -212,11 +216,6 @@ namespace Triggernometry.Actions
                     });
                     break;
             }
-        }
-
-        internal override Control GetPropertyEditor()
-        {
-            return null; // todo
         }
 
         #endregion
