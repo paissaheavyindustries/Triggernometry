@@ -8,6 +8,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Message box
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Programming)]
     [XmlRoot(ElementName = "MessageBox")]
     internal class ActionMessageBox : ActionBase
     {

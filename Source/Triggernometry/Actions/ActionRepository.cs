@@ -8,6 +8,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Remote repository operations
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Programming)]
     [XmlRoot(ElementName = "Repository")]
     public class ActionRepository : ActionBase
     {

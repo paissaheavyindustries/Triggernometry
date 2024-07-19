@@ -8,6 +8,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// OBS remote control operations
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.RemoteControl)]
     [XmlRoot(ElementName = "ObsControl")]
     internal class ActionObsControl : ActionBase
     {

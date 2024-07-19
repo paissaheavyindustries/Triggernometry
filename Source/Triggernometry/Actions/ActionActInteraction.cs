@@ -8,6 +8,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// ACT interaction operations
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.RemoteControl)]
     [XmlRoot(ElementName = "ActInteraction")]
     public class ActionActInteraction : ActionBase
     {

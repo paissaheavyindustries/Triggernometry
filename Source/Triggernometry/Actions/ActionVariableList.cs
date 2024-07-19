@@ -12,6 +12,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// List variable operations
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Variable)]
     [XmlRoot(ElementName = "VariableList")]
     public class ActionVariableList : ActionBase
     {

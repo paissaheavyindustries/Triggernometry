@@ -9,6 +9,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Send window message
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.RemoteControl)]
     [XmlRoot(ElementName = "WindowMessage")]
     public class ActionWindowMessage : ActionBase
     {

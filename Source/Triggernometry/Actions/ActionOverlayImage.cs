@@ -8,6 +8,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Image overlay operations
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Overlay)]
     [XmlRoot(ElementName = "OverlayImage")]
     internal class ActionOverlayImage : ActionBase
     {

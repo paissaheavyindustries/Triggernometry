@@ -8,6 +8,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Launch process
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Programming)]
     [XmlRoot(ElementName = "LaunchProcess")]
     internal class ActionLaunchProcess : ActionBase
     {

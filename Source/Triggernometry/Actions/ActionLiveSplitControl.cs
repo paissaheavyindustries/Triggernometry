@@ -8,6 +8,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// LiveSplit remote control operations
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.RemoteControl)]
     [XmlRoot(ElementName = "LiveSplitControl")]
     internal class ActionLiveSplitControl : ActionBase
     {

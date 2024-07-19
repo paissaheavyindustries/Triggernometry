@@ -12,6 +12,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// JSON remote request
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Networking)]
     [XmlRoot(ElementName = "JsonRequest")]
     internal class ActionJsonRequest : ActionBase
     {

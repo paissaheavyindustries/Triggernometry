@@ -10,6 +10,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Mouse operations
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Input)]
     [XmlRoot(ElementName = "Mouse")]
     internal class ActionMouse : ActionBase
     {

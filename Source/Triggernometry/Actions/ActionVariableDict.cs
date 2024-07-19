@@ -11,6 +11,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Dictionary variable operations
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Variable)]
     [XmlRoot(ElementName = "VariableDict")]
     public class ActionVariableDict : ActionBase
     {

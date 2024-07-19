@@ -8,6 +8,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Script execution
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Programming)]
     [XmlRoot(ElementName = "ExecuteScript")]
     internal class ActionExecuteScript : ActionBase
     {

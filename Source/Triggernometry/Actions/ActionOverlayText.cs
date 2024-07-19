@@ -9,6 +9,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Text overlay operations
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Overlay)]
     [XmlRoot(ElementName = "OverlayText")]
     internal class ActionOverlayText : ActionBase
     {

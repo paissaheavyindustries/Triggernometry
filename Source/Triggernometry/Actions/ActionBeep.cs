@@ -8,6 +8,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Beep
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Audio)]
     [XmlRoot(ElementName = "Beep")]
     internal class ActionBeep : ActionBase
     {

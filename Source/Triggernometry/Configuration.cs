@@ -155,11 +155,11 @@ namespace Triggernometry
                 bool temp = bool.Parse(value);
                 if (temp == true)
                 {
-                    SoundMethod = AudioRoutingMethodEnum.ACT;
+                    TtsMethod = AudioRoutingMethodEnum.ACT;
                 }
                 else
                 {
-                    SoundMethod = AudioRoutingMethodEnum.Triggernometry;
+                    TtsMethod = AudioRoutingMethodEnum.Triggernometry;
                 }
             }
         }

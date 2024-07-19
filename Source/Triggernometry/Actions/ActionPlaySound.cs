@@ -8,6 +8,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Sound playback
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Audio)]
     [XmlRoot(ElementName = "PlaySound")]
     public class ActionPlaySound : ActionBase
     {

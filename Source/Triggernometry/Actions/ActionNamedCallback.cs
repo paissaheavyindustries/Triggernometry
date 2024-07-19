@@ -7,6 +7,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Named callback invocation
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.RemoteControl)]
     [XmlRoot(ElementName = "NamedCallback")]
     internal class ActionNamedCallback : ActionBase
     {

@@ -1,22 +1,15 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SharpDX;
-using SharpDX.Direct2D1.Effects;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using Triggernometry.CustomControls;
-using static System.Windows.Forms.AxHost;
 using static Triggernometry.RealPlugin;
 
 namespace Triggernometry
@@ -54,6 +47,68 @@ namespace Triggernometry
     public abstract class ActionBase
     {
 
+        #region Classes and enums
+
+        /// <summary>
+        /// This class attribute determines the category in which the action belongs into.
+        /// The category in turn is used by the trigger action editor to assign it to the right menu.
+        /// </summary>
+        [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+        public class ActionCategory : Attribute
+        {
+
+            public enum CategoryTypeEnum
+            {
+                /// <summary>
+                /// Miscellaneous actions that don't really belong into any other group
+                /// </summary>
+                Miscellaneous,
+                /// <summary>
+                /// Audio actions (TTS, play sound, ..)
+                /// </summary>
+                Audio,
+                /// <summary>
+                /// Overlay actions (show image, show text, ..)
+                /// </summary>
+                Overlay,
+                /// <summary>
+                /// Communication actions (Discord webhook, JSON requests, ..)
+                /// </summary>
+                Networking,
+                /// <summary>
+                /// Variable actions (scalars, lists, ..)
+                /// </summary>
+                Variable,
+                /// <summary>
+                /// File actions (read file, ..)
+                /// </summary>
+                File,
+                /// <summary>
+                /// External application remote control actions (OBS, LiveSplit, ..)
+                /// </summary>
+                RemoteControl,
+                /// <summary>
+                /// Programming types (scripting, mutex, ..)
+                /// </summary>
+                Programming,
+                /// <summary>
+                /// Input types (keypress, mouse, ..)
+                /// </summary>
+                Input,
+            }
+
+            internal CategoryTypeEnum _categoryType;
+
+            public ActionCategory(CategoryTypeEnum categoryType = CategoryTypeEnum.Miscellaneous)
+            {
+                _categoryType = categoryType;
+            }
+
+        }
+
+        /// <summary>
+        /// This property attribute controls how the generic action property editor will treat and display a specific property
+        /// </summary>
         [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
         public class ActionAttribute : Attribute
         {
@@ -62,41 +117,54 @@ namespace Triggernometry
             {
                 None,
                 /// <summary>
-                /// For GUID type, refers to a trigger
+                /// For GUID type, means that this guid is a reference to a trigger
                 /// </summary>
                 TriggerReference,
                 /// <summary>
-                /// For GUID type, refers to a folder
+                /// For GUID type, means that this guid is a reference to a folder
                 /// </summary>
                 FolderReference,
                 /// <summary>
-                /// For GUID type, refers to a remote repository
+                /// For GUID type, means that this guid is a reference to a remote repository
                 /// </summary>
                 RepoReference,
                 /// <summary>
-                /// For string type, refers to a generic file
+                /// For string type, means that this is a path to a generic file
                 /// </summary>
                 FileSelector,
                 /// <summary>
-                /// For string type, refers to an executable
+                /// For string type, means that this is a path to an executable
                 /// </summary>
                 ExecutableSelector,
                 /// <summary>
-                /// For string type, refers to an audio file
+                /// For string type, means that this is a path to an audio file
                 /// </summary>
                 AudioSelector,
                 /// <summary>
-                /// For string type, refers to an image file
+                /// For string type, means that this is a path to an image file
                 /// </summary>
                 ImageSelector,
                 /// <summary>
-                /// For string type, keypress recorder should be provided
+                /// For string type, means that a keypress recorder should be provided
                 /// </summary>
                 KeypressRecorder
             }
 
+            /// <summary>
+            /// Display order number (smallest first)
+            /// </summary>
             internal int _ordernum;
+
+            /// <summary>
+            /// Type hint for the generic editor, can be different from the underlying datatype.
+            /// For example, underlying data might be string, but we want to have an editor for numeric expression.
+            /// If null, type is taken from underlying datatype.
+            /// </summary>
             internal Type _typehint;
+
+            /// <summary>
+            /// Setting that applies special meaning to properties of specific types, namely System.Guid and System.String
+            /// </summary>
             internal SpecialTypeEnum _specialtype;
 
             public ActionAttribute(int ordernum = 0, Type typehint = null, SpecialTypeEnum specialtype = SpecialTypeEnum.None)
@@ -108,6 +176,9 @@ namespace Triggernometry
 
         }
 
+        /// <summary>
+        /// Helper class for ComboBox/CheckedListBox for binding Enum values to a specific item
+        /// </summary>
         public class EnumBinding
         {
 
@@ -121,14 +192,6 @@ namespace Triggernometry
             }
 
         }
-
-        internal Guid Id { get; set; } = Guid.NewGuid();
-        internal Trigger ParentTrigger { get; set; } = null;
-
-        [XmlAttribute]
-        public int OrderNumber { get; set; } = 1;
-
-        #region Action instance
 
         /// <summary>
         /// When an action is queued for execution, it's wrapped in an ActionInstance that carries all the relevant data for execution.
@@ -176,7 +239,13 @@ namespace Triggernometry
 
         #endregion
 
-        #region Description and information
+        #region Generic properties shared by all actions
+
+        internal Guid Id { get; set; } = Guid.NewGuid();
+        internal Trigger ParentTrigger { get; set; } = null;
+
+        [XmlAttribute]
+        public int OrderNumber { get; set; } = 1;
 
         private bool _DescriptionOverride { get; set; } = false;
         [XmlAttribute]
@@ -515,7 +584,7 @@ namespace Triggernometry
 
         #endregion
 
-        #region Action-specific properties
+        #region Action-specific property management
 
         /// <summary>
         /// Builds a list of all properties on the action that have ActionAttribute set to them
@@ -627,6 +696,40 @@ namespace Triggernometry
             pi.SetValue(this, newval);
         }
 
+        private void BrowseBtn_Click(object sender, EventArgs e)
+        {
+            Button b = (Button)sender;
+            (PropertyInfo prop, ActionAttribute attr, ExpressionTextBox target) prop = ((PropertyInfo prop, ActionAttribute attr, ExpressionTextBox target))b.Tag;
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                string curvalue = (string)prop.prop.GetValue(this);
+                ofd.FileName = curvalue;
+                switch (prop.attr._specialtype)
+                {
+                    case ActionAttribute.SpecialTypeEnum.FileSelector:
+                        ofd.Title = "Select file"; // todo i18n
+                        ofd.Filter = "All files (*.*)|*.*";
+                        break;
+                    case ActionAttribute.SpecialTypeEnum.ExecutableSelector:
+                        ofd.Title = "Select executable"; // todo i18n
+                        ofd.Filter = "Executables (*.exe)|*.exe|All files (*.*)|*.*";
+                        break;
+                    case ActionAttribute.SpecialTypeEnum.AudioSelector:
+                        ofd.Title = "Select audio file"; // todo i18n
+                        ofd.Filter = "Sound files (*.wav, *.mp3)|*.wav;*.mp3|All files (*.*)|*.*";
+                        break;
+                    case ActionAttribute.SpecialTypeEnum.ImageSelector:
+                        ofd.Title = "Select image file"; // todo i18n
+                        ofd.Filter = "Image files (*.gif, *.bmp, *.png, *.jpg, *.jpeg)|*.gif;*.bmp;*.png;*.jpg;*.jpeg|All files (*.*)|*.*";
+                        break;
+                }
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    prop.target.Text = ofd.FileName;
+                }
+            }
+        }
+
         private Control GetGenericPropertyEditor()
         {
             var props = GetProperties();
@@ -644,29 +747,39 @@ namespace Triggernometry
                     switch (prop.attr._specialtype)
                     {
                         case ActionAttribute.SpecialTypeEnum.FileSelector:
-                            // todo show generic file selector
-                            break;
                         case ActionAttribute.SpecialTypeEnum.ExecutableSelector:
-                            // todo show executable selector
-                            break;
                         case ActionAttribute.SpecialTypeEnum.AudioSelector:
-                            // todo show audio selector
-                            break;
-                        case ActionAttribute.SpecialTypeEnum.ImageSelector:
-                            // todo show image selector
-                            break;
+                        case ActionAttribute.SpecialTypeEnum.ImageSelector:                        
+                            {
+                                // show file selector
+                                ExpressionTextBox etb = new ExpressionTextBox();
+                                etb.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                                etb.Expression = (string)prop.prop.GetValue(this);
+                                etb.TextChanged += Etb_TextChanged;
+                                etb.Tag = prop.prop;
+                                Button browseBtn = new Button();
+                                browseBtn.Dock = DockStyle.Fill;
+                                browseBtn.Click += BrowseBtn_Click;
+                                browseBtn.Tag = (prop: prop.prop, attr: prop.attr, target: etb);
+                                propeditors.Add((prop: prop.prop, attr: prop.attr, ctrl: new object[] { etb, browseBtn }));
+                                break;
+                            }
                         case ActionAttribute.SpecialTypeEnum.KeypressRecorder:
-                            // todo show keypress recorder
-                            break;
+                            {
+                                // todo show keypress recorder
+                                break;
+                            }
                         default:
-                            // show string expression field
-                            ExpressionTextBox etb = new ExpressionTextBox();
-                            etb.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
-                            etb.Expression = (string)prop.prop.GetValue(this);
-                            etb.TextChanged += Etb_TextChanged;
-                            etb.Tag = prop.prop;
-                            propeditors.Add((prop: prop.prop, attr: prop.attr, ctrl: etb));
-                            break;
+                            {
+                                // show string expression field
+                                ExpressionTextBox etb = new ExpressionTextBox();
+                                etb.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
+                                etb.Expression = (string)prop.prop.GetValue(this);
+                                etb.TextChanged += Etb_TextChanged;
+                                etb.Tag = prop.prop;
+                                propeditors.Add((prop: prop.prop, attr: prop.attr, ctrl: etb));
+                                break;
+                            }
                     }
                 }
                 else if (prop.attr._typehint == typeof(int) || prop.attr._typehint == typeof(uint) || prop.attr._typehint == typeof(float))

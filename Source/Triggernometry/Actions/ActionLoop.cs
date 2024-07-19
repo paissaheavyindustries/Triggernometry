@@ -10,6 +10,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Loop
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Programming)]
     [XmlRoot(ElementName = "Loop")]
     internal class ActionLoop : ActionBase
     {

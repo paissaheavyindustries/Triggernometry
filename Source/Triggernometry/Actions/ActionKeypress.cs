@@ -11,6 +11,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Keypress operations
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Input)]
     [XmlRoot(ElementName = "Keypress")]
     internal class ActionKeypress : ActionBase
     {

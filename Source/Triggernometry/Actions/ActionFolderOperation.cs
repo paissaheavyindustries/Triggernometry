@@ -8,6 +8,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Folder operations
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Programming)]
     [XmlRoot(ElementName = "FolderOperation")]
     internal class ActionFolderOperation : ActionBase
     {

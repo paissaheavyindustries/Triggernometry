@@ -8,6 +8,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Message logging
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Programming)]
     [XmlRoot(ElementName = "LogMessage")]
     internal class ActionLogMessage : ActionBase
     {

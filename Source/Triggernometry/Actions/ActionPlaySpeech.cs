@@ -8,6 +8,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Text-to-speech
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Audio)]
     [XmlRoot(ElementName = "PlaySpeech")]
     public class ActionPlaySpeech : ActionBase
     {

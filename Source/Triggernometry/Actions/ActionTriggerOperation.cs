@@ -9,6 +9,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Trigger operations
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Programming)]
     [XmlRoot(ElementName = "TriggerOperation")]
     public class ActionTriggerOperation : ActionBase
     {

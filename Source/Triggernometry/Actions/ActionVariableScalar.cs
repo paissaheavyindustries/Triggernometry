@@ -13,6 +13,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// Scalar variable operations
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.Variable)]
     [XmlRoot(ElementName = "VariableScalar")]
     public class ActionVariableScalar : ActionBase
     {

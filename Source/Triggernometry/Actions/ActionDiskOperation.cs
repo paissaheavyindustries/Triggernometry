@@ -14,6 +14,7 @@ namespace Triggernometry.Actions
     /// <summary>
     /// File system operations
     /// </summary>
+    [ActionCategory(ActionCategory.CategoryTypeEnum.File)]
     [XmlRoot(ElementName = "DiskOperation")]
     internal class ActionDiskOperation : ActionBase
     {
