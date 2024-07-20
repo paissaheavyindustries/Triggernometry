@@ -307,6 +307,9 @@ namespace Triggernometry
         public delegate PluginWrapper InstanceDelegate(string ActPluginName, string ActPluginType);
         public delegate void ACTEncounterLogDelegate(string message);
 
+        internal Dictionary<string, DateTime> TtsRepetitions = new Dictionary<string, DateTime>();
+        internal Dictionary<string, DateTime> SoundRepetitions = new Dictionary<string, DateTime>();
+
         internal Scarborough.Scarborough sc;
         private Queue<LogEvent> EventQueue;
         private ManualResetEvent QueueWakeupEvent;
@@ -1647,11 +1650,25 @@ namespace Triggernometry
         internal void TtsPlaybackAct(Context ctx, Action a)
         {
             string text = TtsPlaybackGetTextFromAction(ctx, a);
+            lock (TtsRepetitions)
+            {
+                if (RegisterRepetition(TtsRepetitions, cfg.TtsRepCooldown, text) == false)
+                {
+                    return;
+                }
+            }
             TtsPlaybackHook(text);
         }
 
         internal void SoundPlaybackAct(Context ctx, Action a, string filename)
         {
+            lock (SoundRepetitions)
+            {
+                if (RegisterRepetition(SoundRepetitions, cfg.SoundRepCooldown, filename) == false)
+                {
+                    return;
+                }
+            }
             double vol = ctx.EvaluateNumericExpression(a.ActionContextLogger, ctx, a._PlaySoundVolumeExpression);
             vol *= (ctx.plug.cfg.SfxVolumeAdjustment / 100.0);
             if (vol < 0.0)
@@ -1678,8 +1695,15 @@ namespace Triggernometry
         internal void TtsPlaybackSelf(Context ctx, Action a)
         {
             string text = TtsPlaybackGetTextFromAction(ctx, a);
+            lock (TtsRepetitions)
+            {
+                if (RegisterRepetition(TtsRepetitions, cfg.TtsRepCooldown, text) == false)
+                {
+                    return;
+                }
+            }
             SpeechSynthesizer mytts;
-            if (a._UseTTSExclusive == true)
+            if (/*a._UseTTSExclusive == */true)
             {
                 mytts = new SpeechSynthesizer();
             }
@@ -1708,11 +1732,18 @@ namespace Triggernometry
             }
             mytts.Volume = (int)Math.Ceiling(vol);
             mytts.Rate = (int)Math.Ceiling(rate);
-            mytts.Speak(text);
+            mytts.SpeakAsync(text);
         }
 
         internal void SoundPlaybackSelf(Context ctx, Action a, string filename)
         {
+            lock (SoundRepetitions)
+            {
+                if (RegisterRepetition(SoundRepetitions, cfg.SoundRepCooldown, filename) == false)
+                {
+                    return;
+                }
+            }
             WindowsMediaPlayer mywmp;
             if (a._PlaySoundExclusive == true)
             {
@@ -1751,6 +1782,13 @@ namespace Triggernometry
                 return;
             }
             string text = TtsPlaybackGetTextFromAction(ctx, a);
+            lock (TtsRepetitions)
+            {
+                if (RegisterRepetition(TtsRepetitions, cfg.TtsRepCooldown, text) == false)
+                {
+                    return;
+                }
+            }
             string args = cfg.TtsExternalAppArgs ?? "";
             args = args.Replace("$source", text);
             Process.Start(proc, args);
@@ -1758,6 +1796,13 @@ namespace Triggernometry
 
         internal void SoundPlaybackExternal(Context ctx, Action a, string filename)
         {
+            lock (SoundRepetitions)
+            {
+                if (RegisterRepetition(SoundRepetitions, cfg.SoundRepCooldown, filename) == false)
+                {
+                    return;
+                }
+            }
             string proc = (cfg.SoundExternalApp ?? "").Trim();
             if (proc.Length == 0)
             {
@@ -1766,6 +1811,29 @@ namespace Triggernometry
             string args = cfg.SoundExternalAppArgs ?? "";
             args = args.Replace("$source", filename);
             Process.Start(proc, args);
+        }
+
+        internal bool RegisterRepetition(Dictionary<string, DateTime> repstore, int cooldown, string item)
+        {
+            if (cooldown == 0)
+            {
+                return true;
+            }
+            if (repstore.TryGetValue(item, out DateTime last) == true)
+            {
+                if (last.AddMilliseconds(cooldown) > DateTime.Now)
+                {
+                    return false;
+                }
+            }
+            repstore[item] = DateTime.Now;
+            // clean old entries while we're here
+            var olds = (from rx in repstore where rx.Value.AddMilliseconds(cooldown) < DateTime.Now select rx.Key).ToList();
+            foreach (var old in olds)
+            {
+                repstore.Remove(old);
+            }
+            return true;
         }
 
         internal void TtsPlaybackSmart(Context ctx, Action a)

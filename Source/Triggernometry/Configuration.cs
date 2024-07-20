@@ -165,6 +165,12 @@ namespace Triggernometry
         }
 
         [XmlAttribute]
+        public int SoundRepCooldown { get; set; } = 500;
+
+        [XmlAttribute]
+        public int TtsRepCooldown { get; set; } = 500;
+
+        [XmlAttribute]
         public AudioRoutingMethodEnum SoundMethod { get; set; } = AudioRoutingMethodEnum.Triggernometry;
 
         [XmlAttribute]

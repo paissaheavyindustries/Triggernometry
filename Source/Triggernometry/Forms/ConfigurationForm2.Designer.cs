@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigurationForm2));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pnlMenu = new System.Windows.Forms.Panel();
             this.btnMisc = new Triggernometry.CustomControls.MenuButton();
             this.tbcMain = new System.Windows.Forms.TabControl();
@@ -77,6 +77,9 @@
             this.tabAudio = new System.Windows.Forms.TabPage();
             this.panel22 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblTtsRepV = new System.Windows.Forms.Label();
+            this.trbTtsRepetition = new System.Windows.Forms.TrackBar();
+            this.lblTtsRepetition = new System.Windows.Forms.Label();
             this.txtTtsPathArgs = new System.Windows.Forms.TextBox();
             this.lblTtsPathArgs = new System.Windows.Forms.Label();
             this.btnTtsPath = new System.Windows.Forms.Button();
@@ -93,6 +96,9 @@
             this.prettyCaption2 = new Triggernometry.CustomControls.PrettyCaption();
             this.panel4 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblSoundRepV = new System.Windows.Forms.Label();
+            this.trbSoundRepetition = new System.Windows.Forms.TrackBar();
+            this.lblSoundRepetition = new System.Windows.Forms.Label();
             this.txtSoundPathArgs = new System.Windows.Forms.TextBox();
             this.lblSoundPathArgs = new System.Windows.Forms.Label();
             this.panel30 = new System.Windows.Forms.Panel();
@@ -328,10 +334,12 @@
             this.tabAudio.SuspendLayout();
             this.panel22.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trbTtsRepetition)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trbTtsVolume)).BeginInit();
             this.panel21.SuspendLayout();
             this.panel4.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trbSoundRepetition)).BeginInit();
             this.panel30.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trbSoundVolume)).BeginInit();
             this.tabLogging.SuspendLayout();
@@ -1016,10 +1024,10 @@
             this.panel22.AutoSize = true;
             this.panel22.Controls.Add(this.tableLayoutPanel3);
             this.panel22.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel22.Location = new System.Drawing.Point(0, 249);
+            this.panel22.Location = new System.Drawing.Point(0, 277);
             this.panel22.Name = "panel22";
             this.panel22.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
-            this.panel22.Size = new System.Drawing.Size(640, 241);
+            this.panel22.Size = new System.Drawing.Size(623, 269);
             this.panel22.TabIndex = 12;
             // 
             // tableLayoutPanel3
@@ -1028,37 +1036,84 @@
             this.tableLayoutPanel3.ColumnCount = 3;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel3.Controls.Add(this.txtTtsPathArgs, 1, 4);
-            this.tableLayoutPanel3.Controls.Add(this.lblTtsPathArgs, 0, 4);
-            this.tableLayoutPanel3.Controls.Add(this.btnTtsPath, 2, 3);
-            this.tableLayoutPanel3.Controls.Add(this.txtTtsPath, 1, 3);
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel3.Controls.Add(this.lblTtsRepV, 2, 2);
+            this.tableLayoutPanel3.Controls.Add(this.trbTtsRepetition, 1, 2);
+            this.tableLayoutPanel3.Controls.Add(this.lblTtsRepetition, 0, 2);
+            this.tableLayoutPanel3.Controls.Add(this.txtTtsPathArgs, 1, 5);
+            this.tableLayoutPanel3.Controls.Add(this.lblTtsPathArgs, 0, 5);
+            this.tableLayoutPanel3.Controls.Add(this.btnTtsPath, 2, 4);
+            this.tableLayoutPanel3.Controls.Add(this.txtTtsPath, 1, 4);
             this.tableLayoutPanel3.Controls.Add(this.cbxTtsMethod, 1, 0);
-            this.tableLayoutPanel3.Controls.Add(this.lblTtsPath, 0, 3);
+            this.tableLayoutPanel3.Controls.Add(this.lblTtsPath, 0, 4);
             this.tableLayoutPanel3.Controls.Add(this.lblTtsMethod, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.lblTtsVolP, 2, 1);
             this.tableLayoutPanel3.Controls.Add(this.trbTtsVolume, 1, 1);
             this.tableLayoutPanel3.Controls.Add(this.lblTtsVolume, 0, 1);
-            this.tableLayoutPanel3.Controls.Add(this.panel21, 1, 2);
+            this.tableLayoutPanel3.Controls.Add(this.panel21, 1, 3);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 8);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 5;
+            this.tableLayoutPanel3.RowCount = 6;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(640, 233);
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(623, 261);
             this.tableLayoutPanel3.TabIndex = 1;
+            // 
+            // lblTtsRepV
+            // 
+            this.lblTtsRepV.AutoEllipsis = true;
+            this.lblTtsRepV.AutoSize = true;
+            this.lblTtsRepV.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTtsRepV.Location = new System.Drawing.Point(566, 55);
+            this.lblTtsRepV.Name = "lblTtsRepV";
+            this.lblTtsRepV.Size = new System.Drawing.Size(54, 28);
+            this.lblTtsRepV.TabIndex = 33;
+            this.lblTtsRepV.Text = "500 ms";
+            this.lblTtsRepV.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // trbTtsRepetition
+            // 
+            this.trbTtsRepetition.AutoSize = false;
+            this.trbTtsRepetition.Dock = System.Windows.Forms.DockStyle.Top;
+            this.trbTtsRepetition.LargeChange = 250;
+            this.trbTtsRepetition.Location = new System.Drawing.Point(159, 58);
+            this.trbTtsRepetition.Maximum = 3000;
+            this.trbTtsRepetition.Name = "trbTtsRepetition";
+            this.trbTtsRepetition.Size = new System.Drawing.Size(401, 22);
+            this.trbTtsRepetition.SmallChange = 100;
+            this.trbTtsRepetition.TabIndex = 32;
+            this.trbTtsRepetition.TabStop = false;
+            this.trbTtsRepetition.TickFrequency = 100;
+            this.trbTtsRepetition.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.trbTtsRepetition.Value = 500;
+            this.trbTtsRepetition.Scroll += new System.EventHandler(this.trbTtsRepetition_Scroll);
+            this.trbTtsRepetition.ValueChanged += new System.EventHandler(this.trbTtsRepetition_ValueChanged);
+            // 
+            // lblTtsRepetition
+            // 
+            this.lblTtsRepetition.AutoEllipsis = true;
+            this.lblTtsRepetition.AutoSize = true;
+            this.lblTtsRepetition.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTtsRepetition.Location = new System.Drawing.Point(3, 55);
+            this.lblTtsRepetition.MinimumSize = new System.Drawing.Size(150, 0);
+            this.lblTtsRepetition.Name = "lblTtsRepetition";
+            this.lblTtsRepetition.Size = new System.Drawing.Size(150, 28);
+            this.lblTtsRepetition.TabIndex = 31;
+            this.lblTtsRepetition.Text = "Repetition cooldown";
+            this.lblTtsRepetition.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // txtTtsPathArgs
             // 
             this.tableLayoutPanel3.SetColumnSpan(this.txtTtsPathArgs, 2);
             this.txtTtsPathArgs.Dock = System.Windows.Forms.DockStyle.Top;
-            this.txtTtsPathArgs.Location = new System.Drawing.Point(159, 210);
+            this.txtTtsPathArgs.Location = new System.Drawing.Point(159, 238);
             this.txtTtsPathArgs.Name = "txtTtsPathArgs";
-            this.txtTtsPathArgs.Size = new System.Drawing.Size(478, 20);
+            this.txtTtsPathArgs.Size = new System.Drawing.Size(461, 20);
             this.txtTtsPathArgs.TabIndex = 29;
             // 
             // lblTtsPathArgs
@@ -1066,7 +1121,7 @@
             this.lblTtsPathArgs.AutoEllipsis = true;
             this.lblTtsPathArgs.AutoSize = true;
             this.lblTtsPathArgs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTtsPathArgs.Location = new System.Drawing.Point(3, 207);
+            this.lblTtsPathArgs.Location = new System.Drawing.Point(3, 235);
             this.lblTtsPathArgs.MinimumSize = new System.Drawing.Size(150, 0);
             this.lblTtsPathArgs.Name = "lblTtsPathArgs";
             this.lblTtsPathArgs.Size = new System.Drawing.Size(150, 26);
@@ -1078,10 +1133,10 @@
             // 
             this.btnTtsPath.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnTtsPath.Image = ((System.Drawing.Image)(resources.GetObject("btnTtsPath.Image")));
-            this.btnTtsPath.Location = new System.Drawing.Point(590, 181);
+            this.btnTtsPath.Location = new System.Drawing.Point(563, 209);
             this.btnTtsPath.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnTtsPath.Name = "btnTtsPath";
-            this.btnTtsPath.Size = new System.Drawing.Size(47, 26);
+            this.btnTtsPath.Size = new System.Drawing.Size(57, 26);
             this.btnTtsPath.TabIndex = 23;
             this.btnTtsPath.TabStop = false;
             this.btnTtsPath.UseVisualStyleBackColor = true;
@@ -1089,9 +1144,9 @@
             // txtTtsPath
             // 
             this.txtTtsPath.Dock = System.Windows.Forms.DockStyle.Top;
-            this.txtTtsPath.Location = new System.Drawing.Point(159, 184);
+            this.txtTtsPath.Location = new System.Drawing.Point(159, 212);
             this.txtTtsPath.Name = "txtTtsPath";
-            this.txtTtsPath.Size = new System.Drawing.Size(428, 20);
+            this.txtTtsPath.Size = new System.Drawing.Size(401, 20);
             this.txtTtsPath.TabIndex = 22;
             // 
             // cbxTtsMethod
@@ -1107,7 +1162,7 @@
             "External application"});
             this.cbxTtsMethod.Location = new System.Drawing.Point(159, 3);
             this.cbxTtsMethod.Name = "cbxTtsMethod";
-            this.cbxTtsMethod.Size = new System.Drawing.Size(478, 21);
+            this.cbxTtsMethod.Size = new System.Drawing.Size(461, 21);
             this.cbxTtsMethod.TabIndex = 12;
             this.cbxTtsMethod.SelectedIndexChanged += new System.EventHandler(this.cbxTtsMethod_SelectedIndexChanged);
             // 
@@ -1116,7 +1171,7 @@
             this.lblTtsPath.AutoEllipsis = true;
             this.lblTtsPath.AutoSize = true;
             this.lblTtsPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTtsPath.Location = new System.Drawing.Point(3, 181);
+            this.lblTtsPath.Location = new System.Drawing.Point(3, 209);
             this.lblTtsPath.MinimumSize = new System.Drawing.Size(150, 0);
             this.lblTtsPath.Name = "lblTtsPath";
             this.lblTtsPath.Size = new System.Drawing.Size(150, 26);
@@ -1142,9 +1197,9 @@
             this.lblTtsVolP.AutoEllipsis = true;
             this.lblTtsVolP.AutoSize = true;
             this.lblTtsVolP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTtsVolP.Location = new System.Drawing.Point(593, 27);
+            this.lblTtsVolP.Location = new System.Drawing.Point(566, 27);
             this.lblTtsVolP.Name = "lblTtsVolP";
-            this.lblTtsVolP.Size = new System.Drawing.Size(44, 28);
+            this.lblTtsVolP.Size = new System.Drawing.Size(54, 28);
             this.lblTtsVolP.TabIndex = 7;
             this.lblTtsVolP.Text = "100 %";
             this.lblTtsVolP.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1156,7 +1211,7 @@
             this.trbTtsVolume.Location = new System.Drawing.Point(159, 30);
             this.trbTtsVolume.Maximum = 100;
             this.trbTtsVolume.Name = "trbTtsVolume";
-            this.trbTtsVolume.Size = new System.Drawing.Size(428, 22);
+            this.trbTtsVolume.Size = new System.Drawing.Size(401, 22);
             this.trbTtsVolume.TabIndex = 6;
             this.trbTtsVolume.TabStop = false;
             this.trbTtsVolume.TickStyle = System.Windows.Forms.TickStyle.None;
@@ -1184,9 +1239,9 @@
             this.panel21.Controls.Add(this.lblExternalTtsWarn);
             this.panel21.Controls.Add(this.lblActTtsWarn);
             this.panel21.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel21.Location = new System.Drawing.Point(159, 58);
+            this.panel21.Location = new System.Drawing.Point(159, 86);
             this.panel21.Name = "panel21";
-            this.panel21.Size = new System.Drawing.Size(478, 120);
+            this.panel21.Size = new System.Drawing.Size(461, 120);
             this.panel21.TabIndex = 30;
             // 
             // lblExternalTtsWarn
@@ -1198,7 +1253,7 @@
             this.lblExternalTtsWarn.Location = new System.Drawing.Point(0, 60);
             this.lblExternalTtsWarn.Name = "lblExternalTtsWarn";
             this.lblExternalTtsWarn.Padding = new System.Windows.Forms.Padding(8);
-            this.lblExternalTtsWarn.Size = new System.Drawing.Size(478, 60);
+            this.lblExternalTtsWarn.Size = new System.Drawing.Size(461, 60);
             this.lblExternalTtsWarn.TabIndex = 30;
             this.lblExternalTtsWarn.Text = "This option will make Triggernometry launch an external application. Use this opt" +
     "ion with caution, and only if you understand what you are doing, as this may exp" +
@@ -1214,7 +1269,7 @@
             this.lblActTtsWarn.Location = new System.Drawing.Point(0, 0);
             this.lblActTtsWarn.Name = "lblActTtsWarn";
             this.lblActTtsWarn.Padding = new System.Windows.Forms.Padding(8);
-            this.lblActTtsWarn.Size = new System.Drawing.Size(478, 60);
+            this.lblActTtsWarn.Size = new System.Drawing.Size(461, 60);
             this.lblActTtsWarn.TabIndex = 29;
             this.lblActTtsWarn.Text = "Using ACT for text-to-speech will cause the rate and volume options on text-to-sp" +
     "eech actions to be ignored.";
@@ -1229,9 +1284,9 @@
             this.prettyCaption2.Collapsee = null;
             this.prettyCaption2.Collapsible = false;
             this.prettyCaption2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.prettyCaption2.Location = new System.Drawing.Point(0, 219);
+            this.prettyCaption2.Location = new System.Drawing.Point(0, 247);
             this.prettyCaption2.Name = "prettyCaption2";
-            this.prettyCaption2.Size = new System.Drawing.Size(640, 30);
+            this.prettyCaption2.Size = new System.Drawing.Size(623, 30);
             this.prettyCaption2.TabIndex = 11;
             // 
             // panel4
@@ -1242,7 +1297,7 @@
             this.panel4.Location = new System.Drawing.Point(0, 30);
             this.panel4.Name = "panel4";
             this.panel4.Padding = new System.Windows.Forms.Padding(0, 8, 0, 8);
-            this.panel4.Size = new System.Drawing.Size(640, 189);
+            this.panel4.Size = new System.Drawing.Size(623, 217);
             this.panel4.TabIndex = 10;
             // 
             // tableLayoutPanel1
@@ -1251,37 +1306,84 @@
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.txtSoundPathArgs, 1, 4);
-            this.tableLayoutPanel1.Controls.Add(this.lblSoundPathArgs, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.panel30, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.btnSoundPath, 2, 3);
-            this.tableLayoutPanel1.Controls.Add(this.lblSoundPath, 0, 3);
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel1.Controls.Add(this.lblSoundRepV, 2, 2);
+            this.tableLayoutPanel1.Controls.Add(this.trbSoundRepetition, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.lblSoundRepetition, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.txtSoundPathArgs, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.lblSoundPathArgs, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.panel30, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.btnSoundPath, 2, 4);
+            this.tableLayoutPanel1.Controls.Add(this.lblSoundPath, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.lblSoundMethod, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblSoundVolP, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.trbSoundVolume, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.lblSoundVolume, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.cbxSoundMethod, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.txtSoundPath, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.txtSoundPath, 1, 4);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 8);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
+            this.tableLayoutPanel1.RowCount = 6;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(640, 173);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(623, 201);
             this.tableLayoutPanel1.TabIndex = 1;
+            // 
+            // lblSoundRepV
+            // 
+            this.lblSoundRepV.AutoEllipsis = true;
+            this.lblSoundRepV.AutoSize = true;
+            this.lblSoundRepV.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblSoundRepV.Location = new System.Drawing.Point(566, 55);
+            this.lblSoundRepV.Name = "lblSoundRepV";
+            this.lblSoundRepV.Size = new System.Drawing.Size(54, 28);
+            this.lblSoundRepV.TabIndex = 31;
+            this.lblSoundRepV.Text = "500 ms";
+            this.lblSoundRepV.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // trbSoundRepetition
+            // 
+            this.trbSoundRepetition.AutoSize = false;
+            this.trbSoundRepetition.Dock = System.Windows.Forms.DockStyle.Top;
+            this.trbSoundRepetition.LargeChange = 250;
+            this.trbSoundRepetition.Location = new System.Drawing.Point(159, 58);
+            this.trbSoundRepetition.Maximum = 3000;
+            this.trbSoundRepetition.Name = "trbSoundRepetition";
+            this.trbSoundRepetition.Size = new System.Drawing.Size(401, 22);
+            this.trbSoundRepetition.SmallChange = 100;
+            this.trbSoundRepetition.TabIndex = 30;
+            this.trbSoundRepetition.TabStop = false;
+            this.trbSoundRepetition.TickFrequency = 100;
+            this.trbSoundRepetition.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.trbSoundRepetition.Value = 500;
+            this.trbSoundRepetition.Scroll += new System.EventHandler(this.trbSoundRepetition_Scroll);
+            this.trbSoundRepetition.ValueChanged += new System.EventHandler(this.trbSoundRepetition_ValueChanged);
+            // 
+            // lblSoundRepetition
+            // 
+            this.lblSoundRepetition.AutoEllipsis = true;
+            this.lblSoundRepetition.AutoSize = true;
+            this.lblSoundRepetition.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblSoundRepetition.Location = new System.Drawing.Point(3, 55);
+            this.lblSoundRepetition.MinimumSize = new System.Drawing.Size(150, 0);
+            this.lblSoundRepetition.Name = "lblSoundRepetition";
+            this.lblSoundRepetition.Size = new System.Drawing.Size(150, 28);
+            this.lblSoundRepetition.TabIndex = 29;
+            this.lblSoundRepetition.Text = "Repetition cooldown";
+            this.lblSoundRepetition.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // txtSoundPathArgs
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.txtSoundPathArgs, 2);
             this.txtSoundPathArgs.Dock = System.Windows.Forms.DockStyle.Top;
-            this.txtSoundPathArgs.Location = new System.Drawing.Point(159, 150);
+            this.txtSoundPathArgs.Location = new System.Drawing.Point(159, 178);
             this.txtSoundPathArgs.Name = "txtSoundPathArgs";
-            this.txtSoundPathArgs.Size = new System.Drawing.Size(478, 20);
+            this.txtSoundPathArgs.Size = new System.Drawing.Size(461, 20);
             this.txtSoundPathArgs.TabIndex = 28;
             // 
             // lblSoundPathArgs
@@ -1289,7 +1391,7 @@
             this.lblSoundPathArgs.AutoEllipsis = true;
             this.lblSoundPathArgs.AutoSize = true;
             this.lblSoundPathArgs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblSoundPathArgs.Location = new System.Drawing.Point(3, 147);
+            this.lblSoundPathArgs.Location = new System.Drawing.Point(3, 175);
             this.lblSoundPathArgs.MinimumSize = new System.Drawing.Size(150, 0);
             this.lblSoundPathArgs.Name = "lblSoundPathArgs";
             this.lblSoundPathArgs.Size = new System.Drawing.Size(150, 26);
@@ -1303,9 +1405,9 @@
             this.tableLayoutPanel1.SetColumnSpan(this.panel30, 2);
             this.panel30.Controls.Add(this.lblExternalSoundWarn);
             this.panel30.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel30.Location = new System.Drawing.Point(159, 58);
+            this.panel30.Location = new System.Drawing.Point(159, 86);
             this.panel30.Name = "panel30";
-            this.panel30.Size = new System.Drawing.Size(478, 60);
+            this.panel30.Size = new System.Drawing.Size(461, 60);
             this.panel30.TabIndex = 26;
             // 
             // lblExternalSoundWarn
@@ -1317,7 +1419,7 @@
             this.lblExternalSoundWarn.Location = new System.Drawing.Point(0, 0);
             this.lblExternalSoundWarn.Name = "lblExternalSoundWarn";
             this.lblExternalSoundWarn.Padding = new System.Windows.Forms.Padding(8);
-            this.lblExternalSoundWarn.Size = new System.Drawing.Size(478, 60);
+            this.lblExternalSoundWarn.Size = new System.Drawing.Size(461, 60);
             this.lblExternalSoundWarn.TabIndex = 28;
             this.lblExternalSoundWarn.Text = "This option will make Triggernometry launch an external application. Use this opt" +
     "ion with caution, and only if you understand what you are doing, as this may exp" +
@@ -1328,10 +1430,10 @@
             // 
             this.btnSoundPath.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSoundPath.Image = ((System.Drawing.Image)(resources.GetObject("btnSoundPath.Image")));
-            this.btnSoundPath.Location = new System.Drawing.Point(590, 121);
+            this.btnSoundPath.Location = new System.Drawing.Point(563, 149);
             this.btnSoundPath.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.btnSoundPath.Name = "btnSoundPath";
-            this.btnSoundPath.Size = new System.Drawing.Size(47, 26);
+            this.btnSoundPath.Size = new System.Drawing.Size(57, 26);
             this.btnSoundPath.TabIndex = 20;
             this.btnSoundPath.TabStop = false;
             this.btnSoundPath.UseVisualStyleBackColor = true;
@@ -1341,7 +1443,7 @@
             this.lblSoundPath.AutoEllipsis = true;
             this.lblSoundPath.AutoSize = true;
             this.lblSoundPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblSoundPath.Location = new System.Drawing.Point(3, 121);
+            this.lblSoundPath.Location = new System.Drawing.Point(3, 149);
             this.lblSoundPath.MinimumSize = new System.Drawing.Size(150, 0);
             this.lblSoundPath.Name = "lblSoundPath";
             this.lblSoundPath.Size = new System.Drawing.Size(150, 26);
@@ -1367,9 +1469,9 @@
             this.lblSoundVolP.AutoEllipsis = true;
             this.lblSoundVolP.AutoSize = true;
             this.lblSoundVolP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblSoundVolP.Location = new System.Drawing.Point(593, 27);
+            this.lblSoundVolP.Location = new System.Drawing.Point(566, 27);
             this.lblSoundVolP.Name = "lblSoundVolP";
-            this.lblSoundVolP.Size = new System.Drawing.Size(44, 28);
+            this.lblSoundVolP.Size = new System.Drawing.Size(54, 28);
             this.lblSoundVolP.TabIndex = 7;
             this.lblSoundVolP.Text = "100 %";
             this.lblSoundVolP.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1381,7 +1483,7 @@
             this.trbSoundVolume.Location = new System.Drawing.Point(159, 30);
             this.trbSoundVolume.Maximum = 100;
             this.trbSoundVolume.Name = "trbSoundVolume";
-            this.trbSoundVolume.Size = new System.Drawing.Size(428, 22);
+            this.trbSoundVolume.Size = new System.Drawing.Size(401, 22);
             this.trbSoundVolume.TabIndex = 6;
             this.trbSoundVolume.TabStop = false;
             this.trbSoundVolume.TickStyle = System.Windows.Forms.TickStyle.None;
@@ -1415,16 +1517,16 @@
             "External application"});
             this.cbxSoundMethod.Location = new System.Drawing.Point(159, 3);
             this.cbxSoundMethod.Name = "cbxSoundMethod";
-            this.cbxSoundMethod.Size = new System.Drawing.Size(478, 21);
+            this.cbxSoundMethod.Size = new System.Drawing.Size(461, 21);
             this.cbxSoundMethod.TabIndex = 9;
             this.cbxSoundMethod.SelectedIndexChanged += new System.EventHandler(this.cbxSoundMethod_SelectedIndexChanged);
             // 
             // txtSoundPath
             // 
             this.txtSoundPath.Dock = System.Windows.Forms.DockStyle.Top;
-            this.txtSoundPath.Location = new System.Drawing.Point(159, 124);
+            this.txtSoundPath.Location = new System.Drawing.Point(159, 152);
             this.txtSoundPath.Name = "txtSoundPath";
-            this.txtSoundPath.Size = new System.Drawing.Size(428, 20);
+            this.txtSoundPath.Size = new System.Drawing.Size(401, 20);
             this.txtSoundPath.TabIndex = 21;
             // 
             // prettyCaption1
@@ -1438,7 +1540,7 @@
             this.prettyCaption1.Dock = System.Windows.Forms.DockStyle.Top;
             this.prettyCaption1.Location = new System.Drawing.Point(0, 0);
             this.prettyCaption1.Name = "prettyCaption1";
-            this.prettyCaption1.Size = new System.Drawing.Size(640, 30);
+            this.prettyCaption1.Size = new System.Drawing.Size(623, 30);
             this.prettyCaption1.TabIndex = 9;
             // 
             // tabLogging
@@ -3055,8 +3157,8 @@
             this.dgvConstVariables.AllowUserToAddRows = false;
             this.dgvConstVariables.AllowUserToDeleteRows = false;
             this.dgvConstVariables.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.dgvConstVariables.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.dgvConstVariables.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvConstVariables.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvConstVariables.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colScalarName,
@@ -4357,12 +4459,14 @@
             this.panel22.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trbTtsRepetition)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trbTtsVolume)).EndInit();
             this.panel21.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trbSoundRepetition)).EndInit();
             this.panel30.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.trbSoundVolume)).EndInit();
             this.tabLogging.ResumeLayout(false);
@@ -4760,5 +4864,11 @@
         private System.Windows.Forms.Label lblAutosaveConfig;
         private System.Windows.Forms.Label lblTriggerTemplate;
         private System.Windows.Forms.Button btnUpdateCheck;
+        private System.Windows.Forms.Label lblSoundRepetition;
+        private System.Windows.Forms.TrackBar trbTtsRepetition;
+        private System.Windows.Forms.Label lblTtsRepetition;
+        private System.Windows.Forms.Label lblSoundRepV;
+        private System.Windows.Forms.TrackBar trbSoundRepetition;
+        private System.Windows.Forms.Label lblTtsRepV;
     }
 }

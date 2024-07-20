@@ -46,6 +46,8 @@ namespace Triggernometry.Forms
             SetupFfxivJobOrder(null);
             lblSoundVolP.Tag = I18n.DoNotTranslate;
             lblTtsVolP.Tag = I18n.DoNotTranslate;
+            lblSoundRepV.Tag = I18n.DoNotTranslate;
+            lblTtsRepV.Tag = I18n.DoNotTranslate;
             btnUiFont.Tag = I18n.DoNotTranslate;
             RestoredSavedDimensions();
             FormClosing += ConfigurationForm2_FormClosing;
@@ -83,6 +85,8 @@ namespace Triggernometry.Forms
             }
             trbSoundVolume.Value = cfg.SfxVolumeAdjustment;
             trbTtsVolume.Value = cfg.TtsVolumeAdjustment;
+            trbSoundRepetition.Value = cfg.SoundRepCooldown;
+            trbTtsRepetition.Value = cfg.TtsRepCooldown;
             cbxLoggingLevel.SelectedIndex = (int)cfg.DebugLevel;
             cbxSoundMethod.SelectedIndex = (int)cfg.SoundMethod;
             cbxTtsMethod.SelectedIndex = (int)cfg.TtsMethod;
@@ -169,6 +173,8 @@ namespace Triggernometry.Forms
         {
             cfg.SfxVolumeAdjustment = trbSoundVolume.Value;
             cfg.TtsVolumeAdjustment = trbTtsVolume.Value;
+            cfg.SoundRepCooldown = trbSoundRepetition.Value;
+            cfg.TtsRepCooldown = trbTtsRepetition.Value;
             cfg.DebugLevel = (RealPlugin.DebugLevelEnum)cbxLoggingLevel.SelectedIndex;
             cfg.SoundMethod = (Configuration.AudioRoutingMethodEnum)cbxSoundMethod.SelectedIndex;
             cfg.TtsMethod = (Configuration.AudioRoutingMethodEnum)cbxTtsMethod.SelectedIndex;
@@ -443,6 +449,26 @@ namespace Triggernometry.Forms
         private void trbTtsVolume_ValueChanged(object sender, EventArgs e)
         {
             trbTtsVolume_Scroll(null, null);
+        }
+
+        private void trbTtsRepetition_ValueChanged(object sender, EventArgs e)
+        {
+            trbTtsRepetition_Scroll(null, null);
+        }
+
+        private void trbTtsRepetition_Scroll(object sender, EventArgs e)
+        {
+            lblTtsRepV.Text = trbTtsRepetition.Value + " ms";
+        }
+
+        private void trbSoundRepetition_ValueChanged(object sender, EventArgs e)
+        {
+            trbSoundRepetition_Scroll(null, null);
+        }
+
+        private void trbSoundRepetition_Scroll(object sender, EventArgs e)
+        {
+            lblSoundRepV.Text = trbSoundRepetition.Value + " ms";
         }
 
         private void cbxSoundMethod_SelectedIndexChanged(object sender, EventArgs e)

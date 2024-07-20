@@ -175,6 +175,12 @@
     <Compile Include="Aura\Renderer\Winforms.cs" />
     <Compile Include="Aura\Renderer\RendererBase.cs" />
     <Compile Include="Aura\Renderer\Scarborough.cs" />
+    <Compile Include="CustomControls\ActionEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\ActionEditor.Designer.cs">
+      <DependentUpon>ActionEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomControls\ActionViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -213,6 +219,12 @@
     </Compile>
     <Compile Include="CustomControls\Toast.Designer.cs">
       <DependentUpon>Toast.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\TriggerEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\TriggerEditor.Designer.cs">
+      <DependentUpon>TriggerEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Endpoint.cs" />
     <Compile Include="Forms\AboutForm.cs">
@@ -348,6 +360,12 @@
     </Compile>
     <Compile Include="Forms\SubstitutionForm.Designer.cs">
       <DependentUpon>SubstitutionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TriggerForm2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TriggerForm2.Designer.cs">
+      <DependentUpon>TriggerForm2.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\VariableEditorForm.cs">
       <SubType>Form</SubType>
@@ -540,6 +558,9 @@
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CustomControls\ActionEditor.resx">
+      <DependentUpon>ActionEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CustomControls\ActionViewer.resx">
       <DependentUpon>ActionViewer.cs</DependentUpon>
     </EmbeddedResource>
@@ -554,6 +575,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CustomControls\Toast.resx">
       <DependentUpon>Toast.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomControls\TriggerEditor.resx">
+      <DependentUpon>TriggerEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
@@ -615,6 +639,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SubstitutionForm.resx">
       <DependentUpon>SubstitutionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TriggerForm2.resx">
+      <DependentUpon>TriggerForm2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\VariableEditorForm.resx">
       <DependentUpon>VariableEditorForm.cs</DependentUpon>
