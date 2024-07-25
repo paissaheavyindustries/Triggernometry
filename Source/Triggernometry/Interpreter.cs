@@ -326,27 +326,7 @@ namespace Triggernometry
             var asms = AppDomain.CurrentDomain.GetAssemblies();
             foreach (Assembly asm in asms)
             {
-                try
-                {
-                    _so = _so.AddReferences(asm);
-                }
-                catch (Exception)
-                {
-                    try
-                    {
-                        MethodInfo grb = asm.GetType().GetMethod("GetRawBytes", BindingFlags.Instance | BindingFlags.NonPublic);
-                        byte[] asmb = (byte[])grb.Invoke(asm, null);
-                        if (asmb == null || asmb.Length == 0)
-                        {
-                            continue;
-                        }
-                        PortableExecutableReference pe = MetadataReference.CreateFromImage(asmb);
-                        _so = _so.AddReferences(pe);
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
+                _so = _so.AddMetadataReferenceFromAssembly(asm);
             }
             _so = _so.AddImports("System");
             Evaluate("int whee;", null, new Context() { plug = RealPlugin.plug });
@@ -404,8 +384,14 @@ namespace Triggernometry
             ScriptOptions _myso = _so.WithAllowUnsafe(GetUnsafeUsage(ctx));
             if (assy != null)
             {
-                string[] assys = assy.Split(',');
-                _myso = _myso.AddReferences(assys.Select(x => x.Trim()));
+                var assys = assy.Split(',').Select(x => x.Trim());
+                var currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+                foreach (var asmName in assys)
+                {
+                    var assembly = currentAssemblies.FirstOrDefault(a => a.GetName().Name.Equals(asmName, StringComparison.OrdinalIgnoreCase));
+                    // try to first load from current assemblies (including the assemblies loaded into memory by ACT which were not detected during InitPlugin)
+                    _myso = (assembly != null) ? _myso.AddMetadataReferenceFromAssembly(assembly) : _myso.AddReferences(asmName);
+                }
             }
             string[] badApis = GetBadApis(ctx);
             if (badApis != null && badApis.Length > 0)
@@ -470,6 +456,35 @@ namespace Triggernometry
             }
         }
 
+    }
+
+    public static class ScriptOptionsExtensions
+    {
+        public static ScriptOptions AddMetadataReferenceFromAssembly(this ScriptOptions options, Assembly asm)
+        {
+            try
+            {
+                options = options.AddReferences(asm);
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    MethodInfo grb = asm.GetType().GetMethod("GetRawBytes", BindingFlags.Instance | BindingFlags.NonPublic);
+                    byte[] asmb = (byte[])grb.Invoke(asm, null);
+                    if (asmb == null || asmb.Length == 0)
+                    {
+                        return options;
+                    }
+                    PortableExecutableReference pe = MetadataReference.CreateFromImage(asmb);
+                    options = options.AddReferences(pe);
+                }
+                catch (Exception)
+                {
+                }
+            }
+            return options;
+        }
     }
 
 }
