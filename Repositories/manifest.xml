@@ -43,14 +43,7 @@
 					<Repositories>
 						<Repository Name="Final Fantasy XIV debugging triggers" Address="https://raw.githubusercontent.com/paissaheavyindustries/Triggernometry-Triggers/main/Repositories/ffxiv_debugging.xml" Description="Includes some simple triggers related to debugging and outputting information related to Final Fantasy XIV functions." />
 					</Repositories>
-				</Category>
-				<Category Name="Visual DoT timers by Zeffuro" Description="Triggers for tracking DoTs for Final Fantasy XIV jobs. Trigger collection created by Zeffuro (Discord: Zeffuro#3033).">
-					<Categories>
-					</Categories>
-					<Repositories>
-						<Repository Name="Zeffuro's DoT timers" Address="https://raw.githubusercontent.com/Zeffuro/Zeffuro-s-Trigger-Repository/master/TriggernometryExport.xml" Description="Triggers for tracking DoT timers." />
-					</Repositories>
-				</Category>				
+				</Category>			
 				<Category Name="Gathering" Description="Triggers related to gathering in Final Fantasy XIV.">
 					<Categories>
 					</Categories>
