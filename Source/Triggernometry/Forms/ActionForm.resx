@@ -135,6 +135,581 @@
         IHf+omT08N8eV63SsHtaKVz4BYlNulYdU+xqAAAAAElFTkSuQmCC
 </value>
   </data>
+  <data name="button6.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAN
+        0AAADdABEGw9BwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAJ0SURBVDhPjdHd
+        T5JRHAfw57ab7vpHmi91101LyxtWoPhorAukseaNFwktWzU3q602TUoxTeV5CmJGskJrTFkyx4VBvKgg
+        KCLIm7NaFyhv3845LpKt0ovPzsU5v+/5nd/heJ6vImu5stcslxbIWiQrI+ebS61tLSXFtfZlqVR66vB5
+        TqvVjmk0mp3fSCFyuRz29/eRz+dRKBSYYrGIickJ8G0tm6TwZCWgu7v7u8vlwuLiIhYWFiBtvoxQKASf
+        z8d4vV643W4sLS2hXC5jYKC/zF9t9ZNOTrCArq6ub06nExaLBWazmQWEw2GMvBipEgj4WUCpVILuma7M
+        t8uHWUBnZ+euwzHPik0mE+gTYrEYNjY2sL6+zkQiEUSjUaTTaSQSCXg8HrQr+B8sQK1W79jtdhiNRgiC
+        wAK2t7cx9nKU3KyvoCFbW1uM56sHpIOfLECpVGZtNhtEUcT4+DjI1JHNZpHJZBh6K5VKpZhkMolgMEiG
+        KT/oQKFQpK1WK87dEHDm+oF6oq7jQC1jqKhR/lGvEuP0K9JTU1Ps4Hwg81cOarnaJ2+KhAhlTiaTJen7
+        afpnstH/fu1IgzNhzHqSqOkwlDiJRJIQBANp1wDnShbPZyNHGrSFMfMlSbsucE1NTXE6vHqVgDlvGvqP
+        EQz/g44UPpkO4ZFlFe9ccRqQ5xoaGmJ6vZ4NT3Bs4vF0EA/frqLXvIL7pmXcNQbQ88oPzaQPNye8zC3B
+        h8EPa6hViXtcY2NjdGhoCGdJwFPyvnumAG6L/v+689qP3jcB+ks52kG0p0/HAqR9c5A9mD+WSz021KnE
+        IHf+omT08N8eV63SsHtaKVz4BYlNulYdU+xqAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnKeycodesListen.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAABl0RVh0U29m
+        dHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAIxSURBVDhPpZLLSxtRFMZvEqw0yAjtKqDGd6CSrKqS
+        CA0NzbYuDL4wiEaJWh8IIgrZWEFE3IibkEVBl/0Xuumq2EfSpiAUS2nF6iRzxzRP8iDN1zOFlkwzi5Yu
+        Ps6dM+f73XvPPQzAf0kz+S/STL5g7OZrxh5GGHtM8QnJT+s7WrU1CSq8904QYnGfr5TZ36/kgkEkNja+
+        f7LbC2HGgm8YM1bXq8z08/5HqzVfODpCNhRCcncXia0tpPb2kD8+RmJlpRyuqzshm64GcMKY8LaxUc6T
+        MREIgC8vgy8tgS8ugi8sgPv9yB4cQPR4SnSSRzUAuqdX8npL6Z0dSNPT4D4f+MwMuLKenIQ0MQGJYuHw
+        EO8FQaoBKPdLb25CGhmB6HQi5naD01oeHYU8PAw+NIT44CCy29s46+kpU6NvqQE63bPc+jq+dnXhoqkJ
+        ly0tENvaELfZIA0MQHK5EKOYmpvDF4ejSBvaVIBX9GTfpqYqcbsdl83NEFtbEW9vh9TR8VMxgl2ZzcjM
+        z+OD2Vw+ZeyGCkA9cJ87HIUU3fuKdlcMvLMT193dkOlUCoT39yO7uopIfX30l+83QFHEYHienJ2tJD0e
+        SGTmZExYLJAVSG8vcmQ+s1iKNCt3NQE0B6ZoQ4N4PTZWVorT4+NIU/My9CK5tTXQjBQjen2g2qMCKFIm
+        LazXh05NpuLnvr78hctVoF1LUaPxnPrk/LNe9VGtp4wZCGal3jx4ydhtrRpFmsm/F9gPIhaNejfyr/0A
+        AAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="btnSendKeysListen.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAABl0RVh0U29m
+        dHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAIxSURBVDhPpZLLSxtRFMZvEqw0yAjtKqDGd6CSrKqS
+        CA0NzbYuDL4wiEaJWh8IIgrZWEFE3IibkEVBl/0Xuumq2EfSpiAUS2nF6iRzxzRP8iDN1zOFlkwzi5Yu
+        Ps6dM+f73XvPPQzAf0kz+S/STL5g7OZrxh5GGHtM8QnJT+s7WrU1CSq8904QYnGfr5TZ36/kgkEkNja+
+        f7LbC2HGgm8YM1bXq8z08/5HqzVfODpCNhRCcncXia0tpPb2kD8+RmJlpRyuqzshm64GcMKY8LaxUc6T
+        MREIgC8vgy8tgS8ugi8sgPv9yB4cQPR4SnSSRzUAuqdX8npL6Z0dSNPT4D4f+MwMuLKenIQ0MQGJYuHw
+        EO8FQaoBKPdLb25CGhmB6HQi5naD01oeHYU8PAw+NIT44CCy29s46+kpU6NvqQE63bPc+jq+dnXhoqkJ
+        ly0tENvaELfZIA0MQHK5EKOYmpvDF4ejSBvaVIBX9GTfpqYqcbsdl83NEFtbEW9vh9TR8VMxgl2ZzcjM
+        z+OD2Vw+ZeyGCkA9cJ87HIUU3fuKdlcMvLMT193dkOlUCoT39yO7uopIfX30l+83QFHEYHienJ2tJD0e
+        SGTmZExYLJAVSG8vcmQ+s1iKNCt3NQE0B6ZoQ4N4PTZWVorT4+NIU/My9CK5tTXQjBQjen2g2qMCKFIm
+        LazXh05NpuLnvr78hctVoF1LUaPxnPrk/LNe9VGtp4wZCGal3jx4ydhtrRpFmsm/F9gPIhaNejfyr/0A
+        AAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="rtbHelperDictBuild.Text" xml:space="preserve">
+    <value>The expression is parsed using the first character as the separator between key and value, and the second character as the separator between each key-value pairs. The remainder of the expression is built into a dictionary.
+
+Example: Input expression `=,a=1,b=2,c=3` builds a dictionary: `a = 1, b = 2, c = 3`;
+Input expression `=,${{tvar:table.hjoin('=', ',')}}` can transform a two-column table variable `table` into a dictionary, with each column serving as key and value respectively.</value>
+  </data>
+  <data name="rtbHelperDictFilter.Text" xml:space="preserve">
+    <value>Parses each key-value pair's dynamic expression value and filters out the key-value pairs whose results are true (non-zero) for the target dictionary.
+
+Available dynamic expressions:
+`${{_key}}`: The key of the current key-value pair;
+`${{_val}}`: The value of the current key-value pair.
+
+Example: For a source dictionary `10A = 0, 10F = 3, 40C = 2, 402 = 0`;
+Using the expression `${{_val}}`, the result is `10F = 3, 40C = 2`;
+Using the expression `${{func:startwith(1):${{_key}}}}`, the result is `10A = 0, 10F = 3`.</value>
+  </data>
+  <data name="rtbHelperDictMerge.Text" xml:space="preserve">
+    <value>Adds all key-value pairs from the source dictionary to the target dictionary.
+If a key already exists, it will be skipped.
+If the target dictionary does not exist, it acts as a deep copy of the dictionary.</value>
+  </data>
+  <data name="rtbHelperDictMergeHard.Text" xml:space="preserve">
+    <value>Adds all key-value pairs from the source dictionary to the target dictionary.
+If a key already exists, its value will be overwritten.
+If the target dictionary does not exist, it acts as a deep copy of the dictionary.</value>
+  </data>
+  <data name="rtbHelperDictRemove.Text" xml:space="preserve">
+    <value>Removes the key-value pair corresponding to the given key from the dictionary.
+If the key does not exist, there will be no operation.</value>
+  </data>
+  <data name="rtbHelperDictSet.Text" xml:space="preserve">
+    <value>Parses the key and value expressions and stores the key-value pair in the dictionary.
+If the key already exists, the original value will be overwritten.
+
+Available dynamic expressions:
+`${{_val}}`: The current value corresponding to the given key.</value>
+  </data>
+  <data name="rtbHelperDictSetAll.Text" xml:space="preserve">
+    <value>Iterates through the dictionary, dynamically parsing each key-value pair into a new key-value pair and overwriting the original dictionary.
+
+Optional length parameter:
+If length is provided, the dictionary's key count will be adjusted accordingly, with the goal of overwriting the dictionary based on a temporary index.
+If length is not provided, the aim should be to rewrite the dictionary based on its original content.
+
+Available dynamic expressions:
+`${{_key}}`: The key of the current key-value pair (if length is not provided);
+`${{_val}}`: The value of the current key-value pair (if length is not provided);
+`${{_idx}}`: The current index (if length is provided).
+
+Note: Dictionaries are inherently unordered structures. When using indices, the order of key-value pairs is not guaranteed. It is not recommended to mix dynamic expressions.
+
+Example: Initial dictionary is `a = 1, b = 2, c = 3`;
+Using the key expression `${{_key}}` and value expression `${{_key}}${{_value}}`, the result is `a = a1, b = b2, c = c3`;
+Subsequently, providing a length of `4`, with key expression `${{func:repeat(${{_idx}}):a}}` and value expression `${{_idx}}^2`, the dictionary can be overwritten as `a = 1, aa = 4, aaa = 9, aaaa = 16`.</value>
+  </data>
+  <data name="rtbHelperDictUnset.Text" xml:space="preserve">
+    <value>Destroys the specified dictionary variable.
+You can choose to destroy session or permanent variables.</value>
+  </data>
+  <data name="rtbHelperDictUnsetAll.Text" xml:space="preserve">
+    <value>Destroys all dictionary variables.
+You can choose to destroy session or permanent variables.</value>
+  </data>
+  <data name="rtbHelperDictUnsetRegex.Text" xml:space="preserve">
+    <value>Destroys all dictionary variables whose names match the regular expression.
+You can choose to destroy session or permanent variables.
+
+Regular match mode is partial:
+For example, `1|2|3` can match variables named `1`, `2`, `3`, but also `ab1cd`.
+For a complete match, you can specify the beginning and end, such as `^(1|2|3)$`.</value>
+  </data>
+  <data name="rtbHelperLvarBuild.Text" xml:space="preserve">
+    <value>Using the first character of the parsed expression as a separator, build a list from the remaining part of the expression.
+
+Example: An input expression `,1,2,3,4,5,6,7,8` would produce a list: `1, 2, 3, 4, 5, 6, 7, 8`;
+An input expression `,${{lvar:list.join(',', '−1:1:−1')}}` would build a list by removing the first column of the list variable `list` and then reversing it;
+An input expression `,${{tvar:table.hjoin(',', ',')}}` would reduce the 2D table variable `table` into a 1D list.</value>
+  </data>
+  <data name="rtbHelperLvarCopy.Text" xml:space="preserve">
+    <value>Copy the source list to the target list.
+After copying, the values in the two lists do not have any subsequent association (deep copy).</value>
+  </data>
+  <data name="rtbHelperLvarFilter.Text" xml:space="preserve">
+    <value>Parse the dynamic expression value corresponding to each element, and filter the elements with true (non-zero) results into the target list.
+
+Available dynamic expressions:
+`${{_this}}`: Current element's value;
+`${{_idx}}`: Current element's index (starting from `1`).
+
+Example: Source list is: `name1, name2, name3, name4, ..., name8`; 
+Filtered through expression `${{_idx}} % 4 = 0` we get: `name4, name8`;
+Filtered through expression `${{_ffxiventity[${{_this}}].x}} &gt; 100` we get a list of entity names where `x &gt; 100` (right half of the field).</value>
+  </data>
+  <data name="rtbHelperLvarInsert.Text" xml:space="preserve">
+    <value>Parse the expression and insert it at the specified index in the list.
+All values after this index will be shifted back by one, and then the new value is set to the target index.
+
+The index starts from `1`. Negative indices are supported, such as `−1` means the last position, which does not affect the insertion order. 
+If the index exceeds the list range, empty elements will be added before setting to that index.
+
+Example: Inserting `a` into the index `3` of `1, 2, 3, 4` results in: `1, 2, a, 3, 4`.</value>
+  </data>
+  <data name="rtbHelperLvarInsertList.Text" xml:space="preserve">
+    <value>Insert all values of the source list as a whole at the specified index of the target list.
+All values after this index will be shifted back, and then the values from the source list will start filling from this index.
+
+The index starts from `1`. Negative indices are supported, such as −1 means the last position. 
+If the index exceeds the list range, empty elements will be added before setting to that index.
+
+Example: Inserting `a, b, c` into the index `3` of `1, 2, 3, 4` results in: `1, 2, a, b, c, 3, 4`.</value>
+  </data>
+  <data name="rtbHelperLvarJoin.Text" xml:space="preserve">
+    <value>Join the values of the list variable into a string using the expression as a delimiter, and store it in a session variable.
+Multi-character separators are supported.
+This action is the inverse of "Splitting Scalar into List".</value>
+  </data>
+  <data name="rtbHelperLvarPopFirst.Text" xml:space="preserve">
+    <value>Pop the value at the specified index of the list into a session variable.
+It is equivalent to the combined action of "Remove Index" and "Set Scalar".
+The index starts from `1`. Negative indices are supported, such as `−1` means the last position.
+If the index exceeds the list range, the list remains unchanged, and the session variable is set to an empty value.
+
+Example: Popping the index `3` from the list `1, 2, 3, 4` results in a list `1, 2, 4` and a session variable (value of `3`).</value>
+  </data>
+  <data name="rtbHelperLvarPopToListInsert.Text" xml:space="preserve">
+    <value>Pop the value at the specified index of the source list and insert it at the specified index of another list.
+It is equivalent to the combined action of "Remove Index" and "Insert to Index".
+
+Both indices start from `1`. Negative indices are supported, such as `−1` means the last position. 
+If the source index exceeds the list range, the source list remains unchanged, and a blank value is inserted into the target list.
+If no target index is provided, it is pushed to the end of the target list.
+
+Example: Source list `src = a, b, c`; Target list `tgt = 1, 2, 3, 4`;
+With source index `2` and target index `3`, the result is: `src = a, c`; `tgt = 1, 2, b, 3, 4`;
+With source index `−1` and no target index provided, the result is: `src = a, b`; `tgt = 1, 2, 3, 4, c`.</value>
+  </data>
+  <data name="rtbHelperLvarPopToListSet.Text" xml:space="preserve">
+    <value>Pop the value at the specified index of the source list and set it at the specified index of another list.
+It is equivalent to the combined action of "Remove Index" and "Set to Index".
+
+Both indices start from `1`. Negative indices are supported, such as −1 means the last position.
+If the source index exceeds the list range, the source list remains unchanged, and a blank value is set to the target list.
+
+Example: Source list `src = a, b, c`; Target list `tgt = 1, 2, 3, 4`;
+With source index `2` and target index `−2`, the result is: `src = a, c`; `tgt = 1, 2, b, 4`;
+With source index `−1` and target index `6`, the result is: `src = a, b`; `tgt = 1, 2, 3, 4, , c`.</value>
+  </data>
+  <data name="rtbHelperLvarPush.Text" xml:space="preserve">
+    <value>Parse the expression and push it to the end of the list.
+If the list doesn't exist, an empty list will be created first.
+It's equivalent to setting/inserting the value to the index `${{lvar:name.size}} + 1`.
+
+Example: Pushing `a` to `1, 2, 3, 4` results in: `1, 2, 3, 4, a`.</value>
+  </data>
+  <data name="rtbHelperLvarRemove.Text" xml:space="preserve">
+    <value>Remove the value at the specified index of the list.
+
+Indices start from `1`. Negative indexing is supported, with `−1` representing the last element.
+If the index is out of range for the list, the list remains unchanged.
+
+Example: Removing index `2` from the list `1, 2, 3, 4` results in: `1, 3, 4`.</value>
+  </data>
+  <data name="rtbHelperLvarSet.Text" xml:space="preserve">
+    <value>Parse the expression and set it to the specified index in the list.
+The value at that index will be overwritten, while other indices remain unchanged.
+Indices start from `1`. Negative indexing is supported, with `−1` representing the last element.
+If the index is out of range for the list, empty elements will be added until the specified index is reached.
+
+Available dynamic expressions:
+`${{_this}}`: the current element's value;
+`${{_idx}}`: the current element's index (starting from `1`).</value>
+  </data>
+  <data name="rtbHelperLvarSetAll.Text" xml:space="preserve">
+    <value>Iterate through the list, dynamically parsing the expression value for each element and replacing the original list values with the new ones.
+The index number is an optional parameter; if provided, the list length will be adjusted to that value first.
+
+Available dynamic expressions:
+${{_this}}: the current element's value;
+${{_idx}}: the current element's index (starting from `1`).
+
+Example: When the initial list does not exist;
+Given an index (length) of `3` and the numerical expression `${{_idx}} * 2`, the resulting list is: `2, 4, 6`;
+Continuing with the text expression `${{tvar:table[1][${{_this}}]}}`, the elements from column `1` and rows `2, 4, 6` of the `table` are written to the list.</value>
+  </data>
+  <data name="rtbHelperLvarSortAlphaAsc.Text" xml:space="preserve">
+    <value>Sort the list in ascending order based on alphabetical order (i.e., the Unicode order of characters).
+Equivalent to the custom sorting key function: `s+:${{_this}}`.
+
+Example: Sorting the list `1, 3, A, 10, 1A, 1F, 100` results in: `1, 10, 1A, 1F, 100, 3, A`.</value>
+  </data>
+  <data name="rtbHelperLvarSortAlphaDesc.Text" xml:space="preserve">
+    <value>Sort the list in descending order based on alphabetical order (i.e., the Unicode order of characters).
+Equivalent to the custom sorting key function: `s−:${{_this}}`.
+
+Example: Sorting the list `1, 3, A, 10, 1A, 1F, 100` results in: `A, 3, 100, 1F, 1A, 10, 1`.</value>
+  </data>
+  <data name="rtbHelperLvarSortByKeys.Text" xml:space="preserve">
+    <value>Sort the list based on a set of provided key functions.
+
+Available dynamic expressions:
+`${{_this}}`: the current element's value;
+`${{_idx}}`: the current element's index (starting from `1`).
+
+Key function format:
+In each key function, `n/s` stands for numeric/text sorting, `+/−` stands for ascending/descending order (with `+` being optional), and the expression represents the key function.
+For instance, `n−:${{_idx}}` means to sort all elements in descending order based on their index values, i.e., to reverse the list;
+`s+:${{lvar:a[${{_this}}]}}` means to use each element as an index, look up the corresponding value in the list `a`, and use it as the sorting key in ascending text order.
+
+If the key function includes a comma or single/double quotes, it must be entirely enclosed in the opposite quotes (consistent with function argument syntax);
+Multiple key functions can be connected with commas to achieve sequential sorting with multiple keys.
+For example, the key functions `"n+:${{_this}} % 3", 'n−:${{_idx}}'`:
+This means that the remainder of each element divided by `3` is used as the first key in ascending order, and the index of each element is used as the second key in descending order.
+Applying this sort to the list `1, 2, 3, 4, 5, 6, 7, 8, 9` results in: `9, 6, 3, 7, 4, 1, 8, 5, 2`.</value>
+  </data>
+  <data name="rtbHelperLvarSortFfxivPartyAsc.Text" xml:space="preserve">
+    <value>Sort each value in the list as a member name in a squad list in ascending order according to the job order.
+The job order is set in the Triggernometry user configuration.
+When jobs are the same, it further sorts by the member name.
+
+Note: This method is highly dependent on user configuration. If you want to share triggers, it's recommended to use this method cautiously.</value>
+  </data>
+  <data name="rtbHelperLvarSortFfxivPartyDesc.Text" xml:space="preserve">
+    <value>Sort each value in the list as a member name in a squad list in descending order according to the job order.
+The job order is set in the Triggernometry user configuration.
+When jobs are the same, it further sorts by the member name.
+
+Note: This method is highly dependent on user configuration. If you want to share triggers, it's recommended to use this method cautiously.</value>
+  </data>
+  <data name="rtbHelperLvarSortNumericAsc.Text" xml:space="preserve">
+    <value>Sort the list in ascending numeric order.
+All values in the list must be treated as pure numeric values (of type double); otherwise, an exception will be thrown.
+Equivalent to the custom sorting key function: `n+:${{_this}}`.
+
+Example: Sorting the list `1.2, 3, 10, 0, −1` results in: `−1, 0, 1.2, 3, 10`.</value>
+  </data>
+  <data name="rtbHelperLvarSortNumericDesc.Text" xml:space="preserve">
+    <value>Sort the list in descending numeric order.
+All values in the list must be treated as pure numeric values (of type double); otherwise, an exception will be thrown.
+Equivalent to the custom sorting key function: `n−:${{_this}}`.
+
+Example: Sorting the list `1.2, 3, 10, 0, −1` results in: `10, 3, 1.2, 0, −1`.</value>
+  </data>
+  <data name="rtbHelperLvarSplit.Text" xml:space="preserve">
+    <value>Split the scalar value as a string using an expression as the delimiter, and store it in a list variable.
+Supports multi-character delimiters.
+This action is the inverse of "joining a list into a scalar".</value>
+  </data>
+  <data name="rtbHelperLvarUnset.Text" xml:space="preserve">
+    <value>Destroy the list variable with the specified name.
+You can choose to destroy either the session variable or the permanent variable.</value>
+  </data>
+  <data name="rtbHelperLvarUnsetAll.Text" xml:space="preserve">
+    <value>Destroy all list variables.
+You can choose to destroy either the session variable or the permanent variable.</value>
+  </data>
+  <data name="rtbHelperLvarUnsetRegex.Text" xml:space="preserve">
+    <value>Destroy all scalar variables whose names match the regular expression.
+You can choose to destroy either the session variable or the permanent variable.
+
+The regex matching mode is partial matching:
+For instance, `1|2|3` can match variables named `1`, `2`, `3`, but also can match variables named `ab1cd`.
+For an exact match, you can specify the beginning and end, like `^(1|2|3)$`.</value>
+  </data>
+  <data name="rtbHelperTvarAppend.Text" xml:space="preserve">
+    <value>Append the source list to the row below the last row of the target list.
+If their widths differ, the wider width will be taken, and the row of the narrower list will be filled with empty values.</value>
+  </data>
+  <data name="rtbHelperTvarBuild.Text" xml:space="preserve">
+    <value>Use the first character of the parsed expression as the cell separator and the second character as the row separator, then build the rest of the expression into a table.
+
+Example: The input expression `,|1,2,3|4,5,6|7,8,9` can build the table:
+           `1, 2, 3`
+           `4, 5, 6`
+           `7, 8, 9`
+The input expression `,|${{lvar:list1.join}}|${{lvar:list2.join}}` can merge two list variables into a table;
+The input expression `,⏎${{tvar:table.vjoin}}` can transpose the table (matrix).</value>
+  </data>
+  <data name="rtbHelperTvarCopy.Text" xml:space="preserve">
+    <value>Copy the source table as the target table.
+After copying, there's no subsequent association between the values in the two tables (deep copy).</value>
+  </data>
+  <data name="rtbHelperTvarFilter.Text" xml:space="preserve">
+    <value>Parse the dynamic expression values corresponding to each element, and filter elements with true (non-zero) results into the target list.
+Similar to filtering a list, the table is traversed horizontally row by row.
+
+Available dynamic expressions:
+`${{_this}}`: The value of the current element;
+`${{_col}}`: The column index of the current element (starting from `1`);
+`${{_row}}`: The row index of the current element (starting from `1`);
+`${{_col[i]}}`: The value of the `i`th element in the current column (starting from `1`);
+`${{_row[i]}}`: The value of the `i`th element in the current row (starting from `1`).</value>
+  </data>
+  <data name="rtbHelperTvarFilterLine.Text" xml:space="preserve">
+    <value>Parse the dynamic expression values for each row or column, and filter rows or columns with true (non-zero) results into the target table.
+You can only provide one of the row/column expressions, corresponding to two filtering modes.
+
+Available dynamic expressions (column mode):
+`${{_col}}`: The current column index (starting from `1`);
+`${{_col[i]}}`: The value of the `i`th element in the current column (starting from `1`);
+
+Available dynamic expressions (row mode):
+`${{_row}}`: The current row index (starting from `1`);
+`${{_row[i]}}`: The value of the `i`th element in the current row (starting from `1`).
+
+Example: Source table is: `MT, name1, 2 | ST, name2, 3 | H1, name3, 1 | … | D4, name8, 8`;
+After the row expression `${{_row[3]}} &lt; 3`, rows `1` and `3` are filtered into the new table: `MT, name1, 2 | H1, name3, 1`.</value>
+  </data>
+  <data name="rtbHelperTvarInsertLine.Text" xml:space="preserve">
+    <value>The first character after parsing the expression is used as the delimiter, and the remaining part is split into a series of values to be inserted, similar to building a list.
+You can only provide one of the row/column indexes as the insertion index.
+During insertion, all subsequent rows/columns will move one position back, and then the new row/column is set to the target index.
+
+Indices start from `1`. Negative indices are supported, where `-1` represents the last position.
+If the index exceeds the list range, blank rows/columns will be added and set to that index.</value>
+  </data>
+  <data name="rtbHelperTvarRemoveLine.Text" xml:space="preserve">
+    <value>Remove the specified row or column from the table.
+You can only provide one of the row/column indexes as the index to be deleted.
+
+Negative indices are supported, where `-1` represents the last position.
+If the index exceeds the list range, no action will be taken.</value>
+  </data>
+  <data name="rtbHelperTvarResize.Text" xml:space="preserve">
+    <value>Resize the table according to the given width and height.
+If the row/column parameter is left empty, this dimension would not be adjusted.
+
+If the new width/height exceeds the current size, the excess will be filled with empty values;
+If the new width/height is less than the current size, rows/columns will be deleted from the end.</value>
+  </data>
+  <data name="rtbHelperTvarSet.Text" xml:space="preserve">
+    <value>Parse the expression and set it to the specified row and column.
+Indices start from `1`. Negative indices are supported, e.g., `-1` represents the last position.
+
+Available dynamic expressions:
+`${{_this}}`: Value of the current element;
+`${{_col}}`: Column index of the current element (starting from `1`);
+`${{_row}}`: Row index of the current element (starting from `1`);
+`${{_col[i]}}`: Value of the `i`th element in the current column (starting from `1`);
+`${{_row[i]}}`: Value of the `i`th element in the current row (starting from `1`).</value>
+  </data>
+  <data name="rtbHelperTvarSetAll.Text" xml:space="preserve">
+    <value>Iterate through the table, dynamically parse the expression value corresponding to each element, and overwrite the original table with new values.
+Row and column indices are optional parameters. If indices are provided, the list will first be adjusted to the corresponding width/height.
+
+Available dynamic expressions:
+`${{_this}}`: Value of the current element;
+`${{_col}}`: Column index of the current element (starting from `1`);
+`${{_row}}`: Row index of the current element (starting from `1`);
+`${{_col[i]}}`: Value of the `i`th element in the current column (starting from `1`);
+`${{_row[i]}}`: Value of the `i`th element in the current row (starting from `1`).
+
+Example: If the initial table does not exist;
+Input row `3`, column `3`, expression `1`, can initialize a `3 * 3` table with all values being `1`;
+If the numeric expression `${{_row}} == ${{_col}}` is entered, the resulting table (unit matrix) is: `1, 0, 0 | 0, 1, 0 | 0, 0, 1`.</value>
+  </data>
+  <data name="rtbHelperTvarSetLine.Text" xml:space="preserve">
+    <value>Using the first character of the parsed expression as a delimiter, the remaining part is split into a series of values to be stored, similar to building a list.
+You can only provide one of the row or column indices as the index to set.
+When inserting, all subsequent rows/columns will move back one position, and then the new row/column will be set to the target index.
+
+Indices start from `1`. Negative indices are supported, e.g., `-1` represents the last position.
+If the index exceeds the list range, blank rows/columns will be added and set to that index.</value>
+  </data>
+  <data name="rtbHelperTvarSlicesSetAll.Text" xml:space="preserve">
+    <value>Iterate through the specified rows and columns of the table, dynamically parse the expression value of each element, and overwrite the original value with new values.
+Row and column indices are optional parameters, each accepting a slice expression. If not provided, it means all rows/columns.
+
+Available dynamic expressions:
+`${{_this}}`: Value of the current element;
+`${{_col}}`: Column index of the current element (starting from `1`);
+`${{_row}}`: Row index of the current element (starting from `1`);
+`${{_col[i]}}`: Value of the `i`th element in the current column (starting from `1`);
+`${{_row[i]}}`: Value of the `i`th element in the current row (starting from `1`).
+
+Example: Table `a, player1 | b, player2 | … | g, player7 | h, player8`;
+Input column (slice) `2`, expression `${{_ffxiventity[${{_this}}].id}}`, can change all values in the second column to the IDs of eight players.</value>
+  </data>
+  <data name="rtbHelperTvarSortLine.Text" xml:space="preserve">
+    <value>Sort rows or columns of the table based on a set of given keyword functions.
+You can only provide one of the row or column expressions, representing row sorting or column sorting.
+
+Available dynamic expressions (Column mode):
+`${{_col}}`: Current column index (starting from `1`);
+`${{_col[i]}}`: Value of the `i`th element in the current column (starting from `1`);
+
+Available dynamic expressions (Row mode):
+`${{_row}}`: Current row index (starting from `1`);
+`${{_row[i]}}`: Value of the `i`th element in the current row (starting from `1`).
+
+Keyword function format:
+In each keyword function, `n`/`s` represents numeric or text sorting, `+`/`−` represents ascending/descending order (can omit `+`), and the expression represents the keyword function.
+For example: `n−:${{_row}}` means to sort all rows in descending order based on the numeric value of the row index, i.e., reversing all rows of the table;
+`s+:${{_col[2]}}` means to sort all columns in ascending order based on the text of the second element in each column.
+
+If the keyword function contains commas, single or double quotes, it must be enclosed in opposite quotes (same as function parameter syntax);
+Multiple keyword functions can be connected with commas to achieve multi-keyword successive sorting.
+
+For example, if the keyword function is `"n+:${{_row[1]}} % 2", 's+:${{func:substring(1, 1):${{_row[2]}}}}'`:
+It means that the remainder of the first element of each row divided by `2` is sorted in ascending order as the first key, and the second character of the second element is sorted in ascending order as the second key.
+
+For the table `1, abc | 2, acb | 3, acb | 4, cba` applied with this row sorting,
+The result is: `4, cba | 2, acb | 1, abc | 3, acb`.</value>
+  </data>
+  <data name="rtbHelperTvarUnset.Text" xml:space="preserve">
+    <value>Destroys the specified table variable. You can choose between session and permanent variables.</value>
+  </data>
+  <data name="rtbHelperTvarUnsetAll.Text" xml:space="preserve">
+    <value>Destroys all table variables. You can choose between session and permanent variables.</value>
+  </data>
+  <data name="rtbHelperTvarUnsetRegex.Text" xml:space="preserve">
+    <value>Destroys all table variables whose names match the provided regex pattern.
+You can choose to destroy session or permanent variables.
+
+The regex match mode is partial match:
+For instance, `1|2|3` can match variables named `1`, `2`, `3`, but also `ab1cd`. 
+For an exact match, you can specify the start and end, such as `^(1|2|3)$`.</value>
+  </data>
+  <data name="rtbHelperVarClipboard.Text" xml:space="preserve">
+    <value>You can provide either a variable name or an expression.
+If you provide a variable name, the value of that variable will be directly stored in the clipboard;
+If you provide an expression, it will be parsed as text and then stored in the clipboard.
+
+Additionally, content stored in the clipboard can be invoked elsewhere using the expression `${{_clipboard}}`.
+Please note if the content in the clipboard contains `${{_clipboard}}`, an exception will be thrown due to an attempt to parse it in an infinite loop.</value>
+  </data>
+  <data name="rtbHelperVarQueryJsonPath.Text" xml:space="preserve">
+    <value>Provide the name of a scalar containing JSON-formatted text, use the expression as a JSONPath query, and the result is stored in the target scalar.
+
+If no result is found, an empty string is returned;
+If one result is found, it's directly converted to a string;
+If multiple results are found, all results are serialized into a JSON array string.
+
+Example: the content of the source scalar is:
+`{{
+    "name": "Athena",
+    "pos": 
+    {{
+        "x": "100",
+        "y": "80"
+    }}
+}}`
+For the JSONPath expression `$.name`, the query result is `Athena`;
+For the JSONPath expression `$.pos.x`, the query result is `100`.
+For more syntax, please refer to JSONPath documentation.</value>
+  </data>
+  <data name="rtbHelperVarQueryJsonPathList.Text" xml:space="preserve">
+    <value>Provide the name of a scalar containing JSON-formatted text, use the expression as a JSONPath query, and the result is stored in the target list.
+
+If no results are found, an empty list is returned;
+If one or multiple results are found, each result is converted to a string and stored in the list.</value>
+  </data>
+  <data name="rtbHelperVarSetNumeric.Text" xml:space="preserve">
+    <value>The entire expression is parsed as a numeric expression, and the result is stored in the specified target variable.
+You can choose between session and permanent variables.</value>
+  </data>
+  <data name="rtbHelperVarSetString.Text" xml:space="preserve">
+    <value>The entire expression is parsed as a text expression, and the result is stored in the specified target variable.
+You can choose between session and permanent variables.</value>
+  </data>
+  <data name="rtbHelperVarUnset.Text" xml:space="preserve">
+    <value>Destroys the specified scalar variable.
+You can choose to destroy session or permanent variables.</value>
+  </data>
+  <data name="rtbHelperVarUnsetAll.Text" xml:space="preserve">
+    <value>Destroys all scalar variables.
+You can choose to destroy session or permanent variables.</value>
+  </data>
+  <data name="rtbHelperVarUnsetRegex.Text" xml:space="preserve">
+    <value>Destroys all scalar variables whose names match the provided regex pattern.
+You can choose to destroy session or permanent variables.
+
+The regex match mode is partial match:
+For instance, `1|2|3` can match variables named `1`, `2`, `3`, but also `ab1cd`.
+For an exact match, you can specify the start and end, such as `^(1|2|3)$`.</value>
+  </data>
+  <data name="rtbHelperSendKeysWindowMessage.Text" xml:space="preserve">
+    <value>If the process ID is left empty or is zero, the message will be sent to the first window with the given title. If it's set to -1, the message is sent to all found windows. For all other values, the message will be sent to the window with the matching process ID and title name.
+
+Title name can be a regular expression.
+
+Modifier keys such as Shift can be represented as additions to the original keycode, or sent separately. Keycode constants are described on the webpage above.
+
+The window message sends one key at a time in this mode.</value>
+  </data>
+  <data name="btnKeycodesLink.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
+        DAAACwwBP0AiyAAAAAd0SU1FB9UEGgcsB+YZ3o8AAAA1dEVYdENvbW1lbnQAKGMpIDIwMDQgSmFrdWIg
+        U3RlaW5lcgoKQ3JlYXRlZCB3aXRoIFRoZSBHSU1QkNmLbwAAAsxJREFUOE+tk8tTUmEYxlm1bvoP+gea
+        Nv0VLaqNApUz6MJxqilnUoIybbSmbNHFSzMqgwmiplkqF1PASyr3A8hFucMBFETBC5CI8HQO6jCTLntm
+        nvnO4n1+8573ez/Gv2I29tdSNt3li/+w+eIi69nAAZM7oKK+OaclF4vJ/Xq9ii+KtfbOYlbnhjeyg41E
+        Go5AAhOLTrz88gssnkhPga6dRsqqqBfc4DRLihPzDgSjCZhdJGbmlqA2uKG2J6DWO+EKxSGSE2DzRNvn
+        IHVtI3s/5uzwk5sgrDaQqSL8O3nYo1kotXbMrxDw+INUR7vol5pAATSnUQaj+rmo7VXPDHbThwhHotA7
+        AiD3gDBl99YRVszrWHN5kE5nkM/nqV+Kg9cppyEnM3nS/j0mW15HMByB0ZdCMAWEdk/sThxDY1qFWmOB
+        WKaDTK1FZCMG0bSFBshLgJqW4YLdF8c3tQ3G8BH8SSBAQWgTni0UCgUUi8XSSUY24PUFoDQFaMBWCUBd
+        FzyRFMb0cSjX9qEL5eCIHWM1moPW7CiFz5zL5TAuU+L3apgGHJcAVU2SgtG1CcWiCVrCjiljDDJrEhPE
+        NkaUVhxSob39gxIglUqBsFgxrfOVO6hpHo6OqmzwhqKlokAojAGVG32qIDrkXrRJ9Hg/pEEmkwFJkhBI
+        xiGYKt3EyQyqXwx28LsUcFLTPWt1J5lC6xCBliErGoQGPOxeRjAYhM1mw6BCh4ZPMhpQ3kxO8/BB36QB
+        3nAc2WwW03MrqO/V4UH3Cqo/LID1Vgmr1QrlkhGdY1o6XN4DWnfqOm/fb5Kg56cBxjUSjz4qcK9dhYo3
+        M7jVIkfFawWmFizoGNXQ65ykAOfX+SbnHauuVZLjfpZDKCWg0HqhNocg1XjRO2mk2paCxe13Xhg+0+Ur
+        Vy9VPu6SsBuFSWrni2yeGNRrzDOfClyVDcLa07L/KQbjLyuiV7kq7sMxAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="rtbHelperSendKeysSendKeys.Text" xml:space="preserve">
+    <value>The SendKeys keypress format, including how to represent modifier keys such as Shift, is described on the webpage above.</value>
+  </data>
+  <data name="btnSendKeysLink.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
+        DAAACwwBP0AiyAAAAAd0SU1FB9UEGgcsB+YZ3o8AAAA1dEVYdENvbW1lbnQAKGMpIDIwMDQgSmFrdWIg
+        U3RlaW5lcgoKQ3JlYXRlZCB3aXRoIFRoZSBHSU1QkNmLbwAAAsxJREFUOE+tk8tTUmEYxlm1bvoP+gea
+        Nv0VLaqNApUz6MJxqilnUoIybbSmbNHFSzMqgwmiplkqF1PASyr3A8hFucMBFETBC5CI8HQO6jCTLntm
+        nvnO4n1+8573ez/Gv2I29tdSNt3li/+w+eIi69nAAZM7oKK+OaclF4vJ/Xq9ii+KtfbOYlbnhjeyg41E
+        Go5AAhOLTrz88gssnkhPga6dRsqqqBfc4DRLihPzDgSjCZhdJGbmlqA2uKG2J6DWO+EKxSGSE2DzRNvn
+        IHVtI3s/5uzwk5sgrDaQqSL8O3nYo1kotXbMrxDw+INUR7vol5pAATSnUQaj+rmo7VXPDHbThwhHotA7
+        AiD3gDBl99YRVszrWHN5kE5nkM/nqV+Kg9cppyEnM3nS/j0mW15HMByB0ZdCMAWEdk/sThxDY1qFWmOB
+        WKaDTK1FZCMG0bSFBshLgJqW4YLdF8c3tQ3G8BH8SSBAQWgTni0UCgUUi8XSSUY24PUFoDQFaMBWCUBd
+        FzyRFMb0cSjX9qEL5eCIHWM1moPW7CiFz5zL5TAuU+L3apgGHJcAVU2SgtG1CcWiCVrCjiljDDJrEhPE
+        NkaUVhxSob39gxIglUqBsFgxrfOVO6hpHo6OqmzwhqKlokAojAGVG32qIDrkXrRJ9Hg/pEEmkwFJkhBI
+        xiGYKt3EyQyqXwx28LsUcFLTPWt1J5lC6xCBliErGoQGPOxeRjAYhM1mw6BCh4ZPMhpQ3kxO8/BB36QB
+        3nAc2WwW03MrqO/V4UH3Cqo/LID1Vgmr1QrlkhGdY1o6XN4DWnfqOm/fb5Kg56cBxjUSjz4qcK9dhYo3
+        M7jVIkfFawWmFizoGNXQ65ykAOfX+SbnHauuVZLjfpZDKCWg0HqhNocg1XjRO2mk2paCxe13Xhg+0+Ur
+        Vy9VPu6SsBuFSWrni2yeGNRrzDOfClyVDcLa07L/KQbjLyuiV7kq7sMxAAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="prsScalarTarget.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
@@ -191,6 +766,23 @@
         f7n6AAAAAElFTkSuQmCC
 </value>
   </data>
+  <data name="btnBrowseAura.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAN
+        0AAADdABEGw9BwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAJ0SURBVDhPjdHd
+        T5JRHAfw57ab7vpHmi91101LyxtWoPhorAukseaNFwktWzU3q602TUoxTeV5CmJGskJrTFkyx4VBvKgg
+        KCLIm7NaFyhv3845LpKt0ovPzsU5v+/5nd/heJ6vImu5stcslxbIWiQrI+ebS61tLSXFtfZlqVR66vB5
+        TqvVjmk0mp3fSCFyuRz29/eRz+dRKBSYYrGIickJ8G0tm6TwZCWgu7v7u8vlwuLiIhYWFiBtvoxQKASf
+        z8d4vV643W4sLS2hXC5jYKC/zF9t9ZNOTrCArq6ub06nExaLBWazmQWEw2GMvBipEgj4WUCpVILuma7M
+        t8uHWUBnZ+euwzHPik0mE+gTYrEYNjY2sL6+zkQiEUSjUaTTaSQSCXg8HrQr+B8sQK1W79jtdhiNRgiC
+        wAK2t7cx9nKU3KyvoCFbW1uM56sHpIOfLECpVGZtNhtEUcT4+DjI1JHNZpHJZBh6K5VKpZhkMolgMEiG
+        KT/oQKFQpK1WK87dEHDm+oF6oq7jQC1jqKhR/lGvEuP0K9JTU1Ps4Hwg81cOarnaJ2+KhAhlTiaTJen7
+        afpnstH/fu1IgzNhzHqSqOkwlDiJRJIQBANp1wDnShbPZyNHGrSFMfMlSbsucE1NTXE6vHqVgDlvGvqP
+        EQz/g44UPpkO4ZFlFe9ccRqQ5xoaGmJ6vZ4NT3Bs4vF0EA/frqLXvIL7pmXcNQbQ88oPzaQPNye8zC3B
+        h8EPa6hViXtcY2NjdGhoCGdJwFPyvnumAG6L/v+689qP3jcB+ks52kG0p0/HAqR9c5A9mD+WSz021KnE
+        IHf+omT08N8eV63SsHtaKVz4BYlNulYdU+xqAAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="prsListTarget.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
@@ -234,6 +826,91 @@
 </value>
   </data>
   <data name="prsListSource.Tag" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
+        6QAACukB/XXO0wAAAAd0SU1FB+UDERMSHSDKa5gAAAG6SURBVDhPlZPHakJBFIazyatlk4XgIpDAVddX
+        /RVsiL2ioKDYK4oFC3ZRxIrowpfwSQRzzwTvhUQwDnwwjW/OnDnzolKp3jmOw5NoCaVS+fZCncPhgFqt
+        hmq1ikqlgnK5jFKphGKxiHw+j1wuh0wmg3Q6jWQyiUQigdlsxmRMsN/vIZfLIZPJ/s10OhUF2G63mM/n
+        TzEcDiXBarXC9Xp9il6vJwkWiwUulwvO5/O/IEG73ZYElJDfJzyi0WhIgslkwibvnXYPipZeTBQMBoM/
+        JzyCnlkUdLtd+P1+mM1maLXau9ya0WiE3W5ntSEKWq0WXC4X29jpdDAajVhelssldrsdqE6oT09He6xW
+        K1KplCSo1+twOBzQ6/XYbDbQaDSM4/GI9XrNZP1+H81mkwksFgvi8bgkoITYbDYmOJ1OomA8HrPrUZkX
+        CgVWxjRvMpkQiUQkAdW80+lkAqqym4D+RTabRSwWQzgchsfjYfMGgwGhUOhHoFAoPgQjTyHpdDp2nWAw
+        CK/Xi2g0ikAgwOSUYGpqtRputxs+n0+M4FWQfAnfWlhTszveIqAxwfO8CI2Fb8wL+3mO4z6/AUc7QNXT
+        f7n6AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnObsWebsocketLink.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
+        DAAACwwBP0AiyAAAAAd0SU1FB9UEGgcsB+YZ3o8AAAA1dEVYdENvbW1lbnQAKGMpIDIwMDQgSmFrdWIg
+        U3RlaW5lcgoKQ3JlYXRlZCB3aXRoIFRoZSBHSU1QkNmLbwAAAsxJREFUOE+tk8tTUmEYxlm1bvoP+gea
+        Nv0VLaqNApUz6MJxqilnUoIybbSmbNHFSzMqgwmiplkqF1PASyr3A8hFucMBFETBC5CI8HQO6jCTLntm
+        nvnO4n1+8573ez/Gv2I29tdSNt3li/+w+eIi69nAAZM7oKK+OaclF4vJ/Xq9ii+KtfbOYlbnhjeyg41E
+        Go5AAhOLTrz88gssnkhPga6dRsqqqBfc4DRLihPzDgSjCZhdJGbmlqA2uKG2J6DWO+EKxSGSE2DzRNvn
+        IHVtI3s/5uzwk5sgrDaQqSL8O3nYo1kotXbMrxDw+INUR7vol5pAATSnUQaj+rmo7VXPDHbThwhHotA7
+        AiD3gDBl99YRVszrWHN5kE5nkM/nqV+Kg9cppyEnM3nS/j0mW15HMByB0ZdCMAWEdk/sThxDY1qFWmOB
+        WKaDTK1FZCMG0bSFBshLgJqW4YLdF8c3tQ3G8BH8SSBAQWgTni0UCgUUi8XSSUY24PUFoDQFaMBWCUBd
+        FzyRFMb0cSjX9qEL5eCIHWM1moPW7CiFz5zL5TAuU+L3apgGHJcAVU2SgtG1CcWiCVrCjiljDDJrEhPE
+        NkaUVhxSob39gxIglUqBsFgxrfOVO6hpHo6OqmzwhqKlokAojAGVG32qIDrkXrRJ9Hg/pEEmkwFJkhBI
+        xiGYKt3EyQyqXwx28LsUcFLTPWt1J5lC6xCBliErGoQGPOxeRjAYhM1mw6BCh4ZPMhpQ3kxO8/BB36QB
+        3nAc2WwW03MrqO/V4UH3Cqo/LID1Vgmr1QrlkhGdY1o6XN4DWnfqOm/fb5Kg56cBxjUSjz4qcK9dhYo3
+        M7jVIkfFawWmFizoGNXQ65ykAOfX+SbnHauuVZLjfpZDKCWg0HqhNocg1XjRO2mk2paCxe13Xhg+0+Ur
+        Vy9VPu6SsBuFSWrni2yeGNRrzDOfClyVDcLa07L/KQbjLyuiV7kq7sMxAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="prsJsonVariable.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
+        6QAACukB/XXO0wAAAAd0SU1FB+UDERMSHSDKa5gAAAG6SURBVDhPlZPHakJBFIazyatlk4XgIpDAVddX
+        /RVsiL2ioKDYK4oFC3ZRxIrowpfwSQRzzwTvhUQwDnwwjW/OnDnzolKp3jmOw5NoCaVS+fZCncPhgFqt
+        hmq1ikqlgnK5jFKphGKxiHw+j1wuh0wmg3Q6jWQyiUQigdlsxmRMsN/vIZfLIZPJ/s10OhUF2G63mM/n
+        TzEcDiXBarXC9Xp9il6vJwkWiwUulwvO5/O/IEG73ZYElJDfJzyi0WhIgslkwibvnXYPipZeTBQMBoM/
+        JzyCnlkUdLtd+P1+mM1maLXau9ya0WiE3W5ntSEKWq0WXC4X29jpdDAajVhelssldrsdqE6oT09He6xW
+        K1KplCSo1+twOBzQ6/XYbDbQaDSM4/GI9XrNZP1+H81mkwksFgvi8bgkoITYbDYmOJ1OomA8HrPrUZkX
+        CgVWxjRvMpkQiUQkAdW80+lkAqqym4D+RTabRSwWQzgchsfjYfMGgwGhUOhHoFAoPgQjTyHpdDp2nWAw
+        CK/Xi2g0ikAgwOSUYGpqtRputxs+n0+M4FWQfAnfWlhTszveIqAxwfO8CI2Fb8wL+3mO4z6/AUc7QNXT
+        f7n6AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="prsJsonVariable.Tag" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
+        6QAACukB/XXO0wAAAAd0SU1FB+UDERMSHSDKa5gAAAG6SURBVDhPlZPHakJBFIazyatlk4XgIpDAVddX
+        /RVsiL2ioKDYK4oFC3ZRxIrowpfwSQRzzwTvhUQwDnwwjW/OnDnzolKp3jmOw5NoCaVS+fZCncPhgFqt
+        hmq1ikqlgnK5jFKphGKxiHw+j1wuh0wmg3Q6jWQyiUQigdlsxmRMsN/vIZfLIZPJ/s10OhUF2G63mM/n
+        TzEcDiXBarXC9Xp9il6vJwkWiwUulwvO5/O/IEG73ZYElJDfJzyi0WhIgslkwibvnXYPipZeTBQMBoM/
+        JzyCnlkUdLtd+P1+mM1maLXau9ya0WiE3W5ntSEKWq0WXC4X29jpdDAajVhelssldrsdqE6oT09He6xW
+        K1KplCSo1+twOBzQ6/XYbDbQaDSM4/GI9XrNZP1+H81mkwksFgvi8bgkoITYbDYmOJ1OomA8HrPrUZkX
+        CgVWxjRvMpkQiUQkAdW80+lkAqqym4D+RTabRSwWQzgchsfjYfMGgwGhUOhHoFAoPgQjTyHpdDp2nWAw
+        CK/Xi2g0ikAgwOSUYGpqtRputxs+n0+M4FWQfAnfWlhTszveIqAxwfO8CI2Fb8wL+3mO4z6/AUc7QNXT
+        f7n6AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="rtbHelperJson.Text" xml:space="preserve">
+    <value>If the response firing expression has been defined, an log line will be generated from the result of the evaluted string expression. The log line will be processed like any other, as if it came from ACT itself.
+
+To add the response from the endpoint to this expression, special variable "_response" is available, as well as the variable you may have defined. The special variable will only be valid in the context of this action's execution. Special variable _responsecode is also available for retrieving the HTTP status code of the request.</value>
+  </data>
+  <data name="rtbHelperWmsg.Text" xml:space="preserve">
+    <value>If the process ID is left empty or is zero, the message will be sent to the first window with the given title. If it's set to -1, the message is sent to all found windows. For all other values, the message will be sent to the window with the matching process ID and title name.
+
+Title name can be a regular expression.</value>
+  </data>
+  <data name="prsFileVariable.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
+        6QAACukB/XXO0wAAAAd0SU1FB+UDERMSHSDKa5gAAAG6SURBVDhPlZPHakJBFIazyatlk4XgIpDAVddX
+        /RVsiL2ioKDYK4oFC3ZRxIrowpfwSQRzzwTvhUQwDnwwjW/OnDnzolKp3jmOw5NoCaVS+fZCncPhgFqt
+        hmq1ikqlgnK5jFKphGKxiHw+j1wuh0wmg3Q6jWQyiUQigdlsxmRMsN/vIZfLIZPJ/s10OhUF2G63mM/n
+        TzEcDiXBarXC9Xp9il6vJwkWiwUulwvO5/O/IEG73ZYElJDfJzyi0WhIgslkwibvnXYPipZeTBQMBoM/
+        JzyCnlkUdLtd+P1+mM1maLXau9ya0WiE3W5ntSEKWq0WXC4X29jpdDAajVhelssldrsdqE6oT09He6xW
+        K1KplCSo1+twOBzQ6/XYbDbQaDSM4/GI9XrNZP1+H81mkwksFgvi8bgkoITYbDYmOJ1OomA8HrPrUZkX
+        CgVWxjRvMpkQiUQkAdW80+lkAqqym4D+RTabRSwWQzgchsfjYfMGgwGhUOhHoFAoPgQjTyHpdDp2nWAw
+        CK/Xi2g0ikAgwOSUYGpqtRputxs+n0+M4FWQfAnfWlhTszveIqAxwfO8CI2Fb8wL+3mO4z6/AUc7QNXT
+        f7n6AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="prsFileVariable.Tag" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
         6QAACukB/XXO0wAAAAd0SU1FB+UDERMSHSDKa5gAAAG6SURBVDhPlZPHakJBFIazyatlk4XgIpDAVddX
@@ -303,34 +980,6 @@
         f7n6AAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="prsDictSource.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
-        6QAACukB/XXO0wAAAAd0SU1FB+UDERMSHSDKa5gAAAG6SURBVDhPlZPHakJBFIazyatlk4XgIpDAVddX
-        /RVsiL2ioKDYK4oFC3ZRxIrowpfwSQRzzwTvhUQwDnwwjW/OnDnzolKp3jmOw5NoCaVS+fZCncPhgFqt
-        hmq1ikqlgnK5jFKphGKxiHw+j1wuh0wmg3Q6jWQyiUQigdlsxmRMsN/vIZfLIZPJ/s10OhUF2G63mM/n
-        TzEcDiXBarXC9Xp9il6vJwkWiwUulwvO5/O/IEG73ZYElJDfJzyi0WhIgslkwibvnXYPipZeTBQMBoM/
-        JzyCnlkUdLtd+P1+mM1maLXau9ya0WiE3W5ntSEKWq0WXC4X29jpdDAajVhelssldrsdqE6oT09He6xW
-        K1KplCSo1+twOBzQ6/XYbDbQaDSM4/GI9XrNZP1+H81mkwksFgvi8bgkoITYbDYmOJ1OomA8HrPrUZkX
-        CgVWxjRvMpkQiUQkAdW80+lkAqqym4D+RTabRSwWQzgchsfjYfMGgwGhUOhHoFAoPgQjTyHpdDp2nWAw
-        CK/Xi2g0ikAgwOSUYGpqtRputxs+n0+M4FWQfAnfWlhTszveIqAxwfO8CI2Fb8wL+3mO4z6/AUc7QNXT
-        f7n6AAAAAElFTkSuQmCC
-</value>
-  </data>
-  <data name="prsDictSource.Tag" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
-        6QAACukB/XXO0wAAAAd0SU1FB+UDERMSHSDKa5gAAAG6SURBVDhPlZPHakJBFIazyatlk4XgIpDAVddX
-        /RVsiL2ioKDYK4oFC3ZRxIrowpfwSQRzzwTvhUQwDnwwjW/OnDnzolKp3jmOw5NoCaVS+fZCncPhgFqt
-        hmq1ikqlgnK5jFKphGKxiHw+j1wuh0wmg3Q6jWQyiUQigdlsxmRMsN/vIZfLIZPJ/s10OhUF2G63mM/n
-        TzEcDiXBarXC9Xp9il6vJwkWiwUulwvO5/O/IEG73ZYElJDfJzyi0WhIgslkwibvnXYPipZeTBQMBoM/
-        JzyCnlkUdLtd+P1+mM1maLXau9ya0WiE3W5ntSEKWq0WXC4X29jpdDAajVhelssldrsdqE6oT09He6xW
-        K1KplCSo1+twOBzQ6/XYbDbQaDSM4/GI9XrNZP1+H81mkwksFgvi8bgkoITYbDYmOJ1OomA8HrPrUZkX
-        CgVWxjRvMpkQiUQkAdW80+lkAqqym4D+RTabRSwWQzgchsfjYfMGgwGhUOhHoFAoPgQjTyHpdDp2nWAw
-        CK/Xi2g0ikAgwOSUYGpqtRputxs+n0+M4FWQfAnfWlhTszveIqAxwfO8CI2Fb8wL+3mO4z6/AUc7QNXT
-        f7n6AAAAAElFTkSuQmCC
-</value>
-  </data>
   <data name="prsDictTarget.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
@@ -359,75 +1008,7 @@
         f7n6AAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="btnBrowseAura.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAN
-        0AAADdABEGw9BwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAJ0SURBVDhPjdHd
-        T5JRHAfw57ab7vpHmi91101LyxtWoPhorAukseaNFwktWzU3q602TUoxTeV5CmJGskJrTFkyx4VBvKgg
-        KCLIm7NaFyhv3845LpKt0ovPzsU5v+/5nd/heJ6vImu5stcslxbIWiQrI+ebS61tLSXFtfZlqVR66vB5
-        TqvVjmk0mp3fSCFyuRz29/eRz+dRKBSYYrGIickJ8G0tm6TwZCWgu7v7u8vlwuLiIhYWFiBtvoxQKASf
-        z8d4vV643W4sLS2hXC5jYKC/zF9t9ZNOTrCArq6ub06nExaLBWazmQWEw2GMvBipEgj4WUCpVILuma7M
-        t8uHWUBnZ+euwzHPik0mE+gTYrEYNjY2sL6+zkQiEUSjUaTTaSQSCXg8HrQr+B8sQK1W79jtdhiNRgiC
-        wAK2t7cx9nKU3KyvoCFbW1uM56sHpIOfLECpVGZtNhtEUcT4+DjI1JHNZpHJZBh6K5VKpZhkMolgMEiG
-        KT/oQKFQpK1WK87dEHDm+oF6oq7jQC1jqKhR/lGvEuP0K9JTU1Ps4Hwg81cOarnaJ2+KhAhlTiaTJen7
-        afpnstH/fu1IgzNhzHqSqOkwlDiJRJIQBANp1wDnShbPZyNHGrSFMfMlSbsucE1NTXE6vHqVgDlvGvqP
-        EQz/g44UPpkO4ZFlFe9ccRqQ5xoaGmJ6vZ4NT3Bs4vF0EA/frqLXvIL7pmXcNQbQ88oPzaQPNye8zC3B
-        h8EPa6hViXtcY2NjdGhoCGdJwFPyvnumAG6L/v+689qP3jcB+ks52kG0p0/HAqR9c5A9mD+WSz021KnE
-        IHf+omT08N8eV63SsHtaKVz4BYlNulYdU+xqAAAAAElFTkSuQmCC
-</value>
-  </data>
-  <data name="btnSendKeysListen.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAABl0RVh0U29m
-        dHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAIxSURBVDhPpZLLSxtRFMZvEqw0yAjtKqDGd6CSrKqS
-        CA0NzbYuDL4wiEaJWh8IIgrZWEFE3IibkEVBl/0Xuumq2EfSpiAUS2nF6iRzxzRP8iDN1zOFlkwzi5Yu
-        Ps6dM+f73XvPPQzAf0kz+S/STL5g7OZrxh5GGHtM8QnJT+s7WrU1CSq8904QYnGfr5TZ36/kgkEkNja+
-        f7LbC2HGgm8YM1bXq8z08/5HqzVfODpCNhRCcncXia0tpPb2kD8+RmJlpRyuqzshm64GcMKY8LaxUc6T
-        MREIgC8vgy8tgS8ugi8sgPv9yB4cQPR4SnSSRzUAuqdX8npL6Z0dSNPT4D4f+MwMuLKenIQ0MQGJYuHw
-        EO8FQaoBKPdLb25CGhmB6HQi5naD01oeHYU8PAw+NIT44CCy29s46+kpU6NvqQE63bPc+jq+dnXhoqkJ
-        ly0tENvaELfZIA0MQHK5EKOYmpvDF4ejSBvaVIBX9GTfpqYqcbsdl83NEFtbEW9vh9TR8VMxgl2ZzcjM
-        z+OD2Vw+ZeyGCkA9cJ87HIUU3fuKdlcMvLMT193dkOlUCoT39yO7uopIfX30l+83QFHEYHienJ2tJD0e
-        SGTmZExYLJAVSG8vcmQ+s1iKNCt3NQE0B6ZoQ4N4PTZWVorT4+NIU/My9CK5tTXQjBQjen2g2qMCKFIm
-        LazXh05NpuLnvr78hctVoF1LUaPxnPrk/LNe9VGtp4wZCGal3jx4ydhtrRpFmsm/F9gPIhaNejfyr/0A
-        AAAASUVORK5CYII=
-</value>
-  </data>
-  <data name="btnKeycodesListen.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAABl0RVh0U29m
-        dHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAIxSURBVDhPpZLLSxtRFMZvEqw0yAjtKqDGd6CSrKqS
-        CA0NzbYuDL4wiEaJWh8IIgrZWEFE3IibkEVBl/0Xuumq2EfSpiAUS2nF6iRzxzRP8iDN1zOFlkwzi5Yu
-        Ps6dM+f73XvPPQzAf0kz+S/STL5g7OZrxh5GGHtM8QnJT+s7WrU1CSq8904QYnGfr5TZ36/kgkEkNja+
-        f7LbC2HGgm8YM1bXq8z08/5HqzVfODpCNhRCcncXia0tpPb2kD8+RmJlpRyuqzshm64GcMKY8LaxUc6T
-        MREIgC8vgy8tgS8ugi8sgPv9yB4cQPR4SnSSRzUAuqdX8npL6Z0dSNPT4D4f+MwMuLKenIQ0MQGJYuHw
-        EO8FQaoBKPdLb25CGhmB6HQi5naD01oeHYU8PAw+NIT44CCy29s46+kpU6NvqQE63bPc+jq+dnXhoqkJ
-        ly0tENvaELfZIA0MQHK5EKOYmpvDF4ejSBvaVIBX9GTfpqYqcbsdl83NEFtbEW9vh9TR8VMxgl2ZzcjM
-        z+OD2Vw+ZeyGCkA9cJ87HIUU3fuKdlcMvLMT193dkOlUCoT39yO7uopIfX30l+83QFHEYHienJ2tJD0e
-        SGTmZExYLJAVSG8vcmQ+s1iKNCt3NQE0B6ZoQ4N4PTZWVorT4+NIU/My9CK5tTXQjBQjen2g2qMCKFIm
-        LazXh05NpuLnvr78hctVoF1LUaPxnPrk/LNe9VGtp4wZCGal3jx4ydhtrRpFmsm/F9gPIhaNejfyr/0A
-        AAAASUVORK5CYII=
-</value>
-  </data>
-  <data name="btnSendKeysLink.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DAAACwwBP0AiyAAAAAd0SU1FB9UEGgcsB+YZ3o8AAAA1dEVYdENvbW1lbnQAKGMpIDIwMDQgSmFrdWIg
-        U3RlaW5lcgoKQ3JlYXRlZCB3aXRoIFRoZSBHSU1QkNmLbwAAAsxJREFUOE+tk8tTUmEYxlm1bvoP+gea
-        Nv0VLaqNApUz6MJxqilnUoIybbSmbNHFSzMqgwmiplkqF1PASyr3A8hFucMBFETBC5CI8HQO6jCTLntm
-        nvnO4n1+8573ez/Gv2I29tdSNt3li/+w+eIi69nAAZM7oKK+OaclF4vJ/Xq9ii+KtfbOYlbnhjeyg41E
-        Go5AAhOLTrz88gssnkhPga6dRsqqqBfc4DRLihPzDgSjCZhdJGbmlqA2uKG2J6DWO+EKxSGSE2DzRNvn
-        IHVtI3s/5uzwk5sgrDaQqSL8O3nYo1kotXbMrxDw+INUR7vol5pAATSnUQaj+rmo7VXPDHbThwhHotA7
-        AiD3gDBl99YRVszrWHN5kE5nkM/nqV+Kg9cppyEnM3nS/j0mW15HMByB0ZdCMAWEdk/sThxDY1qFWmOB
-        WKaDTK1FZCMG0bSFBshLgJqW4YLdF8c3tQ3G8BH8SSBAQWgTni0UCgUUi8XSSUY24PUFoDQFaMBWCUBd
-        FzyRFMb0cSjX9qEL5eCIHWM1moPW7CiFz5zL5TAuU+L3apgGHJcAVU2SgtG1CcWiCVrCjiljDDJrEhPE
-        NkaUVhxSob39gxIglUqBsFgxrfOVO6hpHo6OqmzwhqKlokAojAGVG32qIDrkXrRJ9Hg/pEEmkwFJkhBI
-        xiGYKt3EyQyqXwx28LsUcFLTPWt1J5lC6xCBliErGoQGPOxeRjAYhM1mw6BCh4ZPMhpQ3kxO8/BB36QB
-        3nAc2WwW03MrqO/V4UH3Cqo/LID1Vgmr1QrlkhGdY1o6XN4DWnfqOm/fb5Kg56cBxjUSjz4qcK9dhYo3
-        M7jVIkfFawWmFizoGNXQ65ykAOfX+SbnHauuVZLjfpZDKCWg0HqhNocg1XjRO2mk2paCxe13Xhg+0+Ur
-        Vy9VPu6SsBuFSWrni2yeGNRrzDOfClyVDcLa07L/KQbjLyuiV7kq7sMxAAAAAElFTkSuQmCC
-</value>
-  </data>
-  <data name="prsFileVariable.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="prsDictSource.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
         6QAACukB/XXO0wAAAAd0SU1FB+UDERMSHSDKa5gAAAG6SURBVDhPlZPHakJBFIazyatlk4XgIpDAVddX
@@ -441,7 +1022,7 @@
         f7n6AAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="prsFileVariable.Tag" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="prsDictSource.Tag" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
         6QAACukB/XXO0wAAAAd0SU1FB+UDERMSHSDKa5gAAAG6SURBVDhPlZPHakJBFIazyatlk4XgIpDAVddX
@@ -455,85 +1036,21 @@
         f7n6AAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="button6.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAN
-        0AAADdABEGw9BwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAJ0SURBVDhPjdHd
-        T5JRHAfw57ab7vpHmi91101LyxtWoPhorAukseaNFwktWzU3q602TUoxTeV5CmJGskJrTFkyx4VBvKgg
-        KCLIm7NaFyhv3845LpKt0ovPzsU5v+/5nd/heJ6vImu5stcslxbIWiQrI+ebS61tLSXFtfZlqVR66vB5
-        TqvVjmk0mp3fSCFyuRz29/eRz+dRKBSYYrGIickJ8G0tm6TwZCWgu7v7u8vlwuLiIhYWFiBtvoxQKASf
-        z8d4vV643W4sLS2hXC5jYKC/zF9t9ZNOTrCArq6ub06nExaLBWazmQWEw2GMvBipEgj4WUCpVILuma7M
-        t8uHWUBnZ+euwzHPik0mE+gTYrEYNjY2sL6+zkQiEUSjUaTTaSQSCXg8HrQr+B8sQK1W79jtdhiNRgiC
-        wAK2t7cx9nKU3KyvoCFbW1uM56sHpIOfLECpVGZtNhtEUcT4+DjI1JHNZpHJZBh6K5VKpZhkMolgMEiG
-        KT/oQKFQpK1WK87dEHDm+oF6oq7jQC1jqKhR/lGvEuP0K9JTU1Ps4Hwg81cOarnaJ2+KhAhlTiaTJen7
-        afpnstH/fu1IgzNhzHqSqOkwlDiJRJIQBANp1wDnShbPZyNHGrSFMfMlSbsucE1NTXE6vHqVgDlvGvqP
-        EQz/g44UPpkO4ZFlFe9ccRqQ5xoaGmJ6vZ4NT3Bs4vF0EA/frqLXvIL7pmXcNQbQ88oPzaQPNye8zC3B
-        h8EPa6hViXtcY2NjdGhoCGdJwFPyvnumAG6L/v+689qP3jcB+ks52kG0p0/HAqR9c5A9mD+WSz021KnE
-        IHf+omT08N8eV63SsHtaKVz4BYlNulYdU+xqAAAAAElFTkSuQmCC
-</value>
-  </data>
-  <data name="prsJsonVariable.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
-        6QAACukB/XXO0wAAAAd0SU1FB+UDERMSHSDKa5gAAAG6SURBVDhPlZPHakJBFIazyatlk4XgIpDAVddX
-        /RVsiL2ioKDYK4oFC3ZRxIrowpfwSQRzzwTvhUQwDnwwjW/OnDnzolKp3jmOw5NoCaVS+fZCncPhgFqt
-        hmq1ikqlgnK5jFKphGKxiHw+j1wuh0wmg3Q6jWQyiUQigdlsxmRMsN/vIZfLIZPJ/s10OhUF2G63mM/n
-        TzEcDiXBarXC9Xp9il6vJwkWiwUulwvO5/O/IEG73ZYElJDfJzyi0WhIgslkwibvnXYPipZeTBQMBoM/
-        JzyCnlkUdLtd+P1+mM1maLXau9ya0WiE3W5ntSEKWq0WXC4X29jpdDAajVhelssldrsdqE6oT09He6xW
-        K1KplCSo1+twOBzQ6/XYbDbQaDSM4/GI9XrNZP1+H81mkwksFgvi8bgkoITYbDYmOJ1OomA8HrPrUZkX
-        CgVWxjRvMpkQiUQkAdW80+lkAqqym4D+RTabRSwWQzgchsfjYfMGgwGhUOhHoFAoPgQjTyHpdDp2nWAw
-        CK/Xi2g0ikAgwOSUYGpqtRputxs+n0+M4FWQfAnfWlhTszveIqAxwfO8CI2Fb8wL+3mO4z6/AUc7QNXT
-        f7n6AAAAAElFTkSuQmCC
-</value>
-  </data>
-  <data name="prsJsonVariable.Tag" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAK
-        6QAACukB/XXO0wAAAAd0SU1FB+UDERMSHSDKa5gAAAG6SURBVDhPlZPHakJBFIazyatlk4XgIpDAVddX
-        /RVsiL2ioKDYK4oFC3ZRxIrowpfwSQRzzwTvhUQwDnwwjW/OnDnzolKp3jmOw5NoCaVS+fZCncPhgFqt
-        hmq1ikqlgnK5jFKphGKxiHw+j1wuh0wmg3Q6jWQyiUQigdlsxmRMsN/vIZfLIZPJ/s10OhUF2G63mM/n
-        TzEcDiXBarXC9Xp9il6vJwkWiwUulwvO5/O/IEG73ZYElJDfJzyi0WhIgslkwibvnXYPipZeTBQMBoM/
-        JzyCnlkUdLtd+P1+mM1maLXau9ya0WiE3W5ntSEKWq0WXC4X29jpdDAajVhelssldrsdqE6oT09He6xW
-        K1KplCSo1+twOBzQ6/XYbDbQaDSM4/GI9XrNZP1+H81mkwksFgvi8bgkoITYbDYmOJ1OomA8HrPrUZkX
-        CgVWxjRvMpkQiUQkAdW80+lkAqqym4D+RTabRSwWQzgchsfjYfMGgwGhUOhHoFAoPgQjTyHpdDp2nWAw
-        CK/Xi2g0ikAgwOSUYGpqtRputxs+n0+M4FWQfAnfWlhTszveIqAxwfO8CI2Fb8wL+3mO4z6/AUc7QNXT
-        f7n6AAAAAElFTkSuQmCC
-</value>
-  </data>
-  <data name="btnObsWebsocketLink.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DAAACwwBP0AiyAAAAAd0SU1FB9UEGgcsB+YZ3o8AAAA1dEVYdENvbW1lbnQAKGMpIDIwMDQgSmFrdWIg
-        U3RlaW5lcgoKQ3JlYXRlZCB3aXRoIFRoZSBHSU1QkNmLbwAAAsxJREFUOE+tk8tTUmEYxlm1bvoP+gea
-        Nv0VLaqNApUz6MJxqilnUoIybbSmbNHFSzMqgwmiplkqF1PASyr3A8hFucMBFETBC5CI8HQO6jCTLntm
-        nvnO4n1+8573ez/Gv2I29tdSNt3li/+w+eIi69nAAZM7oKK+OaclF4vJ/Xq9ii+KtfbOYlbnhjeyg41E
-        Go5AAhOLTrz88gssnkhPga6dRsqqqBfc4DRLihPzDgSjCZhdJGbmlqA2uKG2J6DWO+EKxSGSE2DzRNvn
-        IHVtI3s/5uzwk5sgrDaQqSL8O3nYo1kotXbMrxDw+INUR7vol5pAATSnUQaj+rmo7VXPDHbThwhHotA7
-        AiD3gDBl99YRVszrWHN5kE5nkM/nqV+Kg9cppyEnM3nS/j0mW15HMByB0ZdCMAWEdk/sThxDY1qFWmOB
-        WKaDTK1FZCMG0bSFBshLgJqW4YLdF8c3tQ3G8BH8SSBAQWgTni0UCgUUi8XSSUY24PUFoDQFaMBWCUBd
-        FzyRFMb0cSjX9qEL5eCIHWM1moPW7CiFz5zL5TAuU+L3apgGHJcAVU2SgtG1CcWiCVrCjiljDDJrEhPE
-        NkaUVhxSob39gxIglUqBsFgxrfOVO6hpHo6OqmzwhqKlokAojAGVG32qIDrkXrRJ9Hg/pEEmkwFJkhBI
-        xiGYKt3EyQyqXwx28LsUcFLTPWt1J5lC6xCBliErGoQGPOxeRjAYhM1mw6BCh4ZPMhpQ3kxO8/BB36QB
-        3nAc2WwW03MrqO/V4UH3Cqo/LID1Vgmr1QrlkhGdY1o6XN4DWnfqOm/fb5Kg56cBxjUSjz4qcK9dhYo3
-        M7jVIkfFawWmFizoGNXQ65ykAOfX+SbnHauuVZLjfpZDKCWg0HqhNocg1XjRO2mk2paCxe13Xhg+0+Ur
-        Vy9VPu6SsBuFSWrni2yeGNRrzDOfClyVDcLa07L/KQbjLyuiV7kq7sMxAAAAAElFTkSuQmCC
-</value>
-  </data>
-  <metadata name="openFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <data name="openFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing">
     <value>17, 17</value>
-  </metadata>
-  <metadata name="openFileDialog2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  </data>
+  <data name="openFileDialog2.TrayLocation" type="System.Drawing.Point, System.Drawing">
     <value>157, 17</value>
-  </metadata>
-  <metadata name="openFileDialog3.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  </data>
+  <data name="openFileDialog3.TrayLocation" type="System.Drawing.Point, System.Drawing">
     <value>297, 17</value>
-  </metadata>
-  <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  </data>
+  <data name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing">
     <value>437, 17</value>
-  </metadata>
-  <metadata name="stsMouseHelp.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  </data>
+  <data name="stsMouseHelp.TrayLocation" type="System.Drawing.Point, System.Drawing">
     <value>900, 17</value>
-  </metadata>
+  </data>
   <data name="tlsMouseLocation.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
@@ -550,13 +1067,71 @@
         RK5CYII=
 </value>
   </data>
-  <metadata name="fontDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <data name="fontDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing">
     <value>784, 17</value>
-  </metadata>
-  <metadata name="timer2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  </data>
+  <data name="timer2.TrayLocation" type="System.Drawing.Point, System.Drawing">
     <value>1029, 17</value>
-  </metadata>
-  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="$this.TrayHeight" type="System.Int32, mscorlib">
     <value>52</value>
-  </metadata>
+  </data>
+  <data name="rtbHelperVarUnsetRegexUniversal.Text" xml:space="preserve">
+    <value>Destroys all variables (scalar, list, table, dictionary) whose names match the provided regex pattern.
+You can choose to destroy session or permanent variables.
+
+The regex match mode is partial match:
+For instance, `1|2|3` can match variables named `1`, `2`, `3`, but also `ab1cd`.
+For an exact match, you can specify the start and end, such as `^(1|2|3)$`.</value>
+  </data>
+  <data name="rtbHelperCallback.Text" xml:space="preserve">
+    <value>Allows you to register your code as callbacks into Triggernometry, and then have callbacks executed as Triggernometry actions.</value>
+  </data>
+  <data name="rtbHelperSendKeysWindowMessageCombo.Text" xml:space="preserve">
+    <value>If the process ID is left empty or is zero, the message will be sent to the first window with the given title. If it's set to -1, the message is sent to all found windows. For all other values, the message will be sent to the window with the matching process ID and title name.
+
+Title name can be a regular expression.
+
+Modifier keys such as Shift can be represented as additions to the original keycode, or sent separately. Keycode constants are described on the webpage above.
+
+In the multiple window messages mode, you can provide a comma-separated list of keycodes.</value>
+  </data>
+  <data name="rtbHelperDictGetEntity.Text" xml:space="preserve">
+    <value>Retrieve the specific properties of a specific entity and store it in the dictionary variable.
+Each key is a property, and the corresponding value is its value.
+Similar to `_ffxiventity`, it will return only the first entity data matching the expression.
+
+Key Expression:
+The specific property names to be retrieved, separated by commas. 
+e.g. `ID, Name, X, Y, HasStatus(50), Heading`.
+The properties correspond to all available properties in the expression `${{_ffxiventity[name].property}}`.
+If the expression is not provided, a default set of most properties will be returned.
+
+Value Expression:
+The specific entity. 
+· By hex ID: `103CDDB2`
+· By name: `Striking Dummy`
+· By mathematical expression:
+Use property expressions as placeholders, e.g. `IsT &amp;&amp; HasStatus(50) &amp;&amp; Distance &lt; 5`
+
+If the entity is not found, a dictionary with default values will be returned, and a warning log will be generated.</value>
+  </data>
+  <data name="rtbHelperTvarGetAllEntities.Text" xml:space="preserve">
+    <value>Retrieve the specific properties of specific entities, and store the data in the table variable.
+The first row of the table contains property names such as `Name`, `ID`, etc., with each subsequent row containing data for a single entity.
+
+Column Expression:
+The specific property names to be retrieved, separated by commas. 
+e.g. `ID, Name, X, Y, HasStatus(50), Heading`.
+The properties correspond to all available properties in the expression `${{_ffxiventity[name].property}}`.
+If the expression is not provided, a default set of most properties will be returned.
+
+Row Expression: 
+A mathematical expression to filter specific entities.
+Use property expressions as placeholders, e.g. `IsT &amp;&amp; HasStatus(50) &amp;&amp; Distance &lt; 5`.
+If the expression is not provided, all entities will be queried.
+
+The table can be further processed with filtering, sorting, and other table actions.</value>
+  </data>
 </root>

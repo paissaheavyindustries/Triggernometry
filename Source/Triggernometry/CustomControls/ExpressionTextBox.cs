@@ -55,26 +55,27 @@ namespace Triggernometry.CustomControls
 
         public static List<string> prefixes = new List<string>() // right after "${"
         {
-            "numeric:", "n:", "string:", "s:", "func:", "f:",
+            "numeric:", "n:", "string:", "s:", "func:", "f:", "if:",
             "var:", "pvar:", "evar:", "epvar:", "v:", "pv:", "ev:", "epv:",
             "lvar:", "plvar:", "elvar:", "eplvar:", "l:", "pl:", "el:", "epl:",
             "tvar:", "ptvar:", "etvar:", "eptvar:", "t:", "pt:", "et:", "ept:",
             "dvar:", "pdvar:", "edvar:", "epdvar:", "d:", "pd:", "ed:", "epd:",
             "tvarcl:", "ptvarcl:", "tvarrl:", "ptvarrl:", "tvardl:", "ptvardl:",
             "?l:", "?lvar:", "?t:", "?tvar:", "?d:", "?dvar:",
-            "etext:", "eimage:", "ecallback:", "estorage:", 
+            "etext:", "eimage:", "ecallback:", "estorage:",
             "env:",
 
             // special variables
-            "_incombat", "_lastencounter", "_activeencounter", "_configpath", "_pluginpath", "_pluginversion", 
+            "_incombat", "_lastencounter", "_activeencounter", "_configpath", "_pluginpath", "_pluginversion",
             "_duration", "_event", "_since", "_sincems", "_triggerid", "_triggername", "_triggerpath", "_zone",
             "_response", "_responsecode", "_jsonresponse[x]",
             "_timestamp", "_timestampms", "_systemtime", "_systemtimems", "_clipboard",
             "_screenwidth", "_screenheight", "_textaura[x]", "_imageaura[x]",
             "_x", "_y", "_w", "_width", "_h", "_height", "_opacity",
             "_ffxivparty[x]", "_party[x]", "_ffxiventity[x]", "_entity[x]", "_ffxivplayer", "_me", "_me.id",
-            "_job[jobid/jobName/jobAbbrev]",
+            "_job[jobid/jobName/jobAbbrev]", "_tm2id[markType]", "_targetmarker2id[markType]", "_wm[markType]", "_waymark[markType]",
             "_ffxivtime", "_ET", "_ETprecise", "_ffxivpartyorder", "_ffxivprocid", "_ffxivprocname", "_ffxivzoneid",
+            "_ffxivversion", "_ffxivincombat", "_ffxivisglobal",
             "_env[x]", "_const[x]", "_config[x]", "_storage[x]", "_actionhistory[i/previous]",
             "_this", "_idx", "_col", "_row", "_col[i]", "_row[i]", "_colrl[...]", "_rowcl[...]", "_key", "_val",
             "_loopiterator", "_i",
@@ -82,7 +83,7 @@ namespace Triggernometry.CustomControls
 
         public static List<string> funcs = new List<string>()
         {
-            "toupper", "tolower", "tofullwidth", "tohalfwidth", "toxivchar(combineDigits=false)", "length",
+            "toupper", "tolower", "tofullwidth", "tohalfwidth", "toblackchar(combineDigits=false)", "towhitechar", "length",
             "dec2hex", "dec2hex2", "dec2hex4", "dec2hex8", "float2hex", "double2hex",
             "hex2dec", "hex2float", "hex2double", "parsedmg",
             "substring(index)", "substring(index, len)", "slice(slices)", "pick(index, separator=',')",
@@ -144,21 +145,13 @@ namespace Triggernometry.CustomControls
             "x", "y", "w", "h", "opacity"
         };
 
-        public static List<string> ffxivProps = new List<string>()
-        {
-            "name", "job", "jobid", "role", "subrole", "roleid", "id", "ownerid", "bnpcid", "bnpcnameid", "type", "partytype", "address",
-            "currenthp", "currentmp", "currentcp", "currentgp", "maxhp", "maxmp", "maxcp", "maxgp", "level",
-            "x", "y", "z", "heading", "h", "distance", "iscasting", "casttime", "maxcasttime", "castid",
-            "inparty", "order", "worldid", "worldname", "currentworldid", "targetid", "casttargetid",
-            "isT", "isH", "isD", "isM", "isR", "isC", "isG", "isTH", "isCG", "isTM", "isHR",
-            "jobCN", "jobDE", "jobEN", "jobFR", "jobJP", "jobKR", "jobCN1", "jobCN2", "jobEN3", "jobJP1",
-        };
-
-        public static List<string> jobProps = new List<string>()
-        {
-            "role", "job", "jobid", "isT", "isH", "isD", "isM", "isR", "isC", "isG", "isTH", "isCG", "isTM", "isHR",
-            "jobCN", "jobDE", "jobEN", "jobFR", "jobJP", "jobKR", "jobCN1", "jobCN2", "jobEN3", "jobJP1"
-        };
+        // Name, X, Job, Role, etc.
+        public static List<string> XivEntityProps = new List<string> { 
+            "HasStatus(statusId)", "StatusTimer(statusId)", "StatusStack(statusId)",
+        }.Concat(FFXIV.Entity.LegalEntityPropNames).Concat(FFXIV.Job.LegalJobPropNames).ToList();
+        
+        // Job, Role, etc.
+        public static List<string> XivJobProps = FFXIV.Job.LegalJobPropNames.ToList();
 
         public static List<string> configurations = new List<string>()
         {
@@ -264,31 +257,45 @@ namespace Triggernometry.CustomControls
         internal Context ctx;
         private Context fakectx;
 
+        // record all the capture groups and combine with prefixes
+        // when entering a trigger or editing the trigger regex
+
         private static string _currentTriggerRegexStr = "";
         internal static string CurrentTriggerRegexStr
         {
-            get { return _currentTriggerRegexStr; }
+            get => _currentTriggerRegexStr;
             set
-            {   // record all the capture groups and combine with prefixes
-                // when entering a trigger or exiting the regex textbox
+            {   
                 _currentTriggerRegexStr = value;
-                try
-                {
-                    Regex regex = new Regex(_currentTriggerRegexStr);
-                    CurrentRegexGroupsAndPrefixes = regex.GetGroupNames().ToList();
-                    CurrentRegexGroupsAndPrefixes.AddRange(prefixes);
-                }
-                catch
-                {
-                    _currentTriggerRegexStr = "";
-                    CurrentRegexGroupsAndPrefixes = prefixes;
-                }
-                CurrentRegexGroupsAndPrefixesHashset = new HashSet<string>(CurrentRegexGroupsAndPrefixes);
+                _currentRegexGroupsAndPrefixes = null;
             }
         }
 
-        private static List<string> CurrentRegexGroupsAndPrefixes = new List<string>();
-        private static HashSet<string> CurrentRegexGroupsAndPrefixesHashset = new HashSet<string>();
+        private static HashSet<string> _currentRegexGroupsAndPrefixes = null;
+        private static HashSet<string> CurrentRegexGroupsAndPrefixes
+        {
+            get // lazy loading
+            {
+                if (_currentRegexGroupsAndPrefixes == null)
+                {
+                    List<string> groups;
+                    try
+                    {
+                        Regex regex = new Regex(_currentTriggerRegexStr);
+                        groups = regex.GetGroupNames().ToList();
+                        groups.AddRange(prefixes);
+                    }
+                    catch
+                    {
+                        _currentTriggerRegexStr = "";
+                        groups = prefixes;
+                    }
+                    _currentRegexGroupsAndPrefixes = new HashSet<string>(groups);
+                }
+                return _currentRegexGroupsAndPrefixes;
+            }
+        }
+
         private string suffix = "";  // to do
 
         public delegate void EnterDelegate();
@@ -297,37 +304,36 @@ namespace Triggernometry.CustomControls
         public IButtonControl CancelButton;
 
         public static readonly Regex rexPrefix
-            = new Regex(@"[$¤]\{(?<prefix>[^[$}:.]*)$");
+            = new Regex(@"[$¤]\{(?<prefix>[^[$}:.]*)$", RegexOptions.Compiled);
         public static readonly Regex rexFunc
-            = new Regex(@"[$¤]\{f(?:unc)?:(?<funcid>[^(:]*)$");
+            = new Regex(@"[$¤]\{f(?:unc)?:(?<funcid>[^(:]*)$", RegexOptions.Compiled);
         public static readonly Regex rexVarName
-            = new Regex(@"[$¤]\{(?<e>e?)(?<persist>p?)(?<type>[vltd]|text|image|callback|storage)(?:v?ar)?(?:[cdr]l)?:(?<name>[^$¤.[]*)$");
+            = new Regex(@"[$¤]\{(?<e>e?)(?<persist>p?)(?<type>[vltd]|text|image|callback|storage)(?:v?ar)?(?:[cdr]l)?:(?<name>[^$¤.[]*)$", RegexOptions.Compiled);
         public static readonly Regex rexColHeader
-            = new Regex(@"[$¤]\{(?<persist>p?)t(?:var)?[cd]l:(?<name>[^$¤[]+)\[(?<key>[^$¤\]]*)$");
+            = new Regex(@"[$¤]\{(?<persist>p?)t(?:var)?[cd]l:(?<name>[^$¤[]+)\[(?<key>[^$¤\]]*)$", RegexOptions.Compiled);
         public static readonly Regex rexRowHeader
-            = new Regex(@"[$¤]\{(?<persist>p?)t(?:var)?(?:rl:(?<name1>[^$¤[]+)|dl:(?<name2>[^$¤[]+)\[.*\])\[(?<key>[^$¤\]]*)$");
+            = new Regex(@"[$¤]\{(?<persist>p?)t(?:var)?(?:rl:(?<name1>[^$¤[]+)|dl:(?<name2>[^$¤[]+)\[.*\])\[(?<key>[^$¤\]]*)$", RegexOptions.Compiled);
         public static readonly Regex rexDictKey
-            = new Regex(@"[$¤]\{(?<persist>p?)d(?:var)?:(?<name>[^$¤[]+)\[(?<key>[^$¤\]]*)$");
+            = new Regex(@"[$¤]\{(?<persist>p?)d(?:var)?:(?<name>[^$¤[]+)\[(?<key>[^$¤\]]*)$", RegexOptions.Compiled);
         public static readonly Regex rexStructKey
-            = new Regex(@"[$¤]\{_(?<struct>const|textaura|imageaura|config|storage)\[(?<key>[^$¤\]]*)$");
+            = new Regex(@"[$¤]\{_(?<struct>const|textaura|imageaura|config|storage)\[(?<key>[^$¤\]]*)$", RegexOptions.Compiled);
         // The regexes "rex...Prop" and "rexMath" are matched after looking for the previous unclosed '{'
         public static readonly Regex rexVarProp
-            = new Regex(@"^[p?]?(?<type>[ltd])(?:var)?:.*\.(?<prop>[^.(]*)$");
+            = new Regex(@"^[p?]?(?<type>[ltd])(?:var)?:.*\.(?<prop>[^.(]*)$", RegexOptions.Compiled);
         public static readonly Regex rexMeProp
-            = new Regex(@"^_me\.(?<prop>.*)$");
+            = new Regex(@"^_me\.(?<prop>.*)$", RegexOptions.Compiled);
         public static readonly Regex rexStructProp
-            = new Regex(@"_(?<struct>[^[]+)\[.*\]\.(?<prop>[^.]*)$");
+            = new Regex(@"_(?<struct>[^[]+)\[.*\]\.(?<prop>[^.]*)$", RegexOptions.Compiled);
         public static readonly Regex rexMath
-            = new Regex(@"(?<![[$¤.])\b[\p{L}\w]+$");
+            = new Regex(@"(?<![[$¤.])\b[\p{L}\w]+$", RegexOptions.Compiled);
 
         private static readonly Regex rexDynamicNames // capture the names in the expressions and store into lists for autofill
-            = new Regex(@"[$¤]\{e?(?<persist>p?)(?<type>[vltd]|text|image)(?:v?ar)?(?:[cdr]l)?:(?<name>[^$¤.[{}\n]*)[^\${}]*\}");
+            = new Regex(@"[$¤]\{e?(?<persist>p?)(?<type>[vltd]|text|image)(?:v?ar)?(?:[cdr]l)?:(?<name>[^$¤.[{}\n]*)[^\${}]*\}", RegexOptions.Compiled);
 
         private string CurrentMatch;
         private Timer acfDebounceTimer = new Timer();
 
         public Forms.AutoCompleteForm acf = null;
-        private static readonly object EventText;
 
         // unhide TextChanged on base class
         private EventHandler _TextChanged;
@@ -371,10 +377,6 @@ namespace Triggernometry.CustomControls
 
         private void ExpressionTextBox_Leave(object sender, EventArgs e)
         {
-            if (Name == "txtRegexp") // record the editted trigger regex
-            {
-                CurrentTriggerRegexStr = textBox1.Text;
-            }
             HideAutocomplete();
         }
 
@@ -657,7 +659,7 @@ namespace Triggernometry.CustomControls
         {
             var matches = reCaptureGroups.Matches(expression);
             return matches.Cast<Match>().All(
-                m => CurrentRegexGroupsAndPrefixesHashset.Contains(m.Groups["capture"].Value)
+                m => CurrentRegexGroupsAndPrefixes.Contains(m.Groups["capture"].Value)
                 );
         }
 
@@ -830,8 +832,9 @@ namespace Triggernometry.CustomControls
                     type = AutofillTypeEnum.None;
                 }
 
-                List<string> varNames = GetExistingAutofillNameList(type, isPersist);
-                varNames.AddRange(GetDynamicAutofillNameList(type, isPersist) ?? new List<string>());
+                // combine the existing and dynamic variable names
+                HashSet<string> varNames = new HashSet<string>(GetExistingAutofillNameList(type, isPersist));
+                varNames.UnionWith(GetDynamicAutofillNameList(type, isPersist) ?? Enumerable.Empty<string>());
 
                 matchedStrings = GetAutocompleteSuggestions(varNames, m.Groups["name"].Value);
                 if (matchedStrings.Count() > 0)
@@ -1024,7 +1027,7 @@ namespace Triggernometry.CustomControls
                                 + currentExpr.Substring(currentExpr.LastIndexOf('}') + 1);
                 }
                 // match numeric:
-                if (currentExpr.StartsWith("n:") || currentExpr.StartsWith("numeric:"))
+                if (currentExpr.StartsWith("n:") || currentExpr.StartsWith("numeric:") || currentExpr.StartsWith("if:"))
                 {
                     m = rexMath.Match(currentExpr);
                     if (m.Success)
@@ -1070,7 +1073,7 @@ namespace Triggernometry.CustomControls
                 m = rexMeProp.Match(currentExpr);
                 if (m.Success)
                 {
-                    matchedStrings = GetAutocompleteSuggestions(ffxivProps, m.Groups["prop"].Value);
+                    matchedStrings = GetAutocompleteSuggestions(XivEntityProps, m.Groups["prop"].Value);
                     if (matchedStrings != null && matchedStrings.Count() > 0)
                     {
                         CurrentMatch = m.Groups["prop"].Value;
@@ -1093,7 +1096,7 @@ namespace Triggernometry.CustomControls
                         case "ffxiventity":
                         case "party":
                         case "entity":
-                            matchedStrings = GetAutocompleteSuggestions(ffxivProps, m.Groups["prop"].Value);
+                            matchedStrings = GetAutocompleteSuggestions(XivEntityProps, m.Groups["prop"].Value);
                             break;
                         case "textaura":
                             matchedStrings = GetAutocompleteSuggestions(textAuraProps, m.Groups["prop"].Value);
@@ -1102,7 +1105,7 @@ namespace Triggernometry.CustomControls
                             matchedStrings = GetAutocompleteSuggestions(imageAuraProps, m.Groups["prop"].Value);
                             break;
                         case "job":
-                            matchedStrings = GetAutocompleteSuggestions(jobProps, m.Groups["prop"].Value);
+                            matchedStrings = GetAutocompleteSuggestions(XivJobProps, m.Groups["prop"].Value);
                             break;
                     }
                     if (matchedStrings != null && matchedStrings.Count() > 0)
@@ -1399,7 +1402,7 @@ namespace Triggernometry.CustomControls
             if (!existingNames.Contains(name))
             {
                 dynamicNames.Add(name);
-                if (dynamicNames.Count > 20)
+                if (dynamicNames.Count > 30)
                 {
                     dynamicNames.RemoveAt(0);
                 }
@@ -1770,6 +1773,13 @@ namespace Triggernometry.CustomControls
                             Paste(useAbbrev ? "${_me.id}" : "${_ffxiventity[${_ffxivplayer}].id}");
                             SelectionStart -= 3;
                             SelectionLength = 2; // select "id"
+                            break;
+                        // Ctrl + Shift + I: ${if: ? : }
+                        case Keys.I:
+                            if (shouldWrap)
+                                InsertStringOnBothSides("${if: " + SelectedText.Trim() + " ? ", " :  }");
+                            else
+                                InsertStringOnBothSides("${if: ", " ?  :  }");
                             break;
                         // Ctrl + Shift + A: Select the next outer layer of brackets
                         case Keys.A:

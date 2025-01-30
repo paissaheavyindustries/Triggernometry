@@ -264,7 +264,12 @@ namespace Triggernometry
             }
         }
 
-        public ConditionGroup Condition { get; set; }
+        internal ConditionGroup _Condition = new ConditionGroup { Enabled = false };
+        public ConditionGroup Condition
+        {
+            get => _Condition.Children.Count == 0 && !_Condition.Enabled ? null : _Condition;
+            set => _Condition = value;
+        }
 
         #endregion
 
@@ -293,14 +298,14 @@ namespace Triggernometry
 
         private void _Conditions_ItemAdded(object sender, EventListArgs<Condition> e)
         {
-            if (Condition == null)
+            if (_Condition == null)
             {
-                Condition = new ConditionGroup();
-                Condition.Grouping = ConditionGroup.CndGroupingEnum.And;
-                Condition.Enabled = true;
+                _Condition = new ConditionGroup();
+                _Condition.Grouping = ConditionGroup.CndGroupingEnum.And;
+                _Condition.Enabled = true;
             }
             Condition cx = e.Item;
-            Condition.AddChild(cx.ConvertToConditionSingle());
+            _Condition.AddChild(cx.ConvertToConditionSingle());
             _Conditions.Remove(e.Item);
         }
 
@@ -458,7 +463,12 @@ namespace Triggernometry
             }
         }
 
-        internal bool ObsConnector(Context ctx, string endpoint, string password)
+        /// <returns>
+        /// <c>true</c> : connected <br /> 
+        /// <c>false</c>: failed <br /> 
+        /// <c>null</c> : not running
+        /// </returns>
+        internal bool? ObsConnector(Context ctx, string endpoint, string password)
         {
             lock (plug._obs)
             {
@@ -466,15 +476,28 @@ namespace Triggernometry
                 {
                     return true;
                 }
+                switch (plug._obs.CheckRunningState())
+                {
+                    case ObsController.ObsRunningState.NotRunningFirstlyFound:
+                        AddToLog(ctx, DebugLevelEnum.Warning, I18n.Translate("internal/Action/obsnotrunning",
+                            "OBS is not running and the OBS action cannot be performed."));
+                        return null;
+                    case ObsController.ObsRunningState.NotRunning:
+                        return null;
+                    case ObsController.ObsRunningState.Running:
+                        break;
+                }
                 try
                 {
                     plug._obs.Connect(endpoint, password);
-                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Action/obsconnectok", "OBS WebSocket connected successfully"));
+                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Action/obsconnectok", 
+                        "OBS WebSocket connected successfully"));
                     return true;
                 }
                 catch (Exception ex)
                 {
-                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/obsconnecterror", "Error connecting to OBS WebSocket: {0}", ex.Message));
+                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/obsconnecterror", 
+                        "Error connecting to OBS WebSocket: {0}", ex.Message));
                 }
             }
             return false;
@@ -505,21 +528,24 @@ namespace Triggernometry
         private string GetTargetWindowsDescription(string procid, string titleRegex)
         {
             procid = procid.Trim();
-            if (titleRegex.Trim().Length == 0) // the same condition check as in WindowsUtils.FindWindows
+            if (string.IsNullOrWhiteSpace(titleRegex))
             {
-                return I18n.Translate("internal/Action/descwindowtargetnone", "(unspecified window name)");
+                titleRegex = ".*";
             }
-            if (procid == "" || procid == "0")
+            int parsedProcId = 1;
+            try { parsedProcId = (int)MathParser.Parse(procid); } 
+            catch { }
+            if (parsedProcId == 0)
             {
                 return I18n.Translate("internal/Action/descwindowtargetsingle", "the first window whose title match ({0})", titleRegex);
             }
-            else if (procid == "-1")
+            else if (parsedProcId < 0)
             {
                 return I18n.Translate("internal/Action/descwindowtargetall", "all windows whose titles match ({0})", titleRegex);
             }
             else
             {
-                return I18n.Translate("internal/Action/descwindowtargetid", "windows in the process id ({0}) whose titles match ({1})", procid, titleRegex);
+                return I18n.Translate("internal/Action/descwindowtargetid", "windows in the process with id ({0}) whose titles match ({1})", procid, titleRegex);
             }
         }
 
@@ -537,7 +563,7 @@ namespace Triggernometry
                     ? _ExecutionDelayExpression : $"({_ExecutionDelayExpression})";
                 temp += I18n.Translate("internal/Action/descafterdelay", "after {0} ms, ", delay);  // included comma in translations (comma symbols are language-dependent)
             }
-            if (Condition != null && Condition.Enabled == true)
+            if (_Condition != null && _Condition.Enabled == true)
             {
                 temp += I18n.Translate("internal/Action/descassumingcondition", "assuming condition is met, ");
             }
@@ -1216,8 +1242,21 @@ namespace Triggernometry
                             }
                             break;
                         case TableVariableOpEnum.GetAllEntities:
-                            temp += I18n.Translate("internal/Action/desctablegetallentities",
-                                "Save all FFXIV entity data {1}table variable ({0})", _TableVariableName, sPersistT);
+                            {
+                                bool hasFilter = string.IsNullOrWhiteSpace(_TableVariableY);
+                                bool hasSpecifiedProps = !string.IsNullOrWhiteSpace(_TableVariableX);
+                                string keySuffix = (hasFilter ? "1" : "0") + (hasSpecifiedProps ? "1" : "0");
+                                string key = $"internal/Action/desctablegetallentities{keySuffix}"; //...00, ...01, ...10, ...11
+                                string trl = "";
+                                switch (keySuffix)
+                                {
+                                    case "11": trl = "Store ({3}) properties of FFXIV entities matching ({2}) in {1}table ({0})"; break;
+                                    case "10": trl = "Store all properties of FFXIV entities matching ({2}) in {1}table ({0})"; break;
+                                    case "01": trl = "Store ({3}) properties of all FFXIV entities in {1}table ({0})"; break;
+                                    case "00": trl = "Store all properties of all FFXIV entities in {1}table ({0})"; break;
+                                }
+                                temp += I18n.Translate(key, trl, _TableVariableName, sPersistT, _TableVariableY, _TableVariableX);
+                            }
                             break;
                     }
                     break;
@@ -1284,15 +1323,15 @@ namespace Triggernometry
                                 "merge {1}dict variable ({0}) into {3}dict variable ({2}), and overwrite the values of repeated keys",
                                 _DictVariableName, sPersistD, _DictVariableTarget, tPersistD);
                             break;
-                        case DictVariableOpEnum.GetEntityByName:
-                            temp += I18n.Translate("internal/Action/descdictgetentitybyname",
-                                "save the properties of entity name ({2}) into {1}dict variable ({0})",
-                                _DictVariableName, sPersistD, _DictVariableValue);
-                            break;
-                        case DictVariableOpEnum.GetEntityById:
-                            temp += I18n.Translate("internal/Action/descdictgetentitybyid",
-                                "save the properties of entity id ({2}) into {1}dict variable ({0})",
-                                _DictVariableName, sPersistD, _DictVariableValue);
+                        case DictVariableOpEnum.GetEntity:
+                            {
+                                bool hasSpecifiedProps = !string.IsNullOrWhiteSpace(_DictVariableKey);
+                                string key = hasSpecifiedProps ? "internal/Action/descdictgetentitygivenprops"
+                                                               : "internal/Action/descdictgetentity";
+                                string trl = hasSpecifiedProps ? "Store ({3}) properties of the entity ({2}) in {1}dictionary ({0})"
+                                                               : "Store all properties of the entity ({2}) in {1}dictionary ({0})";
+                                temp += I18n.Translate(key, trl, _DictVariableName, sPersistD, _DictVariableValue, _DictVariableKey);
+                            }
                             break;
                         case DictVariableOpEnum.UnsetAll:
                             temp += I18n.Translate("internal/Action/descdictunsetall",
@@ -1678,9 +1717,9 @@ namespace Triggernometry
             {
                 if ((ctx.force & Action.TriggerForceTypeEnum.SkipConditions) == 0 && ctx.testByPlaceholder == false)
                 {
-                    if (Condition != null && Condition.Enabled == true)
+                    if (_Condition != null && _Condition.Enabled == true)
                     {
-                        if (Condition.CheckCondition(ctx, ActionContextLogger, ctx) == false)
+                        if (_Condition.CheckCondition(ctx, ActionContextLogger, ctx) == false)
                         {
                             AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/actionnotfired", "Action #{0} on trigger '{1}' not fired, condition not met", OrderNumber, ctx.trig?.LogName ?? "(null)"));
                             ctx.PushActionResult(0);
@@ -1702,10 +1741,10 @@ namespace Triggernometry
                                     plug.SetCombatStateHook(_ActOpBoolParam);
                                     break;
                                 case ActInteractionTypeEnum.LogAllNetwork:
-                                    plug.LogAllNetworkHook(_ActOpBoolParam);
+                                    PluginBridges.BridgeFFXIV.LogAllNetwork(_ActOpBoolParam);
                                     break;
                                 case ActInteractionTypeEnum.UseDeucalion:
-                                    plug.UseDeucalionHook(_ActOpBoolParam);
+                                    PluginBridges.BridgeFFXIV.UseDeucalion(_ActOpBoolParam);
                                     break;
                             }
                         }
@@ -1845,18 +1884,26 @@ namespace Triggernometry
                                                 sourcename, sPersist, targetname, tPersist));
                                     }
                                     break;
-                                case DictVariableOpEnum.GetEntityByName:
-                                case DictVariableOpEnum.GetEntityById:
+                                case DictVariableOpEnum.GetEntity:
                                     {
                                         string value = ParseValue();
-                                        VariableDictionary entity = _DictVariableOp == DictVariableOpEnum.GetEntityByName
-                                                                  ? PluginBridges.BridgeFFXIV.GetNamedEntity(value)
-                                                                  : PluginBridges.BridgeFFXIV.GetIdEntity(value);
+
+                                        var entity = FFXIV.Entity.GetFilteredEntities(value).FirstOrDefault();
+                                        entity = entity ?? FFXIV.Entity.NullEntity();
+
+                                        var propNames = string.IsNullOrWhiteSpace(_DictVariableKey)
+                                            ? FFXIV.Entity.RecommendedEntityPropNames.Concat(FFXIV.Job.LegalJobPropNames)
+                                            : Context.SplitArguments(ParseKey(), false);
+
+                                        var vd = new VariableDictionary(propNames.ToDictionary(
+                                            propName => propName,
+                                            propName => entity.QueryProperty(propName)
+                                        ));
                                         lock (svs.Dict)
                                         {
-                                            svs.Dict[sourcename] = (VariableDictionary)entity.Duplicate();
+                                            svs.Dict[sourcename] = vd;
                                         }
-                                        if (entity.GetValue("id").ToString() != "")
+                                        if (entity.Exist)
                                             AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/dictgetentity",
                                                 "Saved the data of entity ({2}) into {1}dict variable ({0})",
                                                 sourcename, sPersist, value));
@@ -2161,7 +2208,7 @@ namespace Triggernometry
                             {
                                 Thread.Sleep(10);
                             }
-                            if (plug.scripting != null)
+                            if (plug.scripting != null && plug.scripting.Ready)
                             {
                                 plug.scripting.Evaluate(scp, assy, ctx);
                             }
@@ -2232,7 +2279,8 @@ namespace Triggernometry
                             }
                             else
                             {
-                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/nofolderwithid", "Didn't find a folder with id ({0})", _FolderId));
+                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/nofolderwithid",
+                                    "Folder operation failed: In trigger ({1}), the specified folder id ({0}) does not exist.", _FolderId, ParentTrigger?.FullPath ?? "null"));
                             }
                         }
                         break;
@@ -2347,20 +2395,19 @@ namespace Triggernometry
                                     break;
                                 case KeypressTypeEnum.WindowMessage:
                                     {
-                                        string procid = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressProcId);
+                                        int procid = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _KeyPressProcId);
                                         string window = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressWindow);
                                         int keycode = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _KeyPressCode);
-                                        WindowsUtils.SendKeycodes(procid, window, (ushort)keycode);
+                                        WindowsUtils.SendKeycode(procid, window, keycode);
                                     }
                                     break;
                                 case KeypressTypeEnum.WindowMessageCombo:
                                     {
-                                        string procid = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressProcId);
+                                        int procid = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _KeyPressProcId);
                                         string window = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressWindow);
-                                        string[] keycodes = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressCode).Split(",".ToCharArray());
-                                        List<int> kc = new List<int>();
-                                        kc.AddRange(from kx in keycodes select Convert.ToInt32(kx.Trim()));
-                                        WindowsUtils.SendKeycodes(procid, window, kc.ToArray());
+                                        int[] keycodes = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressCode)
+                                            .Split(',').Select(kx => Convert.ToInt32(kx.Trim())).ToArray();
+                                        WindowsUtils.SendKeycodes(procid, window, keycodes);
                                     }
                                     break;
                             }
@@ -2958,93 +3005,88 @@ namespace Triggernometry
                             string password = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSPassword);
                             lock (obsController)
                             {
-                                if (ObsConnector(ctx, endpoint, password) == true)
+                                if (ObsConnector(ctx, endpoint, password) != true)
+                                    return; // already complaint about errors
+                                try
                                 {
-                                    try
+                                    switch (_OBSControlType)
                                     {
-                                        switch (_OBSControlType)
-                                        {
-                                            case ObsControlTypeEnum.StartStreaming:
-                                                obsController.StartStreaming();
-                                                break;
-                                            case ObsControlTypeEnum.StopStreaming:
-                                                obsController.StopStreaming();
-                                                break;
-                                            case ObsControlTypeEnum.ToggleStreaming:
-                                                obsController.ToggleStreaming();
-                                                break;
-                                            case ObsControlTypeEnum.StartRecording:
-                                                obsController.StartRecording();
-                                                break;
-                                            case ObsControlTypeEnum.StopRecording:
-                                                obsController.StopRecording();
-                                                break;
-                                            case ObsControlTypeEnum.ToggleRecording:
-                                                obsController.ToggleRecording();
-                                                break;
-                                            case ObsControlTypeEnum.RestartRecording:
-                                                obsController.RestartRecording();
-                                                break;
-                                            case ObsControlTypeEnum.RestartRecordingIfActive:
-                                                obsController.RestartRecordingIfActive();
-                                                break;
-                                            case ObsControlTypeEnum.ResumeRecording:
-                                                obsController.ResumeRecording();
-                                                break;
-                                            case ObsControlTypeEnum.PauseRecording:
-                                                obsController.PauseRecording();
-                                                break;
-                                            case ObsControlTypeEnum.ToggleRecordPause:
-                                                obsController.ToggleRecordPause();
-                                                break;
-                                            case ObsControlTypeEnum.StartReplayBuffer:
-                                                obsController.StartReplayBuffer();
-                                                break;
-                                            case ObsControlTypeEnum.StopReplayBuffer:
-                                                obsController.StopReplayBuffer();
-                                                break;
-                                            case ObsControlTypeEnum.ToggleReplayBuffer:
-                                                obsController.ToggleReplayBuffer();
-                                                break;
-                                            case ObsControlTypeEnum.SaveReplayBuffer:
-                                                obsController.SaveReplayBuffer();
-                                                break;
-                                            case ObsControlTypeEnum.SetScene:
-                                                {
-                                                    string scn = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSceneName);
-                                                    obsController.SetCurrentScene(scn);
-                                                }
-                                                break;
-                                            case ObsControlTypeEnum.ShowSource:
-                                                {
-                                                    string scn = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSceneName);
-                                                    string src = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSourceName);
-                                                    obsController.ShowHideSource(scn, src, true);
-                                                }
-                                                break;
-                                            case ObsControlTypeEnum.HideSource:
-                                                {
-                                                    string scn = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSceneName);
-                                                    string src = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSourceName);
-                                                    obsController.ShowHideSource(scn, src, false);
-                                                }
-                                                break;
-                                            case ObsControlTypeEnum.JSONPayload:
-                                                {
-                                                    string json = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSJSONPayload);
-                                                    obsController.JSONPayload(json);
-                                                }
-                                                break;
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/obscontrolexception", "Can't execute OBS control action due to exception: " + ex.Message));
+                                        case ObsControlTypeEnum.StartStreaming:
+                                            obsController.StartStreaming();
+                                            break;
+                                        case ObsControlTypeEnum.StopStreaming:
+                                            obsController.StopStreaming();
+                                            break;
+                                        case ObsControlTypeEnum.ToggleStreaming:
+                                            obsController.ToggleStreaming();
+                                            break;
+                                        case ObsControlTypeEnum.StartRecording:
+                                            obsController.StartRecording();
+                                            break;
+                                        case ObsControlTypeEnum.StopRecording:
+                                            obsController.StopRecording();
+                                            break;
+                                        case ObsControlTypeEnum.ToggleRecording:
+                                            obsController.ToggleRecording();
+                                            break;
+                                        case ObsControlTypeEnum.RestartRecording:
+                                            obsController.RestartRecording();
+                                            break;
+                                        case ObsControlTypeEnum.RestartRecordingIfActive:
+                                            obsController.RestartRecordingIfActive();
+                                            break;
+                                        case ObsControlTypeEnum.ResumeRecording:
+                                            obsController.ResumeRecording();
+                                            break;
+                                        case ObsControlTypeEnum.PauseRecording:
+                                            obsController.PauseRecording();
+                                            break;
+                                        case ObsControlTypeEnum.ToggleRecordPause:
+                                            obsController.ToggleRecordPause();
+                                            break;
+                                        case ObsControlTypeEnum.StartReplayBuffer:
+                                            obsController.StartReplayBuffer();
+                                            break;
+                                        case ObsControlTypeEnum.StopReplayBuffer:
+                                            obsController.StopReplayBuffer();
+                                            break;
+                                        case ObsControlTypeEnum.ToggleReplayBuffer:
+                                            obsController.ToggleReplayBuffer();
+                                            break;
+                                        case ObsControlTypeEnum.SaveReplayBuffer:
+                                            obsController.SaveReplayBuffer();
+                                            break;
+                                        case ObsControlTypeEnum.SetScene:
+                                            {
+                                                string scn = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSceneName);
+                                                obsController.SetCurrentScene(scn);
+                                            }
+                                            break;
+                                        case ObsControlTypeEnum.ShowSource:
+                                            {
+                                                string scn = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSceneName);
+                                                string src = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSourceName);
+                                                obsController.ShowHideSource(scn, src, true);
+                                            }
+                                            break;
+                                        case ObsControlTypeEnum.HideSource:
+                                            {
+                                                string scn = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSceneName);
+                                                string src = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSSourceName);
+                                                obsController.ShowHideSource(scn, src, false);
+                                            }
+                                            break;
+                                        case ObsControlTypeEnum.JSONPayload:
+                                            {
+                                                string json = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSJSONPayload);
+                                                obsController.JSONPayload(json);
+                                            }
+                                            break;
                                     }
                                 }
-                                else
+                                catch (Exception ex)
                                 {
-                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/obscontrolerror", "Can't execute OBS control action due to error"));
+                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/obscontrolexception", "Can't execute OBS control action due to exception: {0}" + ex.Message));
                                 }
                             }
                         }
@@ -3857,25 +3899,32 @@ namespace Triggernometry
                                     break;
                                 case TableVariableOpEnum.GetAllEntities:
                                     {
-                                        List<VariableDictionary> entities = PluginBridges.BridgeFFXIV.GetAllEntities();
+                                        var entities = string.IsNullOrWhiteSpace(_TableVariableY)
+                                            ? FFXIV.Entity.GetEntities()
+                                            : FFXIV.Entity.GetFilteredEntities(ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TableVariableY));
+
+                                        var propNames = string.IsNullOrWhiteSpace(_TableVariableX)
+                                            ? FFXIV.Entity.RecommendedEntityPropNames.Select(x => x.ToLower()).Concat(FFXIV.Job.LegalJobPropNames).OrderBy(s => s)
+                                            : (IEnumerable<string>)Context.SplitArguments(ctx.EvaluateStringExpression(ActionContextLogger, ctx, _TableVariableX), false);
+                                        if (string.IsNullOrWhiteSpace(_TableVariableX))
+                                        {
+                                            var specialKeys = new List<string> { "id", "name", "x", "y", "z", "h", "bnpcid" };
+                                            propNames = specialKeys.Concat(propNames.Except(specialKeys));
+                                        }
+
                                         VariableTable vt = new VariableTable { LastChanger = vtchanger, LastChanged = DateTime.Now };
-
-                                        var keys = PluginBridges.BridgeFFXIV._nullCombatant.Values.Keys.OrderBy(k => k).ToList();
-                                        var specialKeys = new List<string> { "id", "name", "x", "y", "z", "h" };
-                                        keys = specialKeys.Concat(keys.Except(specialKeys)).ToList();
-
                                         var headerRow = new VariableTable.VariableTableRow
                                         {
-                                            Values = keys.Select(k => (Variable)new VariableScalar() { Value = k }).ToList()
+                                            Values = propNames.Select(prop => (Variable)new VariableScalar(prop)).ToList()
                                         };
                                         vt.Rows.Add(headerRow);
 
                                         foreach (var entity in entities)
                                         {
-                                            if (entity.GetValue("id").ToString() == "") { continue; }
+                                            if (entity.ID == 0) continue; 
                                             var row = new VariableTable.VariableTableRow
                                             {
-                                                Values = keys.Select(k => (Variable)new VariableScalar() { Value = entity.GetValue(k).ToString() }).ToList()
+                                                Values = propNames.Select(prop => (Variable)new VariableScalar(entity.QueryProperty(prop))).ToList()
                                             };
                                             vt.Rows.Add(row);
                                         }
@@ -3983,7 +4032,8 @@ namespace Triggernometry
                                 }
                                 else
                                 {
-                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notrigiderror", "No trigger id, and op is not cancel all actions, unexpected"));
+                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/notriggerwithid", 
+                                        "Trigger operation failed: In trigger ({1}), the specified trigger id ({0}) does not exist.", _TriggerId, ParentTrigger?.FullPath ?? "null"));
                                 }
                             }
                         }
@@ -3992,11 +4042,11 @@ namespace Triggernometry
                     #region Implementation - Window message
                     case ActionTypeEnum.WindowMessage:
                         {
-                            string procid = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _WmsgProcId);
+                            int procid = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _WmsgProcId);
                             string window = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _WmsgTitle);
                             int code = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _WmsgCode);
-                            int wparam = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _WmsgWparam);
-                            int lparam = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _WmsgLparam);
+                            IntPtr wparam = (IntPtr)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _WmsgWparam);
+                            IntPtr lparam = (IntPtr)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _WmsgLparam);
                             WindowsUtils.SendMessageToWindow(procid, window, (ushort)code, wparam, lparam);
                         }
                         break;
@@ -4319,7 +4369,7 @@ namespace Triggernometry
             a._JsonHeaderExpression = _JsonHeaderExpression;
             a._JsonFiringExpression = _JsonFiringExpression;
             a._JsonPayloadExpression = _JsonPayloadExpression;
-            a.Condition = (ConditionGroup)(Condition != null ? ((ConditionGroup)Condition).Duplicate() : null);
+            a._Condition = (ConditionGroup)(_Condition != null ? ((ConditionGroup)_Condition).Duplicate() : null);
             a._KeyPressExpression = _KeyPressExpression;
             a._KeypressType = _KeypressType;
             a._KeyPressCode = _KeyPressCode;
@@ -4394,8 +4444,8 @@ namespace Triggernometry
             a._JsonResultVariable = _JsonResultVariable;
             a._JsonResultVariablePersist = _JsonResultVariablePersist;
             a._TriggerZoneType = _TriggerZoneType;
-            a.SoundRouting = SoundRouting;
-            a.TTSRouting = TTSRouting;
+            a._SoundRouting = _SoundRouting;
+            a._TTSRouting = _TTSRouting;
         }
 
         private Tuple<int, string> SendJson(Context ctx, Action.HTTPMethodEnum method, string url, string json, IEnumerable<string> headers, bool expectNoContent)

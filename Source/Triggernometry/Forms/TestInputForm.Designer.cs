@@ -32,8 +32,10 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
+            this.btnCopyDebugTrigger = new System.Windows.Forms.Button();
             this.grpEventDetails = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanelBottom = new System.Windows.Forms.TableLayoutPanel();
             this.cbxZoneType = new System.Windows.Forms.ComboBox();
             this.lblZoneType = new System.Windows.Forms.Label();
             this.cbxEventDestination = new System.Windows.Forms.ComboBox();
@@ -46,6 +48,7 @@
             this.panel4.SuspendLayout();
             this.grpEventDetails.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
+            this.tableLayoutPanelBottom.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel3
@@ -58,35 +61,64 @@
             // 
             // panel4
             // 
-            this.panel4.Controls.Add(this.btnCancel);
-            this.panel4.Controls.Add(this.btnOk);
+            this.panel4.AutoSize = true;
+            this.panel4.Controls.Add(this.tableLayoutPanelBottom);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel4.Location = new System.Drawing.Point(10, 366);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(514, 35);
             this.panel4.TabIndex = 18;
             // 
-            // btnCancel
+            // tableLayoutPanelBottom
             // 
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnCancel.Location = new System.Drawing.Point(364, 0);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(150, 35);
-            this.btnCancel.TabIndex = 1;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
+            this.tableLayoutPanelBottom.AutoSize = true;
+            this.tableLayoutPanelBottom.ColumnCount = 3;
+            this.tableLayoutPanelBottom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
+            this.tableLayoutPanelBottom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
+            this.tableLayoutPanelBottom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
+            this.tableLayoutPanelBottom.Controls.Add(this.btnOk, 0, 0);
+            this.tableLayoutPanelBottom.Controls.Add(this.btnCopyDebugTrigger, 1, 0);
+            this.tableLayoutPanelBottom.Controls.Add(this.btnCancel, 2, 0);
+            this.tableLayoutPanelBottom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelBottom.Name = "tableLayoutPanelBottom";
+            this.tableLayoutPanelBottom.RowCount = 1;
+            this.tableLayoutPanelBottom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             // 
             // btnOk
             // 
+            this.btnOk.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOk.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnOk.Dock = System.Windows.Forms.DockStyle.None;
             this.btnOk.Location = new System.Drawing.Point(0, 0);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(150, 35);
             this.btnOk.TabIndex = 0;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
+            // 
+            // btnCopyDebugTrigger
+            // 
+            this.btnCopyDebugTrigger.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnCopyDebugTrigger.Dock = System.Windows.Forms.DockStyle.None;
+            this.btnCopyDebugTrigger.Location = new System.Drawing.Point(182, 0);
+            this.btnCopyDebugTrigger.Name = "btnCopyDebugTrigger";
+            this.btnCopyDebugTrigger.Size = new System.Drawing.Size(150, 35);
+            this.btnCopyDebugTrigger.TabIndex = 1;
+            this.btnCopyDebugTrigger.Text = "Copy Debug Trigger";
+            this.btnCopyDebugTrigger.UseVisualStyleBackColor = true;
+            this.btnCopyDebugTrigger.Click += new System.EventHandler(this.btnCopyDebugTrigger_Click);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Dock = System.Windows.Forms.DockStyle.None;
+            this.btnCancel.Location = new System.Drawing.Point(364, 0);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(150, 35);
+            this.btnCancel.TabIndex = 2;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
             // 
             // grpEventDetails
             // 
@@ -263,6 +295,8 @@
             this.grpEventDetails.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
+            this.tableLayoutPanelBottom.ResumeLayout(false);
+            this.tableLayoutPanelBottom.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -274,8 +308,10 @@
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Button btnCancel;
         internal System.Windows.Forms.Button btnOk;
+        private System.Windows.Forms.Button btnCopyDebugTrigger;
         private System.Windows.Forms.GroupBox grpEventDetails;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelBottom;
         private System.Windows.Forms.Label lblEvent;
         private System.Windows.Forms.Label lblZoneName;
         private System.Windows.Forms.Button btnGetCurZone;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Triggernometry
 {
 
-    internal sealed class LogEvent
+    public sealed class LogEvent
     {
 
         public enum SourceEnum

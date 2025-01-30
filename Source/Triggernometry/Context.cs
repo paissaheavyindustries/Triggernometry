@@ -8,13 +8,14 @@ using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using Triggernometry.Variables;
 using System.Windows.Forms;
-using System.Reflection;
+using Triggernometry.FFXIV;
 using Triggernometry.Utilities;
+using Triggernometry.PluginBridges;
 
 namespace Triggernometry
 {
 
-    public class Context
+    public partial class Context
     {
 
         internal Guid id = Guid.NewGuid();
@@ -26,28 +27,41 @@ namespace Triggernometry
         internal RealPlugin.ActionExecutionHook soundhook;
         internal RealPlugin.ActionExecutionHook ttshook;
 
-        internal static Regex rex               // ${...}
-            = new Regex(@"\$\{(?<id>[^${}]*)\}");        
-        internal static Regex rox               // ¤{...}
-            = new Regex(@"¤\{[^${}]*\}");        
-        internal static Regex rexnum            // $1 $2
-            = new Regex(@"\$(?<id>[0-9]+)");        
-        internal static Regex rexListIdx        // name[index]
-            = new Regex(@"^(?<name>[^[]+)\[(?<index>[^[\]]*?)\]");        
-        internal static Regex rexTableIdx       // name[col][row]
-            = new Regex(@"^(?<name>[^[]+)\[(?<column>[^[\]]*?)\]\[(?<row>[^[\]]*?)\] *$");        
-        internal static Regex rexFunc           // name(arg)?:val
-            = new Regex(@"^(?<name>[^(:]+)(?:\((?<arg>[^)]*)\))?:(?<val>.*)$");        
-        internal static Regex rexProp           // name.prop(arg)?
-            = new Regex(@"^(?<name>.+?)\.(?<prop>[^([.]+?)(?:\((?<arg>[^)]*)\))? *$");
-        internal static Regex rexListProp       // name?[index].prop(arg)?
-            = new Regex(@"^(?<name>[^[]*)\[(?<index>[^[\]]*?)\]\.(?<prop>[^([]+?)(?:\((?<arg>[^)]*)\))? *$");
-        internal static Regex rexTableProp      // name?[index1][index2].prop(arg)?
-            = new Regex(@"^(?<name>[^[]*)\[(?<column>[^[\]]*)\]\[(?<row>[^[\]]*)\]\.(?<prop>[^([]+?)(?:\((?<arg>[^)]*)\))? *$");
-        internal static Regex rexExistVar       // evar: / epvar: / elvar: ...
-            = new Regex(@"^e(?<persist>p?)(?<type>[vltd]|text|image|callback|storage)(?:v?ar)?:(?<name>.*)$");
+        /// <summary> Regex matching: ${id} </summary>
+        internal static Regex rex
+            = new Regex(@"\$\{(?<id>[^${}]*)\}", RegexOptions.Compiled);
+        /// <summary> Regex matching: ¤{id} </summary>
+        internal static Regex rox
+            = new Regex(@"¤\{[^${}]*\}", RegexOptions.Compiled);
+        /// <summary> Regex matching: $num (e.g. $1, $20) </summary>
+        internal static Regex rexNum
+            = new Regex(@"\$(?<id>[0-9]+)", RegexOptions.Compiled);
+        /// <summary> Regex matching: name[index] </summary>
+        internal static Regex rexListIdx
+            = new Regex(@"^(?<name>[^[]+)\[(?<index>[^[\]]*?)\]", RegexOptions.Compiled);
+        /// <summary> Regex matching: name[column][row] </summary>
+        internal static Regex rexTableIdx
+            = new Regex(@"^(?<name>[^[]+)\[(?<column>[^[\]]*?)\]\[(?<row>[^[\]]*?)\] *$", RegexOptions.Compiled);
+        /// <summary> Regex matching: name(arg)?:val </summary>
+        internal static Regex rexFunc           
+            = new Regex(@"^(?<name>[^(:]+)(?:\((?<arg>[^)]*)\))? *:(?<val>.*)$", RegexOptions.Compiled);
+        /// <summary> Regex matching: name.prop(arg)? </summary>
+        internal static Regex rexMethod
+            = new Regex(@"^(?<name>.+?)\.(?<prop>[^([.]+?)(?:\((?<arg>[^)]*)\))? *$", RegexOptions.Compiled);
+        /// <summary> Regex matching: name?[index].prop </summary>
+        internal static Regex rexListProp
+            = new Regex(@"^(?<name>[^[]*)\[(?<index>[^[\]]*?)\]\.(?<prop>.+)$", RegexOptions.Compiled);
+        /// <summary> Regex matching: name?[index].prop(arg)? </summary>
+        internal static Regex rexListMethod
+            = new Regex(@"^(?<name>[^[]*)\[(?<index>[^[\]]*?)\]\.(?<prop>[^([]+?)(?:\((?<arg>[^)]*)\))? *$", RegexOptions.Compiled);
+        /// <summary> Regex matching: name?[index1][index2].prop(arg)? </summary>
+        internal static Regex rexTableMethod
+            = new Regex(@"^(?<name>[^[]*)\[(?<column>[^[\]]*)\]\[(?<row>[^[\]]*)\]\.(?<prop>[^([]+?)(?:\((?<arg>[^)]*)\))? *$", RegexOptions.Compiled);
+        /// <summary> Regex matching: evar: / epvar: / elvar: / ecallback: / ... </summary>
+        internal static Regex rexExistVar
+            = new Regex(@"^e(?<persist>p?)(?<type>[vltd]|text|image|callback|storage)(?:v?ar)?:(?<name>.*)$", RegexOptions.Compiled);
 
-        internal static Regex reHex8 = new Regex("^[0-9A-Fa-f]{1,8}$");
+        internal static Regex reHex8 = new Regex("^[0-9A-Fa-f]{1,8}$", RegexOptions.Compiled);
 
         internal Dictionary<string, string> namedgroups;
         internal List<string> numgroups;
@@ -211,18 +225,19 @@ namespace Triggernometry
             return vd;
         }
 
-        internal static Regex BuildSplitArgRegex(string separator)
+        internal static Regex BuildSplitArgRegex(string separator, bool isCompiled = false)
         {
             string s = Regex.Escape(separator);
             char lb = LINEBREAK_PLACEHOLDER;
             return new Regex(
-                $"(?<=^|{s})((?:\\s|{lb})*\"[^\"]*\"(?:\\s|{lb})*|(?:\\s|{lb})*'[^']*'(?:\\s|{lb})*|[^{s}]*)(?=$|{s})");
             //    (?<=^|{s}): after a separator or start-of-line
             //               (?:\\s|{lb})*\"[^\"]*\"(?:\\s|{lb})*: spaces? + " + text? + " + spaces?
             //                                                    (?:\\s|{lb})*'[^']*'(?:\\s|{lb})*: spaces? + ' + text? + ' + spaces?
             //                                                                                      [^{s}]*: any unquoted text
             //                                                                                              (?=$|{s}): before a separator or end-of-line
-
+                $"(?<=^|{s})((?:\\s|{lb})*\"[^\"]*\"(?:\\s|{lb})*|(?:\\s|{lb})*'[^']*'(?:\\s|{lb})*|[^{s}]*)(?=$|{s})",
+                isCompiled ? RegexOptions.Compiled : RegexOptions.None
+            );
         }
 
         /// <summary>Trim all whitespace characters and the linebreak placeholders from both sides of the string.</summary>
@@ -232,12 +247,12 @@ namespace Triggernometry
         /// <summary>Trim all whitespace characters and the linebreak placeholders from the right side of the string.</summary>
         public static string TrimR(string s) => reTrimR.Match(s).Groups["string"].Value;
 
-        internal static Regex reSplitArgComma = BuildSplitArgRegex(",");
-        internal static Regex reSplitArgEqual = BuildSplitArgRegex("=");
-        internal static Regex reSplitArgPipe = BuildSplitArgRegex("|");
-        internal static Regex reTrim = new Regex($"^[\\s{LINEBREAK_PLACEHOLDER}]*(?<string>.*?)[\\s{LINEBREAK_PLACEHOLDER}]*$");
-        internal static Regex reTrimL = new Regex($"^[\\s{LINEBREAK_PLACEHOLDER}]*(?<string>.*?)$");
-        internal static Regex reTrimR = new Regex($"^(?<string>.*?)[\\s{LINEBREAK_PLACEHOLDER}]*$");
+        internal static Regex reSplitArgComma = BuildSplitArgRegex(",", true);
+        internal static Regex reSplitArgEqual = BuildSplitArgRegex("=", true);
+        internal static Regex reSplitArgPipe = BuildSplitArgRegex("|", true);
+        internal static Regex reTrim = new Regex($"^[\\s{LINEBREAK_PLACEHOLDER}]*(?<string>.*?)[\\s{LINEBREAK_PLACEHOLDER}]*$", RegexOptions.Compiled);
+        internal static Regex reTrimL = new Regex($"^[\\s{LINEBREAK_PLACEHOLDER}]*(?<string>.*?)$", RegexOptions.Compiled);
+        internal static Regex reTrimR = new Regex($"^(?<string>.*?)[\\s{LINEBREAK_PLACEHOLDER}]*$", RegexOptions.Compiled);
 
         /// <summary> 
         /// Split an expression with commas or other specified separators to a list of arguments. <br />
@@ -465,6 +480,42 @@ namespace Triggernometry
             return result;
         }
 
+        private void ParseTernaryExpression(string input, out string condExpr, out string trueStr, out string falseStr)
+        {
+            falseStr = ExtractLastExpression(ref input, ':');
+            trueStr = ExtractLastExpression(ref input, '?');
+            condExpr = Trim(input);
+        }
+
+        private string ExtractLastExpression(ref string input, char sep)
+        {
+            input = TrimR(input);
+            int lastIndex = input.Length - 1;
+            char lastChar = input[lastIndex];
+
+            int? sepIndex = null;
+            if (lastChar == '\'' || lastChar == '\"')
+            {
+                int quoteIndex = input.LastIndexOf(lastChar, lastIndex - 1);
+                if (quoteIndex != -1)
+                {
+                    sepIndex = input.LastIndexOf(sep, quoteIndex - 1);
+                }
+            }
+            sepIndex = sepIndex ?? input.LastIndexOf(sep);
+            if (sepIndex == -1) return null;
+
+            string afterSep = TrimL(input.Substring(sepIndex.Value + 1));
+            int length = afterSep.Length;
+            if (length >= 2 && afterSep[0] == afterSep[length - 1] && (afterSep[0] == '\"' || afterSep[0] == '\''))
+            {
+                afterSep = afterSep.Substring(1, length - 2);  // "..." / '...' => ...
+            }
+
+            input = input.Substring(0, sepIndex.Value);
+            return afterSep;
+        }
+
         public static string ToFullWidth(string input)
         {
             char[] array = input.ToCharArray();
@@ -501,7 +552,7 @@ namespace Triggernometry
 
         /// <summary> Convert the letters and numbers in a string to the XIV-defined black box character.</summary>
         /// <param name="combineDigits">True if you want the numbers 10-31 in the string to be combined as a single XIV character.</param>
-        public static string ToXIVChar(string input, bool combineDigits)
+        public static string ToXivBlackChar(string input, bool combineDigits)
         {
             StringBuilder result = new StringBuilder();
             char[] array = input.ToCharArray();
@@ -533,6 +584,27 @@ namespace Triggernometry
                     }
                     // Convert digits to special XIV capital characters 0-9
                     result.Append((char)(array[i] + 57439));
+                }
+                else
+                {
+                    result.Append(array[i]);
+                }
+            }
+            return result.ToString();
+        }
+
+        /// <summary> Convert the 0-9 numbers in a string to the XIV-defined white box character.</summary>
+        public static string ToXivWhiteChar(string input)
+        {
+            StringBuilder result = new StringBuilder();
+            char[] array = input.ToCharArray();
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i] >= '0' && array[i] <= '9')
+                {
+                    // U+E0E0 - E0E9
+                    result.Append((char)(array[i] + 57520));
                 }
                 else
                 {
@@ -583,7 +655,7 @@ namespace Triggernometry
                 m = rex.Match(newexpr);
                 if (m.Success == false)
                 {
-                    m = rexnum.Match(newexpr);
+                    m = rexNum.Match(newexpr);
                     if (m.Success == false)
                     {
                         break;
@@ -694,7 +766,22 @@ namespace Triggernometry
                             val = PluginBridges.BridgeFFXIV.GetProcessName();
                             found = true;
                         }
-                        else if (x == "_incombat")
+                        else if (x == "_ffxivversion")
+                        {
+                            val = PluginBridges.BridgeFFXIV.GetGameVersion();
+                            found = true;
+                        }
+                        else if (x == "_ffxivisglobal")
+                        {
+                            val = PluginBridges.BridgeFFXIV.GetMyself().GetValue("name").ToString().Contains(" ") ? "1" : "0";
+                            found = true;
+                        }
+                        else if (x == "_ffxivincombat") // game status
+                        {
+                            val = ModuleInCombat.GetInCombat() ? "1" : "0";
+                            found = true;
+                        }
+                        else if (x == "_incombat") // ACT status
                         {
                             val = plug != null && plug.InCombatHook() ? "1" : "0";
                             found = true;
@@ -879,6 +966,17 @@ namespace Triggernometry
                             }
                             found = true;
                         }
+                        else if (x.StartsWith("_wm[") || x.StartsWith("_waymark["))
+                        {
+                            mx = rexListMethod.Match(x);
+                            if (mx.Success)
+                            {
+                                string rawType = Trim(mx.Groups["index"].Value);
+                                string rawProp = Trim(mx.Groups["prop"].Value);
+                                val = Memory.Waymark.QueryWaymark(rawType, rawProp);
+                            }
+                            found = true;
+                        }
                         else if (x.StartsWith("_storage["))
                         {
                             mx = rexListIdx.Match(x);
@@ -903,17 +1001,12 @@ namespace Triggernometry
                         }
                         else if (x.StartsWith("_job[")) // ${_job[jobid].prop} or ${_job[Name].prop}
                         {
-                            mx = rexListProp.Match(x);
+                            mx = rexListMethod.Match(x);
                             if (mx.Success)
                             {
                                 string rawJob = Trim(mx.Groups["index"].Value);
-                                if (!Entity.jobNameToIdMap.ContainsKey(rawJob.ToLower()))
-                                {
-                                    throw InvalidValueError("_job", "key", rawJob, x);
-                                }
-                                string jobid = Entity.jobNameToIdMap[rawJob.ToLower()];
                                 string prop = mx.Groups["prop"].Value;
-                                val = Entity.jobs[jobid][prop];
+                                val = Job.GetJob(rawJob).QueryProperty(prop);
                             }
                             found = true;
                         }
@@ -1050,7 +1143,7 @@ namespace Triggernometry
                             VariableStore store = x.StartsWith("p") ? plug.cfg.PersistentVariables
                                                 : x.StartsWith("l") ? plug.sessionvars : new VariableStore();
                             string varname = x.Substring(x.IndexOf(":") + 1);
-                            mx = rexProp.Match(varname);
+                            mx = rexMethod.Match(varname);
                             if (mx.Success)
                             {
                                 string gname = mx.Groups["name"].Value;
@@ -1221,7 +1314,7 @@ namespace Triggernometry
                                                 : x.StartsWith("d") ? plug.sessionvars : new VariableStore();
                             string varname = x.Substring(x.IndexOf(":") + 1);
 
-                            mx = rexProp.Match(varname);
+                            mx = rexMethod.Match(varname);
                             if (mx.Success)
                             {
                                 string gname = mx.Groups["name"].Value;
@@ -1381,7 +1474,7 @@ namespace Triggernometry
                             VariableStore store = x.StartsWith("p") ? plug.cfg.PersistentVariables
                                                 : x.StartsWith("t") ? plug.sessionvars : new VariableStore();
                             string varname = x.Substring(x.IndexOf(":") + 1);
-                            mx = rexProp.Match(varname);
+                            mx = rexMethod.Match(varname);
                             if (mx.Success)
                             {
                                 string gname = mx.Groups["name"].Value;
@@ -1698,6 +1791,20 @@ namespace Triggernometry
                             val = EvaluateStringExpression(logger, o, strexpr);
                             found = true;
                         }
+                        else if (x.StartsWith("if:"))
+                        {
+                            string ternaryExpr = x.Substring(3);
+                            ParseTernaryExpression(ternaryExpr, out string condExpr, out string trueStr, out string falseStr);
+                            if (trueStr == null || falseStr == null)
+                            {
+                                throw new Exception(I18n.Translate("internal/Context/ternaryexpressionerror",
+                                    "Ternary expression ({0}) could not be parsed: \r\nCondition: ({1}); \r\nTrueExpr: ({2}); \r\nFalseExpr: ({3})",
+                                    ternaryExpr, condExpr, trueStr ?? "null", falseStr ?? "null"));
+                            }
+                            bool cond = !MathParser.IsZero(MathParser.Parse(condExpr));
+                            val = cond ? trueStr : falseStr;
+                            found = true;
+                        }
                         else if (x.StartsWith("func:") || x.StartsWith("f:"))
                         {
                             val = "";
@@ -1717,15 +1824,17 @@ namespace Triggernometry
                                     case "tolower": val = funcval.ToLower(); break;
                                     case "tofullwidth": val = ToFullWidth(funcval); break;
                                     case "tohalfwidth": val = ToHalfWidth(funcval); break;
-                                    case "toxivchar":
+                                    case "toxivchar": // old name
+                                    case "toblackchar":
                                         {
                                             if (!bool.TryParse(GetArgument(args, 0, "false"), out bool combineDigits))
                                             {
                                                 throw ParseTypeError(I18n.TranslateWord("string"), args[0], I18n.TranslateWord("bool"), x);
                                             }
-                                            val = ToXIVChar(funcval, combineDigits);
+                                            val = ToXivBlackChar(funcval, combineDigits);
                                         }
                                         break;
+                                    case "towhitechar": val = ToXivWhiteChar(funcval); break;
                                     case "length": val = funcval.Length.ToString(); break;
                                     case "hex2dec":    // hex2dec()
                                     case "hex2float":  // hex2float()
@@ -2141,64 +2250,55 @@ namespace Triggernometry
                             mx = rexListProp.Match(x);
                             if (mx.Success)
                             {
-                                bool isParty = x.Contains("party[");
+                                bool isParty = x.StartsWith("_ffxivparty[") || x.StartsWith("_party[");
                                 string key = Trim(mx.Groups["index"].Value);
                                 string prop = Trim(mx.Groups["prop"].Value);
-                                VariableDictionary entity = new VariableDictionary();
+                                FFXIV.Entity entity;
 
-                                if (isParty && key.Length == 1 && char.IsDigit(key[0]))
+                                if (isParty && int.TryParse(key, out int partyIdx) && partyIdx >= 1 && partyIdx <= 8)
                                 {   // ffxivparty[n]
-                                    entity = PluginBridges.BridgeFFXIV.GetPartyMember(int.Parse(key));
+                                    string hexID = PluginBridges.BridgeFFXIV.GetPartyMember(partyIdx).GetValue("id").ToString();
+                                    entity = FFXIV.Entity.GetEntityByID(hexID);
                                 }
                                 else
                                 {
-                                    int idx = key.IndexOf("=");
-                                    string key2 = null;
-                                    if (!isParty && idx > 0)
+                                    var entities = FFXIV.Entity.GetFilteredEntities(key);
+                                    if (isParty)
                                     {
-                                        key2 = Trim(key.Substring(0, idx));
+                                        entities = entities.Where(e => e.InParty);
                                     }
-
-                                    if (key2 != null && PluginBridges.BridgeFFXIV._nullCombatant.ContainsKey(key2))
-                                    {   // _entity[bnpcid=13681]
-                                        string value2 = Trim(key.Substring(idx + 1));
-                                        var entities = PluginBridges.BridgeFFXIV.GetAllEntities();
-                                        entity = entities.FirstOrDefault(vd => vd.GetValue(key2).ToString() == value2) 
-                                            ?? PluginBridges.BridgeFFXIV._nullCombatant;
+                                    entity = entities.FirstOrDefault();
                                     }
-                                    else if (reHex8.Match(key).Success)
-                                    {   // [10ABCDEF]
-                                        entity = isParty ? PluginBridges.BridgeFFXIV.GetIdPartyMember(key)
-                                                         : PluginBridges.BridgeFFXIV.GetIdEntity(key);
-                                    }
-                                    if (entity.GetValue("id").ToString() == "")
-                                    {   // [name]
-                                        entity = isParty ? PluginBridges.BridgeFFXIV.GetNamedPartyMember(key)
-                                                         : PluginBridges.BridgeFFXIV.GetNamedEntity(key);
-                                    }
+                                if (entity == null)
+                                {
+                                    RealPlugin.plug.UnfilteredAddToLog(RealPlugin.DebugLevelEnum.Warning, I18n.Translate(
+                                        "internal/Context/noEntity",
+                                        "Failed to find entity: {0}. Trigger: ({1})",
+                                        x, trig?.FullPath ?? "null"));
                                 }
-
-                                val = entity.GetValue(prop).ToString();
+                                else val = string.Join(", ", entity.QueryProperties(prop));
                             }
                             found = true;
                         }
                         else if (x.StartsWith("_me.")) // ${_me.prop}
                         {
                             string prop = Trim(x.Substring(4));
-                            if (PluginBridges.BridgeFFXIV.PlayerHexId == "")
+                            if (prop.ToLower() == "id")
                             {
-                                PluginBridges.BridgeFFXIV.UpdateState();
-                            }
-                            if (prop == "id")
-                            {
-                                val = PluginBridges.BridgeFFXIV.PlayerHexId;
+                                val = BridgeFFXIV.PlayerHexId;
                             }
                             else
                             {
-                                VariableDictionary me = PluginBridges.BridgeFFXIV.GetIdEntity(PluginBridges.BridgeFFXIV.PlayerHexId);
-                                val = me.GetValue(prop).ToString();
+                                val = string.Join(", ", FFXIV.Entity.GetMyself().QueryProperties(prop));
                             }
-                            found = true;
+                            }
+                        else if (x.StartsWith("_tgt.")) // ${_tgt.prop}
+                        {   // just for simplifying the expression ${_entity[${_me.targetid}].prop}
+                            string prop = Trim(x.Substring(5));
+                            var targetID = FFXIV.Entity.GetMyself().TargetID;
+                            FFXIV.Entity tgt = FFXIV.Entity.GetEntityByID(targetID)
+                                ?? FFXIV.Entity.NullEntity(); 
+                            val = string.Join(", ", tgt.QueryProperties(prop));
                         }
                         else if (x == "_clipboard")
                         {
@@ -2234,7 +2334,7 @@ namespace Triggernometry
                         }
                         else if (x.StartsWith("_textaura"))
                         {
-                            mx = rexListProp.Match(x);
+                            mx = rexListMethod.Match(x);
                             if (mx.Success)
                             {
                                 string gindex = mx.Groups["index"].Value;
@@ -2311,7 +2411,7 @@ namespace Triggernometry
                         }
                         else if (x.StartsWith("_imageaura"))
                         {
-                            mx = rexListProp.Match(x);
+                            mx = rexListMethod.Match(x);
                             if (mx.Success)
                             {
                                 string gindex = mx.Groups["index"].Value;

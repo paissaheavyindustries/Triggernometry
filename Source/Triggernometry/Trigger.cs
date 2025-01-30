@@ -70,7 +70,12 @@ namespace Triggernometry
             }
         }
 
-        public ConditionGroup Condition { get; set; }
+        internal ConditionGroup _Condition = new ConditionGroup { Enabled = false };
+        public ConditionGroup Condition
+        {
+            get => _Condition.Children.Count == 0 && !_Condition.Enabled ? null : _Condition;
+            set => _Condition = value;
+        }
 
         internal bool _Sequential { get; set; } = false;
         [XmlAttribute]
@@ -109,7 +114,7 @@ namespace Triggernometry
         }
 
         [XmlAttribute]
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
         internal string LogName
         {
@@ -396,7 +401,7 @@ namespace Triggernometry
         {
             get
             {
-                return _Conditions;
+                return (_Conditions?.Count ?? 0) == 0 ? null : _Conditions;
             }
             set
             {
@@ -410,14 +415,14 @@ namespace Triggernometry
 
         private void _Conditions_ItemAdded(object sender, EventListArgs<Condition> e)
         {
-            if (Condition == null)
+            if (_Condition == null)
             {
-                Condition = new ConditionGroup();
-                Condition.Grouping = ConditionGroup.CndGroupingEnum.And;
-                Condition.Enabled = true;
+                _Condition = new ConditionGroup();
+                _Condition.Grouping = ConditionGroup.CndGroupingEnum.And;
+                _Condition.Enabled = true;
             }
             Condition cx = e.Item;
-            Condition.AddChild(cx.ConvertToConditionSingle());
+            _Condition.AddChild(cx.ConvertToConditionSingle());
             _Conditions.Remove(e.Item);
         }
 
@@ -693,9 +698,9 @@ namespace Triggernometry
                 }
                 if ((ctx.force & Action.TriggerForceTypeEnum.SkipConditions) == 0)
                 {
-                    if (Condition != null && Condition.Enabled == true)
+                    if (_Condition != null && _Condition.Enabled == true)
                     {
-                        if (Condition.CheckCondition(ctx, TriggerContextLogger, ctx.plug) == false)
+                        if (_Condition.CheckCondition(ctx, TriggerContextLogger, ctx.plug) == false)
                         {
                             AddToLog(p, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Trigger/trignotfired", "Trigger '{0}' not fired, condition not met", LogName));
                             return false;
@@ -817,7 +822,7 @@ namespace Triggernometry
                 a.CopySettingsTo(b);
                 t.Actions.Add(b);
             }
-            t.Condition = (ConditionGroup)Condition.Duplicate();
+            t._Condition = (ConditionGroup)_Condition.Duplicate();
             t._IsReadme = _IsReadme;
             t.Name = Name;
             t.Id = Id;

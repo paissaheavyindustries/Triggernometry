@@ -1768,7 +1768,7 @@ namespace Triggernometry.Forms
             "Append whole table variable to another table vertically",
             "Append whole table variable to another table horizontally",
             "Sort the rows/cols by the key functions",
-            "Get complete data for all FFXIV entities",
+            "Get specified properties for specified FFXIV entities",
             "Unset all table variables",
             "Unset table variables matching regular expression"});
             this.cbxTvarOpType.Location = new System.Drawing.Point(119, 3);
@@ -1854,8 +1854,7 @@ namespace Triggernometry.Forms
             "Filter into another dictionary",
             "Merge two dictionaries (keep)",
             "Merge two dictionaries (overwrite)",
-            "Get entity data by name",
-            "Get entity data by hex ID",
+            "Get specified properties of a specified FFXIV entity",
             "Unset all dictionary variables",
             "Unset dictionary variables matching regular expression"});
             this.cbxDictOpType.Location = new System.Drawing.Point(119, 3);
@@ -6225,7 +6224,6 @@ namespace Triggernometry.Forms
             this.stsMouseHelp.Size = new System.Drawing.Size(650, 22);
             this.stsMouseHelp.SizingGrip = false;
             this.stsMouseHelp.TabIndex = 1;
-            this.stsMouseHelp.Text = "statusStrip1";
             this.stsMouseHelp.Visible = false;
             // 
             // tlsMouseLocation

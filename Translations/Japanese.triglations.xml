@@ -100,8 +100,7 @@
     <TranslationEntry Key="ActionForm/cbxDictKeyType[String]" Translation="String" />
     <TranslationEntry Key="ActionForm/cbxDictOpType[Build from the expression]" Translation="Build from the expression" />
     <TranslationEntry Key="ActionForm/cbxDictOpType[Filter into another dictionary]" Translation="Filter into another dictionary" />
-    <TranslationEntry Key="ActionForm/cbxDictOpType[Get entity data by hex ID]" Translation="Get entity data by hex ID" />
-    <TranslationEntry Key="ActionForm/cbxDictOpType[Get entity data by name]" Translation="Get entity data by name" />
+    <TranslationEntry Key="ActionForm/cbxDictOpType[Get specified properties of a specified FFXIV entity]" Translation="Get specified properties of a specified FFXIV entity" />
     <TranslationEntry Key="ActionForm/cbxDictOpType[Merge two dictionaries (keep)]" Translation="Merge two dictionaries (keep)" />
     <TranslationEntry Key="ActionForm/cbxDictOpType[Merge two dictionaries (overwrite)]" Translation="Merge two dictionaries (overwrite)" />
     <TranslationEntry Key="ActionForm/cbxDictOpType[Remove the given key]" Translation="Remove the given key" />
@@ -228,6 +227,9 @@
     <TranslationEntry Key="ActionForm/cbxRepositoryOp[Update all enabled repositories]" Translation="Update all enabled repositories" />
     <TranslationEntry Key="ActionForm/cbxRepositoryOp[Update containing repository]" Translation="Update containing repository" />
     <TranslationEntry Key="ActionForm/cbxRepositoryOp[Update selected repository]" Translation="Update selected repository" />
+    <TranslationEntry Key="ActionForm/cbxSoundMethod[ACT]" Translation="ACT" />
+    <TranslationEntry Key="ActionForm/cbxSoundMethod[Default]" Translation="Default" />
+    <TranslationEntry Key="ActionForm/cbxSoundMethod[Windows Media Player API]" Translation="Windows Media Player API" />
     <TranslationEntry Key="ActionForm/cbxTextAuraAlignment[Bottom center]" Translation="下 中央" />
     <TranslationEntry Key="ActionForm/cbxTextAuraAlignment[Bottom left]" Translation="下 左" />
     <TranslationEntry Key="ActionForm/cbxTextAuraAlignment[Bottom right]" Translation="下 右" />
@@ -248,6 +250,9 @@
     <TranslationEntry Key="ActionForm/cbxTriggerOp[Fire the specified trigger]" Translation="指定したトリガーを実行する" />
     <TranslationEntry Key="ActionForm/cbxTriggerZoneType[FFXIV zone ID]" Translation="FFXIV zone ID" />
     <TranslationEntry Key="ActionForm/cbxTriggerZoneType[Zone name]" Translation="Zone name" />
+    <TranslationEntry Key="ActionForm/cbxTtsMethod[ACT]" Translation="ACT" />
+    <TranslationEntry Key="ActionForm/cbxTtsMethod[Default]" Translation="Default" />
+    <TranslationEntry Key="ActionForm/cbxTtsMethod[Windows Speech API]" Translation="Windows Speech API" />
     <TranslationEntry Key="ActionForm/cbxTvarExpType[Numeric]" Translation="数値" />
     <TranslationEntry Key="ActionForm/cbxTvarExpType[String]" Translation="文字列" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Append whole table variable to another table horizontally]" Translation="Append whole table variable to another table horizontally" />
@@ -256,7 +261,7 @@
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Copy whole table variable to another table variable]" Translation="テーブル変数全体を別のテーブル変数にコピー" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Filter elements into another list]" Translation="Filter elements into another list" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Filter rows/cols into another table]" Translation="Filter rows/cols into another table" />
-    <TranslationEntry Key="ActionForm/cbxTvarOpType[Get complete data for all FFXIV entities]" Translation="Get complete data for all FFXIV entities" />
+    <TranslationEntry Key="ActionForm/cbxTvarOpType[Get specified properties for specified FFXIV entities]" Translation="Get specified properties for specified FFXIV entities" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Insert values at the given col or row]" Translation="Insert values at the given col or row" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Remove the given column or row]" Translation="Remove the given column or row" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Resize table variable]" Translation="テーブル変数のリサイズ" />
@@ -472,8 +477,10 @@
     <TranslationEntry Key="ActionForm/lblScriptExtEditor" Translation="External editor has been launched - script contents will be read back from the disk and refreshed when you close the external editor." />
     <TranslationEntry Key="ActionForm/lblScriptWarning" Translation="このタイプのアクションには潜在的な危険性があります。トリガーが期待値の範囲外のパラメーターで起動された場合などに意図しない損害を引き起こす可能性があります。十分に注意を払い自己責任で使用してください。" />
     <TranslationEntry Key="ActionForm/lblSoundFile" Translation="再生する音声ファイル" />
+    <TranslationEntry Key="ActionForm/lblSoundMethod" Translation="Audio output method" />
     <TranslationEntry Key="ActionForm/lblSoundVolume" Translation="ボリューム (0 ... 100 %)" />
     <TranslationEntry Key="ActionForm/lblSpeechRate" Translation="読み上げの速度 (-10 ... +10)" />
+    <TranslationEntry Key="ActionForm/lblSpeechRouting" Translation="Audio output method" />
     <TranslationEntry Key="ActionForm/lblSpeechVolume" Translation="読み上げる音声のボリューム (0 ... 100 %)" />
     <TranslationEntry Key="ActionForm/lblTextAuraAlignment" Translation="テキストの配置" />
     <TranslationEntry Key="ActionForm/lblTextAuraFont" Translation="フォント" />
@@ -524,8 +531,7 @@
     <TranslationEntry Key="ActionForm/███rtbHelperCallback" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperDictBuild" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperDictFilter" Translation="" />
-    <TranslationEntry Key="ActionForm/███rtbHelperDictGetEntityById" Translation="" />
-    <TranslationEntry Key="ActionForm/███rtbHelperDictGetEntityByName" Translation="" />
+    <TranslationEntry Key="ActionForm/███rtbHelperDictGetEntity" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperDictMerge" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperDictMergeHard" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperDictRemove" Translation="" />
@@ -534,7 +540,7 @@
     <TranslationEntry Key="ActionForm/███rtbHelperDictUnset" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperDictUnsetAll" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperDictUnsetRegex" Translation="" />
-    <TranslationEntry Key="ActionForm/rtbHelperJson" Translation="" />
+    <TranslationEntry Key="ActionForm/███rtbHelperJson" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarBuild" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarCopy" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarFilter" Translation="" />
@@ -559,7 +565,7 @@
     <TranslationEntry Key="ActionForm/███rtbHelperLvarUnset" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarUnsetAll" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperLvarUnsetRegex" Translation="" />
-    <TranslationEntry Key="ActionForm/rtbHelperSendKeysSendKeys" Translation="" />
+    <TranslationEntry Key="ActionForm/███rtbHelperSendKeysSendKeys" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperSendKeysWindowMessage" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperSendKeysWindowMessageCombo" Translation="" />
     <TranslationEntry Key="ActionForm/███rtbHelperTvarAppend" Translation="" />
@@ -596,7 +602,6 @@
     <TranslationEntry Key="ActionForm/tabDebugging" Translation="デバッグ" />
     <TranslationEntry Key="ActionForm/tabDescription" Translation="説明" />
     <TranslationEntry Key="ActionForm/tabScheduling" Translation="制御" />
-    <TranslationEntry Key="ActionForm/tlsMouseLocation" Translation="X: 123, Y: 1234" />
     <TranslationEntry Key="AuraDesignForm/alignmentToolStripMenuItem" Translation="配置" />
     <TranslationEntry Key="AuraDesignForm/bottomCenterToolStripMenuItem" Translation="下 中央" />
     <TranslationEntry Key="AuraDesignForm/bottomLeftToolStripMenuItem" Translation="下 左" />
@@ -631,7 +636,7 @@
     <TranslationEntry Key="BenchmarkProgressForm" Translation="Benchmark in progress" />
     <TranslationEntry Key="BenchmarkProgressForm/btnCancel" Translation="Cancel" />
     <TranslationEntry Key="ConfigurationForm" Translation="設定" />
-    <TranslationEntry Key="ConfigurationForm/" Translation="518400" />
+    <TranslationEntry Key="ConfigurationForm/btnAudio" Translation="音声" />
     <TranslationEntry Key="ConfigurationForm/btnCacheFileBrowse" Translation="参照" />
     <TranslationEntry Key="ConfigurationForm/btnCacheFileClear" Translation="キャッシュ削除" />
     <TranslationEntry Key="ConfigurationForm/btnCacheImageBrowse" Translation="参照" />
@@ -642,27 +647,56 @@
     <TranslationEntry Key="ConfigurationForm/btnCacheRepoClear" Translation="キャッシュ削除" />
     <TranslationEntry Key="ConfigurationForm/btnCacheSoundBrowse" Translation="参照" />
     <TranslationEntry Key="ConfigurationForm/btnCacheSoundClear" Translation="キャッシュ削除" />
+    <TranslationEntry Key="ConfigurationForm/btnCaching" Translation="キャッシュ" />
     <TranslationEntry Key="ConfigurationForm/btnCancel" Translation="キャンセル" />
     <TranslationEntry Key="ConfigurationForm/btnClearSelection" Translation="選択を解除" />
     <TranslationEntry Key="ConfigurationForm/btnConstAdd" Translation="Add constant" />
+    <TranslationEntry Key="ConfigurationForm/btnConstants" Translation="Constants" />
     <TranslationEntry Key="ConfigurationForm/btnConstEdit" Translation="Edit constant" />
-    <TranslationEntry Key="ConfigurationForm/btnConstRemove" Translation="Remove value" />
+    <TranslationEntry Key="ConfigurationForm/btnConstRemove" Translation="Remove constant" />
+    <TranslationEntry Key="ConfigurationForm/btnEndpoint" Translation="Endpoint" />
     <TranslationEntry Key="ConfigurationForm/btnEndpointHistUpdate" Translation="Update" />
     <TranslationEntry Key="ConfigurationForm/btnEndpointStart" Translation="開始" />
     <TranslationEntry Key="ConfigurationForm/btnEndpointStop" Translation="停止" />
     <TranslationEntry Key="ConfigurationForm/btnFfxivJobDown" Translation="下へ" />
     <TranslationEntry Key="ConfigurationForm/btnFfxivJobRestore" Translation="初期値を復元" />
     <TranslationEntry Key="ConfigurationForm/btnFfxivJobUp" Translation="上へ" />
+    <TranslationEntry Key="ConfigurationForm/btnGameSpecific" Translation="Game-specific" />
+    <TranslationEntry Key="ConfigurationForm/btnLogging" Translation="Logging" />
+    <TranslationEntry Key="ConfigurationForm/btnMisc" Translation="その他" />
     <TranslationEntry Key="ConfigurationForm/btnOk" Translation="OK" />
+    <TranslationEntry Key="ConfigurationForm/btnSecurity" Translation="Security" />
+    <TranslationEntry Key="ConfigurationForm/btnShortcuts" Translation="Shortcuts" />
+    <TranslationEntry Key="ConfigurationForm/btnStartup" Translation="Startup" />
     <TranslationEntry Key="ConfigurationForm/btnSubAdd" Translation="置換ルールの新規作成" />
     <TranslationEntry Key="ConfigurationForm/btnSubEdit" Translation="置換ルールの編集" />
     <TranslationEntry Key="ConfigurationForm/btnSubRemove" Translation="置換ルールの削除" />
+    <TranslationEntry Key="ConfigurationForm/btnSubstitutions" Translation="置換" />
     <TranslationEntry Key="ConfigurationForm/btnTriggerTemplate" Translation="Edit template trigger" />
     <TranslationEntry Key="ConfigurationForm/btnUnlockSecurity" Translation="Unlock security settings for editing" />
-    <TranslationEntry Key="ConfigurationForm/cbxActionAsync" Translation="New actions asynchronous by default" />
-    <TranslationEntry Key="ConfigurationForm/cbxAutosaveConfig" Translation="Enable configuration auto-save" />
-    <TranslationEntry Key="ConfigurationForm/cbxDevMode" Translation="開発者モード" />
-    <TranslationEntry Key="ConfigurationForm/cbxEnableHwAccel" Translation="オーバーレイの描画にハードウェアアクセラレーションを利用" />
+    <TranslationEntry Key="ConfigurationForm/btnUpdateCheck" Translation="Check for updates" />
+    <TranslationEntry Key="ConfigurationForm/btnUpdates" Translation="Updates" />
+    <TranslationEntry Key="ConfigurationForm/btnUserInterface" Translation="User interface" />
+    <TranslationEntry Key="ConfigurationForm/capAppearance/lblContent" Translation="Appearance" />
+    <TranslationEntry Key="ConfigurationForm/capAuraManagement/lblContent" Translation="Overlay management" />
+    <TranslationEntry Key="ConfigurationForm/capAutosaving/lblContent" Translation="Autosaving" />
+    <TranslationEntry Key="ConfigurationForm/capBehavior/lblContent" Translation="Behavior" />
+    <TranslationEntry Key="ConfigurationForm/capDownloads/lblContent" Translation="File downloads" />
+    <TranslationEntry Key="ConfigurationForm/capEndpointSettings/lblContent" Translation="Settings" />
+    <TranslationEntry Key="ConfigurationForm/capEndpointStatus/lblContent" Translation="Status" />
+    <TranslationEntry Key="ConfigurationForm/capExpressions/lblContent" Translation="Expressions" />
+    <TranslationEntry Key="ConfigurationForm/capFfxivLogging/lblContent" Translation="Logging" />
+    <TranslationEntry Key="ConfigurationForm/capFfxivPartyOrder/lblContent" Translation="Party list ordering" />
+    <TranslationEntry Key="ConfigurationForm/capImageFiles/lblContent" Translation="Image files" />
+    <TranslationEntry Key="ConfigurationForm/capJason/lblContent" Translation="JSON responses" />
+    <TranslationEntry Key="ConfigurationForm/capLogging/lblContent" Translation="Logging settings" />
+    <TranslationEntry Key="ConfigurationForm/capRepoBackups/lblContent" Translation="Repository backups" />
+    <TranslationEntry Key="ConfigurationForm/capScripting/lblContent" Translation="Scripting API access" />
+    <TranslationEntry Key="ConfigurationForm/capSoundFiles/lblContent" Translation="Sound files" />
+    <TranslationEntry Key="ConfigurationForm/capStartupOptions/lblContent" Translation="Startup options" />
+    <TranslationEntry Key="ConfigurationForm/capStartupTrigger/lblContent" Translation="Startup trigger/folder" />
+    <TranslationEntry Key="ConfigurationForm/capTemplate/lblContent" Translation="Templates" />
+    <TranslationEntry Key="ConfigurationForm/capUpdateChannel/lblContent" Translation="Update channel" />
     <TranslationEntry Key="ConfigurationForm/cbxFfxivJobMethod[Player first, rest unordered (legacy)]" Translation="プレーヤーが最初、残りは順不同 (legacy)" />
     <TranslationEntry Key="ConfigurationForm/cbxFfxivJobMethod[Player first, sort the rest by custom party order]" Translation="プレーヤーが最初、残りは任意のパーティ順列で並び替え" />
     <TranslationEntry Key="ConfigurationForm/cbxFfxivJobMethod[Sort everyone by custom party order]" Translation="すべて任意のパーティ順列で並び替え" />
@@ -673,25 +707,17 @@
     <TranslationEntry Key="ConfigurationForm/cbxLoggingLevel[Errors only]" Translation="エラーのみ" />
     <TranslationEntry Key="ConfigurationForm/cbxLoggingLevel[Nothing]" Translation="出力しない" />
     <TranslationEntry Key="ConfigurationForm/cbxLoggingLevel[Verbose debug]" Translation="詳細（デバッグ用）" />
-    <TranslationEntry Key="ConfigurationForm/cbxTriggerTemplate" Translation="Use template trigger for default values" />
-    <TranslationEntry Key="ConfigurationForm/cbxUpdateMethod[ACT]" Translation="ACT" />
-    <TranslationEntry Key="ConfigurationForm/cbxUpdateMethod[Built-in (legacy)]" Translation="Built-in (legacy)" />
-    <TranslationEntry Key="ConfigurationForm/cbxTestIgnoreConditions" Translation="Ignore conditions as default when testing actions" />
-    <TranslationEntry Key="ConfigurationForm/cbxTestLive" Translation="現在の変数値を用いてアクションのテスト時を行う" />
-    <TranslationEntry Key="ConfigurationForm/chkActSoundFiles" Translation="ACT本体の設定を用いて音声ファイルを再生する" />
-    <TranslationEntry Key="ConfigurationForm/chkActTts" Translation="ACT本体の設定を用いてTTSを再生する" />
-    <TranslationEntry Key="ConfigurationForm/chkClipboard" Translation="システムのクリップボードを使う" />
-    <TranslationEntry Key="ConfigurationForm/chkEndpointLog" Translation="Log received data" />
-    <TranslationEntry Key="ConfigurationForm/chkEndpointStartup" Translation="Start endpoint on launch" />
-    <TranslationEntry Key="ConfigurationForm/chkFfxivLogNetwork" Translation="ネットワークイベントを記録する" />
-    <TranslationEntry Key="ConfigurationForm/chkLogNormalEvents" Translation="通常のログを記録する" />
-    <TranslationEntry Key="ConfigurationForm/chkLogVariableExpansions" Translation="Log variable expansions" />
-    <TranslationEntry Key="ConfigurationForm/chkShortcutEnableTemplates" Translation="Enable shortcuts to input template expressions" />
-    <TranslationEntry Key="ConfigurationForm/chkShortcutUseAbbrevInTemplates" Translation="Use abbreviation expressions in template expressions" />
-    <TranslationEntry Key="ConfigurationForm/chkShortcutWrapTextWhenSelected" Translation="Wrap selected text in template expressions" />
-    <TranslationEntry Key="ConfigurationForm/chkUpdates" Translation="起動時に更新を確認" />
-    <TranslationEntry Key="ConfigurationForm/chkWarnAdmin" Translation="管理者権限で起動していない場合に警告を表示" />
-    <TranslationEntry Key="ConfigurationForm/chkWelcome" Translation="起動時にようこそ画面を表示" />
+    <TranslationEntry Key="ConfigurationForm/cbxSoundMethod[ACT]" Translation="ACT" />
+    <TranslationEntry Key="ConfigurationForm/cbxSoundMethod[External application]" Translation="External application" />
+    <TranslationEntry Key="ConfigurationForm/cbxSoundMethod[None (disabled)]" Translation="None (disabled)" />
+    <TranslationEntry Key="ConfigurationForm/cbxSoundMethod[Windows Media Player API]" Translation="Windows Media Player API" />
+    <TranslationEntry Key="ConfigurationForm/cbxTtsMethod[ACT]" Translation="ACT" />
+    <TranslationEntry Key="ConfigurationForm/cbxTtsMethod[External application]" Translation="External application" />
+    <TranslationEntry Key="ConfigurationForm/cbxTtsMethod[None (disabled)]" Translation="None (disabled)" />
+    <TranslationEntry Key="ConfigurationForm/cbxTtsMethod[Windows Speech API]" Translation="Windows Speech API" />
+    <TranslationEntry Key="ConfigurationForm/cbxUpdateMethod[Built-in Github check (legacy)]" Translation="Built-in Github check (legacy)" />
+    <TranslationEntry Key="ConfigurationForm/cbxUpdateMethod[External third party]" Translation="External third party" />
+    <TranslationEntry Key="ConfigurationForm/cbxUpdateMethod[Official (recommended)]" Translation="Official (recommended)" />
     <TranslationEntry Key="ConfigurationForm/colScalarName" Translation="Name" />
     <TranslationEntry Key="ConfigurationForm/colScalarValue" Translation="Value" />
     <TranslationEntry Key="ConfigurationForm/Column1" Translation="検索文字列" />
@@ -707,29 +733,11 @@
     <TranslationEntry Key="ConfigurationForm/dataGridViewCheckBoxColumn1" Translation="Allow for local triggers" />
     <TranslationEntry Key="ConfigurationForm/dataGridViewCheckBoxColumn2" Translation="Allow for remote triggers" />
     <TranslationEntry Key="ConfigurationForm/dataGridViewCheckBoxColumn3" Translation="Allow if running as admin" />
-    <TranslationEntry Key="ConfigurationForm/dataGridViewTextBoxColumn1" Translation="Additional features" />
-    <TranslationEntry Key="ConfigurationForm/groupBox1" Translation=" オーバーレイのコントロール " />
-    <TranslationEntry Key="ConfigurationForm/groupBox2" Translation=" Scripting API access " />
-    <TranslationEntry Key="ConfigurationForm/grpActHooks" Translation=" ACTとの連携 " />
-    <TranslationEntry Key="ConfigurationForm/grpCacheFile" Translation=" ファイルのダウンロード " />
-    <TranslationEntry Key="ConfigurationForm/grpCacheImage" Translation=" 画像ファイル " />
-    <TranslationEntry Key="ConfigurationForm/grpCacheJSON" Translation=" JSONレスポンス " />
-    <TranslationEntry Key="ConfigurationForm/grpCacheRepo" Translation=" リポジトリのバックアップ " />
-    <TranslationEntry Key="ConfigurationForm/grpCacheSound" Translation=" 音声ファイル " />
-    <TranslationEntry Key="ConfigurationForm/grpClipboard" Translation=" クリップボード " />
-    <TranslationEntry Key="ConfigurationForm/grpDefaultSettings" Translation=" Default Settings " />
-    <TranslationEntry Key="ConfigurationForm/grpEndpointHistory" Translation=" Endpoint history " />
-    <TranslationEntry Key="ConfigurationForm/grpEndpointSettings" Translation=" エンドポイント設定 " />
-    <TranslationEntry Key="ConfigurationForm/grpEndpointState" Translation=" ステータス " />
-    <TranslationEntry Key="ConfigurationForm/grpFfxivEventLogging" Translation=" イベントログ " />
-    <TranslationEntry Key="ConfigurationForm/grpFutureProofing" Translation=" 互換性 " />
-    <TranslationEntry Key="ConfigurationForm/grpGeneral" Translation=" ログ " />
-    <TranslationEntry Key="ConfigurationForm/grpPartyListOrder" Translation=" パーティリストの並び順 " />
-    <TranslationEntry Key="ConfigurationForm/grpShortCutExpression" Translation=" Expressions " />
-    <TranslationEntry Key="ConfigurationForm/grpStartup" Translation=" 起動 " />
-    <TranslationEntry Key="ConfigurationForm/grpStartupTrigger" Translation=" 起動時に実行するトリガー（フォルダ） " />
-    <TranslationEntry Key="ConfigurationForm/grpUserInterface" Translation=" ユーザインターフェース " />
-    <TranslationEntry Key="ConfigurationForm/grpVolAdjustment" Translation=" 全体の音量設定 " />
+    <TranslationEntry Key="ConfigurationForm/dataGridViewTextBoxColumn4" Translation="Additional features" />
+    <TranslationEntry Key="ConfigurationForm/lblActionAsync" Translation="New actions asynchronous by default" />
+    <TranslationEntry Key="ConfigurationForm/lblActTtsWarn" Translation="Using ACT for text-to-speech will cause the rate and volume options on text-to-speech actions to be ignored." />
+    <TranslationEntry Key="ConfigurationForm/lblAutoComplete" Translation="Enable autocomplete on text fields" />
+    <TranslationEntry Key="ConfigurationForm/lblAutosaveConfig" Translation="Enable configuration auto-save" />
     <TranslationEntry Key="ConfigurationForm/lblAutosaveInterval" Translation="Autosaving time interval in minutes" />
     <TranslationEntry Key="ConfigurationForm/lblCacheFileCount" Translation="現在のオブジェクト数" />
     <TranslationEntry Key="ConfigurationForm/lblCacheFileExpiry" Translation="失効までの時間 (分)" />
@@ -746,20 +754,45 @@
     <TranslationEntry Key="ConfigurationForm/lblCacheSoundCount" Translation="現在のオブジェクト数" />
     <TranslationEntry Key="ConfigurationForm/lblCacheSoundExpiry" Translation="失効までの時間 (分)" />
     <TranslationEntry Key="ConfigurationForm/lblCacheSoundSize" Translation="使用済みのディスク領域 (byte)" />
-    <TranslationEntry Key="ConfigurationForm/lblEndpoint" Translation="HTTP Endpoint" />
-    <TranslationEntry Key="ConfigurationForm/lblEndpointPassword" Translation="パスワード" />
-    <TranslationEntry Key="ConfigurationForm/lblEndpointPort" Translation="ポート" />
+    <TranslationEntry Key="ConfigurationForm/lblDevMode" Translation="開発者モード" />
+    <TranslationEntry Key="ConfigurationForm/lblEnableHwAccel" Translation="オーバーレイの描画にハードウェアアクセラレーションを利用" />
+    <TranslationEntry Key="ConfigurationForm/lblEndpoint" Translation="HTTP endpoint" />
+    <TranslationEntry Key="ConfigurationForm/lblEndpointLog" Translation="Log received data" />
     <TranslationEntry Key="ConfigurationForm/lblEndpointStartup" Translation="起動時にエンドポイントを有効にする" />
-    <TranslationEntry Key="ConfigurationForm/lblEndpointState" Translation="エンドポイントは稼働していません。" />
+    <TranslationEntry Key="ConfigurationForm/lblExternalSoundWarn" Translation="This option will make Triggernometry launch an external application. Use this option with caution, and only if you understand what you are doing, as this may expose your system to risk of malware." />
+    <TranslationEntry Key="ConfigurationForm/lblExternalTtsWarn" Translation="This option will make Triggernometry launch an external application. Use this option with caution, and only if you understand what you are doing, as this may expose your system to risk of malware." />
+    <TranslationEntry Key="ConfigurationForm/lblExternalUpdateWarn" Translation="Please be aware that any alternative update channels are not managed or monitored officially, and using a malicious channel may expose you to risk of malware. Only use this feature if you really know what you are doing, and have a source you consider trustworthy!" />
     <TranslationEntry Key="ConfigurationForm/lblFfxivJobMethod" Translation="並び替えの方法" />
     <TranslationEntry Key="ConfigurationForm/lblFfxivJobOrder" Translation="ジョブの並び順" />
+    <TranslationEntry Key="ConfigurationForm/lblFfxivLogNetwork" Translation="ネットワークイベントを記録する" />
     <TranslationEntry Key="ConfigurationForm/lblFolderReminder" Translation="フォルダを選択するとフォルダに含まれる全てのトリガーが実行されます" />
     <TranslationEntry Key="ConfigurationForm/lblLoggingLevel" Translation="ログフィルタのレベル" />
+    <TranslationEntry Key="ConfigurationForm/lblLogNormalEvents" Translation="通常のログを記録する" />
+    <TranslationEntry Key="ConfigurationForm/lblLogVariableExpansions" Translation="Log variable expansions" />
     <TranslationEntry Key="ConfigurationForm/lblMonitorWindow" Translation="オーバーレイを描画するウィンドウ" />
-    <TranslationEntry Key="ConfigurationForm/lblSeparator" Translation="イベントテキストの区切り文字" />
-    <TranslationEntry Key="ConfigurationForm/lblSoundVolume" Translation="音声ファイルの再生" />
-    <TranslationEntry Key="ConfigurationForm/lblTtsVolume" Translation="Text-to-speech" />
-    <TranslationEntry Key="ConfigurationForm/lblUpdateMethod" Translation="Plugin update check method" />
+    <TranslationEntry Key="ConfigurationForm/lblShortcutEnableTemplates" Translation="Enable shortcuts to input template expressions" />
+    <TranslationEntry Key="ConfigurationForm/lblShortcutUseAbbrevInTemplates" Translation="Use abbreviation expressions in template expressions" />
+    <TranslationEntry Key="ConfigurationForm/lblShortcutWrapTextWhenSelected" Translation="Wrap selected text in template expressions" />
+    <TranslationEntry Key="ConfigurationForm/lblSoundMethod" Translation="Playback method" />
+    <TranslationEntry Key="ConfigurationForm/lblSoundPath" Translation="Application path" />
+    <TranslationEntry Key="ConfigurationForm/lblSoundPathArgs" Translation="Arguments" />
+    <TranslationEntry Key="ConfigurationForm/lblSoundRepetition" Translation="Repetition cooldown" />
+    <TranslationEntry Key="ConfigurationForm/lblSoundVolume" Translation="音量" />
+    <TranslationEntry Key="ConfigurationForm/lblTestIgnoreConditions" Translation="Ignore conditions as default when testing actions" />
+    <TranslationEntry Key="ConfigurationForm/lblTestLive" Translation="現在の変数値を用いてアクションのテスト時を行う" />
+    <TranslationEntry Key="ConfigurationForm/lblTriggerTemplate" Translation="Use template trigger for default values" />
+    <TranslationEntry Key="ConfigurationForm/lblTtsMethod" Translation="Playback method" />
+    <TranslationEntry Key="ConfigurationForm/lblTtsPath" Translation="Application path" />
+    <TranslationEntry Key="ConfigurationForm/lblTtsPathArgs" Translation="Arguments" />
+    <TranslationEntry Key="ConfigurationForm/lblTtsRepetition" Translation="Repetition cooldown" />
+    <TranslationEntry Key="ConfigurationForm/lblTtsVolume" Translation="音量" />
+    <TranslationEntry Key="ConfigurationForm/lblUiFont" Translation="Custom font" />
+    <TranslationEntry Key="ConfigurationForm/lblUiFontDefault" Translation="Use default font" />
+    <TranslationEntry Key="ConfigurationForm/lblUpdateChannelUri" Translation="Channel URI" />
+    <TranslationEntry Key="ConfigurationForm/lblUpdateMethod" Translation="Update method" />
+    <TranslationEntry Key="ConfigurationForm/lblUpdates" Translation="起動時に更新を確認" />
+    <TranslationEntry Key="ConfigurationForm/lblWarnAdmin" Translation="管理者権限で起動していない場合に警告を表示" />
+    <TranslationEntry Key="ConfigurationForm/lblWelcome" Translation="起動時にようこそ画面を表示" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Arcanist]" Translation="巴術士" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Archer]" Translation="弓術士" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Astrologian]" Translation="占星術師" />
@@ -778,6 +811,7 @@
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Monk]" Translation="モンク" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Ninja]" Translation="忍者" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Paladin]" Translation="ナイト" />
+    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Pictomancer]" Translation="Pictomancer" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Pugilist]" Translation="格闘士" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Reaper]" Translation="Reaper" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Red Mage]" Translation="赤魔道士" />
@@ -787,35 +821,14 @@
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Scholar]" Translation="学者" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Summoner]" Translation="召喚士" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Thaumaturge]" Translation="呪術師" />
+    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Viper]" Translation="Viper" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Warrior]" Translation="戦士" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[White Mage]" Translation="白魔道士" />
-    <TranslationEntry Key="ConfigurationForm/nudCacheFileExpiry" Translation="518400" />
-    <TranslationEntry Key="ConfigurationForm/nudCacheImageExpiry" Translation="518400" />
-    <TranslationEntry Key="ConfigurationForm/nudCacheJsonExpiry" Translation="10800" />
-    <TranslationEntry Key="ConfigurationForm/nudCacheRepoExpiry" Translation="518400" />
-    <TranslationEntry Key="ConfigurationForm/nudCacheSoundExpiry" Translation="518400" />
-    <TranslationEntry Key="ConfigurationForm/nudEndpointPort" Translation="1" />
-    <TranslationEntry Key="ConfigurationForm/tabAudio" Translation="音声" />
-    <TranslationEntry Key="ConfigurationForm/tabCaching" Translation="キャッシュ" />
-    <TranslationEntry Key="ConfigurationForm/tabConsts" Translation="Constants" />
-    <TranslationEntry Key="ConfigurationForm/tabEndpoint" Translation="Endpoint" />
+    <TranslationEntry Key="ConfigurationForm/prettyCaption1/lblContent" Translation="Sound playback" />
+    <TranslationEntry Key="ConfigurationForm/prettyCaption2/lblContent" Translation="Text-to-speech" />
+    <TranslationEntry Key="ConfigurationForm/prettyCaption3/lblContent" Translation="History" />
     <TranslationEntry Key="ConfigurationForm/tabFFXIV" Translation="Final Fantasy XIV" />
-    <TranslationEntry Key="ConfigurationForm/tabGeneral" Translation="一般" />
-    <TranslationEntry Key="ConfigurationForm/tabMisc" Translation="その他" />
-    <TranslationEntry Key="ConfigurationForm/tabSecurity" Translation="Security" />
-    <TranslationEntry Key="ConfigurationForm/tabShortCuts" Translation="ShortCuts" />
-    <TranslationEntry Key="ConfigurationForm/tabSubstitutions" Translation="置換" />
-    <TranslationEntry Key="ConfigurationForm/tslEndpointHistoryRecv" Translation="telegram(s) received" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheFileCount" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheFileSize" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheImageCount" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheImageSize" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheJsonCount" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheJsonSize" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheRepoCount" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheRepoSize" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheSoundCount" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheSoundSize" Translation="0" />
+    <TranslationEntry Key="ConfigurationForm/tlsEndpointHistoryRecv" Translation="telegram(s) received" />
     <TranslationEntry Key="ExportForm" Translation="結果をエクスポート" />
     <TranslationEntry Key="ExportForm/btnClose" Translation="閉じる" />
     <TranslationEntry Key="ExportForm/btnCopy" Translation="コピー" />
@@ -866,12 +879,14 @@
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Monk]" Translation="ジョブ：モンク" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Ninja]" Translation="ジョブ：忍者" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Paladin]" Translation="ジョブ：ナイト" />
+    <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Pictomancer]" Translation="Job: Pictomancer" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Reaper]" Translation="Job: Reaper" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Red Mage]" Translation="ジョブ：赤魔道士" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Sage]" Translation="Job: Sage" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Samurai]" Translation="ジョブ：侍" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Scholar]" Translation="ジョブ：学者" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Summoner]" Translation="ジョブ：召喚士" />
+    <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Viper]" Translation="Job: Viper" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Warrior]" Translation="ジョブ：戦士" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: White Mage]" Translation="ジョブ：白魔道士" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilterEnabled" Translation="指定されたクラスのいずれかである場合にのみイベントを処理する" />
@@ -920,8 +935,8 @@
     <TranslationEntry Key="internal/Action/descdictbuild" Translation="build {1}dict variable ({0}) from string ({2}) separated by ({3}) ({4})" />
     <TranslationEntry Key="internal/Action/descdictbuildraw" Translation="build {1}dict variable ({0}) from {3} expression ({2}) separated by its first 2 characters" />
     <TranslationEntry Key="internal/Action/descdictfilter" Translation="Use expression ({4}) to filter {1}dict ({0}) into {3}dict ({2})" />
-    <TranslationEntry Key="internal/Action/descdictgetentitybyid" Translation="save the properties of entity id ({2}) into {1}dict variable ({0})" />
-    <TranslationEntry Key="internal/Action/descdictgetentitybyname" Translation="save the properties of entity name ({2}) into {1}dict variable ({0})" />
+    <TranslationEntry Key="internal/Action/descdictgetentity" Translation="Store all properties of the entity ({2}) in {1}dictionary ({0})" />
+    <TranslationEntry Key="internal/Action/descdictgetentitygivenprops" Translation="Store ({3}) properties of the entity ({2}) in {1}dictionary ({0})" />
     <TranslationEntry Key="internal/Action/descdictmerge" Translation="merge {1}dict variable ({0}) into {3}dict variable ({2}), and keep the values of repeated keys" />
     <TranslationEntry Key="internal/Action/descdictmergehard" Translation="merge {1}dict variable ({0}) into {3}dict variable ({2}), and overwrite the values of repeated keys" />
     <TranslationEntry Key="internal/Action/descdictremove" Translation="remove the {3} key ({2}) in the {1}dict variable ({0})" />
@@ -1037,7 +1052,10 @@
     <TranslationEntry Key="internal/Action/desctablecopy" Translation="copy {2}table variable ({0}) to {3}table variable ({1})" />
     <TranslationEntry Key="internal/Action/desctablefilter" Translation="Use expression ({4}) to filter {1}table ({0}) into {3}list ({2})" />
     <TranslationEntry Key="internal/Action/desctablefilterline" Translation="Use expression ({4}) to filter the {5}s in {1}table ({0}) into {3}table ({2})" />
-    <TranslationEntry Key="internal/Action/desctablegetallentities" Translation="Save all FFXIV entity data {1}table variable ({0})" />
+    <TranslationEntry Key="internal/Action/desctablegetallentities00" Translation="Store all properties of all FFXIV entities in {1}table ({0})" />
+    <TranslationEntry Key="internal/Action/desctablegetallentities01" Translation="Store ({3}) properties of all FFXIV entities in {1}table ({0})" />
+    <TranslationEntry Key="internal/Action/desctablegetallentities10" Translation="Store all properties of FFXIV entities matching ({2}) in {1}table ({0})" />
+    <TranslationEntry Key="internal/Action/desctablegetallentities11" Translation="Store ({3}) properties of FFXIV entities matching ({2}) in {1}table ({0})" />
     <TranslationEntry Key="internal/Action/desctableinsertline" Translation="at {1}table ({0}) {3} #({2}), insert values from string ({4}) separated by ({5})" />
     <TranslationEntry Key="internal/Action/desctableinsertlineraw" Translation="at {1}table ({0}) {3} #({2}), insert values from {5} expression ({4}) separated by its first character" />
     <TranslationEntry Key="internal/Action/desctableremoveline" Translation="removed {2} #({3}) from {1}table ({0})" />
@@ -1079,8 +1097,7 @@
     <TranslationEntry Key="internal/Action/desctts" Translation="({0}) と読み上げる (ボリューム {1} %, 速度 {2})" />
     <TranslationEntry Key="internal/Action/descunknown" Translation="不明なアクションタイプ" />
     <TranslationEntry Key="internal/Action/descwindowtargetall" Translation="all windows whose titles match ({0})" />
-    <TranslationEntry Key="internal/Action/descwindowtargetid" Translation="windows in the process id ({0}) whose titles match ({1})" />
-    <TranslationEntry Key="internal/Action/descwindowtargetnone" Translation="(unspecified window name)" />
+    <TranslationEntry Key="internal/Action/descwindowtargetid" Translation="windows in the process with id ({0}) whose titles match ({1})" />
     <TranslationEntry Key="internal/Action/descwindowtargetsingle" Translation="the first window whose title match ({0})" />
     <TranslationEntry Key="internal/Action/descwmsg" Translation="{3}にメッセージ送信 ({0}, wparam = {1}, lparam = {2})" />
     <TranslationEntry Key="internal/Action/dictbuild" Translation="{1}Dictionary ({0}) built from expression ({2}) splitted by ({3}) ({4})" />
@@ -1137,17 +1154,18 @@
     <TranslationEntry Key="internal/Action/lscontrolexception" Translation="Can't execute LiveSplit control action due to exception: " />
     <TranslationEntry Key="internal/Action/mutexacquire" Translation="Mutex ({0}) を取得" />
     <TranslationEntry Key="internal/Action/mutexrelease" Translation="Mutex ({0}) を解放" />
-    <TranslationEntry Key="internal/Action/nofolderwithid" Translation="ID ({0}) のフォルダーが見つかりません" />
+    <TranslationEntry Key="internal/Action/nofolderwithid" Translation="Folder operation failed: In trigger ({1}), ID ({0}) のフォルダーが見つかりません" />
     <TranslationEntry Key="internal/Action/notreenodefolderwithid" Translation="Didn't find a tree node for folder ({0}) with id ({1})" />
     <TranslationEntry Key="internal/Action/notreenodetrigdisable" Translation="Could not find tree node to modify for disabling trigger {0}" />
     <TranslationEntry Key="internal/Action/notreenodetrigenable" Translation="Could not find tree node to modify for enabling trigger {0}" />
-    <TranslationEntry Key="internal/Action/notrigiderror" Translation="No trigger id, and op is not cancel all actions, unexpected" />
+    <TranslationEntry Key="internal/Action/notriggerwithid" Translation="Trigger operation failed: In trigger {1}, the specified trigger id ({0}) does not exist." />
     <TranslationEntry Key="internal/Action/obsauthpassword" Translation="OBS WebSocket authentication required, you must provide a password" />
     <TranslationEntry Key="internal/Action/obsconnecterror" Translation="Error connecting to OBS WebSocket: {0}" />
     <TranslationEntry Key="internal/Action/obsconnectok" Translation="OBSとのWebSocket接続に成功しました" />
     <TranslationEntry Key="internal/Action/obsconnectversionerror" Translation="Your version of OBS WebSocket is not currently supported." />
     <TranslationEntry Key="internal/Action/obscontrolerror" Translation="エラーが発生したためOBSのコントロールができませんでした。" />
-    <TranslationEntry Key="internal/Action/obscontrolexception" Translation="例外が発生したためOBSのコントロールができませんでした:" />
+    <TranslationEntry Key="internal/Action/obscontrolexception" Translation="例外が発生したためOBSのコントロールができませんでした: {0}" />
+    <TranslationEntry Key="internal/Action/obsnotrunning" Translation="OBS未起動のため、OBS操作を実行できません。" />
     <TranslationEntry Key="internal/Action/repoupdateall" Translation="Update all repositories" />
     <TranslationEntry Key="internal/Action/repoupdateself" Translation="Update containing repository" />
     <TranslationEntry Key="internal/Action/repoupdatespecific" Translation="Update repository ({0})" />
@@ -1164,6 +1182,7 @@
     <TranslationEntry Key="internal/Action/scripterrorsare" Translation="エラー内容:" />
     <TranslationEntry Key="internal/Action/scripterrorsingular" Translation="スクリプトのコンパイル中にエラーが発生しました。" />
     <TranslationEntry Key="internal/Action/scriptexecerror" Translation="スクリプト実行時エラー" />
+    <TranslationEntry Key="internal/Action/scriptinifailed" Translation="Action #{0} on trigger '{1}' not fired, scripting not available" />
     <TranslationEntry Key="internal/Action/shortscripterror" Translation="{0}, {1}行目" />
     <TranslationEntry Key="internal/Action/sortkeyexprerror" Translation="The sorting key functions ({0}) could not be parsed." />
     <TranslationEntry Key="internal/Action/tableappend" Translation="{2}Table ({0}) appended to {3}table ({1})" />
@@ -1217,6 +1236,10 @@
     <TranslationEntry Key="internal/BenchmarkForm/millisecond" Translation="ms" />
     <TranslationEntry Key="internal/BenchmarkForm/nanosecond" Translation="ns" />
     <TranslationEntry Key="internal/BenchmarkForm/resultexception" Translation="ベンチマーク結果のコンパイル中に例外が発生しました" />
+    <TranslationEntry Key="internal/BridgeOverlay/failInit" Translation="OverlayPlugin-related initialization failed due to: {0}" />
+    <TranslationEntry Key="internal/BridgeOverlay/failInitModule" Translation="OverlayPlugin {1} module initialization failed due to: {0}" />
+    <TranslationEntry Key="internal/BridgeOverlay/moduleCombatantsNotReady" Translation="OverlayPlugin not ready when trying to get entities, will retry later." />
+    <TranslationEntry Key="internal/BridgeOverlay/reflectionNotFound" Translation="Failed to find reflection object ({0}) during initializing OverlayPlugin-related modules." />
     <TranslationEntry Key="internal/ColorSelector/sample" Translation="Sample" />
     <TranslationEntry Key="internal/ConditionGroup/and" Translation="すべての条件式がTRUE" />
     <TranslationEntry Key="internal/ConditionGroup/not" Translation="すべての条件式がTRUEではない" />
@@ -1279,7 +1302,9 @@
     <TranslationEntry Key="internal/Context/infiniteClipboardError" Translation="The current clipboard contains the expression ${{_clipboard}}, which would cause infinite loop" />
     <TranslationEntry Key="internal/Context/infiniteRepeatError" Translation="In the repeat function, new string ({0}) cannot contain old string ({1}) in loop mode. Expr: ({2})" />
     <TranslationEntry Key="internal/Context/invalidValueError" Translation="In ({0}), {1} ({2}) is invalid. Expr: ({3})" />
+    <TranslationEntry Key="internal/Context/noEntity" Translation="Failed to find entity: {0}. Trigger: ({1})" />
     <TranslationEntry Key="internal/Context/parseTypeError" Translation="{0} ({1}) could not be parsed into {2}. Expr: ({3})" />
+    <TranslationEntry Key="internal/Context/ternaryexpressionerror" Translation="Ternary expression ({0}) could not be parsed: &#xD;&#xA;Condition: ({1}); &#xD;&#xA;TrueExpr: ({2}); &#xD;&#xA;FalseExpr: ({3})" />
     <TranslationEntry Key="internal/ExportForm/exception" Translation="例外" />
     <TranslationEntry Key="internal/ExpressionTextBox/numeric1" Translation="このフィールドに数値式を入力します。名前付き正規表現グループへの参照は展開された後、数学表現として評価されます。" />
     <TranslationEntry Key="internal/ExpressionTextBox/numeric2" Translation="フィールドの色は、数値式が有効である（緑）か、文法エラーがある（赤）かを示します。" />
@@ -1298,6 +1323,7 @@
     <TranslationEntry Key="internal/ffxiv/partytoobig" Translation="Party structure has more than {0} members" />
     <TranslationEntry Key="internal/ffxiv/procexception" Translation="Exception in FFXIV process retrieve: {0}" />
     <TranslationEntry Key="internal/ffxiv/updateexception" Translation="Exception in FFXIV state update: {0} at stage {1}" />
+    <TranslationEntry Key="internal/FFXIV/Entity/wrongProp" Translation="({0}) is not a valid entity property expression. Full expression: {1}" />
     <TranslationEntry Key="internal/I18n/bool" Translation="bool" />
     <TranslationEntry Key="internal/I18n/char" Translation="char" />
     <TranslationEntry Key="internal/I18n/charcode" Translation="charcode" />
@@ -1420,7 +1446,7 @@
     <TranslationEntry Key="internal/Plugin/inifilename" Translation="determining filename" />
     <TranslationEntry Key="internal/Plugin/inilanguages" Translation="loading languages" />
     <TranslationEntry Key="internal/Plugin/iniready" Translation="Ready" />
-    <TranslationEntry Key="internal/Plugin/iniscripting" Translation="setting up scripting - try changing the plugin load order in ACT" />
+    <TranslationEntry Key="internal/Plugin/iniscripterror" Translation="Error when initializing scripting - try changing plugin load order: {0}" />
     <TranslationEntry Key="internal/Plugin/inited" Translation="Initialized" />
     <TranslationEntry Key="internal/Plugin/initing" Translation="Initializing" />
     <TranslationEntry Key="internal/Plugin/initoasts" Translation="setting up toasts" />
@@ -1544,6 +1570,16 @@
     <TranslationEntry Key="internal/SearchForm/noresults" Translation="該当なし" />
     <TranslationEntry Key="internal/SearchForm/oneresult" Translation="1 件の結果" />
     <TranslationEntry Key="internal/SearchForm/xresults" Translation="{0} 件の結果" />
+    <TranslationEntry Key="internal/TestInputForm/debugcopied" Translation="Debug trigger has been copied to clipboard." />
+    <TranslationEntry Key="internal/TestInputForm/debugdelay--" Translation="Significantly earlier than the previous line. Adjusted to the correct position based on time." />
+    <TranslationEntry Key="internal/TestInputForm/debugdelay-" Translation="Slightly earlier than the previous line, might due to inaccurate log time. Adjusted to the previous line's time." />
+    <TranslationEntry Key="internal/TestInputForm/debugdelay++" Translation="Significantly later than the previous line." />
+    <TranslationEntry Key="internal/TestInputForm/debugfire" Translation="Debug trigger will be fired after clicking OK." />
+    <TranslationEntry Key="internal/TestInputForm/debugnotime" Translation="No logline time format detected, considered as no delay." />
+    <TranslationEntry Key="internal/TestInputForm/debugspeed" Translation="Enter a positive number for the speed:" />
+    <TranslationEntry Key="internal/TestInputForm/debugspeedex" Translation="The given value is not a positive number." />
+    <TranslationEntry Key="internal/TestInputForm/debugwarning" Translation="Warning:" />
+    <TranslationEntry Key="internal/TestInputForm/debugwarningformat" Translation="Logline #{0}: {1}&#xD;&#xA;Data: {2}" />
     <TranslationEntry Key="internal/Trigger/beforelastfired" Translation="Current time is before last fired for trigger '{0}'" />
     <TranslationEntry Key="internal/Trigger/delayingrefire" Translation="Delaying trigger '{0}' refire to {1}" />
     <TranslationEntry Key="internal/Trigger/firingexception" Translation="Trigger '{0}' didn't fire due to exception: {1}" />
@@ -1942,9 +1978,10 @@
     <TranslationEntry Key="SubstitutionForm/lblSearchFor" Translation="検索文字列" />
     <TranslationEntry Key="TestInputForm" Translation="入力をテスト" />
     <TranslationEntry Key="TestInputForm/btnCancel" Translation="キャンセル" />
+    <TranslationEntry Key="TestInputForm/btnCopyDebugTrigger" Translation="Copy Debug Trigger" />
     <TranslationEntry Key="TestInputForm/btnGetCurZone" Translation="現在のゾーン名を取得" />
     <TranslationEntry Key="TestInputForm/btnOk" Translation="OK" />
-    <TranslationEntry Key="TestInputForm/cbxEventDestination[ACT Event]" Translation="ACT Event" />
+    <TranslationEntry Key="TestInputForm/cbxEventDestination[ACT event]" Translation="ACT Event" />
     <TranslationEntry Key="TestInputForm/cbxEventDestination[Endpoint]" Translation="Endpoint" />
     <TranslationEntry Key="TestInputForm/cbxEventDestination[FFXIV network event]" Translation="FFXIV network event" />
     <TranslationEntry Key="TestInputForm/cbxEventDestination[Normal log line]" Translation="Normal log line" />

@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Triggernometry.Utilities
 {
@@ -103,35 +104,6 @@ namespace Triggernometry.Utilities
             return String.Empty;
         }
 
-        public static List<IntPtr> FindWindows(string title)
-        {
-            List<IntPtr> wins = new List<IntPtr>();
-            if (title.Trim().Length == 0)
-            {
-                return wins;
-            }
-            Regex rex = new Regex(title);
-            EnumWindows((hWnd, lParam) =>
-            {
-                try
-                {
-                    string t = GetWindowTextFromHandle(hWnd);
-                    Match m = rex.Match(t);
-                    if (m.Success == true)
-                    {
-                        wins.Add(hWnd);
-                    }
-                }
-                catch (Exception)
-                {
-                }
-                return true;
-            }
-                , IntPtr.Zero
-            );
-            return wins;
-        }
-
         public static void SendMouse(MouseEventFlags flags, MouseEventDataXButtons buttons, int x, int y)
         {
             if ((flags & MouseEventFlags.ABSOLUTE) == MouseEventFlags.ABSOLUTE)
@@ -144,55 +116,103 @@ namespace Triggernometry.Utilities
             mouse_event((uint)flags, x, y, (uint)buttons, 0);
         }
 
-        public static void SendKeycodes(string procid, string windowtitle, params int[] keycodes)
+        public static List<IntPtr> FindWindows(int procid, string titleRegex)
         {
-            for (int i = 0; i < keycodes.Length; i++)
+            if (string.IsNullOrWhiteSpace(titleRegex))
             {
-                SendMessageToWindow(procid, windowtitle, WM_KEYDOWN, keycodes[i], 0);
+                titleRegex = ".*";
             }
-            Thread.Sleep(10);
-            for (int i = keycodes.Length - 1; i >= 0; i--)
+            return FindWindows(procid, new Regex(titleRegex));
+        }
+
+        public static List<IntPtr> FindWindows(int procid, Regex titleRegex)
+        {
+            // find all windows matching the title regex
+            List<IntPtr> wins = new List<IntPtr>();
+            EnumWindows((hWnd, lParam) =>
             {
-                SendMessageToWindow(procid, windowtitle, WM_KEYUP, keycodes[i], 0);
+                try
+                {
+                    string t = GetWindowTextFromHandle(hWnd);
+                    Match m = titleRegex.Match(t);
+                    if (m.Success == true)
+                    {
+                        wins.Add(hWnd);
+                    }
+                }
+                catch (Exception)
+                {
+                }
+                return true;
+            }
+                , IntPtr.Zero
+            );
+
+            // filter by process id
+            if (procid < 0) // all windows
+            {
+                return wins;
+            }
+            else if (procid == 0) // first window
+            {
+                return wins.Count > 0 ? new List<IntPtr> { wins[0] } : new List<IntPtr>();
+            }
+            else
+            {
+                return wins.Where(win =>
+                {
+                    GetWindowThreadProcessId(win, out uint windowProcId);
+                    return windowProcId == procid;
+                }).ToList();
             }
         }
 
-        public static void SendMessageToWindow(string procid, string windowtitle, uint code, int wparam, int lparam)
+        public static void SendKeycode(int procid, string titleRegex, int keycode)
         {
-            List<IntPtr> wins = FindWindows(windowtitle);
-            if (wins.Count > 0)
+            List<IntPtr> wins = FindWindows(procid, titleRegex);
+            Keys key = (Keys)keycode;
+            List<int> keycodes = new List<int>();
+
+            if (key.HasFlag(Keys.Control))
+                keycodes.Add((int)Keys.ControlKey);
+
+            if (key.HasFlag(Keys.Shift))
+                keycodes.Add((int)Keys.ShiftKey);
+
+            if (key.HasFlag(Keys.Alt))
+                keycodes.Add((int)Keys.Menu);
+
+            keycodes.Add((int)(key & Keys.KeyCode));
+
+            SendKeycodes(procid, titleRegex, keycodes.ToArray());
+        }
+
+        public static void SendKeycodes(int procid, string titleRegex, params int[] keycodes)
+        {
+            List<IntPtr> wins = FindWindows(procid, titleRegex);
+            foreach (var keycode in keycodes)
             {
-                switch (procid.Trim())
+                foreach (IntPtr win in wins)
                 {
-                    case "-1":
-                        {
-                            foreach (IntPtr win in wins)
-                            {
-                                SendMessage(win, code, (IntPtr)wparam, (IntPtr)lparam);
-                            }
-                        }
-                        break;
-                    case "":
-                    case "0":
-                        {
-                            SendMessage(wins[0], code, (IntPtr)wparam, (IntPtr)lparam);
-                        }
-                        break;
-                    default:
-                        {
-                            uint procidnum = uint.Parse(procid);
-                            uint wpid;
-                            foreach (IntPtr win in wins)
-                            {
-                                GetWindowThreadProcessId(win, out wpid);
-                                if (wpid == procidnum)
-                                {
-                                    SendMessage(win, code, (IntPtr)wparam, (IntPtr)lparam);
-                                }
-                            }
-                        }
-                        break;
+                    SendMessage(win, WM_KEYDOWN, (IntPtr)keycode, IntPtr.Zero);
                 }
+            }
+            Thread.Sleep(10);
+            foreach (var keycode in keycodes.Reverse())
+            {
+                foreach (IntPtr win in wins)
+                {
+                    SendMessage(win, WM_KEYUP, (IntPtr)keycode, IntPtr.Zero);
+                }
+            }
+        }
+
+        public static void SendMessageToWindow(int procid, string windowtitle, uint code, IntPtr wparam, IntPtr lparam)
+        {
+            List<IntPtr> wins = FindWindows(procid, windowtitle);
+            foreach (IntPtr win in wins)
+            {
+                SendMessage(win, code, wparam, lparam);
             }
         }
 

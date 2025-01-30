@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Language LanguageName="简体中文 (zh-CN)" MissingKeyHandling="DefaultLanguage">
-	<Translations>
-    <TranslationEntry Key="AboutForm" Translation=" 关于" />
+  <Translations>
+    <TranslationEntry Key="AboutForm" Translation=" 关于" />    
     <TranslationEntry Key="AboutForm/btnOk" Translation="确定" />
     <TranslationEntry Key="AboutForm/tabGeneral" Translation="通用" />
     <TranslationEntry Key="AboutForm/tabLicenses" Translation="协议" />
@@ -100,8 +100,7 @@
     <TranslationEntry Key="ActionForm/cbxDictKeyType[String]" Translation="文本" />
     <TranslationEntry Key="ActionForm/cbxDictOpType[Build from the expression]" Translation="构筑字典" />
     <TranslationEntry Key="ActionForm/cbxDictOpType[Filter into another dictionary]" Translation="过滤字典" />
-    <TranslationEntry Key="ActionForm/cbxDictOpType[Get entity data by hex ID]" Translation="获取实体信息（按照 ID）" />
-    <TranslationEntry Key="ActionForm/cbxDictOpType[Get entity data by name]" Translation="获取实体信息（按照名字）" />
+    <TranslationEntry Key="ActionForm/cbxDictOpType[Get specified properties of a specified FFXIV entity]" Translation="获取单个指定实体的指定属性" />
     <TranslationEntry Key="ActionForm/cbxDictOpType[Merge two dictionaries (keep)]" Translation="合并字典（保留）" />
     <TranslationEntry Key="ActionForm/cbxDictOpType[Merge two dictionaries (overwrite)]" Translation="合并字典（覆盖）" />
     <TranslationEntry Key="ActionForm/cbxDictOpType[Remove the given key]" Translation="移除键值对" />
@@ -228,6 +227,9 @@
     <TranslationEntry Key="ActionForm/cbxRepositoryOp[Update all enabled repositories]" Translation="更新所有启用的远程仓库" />
     <TranslationEntry Key="ActionForm/cbxRepositoryOp[Update containing repository]" Translation="更新所处于的远程仓库" />
     <TranslationEntry Key="ActionForm/cbxRepositoryOp[Update selected repository]" Translation="更新选中的远程仓库" />
+    <TranslationEntry Key="ActionForm/cbxSoundMethod[ACT]" Translation="ACT" />
+    <TranslationEntry Key="ActionForm/cbxSoundMethod[Default]" Translation="默认" />
+    <TranslationEntry Key="ActionForm/cbxSoundMethod[Windows Media Player API]" Translation="Windows 媒体播放器 API" />
     <TranslationEntry Key="ActionForm/cbxTextAuraAlignment[Bottom center]" Translation="正下 ↓" />
     <TranslationEntry Key="ActionForm/cbxTextAuraAlignment[Bottom left]" Translation="左下 ↙" />
     <TranslationEntry Key="ActionForm/cbxTextAuraAlignment[Bottom right]" Translation="右下 ↘" />
@@ -248,6 +250,9 @@
     <TranslationEntry Key="ActionForm/cbxTriggerOp[Fire the specified trigger]" Translation="触发指定的触发器" />
     <TranslationEntry Key="ActionForm/cbxTriggerZoneType[FFXIV zone ID]" Translation="区域 ID" />
     <TranslationEntry Key="ActionForm/cbxTriggerZoneType[Zone name]" Translation="区域名" />
+    <TranslationEntry Key="ActionForm/cbxTtsMethod[ACT]" Translation="ACT" />
+    <TranslationEntry Key="ActionForm/cbxTtsMethod[Default]" Translation="默认" />
+    <TranslationEntry Key="ActionForm/cbxTtsMethod[Windows Speech API]" Translation="Windows 讲述人 API" />
     <TranslationEntry Key="ActionForm/cbxTvarExpType[Numeric]" Translation="数值" />
     <TranslationEntry Key="ActionForm/cbxTvarExpType[String]" Translation="文本" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Append whole table variable to another table horizontally]" Translation="横向合并表格" />
@@ -256,7 +261,7 @@
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Copy whole table variable to another table variable]" Translation="复制表格" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Filter elements into another list]" Translation="过滤为列表" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Filter rows/cols into another table]" Translation="过滤行/列为表格" />
-    <TranslationEntry Key="ActionForm/cbxTvarOpType[Get complete data for all FFXIV entities]" Translation="获取全部实体的属性信息" />
+    <TranslationEntry Key="ActionForm/cbxTvarOpType[Get specified properties for specified FFXIV entities]" Translation="获取全部指定实体的指定属性" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Insert values at the given col or row]" Translation="插入一组值至行/列" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Remove the given column or row]" Translation="移除行/列" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Resize table variable]" Translation="调整行列数" />
@@ -472,8 +477,10 @@
     <TranslationEntry Key="ActionForm/lblScriptExtEditor" Translation="已开启外部编辑器。代码将在关闭编辑器时存入触发器。&#xD;&#xA;（译者注：保存功能在某些编辑器下可能并不可靠，建议手动粘贴以免丢失数据。）" />
     <TranslationEntry Key="ActionForm/lblScriptWarning" Translation="该操作可执行自定义的代码，风险很高。请谨慎使用并自行承担结果。" />
     <TranslationEntry Key="ActionForm/lblSoundFile" Translation="音频路径" />
+    <TranslationEntry Key="ActionForm/lblSoundMethod" Translation="输出方式" />
     <TranslationEntry Key="ActionForm/lblSoundVolume" Translation="音量 (0 至 100)" />
     <TranslationEntry Key="ActionForm/lblSpeechRate" Translation="播读语速 (-10 至 +10)" />
+    <TranslationEntry Key="ActionForm/lblSpeechRouting" Translation="输出方式" />
     <TranslationEntry Key="ActionForm/lblSpeechVolume" Translation="播读音量 (0 – 100 %)" />
     <TranslationEntry Key="ActionForm/lblTextAuraAlignment" Translation="文本对齐" />
     <TranslationEntry Key="ActionForm/lblTextAuraFont" Translation="字体" />
@@ -524,8 +531,7 @@
     <TranslationEntry Key="ActionForm/rtbHelperCallback" Translation="发送具名回调，如调用鲶鱼精邮差等插件。&#xD;&#xA;&#xD;&#xA;鲶鱼精邮差使用简介：&#xD;&#xA;&#xD;&#xA;向游戏发送文本指令：&#xD;&#xA;回调名称：`command`&#xA;回调参数：`/e test &lt;se.1&gt;`&#xA;&#xA;向游戏发送本地标点（取消 `A`，场中标记 `1`，其他标点不改变）：&#xD;&#xA;回调名称：`place`&#xA;回调参数：`&#xD;&#xA;{{&#xD;&#xA;    &quot;A&quot;: {{}},&#xD;&#xA;    &quot;One&quot;: {{&quot;X&quot;: 100, &quot;Y&quot;: 100, &quot;Z&quot;: 0, &quot;Active&quot;: true}}&#xD;&#xA;}}`&#xD;&#xA;&#xD;&#xA;注：本地标点仅自己可见。若需全队可见，需要手动或自动将本地标点存入游戏预设并重新加载；&#xD;&#xA;字符串的换行和缩进无关紧要。&#xD;&#xA;更多用法详见 `Github`: `Natsukage/PostNamazu`" />
     <TranslationEntry Key="ActionForm/rtbHelperDictBuild" Translation="以表达式经过解析后的第一个字符作为键与值的分隔符，第二个字符作为键值对间的分隔符，将表达式剩余部分构筑为字典。&#xD;&#xA;&#xD;&#xA;例：输入表达式 `=,a=1,b=2,c=3` 可构筑字典：`a = 1, b = 2, c = 3`；&#xD;&#xA;输入表达式 `=,${{tvar:table.hjoin('=', ',')}}` 可将一个两列的表格变量 `table` 转化为字典，两列分别作为键与值。" />
     <TranslationEntry Key="ActionForm/rtbHelperDictFilter" Translation="解析每个键值对所对应的动态表达式数值，并将结果为真（非零）的键值对过滤为目标字典。&#xD;&#xA;&#xD;&#xA;可使用的动态表达式：&#xD;&#xA;`${{_key}}`：当前键值对的键；&#xD;&#xA;`${{_val}}`：当前键值对的值。&#xD;&#xA;&#xD;&#xA;例：源字典为：`10A = 0, 10F = 3, 40C = 2, 402 = 0`；&#xD;&#xA;经表达式 `${{_val}}` 过滤可得：`10F = 3, 40C = 2`；&#xD;&#xA;经表达式 `${{func:startwith(1):${{_key}}}}` 过滤可得：`10A = 0, 10F = 3`。" />
-    <TranslationEntry Key="ActionForm/rtbHelperDictGetEntityById" Translation="获取一个指定十六进制 ID 的实体的全部属性，并存入字典变量。&#xD;&#xA;&#xD;&#xA;属性即为表达式 `${{_ffxiventity[name].property}}` 中可用的全部属性；&#xD;&#xA;与 `_ffxiventity` 相同，只会返回查找到的第一个名称符合的实体数据。&#xD;&#xA;未查找到实体时，返回空字典并生成警告日志。" />
-    <TranslationEntry Key="ActionForm/rtbHelperDictGetEntityByName" Translation="获取一个指定名称的实体的全部属性，并存入字典变量。&#xD;&#xA;&#xD;&#xA;属性即为表达式 `${{_ffxiventity[name].property}}` 中可用的全部属性；&#xD;&#xA;与 `_ffxiventity` 相同，只会返回查找到的第一个名称符合的实体数据。&#xD;&#xA;未查找到实体时，返回空字典并生成警告日志。" />
+    <TranslationEntry Key="ActionForm/rtbHelperDictGetEntity" Translation="获取一个指定实体的指定属性，并存入字典变量。&#xD;&#xA;每个键是一个属性名，相应的值为属性值。&#xD;&#xA;与 `_ffxiventity` 相同，只会返回查找到的第一个名称符合的实体数据。&#xD;&#xA;&#xD;&#xA;键表达式：&#xD;&#xA;需要查询的全部属性，以逗号分隔。&#xD;&#xA;如：`ID, Name, X, Y, HasStatus(50), Heading`。&#xD;&#xA;可以使用的属性即为表达式 `${{_ffxiventity[name].property}}` 中可用的全部属性。&#xD;&#xA;如未提供键表达式，则会使用一系列默认属性（包含大多数可用属性）。&#xD;&#xA;&#xD;&#xA;值表达式：&#xD;&#xA;指定的实体。&#xD;&#xA;· 使用 ID：`103CDDB2`&#xD;&#xA;· 使用名称：`木人`&#xD;&#xA;· 使用数学表达式：&#xD;&#xA;以属性表达式为占位符，如：`IsT &amp;&amp; HasStatus(50) &amp;&amp; Distance &lt; 5`。&#xD;&#xA;&#xD;&#xA;未查找到实体时，返回空字典并生成警告日志。" />
     <TranslationEntry Key="ActionForm/rtbHelperDictMerge" Translation="将源字典中的所有键值对添加到目标字典。&#xD;&#xA;若存在相同的的键，则会跳过该键。&#xD;&#xA;在目标字典不存在时，相当于深复制字典。" />
     <TranslationEntry Key="ActionForm/rtbHelperDictMergeHard" Translation="将源字典中的所有键值对添加到目标字典。&#xD;&#xA;若存在相同的的键，则会覆写该键的值。&#xD;&#xA;在目标字典不存在时，相当于深复制字典。" />
     <TranslationEntry Key="ActionForm/rtbHelperDictRemove" Translation="从字典中移除给定键所对应的键值对。&#xD;&#xA;若该键不存在，则不会有任何操作。" />
@@ -568,7 +574,7 @@
     <TranslationEntry Key="ActionForm/rtbHelperTvarCopy" Translation="将源表格复制为目标表格。&#xD;&#xA;复制后两个表格中的值不存在后续关联（深复制）。" />
     <TranslationEntry Key="ActionForm/rtbHelperTvarFilter" Translation="解析每个元素所对应的动态表达式数值，并将结果为真（非零）的元素过滤为目标列表。&#xD;&#xA;与列表的过滤类似，会按照逐行顺序横向遍历表格。&#xD;&#xA;&#xD;&#xA;可使用的动态表达式：&#xD;&#xA;`${{_this}}`：当前元素的值；&#xD;&#xA;`${{_col}}`：当前元素的列索引（从 `1` 开始）；&#xD;&#xA;`${{_row}}`：当前元素的行索引（从 `1` 开始）；&#xD;&#xA;`${{_col[i]}}`：当前列第 `i` 个元素的值（从 `1` 开始）；&#xD;&#xA;`${{_row[i]}}`：当前行第 `i` 个元素的值（从 `1` 开始）。" />
     <TranslationEntry Key="ActionForm/rtbHelperTvarFilterLine" Translation="解析每行或每列所对应的动态表达式数值，并将结果为真（非零）的行或列过滤为目标表格。&#xD;&#xA;仅可以提供行列表达式之一，对应两种过滤模式。&#xD;&#xA;&#xD;&#xA;可使用的动态表达式（列模式）：&#xD;&#xA;`${{_col}}`：当前列索引（从 `1` 开始）；&#xD;&#xA;`${{_col[i]}}`：当前列第 `i` 个元素的值（从 `1` 开始）；&#xD;&#xA;&#xD;&#xA;可使用的动态表达式（行模式）：&#xD;&#xA;`${{_row}}`：当前行索引（从 `1` 开始）；&#xD;&#xA;`${{_row[i]}}`：当前行第 `i` 个元素的值（从 `1` 开始）。&#xD;&#xA;&#xD;&#xA;例：源表格为：`MT, name1, 2 | ST, name2, 3 | H1, name3, 1 | … | D4, name8, 8`；&#xD;&#xA;经过行表达式 `${{_row[3]}} &lt; 3` 可过滤出第 `1`、`3` 行为新表格：`MT, name1, 2 | H1, name3, 1`。" />
-    <TranslationEntry Key="ActionForm/rtbHelperTvarGetAllEntities" Translation="将 ACT 中所有可解析的实体信息存入表格。&#xD;&#xA;表格第一行内容为名称、ID 等实体信息，下面每一行为一个实体的数据。&#xD;&#xA;&#xD;&#xA;可以结合过滤、排序等表格动作获取多个想要查询的实体。" />
+    <TranslationEntry Key="ActionForm/rtbHelperTvarGetAllEntities" Translation="获取全部指定实体的指定属性，并存入表格变量。&#xD;&#xA;表格第一行内容为名称、ID 等实体属性，下面每一行为一个实体的数据。&#xD;&#xA;&#xD;&#xA;列表达式：&#xD;&#xA;需要查询的全部属性，以逗号分隔。&#xD;&#xA;如：`ID, Name, X, Y, HasStatus(50), Heading`。&#xD;&#xA;可以使用的属性即为表达式 `${{_ffxiventity[name].property}}` 中可用的全部属性。&#xD;&#xA;如未提供列表达式，则会使用一系列默认属性（包含大多数可用属性）。&#xD;&#xA;&#xD;&#xA;行表达式：&#xD;&#xA;过滤实体的数学表达式。&#xD;&#xA;以属性表达式为占位符，如：`IsT &amp;&amp; HasStatus(50) &amp;&amp; Distance &lt; 5`。&#xD;&#xA;如果未提供行表达式，则会查询全部实体。" />
     <TranslationEntry Key="ActionForm/rtbHelperTvarInsertLine" Translation="以表达式解析后的首字符为分隔符，剩余部分拆分为一串待插入的值，与构筑列表类似。&#xD;&#xA;仅可以提供行列索引之一，作为插入到的行/列索引。&#xD;&#xA;插入时，后面的所有行/列会向后移动一位，随后新的行/列会设置到目标索引。&#xD;&#xA;&#xD;&#xA;索引从 `1` 开始。支持负索引，如 `−1` 代表最后一位。&#xD;&#xA;若索引超出列表范围，则会补充空白行/列后设置到该索引。" />
     <TranslationEntry Key="ActionForm/rtbHelperTvarRemoveLine" Translation="移除表格中指定的行或列。&#xD;&#xA;仅可以提供行列索引之一，作为要删除的行/列索引。&#xD;&#xA;&#xD;&#xA;支持负索引，如 `−1` 代表最后一位。&#xD;&#xA;若索引超出列表范围，则不会执行任何操作。" />
     <TranslationEntry Key="ActionForm/rtbHelperTvarResize" Translation="按照给定的宽和高重设表格尺寸。&#xD;&#xA;若行/列参数留空，代表不调整这一维度。&#xD;&#xA;&#xD;&#xA;若新的宽/高超出当前尺寸，则超出部分会填充空值；&#xD;&#xA;若新的宽/高小于当前尺寸，则会从末尾删除行/列。" />
@@ -596,7 +602,6 @@
     <TranslationEntry Key="ActionForm/tabDebugging" Translation="调试" />
     <TranslationEntry Key="ActionForm/tabDescription" Translation="描述" />
     <TranslationEntry Key="ActionForm/tabScheduling" Translation="计划任务" />
-    <TranslationEntry Key="ActionForm/tlsMouseLocation" Translation="X: 123, Y: 1234" />
     <TranslationEntry Key="AuraDesignForm/alignmentToolStripMenuItem" Translation="对齐" />
     <TranslationEntry Key="AuraDesignForm/bottomCenterToolStripMenuItem" Translation="正下 ↓" />
     <TranslationEntry Key="AuraDesignForm/bottomLeftToolStripMenuItem" Translation="左下 ↙" />
@@ -630,192 +635,200 @@
     <TranslationEntry Key="BenchmarkForm/colRelEvalTime" Translation="相对评估时间" />
     <TranslationEntry Key="BenchmarkProgressForm" Translation="在进程中性能基准测试" />
     <TranslationEntry Key="BenchmarkProgressForm/btnCancel" Translation="取消" />
-    <TranslationEntry Key="ConfigurationForm" Translation="配置" />
-    <TranslationEntry Key="ConfigurationForm/" Translation="518400" />
-    <TranslationEntry Key="ConfigurationForm/btnCacheFileBrowse" Translation="浏览" />
-    <TranslationEntry Key="ConfigurationForm/btnCacheFileClear" Translation="清空缓存" />
-    <TranslationEntry Key="ConfigurationForm/btnCacheImageBrowse" Translation="浏览" />
-    <TranslationEntry Key="ConfigurationForm/btnCacheImageClear" Translation="清空缓存" />
-    <TranslationEntry Key="ConfigurationForm/btnCacheJsonBrowse" Translation="浏览" />
-    <TranslationEntry Key="ConfigurationForm/btnCacheJsonClear" Translation="清空缓存" />
-    <TranslationEntry Key="ConfigurationForm/btnCacheRepoBrowse" Translation="浏览" />
-    <TranslationEntry Key="ConfigurationForm/btnCacheRepoClear" Translation="清空缓存" />
-    <TranslationEntry Key="ConfigurationForm/btnCacheSoundBrowse" Translation="浏览" />
-    <TranslationEntry Key="ConfigurationForm/btnCacheSoundClear" Translation="清空缓存" />
-    <TranslationEntry Key="ConfigurationForm/btnCancel" Translation="取消" />
-    <TranslationEntry Key="ConfigurationForm/btnClearSelection" Translation="清空选择" />
-    <TranslationEntry Key="ConfigurationForm/btnConstAdd" Translation="添加常量" />
-    <TranslationEntry Key="ConfigurationForm/btnConstEdit" Translation="编辑常量" />
-    <TranslationEntry Key="ConfigurationForm/btnConstRemove" Translation="移除常量" />
-    <TranslationEntry Key="ConfigurationForm/btnEndpointHistUpdate" Translation="刷新" />
-    <TranslationEntry Key="ConfigurationForm/btnEndpointStart" Translation="开始" />
-    <TranslationEntry Key="ConfigurationForm/btnEndpointStop" Translation="停止" />
-    <TranslationEntry Key="ConfigurationForm/btnFfxivJobDown" Translation="下移" />
-    <TranslationEntry Key="ConfigurationForm/btnFfxivJobRestore" Translation="恢复默认" />
-    <TranslationEntry Key="ConfigurationForm/btnFfxivJobUp" Translation="上移" />
-    <TranslationEntry Key="ConfigurationForm/btnOk" Translation="确定" />
-    <TranslationEntry Key="ConfigurationForm/btnSubAdd" Translation="添加替换项" />
-    <TranslationEntry Key="ConfigurationForm/btnSubEdit" Translation="编辑替换项" />
-    <TranslationEntry Key="ConfigurationForm/btnSubRemove" Translation="移除替换项" />
-    <TranslationEntry Key="ConfigurationForm/btnTriggerTemplate" Translation="编辑触发器模板" />
-    <TranslationEntry Key="ConfigurationForm/btnUnlockSecurity" Translation=" 编辑需解锁此安全设置 " />
-    <TranslationEntry Key="ConfigurationForm/cbxActionAsync" Translation="新动作默认为异步动作" />
-    <TranslationEntry Key="ConfigurationForm/cbxAutosaveConfig" Translation="启用自动保存配置" />
-    <TranslationEntry Key="ConfigurationForm/cbxDevMode" Translation="开发者模式" />
-    <TranslationEntry Key="ConfigurationForm/cbxEnableHwAccel" Translation="悬浮窗使用硬件加速" />
-    <TranslationEntry Key="ConfigurationForm/cbxFfxivJobMethod[Player first, rest unordered (legacy)]" Translation="自己序首，游戏默认无自定义队伍排序" />
-    <TranslationEntry Key="ConfigurationForm/cbxFfxivJobMethod[Player first, sort the rest by custom party order]" Translation="自己序首，自定义其他人队伍排序" />
-    <TranslationEntry Key="ConfigurationForm/cbxFfxivJobMethod[Sort everyone by custom party order]" Translation="自定义所有人队伍排序" />
-    <TranslationEntry Key="ConfigurationForm/cbxLoggingLevel[Above custom]" Translation="高于用户" />
-    <TranslationEntry Key="ConfigurationForm/cbxLoggingLevel[Above custom 2]" Translation="高于用户 2" />
-    <TranslationEntry Key="ConfigurationForm/cbxLoggingLevel[All informational messages]" Translation="高于消息" />
-    <TranslationEntry Key="ConfigurationForm/cbxLoggingLevel[Errors and warnings]" Translation="高于警告" />
-    <TranslationEntry Key="ConfigurationForm/cbxLoggingLevel[Errors only]" Translation="仅错误" />
-    <TranslationEntry Key="ConfigurationForm/cbxLoggingLevel[Nothing]" Translation="无" />
-    <TranslationEntry Key="ConfigurationForm/cbxLoggingLevel[Verbose debug]" Translation="全部" />
-    <TranslationEntry Key="ConfigurationForm/cbxTriggerTemplate" Translation="新建触发器时使用模板" />
-    <TranslationEntry Key="ConfigurationForm/cbxUpdateMethod[ACT]" Translation="通过 ACT" />
-    <TranslationEntry Key="ConfigurationForm/cbxUpdateMethod[Built-in (legacy)]" Translation="内置（传统）" />
-    <TranslationEntry Key="ConfigurationForm/cbxTestIgnoreConditions" Translation="测试动作时默认忽略动作条件" />
-    <TranslationEntry Key="ConfigurationForm/cbxTestLive" Translation="测试动作时默认使用实时值" />
-    <TranslationEntry Key="ConfigurationForm/chkActSoundFiles" Translation="使用 ACT 播放声音文件" />
-    <TranslationEntry Key="ConfigurationForm/chkActTts" Translation="使用 ACT 的 TTS 播读（建议开启，否则阻塞动作）" />
-    <TranslationEntry Key="ConfigurationForm/chkClipboard" Translation="使用操作系统剪贴板" />
-    <TranslationEntry Key="ConfigurationForm/chkEndpointLog" Translation="记录数据接收日志" />
-    <TranslationEntry Key="ConfigurationForm/chkEndpointStartup" Translation="启动时开始终端" />
-    <TranslationEntry Key="ConfigurationForm/chkFfxivLogNetwork" Translation="记录网络事件日志" />
-    <TranslationEntry Key="ConfigurationForm/chkLogNormalEvents" Translation="记录 ACT 解析日志" />
-    <TranslationEntry Key="ConfigurationForm/chkLogVariableExpansions" Translation="记录 $... 表达式展开结果" />
-    <TranslationEntry Key="ConfigurationForm/chkShortcutEnableTemplates" Translation="允许使用快捷键输入模板表达式" />
-    <TranslationEntry Key="ConfigurationForm/chkShortcutUseAbbrevInTemplates" Translation="使用缩写代替全称" />
-    <TranslationEntry Key="ConfigurationForm/chkShortcutWrapTextWhenSelected" Translation="将选中的文本包裹在模板表达式内部" />
-    <TranslationEntry Key="ConfigurationForm/chkUpdates" Translation="启动时检查更新" />
-    <TranslationEntry Key="ConfigurationForm/chkWarnAdmin" Translation="在非管理员模式下运行 ACT 时显示警告" />
-    <TranslationEntry Key="ConfigurationForm/chkWelcome" Translation="启动时显示欢迎屏幕" />
-    <TranslationEntry Key="ConfigurationForm/colScalarName" Translation="名称" />
-    <TranslationEntry Key="ConfigurationForm/colScalarValue" Translation="值" />
-    <TranslationEntry Key="ConfigurationForm/Column1" Translation="被替换内容" />
-    <TranslationEntry Key="ConfigurationForm/Column2" Translation="替换为" />
-    <TranslationEntry Key="ConfigurationForm/Column3" Translation="范围" />
-    <TranslationEntry Key="ConfigurationForm/Column4" Translation="命名空间" />
-    <TranslationEntry Key="ConfigurationForm/Column5" Translation="本地触发器" />
-    <TranslationEntry Key="ConfigurationForm/Column6" Translation="远程触发器" />
-    <TranslationEntry Key="ConfigurationForm/Column7" Translation="管理员模式下" />
-    <TranslationEntry Key="ConfigurationForm/Column8" Translation="时间戳" />
-    <TranslationEntry Key="ConfigurationForm/Column9" Translation="数据" />
-    <TranslationEntry Key="ConfigurationForm/ctxClearSelection" Translation="清除选择" />
-    <TranslationEntry Key="ConfigurationForm/dataGridViewCheckBoxColumn1" Translation="本地触发器" />
-    <TranslationEntry Key="ConfigurationForm/dataGridViewCheckBoxColumn2" Translation="远程触发器" />
-    <TranslationEntry Key="ConfigurationForm/dataGridViewCheckBoxColumn3" Translation="管理员模式下" />
-    <TranslationEntry Key="ConfigurationForm/dataGridViewTextBoxColumn1" Translation="额外选项" />
-    <TranslationEntry Key="ConfigurationForm/groupBox1" Translation=" 悬浮窗控制 " />
-    <TranslationEntry Key="ConfigurationForm/groupBox2" Translation=" 编辑 API 权限 " />
-    <TranslationEntry Key="ConfigurationForm/grpActHooks" Translation=" ACT 接口 " />
-    <TranslationEntry Key="ConfigurationForm/grpCacheFile" Translation=" 文件下载 " />
-    <TranslationEntry Key="ConfigurationForm/grpCacheImage" Translation=" 图像文件 " />
-    <TranslationEntry Key="ConfigurationForm/grpCacheJSON" Translation=" JSON 响应 " />
-    <TranslationEntry Key="ConfigurationForm/grpCacheRepo" Translation=" 仓库备份 " />
-    <TranslationEntry Key="ConfigurationForm/grpCacheSound" Translation=" 语音文件 " />
-    <TranslationEntry Key="ConfigurationForm/grpClipboard" Translation="剪贴板 " />
-    <TranslationEntry Key="ConfigurationForm/grpDefaultSettings" Translation=" 默认设置 " />
-    <TranslationEntry Key="ConfigurationForm/grpEndpointHistory" Translation=" 终端历史 " />
-    <TranslationEntry Key="ConfigurationForm/grpEndpointSettings" Translation=" 终端设置 " />
-    <TranslationEntry Key="ConfigurationForm/grpEndpointState" Translation=" 状态 " />
-    <TranslationEntry Key="ConfigurationForm/grpFfxivEventLogging" Translation="事件记录中" />
-    <TranslationEntry Key="ConfigurationForm/grpFutureProofing" Translation=" 未来特性防护 " />
-    <TranslationEntry Key="ConfigurationForm/grpGeneral" Translation=" 通用 " />
-    <TranslationEntry Key="ConfigurationForm/grpPartyListOrder" Translation=" 队伍列表排序 " />
-    <TranslationEntry Key="ConfigurationForm/grpShortCutExpression" Translation=" 表达式 " />
-    <TranslationEntry Key="ConfigurationForm/grpStartup" Translation=" 插件启动时 " />
-    <TranslationEntry Key="ConfigurationForm/grpStartupTrigger" Translation=" 启动时自动触发的触发器/分组 " />
-    <TranslationEntry Key="ConfigurationForm/grpUserInterface" Translation=" 用户界面 " />
-    <TranslationEntry Key="ConfigurationForm/grpVolAdjustment" Translation=" 全局音量调整 " />
-    <TranslationEntry Key="ConfigurationForm/lblAutosaveInterval" Translation="自动保存间隔 / min" />
-    <TranslationEntry Key="ConfigurationForm/lblCacheFileCount" Translation="当前文件数量" />
-    <TranslationEntry Key="ConfigurationForm/lblCacheFileExpiry" Translation="过期时限（单位：分钟）" />
-    <TranslationEntry Key="ConfigurationForm/lblCacheFileSize" Translation="当前文件大小（单位：字节）" />
-    <TranslationEntry Key="ConfigurationForm/lblCacheImageCount" Translation="当前图像数量" />
-    <TranslationEntry Key="ConfigurationForm/lblCacheImageExpiry" Translation="过期时限（以分钟计）" />
-    <TranslationEntry Key="ConfigurationForm/lblCacheImageSize" Translation="当前图像大小（单位：字节）" />
-    <TranslationEntry Key="ConfigurationForm/lblCacheJsonCount" Translation="当前 JSON 缓存文件数量" />
-    <TranslationEntry Key="ConfigurationForm/lblCacheJsonExpiry" Translation="过期时限（以分钟计）" />
-    <TranslationEntry Key="ConfigurationForm/lblCacheJsonSize" Translation="当前缓存文件大小（单位：字节）" />
-    <TranslationEntry Key="ConfigurationForm/lblCacheRepoCount" Translation="当前仓库备份文件数量" />
-    <TranslationEntry Key="ConfigurationForm/lblCacheRepoExpiry" Translation="过期时限（以分钟计）" />
-    <TranslationEntry Key="ConfigurationForm/lblCacheRepoSize" Translation="当前仓库备份文件大小（单位：字节）" />
-    <TranslationEntry Key="ConfigurationForm/lblCacheSoundCount" Translation="当前语音文件数量" />
-    <TranslationEntry Key="ConfigurationForm/lblCacheSoundExpiry" Translation="过期时限（以分钟计）" />
-    <TranslationEntry Key="ConfigurationForm/lblCacheSoundSize" Translation="当前语音文件大小（单位：字节）" />
-    <TranslationEntry Key="ConfigurationForm/lblEndpoint" Translation="HTTP 终端" />
-    <TranslationEntry Key="ConfigurationForm/lblEndpointPassword" Translation="密码" />
-    <TranslationEntry Key="ConfigurationForm/lblEndpointPort" Translation="端口" />
-    <TranslationEntry Key="ConfigurationForm/lblEndpointStartup" Translation="插件启动时启动终端" />
-    <TranslationEntry Key="ConfigurationForm/lblEndpointState" Translation="终端未运行。" />
-    <TranslationEntry Key="ConfigurationForm/lblFfxivJobMethod" Translation="排序方式" />
-    <TranslationEntry Key="ConfigurationForm/lblFfxivJobOrder" Translation="职业排序" />
-    <TranslationEntry Key="ConfigurationForm/lblFolderReminder" Translation="选择这个分组会在插件启动时自动触发分组下的所有触发器" />
-    <TranslationEntry Key="ConfigurationForm/lblLoggingLevel" Translation="日志过滤级别" />
-    <TranslationEntry Key="ConfigurationForm/lblMonitorWindow" Translation="以下标题的窗口激活时显示图片/文本悬浮窗（留空时永远显示）" />
-    <TranslationEntry Key="ConfigurationForm/lblSeparator" Translation="事件文本分隔符" />
-    <TranslationEntry Key="ConfigurationForm/lblSoundVolume" Translation="播放声音文件" />
-    <TranslationEntry Key="ConfigurationForm/lblTtsVolume" Translation="从文本到语音 TTS" />
-    <TranslationEntry Key="ConfigurationForm/lblUpdateMethod" Translation="检查更新方式" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Arcanist]" Translation="秘术师" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Archer]" Translation="弓箭手" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Astrologian]" Translation="占星术士" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Bard]" Translation="吟游诗人" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Black Mage]" Translation="黑魔法师" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Blue Mage]" Translation="青魔法师" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Conjurer]" Translation="幻术师" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Dancer]" Translation="舞者" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Dark Knight]" Translation="黑暗骑士" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Dragoon]" Translation="龙骑士" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Gladiator]" Translation="剑术师" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Gunbreaker]" Translation="绝枪战士" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Lancer]" Translation="枪术师" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Machinist]" Translation="机工士" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Marauder]" Translation="斧术师" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Monk]" Translation="武僧" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Ninja]" Translation="忍者" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Paladin]" Translation="骑士" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Pugilist]" Translation="格斗家" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Reaper]" Translation="钐镰客" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Red Mage]" Translation="赤魔法师" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Rogue]" Translation="双剑士" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Sage]" Translation="贤者" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Samurai]" Translation="武士" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Scholar]" Translation="学者" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Summoner]" Translation="召唤师" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Thaumaturge]" Translation="咒术师" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Warrior]" Translation="战士" />
-    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[White Mage]" Translation="白魔法师" />
-    <TranslationEntry Key="ConfigurationForm/nudCacheFileExpiry" Translation="518400" />
-    <TranslationEntry Key="ConfigurationForm/nudCacheImageExpiry" Translation="518400" />
-    <TranslationEntry Key="ConfigurationForm/nudCacheJsonExpiry" Translation="10800" />
-    <TranslationEntry Key="ConfigurationForm/nudCacheRepoExpiry" Translation="518400" />
-    <TranslationEntry Key="ConfigurationForm/nudCacheSoundExpiry" Translation="518400" />
-    <TranslationEntry Key="ConfigurationForm/nudEndpointPort" Translation="1" />
-    <TranslationEntry Key="ConfigurationForm/tabAudio" Translation="声音" />
-    <TranslationEntry Key="ConfigurationForm/tabCaching" Translation="缓存" />
-    <TranslationEntry Key="ConfigurationForm/tabConsts" Translation="常量" />
-    <TranslationEntry Key="ConfigurationForm/tabEndpoint" Translation="终端" />
-    <TranslationEntry Key="ConfigurationForm/tabFFXIV" Translation="最终幻想 XIV" />
-    <TranslationEntry Key="ConfigurationForm/tabGeneral" Translation="通用" />
-    <TranslationEntry Key="ConfigurationForm/tabMisc" Translation="其他" />
-    <TranslationEntry Key="ConfigurationForm/tabSecurity" Translation="安全" />
-    <TranslationEntry Key="ConfigurationForm/tabShortCuts" Translation="快捷键" />
-    <TranslationEntry Key="ConfigurationForm/tabSubstitutions" Translation="文本替换" />
-    <TranslationEntry Key="ConfigurationForm/tslEndpointHistoryRecv" Translation="条消息 (telegram) 已接收" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheFileCount" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheFileSize" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheImageCount" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheImageSize" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheJsonCount" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheJsonSize" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheRepoCount" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheRepoSize" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheSoundCount" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheSoundSize" Translation="0" />
+    <TranslationEntry Key="ConfigurationForm2" Translation="配置" />
+    <TranslationEntry Key="ConfigurationForm2/btnAudio" Translation="声音" />
+    <TranslationEntry Key="ConfigurationForm2/btnCacheFileBrowse" Translation="浏览" />
+    <TranslationEntry Key="ConfigurationForm2/btnCacheFileClear" Translation="清空缓存" />
+    <TranslationEntry Key="ConfigurationForm2/btnCacheImageBrowse" Translation="浏览" />
+    <TranslationEntry Key="ConfigurationForm2/btnCacheImageClear" Translation="清空缓存" />
+    <TranslationEntry Key="ConfigurationForm2/btnCacheJsonBrowse" Translation="浏览" />
+    <TranslationEntry Key="ConfigurationForm2/btnCacheJsonClear" Translation="清空缓存" />
+    <TranslationEntry Key="ConfigurationForm2/btnCacheRepoBrowse" Translation="浏览" />
+    <TranslationEntry Key="ConfigurationForm2/btnCacheRepoClear" Translation="清空缓存" />
+    <TranslationEntry Key="ConfigurationForm2/btnCacheSoundBrowse" Translation="浏览" />
+    <TranslationEntry Key="ConfigurationForm2/btnCacheSoundClear" Translation="清空缓存" />
+    <TranslationEntry Key="ConfigurationForm2/btnCaching" Translation="缓存" />
+    <TranslationEntry Key="ConfigurationForm2/btnCancel" Translation="取消" />
+    <TranslationEntry Key="ConfigurationForm2/btnClearSelection" Translation="清空选择" />
+    <TranslationEntry Key="ConfigurationForm2/btnConstAdd" Translation="添加常量" />
+    <TranslationEntry Key="ConfigurationForm2/btnConstants" Translation="常量" />
+    <TranslationEntry Key="ConfigurationForm2/btnConstEdit" Translation="编辑常量" />
+    <TranslationEntry Key="ConfigurationForm2/btnConstRemove" Translation="移除常量" />
+    <TranslationEntry Key="ConfigurationForm2/btnEndpoint" Translation="终端" />
+    <TranslationEntry Key="ConfigurationForm2/btnEndpointHistUpdate" Translation="刷新" />
+    <TranslationEntry Key="ConfigurationForm2/btnEndpointStart" Translation="开始" />
+    <TranslationEntry Key="ConfigurationForm2/btnEndpointStop" Translation="停止" />
+    <TranslationEntry Key="ConfigurationForm2/btnFfxivJobDown" Translation="下移" />
+    <TranslationEntry Key="ConfigurationForm2/btnFfxivJobRestore" Translation="恢复默认" />
+    <TranslationEntry Key="ConfigurationForm2/btnFfxivJobUp" Translation="上移" />
+    <TranslationEntry Key="ConfigurationForm2/btnGameSpecific" Translation="游戏" />
+    <TranslationEntry Key="ConfigurationForm2/btnLogging" Translation="日志" />
+    <TranslationEntry Key="ConfigurationForm2/btnMisc" Translation="杂项" />
+    <TranslationEntry Key="ConfigurationForm2/btnOk" Translation="确定" />
+    <TranslationEntry Key="ConfigurationForm2/btnSecurity" Translation="安全" />
+    <TranslationEntry Key="ConfigurationForm2/btnShortcuts" Translation="快捷键" />
+    <TranslationEntry Key="ConfigurationForm2/btnStartup" Translation="启动" />
+    <TranslationEntry Key="ConfigurationForm2/btnSubAdd" Translation="添加替换项" />
+    <TranslationEntry Key="ConfigurationForm2/btnSubEdit" Translation="编辑替换项" />
+    <TranslationEntry Key="ConfigurationForm2/btnSubRemove" Translation="移除替换项" />
+    <TranslationEntry Key="ConfigurationForm2/btnSubstitutions" Translation="文本替换" />
+    <TranslationEntry Key="ConfigurationForm2/btnTriggerTemplate" Translation="编辑触发器模板" />
+    <TranslationEntry Key="ConfigurationForm2/btnUnlockSecurity" Translation=" 编辑需解锁此安全设置 " />
+    <TranslationEntry Key="ConfigurationForm2/btnUpdateCheck" Translation="检查更新" />
+    <TranslationEntry Key="ConfigurationForm2/btnUpdates" Translation="更新" />
+    <TranslationEntry Key="ConfigurationForm2/btnUserInterface" Translation="界面" />
+    <TranslationEntry Key="ConfigurationForm2/capAppearance/lblContent" Translation="外观" />
+    <TranslationEntry Key="ConfigurationForm2/capAuraManagement/lblContent" Translation="悬浮窗" />
+    <TranslationEntry Key="ConfigurationForm2/capAutosaving/lblContent" Translation="自动保存" />
+    <TranslationEntry Key="ConfigurationForm2/capBehavior/lblContent" Translation="行为" />
+    <TranslationEntry Key="ConfigurationForm2/capDownloads/lblContent" Translation="文件下载" />
+    <TranslationEntry Key="ConfigurationForm2/capEndpointSettings/lblContent" Translation="设置" />
+    <TranslationEntry Key="ConfigurationForm2/capEndpointStatus/lblContent" Translation="状态" />
+    <TranslationEntry Key="ConfigurationForm2/capExpressions/lblContent" Translation="表达式" />
+    <TranslationEntry Key="ConfigurationForm2/capFfxivLogging/lblContent" Translation="日志记录" />
+    <TranslationEntry Key="ConfigurationForm2/capFfxivPartyOrder/lblContent" Translation="小队排序" />
+    <TranslationEntry Key="ConfigurationForm2/capImageFiles/lblContent" Translation="图片文件" />
+    <TranslationEntry Key="ConfigurationForm2/capJason/lblContent" Translation="JSON 响应" />
+    <TranslationEntry Key="ConfigurationForm2/capLogging/lblContent" Translation="日志记录选项" />
+    <TranslationEntry Key="ConfigurationForm2/capRepoBackups/lblContent" Translation="远程触发器备份" />
+    <TranslationEntry Key="ConfigurationForm2/capScripting/lblContent" Translation="脚本代码 API 权限" />
+    <TranslationEntry Key="ConfigurationForm2/capSoundFiles/lblContent" Translation="声音文件" />
+    <TranslationEntry Key="ConfigurationForm2/capStartupOptions/lblContent" Translation="启动选项" />
+    <TranslationEntry Key="ConfigurationForm2/capStartupTrigger/lblContent" Translation="启动时自动运行的触发器 / 文件夹" />
+    <TranslationEntry Key="ConfigurationForm2/capTemplate/lblContent" Translation="模板" />
+    <TranslationEntry Key="ConfigurationForm2/capUpdateChannel/lblContent" Translation="更新方式" />
+    <TranslationEntry Key="ConfigurationForm2/cbxFfxivJobMethod[Player first, rest unordered (legacy)]" Translation="自己序首，游戏默认无自定义队伍排序" />
+    <TranslationEntry Key="ConfigurationForm2/cbxFfxivJobMethod[Player first, sort the rest by custom party order]" Translation="自己序首，自定义其他人队伍排序" />
+    <TranslationEntry Key="ConfigurationForm2/cbxFfxivJobMethod[Sort everyone by custom party order]" Translation="自定义所有人队伍排序" />
+    <TranslationEntry Key="ConfigurationForm2/cbxLoggingLevel[Above custom]" Translation="高于用户" />
+    <TranslationEntry Key="ConfigurationForm2/cbxLoggingLevel[Above custom 2]" Translation="高于用户 2" />
+    <TranslationEntry Key="ConfigurationForm2/cbxLoggingLevel[All informational messages]" Translation="高于消息" />
+    <TranslationEntry Key="ConfigurationForm2/cbxLoggingLevel[Errors and warnings]" Translation="高于警告" />
+    <TranslationEntry Key="ConfigurationForm2/cbxLoggingLevel[Errors only]" Translation="仅错误" />
+    <TranslationEntry Key="ConfigurationForm2/cbxLoggingLevel[Nothing]" Translation="无" />
+    <TranslationEntry Key="ConfigurationForm2/cbxLoggingLevel[Verbose debug]" Translation="全部" />
+    <TranslationEntry Key="ConfigurationForm2/cbxSoundMethod[ACT]" Translation="ACT" />
+    <TranslationEntry Key="ConfigurationForm2/cbxSoundMethod[External application]" Translation="外部应用" />
+    <TranslationEntry Key="ConfigurationForm2/cbxSoundMethod[None (disabled)]" Translation="禁用" />
+    <TranslationEntry Key="ConfigurationForm2/cbxSoundMethod[Windows Media Player API]" Translation="Windows 媒体播放器 API" />
+    <TranslationEntry Key="ConfigurationForm2/cbxTtsMethod[ACT]" Translation="ACT（建议）" />
+    <TranslationEntry Key="ConfigurationForm2/cbxTtsMethod[External application]" Translation="外部应用" />
+    <TranslationEntry Key="ConfigurationForm2/cbxTtsMethod[None (disabled)]" Translation="禁用" />
+    <TranslationEntry Key="ConfigurationForm2/cbxTtsMethod[Windows Speech API]" Translation="Windows 讲述人 API" />
+    <TranslationEntry Key="ConfigurationForm2/cbxUpdateMethod[Built-in Github check (legacy)]" Translation="Github 官方仓库" />
+    <TranslationEntry Key="ConfigurationForm2/cbxUpdateMethod[External third party]" Translation="第三方源（无需魔法上网）" />
+    <TranslationEntry Key="ConfigurationForm2/cbxUpdateMethod[Official (recommended)]" Translation="ACT 官方更新" />
+    <TranslationEntry Key="ConfigurationForm2/colScalarName" Translation="名称" />
+    <TranslationEntry Key="ConfigurationForm2/colScalarValue" Translation="值" />
+    <TranslationEntry Key="ConfigurationForm2/Column1" Translation="被替换内容" />
+    <TranslationEntry Key="ConfigurationForm2/Column2" Translation="替换为" />
+    <TranslationEntry Key="ConfigurationForm2/Column3" Translation="范围" />
+    <TranslationEntry Key="ConfigurationForm2/Column4" Translation="命名空间" />
+    <TranslationEntry Key="ConfigurationForm2/Column5" Translation="本地触发器" />
+    <TranslationEntry Key="ConfigurationForm2/Column6" Translation="远程触发器" />
+    <TranslationEntry Key="ConfigurationForm2/Column7" Translation="管理员模式下" />
+    <TranslationEntry Key="ConfigurationForm2/Column8" Translation="时间戳" />
+    <TranslationEntry Key="ConfigurationForm2/Column9" Translation="数据" />
+    <TranslationEntry Key="ConfigurationForm2/ctxClearSelection" Translation="清除选择" />
+    <TranslationEntry Key="ConfigurationForm2/dataGridViewCheckBoxColumn1" Translation="本地触发器" />
+    <TranslationEntry Key="ConfigurationForm2/dataGridViewCheckBoxColumn2" Translation="远程触发器" />
+    <TranslationEntry Key="ConfigurationForm2/dataGridViewCheckBoxColumn3" Translation="管理员模式下" />
+    <TranslationEntry Key="ConfigurationForm2/dataGridViewTextBoxColumn4" Translation="额外选项" />
+    <TranslationEntry Key="ConfigurationForm2/lblActionAsync" Translation="新动作默认为异步动作" />
+    <TranslationEntry Key="ConfigurationForm2/lblActTtsWarn" Translation="使用 ACT 插件 TTS 时会忽略触发器中的速度和音量选项。" />
+    <TranslationEntry Key="ConfigurationForm2/lblAutoComplete" Translation="输入表达式时启用自动补全" />
+    <TranslationEntry Key="ConfigurationForm2/lblAutosaveConfig" Translation="启用自动保存配置" />
+    <TranslationEntry Key="ConfigurationForm2/lblAutosaveInterval" Translation="自动保存间隔（分钟）" />
+    <TranslationEntry Key="ConfigurationForm2/lblCacheFileCount" Translation="当前文件数量" />
+    <TranslationEntry Key="ConfigurationForm2/lblCacheFileExpiry" Translation="过期时限（分钟）" />
+    <TranslationEntry Key="ConfigurationForm2/lblCacheFileSize" Translation="当前文件大小（字节）" />
+    <TranslationEntry Key="ConfigurationForm2/lblCacheImageCount" Translation="当前图像数量" />
+    <TranslationEntry Key="ConfigurationForm2/lblCacheImageExpiry" Translation="过期时限（分钟）" />
+    <TranslationEntry Key="ConfigurationForm2/lblCacheImageSize" Translation="当前图像大小（字节）" />
+    <TranslationEntry Key="ConfigurationForm2/lblCacheJsonCount" Translation="当前 JSON 缓存文件数量" />
+    <TranslationEntry Key="ConfigurationForm2/lblCacheJsonExpiry" Translation="过期时限（分钟）" />
+    <TranslationEntry Key="ConfigurationForm2/lblCacheJsonSize" Translation="当前缓存文件大小（字节）" />
+    <TranslationEntry Key="ConfigurationForm2/lblCacheRepoCount" Translation="当前仓库备份文件数量" />
+    <TranslationEntry Key="ConfigurationForm2/lblCacheRepoExpiry" Translation="过期时限（分钟）" />
+    <TranslationEntry Key="ConfigurationForm2/lblCacheRepoSize" Translation="当前仓库备份文件大小（字节）" />
+    <TranslationEntry Key="ConfigurationForm2/lblCacheSoundCount" Translation="当前语音文件数量" />
+    <TranslationEntry Key="ConfigurationForm2/lblCacheSoundExpiry" Translation="过期时限（分钟）" />
+    <TranslationEntry Key="ConfigurationForm2/lblCacheSoundSize" Translation="当前语音文件大小（字节）" />
+    <TranslationEntry Key="ConfigurationForm2/lblDevMode" Translation="开发者模式" />
+    <TranslationEntry Key="ConfigurationForm2/lblEnableHwAccel" Translation="悬浮窗使用硬件加速" />
+    <TranslationEntry Key="ConfigurationForm2/lblEndpoint" Translation="HTTP 终端" />
+    <TranslationEntry Key="ConfigurationForm2/lblEndpointLog" Translation="记录数据接收日志" />
+    <TranslationEntry Key="ConfigurationForm2/lblEndpointStartup" Translation="插件启动时启动终端" />
+    <TranslationEntry Key="ConfigurationForm2/lblExternalSoundWarn" Translation="此选项会使 Triggernometry 启动外部应用程序。这可能会使系统面临恶意软件的风险，请仅在您了解自己在做什么的情况下谨慎使用此选项。Windows 系统一般无需使用此选项。" />
+    <TranslationEntry Key="ConfigurationForm2/lblExternalTtsWarn" Translation="此选项会使 Triggernometry 启动外部应用程序。这可能会使系统面临恶意软件的风险，请仅在您了解自己在做什么的情况下谨慎使用此选项。Windows 系统一般无需使用此选项。" />
+    <TranslationEntry Key="ConfigurationForm2/lblExternalUpdateWarn" Translation="第三方更新渠道不受 Triggernometry 官方管理，请谨慎使用，仅对可信的更新来源启用此功能。&#xD;&#xA;注：建议使用以下链接更新，包含中文版远程触发器等额外功能。&#xD;&#xA;https://vip.123pan.cn/1824544011/Triggernometry_Release_CN/UpdateManifest.xml" />
+    <TranslationEntry Key="ConfigurationForm2/lblFfxivJobMethod" Translation="排序方式" />
+    <TranslationEntry Key="ConfigurationForm2/lblFfxivJobOrder" Translation="职业排序" />
+    <TranslationEntry Key="ConfigurationForm2/lblFfxivLogNetwork" Translation="记录网络日志" />
+    <TranslationEntry Key="ConfigurationForm2/lblFolderReminder" Translation="选择这个分组会在插件启动时自动触发分组下的所有触发器" />
+    <TranslationEntry Key="ConfigurationForm2/lblLoggingLevel" Translation="日志过滤级别" />
+    <TranslationEntry Key="ConfigurationForm2/lblLogNormalEvents" Translation="记录 ACT 解析日志" />
+    <TranslationEntry Key="ConfigurationForm2/lblLogVariableExpansions" Translation="记录 $... 表达式展开结果" />
+    <TranslationEntry Key="ConfigurationForm2/lblMonitorWindow" Translation="以下标题的窗口激活时显示图片/文本悬浮窗（留空时永远显示）" />
+    <TranslationEntry Key="ConfigurationForm2/lblShortcutEnableTemplates" Translation="允许使用快捷键输入模板表达式" />
+    <TranslationEntry Key="ConfigurationForm2/lblShortcutUseAbbrevInTemplates" Translation="使用表达式缩写而非旧版的全称" />
+    <TranslationEntry Key="ConfigurationForm2/lblShortcutWrapTextWhenSelected" Translation="将选中的文本包裹在模板表达式内部" />
+    <TranslationEntry Key="ConfigurationForm2/lblSoundMethod" Translation="播放方式" />
+    <TranslationEntry Key="ConfigurationForm2/lblSoundPath" Translation="程序目录" />
+    <TranslationEntry Key="ConfigurationForm2/lblSoundPathArgs" Translation="参数" />
+    <TranslationEntry Key="ConfigurationForm2/lblSoundRepetition" Translation="同一文件冷却时间" />
+    <TranslationEntry Key="ConfigurationForm2/lblSoundVolume" Translation="音量" />
+    <TranslationEntry Key="ConfigurationForm2/lblTestIgnoreConditions" Translation="测试动作时默认忽略动作条件" />
+    <TranslationEntry Key="ConfigurationForm2/lblTestLive" Translation="测试动作时默认使用实时值" />
+    <TranslationEntry Key="ConfigurationForm2/lblTriggerTemplate" Translation="新建触发器时使用模板" />
+    <TranslationEntry Key="ConfigurationForm2/lblTtsMethod" Translation="播放方式" />
+    <TranslationEntry Key="ConfigurationForm2/lblTtsPath" Translation="程序目录" />
+    <TranslationEntry Key="ConfigurationForm2/lblTtsPathArgs" Translation="参数" />
+    <TranslationEntry Key="ConfigurationForm2/lblTtsRepetition" Translation="相同文本冷却时间" />
+    <TranslationEntry Key="ConfigurationForm2/lblTtsVolume" Translation="音量" />
+    <TranslationEntry Key="ConfigurationForm2/lblUiFont" Translation="自定义字体" />
+    <TranslationEntry Key="ConfigurationForm2/lblUiFontDefault" Translation="使用默认字体" />
+    <TranslationEntry Key="ConfigurationForm2/lblUpdateChannelUri" Translation="更新链接" />
+    <TranslationEntry Key="ConfigurationForm2/lblUpdateMethod" Translation="更新方式" />
+    <TranslationEntry Key="ConfigurationForm2/lblUpdates" Translation="启动时检查更新" />
+    <TranslationEntry Key="ConfigurationForm2/lblWarnAdmin" Translation="在非管理员模式下运行 ACT 时显示警告" />
+    <TranslationEntry Key="ConfigurationForm2/lblWelcome" Translation="启动时显示欢迎屏幕" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Arcanist]" Translation="秘术师" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Archer]" Translation="弓箭手" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Astrologian]" Translation="占星术士" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Bard]" Translation="吟游诗人" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Black Mage]" Translation="黑魔法师" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Blue Mage]" Translation="青魔法师" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Conjurer]" Translation="幻术师" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Dancer]" Translation="舞者" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Dark Knight]" Translation="黑暗骑士" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Dragoon]" Translation="龙骑士" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Gladiator]" Translation="剑术师" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Gunbreaker]" Translation="绝枪战士" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Lancer]" Translation="枪术师" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Machinist]" Translation="机工士" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Marauder]" Translation="斧术师" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Monk]" Translation="武僧" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Ninja]" Translation="忍者" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Paladin]" Translation="骑士" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Pictomancer]" Translation="Pictomancer" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Pugilist]" Translation="格斗家" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Reaper]" Translation="钐镰客" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Red Mage]" Translation="赤魔法师" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Rogue]" Translation="双剑士" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Sage]" Translation="贤者" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Samurai]" Translation="武士" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Scholar]" Translation="学者" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Summoner]" Translation="召唤师" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Thaumaturge]" Translation="咒术师" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Viper]" Translation="Viper" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[Warrior]" Translation="战士" />
+    <TranslationEntry Key="ConfigurationForm2/lstFfxivJobOrder[White Mage]" Translation="白魔法师" />
+    <TranslationEntry Key="ConfigurationForm2/prettyCaption1/lblContent" Translation="音频文件" />
+    <TranslationEntry Key="ConfigurationForm2/prettyCaption2/lblContent" Translation="TTS 文本转语音" />
+    <TranslationEntry Key="ConfigurationForm2/prettyCaption3/lblContent" Translation="历史记录" />
+    <TranslationEntry Key="ConfigurationForm2/tabFFXIV" Translation="最终幻想 XIV" />
+    <TranslationEntry Key="ConfigurationForm2/tlsEndpointHistoryRecv" Translation="条消息 (telegram) 已接收" />
     <TranslationEntry Key="ExportForm" Translation="导出结果" />
     <TranslationEntry Key="ExportForm/btnClose" Translation="关闭" />
     <TranslationEntry Key="ExportForm/btnCopy" Translation="复制" />
@@ -866,12 +879,14 @@
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Monk]" Translation="特职：武僧" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Ninja]" Translation="特职：忍者" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Paladin]" Translation="特职：骑士" />
+    <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Pictomancer]" Translation="特职：Pictomancer" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Reaper]" Translation="特职：钐镰客" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Red Mage]" Translation="特职：赤魔法师" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Sage]" Translation="特职：贤者" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Samurai]" Translation="特职：武士" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Scholar]" Translation="特职：学者" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Summoner]" Translation="特职：召唤师" />
+    <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Viper]" Translation="特职：Viper" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Warrior]" Translation="特职：战士" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: White Mage]" Translation="特职：白魔法师" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilterEnabled" Translation="限制分组工作条件：指定职业" />
@@ -920,8 +935,8 @@
     <TranslationEntry Key="internal/Action/descdictbuild" Translation="将文本 ({2}) 以 ({3}) ({4}) 拆分，构筑为{1}字典 ({0})" />
     <TranslationEntry Key="internal/Action/descdictbuildraw" Translation="将 {3} 表达式 ({2}) 以开头两个字符拆分，构筑为{1}字典 ({0})" />
     <TranslationEntry Key="internal/Action/descdictfilter" Translation="根据表达式 ({4})，将{1}字典 ({0}) 过滤为{3}字典 ({2})" />
-    <TranslationEntry Key="internal/Action/descdictgetentitybyid" Translation="将 ID 为 ({2}) 的实体属性存入{1}字典 ({0})" />
-    <TranslationEntry Key="internal/Action/descdictgetentitybyname" Translation="将名为 ({2}) 的实体属性存入{1}字典 ({0})" />
+    <TranslationEntry Key="internal/Action/descdictgetentity" Translation="将实体 ({2}) 的全部属性存入{1}字典 ({0})" />
+    <TranslationEntry Key="internal/Action/descdictgetentitygivenprops" Translation="将实体 ({2}) 的 ({3}) 属性存入{1}字典 ({0})" />
     <TranslationEntry Key="internal/Action/descdictmerge" Translation="将{1}字典 ({0}) 合并到{3}字典 ({2})，保留重复键值" />
     <TranslationEntry Key="internal/Action/descdictmergehard" Translation="将{1}字典 ({0}) 合并到{3}字典 ({2})，覆写重复键值" />
     <TranslationEntry Key="internal/Action/descdictremove" Translation="从{1}字典 ({0}) 中移除{3}表达式键 ({2})" />
@@ -1037,7 +1052,10 @@
     <TranslationEntry Key="internal/Action/desctablecopy" Translation="将{2}表格 ({0}) 复制为{3}表格 ({1})" />
     <TranslationEntry Key="internal/Action/desctablefilter" Translation="根据表达式 ({4})，将{1}表格 ({0}) 过滤为{3}列表 ({2})" />
     <TranslationEntry Key="internal/Action/desctablefilterline" Translation="根据表达式 ({4})，将{1}表格 ({0}) 中的{5}过滤为{3}表格 ({2})" />
-    <TranslationEntry Key="internal/Action/desctablegetallentities" Translation="将全部 FFXIV 实体信息存入{1}表格 ({0})" />
+    <TranslationEntry Key="internal/Action/desctablegetallentities00" Translation="将所有 FF14 实体的全部属性存入{1}表格 ({0})" />
+    <TranslationEntry Key="internal/Action/desctablegetallentities01" Translation="将所有 FF14 实体的 ({3}) 属性存入{1}表格 ({0})" />
+    <TranslationEntry Key="internal/Action/desctablegetallentities10" Translation="将所有 ({2}) 的 FF14 实体的全部属性存入{1}表格 ({0})" />
+    <TranslationEntry Key="internal/Action/desctablegetallentities11" Translation="将所有 ({2}) 的 FF14 实体的 ({3}) 属性存入{1}表格 ({0})" />
     <TranslationEntry Key="internal/Action/desctableinsertline" Translation="将文本 ({4}) 以 ({5}) 拆分，并插入为在{1}表格 ({0}) 的第 ({3}) {2}" />
     <TranslationEntry Key="internal/Action/desctableinsertlineraw" Translation="将{5}表达式 ({4}) 以首字符拆分，并插入为{1}表格 ({0}) 的第 ({3}) {2}" />
     <TranslationEntry Key="internal/Action/desctableremoveline" Translation="移除{1}表格 ({0}) 的第 ({3}) {2}" />
@@ -1079,8 +1097,7 @@
     <TranslationEntry Key="internal/Action/desctts" Translation="播读 ({0})，音量 {1} %, 语速 {2}" />
     <TranslationEntry Key="internal/Action/descunknown" Translation="位置动作类型" />
     <TranslationEntry Key="internal/Action/descwindowtargetall" Translation="标题匹配正则 ({0}) 的所有窗口" />
-    <TranslationEntry Key="internal/Action/descwindowtargetid" Translation="进程 ID ({0}) 中标题匹配正则 ({1}) 的窗口" />
-    <TranslationEntry Key="internal/Action/descwindowtargetnone" Translation="（未指定窗口名）" />
+    <TranslationEntry Key="internal/Action/descwindowtargetid" Translation="属于进程 ID ({0})、标题匹配正则 ({1}) 的窗口" />
     <TranslationEntry Key="internal/Action/descwindowtargetsingle" Translation="标题匹配正则 ({0}) 的首个窗口" />
     <TranslationEntry Key="internal/Action/descwmsg" Translation="向{3}发送消息 ({0})，wparam = ({1})，lparam = ({2})" />
     <TranslationEntry Key="internal/Action/dictbuild" Translation="已将表达式 ({2}) 以 ({3}) ({4}) 拆分，构筑为{1}字典 ({0})" />
@@ -1137,17 +1154,18 @@
     <TranslationEntry Key="internal/Action/lscontrolexception" Translation="无法执行 LiveSplit 控制动作，发生异常：" />
     <TranslationEntry Key="internal/Action/mutexacquire" Translation="独占互斥锁 ({0})" />
     <TranslationEntry Key="internal/Action/mutexrelease" Translation="释放互斥锁 ({0})" />
-    <TranslationEntry Key="internal/Action/nofolderwithid" Translation="没有找到带有 ID ({0}) 的分组" />
+    <TranslationEntry Key="internal/Action/nofolderwithid" Translation="触发器分组动作失败：触发器 ({1}) 中，指定的分组 ID ({0}) 不存在。" />
     <TranslationEntry Key="internal/Action/notreenodefolderwithid" Translation="没有找到分组的树节点 ({0}) id 为 ({1})" />
     <TranslationEntry Key="internal/Action/notreenodetrigdisable" Translation="无法找到要修改的树节点以禁用触发器 {0}" />
     <TranslationEntry Key="internal/Action/notreenodetrigenable" Translation="无法找到要修改的树节点以启用触发器 {0}" />
-    <TranslationEntry Key="internal/Action/notrigiderror" Translation="没有触发器 ID，并且 op 不会取消所有操作，意外" />
+    <TranslationEntry Key="internal/Action/notriggerwithid" Translation="触发器动作失败：触发器 ({1}) 中，指定的触发器 ID ({0}) 不存在。" />
     <TranslationEntry Key="internal/Action/obsauthpassword" Translation="OBS 需要网络验证，你必须提供密码。" />
     <TranslationEntry Key="internal/Action/obsconnecterror" Translation="连接到 OBS 接口时出错：{0}" />
     <TranslationEntry Key="internal/Action/obsconnectok" Translation="OBS 接口连接成功" />
     <TranslationEntry Key="internal/Action/obsconnectversionerror" Translation="目前不支持当前 OBS 版本。" />
     <TranslationEntry Key="internal/Action/obscontrolerror" Translation="由于错误，无法执行 OBS 控制操作" />
-    <TranslationEntry Key="internal/Action/obscontrolexception" Translation="由于异常，无法执行 OBS 操作：" />
+    <TranslationEntry Key="internal/Action/obscontrolexception" Translation="由于异常，无法执行 OBS 操作：{0}" />
+    <TranslationEntry Key="internal/Action/obsnotrunning" Translation="OBS 未启动，无法执行 OBS 操作。" />
     <TranslationEntry Key="internal/Action/repoupdateall" Translation="更新全部远程仓库" />
     <TranslationEntry Key="internal/Action/repoupdateself" Translation="更新所处于的远程仓库" />
     <TranslationEntry Key="internal/Action/repoupdatespecific" Translation="更新远程仓库 ({0})" />
@@ -1164,6 +1182,7 @@
     <TranslationEntry Key="internal/Action/scripterrorsare" Translation="错误为：" />
     <TranslationEntry Key="internal/Action/scripterrorsingular" Translation="编译脚本代码时发生错误。" />
     <TranslationEntry Key="internal/Action/scriptexecerror" Translation="脚本代码执行错误" />
+    <TranslationEntry Key="internal/Action/scriptinifailed" Translation="因脚本环境未成功初始化，触发器 {1} 的动作 #{0} 未执行。&#xD;&#xA;&#xD;&#xA;检查 ACT 插件列表（或 插件中心-高级管理），&#xD;&#xA;将 Triggernometry 向上调整至 FFXIV_ACT_Plugin 后面、&#xD;&#xA;Cafe.Matcha（抹茶，如果有的话）前面，再重启 ACT。&#xD;&#xA;&#xD;&#xA;添加或更新插件后也需要重启 ACT。" />
     <TranslationEntry Key="internal/Action/shortscripterror" Translation="{0} @ 行 {1}" />
     <TranslationEntry Key="internal/Action/sortkeyexprerror" Translation="排序关键字函数表达式 ({0}) 无法解析。" />
     <TranslationEntry Key="internal/Action/tableappend" Translation="已将{2}表格 ({0}) 追加至{3}表格 ({1}) 后" />
@@ -1217,6 +1236,10 @@
     <TranslationEntry Key="internal/BenchmarkForm/millisecond" Translation="ms" />
     <TranslationEntry Key="internal/BenchmarkForm/nanosecond" Translation="ns" />
     <TranslationEntry Key="internal/BenchmarkForm/resultexception" Translation="编译基准测试结果时发生异常" />
+    <TranslationEntry Key="internal/BridgeOverlay/failInit" Translation="OverlayPlugin 插件相关功能初始化失败：{0}" />
+    <TranslationEntry Key="internal/BridgeOverlay/failInitModule" Translation="OverlayPlugin 相关模块 {1} 初始化失败：{0}" />
+    <TranslationEntry Key="internal/BridgeOverlay/moduleCombatantsNotReady" Translation="尝试获取实体时，OverlayPlugin 实体模块尚未准备好，稍后重试。" />
+    <TranslationEntry Key="internal/BridgeOverlay/reflectionNotFound" Translation="初始化 OverlayPlugin 相关功能时，反射获取 {0} 失败。" />
     <TranslationEntry Key="internal/ColorSelector/sample" Translation="示例" />
     <TranslationEntry Key="internal/ConditionGroup/and" Translation="全部条件为真（与）" />
     <TranslationEntry Key="internal/ConditionGroup/not" Translation="全部条件为假（非）" />
@@ -1279,14 +1302,16 @@
     <TranslationEntry Key="internal/Context/infiniteClipboardError" Translation="剪贴板内容包含文本 ${{_clipboard}}，会导致展开表达式时出现无限循环" />
     <TranslationEntry Key="internal/Context/infiniteRepeatError" Translation="Repeat 函数中，循环模式下新字符串 ({0}) 不能包含旧字符串 ({1})。表达式：({2})" />
     <TranslationEntry Key="internal/Context/invalidValueError" Translation="{0} 中，{1} ({2}) 不合法。表达式：({3})" />
+    <TranslationEntry Key="internal/Context/noEntity" Translation="获取实体 ({0}) 失败。触发器：({1})" />
     <TranslationEntry Key="internal/Context/parseTypeError" Translation="{0} ({1}) 无法解析为{2}。表达式：({3})" />
+    <TranslationEntry Key="internal/Context/ternaryexpressionerror" Translation="无法解析三元表达式：({0}) &#xD;&#xA;条件：({1}); &#xD;&#xA;True 表达式：({2}); &#xD;&#xA;False 表达式：({3})" />
     <TranslationEntry Key="internal/ExportForm/exception" Translation="异常" />
     <TranslationEntry Key="internal/ExpressionTextBox/numeric1" Translation="该字段支持数值表达式；支持正则捕获组；结果作为数学表达式求值。" />
     <TranslationEntry Key="internal/ExpressionTextBox/numeric2" Translation="绿色文本框代表数值表达式合法，红色代表非法。" />
     <TranslationEntry Key="internal/ExpressionTextBox/string" Translation="该字段支持文本表达式；支持正则捕获组。" />
     <TranslationEntry Key="internal/ffxiv/allentitiesexception" Translation="获取全部 FFXIV 实体时发生异常：{0}" />
     <TranslationEntry Key="internal/ffxiv/allentitiesexceptionsingle" Translation="无法获取该实体信息：名称 ({0})，ID ({1})。异常：{2}" />
-	<TranslationEntry Key="internal/ffxiv/ffxivzonechangednoinstance" Translation="无法获取 FFXIV 区域变化（插件实例不存在）。" />
+	  <TranslationEntry Key="internal/ffxiv/ffxivzonechangednoinstance" Translation="无法获取 FFXIV 区域变化（插件实例不存在）。" />
     <TranslationEntry Key="internal/ffxiv/idexception" Translation="以 ID 检索 FFXIV 实体时发生异常：{0}" />
     <TranslationEntry Key="internal/ffxiv/missingactplugin" Translation="找不到具有文件名 ({0}) 或类型 ({1}) 的 FFXIV 解析插件，某些功能可能无法正常工作" />
     <TranslationEntry Key="internal/ffxiv/namedexception" Translation="以名称检索 FFXIV 实体时发生异常：{0}" />
@@ -1298,6 +1323,7 @@
     <TranslationEntry Key="internal/ffxiv/partytoobig" Translation="小队构成中有超过 {0} 名成员" />
     <TranslationEntry Key="internal/ffxiv/procexception" Translation="搜索 FFXIV 进程时出现异常：{0}" />
     <TranslationEntry Key="internal/ffxiv/updateexception" Translation="FFXIV 状态更新中，阶段 {1} 发生异常：{0}" />
+    <TranslationEntry Key="internal/FFXIV/Entity/wrongProp" Translation="({0}) 不是有效的实体属性或方法名。完整表达式：({1})" />
     <TranslationEntry Key="internal/I18n/bool" Translation="布尔值" />
     <TranslationEntry Key="internal/I18n/char" Translation="字符" />
     <TranslationEntry Key="internal/I18n/charcode" Translation="字符码" />
@@ -1420,7 +1446,7 @@
     <TranslationEntry Key="internal/Plugin/inifilename" Translation="确定文件名" />
     <TranslationEntry Key="internal/Plugin/inilanguages" Translation="读取翻译文件时" />
     <TranslationEntry Key="internal/Plugin/iniready" Translation="已成功启动" />
-    <TranslationEntry Key="internal/Plugin/iniscripting" Translation="初始化脚本环境时出错。&#xD;&#xA;添加或更新插件后需要重启 ACT。如果仍有问题，将触发器插件调整至 FFXIV_ACT_Plugin 和 OverlayPlugin 后面再重启。" />
+    <TranslationEntry Key="internal/Plugin/iniscripterror" Translation="初始化脚本环境时出错。&#xD;&#xA;&#xD;&#xA;检查 ACT 插件列表（或 插件中心-高级管理），&#xD;&#xA;将 Triggernometry 向上调整至 FFXIV_ACT_Plugin 后面、&#xD;&#xA;Cafe.Matcha（抹茶，如果有的话）前面，再重启 ACT。&#xD;&#xA;&#xD;&#xA;添加或更新插件后也需要重启 ACT。&#xD;&#xA;&#xD;&#xA;错误信息：{0}" />
     <TranslationEntry Key="internal/Plugin/inited" Translation="初始化结束" />
     <TranslationEntry Key="internal/Plugin/initing" Translation="初始化中" />
     <TranslationEntry Key="internal/Plugin/initoasts" Translation="设置气泡提示时" />
@@ -1544,6 +1570,16 @@
     <TranslationEntry Key="internal/SearchForm/noresults" Translation="无结果" />
     <TranslationEntry Key="internal/SearchForm/oneresult" Translation="1 个结果" />
     <TranslationEntry Key="internal/SearchForm/xresults" Translation="{0} 个结果" />
+    <TranslationEntry Key="internal/TestInputForm/debugcopied" Translation="调试触发器已复制到剪贴板，可以直接在主界面粘贴。" />
+    <TranslationEntry Key="internal/TestInputForm/debugdelay--" Translation="明显早于前一行。已根据时间插入到正确的位置。" />
+    <TranslationEntry Key="internal/TestInputForm/debugdelay-" Translation="略早于前一行，可能是不准确的日志时间所致。已调整为前一行的时间。" />
+    <TranslationEntry Key="internal/TestInputForm/debugdelay++" Translation="与前一行的时间相差很远。" />
+    <TranslationEntry Key="internal/TestInputForm/debugfire" Translation="调试触发器会在点击确认后运行。" />
+    <TranslationEntry Key="internal/TestInputForm/debugnotime" Translation="未检测到日志行的时间格式，视为无延迟。" />
+    <TranslationEntry Key="internal/TestInputForm/debugspeed" Translation="调试日志速度 输入一个正数：" />
+    <TranslationEntry Key="internal/TestInputForm/debugspeedex" Translation="输入的值无法解析为正数。" />
+    <TranslationEntry Key="internal/TestInputForm/debugwarning" Translation="警告：" />
+    <TranslationEntry Key="internal/TestInputForm/debugwarningformat" Translation="日志行 #{0}：{1}&#xD;&#xA;数据：{2}" />
     <TranslationEntry Key="internal/Trigger/beforelastfired" Translation="当前时间在上次触发触发器之前 '{0}'" />
     <TranslationEntry Key="internal/Trigger/delayingrefire" Translation="延迟触发器 '{0}' 再次触发 {1}" />
     <TranslationEntry Key="internal/Trigger/firingexception" Translation="由于下列异常，触发器 '{0}' 无法被触发：{1}" />
@@ -1660,7 +1696,7 @@
     <TranslationEntry Key="LogForm/chkVerbose" Translation="详细" />
     <TranslationEntry Key="LogForm/chkWarning" Translation="警告" />
     <TranslationEntry Key="LogForm/colLevel" Translation="级别" />
-    <TranslationEntry Key="LogForm/colMessage" Translation="信息" />
+    <TranslationEntry Key="LogForm/colMessage" Translation="信息（如果显示不完整，可以鼠标悬停或右键复制。反馈错误请带上完整信息）" />
     <TranslationEntry Key="LogForm/colTimestamp" Translation="时间" />
     <TranslationEntry Key="LogForm/ctxCopy" Translation="复制" />
     <TranslationEntry Key="LogForm/ctxEverythingToClipboard" Translation="复制所有到剪贴板" />
@@ -1942,9 +1978,10 @@
     <TranslationEntry Key="SubstitutionForm/lblSearchFor" Translation="被替换内容" />
     <TranslationEntry Key="TestInputForm" Translation="测试输入" />
     <TranslationEntry Key="TestInputForm/btnCancel" Translation="取消" />
+    <TranslationEntry Key="TestInputForm/btnCopyDebugTrigger" Translation="生成调试触发器" />
     <TranslationEntry Key="TestInputForm/btnGetCurZone" Translation="自动获取当前区域" />
     <TranslationEntry Key="TestInputForm/btnOk" Translation="确定" />
-    <TranslationEntry Key="TestInputForm/cbxEventDestination[ACT Event]" Translation="ACT 事件" />
+    <TranslationEntry Key="TestInputForm/cbxEventDestination[ACT event]" Translation="ACT 事件" />
     <TranslationEntry Key="TestInputForm/cbxEventDestination[Endpoint]" Translation="终端" />
     <TranslationEntry Key="TestInputForm/cbxEventDestination[FFXIV network event]" Translation="FFXIV 网络日志行" />
     <TranslationEntry Key="TestInputForm/cbxEventDestination[Normal log line]" Translation="ACT 解析日志行" />

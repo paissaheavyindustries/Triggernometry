@@ -344,7 +344,6 @@ namespace Triggernometry.Actions
                         }
                         return temp;
                     }
-                    break;
                 case OperationEnum.Unset:
                     return I18n.Translate(
                         "internal/Action/desctableunset",
@@ -474,7 +473,6 @@ namespace Triggernometry.Actions
                             _Name, sPersistT, lineType, index
                         );
                     }
-                    break;
                 case OperationEnum.SortLine:
                     {
                         bool isCol = !string.IsNullOrWhiteSpace(_X);
@@ -485,13 +483,22 @@ namespace Triggernometry.Actions
                             _Name, sPersistT, lineType, isCol ? _X : _Y
                         );
                     }
-                    break;
                 case OperationEnum.GetAllEntities:
-                    return I18n.Translate(
-                        "internal/Action/desctablegetallentities",
-                        "Save all FFXIV entity data {1}table variable ({0})",
-                        _Name, sPersistT
-                    );
+                    {
+                        bool hasFilter = string.IsNullOrWhiteSpace(_Y);
+                        bool hasSpecifiedProps = !string.IsNullOrWhiteSpace(_X);
+                        string keySuffix = (hasFilter ? "1" : "0") + (hasSpecifiedProps ? "1" : "0");
+                        string key = $"internal/Action/desctablegetallentities{keySuffix}"; //...00, ...01, ...10, ...11
+                        string trl = "";
+                        switch (keySuffix)
+                        {
+                            case "11": trl = "Store ({3}) properties of FFXIV entities matching ({2}) in {1}table ({0})"; break;
+                            case "10": trl = "Store all properties of FFXIV entities matching ({2}) in {1}table ({0})"; break;
+                            case "01": trl = "Store ({3}) properties of all FFXIV entities in {1}table ({0})"; break;
+                            case "00": trl = "Store all properties of all FFXIV entities in {1}table ({0})"; break;
+                        }
+                        return I18n.Translate(key, trl, _Name, sPersistT, _Y, _X);
+                    }
             }
             return "";
         }
@@ -988,25 +995,32 @@ namespace Triggernometry.Actions
                     break;
                 case OperationEnum.GetAllEntities:
                     {
-                        List<VariableDictionary> entities = PluginBridges.BridgeFFXIV.GetAllEntities();
+                        var entities = string.IsNullOrWhiteSpace(_Y)
+                            ? FFXIV.Entity.GetEntities()
+                            : FFXIV.Entity.GetFilteredEntities(ctx.EvaluateStringExpression(ActionContextLogger, ctx, _Y));
+
+                        var propNames = string.IsNullOrWhiteSpace(_X)
+                            ? FFXIV.Entity.RecommendedEntityPropNames.Select(x => x.ToLower()).Concat(FFXIV.Job.LegalJobPropNames).OrderBy(s => s)
+                            : (IEnumerable<string>)Context.SplitArguments(ctx.EvaluateStringExpression(ActionContextLogger, ctx, _X), false);
+                        if (string.IsNullOrWhiteSpace(_X))
+                        {
+                            var specialKeys = new List<string> { "id", "name", "x", "y", "z", "h", "bnpcid" };
+                            propNames = specialKeys.Concat(propNames.Except(specialKeys));
+                        }
+
                         VariableTable vt = new VariableTable { LastChanger = vtchanger, LastChanged = DateTime.Now };
-
-                        var keys = PluginBridges.BridgeFFXIV._nullCombatant.Values.Keys.OrderBy(k => k).ToList();
-                        var specialKeys = new List<string> { "id", "name", "x", "y", "z", "h" };
-                        keys = specialKeys.Concat(keys.Except(specialKeys)).ToList();
-
                         var headerRow = new VariableTable.VariableTableRow
                         {
-                            Values = keys.Select(k => (Variable)new VariableScalar() { Value = k }).ToList()
+                            Values = propNames.Select(prop => (Variable)new VariableScalar(prop)).ToList()
                         };
                         vt.Rows.Add(headerRow);
 
                         foreach (var entity in entities)
                         {
-                            if (entity.GetValue("id").ToString() == "") { continue; }
+                            if (entity.ID == 0) continue;
                             var row = new VariableTable.VariableTableRow
                             {
-                                Values = keys.Select(k => (Variable)new VariableScalar() { Value = entity.GetValue(k).ToString() }).ToList()
+                                Values = propNames.Select(prop => (Variable)new VariableScalar(entity.QueryProperty(prop))).ToList()
                             };
                             vt.Rows.Add(row);
                         }

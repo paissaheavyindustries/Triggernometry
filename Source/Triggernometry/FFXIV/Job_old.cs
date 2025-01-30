@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Triggernometry
 {
+    [Obsolete("Use Triggernometry.FFXIV.Job")]
     public static class Entity
     {
         /// <summary> 
@@ -77,21 +79,21 @@ namespace Triggernometry
             AddJob("27", RoleType.MagicalRanged,  "召", "召唤", "SMN", "召", "召唤师",   "Beschwörer",     "Summoner",      "Invocateur",       "召喚士",         "소환사");
             AddJob("28", RoleType.BarrierHealer,  "学", "学者", "SCH", "学", "学者",     "Gelehrter",      "Scholar",       "Érudit",           "学者",           "학자");
             AddJob("29", RoleType.DexterityMelee, "双", "双剑", "ROG", "双", "双剑师",   "Schurke",        "Rogue",         "Surineur",         "双剣士",         "쌍검사");
-            AddJob("30", RoleType.DexterityMelee, "忍", "忍者", "NIN", "忍", "忍者",     "Ninja",          "Ninja",        "Ninja",             "忍者",           "닌자");
-            AddJob("31", RoleType.PhysicalRanged, "机", "机工", "MCH", "機", "机工士",   "Maschinist",     "Machinist",    "Machiniste",        "機工士",         "기공사");
-            AddJob("32", RoleType.Tank,           "暗", "黑骑", "DRK", "暗", "暗黑骑士", "Dunkelritter",   "Dark Knight",  "Chevalier noir",    "暗黒騎士",       "암흑기사");
-            AddJob("33", RoleType.PureHealer,     "占", "占星", "AST", "占", "占星术士", "Astrologe",      "Astrologian",  "Astromancien",      "占星術士",       "점성술사");
-            AddJob("34", RoleType.StrengthMelee,  "武", "武士", "SAM", "侍", "武士",     "Samurai",        "Samurai",      "Samouraï",          "侍",             "사무라이");
-            AddJob("35", RoleType.MagicalRanged,  "赤", "赤魔", "RDM", "赤", "赤魔法师", "Rotmagier",      "Red Mage",     "Mage rouge",        "赤魔道士",       "적마도사");
-            AddJob("36", RoleType.MagicalRanged,  "青", "青魔", "BLU", "青", "青魔法师", "Blaumagier",     "Blue Mage",    "Mage bleu",         "青魔道士",       "청마도사");
-            AddJob("37", RoleType.Tank,           "绝", "绝枪", "GNB", "ガ", "绝枪战士", "Revolverheld",   "Gunbreaker",   "Pisto-sabreur",     "ガンブレイカー", "건브레이커");
-            AddJob("38", RoleType.PhysicalRanged, "舞", "舞者", "DNC", "踊", "舞者",     "Tänzer",         "Dancer",       "Danseur",           "踊り子",         "무도가");
-            AddJob("39", RoleType.StrengthMelee,  "钐", "钐镰", "RPR", "リ", "钐镰客",   "Schnitter",      "Reaper",       "Faucheur",          "リーパー",       "리퍼");
-            AddJob("40", RoleType.BarrierHealer,  "贤", "贤者", "SGE", "賢", "贤者",     "Weiser",         "Sage",         "Sage",              "賢者",           "현자");
-            AddJob("41", RoleType.DexterityMelee, "蝰", "蝰蛇", "VPR", "ヴ", "蝰蛇剑士", "Viper",          "Viper",        "Vipère",            "ヴァイパー",     "Viper");
-            AddJob("42", RoleType.MagicalRanged,  "绘", "绘灵", "PCT", "ピ", "绘灵法师", "Piktomantie",    "Pictomancer",  "Pictomancien",      "ピクトマンサー", "Pictomancien");
-            AddJob("43", RoleType.None,           "丽", "四三", "043", "丽", "职业四三", "job_43",         "job_43",       "job_43",            "job_43",         "job_43");
-            AddJob("44", RoleType.None,           "水", "四四", "044", "水", "职业四四", "job_44",         "job_44",       "job_44",            "job_44",         "job_44");
+            AddJob("30", RoleType.DexterityMelee, "忍", "忍者", "NIN", "忍", "忍者",     "Ninja",          "Ninja",         "Ninja",            "忍者",           "닌자");
+            AddJob("31", RoleType.PhysicalRanged, "机", "机工", "MCH", "機", "机工士",   "Maschinist",     "Machinist",     "Machiniste",       "機工士",         "기공사");
+            AddJob("32", RoleType.Tank,           "暗", "黑骑", "DRK", "暗", "暗黑骑士", "Dunkelritter",   "Dark Knight",   "Chevalier noir",   "暗黒騎士",       "암흑기사");
+            AddJob("33", RoleType.PureHealer,     "占", "占星", "AST", "占", "占星术士", "Astrologe",      "Astrologian",   "Astromancien",     "占星術士",       "점성술사");
+            AddJob("34", RoleType.StrengthMelee,  "武", "武士", "SAM", "侍", "武士",     "Samurai",        "Samurai",       "Samouraï",         "侍",             "사무라이");
+            AddJob("35", RoleType.MagicalRanged,  "赤", "赤魔", "RDM", "赤", "赤魔法师", "Rotmagier",      "Red Mage",      "Mage rouge",       "赤魔道士",       "적마도사");
+            AddJob("36", RoleType.MagicalRanged,  "青", "青魔", "BLU", "青", "青魔法师", "Blaumagier",     "Blue Mage",     "Mage bleu",        "青魔道士",       "청마도사");
+            AddJob("37", RoleType.Tank,           "绝", "绝枪", "GNB", "ガ", "绝枪战士", "Revolverheld",   "Gunbreaker",    "Pisto-sabreur",    "ガンブレイカー", "건브레이커");
+            AddJob("38", RoleType.PhysicalRanged, "舞", "舞者", "DNC", "踊", "舞者",     "Tänzer",         "Dancer",        "Danseur",          "踊り子",         "무도가");
+            AddJob("39", RoleType.StrengthMelee,  "钐", "钐镰", "RPR", "リ", "钐镰客",   "Schnitter",      "Reaper",        "Faucheur",         "リーパー",       "리퍼");
+            AddJob("40", RoleType.BarrierHealer,  "贤", "贤者", "SGE", "賢", "贤者",     "Weiser",         "Sage",          "Sage",             "賢者",           "현자");
+            AddJob("41", RoleType.DexterityMelee, "蛇", "蝰蛇", "VPR", "ヴ", "蝰蛇剑士", "Viper",          "Viper",         "Vipère",           "ヴァイパー",     "Viper");
+            AddJob("42", RoleType.MagicalRanged,  "绘", "绘灵", "PCT", "ピ", "绘灵法师", "Piktomantie",    "Pictomancer",   "Pictomancien",     "ピクトマンサー", "Pictomancien");
+            AddJob("43", RoleType.None,           "丽", "四三", "043", "丽", "职业四三", "job_43",         "job_43",        "job_43",           "job_43",         "job_43");
+            AddJob("44", RoleType.None,           "水", "四四", "044", "水", "职业四四", "job_44",         "job_44",        "job_44",           "job_44",         "job_44");
         }
 
         private static void AddJob(string id, RoleType subrole, string jobCN1, string jobCN2, string jobEN3, string jobJP1,

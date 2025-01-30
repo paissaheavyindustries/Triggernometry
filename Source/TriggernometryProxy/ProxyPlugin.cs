@@ -9,6 +9,8 @@ using Costura;
 using System.Drawing;
 using System.Threading;
 using System.Diagnostics;
+using System.Xml.Linq;
+using Triggernometry;
 
 namespace TriggernometryProxy
 {
@@ -144,8 +146,6 @@ namespace TriggernometryProxy
             }
             FailsafeRegisterHook("InCombatHook", "InCombat");
             FailsafeRegisterHook("SetCombatStateHook", "SetCombatState");
-            FailsafeRegisterHook("UseDeucalionHook", "UseDeucalion");
-            FailsafeRegisterHook("LogAllNetworkHook", "LogAllNetwork");
             FailsafeRegisterHook("CurrentZoneHook", "GetCurrentZone");
             FailsafeRegisterHook("ActiveEncounterHook", "ExportActiveEncounter");
             FailsafeRegisterHook("LastEncounterHook", "ExportLastEncounter");
@@ -430,50 +430,23 @@ namespace TriggernometryProxy
 
         public Triggernometry.RealPlugin.PluginWrapper GetInstance(string ActPluginName, string ActPluginType)
         {
-            foreach (ActPluginData p in ActGlobals.oFormActMain.ActPlugins)
+            ActPluginData pluginData = GetPluginDataByType(ActPluginType) ?? GetPluginDataByFileName(ActPluginName);
+            if (pluginData == null)
             {
-                string tn = p.pluginObj != null ? p.pluginObj.GetType().Name : "(null)";
-                if (
-                    (
-                        (String.Compare(p.pluginFile.Name, ActPluginName, true) == 0)
-                        ||
-                        (String.Compare(tn, ActPluginType, true) == 0)
-                    )
-                    &&
-                    (
-                        (String.Compare(p.lblPluginStatus.Text, "FFXIV Plugin Started.", true) == 0)
-                        ||
-                        (String.Compare(p.lblPluginStatus.Text, "FFXIV_ACT_Plugin Started.", true) == 0)
-                    )
-                )
-                {
-                    if (ActPluginPrevious == p)
-                    {
-                        return new Triggernometry.RealPlugin.PluginWrapper() { pluginObj = p.pluginObj, state = 1 };
-                    }
-                    else
-                    {
-                        ActPluginPrevious = p;
-                        System.Diagnostics.FileVersionInfo vi = System.Diagnostics.FileVersionInfo.GetVersionInfo(p.pluginFile.FullName);
-                        int[] expectedActVer = new int[4] { 2, 0, 4, 6 };
-                        string expectedActVers = "2.0.4.6";
-                        int[] currentActVer = new int[4] { vi.FileMajorPart, vi.FileMinorPart, vi.FileBuildPart, vi.FilePrivatePart };                        
-                        for (int i = 0; i < 4; i++)
-                        {
-                            if (currentActVer[i] > expectedActVer[i])
-                            {
-                                break;
-                            }
-                            if (currentActVer[i] < expectedActVer[i])
-                            {                                
-                                return new Triggernometry.RealPlugin.PluginWrapper() { pluginObj = p.pluginObj, state = 2, fileversion = vi.FileVersion.ToString(), expectedversion = expectedActVers };
-                            }
-                        }
-                        return new Triggernometry.RealPlugin.PluginWrapper() { pluginObj = p.pluginObj, state = 1 };
-                    }
-                }
+                return new Triggernometry.RealPlugin.PluginWrapper() { pluginObj = null };
             }
-            return new Triggernometry.RealPlugin.PluginWrapper() { pluginObj = null, state = 0 };
+            return new Triggernometry.RealPlugin.PluginWrapper() {
+                pluginObj = pluginData.pluginObj,
+                PnlInfo = pluginData.pPluginInfo,
+                TabPage = pluginData.tpPluginSpace,
+                PluginFile = pluginData.pluginFile,
+                LblTitle = pluginData.lblPluginTitle,
+                LblStatus = pluginData.lblPluginStatus,
+                BtnX = pluginData.btnXButton,
+                CbxEnabled = pluginData.cbEnabled,
+                FileVersion = pluginData.pluginObj.GetType().Assembly.GetName().Version.ToString(),
+                PluginType = pluginData.pluginObj.GetType().ToString()
+            };
         }
 
         public void CheckForUpdates()
@@ -559,22 +532,32 @@ namespace TriggernometryProxy
             }
         }
 
-        public static ActPluginData GetPluginDataByName(string name)
+        public static ActPluginData GetPluginDataByName(string name) => GetPluginDataByType(name); // for backward compatibility
+        public static ActPluginData GetPluginDataByType(string name)
         {
             foreach (var plugin in ActGlobals.oFormActMain.ActPlugins)
             {
-                if (plugin.cbEnabled.Checked && plugin.pluginObj != null)
+                if (plugin.cbEnabled.Checked && plugin.pluginObj?.GetType()?.ToString() == name)
                 {
-                    if (plugin.lblPluginTitle.Text == name)
-                    {
-                        return plugin;
-                    }
+                    return plugin;
                 }
             }
             return null;
         }
 
-        public static List<string> GetMethodsDesc(object obj)
+        public static ActPluginData GetPluginDataByFileName(string name)
+        {
+            foreach (var plugin in ActGlobals.oFormActMain.ActPlugins)
+            {
+                if (plugin.cbEnabled.Checked && plugin.pluginFile?.Name == name)
+                {
+                    return plugin;
+                }
+            }
+            return null;
+        }
+
+        public static List<string> GetMethodsDesc(object obj) // debug
         {
             List<string> results = new List<string>();
             Type type = obj.GetType();
@@ -587,69 +570,6 @@ namespace TriggernometryProxy
                 results.Add(s);
             }
             return results;
-        }
-
-        public void UseDeucalion(bool enabled) => FfxivActPluginHelper.UseDeucalion(enabled);
-        public void LogAllNetwork(bool enabled) => FfxivActPluginHelper.LogAllNetwork(enabled);
-
-        public static class FfxivActPluginHelper
-        {
-            public static ActPluginData pluginData;
-            public static object pluginObj;
-            public static CheckBox chkLogAllNetwork;
-            public static CheckBox chkUseDeucalion;
-
-            static FfxivActPluginHelper()
-            {
-                pluginData = GetPluginDataByName("FFXIV_ACT_Plugin.dll");
-                pluginObj = pluginData?.pluginObj;
-                if (pluginObj == null) return;
-                ScanControls(pluginData.tpPluginSpace);
-            }
-
-            private static void ScanControls(Control parent)
-            {
-                foreach (Control ctrl in parent.Controls)
-                {
-                    if (ctrl is CheckBox chk)
-                    {
-                        switch (ctrl.Name)
-                        {
-                            case "chkUseDeucalion": chkUseDeucalion = chk; break;
-                            case "chkLogAllNetwork": chkLogAllNetwork = chk; break;
-                        }
-                    }
-                    else if (ctrl.HasChildren)
-                    {
-                        ScanControls(ctrl);
-                    }
-                }
-            }
-
-            public static void UseDeucalion(bool enabled)
-            {
-                if (chkUseDeucalion.InvokeRequired)
-                {
-                    chkUseDeucalion.Invoke(new Action(() => chkUseDeucalion.Checked = enabled));
-                }
-                else
-                {
-                    chkUseDeucalion.Checked = enabled;
-                }
-            }
-
-            public static void LogAllNetwork(bool enabled)
-            {
-                if (chkLogAllNetwork.InvokeRequired)
-                {
-                    chkLogAllNetwork.Invoke(new Action(() => chkLogAllNetwork.Checked = enabled));
-                }
-                else
-                {
-                    chkLogAllNetwork.Checked = enabled;
-                }
-            }
-
         }
 
     }

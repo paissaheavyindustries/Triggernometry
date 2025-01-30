@@ -451,15 +451,15 @@ namespace Triggernometry.CustomControls
                 tx.Parent = parentfolder;
                 parentnode.Nodes.Add(tn);
                 plug.AddTrigger(tx, tx.Parent.ParentsEnabled());
-                if (tx.Condition != null)
+                if (tx._Condition != null)
                 {
-                    ConditionGroup.RebuildParentage(tx.Condition);
+                    ConditionGroup.RebuildParentage(tx._Condition);
                 }
                 foreach (Action a in tx.Actions)
                 {
-                    if (a.Condition != null)
+                    if (a._Condition != null)
                     {
-                        ConditionGroup.RebuildParentage(a.Condition);
+                        ConditionGroup.RebuildParentage(a._Condition);
                     }
                 }
             }
@@ -635,7 +635,6 @@ namespace Triggernometry.CustomControls
                 using (Forms.TriggerForm tf = new Forms.TriggerForm(t, readOnly, readMe))
                 {
                     Trigger.TriggerSourceEnum oldSource = t._Source;
-                    ExpressionTextBox.CurrentTriggerRegexStr = t.RegularExpression;
                     tf.imgs = imageList1;
                     tf.trv = treeView1;
                     tf.Text = readMe 
@@ -785,11 +784,12 @@ namespace Triggernometry.CustomControls
             }
             else
             {
+                var folder = treeView1.SelectedNode.Tag as Folder;
                 ctxAdd.Visible = true;
                 ctxUpdate.Visible = true;
                 ctxEdit.Visible = true;
-                ctxDescendingSort.Visible = treeView1.SelectedNode.Tag is Folder;
-                ctxDescendingSort.Checked = treeView1.SelectedNode.Tag is Folder f && f._DescendingSort;
+                ctxDescendingSort.Visible = folder != null;
+                ctxDescendingSort.Checked = folder != null && folder._DescendingSort;
                 ctxFire.Visible = true;
                 ctxFireAllowCondition.Visible = true;
                 ctxCollapse.Visible = true;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -72,6 +73,38 @@ namespace Triggernometry
                 authRespReceived.Dispose();
                 authRespReceived = null;
             }
+        }
+
+        private Process _obsProc;
+        private DateTime _lastChecked;
+        private bool _complaintAboutNotRunning = false;
+        internal ObsRunningState CheckRunningState()
+        {
+            if (_obsProc?.HasExited == false)
+            {
+                return ObsRunningState.Running;
+            }
+            else
+            {
+                _obsProc = null;
+                _complaintAboutNotRunning = false;
+            }
+            if (DateTime.Now - _lastChecked > TimeSpan.FromSeconds(5))
+            {
+                _lastChecked = DateTime.Now;
+                _obsProc = Process.GetProcessesByName("obs64").FirstOrDefault()
+                        ?? Process.GetProcessesByName("obs32").FirstOrDefault();
+            }
+            return _obsProc != null ? ObsRunningState.Running
+                                    : _complaintAboutNotRunning ? ObsRunningState.NotRunning
+                                                                : ObsRunningState.NotRunningFirstlyFound;
+        }
+
+        internal enum ObsRunningState 
+        { 
+            Running,
+            NotRunningFirstlyFound, 
+            NotRunning 
         }
 
         internal void Connect(string endpoint, string password)

@@ -180,7 +180,7 @@ namespace Triggernometry.Forms
                 }
                 if ((filter & SearchFilterEnum.TriggerCondition) != 0)
                 {
-                    if (ConditionMatches(rex, t.Condition) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hittriggercond", "Trigger condition"), Match = tn });
+                    if (ConditionMatches(rex, t._Condition) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hittriggercond", "Trigger condition"), Match = tn });
                 }
                 if ((filter & SearchFilterEnum.TriggerRegex) != 0)
                 {
@@ -195,7 +195,7 @@ namespace Triggernometry.Forms
                     }
                     if ((filter & SearchFilterEnum.ActionCondition) != 0)
                     {
-                        if (ConditionMatches(rex, a.Condition) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitactioncond", "Action #{0} condition", i), Match = tn });
+                        if (ConditionMatches(rex, a._Condition) == true) results.Add(new SearchResult(t) { MatchType = I18n.Translate("internal/SearchForm/hitactioncond", "Action #{0} condition", i), Match = tn });
                     }
                     if ((filter & SearchFilterEnum.ActionDetails) != 0)
                     {

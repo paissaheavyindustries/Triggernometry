@@ -1,15 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using Triggernometry;
 using static Triggernometry.RealPlugin;
 
@@ -348,6 +347,8 @@ namespace Triggernometry.Utilities
 
         #endregion
 
+        #region MarkingController
+
         private static int _offset1B;
         private static readonly SemaphoreSlim _semaphoreSlim1B = new SemaphoreSlim(1, 1);
 
@@ -362,8 +363,8 @@ namespace Triggernometry.Utilities
             private set
             {
                 _semaphoreSlim1B.Wait();
-                try 
-                { 
+                try
+                {
                     _offset1B = value;
                     plug.UnfilteredAddToLog(DebugLevelEnum.Verbose, I18n.Translate("internal/Memory/update1B",
                         "Headmarker offset updated to ({0})", _offset1B));
@@ -389,9 +390,11 @@ namespace Triggernometry.Utilities
             finally { _semaphoreSlim1B.Release(); }
         }
 
-        private static int? _headMarkerOffsetRelAddress3;
+        //private static int? _headMarkerOffsetRelAddress3;
         private static int GetHeadMarkerOffset()
         {
+            return 0; // SE was not using this offset since 7.0
+            /*
             try
             {   // 6.x
                 byte[] moduleData = ReadModuleData(XivProc);
@@ -411,38 +414,40 @@ namespace Triggernometry.Utilities
 
                 return Math.Min(param1 - param2 + param3, 0);
             }
-            catch // to-do
+            catch
             {
                 _headMarkerOffsetRelAddress3 = 0;
-                return 0; 
             }
+            */
         }
 
-        private static int _targetMarkerRelAddress = 0;
-        public static int TargetMarkerRelAddress
+        // FFXIVClientStructs/FFXIV/Client/Game/UI/MarkingController.cs
+        private static IntPtr _markingControllerPtr = IntPtr.Zero;
+        public static IntPtr MarkingControllerPtr
         {
-            get 
+            get
             {
-                if (_targetMarkerRelAddress == 0)
+                if (_markingControllerPtr == IntPtr.Zero)
                 {
                     byte[] moduleData = ReadModuleData(XivProc);
-                    int offset = ScanPoint(moduleData, "48 8d 0d * * * * 4c 8b 85") ?? throw ScanNotFoundException("HeadMarkerAddress");
-                    _targetMarkerRelAddress = offset + 0x10;
+                    int offset = ScanPoint(moduleData, "48 8d 0d * * * * 4c 8b 85") ?? throw ScanNotFoundException("MarkingControllerPtr");
+                    _markingControllerPtr = XivBaseAddress + offset;
                 }
-                return _targetMarkerRelAddress;            
+                return _markingControllerPtr;
             }
         }
 
-        public enum TargetMarkerEnum {
+        public static IntPtr TargetMarkersPtr => MarkingControllerPtr + 0x10;
+        public static IntPtr WaymarksPtr => MarkingControllerPtr + 0x1E0;
+
+        public enum TargetMarkerEnum
+        {
+            None = -1,
             Attack1 = 0, Attack2 = 1, Attack3 = 2, Attack4 = 3, Attack5 = 4,
             Bind1 = 5, Bind2 = 6, Bind3 = 7,
             Stop1 = 8, Stop2 = 9,
-            Ignore1 = 8, Ignore2 = 9,
             Square = 10, Circle = 11, Cross = 12, Triangle = 13,
             Attack6 = 14, Attack7 = 15, Attack8 = 16,
-            Unknown17 = 17, Unknown18 = 18, Unknown19 = 19, Unknown20 = 20, 
-            Unknown21 = 21, Unknown22 = 22, Unknown23 = 23, Unknown24 = 24, 
-            Unknown25 = 25, Unknown26 = 26, Unknown27 = 27
         }
 
         public static uint? EntityIdByTargetMarker(string rawType)
@@ -458,12 +463,12 @@ namespace Triggernometry.Utilities
 
         public static uint EntityIdByTargetMarker(TargetMarkerEnum type)
         {
-            return Read<uint>(XivProcHandle, XivBaseAddress + TargetMarkerRelAddress + 8 * (int)type);
+            return Read<uint>(XivProcHandle, TargetMarkersPtr + 8 * (int)type);
         }
 
-        public static TargetMarkerEnum? TargetMarkerOnEntity(uint entityId)
+        public static TargetMarkerEnum TargetMarkerOnEntity(uint entityId)
         {
-            byte[] mem = ReadBytes(XivProcHandle, XivBaseAddress + TargetMarkerRelAddress, 8 * 28);
+            byte[] mem = ReadBytes(XivProcHandle, TargetMarkersPtr, 8 * 28);
             for (int i = 0; i < 28; i++)
             {
                 uint value = BytesToStructure<uint>(mem, 8 * i);
@@ -472,8 +477,104 @@ namespace Triggernometry.Utilities
                     return (TargetMarkerEnum)i;
                 }
             }
-            return null;
+            return TargetMarkerEnum.None;
         }
+
+        public enum WaymarkEnum
+        {
+            A = 0, B = 1, C = 2, D = 3, One = 4, Two = 5, Three = 6, Four = 7
+        }
+
+        public class Waymark
+        {
+            public const int SIZE = 0x20;
+            public WaymarkEnum Type;
+            public float X, Y, Z;
+            public bool Active;
+            // The in-game marking method only has 0.001 precision
+            // The value is converted to double is to avoid the ToString() method rounding the float value.
+            // e.g. if the waymark is set to x = 10000.456, then the actual float value will be 10000.45605f.
+            // 10000.45605f.ToString("0.###") gets 10000.46, but we want the actual value 10000.456.
+            // Values within ±16384 has the 3rd decimal place precision.
+            public string X3 => ((double)X).ToString("0.###", CultureInfo.InvariantCulture);
+            public string Y3 => ((double)Y).ToString("0.###", CultureInfo.InvariantCulture);
+            public string Z3 => ((double)Z).ToString("0.###", CultureInfo.InvariantCulture);
+
+            public static Waymark Read(WaymarkEnum type)
+            {
+                byte[] bytes = ReadBytes(XivProcHandle, WaymarksPtr + SIZE * (int)type, SIZE);
+                Waymark wm = new Waymark { 
+                    Type = type,
+                    Active = BitConverter.ToBoolean(bytes, 0x1C)
+                };
+                if (wm.Active)
+                {
+                    wm.X = BitConverter.ToSingle(bytes, 0);
+                    wm.Z = BitConverter.ToSingle(bytes, 4);
+                    wm.Y = BitConverter.ToSingle(bytes, 8);
+                }
+                return wm;
+            }
+
+            // ${_waymark[A].active}  ${_waymark[One].x}  ${_waymark[6].xyz}
+            public static string QueryWaymark(string rawType, string rawProp)
+            {
+                if (!Enum.TryParse(rawType.Trim(), ignoreCase: true, out WaymarkEnum type))
+                {
+                    if (int.TryParse(rawType, out int typeIdx))
+                    {
+                        if (typeIdx >= 0 && typeIdx < 8)
+                        { 
+                            type = (WaymarkEnum)typeIdx;
+                        }
+                        else throw Context.InvalidValueError("waymark", I18n.TranslateWord("index"), rawType, $"${{_waymark[{rawType}].{rawProp}}}");
+                    }
+                    else throw Context.InvalidValueError("waymark", I18n.TranslateWord("type"), rawType, $"${{_waymark[{rawType}].{rawProp}}}");
+                }
+                Waymark wm = Read(type);
+                switch (rawProp.ToLower())
+                {
+                    case "active": 
+                        return wm.Active ? "1" : "0";
+                    case "x":   case "posx":
+                        return wm.X3;
+                    case "y":   case "posy": 
+                        return wm.Y3;
+                    case "z":   case "posz": 
+                        return wm.Z3;
+                    case "xy":  case "posxy":
+                        return $"{wm.X3}, {wm.Y3}";
+                    case "xyz": case "pos":
+                        return $"{wm.X3}, {wm.Y3}, {wm.Z3}";
+                    default:
+                        throw Context.InvalidValueError("waymark", I18n.TranslateWord("property"), rawProp, $"${{_waymark[{rawType}].{rawProp}}}");
+                }
+            }
+        }
+
+        public class Waymarks : IEnumerable<Waymark>
+        {
+            public Waymark A, B, C, D, One, Two, Three, Four;
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+            public IEnumerator<Waymark> GetEnumerator()
+            {
+                yield return A;   yield return B;   yield return C;     yield return D;
+                yield return One; yield return Two; yield return Three; yield return Four;
+            }
+            public static Waymarks Read() => new Waymarks 
+            {
+                A     = Waymark.Read(WaymarkEnum.A),
+                B     = Waymark.Read(WaymarkEnum.B),
+                C     = Waymark.Read(WaymarkEnum.C),
+                D     = Waymark.Read(WaymarkEnum.D),
+                One   = Waymark.Read(WaymarkEnum.One),
+                Two   = Waymark.Read(WaymarkEnum.Two),
+                Three = Waymark.Read(WaymarkEnum.Three),
+                Four  = Waymark.Read(WaymarkEnum.Four)
+            };
+        }
+
+        #endregion MarkingController
 
         public static IntPtr GetCameraAddress()
         {

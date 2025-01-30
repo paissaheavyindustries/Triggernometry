@@ -139,7 +139,7 @@ namespace Triggernometry.Actions
             _ProcessId = _ProcessId.Trim();
             if (_WindowTitle.Trim().Length == 0)
             {
-                // the same condition check as in WindowsUtils.FindWindows
+                // the same condition check as in WindowsUtils.FindWindowsByTitleRegex
                 target = I18n.Translate("internal/Action/descwindowtargetnone", "(unspecified window name)");
             }
             if (_ProcessId == "" || _ProcessId == "0")
@@ -160,11 +160,11 @@ namespace Triggernometry.Actions
         internal override void ExecuteImplementation(ActionInstance ai)
         {
             Context ctx = ai.ctx;
-            string procid = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _ProcessId);
+            int procid = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _ProcessId);
             string window = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _WindowTitle);
             int code = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _MessageId);
-            int wparam = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _Wparam);
-            int lparam = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _Lparam);
+            IntPtr wparam = (IntPtr)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _Wparam);
+            IntPtr lparam = (IntPtr)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _Lparam);
             WindowsUtils.SendMessageToWindow(procid, window, (ushort)code, wparam, lparam);
         }
 

@@ -148,6 +148,10 @@ namespace Triggernometry.Forms
             _isInitializing = false;
             initialDescriptions = GetAllDescriptionsStr();
             SetTriggerDescription();
+
+            txtRegexp.TextChanged += (s, e) => ExpressionTextBox.CurrentTriggerRegexStr = txtRegexp.Text;
+            Shown += (s, e) => ExpressionTextBox.CurrentTriggerRegexStr = txtRegexp.Text;
+            Closed += (s, e) => ExpressionTextBox.CurrentTriggerRegexStr = "";
         }
 
         private void CloseTree(TreeNode tn)
@@ -216,7 +220,7 @@ namespace Triggernometry.Forms
                 action.CopySettingsTo(newAction);
                 Actions.Add(newAction);
             }
-            cndCondition.ConditionToEdit = (ConditionGroup)t.Condition?.Duplicate() ?? new ConditionGroup
+            cndCondition.ConditionToEdit = (ConditionGroup)t._Condition?.Duplicate() ?? new ConditionGroup
             {
                 Grouping = CndGroupingEnum.Or,
                 Enabled = false
@@ -242,7 +246,7 @@ namespace Triggernometry.Forms
             t._RefirePeriodExpression = expRefirePeriod.Expression;
             t._DebugLevel = (RealPlugin.DebugLevelEnum)cbxLoggingLevel.SelectedIndex;
             t.Actions = Actions.OrderBy(tx => tx.OrderNumber).ToList();
-            t.Condition = cndCondition.ConditionToEdit;
+            t._Condition = cndCondition.ConditionToEdit;
             t._MutexToCapture = expMutexName.Expression;
             t._IsReadme = chkReadmeTrigger.Checked;
         }
@@ -466,7 +470,7 @@ namespace Triggernometry.Forms
             }
 
             desc = desc.Trim(' ', ';', '；', ',', '，', '、', '　'); // Common I18n separators
-            desc += Environment.NewLine + Environment.NewLine;       // will be trimmed next time if the first line is empty
+            desc += Environment.NewLine;                             // will be trimmed next time if the first line is empty
 
             // Line 2:
             // [Network Event]

@@ -94,10 +94,10 @@ namespace Triggernometry.Actions
                     plug.SetCombatStateHook(bool.Parse(_Value));
                     break;
                 case OperationEnum.LogAllNetwork:
-                    plug.LogAllNetworkHook(bool.Parse(_Value));
+                    PluginBridges.BridgeFFXIV.LogAllNetwork(bool.Parse(_Value));
                     break;
                 case OperationEnum.UseDeucalion:
-                    plug.UseDeucalionHook(bool.Parse(_Value));
+                    PluginBridges.BridgeFFXIV.UseDeucalion(bool.Parse(_Value));
                     break;
             }
         }

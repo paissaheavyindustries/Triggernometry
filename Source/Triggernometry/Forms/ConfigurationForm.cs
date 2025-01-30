@@ -909,7 +909,6 @@ namespace Triggernometry.Forms
             using (TriggerForm tf = new TriggerForm(template))
             {
                 Trigger.TriggerSourceEnum oldSource = template._Source;
-                ExpressionTextBox.CurrentTriggerRegexStr = template.RegularExpression;
                 tf.imgs = plug.ui.imageList1;
                 tf.trv = plug.ui.treeView1;
                 tf.Text = I18n.Translate("internal/UserInterface/edittemplatetrigger", "Edit template trigger");
@@ -1098,7 +1097,7 @@ namespace Triggernometry.Forms
 
         private void btnEndpointHistUpdate_Click(object sender, EventArgs e)
         {
-            tslEndpointHistoryCount.Text = plug._ep.ReceivedTelegrams.ToString();
+            tlsEndpointHistoryCount.Text = plug._ep.ReceivedTelegrams.ToString();
             lock (teleHistory)
             {
                 teleHistory.Clear();
@@ -1167,6 +1166,7 @@ namespace Triggernometry.Forms
                 "Ctrl + Shift + P, V/L/T/D: ${pv/pl/pt/pd:}\n" +
                 "Ctrl + Shift + N: ${n:}\n" +
                 "Ctrl + Shift + F: ${f::}\n" +
+                "Ctrl + Shift + I: ${if: ? : }\n" +
                 "Ctrl + Shift + E: ${_entity[].}\n" +
                 "Ctrl + Shift + M: ${_me.id}\n" +
                 "Ctrl + Shift + A: " + I18n.Translate("internal/ConfigurationForm/tipShortcutCtrlShiftA", "Select the next outer layer of brackets"));

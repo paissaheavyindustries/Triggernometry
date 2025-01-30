@@ -9,8 +9,18 @@ namespace Triggernometry.Variables
     [XmlRoot(ElementName = "VariableDictionary")]
     public sealed class VariableDictionary : Variable
     {
+        private Dictionary<string, Variable> _values = new Dictionary<string, Variable>(StringComparer.OrdinalIgnoreCase);
+
         [XmlIgnore]
-        public Dictionary<string, Variable> Values { get; set; } = new Dictionary<string, Variable>();
+        public Dictionary<string, Variable> Values
+        { 
+            get => _values;
+            set
+            {
+                _values = value?.ToDictionary(pair => pair.Key, pair => pair.Value, StringComparer.OrdinalIgnoreCase) 
+                    ?? new Dictionary<string, Variable>(StringComparer.OrdinalIgnoreCase);
+            }
+        }
 
         [XmlArray("Items")]
         [XmlArrayItem("Item")]
@@ -125,13 +135,10 @@ namespace Triggernometry.Variables
         }
 
         public Variable GetValue(string id)
-        {
-            if (Values.ContainsKey(id) == true)
-            {
-                return Values[id];
-            }
-            return new VariableScalar();
-        }
+            => Values.TryGetValue(id, out var result) ? result : new VariableScalar();
+
+        public string GetStringValue(string id)
+            => Values.TryGetValue(id, out var result) ? result.ToString() : "";
 
         public void SetValue(string id, int val, string changer = DEFAULTCHANGER)
         {

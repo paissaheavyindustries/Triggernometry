@@ -1025,7 +1025,6 @@
             this.statusStrip1.Size = new System.Drawing.Size(1338, 22);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 6;
-            this.statusStrip1.Text = "statusStrip1";
             this.statusStrip1.Visible = false;
             // 
             // prgStatus

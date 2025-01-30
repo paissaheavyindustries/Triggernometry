@@ -254,12 +254,12 @@ namespace Triggernometry.Variables
             LastChanged = DateTime.Now;
         }
 
-        public int SeekRow(string value)
+        public int SeekRow(Variable value)
         {
-            return SeekRow(new VariableScalar() { Value = value });
+            return SeekRow(value.ToString());
         }
 
-        public int SeekRow(Variable value)
+        public int SeekRow(string value)
         {
             if (Height == 0)
             {
@@ -267,7 +267,7 @@ namespace Triggernometry.Variables
             }
             for (int y = 0; y < Height; y++)
             {
-                if (Rows[y].Values[0].CompareTo(value) == 0)
+                if (Rows[y].Values[0].ToString().Equals(value, StringComparison.OrdinalIgnoreCase))
                 {
                     return y + 1;
                 }
@@ -275,12 +275,12 @@ namespace Triggernometry.Variables
             return 0;
         }
 
-        public int SeekColumn(string value)
+        public int SeekColumn(Variable value)
         {
-            return SeekColumn(new VariableScalar() { Value = value });
+            return SeekColumn(value.ToString());
         }
 
-        public int SeekColumn(Variable value)
+        public int SeekColumn(string value)
         {
             if (Height == 0)
             {
@@ -288,7 +288,7 @@ namespace Triggernometry.Variables
             }
             for (int x = 0; x < Width; x++)
             {
-                if (Rows[0].Values[x].CompareTo(value) == 0)
+                if (Rows[0].Values[x].ToString().Equals(value, StringComparison.OrdinalIgnoreCase))
                 {
                     return x + 1;
                 }
@@ -296,12 +296,12 @@ namespace Triggernometry.Variables
             return 0;
         }
 
-        public int VLookup(string targetStr, int rowIndex, List<int> colIndices)
+        public int VLookup(Variable targetStr, int rowIndex, List<int> colIndices)
         {
-            return VLookup(new VariableScalar() { Value = targetStr }, rowIndex, colIndices);
+            return VLookup(targetStr.ToString(), rowIndex, colIndices);
         }
 
-        public int VLookup(Variable targetStr, int colIndex, List<int> rowIndices)
+        public int VLookup(string targetStr, int colIndex, List<int> rowIndices)
         {
             if (colIndex < 0 || colIndex >= Width)
             {
@@ -310,7 +310,7 @@ namespace Triggernometry.Variables
 
             foreach (int rowIndex in rowIndices)
             {
-                if (Rows[rowIndex].Values[colIndex].CompareTo(targetStr) == 0)
+                if (Rows[rowIndex].Values[colIndex].ToString().Equals(targetStr, StringComparison.OrdinalIgnoreCase))
                 {
                     return rowIndex + 1;
                 }
@@ -318,12 +318,12 @@ namespace Triggernometry.Variables
             return 0;
         }
 
-        public int HLookup(string targetStr, int rowIndex, List<int> colIndices)
+        public int HLookup(Variable targetStr, int rowIndex, List<int> colIndices)
         {
-            return HLookup(new VariableScalar() { Value = targetStr }, rowIndex, colIndices);
+            return HLookup(targetStr.ToString(), rowIndex, colIndices);
         }
 
-        public int HLookup(Variable targetStr, int rowIndex, List<int> colIndices)
+        public int HLookup(string targetStr, int rowIndex, List<int> colIndices)
         {
             if (rowIndex < 0 || rowIndex >= Height)
             {
@@ -332,8 +332,7 @@ namespace Triggernometry.Variables
 
             foreach (int colIndex in colIndices)
             {
-                var a = Rows[rowIndex].Values[colIndex];
-                if (Rows[rowIndex].Values[colIndex].CompareTo(targetStr) == 0)
+                if (Rows[rowIndex].Values[colIndex].ToString().Equals(targetStr, StringComparison.OrdinalIgnoreCase))
                 {
                     return colIndex + 1;
                 }

@@ -77,7 +77,7 @@ namespace Triggernometry.Actions
             {
                 Thread.Sleep(10);
             }
-            if (ctx.plug.scripting != null)
+            if (ctx.plug.scripting != null && ctx.plug.scripting.Ready)
             {
                 ctx.plug.scripting.Evaluate(scp, assy, ctx);
             }

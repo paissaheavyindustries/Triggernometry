@@ -664,7 +664,6 @@ namespace Triggernometry.Forms
                 {
                     tf.trv = trv;
                     tf.imgs = imgs;
-                    ExpressionTextBox.CurrentTriggerRegexStr = t.RegularExpression;
                     tf.Text = I18n.Translate("internal/ImportForm/editimportedtrigger", "Edit imported trigger '{0}'", t.Name);
                     tf.wmp = wmp;
                     tf.tts = tts;

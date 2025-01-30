@@ -31,10 +31,11 @@ namespace Triggernometry.Actions
             Filter,
             Merge,
             MergeHard,
-            GetEntityByName,
-            GetEntityById,
+            GetEntity,
             UnsetAll,
             UnsetRegex,
+            [Obsolete] GetEntityByName, // => GetEntity
+            [Obsolete] GetEntityById, // => GetEntity
         }
 
         /// <summary>
@@ -320,18 +321,15 @@ namespace Triggernometry.Actions
                         "merge {1}dict variable ({0}) into {3}dict variable ({2}), and overwrite the values of repeated keys",
                         _Name, sPersistD, _TargetVariable, tPersistD
                     );
-                case OperationEnum.GetEntityByName:
-                    return I18n.Translate(
-                        "internal/Action/descdictgetentitybyname",
-                        "save the properties of entity name ({2}) into {1}dict variable ({0})",
-                        _Name, sPersistD, _Value
-                    );
-                case OperationEnum.GetEntityById:
-                    return I18n.Translate(
-                        "internal/Action/descdictgetentitybyid",
-                        "save the properties of entity id ({2}) into {1}dict variable ({0})",
-                        _Name, sPersistD, _Value
-                    );
+                case OperationEnum.GetEntity:
+                    {
+                        bool hasSpecifiedProps = !string.IsNullOrWhiteSpace(_Key);
+                        string key = hasSpecifiedProps ? "internal/Action/descdictgetentitygivenprops"
+                                                       : "internal/Action/descdictgetentity";
+                        string trl = hasSpecifiedProps ? "Store ({3}) properties of the entity ({2}) in {1}dictionary ({0})"
+                                                       : "Store all properties of the entity ({2}) in {1}dictionary ({0})";
+                        return I18n.Translate(key, trl, _Name, sPersistD, _Value, _Key);
+                    }
                 case OperationEnum.UnsetAll:
                     return I18n.Translate(
                         "internal/Action/descdictunsetall",
@@ -454,18 +452,27 @@ namespace Triggernometry.Actions
                                 sourcename, sPersist, targetname, tPersist));
                     }
                     break;
-                case OperationEnum.GetEntityByName:
-                case OperationEnum.GetEntityById:
+                case OperationEnum.GetEntity:
                     {
                         string value = ParseValue();
-                        VariableDictionary entity = _Operation == OperationEnum.GetEntityByName
-                                                  ? PluginBridges.BridgeFFXIV.GetNamedEntity(value)
-                                                  : PluginBridges.BridgeFFXIV.GetIdEntity(value);
+
+                        var entity = FFXIV.Entity.GetFilteredEntities(value).FirstOrDefault();
+                        entity = entity ?? FFXIV.Entity.NullEntity();
+
+                        var propNames = string.IsNullOrWhiteSpace(_Key)
+                            ? FFXIV.Entity.RecommendedEntityPropNames.Concat(FFXIV.Job.LegalJobPropNames)
+                            : Context.SplitArguments(ParseKey(), false);
+
+                        var vd = new VariableDictionary(propNames.ToDictionary(
+                            propName => propName,
+                            propName => entity.QueryProperty(propName)
+                        ));
+                        
                         lock (svs.Dict)
                         {
-                            svs.Dict[sourcename] = (VariableDictionary)entity.Duplicate();
+                            svs.Dict[sourcename] = vd;
                         }
-                        if (entity.GetValue("id").ToString() != "")
+                        if (entity.Exist)
                             AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/dictgetentity",
                                 "Saved the data of entity ({2}) into {1}dict variable ({0})",
                                 sourcename, sPersist, value));

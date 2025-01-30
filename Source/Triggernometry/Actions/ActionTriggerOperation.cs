@@ -363,7 +363,6 @@ namespace Triggernometry.Actions
                         break;
                     case OperationEnum.DisableTrigger:
                         return I18n.Translate("internal/Action/desctrigdisable", "disable trigger ({0})", t.Name);
-                        break;
                     case OperationEnum.EnableTrigger:
                         return I18n.Translate("internal/Action/desctrigenable", "enable trigger ({0})", t.Name);                        
                 }
@@ -457,7 +456,8 @@ namespace Triggernometry.Actions
                 }
                 else
                 {
-                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notrigiderror", "No trigger id, and op is not cancel all actions, unexpected"));
+                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notriggerwithid",
+                        "Trigger operation failed: In trigger ({1}), the specified trigger id ({0}) does not exist.", _TriggerId, ParentTrigger?.FullPath ?? "null"));
                 }
             }
         }

@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
+using Triggernometry.Forms;
 
 namespace Triggernometry.CustomControls
 {
@@ -755,7 +756,7 @@ namespace Triggernometry.CustomControls
                 case "ctxTestAction":
                     ctx.testByPlaceholder = RealPlugin.plug.cfg.TestLiveByDefault == false;
                     if (plug.cfg.TestIgnoreConditionsByDefault)
-                        a.Condition = new ConditionGroup();
+                        a._Condition = new ConditionGroup();
                     ctxAction.Close();
                     break;
                 case "ctxTestPlaceholder":
@@ -767,7 +768,7 @@ namespace Triggernometry.CustomControls
                 case "ctxTestLiveIgnoreCnd":
                     ctx.testByPlaceholder = false;
                     if (plug.cfg.TestIgnoreConditionsByDefault)
-                        a.Condition = new ConditionGroup();
+                        a._Condition = new ConditionGroup();
                     break;
             }
             
@@ -776,7 +777,7 @@ namespace Triggernometry.CustomControls
 
         private void ctxEditPropCopyCnd_Click(object sender, EventArgs e)
         {
-            ActionViewer.copiedCondition = (ConditionGroup)SelectedActions().FirstOrDefault()?.Condition.Duplicate();
+            ActionViewer.copiedCondition = (ConditionGroup)SelectedActions().FirstOrDefault()?._Condition.Duplicate();
         }
 
         private void ctxEditPropPasteCnd_Click(object sender, EventArgs e)
@@ -785,7 +786,7 @@ namespace Triggernometry.CustomControls
                 return;
             foreach (Action a in SelectedActions())
             {
-                a.Condition = (ConditionGroup)ActionViewer.copiedCondition.Duplicate();
+                a._Condition = (ConditionGroup)ActionViewer.copiedCondition.Duplicate();
             }
             dgvActions.Refresh();
             OnActionsUpdated();
@@ -795,8 +796,8 @@ namespace Triggernometry.CustomControls
         {
             foreach (Action a in SelectedActions())
             {
-                a.Condition = new ConditionGroup();
-                a.Condition.Enabled = false;
+                a._Condition = new ConditionGroup();
+                a._Condition.Enabled = false;
             }
             dgvActions.Refresh();
             OnActionsUpdated();
@@ -844,8 +845,10 @@ namespace Triggernometry.CustomControls
 
         private void ctxEditPropDelay_Click(object sender, EventArgs e)
         {
-            string value = ShowInputDialog(I18n.Translate("internal/ActionViewer/setDelay", "Set Action Delay To (ms)"),
-                ExpressionTextBox.SupportedExpressionTypeEnum.Numeric);
+            string value = new SimpleInputForm(
+                I18n.Translate("internal/ActionViewer/setDelay", "Set Action Delay To (ms)"),
+                ExpressionTextBox.SupportedExpressionTypeEnum.Numeric
+                ).GetInput();
             if (value != null)
             {
                 foreach (Action a in SelectedActions())
@@ -859,8 +862,10 @@ namespace Triggernometry.CustomControls
 
         private void ctxEditPropBgColor_Click(object sender, EventArgs e)
         {
-            string value = ShowInputDialog(I18n.Translate("internal/ActionViewer/setBgColor", "Set Description Background Color To"),
-                ExpressionTextBox.SupportedExpressionTypeEnum.Color);
+            string value = new SimpleInputForm(
+                I18n.Translate("internal/ActionViewer/setBgColor", "Set Description Background Color To"),
+                ExpressionTextBox.SupportedExpressionTypeEnum.Color
+                ).GetInput();
             if (value != null)
             {
                 foreach (Action a in SelectedActions())
@@ -874,8 +879,10 @@ namespace Triggernometry.CustomControls
 
         private void ctxEditPropTextColor_Click(object sender, EventArgs e)
         {
-            string value = ShowInputDialog(I18n.Translate("internal/ActionViewer/setTextColor", "Set Description Text Color To"), 
-                ExpressionTextBox.SupportedExpressionTypeEnum.Color);
+            string value = new SimpleInputForm(
+                I18n.Translate("internal/ActionViewer/setTextColor", "Set Description Text Color To"), 
+                ExpressionTextBox.SupportedExpressionTypeEnum.Color
+                ).GetInput();
             if (value != null)
             {
                 foreach (Action a in SelectedActions())
@@ -902,66 +909,15 @@ namespace Triggernometry.CustomControls
         {
             foreach (Action a in SelectedActions())
             {
-                if (a.Condition == null) 
+                if (a._Condition == null) 
                 { 
-                    a.Condition = new ConditionGroup();
-                    a.Condition.Enabled = false;
+                    a._Condition = new ConditionGroup();
+                    a._Condition.Enabled = false;
                 }
-                a.Condition.Grouping = cndGroupingType;
+                a._Condition.Grouping = cndGroupingType;
             }
             dgvActions.Refresh();
             OnActionsUpdated();
-        }
-
-        private string ShowInputDialog(string title, ExpressionTextBox.SupportedExpressionTypeEnum exprType)
-        {
-            Form inputForm = new Form();
-            inputForm.Text = title;
-            inputForm.FormBorderStyle = FormBorderStyle.FixedDialog;
-            inputForm.StartPosition = FormStartPosition.CenterScreen;
-            inputForm.MaximizeBox = false;
-            inputForm.MinimizeBox = false;
-            inputForm.MinimumSize = new Size(300, 0);
-            inputForm.AutoSize = true;
-            inputForm.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-
-            ExpressionTextBox expEditedValue = new ExpressionTextBox();
-            expEditedValue.Anchor = AnchorStyles.None;
-            expEditedValue.Dock = DockStyle.Fill;
-            expEditedValue.ExpressionType = exprType;
-            expEditedValue.textBox1.MinimumSize = new Size(200, 0);
-
-            Button okButton = new Button();
-            okButton.Text = I18n.Translate("ActionForm/btnOk", "OK");
-            okButton.Anchor = AnchorStyles.None;
-            okButton.Margin = new Padding(10, 20, 10, 10);
-            okButton.Padding = new Padding(5);
-            okButton.DialogResult = DialogResult.OK;
-            okButton.TextAlign = ContentAlignment.MiddleCenter;
-            okButton.AutoSize = true;
-            inputForm.AcceptButton = okButton;
-
-            TableLayoutPanel table = new TableLayoutPanel();
-            table.Dock = DockStyle.Fill;
-            table.Padding = new Padding(20);
-            table.AutoSize = true;
-            table.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            table.RowCount = 2;
-            table.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            table.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            table.Controls.Add(expEditedValue, 0, 0);
-            table.Controls.Add(okButton, 0, 1);
-
-            inputForm.Controls.Add(table);
-
-            if (inputForm.ShowDialog() == DialogResult.OK)
-            {
-                return expEditedValue.Text;
-            }
-            else
-            {
-                return null;
-            }
         }
 
         private void ctxAction_Opening(object sender, CancelEventArgs e)

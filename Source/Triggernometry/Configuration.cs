@@ -469,7 +469,7 @@ namespace Triggernometry
 
         // Default Settings
 
-        public Trigger TemplateTrigger = new Trigger() { Enabled = true, Conditions = null, Condition = new ConditionGroup() { Grouping = ConditionGroup.CndGroupingEnum.Or, Enabled = false } };
+        public Trigger TemplateTrigger = new Trigger() { Enabled = true, Conditions = null, _Condition = new ConditionGroup() { Grouping = ConditionGroup.CndGroupingEnum.Or, Enabled = false } };
 
         [XmlAttribute]
         public bool UseTemplateTrigger { get; set; } = false;
@@ -489,10 +489,10 @@ namespace Triggernometry
         public Action.TextAuraEffectEnum UiFontEffect { get; set; } = Action.TextAuraEffectEnum.None;
 
         [XmlAttribute]
-        public bool TestLiveByDefault { get; set; } = false;
+        public bool TestLiveByDefault { get; set; } = true;
 
         [XmlAttribute]
-        public bool TestIgnoreConditionsByDefault { get; set; } = false;
+        public bool TestIgnoreConditionsByDefault { get; set; } = true;
 
         [XmlAttribute]
         public bool ActionAsyncByDefault { get; set; } = true;

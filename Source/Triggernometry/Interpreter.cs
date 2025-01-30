@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Scripting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -18,6 +19,21 @@ namespace Triggernometry
 
     public class Interpreter
     {
+
+        internal readonly static List<string> SecurityAPIs = new List<string>
+        {
+            "Microsoft.CodeAnalysis",
+            "Microsoft.Win32",
+            "System.CodeDom.Compiler",
+            "System.Diagnostics",
+            "System.IO",
+            "System.Net",
+            "System.Reflection",
+            "System.Runtime",
+            "System.Security",
+            "System.Web",
+            "Triggernometry.Utilities"
+        };
 
         private class Validator
         {
@@ -202,7 +218,6 @@ namespace Triggernometry
 
         }
 
-
         public static class StaticHelpers
         {
             public static Dictionary<string, object> Storage => RealPlugin.plug.scriptingStorage;
@@ -306,9 +321,13 @@ namespace Triggernometry
                 }
             }
 
-            public static string Serialize(object o, bool indent = true) => JsonSerializer.Serialize(o, new JsonSerializerOptions { WriteIndented = indent });
+            public static string Serialize(object o, bool indent = true) 
+                => JsonSerializer.Serialize(o, new JsonSerializerOptions { WriteIndented = indent });
             public static T Deserialize<T>(string s) => JsonSerializer.Deserialize<T>(s);
 
+            public static Process XivProcess => Triggernometry.Utilities.Memory.XivProc;
+            public static void RegisterXivProcessUpdatedAction(string key, System.Action action) 
+                => Triggernometry.Utilities.Memory.RegisterXivProcUpdatedAction(key, action);
         }
 
         public ScriptOptions _so { get; set; }
@@ -320,6 +339,7 @@ namespace Triggernometry
 
         }
 
+        internal bool Ready = false;
         public Interpreter()
         {
             _so = ScriptOptions.Default;
@@ -329,7 +349,20 @@ namespace Triggernometry
                 _so = _so.AddMetadataReferenceFromAssembly(asm);
             }
             _so = _so.AddImports("System");
-            Evaluate("int whee;", null, new Context() { plug = RealPlugin.plug });
+            
+            Task.Run(() =>
+            {
+                try
+                {
+                    Evaluate("int whee;", null, new Context() { plug = RealPlugin.plug });
+                    Ready = true;
+                }
+                catch (Exception ex)
+                {
+                    RealPlugin.plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Plugin/iniscripterror", "Error when initializing scripting - try changing plugin load order: {0}", ex.Message));
+                }
+                RealPlugin.plug.scriptingInited = true;
+            });
         }
 
         public bool GetUnsafeUsage(Context ctx)

@@ -224,7 +224,6 @@
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(144, 35);
             this.btnOk.TabIndex = 0;
-            this.btnOk.Text = "Save Changes";
             this.btnOk.UseVisualStyleBackColor = true;
             // 
             // btnCancel

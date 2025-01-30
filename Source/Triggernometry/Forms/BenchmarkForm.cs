@@ -163,9 +163,9 @@ namespace Triggernometry.Forms
                 t.Parent.PassesFilter(le);
                 bi.TimeOnParent += st.ElapsedTicks - stTime;
                 stTime = st.ElapsedTicks;
-                if (t.Condition != null && t.Condition.Enabled == true)
+                if (t._Condition != null && t._Condition.Enabled == true)
                 {
-                    t.Condition.CheckCondition(ctx, t.TriggerContextLogger, plug);
+                    t._Condition.CheckCondition(ctx, t.TriggerContextLogger, plug);
                 }
                 bi.TimeOnConditions += st.ElapsedTicks - stTime;
                 i++;

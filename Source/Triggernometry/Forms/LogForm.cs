@@ -147,18 +147,18 @@ namespace Triggernometry.Forms
             Regex rex = null;
             if (rexSearch.Text != null && rexSearch.Text.Trim().Length > 0)
             {
-                rex = new Regex(rexSearch.Text);
+                rex = new Regex(rexSearch.Text, RegexOptions.IgnoreCase);
             }
-
             return logData.Where(ix =>
-                (chkAll.Checked ||
-                (chkError.Checked && ix.Level == RealPlugin.DebugLevelEnum.Error) ||
-                (chkWarning.Checked && ix.Level == RealPlugin.DebugLevelEnum.Warning) ||
-                (chkInfo.Checked && ix.Level == RealPlugin.DebugLevelEnum.Info) ||
-                (chkVerbose.Checked && ix.Level == RealPlugin.DebugLevelEnum.Verbose) ||
-                (chkCustom.Checked && ix.Level == RealPlugin.DebugLevelEnum.Custom) ||
-                (chkCustom2.Checked && ix.Level == RealPlugin.DebugLevelEnum.Custom2) )
-                && (rex == null || rex.IsMatch(ix.Message))
+                (
+                    chkAll.Checked ||
+                    (chkError.Checked && ix.Level == RealPlugin.DebugLevelEnum.Error) ||
+                    (chkWarning.Checked && ix.Level == RealPlugin.DebugLevelEnum.Warning) ||
+                    (chkInfo.Checked && ix.Level == RealPlugin.DebugLevelEnum.Info) ||
+                    (chkVerbose.Checked && ix.Level == RealPlugin.DebugLevelEnum.Verbose) ||
+                    (chkCustom.Checked && ix.Level == RealPlugin.DebugLevelEnum.Custom) ||
+                    (chkCustom2.Checked && ix.Level == RealPlugin.DebugLevelEnum.Custom2) 
+                ) && (rex == null || rex.IsMatch(ix.Message))
             ).ToList();
         }
 

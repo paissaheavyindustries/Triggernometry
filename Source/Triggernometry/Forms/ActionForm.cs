@@ -183,7 +183,6 @@ namespace Triggernometry.Forms
             rtbCallbackHelper = new RichTextBoxHelper("rtbCallbackHelper", this, tableLayoutPanel24);
             rtbWmsgHelper = new RichTextBoxHelper("rtbWmsgHelper", this, tableLayoutPanel19);
             rtbJsonHelper = new RichTextBoxHelper("rtbJsonHelper", this, jsonTableLayout);
-            if (I18n.CurrentLanguage.LanguageName.Contains("CN")) { SetComboBoxFontCN(this); }
         }
 
         private void ActionForm_Disposed(object sender, EventArgs e)
@@ -714,9 +713,9 @@ namespace Triggernometry.Forms
                 expTextBackColor.Text = a._TextAuraBackgroundClInt;
                 UpdateFontDescription();
                 ConditionGroup cx;
-                if (a.Condition != null)
+                if (a._Condition != null)
                 {
-                    cx = (ConditionGroup)a.Condition.Duplicate();
+                    cx = (ConditionGroup)a._Condition.Duplicate();
                 }
                 else
                 {
@@ -819,8 +818,8 @@ namespace Triggernometry.Forms
                 cbxRepositoryOp.SelectedIndex = (int)a._RepositoryOp;
                 cbxTriggerZoneType.SelectedIndex = (int)a._TriggerZoneType;
                 expJsonVariable.Expression = a._JsonResultVariable;
-                cbxSoundMethod.SelectedIndex = (int)a.SoundRouting;
-                cbxTtsMethod.SelectedIndex = (int)a.TTSRouting;
+                cbxSoundMethod.SelectedIndex = (int)a._SoundRouting;
+                cbxTtsMethod.SelectedIndex = (int)a._TTSRouting;
             }
             chkProcessLog_CheckedChanged(null, null);
         }
@@ -1013,7 +1012,7 @@ namespace Triggernometry.Forms
             a._TextAuraForegroundClInt = expTextForeColor.Text;
             a._TextAuraBackgroundClInt = expTextBackColor.Text;
             a._TextAuraOutlineClInt = expTextOutlineColor.Text;
-            a.Condition = cndCondition.ConditionToEdit;
+            a._Condition = cndCondition.ConditionToEdit;
             a._KeypressType = (Action.KeypressTypeEnum)cbxKeypressMethod.SelectedIndex;
             a._KeyPressCode = expKeypress.Expression;
             a._KeyPressProcId = expKeypressProcId.Expression;
@@ -1083,15 +1082,15 @@ namespace Triggernometry.Forms
             a._RepositoryOp = (Action.RepositoryOpEnum)cbxRepositoryOp.SelectedIndex;
             a._TriggerZoneType = (Action.TriggerZoneTypeEnum)cbxTriggerZoneType.SelectedIndex;
             a._JsonResultVariable = expJsonVariable.Expression;
-            a.SoundRouting = (Configuration.AudioRoutingMethodEnum)cbxSoundMethod.SelectedIndex;
-            a.TTSRouting = (Configuration.AudioRoutingMethodEnum)cbxTtsMethod.SelectedIndex;
+            a._SoundRouting = (Configuration.AudioRoutingMethodEnum)cbxSoundMethod.SelectedIndex;
+            a._TTSRouting = (Configuration.AudioRoutingMethodEnum)cbxTtsMethod.SelectedIndex;
         }
 
         private void TestAction(bool liveValues, bool ignoreConditions = false)
         {
             Action a = new Action();
             SettingsToAction(a);
-            if (ignoreConditions) a.Condition = new ConditionGroup();
+            if (ignoreConditions) a._Condition = new ConditionGroup();
 
             Context ctx = new Context();
             ctx.plug = plug;
@@ -2431,8 +2430,8 @@ namespace Triggernometry.Forms
                     expTvarName.Enabled = true;
                     cbxTvarExpType.Enabled = false;
                     expTvarValue.Enabled = false;
-                    expTvarColumn.Enabled = false;
-                    expTvarRow.Enabled = false;
+                    expTvarColumn.Enabled = true;
+                    expTvarRow.Enabled = true;
                     expTvarTarget.Enabled = false;
                     expTvarName.AutofillType = ExpressionTextBox.AutofillTypeEnum.Table;
                     break;
@@ -2457,7 +2456,8 @@ namespace Triggernometry.Forms
                     break;
             }
             expTvarColumn.ExpressionType = (cbxTvarOpType.SelectedIndex == (int)TableVariableOpEnum.SortLine
-                                         || cbxTvarOpType.SelectedIndex == (int)TableVariableOpEnum.SlicesSetAll)
+                                         || cbxTvarOpType.SelectedIndex == (int)TableVariableOpEnum.SlicesSetAll
+                                         || cbxTvarOpType.SelectedIndex == (int)TableVariableOpEnum.GetAllEntities)
                                          ? ExpressionTextBox.SupportedExpressionTypeEnum.String
                                          : ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
             expTvarRow.ExpressionType = expTvarColumn.ExpressionType;
@@ -2628,14 +2628,14 @@ namespace Triggernometry.Forms
                     expDictName.AutofillType = ExpressionTextBox.AutofillTypeEnum.Dict;
                     expDictTarget.AutofillType = ExpressionTextBox.AutofillTypeEnum.Dict;
                     break;
-                case (int)DictVariableOpEnum.GetEntityByName:
-                case (int)DictVariableOpEnum.GetEntityById:
+                case (int)DictVariableOpEnum.GetEntity:
                     expDictName.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expDictName.Enabled = true;
                     prsDictSource.Enabled = true;
                     expDictLength.Enabled = false;
                     cbxDictKeyType.Enabled = false;
-                    expDictKey.Enabled = false;
+                    expDictKey.Enabled = true;
+                    cbxDictKeyType.SelectedIndex = 0; // string
                     cbxDictValueType.Enabled = false;
                     cbxDictValueType.SelectedIndex = 0; // string
                     expDictValue.Enabled = true;

@@ -205,8 +205,8 @@
             this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tlsEndpointHistory = new System.Windows.Forms.ToolStrip();
             this.btnEndpointHistUpdate = new System.Windows.Forms.ToolStripButton();
-            this.tslEndpointHistoryRecv = new System.Windows.Forms.ToolStripLabel();
-            this.tslEndpointHistoryCount = new System.Windows.Forms.ToolStripLabel();
+            this.tlsEndpointHistoryRecv = new System.Windows.Forms.ToolStripLabel();
+            this.tlsEndpointHistoryCount = new System.Windows.Forms.ToolStripLabel();
             this.prettyCaption3 = new Triggernometry.CustomControls.PrettyCaption();
             this.panel28 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
@@ -2728,7 +2728,7 @@
             // 
             // lblExternalUpdateWarn
             // 
-            this.lblExternalUpdateWarn.AutoEllipsis = true;
+            this.lblExternalUpdateWarn.AutoSize = true;
             this.lblExternalUpdateWarn.BackColor = System.Drawing.SystemColors.Info;
             this.lblExternalUpdateWarn.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblExternalUpdateWarn.Dock = System.Windows.Forms.DockStyle.Top;
@@ -2887,14 +2887,13 @@
             this.tlsEndpointHistory.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.tlsEndpointHistory.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnEndpointHistUpdate,
-            this.tslEndpointHistoryRecv,
-            this.tslEndpointHistoryCount});
+            this.tlsEndpointHistoryRecv,
+            this.tlsEndpointHistoryCount});
             this.tlsEndpointHistory.Location = new System.Drawing.Point(0, 0);
             this.tlsEndpointHistory.Name = "tlsEndpointHistory";
             this.tlsEndpointHistory.Padding = new System.Windows.Forms.Padding(2);
             this.tlsEndpointHistory.Size = new System.Drawing.Size(640, 35);
             this.tlsEndpointHistory.TabIndex = 3;
-            this.tlsEndpointHistory.Text = "toolStrip2";
             // 
             // btnEndpointHistUpdate
             // 
@@ -2906,19 +2905,19 @@
             this.btnEndpointHistUpdate.Text = "Update";
             this.btnEndpointHistUpdate.Click += new System.EventHandler(this.btnEndpointHistUpdate_Click);
             // 
-            // tslEndpointHistoryRecv
+            // tlsEndpointHistoryRecv
             // 
-            this.tslEndpointHistoryRecv.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tslEndpointHistoryRecv.Name = "tslEndpointHistoryRecv";
-            this.tslEndpointHistoryRecv.Size = new System.Drawing.Size(114, 28);
-            this.tslEndpointHistoryRecv.Text = "telegram(s) received";
+            this.tlsEndpointHistoryRecv.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.tlsEndpointHistoryRecv.Name = "tlsEndpointHistoryRecv";
+            this.tlsEndpointHistoryRecv.Size = new System.Drawing.Size(114, 28);
+            this.tlsEndpointHistoryRecv.Text = "telegram(s) received";
             // 
-            // tslEndpointHistoryCount
+            // tlsEndpointHistoryCount
             // 
-            this.tslEndpointHistoryCount.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tslEndpointHistoryCount.Name = "tslEndpointHistoryCount";
-            this.tslEndpointHistoryCount.Size = new System.Drawing.Size(13, 28);
-            this.tslEndpointHistoryCount.Text = "0";
+            this.tlsEndpointHistoryCount.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.tlsEndpointHistoryCount.Name = "tlsEndpointHistoryCount";
+            this.tlsEndpointHistoryCount.Size = new System.Drawing.Size(13, 28);
+            this.tlsEndpointHistoryCount.Text = "0";
             // 
             // prettyCaption3
             // 
@@ -4770,8 +4769,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column9;
         private System.Windows.Forms.ToolStrip tlsEndpointHistory;
         private System.Windows.Forms.ToolStripButton btnEndpointHistUpdate;
-        private System.Windows.Forms.ToolStripLabel tslEndpointHistoryRecv;
-        private System.Windows.Forms.ToolStripLabel tslEndpointHistoryCount;
+        private System.Windows.Forms.ToolStripLabel tlsEndpointHistoryRecv;
+        private System.Windows.Forms.ToolStripLabel tlsEndpointHistoryCount;
         private CustomControls.PrettyCaption prettyCaption3;
         private System.Windows.Forms.Panel panel28;
         private CustomControls.PrettyCaption capEndpointSettings;

@@ -27,6 +27,7 @@
     <StartAction>Program</StartAction>
     <StartProgram>C:\Program Files (x86)\Advanced Combat Tracker\Advanced Combat Tracker.exe</StartProgram>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -180,6 +181,16 @@
     </Compile>
     <Compile Include="CustomControls\ActionEditor.Designer.cs">
       <DependentUpon>ActionEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FFXIV\Status.cs" />
+    <Compile Include="FFXIV\Entity.cs" />
+    <Compile Include="FFXIV\JobList.cs" />
+    <Compile Include="FFXIV\Job.cs" />
+    <Compile Include="Forms\SimpleInputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SimpleInputForm.Designer.cs">
+      <DependentUpon>SimpleInputForm.cs</DependentUpon>
     </Compile>
     <Compile Include="CustomControls\ActionViewer.cs">
       <SubType>UserControl</SubType>
@@ -376,7 +387,7 @@
     <Compile Include="I18n.cs" />
     <Compile Include="InternalLog.cs" />
     <Compile Include="Interpreter.cs" />
-    <Compile Include="Entity.cs" />
+    <Compile Include="FFXIV\Job_old.cs" />
     <Compile Include="JsonPath\JsonPath.cs" />
     <Compile Include="JsonPath\Public.cs" />
     <Compile Include="Language.cs" />
@@ -389,6 +400,20 @@
     <Compile Include="ObsController.cs" />
     <Compile Include="LiveSplitController.cs" />
     <Compile Include="Parser.cs" />
+    <Compile Include="PluginBridges\BridgeOverlay\ModuleInCombat.cs" />
+    <Compile Include="PluginBridges\BridgeOverlay\ModuleCombatants.cs" />
+    <Compile Include="PluginBridges\BridgeOverlay\BridgeOverlay.cs" />
+    <Compile Include="RealPlugin\RealPlugin.Helper.cs" />
+    <Compile Include="RealPlugin\RealPlugin.Config.cs" />
+    <Compile Include="RealPlugin\RealPlugin.Scripting.cs" />
+    <Compile Include="RealPlugin\RealPlugin.I18n.cs" />
+    <Compile Include="RealPlugin\RealPlugin.Trigger.cs" />
+    <Compile Include="RealPlugin\RealPlugin.InternalLog.cs" />
+    <Compile Include="RealPlugin\RealPlugin.ActionQueue.cs" />
+    <Compile Include="RealPlugin\RealPlugin.Aura.cs" />
+    <Compile Include="RealPlugin\RealPlugin.Audio.cs" />
+    <Compile Include="RealPlugin\RealPlugin.Update.cs" />
+    <Compile Include="RealPlugin\RealPlugin.NamedCallback.cs" />
     <Compile Include="Scarborough\OverrideHelper.cs" />
     <Compile Include="PluginBridges\BridgeFFXIV.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -396,7 +421,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="RealPlugin.cs" />
+    <Compile Include="RealPlugin\RealPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="Forms\RepositoryForm.cs">
